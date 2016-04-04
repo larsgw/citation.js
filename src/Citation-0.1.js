@@ -370,7 +370,7 @@ function Cite(data,options) {
     url:/^(https?:\/\/)?((([a-z\d]([a-z\d-]*[a-z\d])*)\.)+[a-z]{2,}|((\d{1,3}\.){3}\d{1,3}))(\:\d+)?(\/[-a-z\d%_.~+:]*)*(\?[;&a-z\d%_.~+=-]*)?(\#[-a-z\d_]*)?$/i,
     json:[
       /([^\\])\'/g,
-      /(("|]|}|\.|(\d|\.|-|:)\s*\d)\s*,|{)\s*(")?([^":\n]+?)(")?\s*:/g
+      /(("|]|}|\.|(\d|\.|-)*\d)\s*,|{)\s*(")?([^":\n]+?)(")?\s*:/g
     ]
   }
 
@@ -459,7 +459,7 @@ function Cite(data,options) {
       switch(data.trim(/\s/)[0]){
         case '@':
           inputFormat = 'BibTeX';
-          var match = data.match(/@([^\{]+)\{(\w+)\,([^]+)+\}$/) || [],
+          var match = data.match(/@([^\{]+)\{(\w+)\,([^]+)\}$/) || [],
 	      result={ type:match[1],label:match[2] },
 	      pairs = match[3].split('},');
           for(i=0;i<pairs.length;i++){
