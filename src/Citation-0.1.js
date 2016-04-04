@@ -1,32 +1,4 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="utf-8">
-    <title>JSDoc: Source: Citation-0.1.js</title>
-
-    <script src="scripts/prettify/prettify.js"> </script>
-    <script src="scripts/prettify/lang-css.js"> </script>
-    <!--[if lt IE 9]>
-      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
-    <![endif]-->
-    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
-    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
-</head>
-
-<body>
-
-<div id="main">
-
-    <h1 class="page-title">Source: Citation-0.1.js</h1>
-
-    
-
-
-
-    
-    <section>
-        <article>
-            <pre class="prettyprint source linenums"><code>/** 
+/** 
  * @file Citation-0.1.js
  * @todo Add jQuery plugin (building forms)
  * 
@@ -39,9 +11,9 @@
  * 
  * Use the object constructor `Cite()` with the parameters as listed [below](#input). Then just call one of the function, for example get, to get your [output](#output).
  * 
- * &lt;a name="input">
+ * <a name="input">
  * ## Input
- * &lt;/a>
+ * </a>
  * 
  * ** When making the `Cite()` object: **
  * 
@@ -64,15 +36,15 @@
  * 
  * Now, when you use the `.get()` function, the default options will get you the data as a JSON string.
  *
- * &lt;a name="bibtex">
+ * <a name="bibtex">
  * ### BibTeX
- * &lt;/a>
+ * </a>
  * 
  * In the BibTeX-part of the input you simply pass a string of a citation in BibTeX-format. For the BibTeX documentation, see [wikipedia](https://en.wikipedia.org/wiki/BibTeX#Bibliographic_information_file).
  * 
- * &lt;a name="json">
+ * <a name="json">
  * ### JSON
- * &lt;/a>
+ * </a>
  * 
  * In the JSON-part of the input you pass an object or the string of an object. Your JSON may be "relaxed"; You don't need to worry about double quotes around every single key. Properties are specified below. Note that not all properties are supported for all types.
  * 
@@ -109,9 +81,9 @@
  * * Wikidata JSON, where it will try to get as much relevant properties as possible
  * * An URL, where it wil use the fetched data. This uses an synchronous request.
  * 
- * &lt;a name="output">
+ * <a name="output">
  * ## Ouput
- * &lt;/a>
+ * </a>
  * 
  * When using the `.get()` function, your output depends on the options you pass. If you don't pass any options, the values you passed as default are used. When you haven't passed those, standard options are passed.
  * 
@@ -140,9 +112,9 @@
  * 
  * * None!
  * 
- * &lt;br />&lt;br />
+ * <br /><br />
  * - - -
- * &lt;br />&lt;br />
+ * <br /><br />
  * 
  * @projectname Citationjs
  * 
@@ -192,19 +164,19 @@ function name(names,options) {
     case 'apa':
       b += ',';
     case 'eckartapa':
-      b += ' &amp; ';
-      for (i=0;i&lt;names.length;++i) {
+      b += ' & ';
+      for (i=0;i<names.length;++i) {
 	if (names[i].indexOf(',')>0) {
 	  var str = names[i].split(', ');
 	  names[i] = str[1] + ' ' + str[0];
 	};
 	var a = names[i].split(' ');
 	res+=a[(a.length-1)] + ',';
-	for (j=0;j&lt;(a.length-1);++j) {
+	for (j=0;j<(a.length-1);++j) {
 	  if (a[j][0] === a[j][0].toUpperCase()) res+=' ' + a[j][0] + '.';
 	  else res+=' ' + a[j];
 	};
-	if (i!=names.length-1&amp;&amp;i!=names.length-2) res += ', ';
+	if (i!=names.length-1&&i!=names.length-2) res += ', ';
 	else if (i==names.length-2) res += b;
       };
       break;
@@ -214,7 +186,7 @@ function name(names,options) {
       break;
       
     case 'vancouver':default:
-      for (i=0;i&lt; (names.length>3?3:names.length) ;++i) {
+      for (i=0;i< (names.length>3?3:names.length) ;++i) {
 	if (names[i].indexOf(',')>0) {
 	  var str = names[i].split(', ');
 	      str = str[1] + ' ' + str[0];
@@ -222,13 +194,13 @@ function name(names,options) {
 	};
 	var f = '', l = '',
 	    a = names[i].replace(/-/g,' ').split(' ');
-	for (j=0;j&lt;(a.length-1);++j) {
+	for (j=0;j<(a.length-1);++j) {
 	  if (a[j][0] === a[j][0].toUpperCase()) f+=a[j][0];
 	  else l+=a[j] + ' ';
 	};
 	l+=a[(a.length-1)];
 	res+=l+' '+f;
-	if (i&lt;names.length-1) res += ', ';
+	if (i<names.length-1) res += ', ';
       }if (names.length>3) res+=' et al.'
       break;
       
@@ -258,15 +230,15 @@ function date(date,lan) {
   switch(lan){     
     case 'bx':
       
-      if(date.from&amp;&amp;date.from.length!=0)res += '{'+date.from[2]+'-'+('0'+date.from[1]).slice(-2)+'-'+('0'+date.from[0]).slice(-2)+'}';
+      if(date.from&&date.from.length!=0)res += '{'+date.from[2]+'-'+('0'+date.from[1]).slice(-2)+'-'+('0'+date.from[0]).slice(-2)+'}';
       
       break;
       
     case 'nl':
     case 'en':default:
       
-      if(date.from&amp;&amp;date.from.length!=0){
-	if(date.to&amp;&amp;date.to.length!=0){
+      if(date.from&&date.from.length!=0){
+	if(date.to&&date.to.length!=0){
 	  if(date.to[2]==date.from[2]){
 	    if(date.to[1]==date.from[1]){
 	      if(date.to[0]==date.from[0])res += date.from[0]+' '+months[date.from[1]-1].toLowerCase()+' '+date.from[2];
@@ -302,8 +274,8 @@ function numToOrd (num,lan) {
   switch(lan){
     case 'nl':
       
-      if (num&lt;3&amp;&amp;num!=0) res+=rank[num-1];
-      else if (num&lt;=19) res+=rank[3];
+      if (num<3&&num!=0) res+=rank[num-1];
+      else if (num<=19) res+=rank[3];
       else if (num>=20) res+=rank[0];
       else res+=rank[3];
       
@@ -314,7 +286,7 @@ function numToOrd (num,lan) {
       
       if (parseInt(str.slice(-1))>3) res += rank[3];
       else if (
-	(parseInt(str.slice(-1))&lt;=3&amp;&amp;parseInt(str.slice(-1))!=0)&amp;&amp;(num&lt;10||num>19)
+	(parseInt(str.slice(-1))<=3&&parseInt(str.slice(-1))!=0)&&(num<10||num>19)
       ) res += rank[parseInt(str.slice(-1))-1];
       else res += rank[3];
 	
@@ -332,19 +304,19 @@ function numToOrd (num,lan) {
  * @return The html (in string form)
  */
 function JSONToHTML (src) {
-  var res = '&lt;ul style="list-style-type:none">&lt;li>{&lt;ul style="list-style-type:none">';
+  var res = '<ul style="list-style-type:none"><li>{<ul style="list-style-type:none">';
   for (var i in src) {
-    res += src[i] ? '&lt;li>' + i + ':' : '' ;
-    if (typeof src[i]=='object'&amp;&amp;!Array.isArray(src[i])&amp;&amp;src[i]){
+    res += src[i] ? '<li>' + i + ':' : '' ;
+    if (typeof src[i]=='object'&&!Array.isArray(src[i])&&src[i]){
       if(JSON.stringify(src[i])===JSON.stringify({})) res += '{}';
       else res += JSONToHTML(src[i]);
     }
-    else if (typeof src[i]=='object'&amp;&amp;Array.isArray(src[i])) res += JSON.stringify(src[i]);
-    else if (typeof src[i]=='string'&amp;&amp;!parseInt(src[i])) res += '"' + src[i] + '"';
+    else if (typeof src[i]=='object'&&Array.isArray(src[i])) res += JSON.stringify(src[i]);
+    else if (typeof src[i]=='string'&&!parseInt(src[i])) res += '"' + src[i] + '"';
     else if (src[i]) res += (src[i]||'').toString();
-    res += src[i] ? ',&lt;/li>' : '' ;
+    res += src[i] ? ',</li>' : '' ;
   }
-  res += '&lt;/ul>}&lt;/li>&lt;/ul>'
+  res += '</ul>}</li></ul>'
   return res;
 }
 
@@ -395,10 +367,10 @@ function Cite(data,options) {
   * @default
   */
   this._rgx = {
-    url:/^(https?:\/\/)?((([a-z\d]([a-z\d-]*[a-z\d])*)\.)+[a-z]{2,}|((\d{1,3}\.){3}\d{1,3}))(\:\d+)?(\/[-a-z\d%_.~+:]*)*(\?[;&amp;a-z\d%_.~+=-]*)?(\#[-a-z\d_]*)?$/i,
+    url:/^(https?:\/\/)?((([a-z\d]([a-z\d-]*[a-z\d])*)\.)+[a-z]{2,}|((\d{1,3}\.){3}\d{1,3}))(\:\d+)?(\/[-a-z\d%_.~+:]*)*(\?[;&a-z\d%_.~+=-]*)?(\#[-a-z\d_]*)?$/i,
     json:[
       /([^\\])\'/g,
-      /(("|]|}|\.|(\d|\.|-|:)\s*\d)\s*,|{)\s*(")?([^":\n]+?)(")?\s*:/g
+      /(("|]|}|\.|(\d|\.|-)*\d)\s*,|{)\s*(")?([^":\n]+?)(")?\s*:/g
     ]
   }
 
@@ -440,7 +412,7 @@ function Cite(data,options) {
       case 'P1476': return ['title',typeof a[0].mainsnak.datavalue.value=='object'?a[0].mainsnak.datavalue.value.text:a[0].mainsnak.datavalue.value]; break;
       case 'P2093':
 	var res = [];
-	for (var i=0;i&lt;a.length;i++) { res.push(a[i].mainsnak.datavalue.value) };
+	for (var i=0;i<a.length;i++) { res.push(a[i].mainsnak.datavalue.value) };
 	return ['author',res];
 	break;
       case 'P5770': return ['date',{from:a[0].mainsnak.datavalue.value.time.match(/\+?([\d-]+)T?/)[1].split('-').reverse()}]; break;
@@ -487,10 +459,10 @@ function Cite(data,options) {
       switch(data.trim(/\s/)[0]){
         case '@':
           inputFormat = 'BibTeX';
-          var match = data.match(/@([^\{]+)\{(\w+)\,([^]+)+\}$/) || [],
-	      result={ type:match[1],label:match[2] },
-	      pairs = match[3].split('},');
-          for(i=0;i&lt;pairs.length;i++){
+          var match = data.match(/@([^\{]+)\{(\w+)\,([^]+)\}/) || [];
+	  var result={ type:match[1],label:match[2] };
+	  var pairs = match[3].split('},');
+          for(i=0;i<pairs.length;i++){
 	    var key = (pairs[i].split('=')[0]||'').trim(/\s/g),
 		val = (pairs[i].split('=')[1]||'').replace(/[\{"\s]*([^"}]+)[\}"\s]*/g,'$1').replace(/\s+/g,' ');
 	    result[key] = val;
@@ -531,10 +503,10 @@ function Cite(data,options) {
     case 'object':
       if (Array.isArray( data )) {
 	inputFormat = 'JSON', res = [] ;
-	for (obj=0;obj&lt;data.length;obj++) { res = res.concat((new Cite(data[obj])).data) }
+	for (obj=0;obj<data.length;obj++) { res = res.concat((new Cite(data[obj])).data) }
 	formatData = res;
-      } else if (window.jQuery&amp;&amp;data instanceof jQuery) inputFormat = 'jQuery', data = data.val()||data.text()||data.html(), formatData = new Cite(data,options);
-      else if (window.HMTLElement&amp;&amp;data instanceof HMTLElement) inputFormat = 'HTML', data = data.value||data.textContent, formatData = new Cite(data,options);
+      } else if (window.jQuery&&data instanceof jQuery) inputFormat = 'jQuery', data = data.val()||data.text()||data.html(), formatData = new Cite(data,options);
+      else if (window.HMTLElement&&data instanceof HMTLElement) inputFormat = 'HTML', data = data.value||data.textContent, formatData = new Cite(data,options);
       else {
 	if ( data.hasOwnProperty('entities') ) {
 	  inputFormat = 'Wikidata';
@@ -599,7 +571,7 @@ function Cite(data,options) {
    * 
    * The `.reset()` function **does not** have any influence on the log. This way, you can still undo all changes.
    * 
-   * &lt;br />&lt;br />
+   * <br /><br />
    * `.currentVersion()` and similar function **are not** logged, because this would be influenced by function using other functions.
    *
    * @type Object[]
@@ -624,7 +596,7 @@ function Cite(data,options) {
    */
   this.currentVersion = function(){
     var version = 0;
-    for(i=0;i&lt;this._log.length;i++){if(this._log[i].version>version)version=this._log[i].version}
+    for(i=0;i<this._log.length;i++){if(this._log[i].version>version)version=this._log[i].version}
     return version;
   },
   
@@ -640,11 +612,11 @@ function Cite(data,options) {
    */
   this.retrieveVersion = function(versnum){
     this._log.push({name:'retrieveVersion',arguments:[versnum]});
-    if (versnum>=0&amp;&amp;versnum&lt;=this.currentVersion()) {
+    if (versnum>=0&&versnum<=this.currentVersion()) {
       var object=new Cite(this._log[0].arguments[0],this._log[0].arguments[1]),
 	  arr=[];
-      for(i=0;i&lt;this._log.length;i++){if(this._log[i].version)arr.push(this._log[i]);}
-      for(k=1;k&lt;=versnum;k++){ object[arr[k].name].apply(object,(arr[k].arguments||[])); }
+      for(i=0;i<this._log.length;i++){if(this._log[i].version)arr.push(this._log[i]);}
+      for(k=1;k<=versnum;k++){ object[arr[k].name].apply(object,(arr[k].arguments||[])); }
       return object;
     } else return undefined;
   },
@@ -675,7 +647,7 @@ function Cite(data,options) {
   this.add = function (data) {
     this._log.push({name:'add',version:this.currentVersion()+1,arguments:[data]});
     var input = (new Cite(data)).data;
-    for (i=0;i&lt;input.length;i++) { this.data.push(input[i]) };
+    for (i=0;i<input.length;i++) { this.data.push(input[i]) };
     return this;
   }
   
@@ -792,36 +764,36 @@ function Cite(data,options) {
 	switch(options.format){
 	  case 'html':
 	    
-	    for(var i=0;i&lt;this.data.length;i++){
+	    for(var i=0;i<this.data.length;i++){
 	      var src = this.data[i]||{},
 		  pubType = (src.type||'').toLowerCase(),
 		  style = (options.style||'').toLowerCase();
 	      switch(style){
 		case 'apa':
 		case 'eckartapa':
-		  res += '&lt;p>';
+		  res += '<p>';
 		  
 		  switch(pubType){
 		    
 		    case 'book':case 'boek':
 		    case 'chapter':case 'hoofdstuk':
 		      
-		      res += src.chapterauthor || (src.chapterauthor&amp;&amp;src.editor) ? name(
+		      res += src.chapterauthor || (src.chapterauthor&&src.editor) ? name(
 			[].concat(src.chapterauthor||[]).concat(src.editor||[]),
 			{style:style,lan:options.lan}
 		      ) + ' ' : '' ;
-		      res += src.year &amp;&amp; pubType=='chapter' ? '('+src.year+') ' : '' ;
+		      res += src.year && pubType=='chapter' ? '('+src.year+') ' : '' ;
 		      res += src.chapter ? '('+src.chapter+') ' : '' ;
 		      res += src.author || src.editor ? ( pubType=='chapter' ? words['in'] + ' ' : '' ) + name(
 			[].concat(src.author||[]).concat(src.editor||[]),
 			{style:style,lan:options.lan}
 		      ) + ' ' : '' ;
 		      res += src.editor ? '('+words['ed']+'.) ' : '' ;
-		      res += src.year &amp;&amp; pubType!='chapter' ? '('+src.year+') ' : '' ;
+		      res += src.year && pubType!='chapter' ? '('+src.year+') ' : '' ;
 		      res += res.slice(-1) !== '>' ? '. ' : '' ;
-		      res += src.title ? '&lt;i>'+src.title+'&lt;/i> ' : '' ;
+		      res += src.title ? '<i>'+src.title+'</i> ' : '' ;
 		      res += (src.pages||[])[0] ? '( p. '+src.pages[0]+(src.pages[1]?'-'+src.pages[1]:'')+' )' : '' ;
-		      res += src.print ? '('+src.print+'&lt;sup>e&lt;/sup> '+words['print']+')' : '' ;
+		      res += src.print ? '('+src.print+'<sup>e</sup> '+words['print']+')' : '' ;
 		      res += src.place ? ' ' + ( Array.isArray(src.place) ? src.place.join('/') : src.place) : '';
 		      res += src.publisher ? ':'+src.publisher+'.' : '.' ;
 		      
@@ -837,9 +809,9 @@ function Cite(data,options) {
 			')'
 		      : '' ;
 		      res += res.slice(-1) !== '>' ? '. ' : '' ;
-		      res += src.title ? '&lt;i>'+src.title+'&lt;/i> ' : '' ;
+		      res += src.title ? '<i>'+src.title+'</i> ' : '' ;
 		      res += src.date ? '. ' + words['used'] + ' ' + date(src.date,options.lan) : '' ;
-		      res += src.url ? ', ' + words['from'] + ' &lt;a href="' + src.url + '" >' + src.url + '&lt;/a>' : '' ;
+		      res += src.url ? ', ' + words['from'] + ' <a href="' + src.url + '" >' + src.url + '</a>' : '' ;
 		      
 		      break;
 		      
@@ -848,7 +820,7 @@ function Cite(data,options) {
 		      
 		      res += src.author ? name([].concat(src.author||[]),{style:style,lan:options.lan}) + ' ' : '' ;
 		      res += src.year ? '('+src.year+')' : '' ;
-		      res += src.title ? '&lt;i>'+src.title+'&lt;/i> ' : '' ;
+		      res += src.title ? '<i>'+src.title+'</i> ' : '' ;
 		      res += src.con.name ? words['paper'] + ' ' + src.con.name : '' ;
 		      res += src.con.org ? ', ' + src.con.org : '' ;
 		      res += src.place ? ', ' + ( Array.isArray(src.con.place) ? src.con.place.join('/') : src.con.place) : '';
@@ -881,26 +853,26 @@ function Cite(data,options) {
 		      res += src.year ? '('+src.year+')' : '' ;
 		      res += res.slice(-1) !== '>' ? '. ' : '' ;
 		      res += src.title ? src.title+'.' : '' ;
-		      res += src.journal ? ' &lt;i>' + src.journal : '&lt;i>';
-		      res += src.journal &amp;&amp; src.volume ? ', ' : '' ;
-		      res += src.volume ? src.volume + '&lt;/i> ' : '&lt;/i> ';
+		      res += src.journal ? ' <i>' + src.journal : '<i>';
+		      res += src.journal && src.volume ? ', ' : '' ;
+		      res += src.volume ? src.volume + '</i> ' : '</i> ';
 		      res += src.year ? '('+src.year+') ' : '' ;
 		      res += res.slice(-1) !== '>' ? '. ' : '' ;
 		      res += (src.pages||[])[0] ? src.pages[0]+(src.pages[1]?'-'+src.pages[1]:'') : '' ;
 		      res += src.date ? '. ' + words['used'] + ' ' + date(src.date,options.lan) : '' ;
-		      res += src.url ? ', ' + words['from'] + ' &lt;a href="' + src.url + '" >' + src.url + '&lt;/a>' : '' ;
+		      res += src.url ? ', ' + words['from'] + ' <a href="' + src.url + '" >' + src.url + '</a>' : '' ;
 		      
 		      break;
 		    
 		  }
 		  
-		  res += '&lt;/p>';
+		  res += '</p>';
 		  break;
 		  
 		case 'bibtex':
 		  
 		  var arr=[];
-		  res += '&lt;ul style="list-style-type:none">&lt;li>@';
+		  res += '<ul style="list-style-type:none"><li>@';
 		  
 		  switch(pubType){
 		    case 'book':case 'boek':
@@ -926,7 +898,7 @@ function Cite(data,options) {
 		  res += src.author ? name([].concat(src.author),'apa').split(' ')[0].toLowerCase() : '' ;
 		  res += src.year ? src.year : '' ;
 		  res += src.title ? src.title.split(' ')[0].toLowerCase() : '' ;
-		  res += ',&lt;ul style="list-style-type:none">';
+		  res += ',<ul style="list-style-type:none">';
 		  arr.push(
 		    src.title?'title={{'+src.title+'}}':'',
 		    src.author?'author={'+name(src.author, {style:'bibtex'})+'}':'',
@@ -948,8 +920,8 @@ function Cite(data,options) {
 		    src.issn?'issn={'+src.issn+'}':''
 		  );
 		  arr  = arr.join('joining').replace(/(joining)+/g,'joining').replace(/(^joining|joining$)/g,'').split('joining');
-		  res += '&lt;li>'+arr.join(',&lt;/li>&lt;li>')+'&lt;/li>';
-		  res += '&lt;/ul>}&lt;/li>&lt;/ul>';
+		  res += '<li>'+arr.join(',</li><li>')+'</li>';
+		  res += '</ul>}</li></ul>';
 		  
 		  break;
 		
@@ -959,9 +931,9 @@ function Cite(data,options) {
 		  
 		case 'vancouver':
 		default:
-		  res += '&lt;p>';
+		  res += '<p>';
 		  
-		  res += src.chapterauthor || (src.chapterauthor&amp;&amp;src.editor) ? name(
+		  res += src.chapterauthor || (src.chapterauthor&&src.editor) ? name(
 		    [].concat(src.chapterauthor||[]).concat(src.editor||[]),
 		    {style:style,lan:options.lan}
 		  ) + ' ' : '' ;
@@ -996,13 +968,13 @@ function Cite(data,options) {
 		      res += src.year ? src.year+'; ' : '' ;
 		      res += src.volume ? src.volume : '' ;
 		      res += (src.pages||[])[0] ? ': '  + src.pages[0] + ( src.pages[1] ? '-' + src.pages[1]: '' ) : '' ;
-		      res += src.url ? '. ' + words['available'] + ': &lt;a href="' + src.url + '" >' + src.url + '&lt;/a>' : '' ;
+		      res += src.url ? '. ' + words['available'] + ': <a href="' + src.url + '" >' + src.url + '</a>' : '' ;
 		      
 		      break;
 		    
 		  }
 		  
-		  res += '&lt;/p>';
+		  res += '</p>';
 		  break;
 		  
 	      }
@@ -1042,26 +1014,4 @@ function Cite(data,options) {
     }
   }
   
-}</code></pre>
-        </article>
-    </section>
-
-
-
-
-</div>
-
-<nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Cite.html">Cite</a></li></ul><h3>Global</h3><ul><li><a href="global.html#date">date</a></li><li><a href="global.html#JSONToHTML">JSONToHTML</a></li><li><a href="global.html#name">name</a></li><li><a href="global.html#numToOrd">numToOrd</a></li></ul>
-</nav>
-
-<br class="clear">
-
-<footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.0</a> on Mon Apr 04 2016 20:27:02 GMT+0200 (CEST)
-</footer>
-
-<script> prettyPrint(); </script>
-<script src="scripts/linenumber.js"> </script>
-</body>
-</html>
+}

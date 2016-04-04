@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Demo | Citation.js</title>
+    <style>
+      body {margin:0 auto;width:60%;max-width:750px;font-family:'Helvetica Neue', Helvetica, Arial, sans-serif;}
+      div, p {width:100%;}
+      h1,h2,h3 {width:100%;text-align:center;}
+      div.in p {margin-top:0;margin-bottom:0;}
+      div[contenteditable="true"] {height:300px;border:1px solid #888;overflow-y:scroll;margin-top:20px;background:white;font-family:monospace;}
+      p.indent1{text-indent:20px;}p.indent2{text-indent:40px;}
+      div.nomargin{margin:0;}.out p{margin:3px 0;}
+      div.out {overflow-x:auto;}
+      fieldset {border:0 none transparent;padding-left:0;display:inline-block;}
+      
+      /* Highlight */
+      pre {background-color:#f0f0f0;overflow-x:scroll;}
+      span.bold{font-weight:bold}span.normal,span.default{font-weight:normal}
+      span.green1 {color:#006e28;}span.green2 {color:#88b693 !important;font-weight:bold !important;}
+      span.blue1 {color:#0057ae;}
+      span.red1 {color:#bf0303;}
+      span.yellow1 {color:#b08000;}
+      span.grey1 {color:#888;}span.black,span.default {color:#000;}
+      span.purple1{color:#644a9b;}
+      /*span.important:not(.comment) {font-weight:bold;color:#006e28;}
+      span.important.comment {font-weight:bold;color:#88b693;}
+      span.key {font-weight:normal;color:#0057ae;}
+      span.function {font-weight:normal;color:#644a9b;}
+      span.native {font-weight:bold;color:#000;}
+      span.object {font-weight:normal;color:#006e28;}*/
+      span.comment, span.comment span {font-weight:normal;color:#888;}
+      /*span.string {font-weight:normal;color:#bf0303;}
+      span.digit {font-weight:normal;color:#b08000;}
+      span.normal {font-weight:normal;color:#000;}*/
+    </style>
+  </head>
+  <body>
+    <h1>Citation.js - demo</h1>
+    <h2>Input:</h2>
+    <fieldset>
+      <legend>Style:</legend>
+      <select class="format">
+	<option value="Vancouver">Vancouver</option>
+	<option value="APA">APA</option>
+	<option value="JSON">JSON</option>
+	<option value="BibTeX">BibTeX</option>
+      </select>
+    </fieldset>
+    <fieldset>
+      <legend>Language:</legend>
+      <select class="lan">
+	<option value="en">English</option>
+	<option value="nl">Dutch</option>
+      </select>
+    </fieldset>
+    <fieldset>
+      <legend>HTML or plain text:</legend>
+      <select class="html">
+	<option value="html">HTML</option>
+	<option value="string">Plain text</option>
+      </select>
+    </fieldset>
+    <h4>JSON:</h4>
+    <div data-type="json" class="in javascript" contenteditable="true" spellcheck="false">
+      <p>[</p>
+	<div class="nomargin">
+	  <p class="indent1">{</p>
+	    <p class="indent2">type: 'article',</p>
+	    <p class="indent2">author: ['Clara Oswald','Danny Pink'],</p>
+	    <p class="indent2">year: 2001,</p>
+	    <p class="indent2">title: 'Name article',</p>
+	    <p class="indent2">journal: 'Journal',</p>
+	    <p class="indent2">volume: 2,</p>
+	    <p class="indent2">number: 4,</p>
+	    <p class="indent2">pages: [1,21]</p>
+	  <p class="indent1">},</p>
+	</div><div class="nomargin">
+	  <p class="indent1">{</p>
+	    <p class="indent2">type: 'e-article',</p>
+	    <p class="indent2">author: ['Amy Pond','Rory Pond'],</p>
+	    <p class="indent2">year: 2001,</p>
+	    <p class="indent2">title: 'Name article',</p>
+	    <p class="indent2">journal: 'Journal',</p>
+	    <p class="indent2">volume: 2,</p>
+	    <p class="indent2">number: 4,</p>
+	    <p class="indent2">date: {from: [1,12,2015]},</p>
+	    <p class="indent2">url: 'en.wikipedia.org'</p>
+	  <p class="indent1">}</p>
+	</div>
+      <p>]</p>
+    </div>
+    <h4>BibTeX:</h4>
+    <div data-type="bib" class="in bibtex" contenteditable="true" spellcheck="false">
+      <div class="nomargin">
+	<p>@article{Steinbeck2003,</p>
+	  <p class="indent1">author = {Steinbeck, Christoph and Han, Yongquan and Kuhn, Stefan and Horlacher, Oliver and Luttmann, Edgar and Willighagen, Egon},</p>
+	  <p class="indent1">year = {2003},</p>
+	  <p class="indent1">title = {{The Chemistry Development Kit (CDK): an open-source Java library for Chemo- and Bioinformatics.}},</p>
+	  <p class="indent1">journal = {Journal of chemical information and computer sciences},</p>
+	  <p class="indent1">volume = {43},</p>
+	  <p class="indent1">number = {2},</p>
+	  <p class="indent1">pages = {493--500},</p>
+	  <p class="indent1">doi = {10.1021/ci025584y},</p>
+	  <p class="indent1">isbn = {2214707786},</p>
+	  <p class="indent1">issn = {0095-2338},</p>
+	  <p class="indent1">pmid = {12653513},</p>
+	  <p class="indent1">url = {http://www.ncbi.nlm.nih.gov/pubmed/12653513}</p>
+	<p>}</p>
+      </div>
+    </div>
+    <h2>Output:</h2>
+    <h4>From JSON input:</h4>
+    <div data-type="json" class="out"></div>
+    <h4>From BibTeX input:</h4>
+    <div data-type="bib" class="out"></div>
+    <h2>Live code:</h2>
+    <pre><code class="javascript"></code></pre>
+    <script type="text/javascript" src="src/jquery-2.1.4.min.js"></script>
+    <script type="text/javascript" src="src/Citation-0.1.js"></script>
+    <script class="code" type="text/javascript">
+// Set variable to store data
+var jsondata, bibdata;
+  
+$(function(){
+
+  
+  // Declare function to update the output
+  function update() {
+  
+    // (Re)setting data
+    jsondata = new Cite($('.in[data-type="json"]' ).text())
+    bibdata = new Cite($('.in[data-type="bib"]' ).text())
+    
+    // Getting data
+    $('.out[data-type="json"]').html( jsondata.get({
+      type: 'string',
+      style: $('select.format').val(),
+      lan: $('select.lan').val(),
+      format: $('select.html').val()
+    }) );
+    $('.out[data-type="bib"]' ).html(  bibdata.get({
+      type: 'string',
+      style: $('select.format').val(),
+      lan: $('select.lan').val(),
+      format: $('select.html').val()
+    }) );
+  }
+  
+  // Make output update on change of input
+  $('.in,select').on('input',function(){update();});
+  
+  // Trigger update
+  update();
+  
+});
+    </script>
+    <script type="text/javascript">
+      $(window).on('load',function(){
+	$('pre code.javascript').html($('.code').html());
+	$('pre code.javascript, .javascript').each(function(i, block) {
+	  var str = $(this).html()/*.get(0).textContent*/;
+	  var res = str
+	    .replace(/([^\']*)([\'][^\']*[\'])([^\']*)/gi,'$1<span class="red1 normal">$2</span>$3')
+	    .replace(/(cite)([(<])/gi, '<span class="green1 bold">$1</span>$2')
+	    .replace(/(cite)([^\(<])/gi, '<span class="green2 bold">$1</span>$2')
+	    .replace(/(\w+)(\:)/gi,'<span class="blue1 normal">$1</span>$2')
+	    .replace(/([\s\.])([\w$]+)\s*([(])/gi,'$1<span class="purple1 normal">$2</span>$3')
+	    .replace(/(function|this|document|for|if|else|var|true|false|throw|return|while|break|typeof|catch|new|undefined|null|class)([\s()]+)/g,'<span class="black bold">$1</span>$2')
+	    .replace(/^(.*)(\/\/.*)$/gim,'$1<span class="grey1 normal comment">$2</span>')
+	    .replace(/(\/\*[\s\S]*\*\/)/gi,'<span class="grey1 normal comment">$1</span>')
+	    .replace(/([^\'\"\w])(\d+)/gi,'$1<span class="yellow1 normal">$2</span>')
+	    ;
+	  $(this).html(res);
+	});
+	$('pre code.bibtex, .bibtex').each(function() {
+	  var str = $(this).html()/*.get(0).textContent*/;
+	  var res = str
+	    .replace(/(\@)([^\@\{]+)(\{)(\w+)(\,)/gi,'$1<span class="black bold">$2</span>$3<span class="green1 bold">$4</span><span class="default">$5</span>')
+	    .replace(/(\{{1,2})([^\{\}]*)(\}{0,3})/gi,'$1<span class="red1 normal">$2</span>$3')
+	    .replace(/(\w+)\s*(\=)(\s|[^\'\"\w]+)/gi,'<span class="blue1 normal">$1</span> $2 ')
+	    .replace(/([^\'\"\w])([\d\.\-]+)/gi,'$1<span class="yellow1 normal">$2</span>')
+	    ;
+	  $(this).html(res);
+	});
+      });
+    </script>
+  </body>
+</html>
