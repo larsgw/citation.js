@@ -121,7 +121,7 @@
  * @author Lars Willighagen [lars.willighagen@gmail.com]
  * @version 0.1
  * @license
- * Copyright (c) 2016 Lars Willighagen
+ * Copyright (c) 2015-2016 Lars Willighagen
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -324,7 +324,7 @@ function JSONToHTML (src) {
  * @author Lars Willighagen [lars.willighagen@gmail.com]
  * @version 0.1
  * @license
- * Copyright (c) 2016 Lars Willighagen
+ * Copyright (c) 2015-2016 Lars Willighagen
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -805,12 +805,12 @@ function Cite(data,options) {
 		      res += src.pubdate ?
 			'('+
 			( (src.pubdate.from||[]).length === 3 ? src.pubdate.from[2] + '/' : '' ) +
-			( src.pubdate.from || src.pubdate.to ? date(src.pubdate,lan).split(' ').slice(0,2).join(' ') : '' ) +
+			( src.pubdate.from || src.pubdate.to ? date(src.pubdate,options.lan).split(' ').slice(0,2).join(' ') : '' ) +
 			')'
 		      : '' ;
 		      res += res.slice(-1) !== '>' ? '. ' : '' ;
 		      res += src.title ? '<i>'+src.title+'</i> ' : '' ;
-		      res += src.date ? '. ' + words['used'] + ' ' + date(src.date,lan) : '' ;
+		      res += src.date ? '. ' + words['used'] + ' ' + date(src.date,options.lan) : '' ;
 		      res += src.url ? ', ' + words['from'] + ' <a href="' + src.url + '" >' + src.url + '</a>' : '' ;
 		      
 		      break;
@@ -825,7 +825,7 @@ function Cite(data,options) {
 		      res += src.con.org ? ', ' + src.con.org : '' ;
 		      res += src.place ? ', ' + ( Array.isArray(src.con.place) ? src.con.place.join('/') : src.con.place) : '';
 		      res += src.con.country ? ', ' + src.con.country : '' ;
-		      res += src.date ? ', ' + date(src.date,lan) + '.' : '.' ;
+		      res += src.date ? ', ' + date(src.date,options.lan) + '.' : '.' ;
 		      
 		      break;
 		      
@@ -836,7 +836,7 @@ function Cite(data,options) {
 		      res += src.pubdate ?
 			'('+
 			( (src.pubdate.from||[]).length === 3 ? src.pubdate.from[2] + '/' : '' ) +
-			( src.pubdate.from || src.pubdate.to ? date(src.pubdate,lan) : '' ) +
+			( src.pubdate.from || src.pubdate.to ? date(src.pubdate,options.lan) : '' ) +
 			')'
 		      : '' ;
 		      res += res.slice(-1) !== '>' ? '. ' : '' ;
@@ -859,7 +859,7 @@ function Cite(data,options) {
 		      res += src.year ? '('+src.year+') ' : '' ;
 		      res += res.slice(-1) !== '>' ? '. ' : '' ;
 		      res += (src.pages||[])[0] ? src.pages[0]+(src.pages[1]?'-'+src.pages[1]:'') : '' ;
-		      res += src.date ? '. ' + words['used'] + ' ' + date(src.date,lan) : '' ;
+		      res += src.date ? '. ' + words['used'] + ' ' + date(src.date,options.lan) : '' ;
 		      res += src.url ? ', ' + words['from'] + ' <a href="' + src.url + '" >' + src.url + '</a>' : '' ;
 		      
 		      break;
@@ -950,7 +950,7 @@ function Cite(data,options) {
 		    case 'book':case 'boek':
 		    case 'chapter':case 'hoofdstuk':
 		      
-		      res += src.print ? numToOrd(src.print,lan)+' '+words['print']+'. ' : ' ';
+		      res += src.print ? numToOrd(src.print,options.lan)+' '+words['print']+'. ' : ' ';
 		      res += src.place ? ' ' + ( Array.isArray(src.place) ? src.place.join('/') : src.place) + ':' : '';
 		      res += src.publisher ? ' '+src.publisher : '' ;
 		      res += src.year ? '; '+src.year+'.' : '.' ;

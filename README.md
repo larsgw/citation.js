@@ -95,6 +95,15 @@ When using the `.get()` function, your output depends on the options you pass. I
 * BibTeX: specify as `"BibTeX"`. Supports most types and has no languages. If a type is not supported, `misc` is used.
 * JSON style: specify as `"JSON"`. Gets you a HMTL-formatted JSON string.
 
+# Further explanation
+
+Further explanation can be found at the [API](https://larsgw.github.io/citation.js/API/). The explanation of the jQuery plugin can be found there too.
+
+# Demo
+
+* [Normal demo](https://larsgw.github.io/citation.js/demo.html)
+* [Demo including jQuery plugin](https://larsgw.github.io/citation.js/)
+
 # Dependencies
 
 * None!
