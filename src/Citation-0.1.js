@@ -459,7 +459,7 @@ function Cite(data,options) {
       switch(data.trim(/\s/)[0]){
         case '@':
           inputFormat = 'BibTeX';
-          var match = data.match(/@([^\{]+)\{(\w+)\,([^]+)\}$/) || [],
+          var match = data.match(/@([^\{]+)\{(\w+)\,([^]+)\}/) || [],
 	      result={ type:match[1],label:match[2] },
 	      pairs = match[3].split('},');
           for(i=0;i<pairs.length;i++){
