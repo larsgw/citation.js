@@ -348,7 +348,7 @@ function JSONToHTML (src) {
  * 
  * Create a `Cite` object with almost any kind of data, and manipulate it with its default methods.
  * 
- * @param {(Object[]|Object|String)} data - pass the data
+ * @param {(Object[]|Object|String)} data - Pass the data. If no data is passed, an empty object is returned
  * @param {Object} [options={}] - The default options for the output
  * @param {String} options.type - The outputted datatype: "String" , "HTML" or "JSON"
  * @param {String} options.format - The format of the output: "HTML" or "JSON"
@@ -369,7 +369,7 @@ function Cite(data,options) {
   this._rgx = {
     url:/^(https?:\/\/)?((([a-z\d]([a-z\d-]*[a-z\d])*)\.)+[a-z]{2,}|((\d{1,3}\.){3}\d{1,3}))(\:\d+)?(\/[-a-z\d%_.~+:]*)*(\?[;&a-z\d%_.~+=-]*)?(\#[-a-z\d_]*)?$/i,
     json:[
-      /([^\\])\'/g,
+      /'(((?=\\).'|[^'])*)'/g,
       /(("|]|}|\.|(\d|\.|-)*\d)\s*,|{)\s*(")?([^":\n]+?)(")?\s*:/g
     ]
   }
@@ -459,9 +459,9 @@ function Cite(data,options) {
       switch(data.trim(/\s/)[0]){
         case '@':
           inputFormat = 'BibTeX';
-          var match = data.match(/@([^\{]+)\{(\w+)\,([^]+)\}/) || [];
-	  var result={ type:match[1],label:match[2] };
-	  var pairs = match[3].split('},');
+          var match = data.match(/@([^\{]+)\{(\w+)\,([^]+)\}/) || [],
+	      result={ type:match[1],label:match[2] },
+	      pairs = match[3].split('},');
           for(i=0;i<pairs.length;i++){
 	    var key = (pairs[i].split('=')[0]||'').trim(/\s/g),
 		val = (pairs[i].split('=')[1]||'').replace(/[\{"\s]*([^"}]+)[\}"\s]*/g,'$1').replace(/\s+/g,' ');
@@ -482,11 +482,12 @@ function Cite(data,options) {
           formatData = [result];
           break;
         case '{':case '[':
-	  var result = new Cite(JSON.parse(data.replace(this._rgx.json[0],'$1"').replace(this._rgx.json[1],'$1"$5":')));;
+	  var result = new Cite(JSON.parse(data.replace(this._rgx.json[0],'"$1"').replace(this._rgx.json[1],'$1"$5":')));;
 	  inputFormat = result._input.format;
           formatData = result.data
 	  break;
         default:
+	  data = data.replace(/(^\s+|\s+$)/g,'');
 	  if (this._rgx.url.test(data)) {
 	    var xmlHttp = null, xmlHttp = new XMLHttpRequest();
 	    xmlHttp.open( "GET", data, false );
@@ -519,6 +520,10 @@ function Cite(data,options) {
 	}
 	else inputFormat = 'JSON', formatData = [data];
       }
+      break;
+    case 'undefined':
+      inputFormat = 'empty';
+      formatData = [];
       break;
     default:
       inputFormat = 'else';
