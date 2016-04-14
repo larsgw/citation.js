@@ -489,9 +489,14 @@ function Cite(data,options) {
         default:
 	  data = data.replace(/(^\s+|\s+$)/g,'');
 	  if (this._rgx.url.test(data)) {
-	    var xmlHttp = null, xmlHttp = new XMLHttpRequest();
-	    xmlHttp.open( "GET", data, false );
-	    xmlHttp.send( null );
+	    if(data.match(/\/(Q\d+)$/))data='https://www.wikidata.org/wiki/Special:EntityData/'+data.match(/\/(Q\d+)$/)[1]+'.json';
+	    var xmlHttp = new XMLHttpRequest();
+	    try {
+	      xmlHttp.open( "GET", data, false );
+	      xmlHttp.send( null );
+	    } catch(e) {
+	      console.warn('File could not be fetched');
+	    }
 	    var result = new Cite(xmlHttp.responseText);
 	    inputFormat = 'url/'+result._input.format;
 	    formatData = result.data;

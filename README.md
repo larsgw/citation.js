@@ -74,7 +74,7 @@ In the JSON-part of the input you pass an object or the string of an object. You
 Other supported input types are:
 * A jQuery or HTML element, where it will use the text content of the elements
 * Wikidata JSON, where it will try to get as much relevant properties as possible
-* An URL, where it wil use the fetched data. This uses an synchronous request.
+* An URL, where it wil use the fetched data, or extract the Wikidata entity. This uses an synchronous request.
 
 <a name="output">
 ## Ouput
