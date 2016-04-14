@@ -44,56 +44,8 @@
     </style>
   </head>
   <body>
-    <h1>Citation.js - demo</h1>
+    <h1>Citation.js - Wikidata demo</h1>
     <h2>Input:</h2>
-    <h4>JSON:</h4>
-    <div id="json-in" data-type="json" class="in javascript" contenteditable="true" spellcheck="false">
-      <p>[</p>
-	<div class="nomargin">
-	  <p class="indent1">{</p>
-	    <p class="indent2">type: 'article',</p>
-	    <p class="indent2">author: ['Clara Oswald','Danny Pink'],</p>
-	    <p class="indent2">year: 2001,</p>
-	    <p class="indent2">title: 'Name article',</p>
-	    <p class="indent2">journal: 'Journal',</p>
-	    <p class="indent2">volume: 2,</p>
-	    <p class="indent2">number: 4,</p>
-	    <p class="indent2">pages: [1,21]</p>
-	  <p class="indent1">},</p>
-	</div><div class="nomargin">
-	  <p class="indent1">{</p>
-	    <p class="indent2">type: 'e-article',</p>
-	    <p class="indent2">author: ['Amy Pond','Rory Pond'],</p>
-	    <p class="indent2">year: 2001,</p>
-	    <p class="indent2">title: 'Name article',</p>
-	    <p class="indent2">journal: 'Journal',</p>
-	    <p class="indent2">volume: 2,</p>
-	    <p class="indent2">number: 4,</p>
-	    <p class="indent2">date: {from: [1,12,2015]},</p>
-	    <p class="indent2">url: 'en.wikipedia.org'</p>
-	  <p class="indent1">}</p>
-	</div>
-      <p>]</p>
-    </div>
-    <h4>BibTeX:</h4>
-    <div id="bibtex-in" data-type="bib" class="in bibtex" contenteditable="true" spellcheck="false">
-      <div class="nomargin">
-	<p>@article{Steinbeck2003,</p>
-	  <p class="indent1">author = {Steinbeck, Christoph and Han, Yongquan and Kuhn, Stefan and Horlacher, Oliver and Luttmann, Edgar and Willighagen, Egon},</p>
-	  <p class="indent1">year = {2003},</p>
-	  <p class="indent1">title = {{The Chemistry Development Kit (CDK): an open-source Java library for Chemo- and Bioinformatics.}},</p>
-	  <p class="indent1">journal = {Journal of chemical information and computer sciences},</p>
-	  <p class="indent1">volume = {43},</p>
-	  <p class="indent1">number = {2},</p>
-	  <p class="indent1">pages = {493--500},</p>
-	  <p class="indent1">doi = {10.1021/ci025584y},</p>
-	  <p class="indent1">isbn = {2214707786},</p>
-	  <p class="indent1">issn = {0095-2338},</p>
-	  <p class="indent1">pmid = {12653513},</p>
-	  <p class="indent1">url = {http://www.ncbi.nlm.nih.gov/pubmed/12653513}</p>
-	<p>}</p>
-      </div>
-    </div>
     <h4>Wikidata/URL:</h4>
     <div id="url-in" data-type="url" class="in url" contenteditable="true" spellcheck="false">
       https://www.wikidata.org/wiki/Q23571040
@@ -122,10 +74,6 @@
 	<option value="string">Plain text</option>
       </select>
     </fieldset>
-    <h4>From JSON input:</h4>
-    <div id="json-out" data-type="json" class="out"></div>
-    <h4>From BibTeX input:</h4>
-    <div id="bibtex-out" data-type="bib" class="out"></div>
     <h4>From Wikidata/URL input:</h4>
     <p><b style="font-size:12px;">Note that Citation.js can't parse every Wikidata property. This would require many calls to the database, since properties often have numeric-id's instead of values.</b></p>
     <div id="url-out" data-type="url" class="out"></div>
@@ -179,9 +127,7 @@
     </script>
     <script class="code" type="text/javascript">
 // Set variable to store data
-var jsondata = new Cite(),
-     bibdata = new Cite(),
-     urldata = new Cite();
+var urldata = new Cite();
   
 $(function(){
 
@@ -189,9 +135,7 @@ $(function(){
   function update() {
     
     // (Re)setting data
-    jsondata.set($('.in[data-type="json"]').text());
-     bibdata.set($('.in[data-type="bib"]' ).text());
-     urldata.set($('.in[data-type="url"]' ).text());
+    urldata.set($('.in[data-type="url"]' ).text());
      
     // (Re)setting options
     var opt = {
@@ -200,14 +144,10 @@ $(function(){
       lan: $('select.lan').val(),
       format: $('select.html').val()
     };
-    jsondata.options(opt);
-     bibdata.options(opt);
-     urldata.options(opt);
+    urldata.options(opt);
     
     // Getting data
-    $('.out[data-type="json"]').html( jsondata.get() );
-    $('.out[data-type="bib"]' ).html(  bibdata.get() );
-    $('.out[data-type="url"]' ).html(  urldata.get() );
+    $('.out[data-type="url"]').html(urldata.get());
       
   }
   
@@ -226,7 +166,7 @@ $(function(){
 	// Insert live code, directly from the script element (!)
 	$('pre code.javascript').html($('.code').html());
 	// Highlight all code
-	$('.javascript,.bibtex,.url').highlight();
+	$('.javascript,.url').highlight();
 	// Remove and re-add highlighting on focus and blur
 	$('.in').focus(function(){$(this).find('span').each(function(){$(this).after(this.textContent);$(this).remove();});});
 	$('.in').blur(function(){$(this).highlight()});
