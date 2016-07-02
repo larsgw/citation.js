@@ -226,7 +226,9 @@ function date(date,lan) {
 	bx:['January','February','March','April','May','June','July','August','September','October','November','December'],
 	nl:['Januari','Februari','Maart','April','Mei','Juni','Juli','Augustus','September','Oktober','November','December']
       }[lan] || ['January','February','March','April','May','June','July','August','September','October','November','December'];
-      
+  
+  console.log(date,lan)
+  
   switch(lan){     
     case 'bx':
       
@@ -235,7 +237,6 @@ function date(date,lan) {
       break;
       
     case 'nl':
-    case 'en':default:
       
       if(date.from&&date.from.length!=0){
 	if(date.to&&date.to.length!=0){
@@ -246,6 +247,21 @@ function date(date,lan) {
 	    }else res += date.from[0]+' '+months[(date.from[1]-1)].toLowerCase()+' - '+ date.to[0]+' '+months[(date.to[1]-1)].toLowerCase()+' '+date.from[2];
 	  }else res += date.from[0]+' '+months[(date.from[1]-1)].toLowerCase()+' '+date.from[2]+' - '+date.to[0]+' '+months[(date.to[1]-1)].toLowerCase()+' '+date.to[2];
 	}else res += date.from[0]+' '+months[date.from[1]-1].toLowerCase()+' '+date.from[2];
+      }else res += '';
+      
+      break;
+      
+    case 'en':default:
+      
+      if(date.from&&date.from.length!=0){
+	if(date.to&&date.to.length!=0){
+	  if(date.to[2]==date.from[2]){
+	    if(date.to[1]==date.from[1]){
+	      if(date.to[0]==date.from[0])res += date.from[0]+' '+months[date.from[1]-1]+' '+date.from[2];
+	      else res += date.from[0]+' - '+ date.to[0]+' '+months[(date.from[1]-1)]+' '+date.from[2];
+	    }else res += date.from[0]+' '+months[(date.from[1]-1)]+' - '+ date.to[0]+' '+months[(date.to[1]-1)]+' '+date.from[2];
+	  }else res += date.from[0]+' '+months[(date.from[1]-1)]+' '+date.from[2]+' - '+date.to[0]+' '+months[(date.to[1]-1)]+' '+date.to[2];
+	}else res += date.from[0]+' '+months[date.from[1]-1]+' '+date.from[2];
       }else res += '';
       
       break;
@@ -433,7 +449,7 @@ function Cite(data,options) {
       print:'edition',
       In:'In',
       used:'Used on',
-      from:'from',
+      from:'Retrieved from',
       paper:'Paper presented at the',
       editors:'editors',
       internet:'Internet',
@@ -550,10 +566,12 @@ function Cite(data,options) {
 	  res.number= parseInt(res.issue    ) ||undefined;
 	  res.volume= parseInt(res.volume   ) ||undefined;
 	  res.page  =[parseInt(res.firstpage)]||undefined;
-	  res.date  =        {           };
-	  res.date.from=data.date?data.date.value[0].split('-').reverse().map(function(x){return parseInt(x)}):undefined;
+	  res.pubdate  =        {           };
+	  res.pubdate.from=data.date?data.date.value[0].split('-').reverse().map(function(x){return parseInt(x)}):undefined;
+	  res.year  = res.year?res.year:(res.pubdate.from||[])[2];
 	  delete res.authors;
 	  delete res.issue  ;
+	  delete res.date   ;
 	  formatData = [res];
 	}
 	// Default
@@ -904,7 +922,9 @@ function Cite(data,options) {
 		      res += res.slice(-1) !== '>' ? '. ' : '' ;
 		      res += (src.pages||[])[0] ? src.pages[0]+(src.pages[1]?'-'+src.pages[1]:'') : '' ;
 		      res += src.date ? '. ' + words['used'] + ' ' + date(src.date,options.lan) : '' ;
-		      res += src.url ? ', ' + words['from'] + ' <a href="' + src.url + '" >' + src.url + '</a>' : '' ;
+		      res += res.slice(-2) !== '. ' ? ', ' : '' ;
+		      res += src.doi ? 'doi:' + src.doi + '. ' : '' ;
+		      res += src.url ? words['from'] + ' <a href="' + src.url + '" >' + src.url + '</a>' : '' ;
 		      
 		      break;
 		    
