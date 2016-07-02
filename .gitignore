@@ -1,0 +1,11 @@
+css/
+demo.html
+favicon.ico
+index.html
+out/
+src/Citation-0.1b.js
+src/citation.js
+src/conf.json
+src/jquery-2.1.4.min.js
+src/parse-bibtex.js
+test.html
