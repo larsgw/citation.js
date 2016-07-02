@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Demo page</title>
+    <style>
+      a.cjs { color:inherit;text-decoration:none; }
+      a.cjs-active { font-weight:bold; }
+      a.cjs:after { content:' | ';font-weight:normal; }
+      a.cjs:last-child:after { content:''; }
+
+      section.cjs-inputform {
+	width:100%;display:none;
+	margin:1em 0;
+      }
+
+      section.cjs-active {
+	display:block;
+      }
+
+      .cjs-in { position:relative; }
+
+      fieldset.cjs {
+	border:none;
+      }
+
+      fieldset.cjs input[type="number"] { max-width:6ch;max-width:65px; }
+      fieldset.cjs input.cjs-year[type="number"] { max-width:10ch;max-width:85px; }
+
+      textarea.cjs { width:50%;height:300px; }
+
+      #cjs-opt select { display:inline }
+
+      .cjs-draft {
+	min-height:3em;
+	border-radius:5px;
+	border:1px solid #aaa;
+	margin:1em 2px;
+	padding: 0.35em 0.75em 0.635em 0.75em;
+	position:relative;
+      }
+
+      .cjs-draft > p, .cjs-draft > ul {
+	background:transparent;
+	padding:0.65em 5px;margin:0;
+	-webkit-animation: newCite 1s 1 ease;
+	-moz-animation: newCite 1s 1 ease;
+	-o-animation: newCite 1s 1 ease;
+      }
+
+      @-webkit-keyframes newCite {
+	from { background-color:rgba(0,255,0,.5); }
+	to { background-color:rgba(0,255,0,0); }
+      }
+      @-moz-keyframes newCite {
+	from { background-color:rgba(0,255,0,.5); }
+	to { background-color:rgba(0,255,0,0); }
+      }
+      @-o-keyframes newCite {
+	from { background-color:rgba(0,255,0,.5); }
+	to { background-color:rgba(0,255,0,0); }
+      }
+      @keyframes newCite {
+	from { background-color:rgba(0,255,0,.5); }
+	to { background-color:rgba(0,255,0,0); }
+      }
+
+      .cjs-out {
+	width:100%;clear:both;border-top:1px solid #333;margin-top:50px;padding-top:19px;
+      }
+    </style>
+  </head>
+  <body>
+    <form class="cjs cjs-in">
+    </form>
+    
+    <div class="cjs cjs-out"></div>
+    
+    <script type="text/javascript" src="src/jquery-2.1.4.min.js"></script>
+    <script type="text/javascript" src="src/Citation-0.1.js"></script>
+    <script type="text/javascript" src="src/jquery.Citation-0.1.js"></script>
+    <script type="text/javascript">
+      $(function(){
+	$('form.cjs-in').buildCJSForm({lan:'en'})
+	$('div.cjs-out').buildCJSOutput();
+      });
+    </script>
+  </body>
+</html>
