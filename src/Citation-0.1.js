@@ -362,15 +362,15 @@ function Cite(data,options) {
   if(!(this instanceof Cite))return new Cite(data,options);
 
   /**
-  * Object containing several RegExp patterns
+  * Object containing several RegExp patterns, mostly used for parsing (*full of shame*) and recognizing data types
   * 
   * @default
   */
   this._rgx = {
-    url:/^(https?:\/\/)?((([a-z\d]([a-z\d-]*[a-z\d])*)\.)+[a-z]{2,}|((\d{1,3}\.){3}\d{1,3}))(\:\d+)?(\/[-a-z\d%_.~+:]*)*(\?[;&a-z\d%_.~+=-]*)?(\#[-a-z\d_]*)?$/i,
+    url:/^(https?:\/\/)?((([a-z\d]([a-z\d-]*[a-z\d])*)\.)+[a-z]{2,}|((\d{1,3}\.){3}\d{1,3})|localhost)(\:\d+)?(\/[-a-z\d%_.~+:]*)*(\?[;&a-z\d%_.~+=-]*)?(\#[-a-z\d_]*)?$/i,
     json:[
-      /'(((?=\\).'|[^'])*)'/g,
-      /(("|]|}|\.|(\d|\.|-)*\d)\s*,|{)\s*(")?([^":\n]+?)(")?\s*:/g
+      /((?:\[|:|,)\s*)'((?:\\'|[^'])*?[^\\])?'(?=\s*(?:\]|}|,))/g,
+      /((?:(?:"|]|}|\/[gmi]|\.|(?:\d|\.|-)*\d)\s*,|{)\s*)(?:"([^":\n]+?)"|'([^":\n]+?)'|([^":\n]+?))(\s*):/g
     ]
   }
 
@@ -454,40 +454,53 @@ function Cite(data,options) {
   
   // Detecting the input format and formatting the data
   var inputType = typeof data, inputFormat, formatData;
-  switch(typeof data){
+  switch(inputType){
     case 'string':
-      switch(data.trim(/\s/)[0]){
+      switch(data.trim(/\s/).charAt(0)){
         case '@':
+	  // BibTeX
           inputFormat = 'BibTeX';
           var match = data.match(/@([^\{]+)\{(\w+)\,([^]+)\}/) || [],
-	      result={ type:match[1],label:match[2] },
+	      res={ type:match[1],label:match[2] },
 	      pairs = match[3].split('},');
-          for(i=0;i<pairs.length;i++){
+          for(var i=0;i<pairs.length;i++){
 	    var key = (pairs[i].split('=')[0]||'').trim(/\s/g),
 		val = (pairs[i].split('=')[1]||'').replace(/[\{"\s]*([^"}]+)[\}"\s]*/g,'$1').replace(/\s+/g,' ');
-	    result[key] = val;
+	    res[key] = val;
           };
-	  result['author']=result['author']?result['author'].split(' and '):undefined;
-	  result['editor']=result['editor']?result['editor'].split(' and '):undefined;
-	  result['pages']=result['pages']?result['pages'].split('--'):undefined;
-	  result['place']=result['location'];
-	  result['title']=result['title']?
+	  res['author']=res['author']?res['author'].split(' and '):undefined;
+	  res['editor']=res['editor']?res['editor'].split(' and '):undefined;
+	  res['pages']=res['pages']?res['pages'].split('--'):undefined;
+	  res['place']=res['location'];
+	  res['title']=res['title']?
 	    (function(){
-	      var title = result['title'].replace(/({|})/g,'');
+	      var title = res['title'].replace(/({|})/g,'');
 	      if(title.slice(-1)=='.')title.slice(0,-1);
 	      return title;
 	    })()
 	  :undefined;
-          delete result[''];
-          formatData = [result];
+          delete res[''];
+          formatData = [res];
           break;
         case '{':case '[':
-	  var result = new Cite(JSON.parse(data.replace(this._rgx.json[0],'"$1"').replace(this._rgx.json[1],'$1"$5":')));;
-	  inputFormat = result._input.format;
-          formatData = result.data
+	  // JSON string (probably)
+	  var obj;
+	  try       { obj = JSON.parse(data) }
+	  catch (e) {
+	    console.warn('Input was not valid JSON, switching to experimental parser for invalid JSON')
+	    try {
+	      obj = JSON.parse(data.replace(this._rgx.json[0],'$1"$2"').replace(this._rgx.json[1],'$1"$2$3$4"$5:'))
+	    } catch (e) {
+	      console.warn('Experimental parser failed. Please improve the JSON. If this is not JSON, please re-read the supported formats.')
+	    }
+	  }
+	  var res = new Cite(obj);
+	  inputFormat = 'string/' + res._input.format;
+          formatData = res.data;
 	  break;
         default:
 	  data = data.replace(/(^\s+|\s+$)/g,'');
+	  // URL
 	  if (this._rgx.url.test(data)) {
 	    if(data.match(/\/(Q\d+)$/))data='https://www.wikidata.org/wiki/Special:EntityData/'+data.match(/\/(Q\d+)$/)[1]+'.json';
 	    var xmlHttp = new XMLHttpRequest();
@@ -497,9 +510,9 @@ function Cite(data,options) {
 	    } catch(e) {
 	      console.warn('File could not be fetched');
 	    }
-	    var result = new Cite(xmlHttp.responseText);
-	    inputFormat = 'url/'+result._input.format;
-	    formatData = result.data;
+	    var res = xmlHttp.responseText===data?console.warn('Infinite chaining loop detected'):new Cite(xmlHttp.responseText);
+	    inputFormat = 'url/' + res._input.format;
+	    formatData = res.data;
 	  } else {
 	    inputFormat = 'else', formatData = [];
 	    console.warn('This format is not supported (yet)'); }
@@ -507,15 +520,20 @@ function Cite(data,options) {
       }
       break;
     case 'object':
+      // Array
       if (Array.isArray( data )) {
-	inputFormat = 'JSON', res = [] ;
+	inputFormat = 'json', res = [] ;
 	for (obj=0;obj<data.length;obj++) { res = res.concat((new Cite(data[obj])).data) }
 	formatData = res;
-      } else if (window.jQuery&&data instanceof jQuery) inputFormat = 'jQuery', data = data.val()||data.text()||data.html(), formatData = new Cite(data,options);
+      }
+      // jQuery & HTML
+      else if (window.jQuery&&data instanceof jQuery) inputFormat = 'jQuery', data = data.val()||data.text()||data.html(), formatData = new Cite(data,options);
       else if (window.HMTLElement&&data instanceof HMTLElement) inputFormat = 'HTML', data = data.value||data.textContent, formatData = new Cite(data,options);
+      // JSON structures
       else {
+	// Wikidata
 	if ( data.hasOwnProperty('entities') ) {
-	  inputFormat = 'Wikidata';
+	  inputFormat = 'json/wikidata';
 	  var obj = data.entities[Object.keys(data.entities)[0]].claims, res = {};
 	  for (var prop in obj) {
 	    var val = this._wikidataProperties(obj[prop],prop)
@@ -523,7 +541,23 @@ function Cite(data,options) {
 	  } res.title = res.title || data.entities[Object.keys(data.entities)[0]].labels.en.value;
 	  formatData = [res];
 	}
-	else inputFormat = 'JSON', formatData = [data];
+	// ContentMine
+	else if ( data.hasOwnProperty('fulltext_html')||data.hasOwnProperty('fulltext_xml')||data.hasOwnProperty('fulltext_pdf') ) {
+	  inputFormat = 'json/contentmine';
+	  var res = {};
+	  for (var prop in data) res[prop]=data[prop].value[0];
+	  res.author= data.authors?data.authors.value:undefined;
+	  res.number= parseInt(res.issue    ) ||undefined;
+	  res.volume= parseInt(res.volume   ) ||undefined;
+	  res.page  =[parseInt(res.firstpage)]||undefined;
+	  res.date  =        {           };
+	  res.date.from=data.date?data.date.value[0].split('-').reverse().map(function(x){return parseInt(x)}):undefined;
+	  delete res.authors;
+	  delete res.issue  ;
+	  formatData = [res];
+	}
+	// Default
+	else inputFormat = 'json', formatData = [data];
       }
       break;
     case 'undefined':
