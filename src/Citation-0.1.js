@@ -415,7 +415,7 @@ function Cite(data,options) {
 	(console.warn('This entry type is not recognized and therefore interpreted as \'article\'')||'')+'article'];
 	break;
       case 'P212' : return ['isbn',a[0].mainsnak.datavalue.value]; break;
-      case 'P304' : return ['pages',[a[0].mainsnak.datavalue.value.split('-')||0]]; break;
+      case 'P304' : return ['pages',(a[0].mainsnak.datavalue.value.split('-')||undefined)]; break;
       case 'P356' : return ['doi',a[0].mainsnak.datavalue.value]; break;
       case 'P393' : return ['print',parseInt(a[0].mainsnak.datavalue.value)]; break;
       case 'P433' : return ['issue',parseInt(a[0].mainsnak.datavalue.value)]; break;
@@ -562,6 +562,7 @@ function Cite(data,options) {
 	  inputFormat = 'json/contentmine';
 	  var res = {};
 	  for (var prop in data) res[prop]=data[prop].value[0];
+	  res.author= 'article';
 	  res.author= data.authors?data.authors.value:undefined;
 	  res.number= parseInt(res.issue    ) ||undefined;
 	  res.volume= parseInt(res.volume   ) ||undefined;
@@ -852,7 +853,7 @@ function Cite(data,options) {
 		      ) + ' ' : '' ;
 		      res += src.editor ? '('+words['ed']+'.) ' : '' ;
 		      res += src.year && pubType!='chapter' ? '('+src.year+') ' : '' ;
-		      res += res.slice(-1) !== '>' ? '. ' : '' ;
+		      res += res.slice(-3) !== '<p>' ? '. ' : '' ;
 		      res += src.title ? '<i>'+src.title+'</i> ' : '' ;
 		      res += (src.pages||[])[0] ? '( p. '+src.pages[0]+(src.pages[1]?'-'+src.pages[1]:'')+' )' : '' ;
 		      res += src.print ? '('+src.print+'<sup>e</sup> '+words['print']+')' : '' ;
@@ -861,16 +862,16 @@ function Cite(data,options) {
 		      
 		      break;
 		      
-		    case 'e-publication':case 'e-publicatie':
+		    case 'e-publication':case 'e-publicatie':case 'website':
 		      
 		      res += src.author ? name([].concat(src.author||[]),{style:style,lan:options.lan}) + ' ' : '' ;
 		      res += src.pubdate ?
 			'('+
-			( (src.pubdate.from||[]).length === 3 ? src.pubdate.from[2] + '/' : '' ) +
+			( (src.pubdate.from||[]).length === 3 ? src.pubdate.from[2] + ', ' : '' ) +
 			( src.pubdate.from || src.pubdate.to ? date(src.pubdate,options.lan).split(' ').slice(0,2).join(' ') : '' ) +
 			')'
 		      : '' ;
-		      res += res.slice(-1) !== '>' ? '. ' : '' ;
+		      res += res.slice(-3) !== '<p>' ? '. ' : '' ;
 		      res += src.title ? '<i>'+src.title+'</i> ' : '' ;
 		      res += src.date ? '. ' + words['used'] + ' ' + date(src.date,options.lan) : '' ;
 		      res += src.url ? ', ' + words['from'] + ' <a href="' + src.url + '" >' + src.url + '</a>' : '' ;
@@ -897,11 +898,11 @@ function Cite(data,options) {
 		      res += src.author ? name([].concat(src.author||[]),{style:style,lan:options.lan}) + ' ' : '' ;
 		      res += src.pubdate ?
 			'('+
-			( (src.pubdate.from||[]).length === 3 ? src.pubdate.from[2] + '/' : '' ) +
-			( src.pubdate.from || src.pubdate.to ? date(src.pubdate,options.lan) : '' ) +
+			( (src.pubdate.from||[]).length === 3 ? src.pubdate.from[2] + ', ' : '' ) +
+			( src.pubdate.from || src.pubdate.to ? date(src.pubdate,options.lan).split(' ').slice(0,2).join(' ') : '' ) +
 			')'
 		      : '' ;
-		      res += res.slice(-1) !== '>' ? '. ' : '' ;
+		      res += res.slice(-3) !== '<p>' ? '. ' : '' ;
 		      res += src.title ? src.title+'. ' : '' ;
 		      res += (src.pages||[])[0] ? ', p. '+src.pages[0]+(src.pages[1]?'-'+src.pages[1]:'')+'.' : '' ;
 		      
@@ -913,18 +914,17 @@ function Cite(data,options) {
 		      
 		      res += src.author ? name([].concat(src.author||[]),{style:style,lan:options.lan}) + ' ' : '' ;
 		      res += src.year ? '('+src.year+')' : '' ;
-		      res += res.slice(-1) !== '>' ? '. ' : '' ;
-		      res += src.title ? src.title+'.' : '' ;
-		      res += src.journal ? ' <i>' + src.journal : '<i>';
+		      res += res.slice(-3) !== '<p>' ? '. ' : '' ;
+		      res += src.title ? src.title+'. ' : '' ;
+		      res += src.journal ? '<i>' + src.journal : '<i>';
 		      res += src.journal && src.volume ? ', ' : '' ;
-		      res += src.volume ? src.volume + '</i> ' : '</i> ';
-		      res += src.year ? '('+src.year+') ' : '' ;
-		      res += res.slice(-1) !== '>' ? '. ' : '' ;
-		      res += (src.pages||[])[0] ? src.pages[0]+(src.pages[1]?'-'+src.pages[1]:'') : '' ;
-		      res += src.date ? '. ' + words['used'] + ' ' + date(src.date,options.lan) : '' ;
-		      res += res.slice(-2) !== '. ' ? ', ' : '' ;
-		      res += src.doi ? 'doi:' + src.doi + '. ' : '' ;
-		      res += src.url ? words['from'] + ' <a href="' + src.url + '" >' + src.url + '</a>' : '' ;
+		      res += src.volume ? src.volume + '</i>' : '</i> ';
+		      res += src.number ? '('+src.number+')' : '' ;
+		      res += (src.pages||[])[0] ? ', ' + src.pages[0]+(src.pages[1]?'-'+src.pages[1]:'') : '' ;
+		      res += res.slice(-2) !== ', ' && res.slice(-3) !== '<p>' ? '. ' : '' ;
+		      res += src.date ? words['used'] + ' ' + date(src.date,options.lan) + '. ' : '' ;
+		      res += src.doi ? '<a href="https://doi.org/'+src.doi+'" >doi:' + src.doi + '</a>' : '' ;
+		      res += src.url && ! src.doi ? words['from'] + '<a href="' + src.url + '" >' + src.url + '</a>' : '' ;
 		      
 		      break;
 		    
@@ -978,9 +978,9 @@ function Cite(data,options) {
 		    (src.conference||{}).org?'organization={'+src.conference.org+'}':'',
 		    src.place?'address={'+(Array.isArray(src.place)?src.place[0]:src.place)+'}':'',
 		    src.publisher?'publisher={'+src.publisher+'}':'',
+		    src.doi?'doi={'+src.doi+'}':'',
 		    //Properties currently only used for BibTeX
 		    src.isbn?'isbn={'+src.isbn+'}':'',
-		    src.doi?'doi={'+src.doi+'}':'',
 		    src.issn?'issn={'+src.issn+'}':''
 		  );
 		  arr  = arr.join('joining').replace(/(joining)+/g,'joining').replace(/(^joining|joining$)/g,'').split('joining');
@@ -992,6 +992,20 @@ function Cite(data,options) {
 		case 'json':
 		  res += JSONToHTML(src);
 		  break;
+		
+		/*case 'harvard':
+		  res += '<p>';
+		  
+		  switch (pubType){
+		    
+		    case 'book':case 'boek':
+		      
+		      break;
+		    
+		  }
+		  
+		  res += '</p>';
+		  break;*/
 		  
 		case 'vancouver':
 		default:
