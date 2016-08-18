@@ -1,10 +1,10 @@
 # Description
 
-Citation.js converts all your BibTeX and JSON to BibTeX, JSON and HTML in your very own webbrowser! You can now even implement in to your own page.
+Citation.js converts formats like BibTeX, Wikidata JSON and ContentMine JSON to a custom standard to convert to other formats like APA, Vancouver and back to BibTeX.
 
 # Use
 
-Use the object constructor `Cite()` with the parameters as listed [below](#input). Then just call one of the function, for example get, to get your [output](#output).
+Use the object constructor `Cite()` with the parameters as listed [below](#input). Then just call one of the functions, e.g. `.get()`, to get your [output](#output).
 
 <a name="input">
 ## Input
@@ -74,6 +74,7 @@ In the JSON-part of the input you pass an object or the string of an object. You
 Other supported input types are:
 * A jQuery or HTML element, where it will use the text content of the elements
 * Wikidata JSON, where it will try to get as much relevant properties as possible
+* ContentMine JSON, where it will convert to JSON with custom standard
 * An URL, where it wil use the fetched data, or extract the Wikidata entity. This uses an synchronous request.
 
 <a name="output">
@@ -97,12 +98,12 @@ When using the `.get()` function, your output depends on the options you pass. I
 
 # Further explanation
 
-Further explanation can be found at the [API](https://larsgw.github.io/citation.js/API/). The explanation of the jQuery plugin can be found there too.
+Further explanation can be found at the [API](https://larsgw.github.io/citation.js/docs/api/). The explanation of the jQuery plugin can be found there too.
 
 # Demo
 
-* [Normal demo](https://larsgw.github.io/citation.js/demo.html)
-* [Demo including jQuery plugin](https://larsgw.github.io/citation.js/)
+* [Normal demo](https://larsgw.github.io/citation.js/docs/demo/demo.html)
+* [Demo including jQuery plugin](https://larsgw.github.io/citation.js/docs/demo/jquery.html)
 
 # Dependencies
 

@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Demo page</title>
+    <link type="text/css" rel="stylesheet" href="src/jquery.Citation-0.1.css"/>
+    <link rel="shortcut icon" type="image/x-icon" href="../favicon.ico"/>
+    <link rel="icon" type="image/x-icon" href="../favicon.ico"/>
+  </head>
+  <body>
+    <form class="cjs cjs-in">
+    </form>
+    
+    <div class="cjs cjs-out"></div>
+    
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+    <script type="text/javascript" src="src/Citation-0.1.js"></script>
+    <script type="text/javascript" src="src/jquery.Citation-0.1.js"></script>
+    <script type="text/javascript">
+      $(function(){
+	$('form.cjs-in').buildCJSForm({lan:'en'})
+	$('div.cjs-out').buildCJSOutput();
+      });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Home</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Home</h1>
+
+    
+
+
+
+    
+
+
+    <h3> </h3>
+
+
+
+
+
+
+
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+<section>
+
+<header>
+    
+        <h2>Citation-0.1.js</h2>
+        
+    
+</header>
+
+<article>
+    <div class="container-overview">
+    
+        
+            <div class="description"><h1>Description</h1><p>Citation.js converts formats like BibTeX, Wikidata JSON and ContentMine JSON to a custom standard to convert to other formats like APA, Vancouver and back to BibTeX.</p>
+<h1>Use</h1><p>Use the object constructor <code>Cite()</code> with the parameters as listed <a href="#input">below</a>. Then just call one of the functions, e.g. <code>.get()</code>, to get your <a href="#output">output</a>.</p>
+<p><a name="input"></p>
+<h2>Input</h2><p></a></p>
+<p><strong>When making the <code>Cite()</code> object:</strong></p>
+<ol>
+<li>In the first parameter you pass the string, object or array of objects you want to convert. For the properties supported in the objects, see <a href="#json">JSON</a>.</li>
+<li>In the second parameter you pass an object containing options with the following properties. These are the default options for when <a href="Cite.html#.get">getting data</a>.<ol>
+<li><code>type</code>: The output datatype: <code>&quot;html&quot;</code>, <code>&quot;string&quot;</code> or <code>&quot;json&quot;</code> (default)</li>
+<li><code>format</code>: The output format: <code>&quot;html&quot;</code>, <code>&quot;string&quot;</code> or <code>&quot;json&quot;</code> (default). This way, you can get a HTML or JSON string instead of an actual object.</li>
+<li><code>style</code>: The output style. See <a href="#output">Output</a>. <code>&quot;Vancouver&quot;</code> is default</li>
+<li><code>lan</code>: The language. Currently Dutch (<code>&quot;nl&quot;</code>) and English (<code>&quot;en&quot;</code>, default) are supported</li>
+</ol>
+</li>
+</ol>
+<p><strong>Example:</strong></p>
+<pre class="prettyprint source"><code>var citation = Cite(
+ {}, //data
+ {
+   type:&quot;string&quot;,
+   format:&quot;json&quot;
+ }
+);</code></pre><p>Now, when you use the <code>.get()</code> function, the default options will get you the data as a JSON string.</p>
+<p><a name="bibtex"></p>
+<h3>BibTeX</h3><p></a></p>
+<p>In the BibTeX-part of the input you simply pass a string of a citation in BibTeX-format. For the BibTeX documentation, see <a href="https://en.wikipedia.org/wiki/BibTeX#Bibliographic_information_file">wikipedia</a>.</p>
+<p><a name="json"></p>
+<h3>JSON</h3><p></a></p>
+<p>In the JSON-part of the input you pass an object or the string of an object. Your JSON may be &quot;relaxed&quot;; You don't need to worry about double quotes around every single key. Properties are specified below. Note that not all properties are supported for all types.</p>
+<ul>
+<li><code>type</code>: the type of citation. May be <code>&quot;book&quot;</code>, <code>&quot;chapter&quot;</code>, <code>&quot;article&quot;</code>, <code>&quot;e-article&quot;</code>, <code>&quot;e-publication&quot;</code>, <code>&quot;paper&quot;</code> or <code>&quot;newspaper-article&quot;</code></li>
+<li><code>author</code>: the author(s), listed in an array. Names don't have to be formatted</li>
+<li><code>editor</code>: the editor(s), listed in an array. Names don't have to be formatted</li>
+<li><code>chapterauthor</code>: the authors of the chapter. Names don't have to be formatted</li>
+<li><code>title</code>: the title of the book, publication, etc</li>
+<li><code>chapter</code>: the title or number of the chapter</li>
+<li><code>pages</code>: the pagenumbers of the citated fragment, listed as integers in an array</li>
+<li><code>year</code>: year of publication, as an integer</li>
+<li><code>pubdate</code>: object containin following properties, concerning the date of publication<ul>
+<li><code>from</code>: date of publication, format dd-mm-yyyy, listed as integers in an array</li>
+</ul>
+</li>
+<li><code>date</code>: object containin following properties, concerning the date of citation<ul>
+<li><code>from</code>: date of citation or date of start of conference, format dd-mm-yyyy, listed as integers in an array</li>
+<li><code>to</code>: date of end of conference, format dd-mm-yyyy, listed as integers in an array</li>
+</ul>
+</li>
+<li><code>url</code>: URL of publication</li>
+<li><code>conference</code>: object containin following properties, concerning the conference where the thing was presented<ul>
+<li><code>name</code>: name of conference</li>
+<li><code>org</code>: name of organisation where conference was held</li>
+<li><code>place</code>: place where conference was held</li>
+<li><code>country</code>: country where conference was held</li>
+<li>for the date of the conference, use <code>date</code> (outside of the <code>con</code> object)</li>
+</ul>
+</li>
+<li><code>journal</code>: journal the thing is published in</li>
+<li><code>volume</code>: the volume of the journal the thing is published in</li>
+<li><code>number</code>: the number of the journal the thing is published in </li>
+<li><code>place</code>: the place(s) of publication, listed in an array</li>
+<li><code>publisher</code>: the publisher as a string</li>
+</ul>
+<h3>Other input types</h3><p>Other supported input types are:</p>
+<ul>
+<li>A jQuery or HTML element, where it will use the text content of the elements</li>
+<li>Wikidata JSON, where it will try to get as much relevant properties as possible</li>
+<li>ContentMine JSON, where it will convert to JSON with custom standard</li>
+<li>An URL, where it wil use the fetched data, or extract the Wikidata entity. This uses an synchronous request.</li>
+</ul>
+<p><a name="output"></p>
+<h2>Ouput</h2><p></a></p>
+<p>When using the <code>.get()</code> function, your output depends on the options you pass. If you don't pass any options, the values you passed as default are used. When you haven't passed those, standard options are passed.</p>
+<p><strong><code>Type</code> and <code>Format</code></strong></p>
+<ul>
+<li>JSON: Outputs an object with properties as specified in <a href="#json">Input/JSON</a>. Specify as <code>&quot;JSON&quot;</code>. Supports all types. Languages are ignored.</li>
+<li>String: Outputs a single string with your formatted citation, in the styles below.</li>
+<li>HTML: Outputs a set of DOM nodes, containing your formatted citation, in the styles below.</li>
+</ul>
+<p><strong><code>Styles</code></strong></p>
+<ul>
+<li>Vancouver style; specify as <code>&quot;Vancouver&quot;</code>. Supports all languages and all types except <code>&quot;paper&quot;</code>. Instead of <code>&quot;paper&quot;</code>, use <code>&quot;article&quot;</code>.</li>
+<li>APA style; specify as <code>&quot;APA&quot;</code>. Supports all types and languages.</li>
+<li>BibTeX: specify as <code>&quot;BibTeX&quot;</code>. Supports most types and has no languages. If a type is not supported, <code>misc</code> is used.</li>
+<li>JSON style: specify as <code>&quot;JSON&quot;</code>. Gets you a HMTL-formatted JSON string.</li>
+</ul>
+<h1>Further explanation</h1><p>Further explanation can be found at the <a href="https://larsgw.github.io/citation.js/docs/api/">API</a>. The explanation of the jQuery plugin can be found there too.</p>
+<h1>Demo</h1><ul>
+<li><a href="https://larsgw.github.io/citation.js/docs/demo/demo.html">Normal demo</a></li>
+<li><a href="https://larsgw.github.io/citation.js/docs/demo/jquery.html">Demo including jQuery plugin</a></li>
+</ul>
+<h1>Dependencies</h1><ul>
+<li>None!</li>
+</ul>
+<p><br /><br /></p>
+<hr>
+<p><br /><br /></p></div>
+        
+
+        
+
+
+<dl class="details">
+
+    
+    <dt class="tag-version">Version:</dt>
+    <dd class="tag-version"><ul class="dummy"><li>0.1</li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-author">Author:</dt>
+    <dd class="tag-author">
+        <ul>
+            <li>&lt;p>Lars Willighagen [lars.willighagen@gmail.com]&lt;/p></li>
+        </ul>
+    </dd>
+    
+
+    
+
+    
+    <dt class="tag-license">License:</dt>
+    <dd class="tag-license"><ul class="dummy"><li>Copyright (c) 2015-2016 Lars Willighagen
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.</li></ul></dd>
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="Citation-0.1.js.html">Citation-0.1.js</a>, <a href="Citation-0.1.js.html#line1">line 1</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+    <dt class="tag-todo">To Do:</dt>
+    <dd class="tag-todo">
+        <ul>
+            <li>Add jQuery plugin (building forms)</li>
+        </ul>
+    </dd>
+    
+</dl>
+
+
+        
+    
+    </div>
+
+    
+
+    
+
+    
+
+     
+
+    
+
+    
+
+    
+
+    
+
+    
+</article>
+
+</section>
+
+
+
+
+
+
+
+<section>
+
+<header>
+    
+        <h2>jquery.Citation-0.1.js</h2>
+        
+    
+</header>
+
+<article>
+    <div class="container-overview">
+    
+        
+            <div class="description"><h1>Description</h1><p>This plugin builds a form for input for the <code>Cite</code> object. Uses the templates in <code>html/</code>.</p>
+<h1>Use</h1><h2><code>jQuery.buildCJSForm(opt,tmp)</code></h2><p>Builds the form. Parameters:</p>
+<ul>
+<li><code>opt</code>: Default options (See <a href="API/">the docs</a> for Citationjs)</li>
+<li><code>tmp</code>: Path for the template, default: <code>&quot;src/html/form-&quot; + opt.lan + &quot;.html&quot;</code></li>
+</ul>
+<h2><code>jQuery.buildCJSOutput()</code></h2><p>Sets the place to show the output. No parameters.</p>
+<h1>Dependencies</h1><ul>
+<li>jQuery</li>
+<li>Citation.js</li>
+</ul>
+<p><br /><br /></p>
+<hr>
+<p><br /><br /></p></div>
+        
+
+        
+
+
+<dl class="details">
+
+    
+    <dt class="tag-version">Version:</dt>
+    <dd class="tag-version"><ul class="dummy"><li>0.1</li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-author">Author:</dt>
+    <dd class="tag-author">
+        <ul>
+            <li>&lt;p>Lars Willighagen [lars.willighagen@gmail.com]&lt;/p></li>
+        </ul>
+    </dd>
+    
+
+    
+
+    
+    <dt class="tag-license">License:</dt>
+    <dd class="tag-license"><ul class="dummy"><li>Copyright (c) 2015-2016 Lars Willighagen
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.</li></ul></dd>
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="jquery.Citation-0.1.js.html">jquery.Citation-0.1.js</a>, <a href="jquery.Citation-0.1.js.html#line1">line 1</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+        
+    
+    </div>
+
+    
+
+    
+
+    
+
+     
+
+    
+
+    
+
+    
+
+    
+
+    
+</article>
+
+</section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Cite.html">Cite</a></li></ul><h3>Global</h3><ul><li><a href="global.html#date">date</a></li><li><a href="global.html#JSONToHTML">JSONToHTML</a></li><li><a href="global.html#name">name</a></li><li><a href="global.html#numToOrd">numToOrd</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.0</a> on Thu Aug 18 2016 17:47:57 GMT+0200 (CEST)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

@@ -1,0 +1,7 @@
+{
+  "plugins": ["plugins/markdown"],
+  "tags": {
+    "allowUnknownTags": true,
+    "dictionaries": ["jsdoc","closure"]
+  }
+} 
