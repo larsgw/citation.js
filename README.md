@@ -107,4 +107,4 @@ Further explanation can be found at the [API](https://larsgw.github.io/citation.
 
 # Dependencies
 
-* None!
+* None! (Although, when using it in Nodejs, you need sync-request)

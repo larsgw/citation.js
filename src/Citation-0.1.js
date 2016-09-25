@@ -1,6 +1,5 @@
 /** 
  * @file Citation-0.1.js
- * @todo Add jQuery plugin (building forms)
  * 
  * @description
  * # Description
@@ -143,6 +142,19 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
+
+var  nodejsMode = false
+  , browserMode = false
+
+// Nodejs?
+if ( typeof process === "object" && Object.prototype.toString.call(process) ) {
+   nodejsMode = true
+       window = {}
+  console.log('Node.js mode')
+} else {
+  browserMode = true
+  console.log('Browser mode')
+}
 
 /**
  * Convert an array of names into a string expected by the rules
@@ -519,16 +531,27 @@ function Cite(data,options) {
         default:
 	  data = data.replace(/(^\s+|\s+$)/g,'');
 	  // URL
-	  if (this._rgx.url.test(data)) {
-	    if(data.match(/\/(Q\d+)$/))data='https://www.wikidata.org/wiki/Special:EntityData/'+data.match(/\/(Q\d+)$/)[1]+'.json';
-	    var xmlHttp = new XMLHttpRequest();
-	    try {
-	      xmlHttp.open( "GET", data, false );
-	      xmlHttp.send( null );
-	    } catch(e) {
-	      console.warn('File could not be fetched');
+	  if (this._rgx.url.test(data)||data.match(/^(Q\d+)$/)) {
+	    if (data.match(/(\/||^)(Q\d+)$/))
+	      data='https://www.wikidata.org/wiki/Special:EntityData/'+data.match(/(?:\/|^)(Q\d+)$/)[1]+'.json';
+	    
+	    var res
+	    
+	    if ( browserMode ) {
+	      var xmlHttp = new XMLHttpRequest();
+	      try {
+		xmlHttp.open( 'GET', data, false );
+		xmlHttp.send( null );
+	      } catch(e) {
+		console.warn('File could not be fetched');
+	      }
+	      res = xmlHttp.responseText===data?console.warn('Infinite chaining loop detected'):new Cite(xmlHttp.responseText);
+	    } else if ( nodejsMode ) {
+	      var request = require( 'sync-request' );
+	      var result  = request( 'GET', data ).getBody( 'utf8' )
+	      res = result===data?console.warn('Infinite chaining loop detected'):new Cite(result);
 	    }
-	    var res = xmlHttp.responseText===data?console.warn('Infinite chaining loop detected'):new Cite(xmlHttp.responseText);
+	    
 	    inputFormat = 'url/' + res._input.format;
 	    formatData = res.data;
 	  } else {
@@ -1019,7 +1042,7 @@ function Cite(data,options) {
 		    var prop = arr[ propIndex ]
 		      , val  = obj[ prop      ]
 		    
-		    val = prop + '={' + val + '}'
+		    arr[ propIndex ] = prop + '={' + val + '}'
 		  }
 		  
 		  res += '<li>'+arr.join(',</li><li>')+'</li>';
@@ -1104,9 +1127,11 @@ function Cite(data,options) {
 	    break;
 	    
 	  case 'string':
-	    var tmp = document.createElement('div');
-	    tmp.innerHTML = this.get({type:'string',format:'html',style:options.style,lan:options.lan},true);
-	    return tmp.textContent||tmp.innerText;
+	    if ( browserMode ) {
+	      var tmp = document.createElement('div');
+	      tmp.innerHTML = this.get({type:'string',format:'html',style:options.style,lan:options.lan},true);
+	      return tmp.textContent||tmp.innerText;
+	    }
 	    break;
 	    
 	  case 'json':
@@ -1118,9 +1143,11 @@ function Cite(data,options) {
 	break;
 	
       case 'html':
-	var tmp = document.createElement('div');
-	tmp.innerHTML = this.get({type:'string',format:'html',style:options.style,lan:options.lan},true);
-	return tmp.childNodes[0];
+	if ( browserMode ) {
+	  var tmp = document.createElement('div');
+	  tmp.innerHTML = this.get({type:'string',format:'html',style:options.style,lan:options.lan},true);
+	  return tmp.childNodes[0];
+	}
 	break;
 	
       case 'json':
@@ -1131,3 +1158,5 @@ function Cite(data,options) {
   }
   
 }
+
+if ( nodejsMode ) module.exports = Cite
