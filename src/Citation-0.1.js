@@ -632,7 +632,7 @@ function Cite(data,options) {
   /**
    * The log, containing all logged data.
    * 
-   * These are the names of each called function, together with it's input. If the `Cite` object is changed, the version number get's updated as well.
+   * These are the names of each called function, together with it's input. If the `Cite` object is changed, the version number gets updated as well.
    * 
    * The `.reset()` function **does not** have any influence on the log. This way, you can still undo all changes.
    * 
@@ -820,19 +820,25 @@ function Cite(data,options) {
   * @return The formatted data
   */
   this.get = function (options,nolog) {
-    if(!nolog)this._log.push({name:'get',arguments:[options]});
+    if(!nolog)
+      this._log.push({name:'get',arguments:[options]});
+    
     options = (options||this._options)||{};
+    
     switch((options.type||'').toLowerCase()){
       
       case 'string':
-	var res = '', words = this._wordList[(options.lan||'en')] ;
+	var res = ''
+	  , words = this._wordList[(options.lan||'en')]
+	
 	switch(options.format){
 	  case 'html':
 	    
 	    for(var i=0;i<this.data.length;i++){
-	      var src = this.data[i]||{},
-		  pubType = (src.type||'').toLowerCase(),
-		  style = (options.style||'').toLowerCase();
+	      var src     = this.data[i]||{}
+		, pubType = (src.type||'').toLowerCase()
+		, style   = (options.style||'').toLowerCase()
+	      
 	      switch(style){
 		case 'apa':
 		case 'eckartapa':
@@ -937,27 +943,43 @@ function Cite(data,options) {
 		  
 		case 'bibtex':
 		  
-		  var arr=[];
 		  res += '<ul style="list-style-type:none"><li>@';
 		  
 		  switch(pubType){
-		    case 'book':case 'boek':
-		      res += 'book';break;
+		    case 'book':
+		      case 'boek':
 		      
-		    case 'chapter':case 'hoofdstuk':
-		      res += 'inbook';break;
+		      res += 'book';
+		      break;
 		      
-		    case 'newspaper':console.warn('This is not the official name');case 'newspaper-article':case 'krantenartikel':
-		    case 'e-publication':case 'e-publicatie':case 'e-article':case 'e-artikel':
-		    case 'article':case 'artikel':
-		      res += 'article';break;
+		    case 'chapter':
+		      case 'hoofdstuk':
+		      
+		      res += 'inbook';
+		      break;
+		      
+		    case 'newspaper':console.warn('This is not the official name');
+		      case 'newspaper-article':
+		      case 'krantenartikel':
+		    case 'e-article':
+		      case 'e-publication':
+		      case 'e-publicatie':
+		      case 'e-artikel':
+		    case 'article':
+		      case 'artikel':
+		      
+		      res += 'article';
+		      break;
 		      
 		    case 'paper':
-		      res += 'inproceedings';break;
+		      
+		      res += 'inproceedings';
 		      break;
 		      
 		    default:
-		      res += 'misc';break;
+		      
+		      res += 'misc';
+		      break;
 		  }
 		  
 		  res += '{';
@@ -965,27 +987,41 @@ function Cite(data,options) {
 		  res += src.year ? src.year : '' ;
 		  res += src.title ? src.title.split(' ')[0].toLowerCase() : '' ;
 		  res += ',<ul style="list-style-type:none">';
-		  arr.push(
-		    src.title?'title={{'+src.title+'}}':'',
-		    src.author?'author={'+name(src.author, {style:'bibtex'})+'}':'',
-		    src.editor?'editor={'+name(src.editor, {style:'bibtex'})+'}':'',
-		    src.print?'edition={'+src.print+'}':'',
-		    src.volume?'volume={'+src.volume+'}':'',
-		    src.number?'number={'+src.number+'}':'',
-		    src.pages?'pages={'+src.pages[0]+'--'+(src.pages[1]||src.pages[0])+'}':'',
-		    src.year?'year={'+src.year+'}':((src.pubdate||[])[2]?src.pubdate[2]:''),
-		    src.url?'url={'+src.url+'}':'',
-		    src.date?'note={[Online; accesed '+date(src.date,'bx')+']}':'',
-		    src.journal?'journal={'+src.journal+'}':'',
-		    (src.conference||{}).org?'organization={'+src.conference.org+'}':'',
-		    src.place?'address={'+(Array.isArray(src.place)?src.place[0]:src.place)+'}':'',
-		    src.publisher?'publisher={'+src.publisher+'}':'',
-		    src.doi?'doi={'+src.doi+'}':'',
-		    //Properties currently only used for BibTeX
-		    src.isbn?'isbn={'+src.isbn+'}':'',
-		    src.issn?'issn={'+src.issn+'}':''
-		  );
-		  arr  = arr.join('joining').replace(/(joining)+/g,'joining').replace(/(^joining|joining$)/g,'').split('joining');
+		  
+		  var obj = {}
+		    , arr
+		  
+		  if ( src.author    ) obj.author    = name( src.author, {style:'bibtex'} )
+		  if ( src.conference) {
+		    if ( src.conference.org ) obj.organization = src.conference.org
+		  }
+		  if ( src.date      ) obj.note      = '[Online; accesed ' + date( src.date , 'bx' ) + ']'
+		  if ( src.doi       ) obj.doi       = src.doi
+		  if ( src.editor    ) obj.editor    = name( src.editor, {style:'bibtex'} )
+		  if ( src.isbn      ) obj.isbn      = src.isbn
+		  if ( src.issn      ) obj.issn      = src.issn
+		  if ( src.journal   ) obj.journal   = src.journal
+		  if ( src.number    ) obj.number    = src.number
+		  if ( src.pages     ) obj.pages     = src.pages[0]+'--'+(src.pages[1]||src.pages[0])
+		  if ( src.place     ) obj.address   = ( Array.isArray(src.place) ? src.place[0] : src.place )
+		  if ( src.print     ) obj.edition   = src.print
+		  if ( src.publisher ) obj.publisher = src.publisher
+		  if ( src.title     ) obj.title     = '{' + src.title + '}'
+		  if ( src.url       ) obj.url       = src.url
+		  if ( src.volume    ) obj.volume    = src.volume
+		  if ( src.year      ) obj.year      = src.year
+		       else if ( src.pubdate.length >= 3 )
+				       obj.year      = src.pubdate[2]
+		  
+		  arr  = Object.keys( obj )
+		  
+		  for ( var propIndex = 0; propIndex < arr.length; propIndex++ ) {
+		    var prop = arr[ propIndex ]
+		      , val  = obj[ prop      ]
+		    
+		    val = prop + '={' + val + '}'
+		  }
+		  
 		  res += '<li>'+arr.join(',</li><li>')+'</li>';
 		  res += '</ul>}</li></ul>';
 		  
