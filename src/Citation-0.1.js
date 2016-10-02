@@ -549,7 +549,10 @@ function Cite(data,options) {
 	    } else if ( nodejsMode ) {
 	      var request = require( 'sync-request' );
 	      var result  = request( 'GET', data ).getBody( 'utf8' )
-	      res = result===data?console.warn('Infinite chaining loop detected'):new Cite(result);
+	      res = result === data ?
+		console.warn('Infinite chaining loop detected') || { data: [], _input: { format: 'self-referencing' } }
+	      :
+	        new Cite(result);
 	    }
 	    
 	    inputFormat = 'url/' + res._input.format;
