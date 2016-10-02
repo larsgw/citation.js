@@ -24,6 +24,7 @@
  * # Dependencies
  * 
  * * Citation-0.1.js
+ * * wikidata.Citation-0.1.js
  * * Node.js and following packages:
  *   * commander
  *   * striptags
@@ -63,6 +64,7 @@ var program = require(   'commander'       )
   , fs      = require(   'fs'              )
   , striptag= require(   'striptags'       )
   , Cite    = require( './Citation-0.1.js' )
+  , wdCite  = require( './wikidata.Citation-0.1.js' )
 
 program
   .version( '0.1' )
@@ -116,6 +118,10 @@ if ( program.input )
   input = fs.readFileSync( program.input, 'utf8' )
 else if ( program.url )
   input = program.url
+
+if ( input.match(
+  /((https?:\/\/www.wikidata.org\/entity\/)?Q\d+(\s+|,))*(https?:\/\/www.wikidata.org\/entity\/)?Q\d+/
+) ) input = wdCite( input.split( /\s+|,/ ), program.outputLanguage )
 
 var data  = new Cite( input )
   , options = {
