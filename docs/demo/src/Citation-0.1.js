@@ -568,8 +568,8 @@ function Cite(data,options) {
 	formatData = res;
       }
       // jQuery & HTML
-      else if (window.jQuery&&data instanceof jQuery) inputFormat = 'jQuery', data = data.val()||data.text()||data.html(), formatData = new Cite(data,options);
-      else if (window.HMTLElement&&data instanceof HMTLElement) inputFormat = 'HTML', data = data.value||data.textContent, formatData = new Cite(data,options);
+      else if (window.jQuery&&data instanceof jQuery) inputFormat = 'jQuery', data = data.val()||data.text()||data.html(), formatData = (new Cite(data,options)).data;
+      else if (window.HMTLElement&&data instanceof HMTLElement) inputFormat = 'HTML', data = data.value||data.textContent, formatData = (new Cite(data,options)).data;
       // JSON structures
       else {
 	// Wikidata

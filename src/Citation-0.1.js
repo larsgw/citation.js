@@ -326,7 +326,7 @@ function numToOrd (num,lan) {
 }
 
 /**
- * Convert JSON to HTML. Normally, this would be done in the switch statement, but this function needs to be able to be self-invoked.
+ * Convert JSON to HTML. Normally, this would be done in the switch statement, but the function is recursive.
  * 
  * @function JSONToHTML
  * @param {Object} src - The data
@@ -389,31 +389,51 @@ function JSONToHTML (src) {
 function Cite(data,options) {
 
   // Making it Scope-Safe
-  if(!(this instanceof Cite))return new Cite(data,options);
+  if ( !( this instanceof Cite ) )
+    return new Cite( data, options )
 
   /**
   * Object containing several RegExp patterns, mostly used for parsing (*full of shame*) and recognizing data types
   * 
   * @default
   */
-  this._rgx = {
-    url:/^(https?:\/\/)?((([a-z\d]([a-z\d-]*[a-z\d])*)\.)+[a-z]{2,}|((\d{1,3}\.){3}\d{1,3})|localhost)(\:\d+)?(\/[-a-z\d%_.~+:]*)*(\?[;&a-z\d%_.~+=-]*)?(\#[-a-z\d_]*)?$/i,
-    json:[
-      /((?:\[|:|,)\s*)'((?:\\'|[^'])*?[^\\])?'(?=\s*(?:\]|}|,))/g,
-      /((?:(?:"|]|}|\/[gmi]|\.|(?:\d|\.|-)*\d)\s*,|{)\s*)(?:"([^":\n]+?)"|'([^":\n]+?)'|([^":\n]+?))(\s*):/g
+  var _rgx = {
+    url:/^(https?:\/\/)?((([a-z\d]([a-z\d-]*[a-z\d])*)\.)+[a-z]{2,}|((\d{1,3}\.){3}\d{1,3})|localhost)(\:\d+)?(\/[-a-z\d%_.~+:]*)*(\?[;&a-z\d%_.~+=-]*)?(\#[-a-z\d_]*)?$/i
+  , bibtex: [
+      /^\s*@(.+?)\{\s*(\w+?)\s*,\s*((?:\w+\s*=\s*(?:\{.+?\}|".+?"|\{\{.+?\}\})\s*,\s*)*(?:\w+\s*=\s*(?:\{.+?\}|".+?"|\{\{.+?\}\})\s*))\s*\}\s*$/
+    
+    , [ /^\s*(?:\{\{|\{|")(.+?)(?:\}\}|\}|")\s*$/g
+      , '$1' ]
+    
+    , /,(?=\s*\w+\s*=\s*(?:\{.+?\}|".+?"|\{\{.+?\}\}))/g
+    ]
+  , wikidata: [
+      /(?:\/|^)(Q\d+)$/
+    , /(Q\d+)/
+    ]
+  , json:[
+      [ /((?:\[|:|,)\s*)'((?:\\'|[^'])*?[^\\])?'(?=\s*(?:\]|}|,))/g
+      , '$1"$2"' ]
+      
+    , [ /((?:(?:"|]|}|\/[gmi]|\.|(?:\d|\.|-)*\d)\s*,|{)\s*)(?:"([^":\n]+?)"|'([^":\n]+?)'|([^":\n]+?))(\s*):/g
+      , '$1"$2$3$4"$5:' ]
     ]
   }
-
+  
+  this._rgx = _rgx
+  
   /**
   * Object containing a list of Wikidata Instances and it's corresponding name as specified by the docs
   * 
   * @default
   */
-  this._wikidataInstances = {
+  var _wikidataInstances = {
     Q13442814:'article',  
     Q3331189:'book',
     Q571:'book'
   }
+  
+  this._wikidataInstances = _wikidataInstances
 
   /**
   * Object containing functions in a list of Wikidata Properties returning it's corresponding property and value as specified by the docs
@@ -422,7 +442,7 @@ function Cite(data,options) {
   * @memberof Cite
   * @default
   */
-  this._wikidataProperties = function(a,b){
+  var _wikidataProperties = function(a,b){
     switch(b){
       case 'P31'  :
 	return ['type',this._wikidataInstances['Q'+a[0].mainsnak.datavalue.value['numeric-id']]||
@@ -450,6 +470,8 @@ function Cite(data,options) {
     }
   }
   
+  this._wikidataProperties = _wikidataProperties
+  
   /**
    * The keywords (for language support)
    * 
@@ -457,7 +479,7 @@ function Cite(data,options) {
    * @property en {Object} The English words
    * @property nl {Object} The Dutch words
    */
-  this._wordList = {
+  var _wordList = {
     en:{
       ed:'ed',
       print:'edition',
@@ -482,140 +504,339 @@ function Cite(data,options) {
     }
   }
   
-  // Detecting the input format and formatting the data
-  var inputType = typeof data, inputFormat, formatData;
-  switch(inputType){
-    case 'string':
-      switch(data.trim(/\s/).charAt(0)){
-        case '@':
-	  // BibTeX
-          inputFormat = 'BibTeX';
-          var match = data.match(/@([^\{]+)\{(\w+)\,([^]+)\}/) || [],
-	      res={ type:match[1],label:match[2] },
-	      pairs = match[3].split('},');
-          for(var i=0;i<pairs.length;i++){
-	    var key = (pairs[i].split('=')[0]||'').trim(/\s/g),
-		val = (pairs[i].split('=')[1]||'').replace(/[\{"\s]*([^"}]+)[\}"\s]*/g,'$1').replace(/\s+/g,' ');
-	    res[key] = val;
-          };
-	  res['author']=res['author']?res['author'].split(' and '):undefined;
-	  res['editor']=res['editor']?res['editor'].split(' and '):undefined;
-	  res['pages']=res['pages']?res['pages'].split('--'):undefined;
-	  res['place']=res['location'];
-	  res['title']=res['title']?
-	    (function(){
-	      var title = res['title'].replace(/({|})/g,'');
-	      if(title.slice(-1)=='.')title.slice(0,-1);
-	      return title;
-	    })()
-	  :undefined;
-          delete res[''];
-          formatData = [res];
-          break;
-        case '{':case '[':
-	  // JSON string (probably)
-	  var obj;
-	  try       { obj = JSON.parse(data) }
-	  catch (e) {
-	    console.warn('Input was not valid JSON, switching to experimental parser for invalid JSON')
-	    try {
-	      obj = JSON.parse(data.replace(this._rgx.json[0],'$1"$2"').replace(this._rgx.json[1],'$1"$2$3$4"$5:'))
-	    } catch (e) {
-	      console.warn('Experimental parser failed. Please improve the JSON. If this is not JSON, please re-read the supported formats.')
-	    }
-	  }
-	  var res = new Cite(obj);
-	  inputFormat = 'string/' + res._input.format;
-          formatData = res.data;
-	  break;
-        default:
-	  data = data.replace(/(^\s+|\s+$)/g,'');
-	  // URL
-	  if (this._rgx.url.test(data)||data.match(/^(Q\d+)$/)) {
-	    if (data.match(/(\/||^)(Q\d+)$/))
-	      data='https://www.wikidata.org/wiki/Special:EntityData/'+data.match(/(?:\/|^)(Q\d+)$/)[1]+'.json';
-	    
-	    var res
-	    
-	    if ( browserMode ) {
-	      var xmlHttp = new XMLHttpRequest();
-	      try {
-		xmlHttp.open( 'GET', data, false );
-		xmlHttp.send( null );
-	      } catch(e) {
-		console.warn('File could not be fetched');
-	      }
-	      res = xmlHttp.responseText===data?console.warn('Infinite chaining loop detected'):new Cite(xmlHttp.responseText);
-	    } else if ( nodejsMode ) {
-	      var request = require( 'sync-request' );
-	      var result  = request( 'GET', data ).getBody( 'utf8' )
-	      res = result === data ?
-		console.warn('Infinite chaining loop detected') || { data: [], _input: { format: 'self-referencing' } }
-	      :
-	        new Cite(result);
-	    }
-	    
-	    inputFormat = 'url/' + res._input.format;
-	    formatData = res.data;
-	  } else {
-	    inputFormat = 'else', formatData = [];
-	    console.warn('This format is not supported (yet)'); }
-          break;
+  this._wordList = _wordList
+  
+  /**
+   * 
+   */
+  var _getFile = function ( url ) {
+    var result
+    
+    if ( browserMode ) {
+      
+      var xmlHttp = new XMLHttpRequest();
+      
+      try {
+	xmlHttp.open( 'GET', url, false )
+	xmlHttp.send( null )
+      } catch (e) {
+	return console.warn('File could not be fetched')
       }
-      break;
-    case 'object':
-      // Array
-      if (Array.isArray( data )) {
-	inputFormat = 'json', res = [] ;
-	for (obj=0;obj<data.length;obj++) { res = res.concat((new Cite(data[obj])).data) }
-	formatData = res;
+      
+      result = xmlHttp.responseText
+      
+    } else if ( nodejsMode ) {
+      
+      try {
+	var request = require( 'sync-request' )
+	    result  = request( 'GET', url ).getBody( 'utf8' )
+      } catch (e) {
+	return console.warn('File could not be fetched')
       }
-      // jQuery & HTML
-      else if (window.jQuery&&data instanceof jQuery) inputFormat = 'jQuery', data = data.val()||data.text()||data.html(), formatData = new Cite(data,options);
-      else if (window.HMTLElement&&data instanceof HMTLElement) inputFormat = 'HTML', data = data.value||data.textContent, formatData = new Cite(data,options);
-      // JSON structures
-      else {
+      
+    }
+    
+    if ( result === url )
+      return console.warn('Infinite chaining loop detected')
+    else
+      return result
+  }
+  
+  this._getFile = _getFile
+  
+  /**
+   * 
+   */
+  var _getJSON = function ( str ) {
+    var object
+    try {
+      object = JSON.parse( str )
+    } catch (e) {
+      (console.info||console.warn)('Input was not valid JSON, switching to experimental parser for invalid JSON')
+      try {
+	object = JSON.parse(
+	  str
+	    .replace(this._rgx.json[0][0],this._rgx.json[0][1])
+	    .replace(this._rgx.json[1][0],this._rgx.json[1][1])
+	)
+      } catch (e) {
+	console.warn('Experimental parser failed. Please improve the JSON. If this is not JSON, please re-read the supported formats.')
+      }
+    }
+    return object
+  }
+  
+  this._getJSON = _getJSON
+  
+  /**
+   * 
+   */
+  var _parseBibTeX = function ( str ) {
+    var str   = str || ''
+      , match = str.match( this._rgx.bibtex[ 0 ] ) || []
+      , res   = { type:match[ 1 ], label:match[ 2 ] }
+      , pairs = match[ 3 ].split(this._rgx.bibtex[ 2 ])
+    
+    for ( var i = 0; i < pairs.length; i++ ) {
+      var pair= pairs[i].split('=')
+	, key = (pair[0]||'').trim(/\s/g)
+	, val = (pair[1]||'').replace( this._rgx.bibtex[ 1 ][ 0 ], this._rgx.bibtex[ 1 ][ 1 ] ).replace(/\s+/g,' ');
+      
+      if ( key.length )
+	res[ key ] = val;
+    }
+    
+    if ( res.hasOwnProperty( 'author' ) )
+      res.author = res.author.split( ' and ' )
+    
+    if ( res.hasOwnProperty( 'editor' ) )
+      res.editor = res.editor.split( ' and ' )
+    
+    if ( res.hasOwnProperty( 'pages' ) )
+      res.pages  = res.pages .split( '--' )
+    
+    if ( res.hasOwnProperty( 'location' ) )
+      res.place = res.location
+    
+    if ( res.hasOwnProperty( 'title' ) )
+      res['title'].replace(/({|\.?})/g,'')
+    
+    return [ res ]
+  }
+  
+  this._parseBibTeX = _parseBibTeX
+  
+  /**
+   * 
+   */
+  var _parseWikidata = function ( data ) {
+    var obj = data.entities[ Object.keys(data.entities)[0] ].claims
+      , res = {};
+    
+    for (var prop in obj) {
+      var val = this._wikidataProperties(obj[prop],prop)
+      if (prop) res[val[0]]=val[1]; else continue;
+    }
+    
+    res.title = res.title || data.entities[ Object.keys( data.entities )[ 0 ] ].labels.en.value;
+    
+    return res
+  }
+  
+  this._parseWikidata = _parseWikidata
+  
+  /**
+   * 
+   */
+  var _parseContentMine = function ( data ) {
+    var res = {}
+    
+    for ( var prop in data )
+      res[ prop ] = data[ prop ].value[ 0 ]
+    
+    res.type  = 'article';
+    res.author= data.authors?data.authors.value:undefined
+    res.number= parseInt(res.issue    ) ||undefined
+    res.volume= parseInt(res.volume   ) ||undefined
+    res.page  =[parseInt(res.firstpage)]||undefined
+    res.pubdate = {}
+    res.pubdate.from=data.date?data.date.value[0].split('-').reverse().map(function(v){return parseInt(v)}):undefined
+    res.year  = res.year?res.year:(res.pubdate.from||[])[2]
+    
+    delete res.authors;
+    delete res.issue  ;
+    delete res.date   ;
+    
+    return res
+  }
+  
+  this._parseContentMine = _parseContentMine
+  
+  /**
+   * Determine input type (internal use)
+   * 
+   * @method parseInputType
+   * @memberof Cite
+   * @this Cite
+   * 
+   * @param input The input data
+   * @return The input type
+   */
+  this._parseInputType = function ( input ) {
+    
+    switch ( typeof input) {
+      
+      case 'string':
+	
+	// Empty
+	     if ( input.length === 0 )
+	  return 'empty'
+	
+	// Wikidata URL
+	else if ( this._rgx.wikidata[ 0 ].test( input ) )
+	  return 'url/wikidata'
+	
+	// BibTeX
+	else if ( this._rgx.bibtex  [ 0 ].test( input ) )
+	  return 'string/bibtex'
+	
+	// JSON
+	else if ( /^\s*(\{|\[)/.test( input ) )
+	  return 'string/json'
+	
+	// Else URL
+	else if ( this._rgx.url.test( input ) )
+	  return 'url/else'
+	
+	// Else
+	else
+	  return console.warn( 'This format is not supported or recognised' ) || 'invalid'
+	
+      case 'object':
+	
+	// Empty
+	     if ( input === null )
+	  return 'empty'
+	
+	// Array
+	else if ( Array.isArray( input ) )
+	  return 'array'
+	
+	// jQuery
+	else if ( window.jQuery && input instanceof jQuery )
+	  return 'jquery'
+	
+	// HTML
+	else if (window.HMTLElement && input instanceof HMTLElement)
+	  return 'html'
+	
 	// Wikidata
-	if ( data.hasOwnProperty('entities') ) {
-	  inputFormat = 'json/wikidata';
-	  var obj = data.entities[Object.keys(data.entities)[0]].claims, res = {};
-	  for (var prop in obj) {
-	    var val = this._wikidataProperties(obj[prop],prop)
-	    if (prop) res[val[0]]=val[1]; else continue;
-	  } res.title = res.title || data.entities[Object.keys(data.entities)[0]].labels.en.value;
-	  formatData = [res];
-	}
+	else if ( input.hasOwnProperty( 'entities' ) )
+	  return 'wikidata'
+	
 	// ContentMine
-	else if ( data.hasOwnProperty('fulltext_html')||data.hasOwnProperty('fulltext_xml')||data.hasOwnProperty('fulltext_pdf') ) {
-	  inputFormat = 'json/contentmine';
-	  var res = {};
-	  for (var prop in data) res[prop]=data[prop].value[0];
-	  res.author= 'article';
-	  res.author= data.authors?data.authors.value:undefined;
-	  res.number= parseInt(res.issue    ) ||undefined;
-	  res.volume= parseInt(res.volume   ) ||undefined;
-	  res.page  =[parseInt(res.firstpage)]||undefined;
-	  res.pubdate  =        {           };
-	  res.pubdate.from=data.date?data.date.value[0].split('-').reverse().map(function(x){return parseInt(x)}):undefined;
-	  res.year  = res.year?res.year:(res.pubdate.from||[])[2];
-	  delete res.authors;
-	  delete res.issue  ;
-	  delete res.date   ;
-	  formatData = [res];
-	}
+	else if ( input.hasOwnProperty( 'fulltext_html' ) ||
+	          input.hasOwnProperty( 'fulltext_xml'  ) ||
+	          input.hasOwnProperty( 'fulltext_pdf'  ) )
+	  return 'contentmine'
+	
 	// Default
-	else inputFormat = 'json', formatData = [data];
-      }
-      break;
-    case 'undefined':
-      inputFormat = 'empty';
-      formatData = [];
-      break;
-    default:
-      inputFormat = 'else';
-      formatData = [];
-      console.warn('This format is not supported (yet)');
-      break;
+	else
+	  return 'json'
+	
+	break;
+      
+      case 'undefined':
+	
+	// Empty
+	return 'empty'
+	
+	break;
+	
+      default:
+	
+	return console.warn( 'This format is not supported or recognised' ) || 'invalid'
+	
+	break;
+    }
+  }
+  
+  /**
+   * Standardise input (internal use)
+   * 
+   * @method parseInputData
+   * @memberof Cite
+   * @this Cite
+   * 
+   * @param input The input data
+   * @param type The input type
+   * @return The parsed input
+   */
+  this._parseInputData = function ( input, type ) {
+    var output
+    
+    switch ( type ) {
+      
+      case 'url/wikidata':
+	input  =
+	  'https://www.wikidata.org/wiki/Special:EntityData/'
+	  + input.match( this._rgx.wikidata[ 1 ] )[ 1 ] +
+	  '.json';
+	
+	output = this._parseInput( this._getFile( input ) )
+	break;
+      
+      case 'url/else':
+	output = this._parseInput( this._getFile( input ) )
+	break;
+      
+      case 'jquery':
+	output = this._parseInput( data.val() || data.text() || data.html() )
+	break;
+      
+      case 'html':
+	output = this._parseInput( data.value || data.textContent )
+	break;
+      
+      case 'string/json':
+	output = this._parseInput( this._getJSON( input ) )
+	break;
+      
+      case 'string/bibtex':
+	output = this._parseBibTeX( input )
+	break;
+      
+      case 'wikidata':
+	output = this._parseWikidata( input )
+	break;
+      
+      case 'contentmine':
+	output = this._parseContentMine( input )
+	break;
+      
+      case 'array':
+	output = []
+	input.forEach( function ( value ) {
+	  output.concat( this.parseInput( value ) )
+	} )
+	break;
+      
+      case 'json':
+	output = [ input ]
+	break;     
+      
+      /** TODO
+       * @todo
+       * 
+       * * contentmine
+       */
+      
+      case 'empty'  :
+      case 'invalid':
+      default       :
+	output = []
+	break;
+      
+    }
+    
+    return output
+  }
+  
+  /**
+   * Parse input (internal use). Wrapper for `parseInputType()` and `parseInputData()`
+   * 
+   * @method parseInput
+   * @memberof Cite
+   * @this Cite
+   * 
+   * @param input The input data
+   * @return The parsed input
+   */
+  this._parseInput = function ( input ) {
+    var type = this._parseInputType( input )
+      , outp = this._parseInputData( input, type )
+    
+    return outp
   }
   
   // Setting reference data
@@ -630,22 +851,21 @@ function Cite(data,options) {
    * @type Object
    * @default {}
    */
-  
-  this._options = options || {},
+  this._options = options || {}
   
   /**
    * Information about the input data
    *
    * @property data The inputted data
    * @property type {String} The datatype of the input
-   * @property format {String} The format of the input, if the input is a string
+   * @property format {String} The format of the input
    * @type Object
    */
   this._input = {
-    data:data,
-    type:inputType,
-    format:inputFormat
-  },
+    data: data
+  , type: typeof data
+  , format: this._parseInputType( data )
+  }
   
   /**
    * The data formatted to JSON
@@ -653,7 +873,7 @@ function Cite(data,options) {
    * @type Object
    * @default []
    */
-  this.data = formatData || [];
+  this.data = []
   
   /**
    * The log, containing all logged data.
@@ -673,7 +893,7 @@ function Cite(data,options) {
    */
   this._log = [
     {name:'init',version:'0',arguments:[this._input.data,this._options]}
-  ],
+  ]
   
   // Methods
   
@@ -689,7 +909,7 @@ function Cite(data,options) {
     var version = 0;
     for(i=0;i<this._log.length;i++){if(this._log[i].version>version)version=this._log[i].version}
     return version;
-  },
+  }
   
   /**
    * Does not change the current object.
@@ -710,7 +930,7 @@ function Cite(data,options) {
       for(k=1;k<=versnum;k++){ object[arr[k].name].apply(object,(arr[k].arguments||[])); }
       return object;
     } else return undefined;
-  },
+  }
   
   /**
    * Does not change the current object. Undoes the last edit made.
@@ -723,7 +943,7 @@ function Cite(data,options) {
    */
   this.undo = function(){
     return this.retrieveVersion(this.currentVersion()-1);
-  },
+  }
   
   /**
   * Add an object to the array of objects
@@ -732,14 +952,18 @@ function Cite(data,options) {
   * @memberof Cite
   * @this Cite
   * 
-  * @param data The passed data to add to the object
+  * @param data The data to add to your object
   * @return The updated parent object
   */
-  this.add = function (data) {
-    this._log.push({name:'add',version:this.currentVersion()+1,arguments:[data]});
-    var input = (new Cite(data)).data;
-    for (i=0;i<input.length;i++) { this.data.push(input[i]) };
-    return this;
+  this.add = function ( data, nolog ) {
+    if ( !nolog )
+      this._log.push( { name: 'add', version: this.currentVersion() + 1, arguments: [ data, nolog ] } )
+    
+    var input = this._parseInput( data );
+    
+    this.data = this.data.concat( input )
+    
+    return this
   }
   
   /**
@@ -749,7 +973,26 @@ function Cite(data,options) {
    * @memberof Cite
    * @this Cite
    * 
-   * @param {(Object[]|Object|String)} data - pass the data
+   * @param data The data to replace the data in your object
+   * @return The updated parent object
+   */
+  this.set = function ( data, nolog ) {
+    if ( !nolog )
+      this._log.push( { name: 'set', version: this.currentVersion() + 1, arguments: [ data, nolog ] } )
+    
+    this.data = []
+    this.add( data, true )
+    
+    return this
+  }
+  
+  /**
+   * Change the default options of a `Cite` object.
+   * 
+   * @method options
+   * @memberof Cite
+   * @this Cite
+   * 
    * @param {Object} [options={}] - The default options for the output
    * @param {String} options.type - The outputted datatype: "String" , "HTML" or "JSON"
    * @param {String} options.format - The format of the output: "HTML" or "JSON"
@@ -757,13 +1000,12 @@ function Cite(data,options) {
    * @param {String} options.lan - The language of the output: "en" or "nl"
    * @return The updated parent object
    */
-  this.set = function (data, options) {
-    this._log.push({name:'set',version:this.currentVersion()+1,arguments:[data,options]});
-    data = data || this.data,
-    options = options || this._options;
-    var object = new Cite(data, options);
-    this.data = object.data;
-    this._options = object._options;
+  this.options = function ( options, nolog ) {
+    if ( !nolog )
+      this._log.push( { name: 'options', version: this.currentVersion() + 1, arguments: [ options ] } )
+    
+    Object.assign( this._options, options )
+    
     return this;
   }
   
@@ -776,10 +1018,12 @@ function Cite(data,options) {
    * @return The updated, empty parent object (except the log, the log lives)
    */
   this.reset = function () {
-    this._log.push({name:'reset',version:this.currentVersion()+1,arguments:[]});
-    this.data = [],
-    this._options = {};
-    return this;
+    this._log.push( { name: 'reset', version: this.currentVersion() + 1, arguments: [] } )
+    
+    this.data     = []
+    this._options = {}
+    
+    return this
   }
   
   /**
@@ -810,29 +1054,7 @@ function Cite(data,options) {
   }
   
   /**
-   * Change the default options of a `Cite` object.
-   * 
-   * @method options
-   * @memberof Cite
-   * @this Cite
-   * 
-   * @param {Object} [options={}] - The default options for the output
-   * @param {String} options.type - The outputted datatype: "String" , "HTML" or "JSON"
-   * @param {String} options.format - The format of the output: "HTML" or "JSON"
-   * @param {String} options.style - The style of the output: "Vancouver" or "APA"
-   * @param {String} options.lan - The language of the output: "en" or "nl"
-   * @return The updated parent object
-   */
-  this.options = function (options) {
-    this._log.push({name:'options',version:this.currentVersion()+1,arguments:[options]});
-    for (i in options) {
-      this._options[i] = options[i];
-    }
-    return this;
-  }
-  
-  /**
-  * GET formatted data from your object. For more info, see [Output](./#output).
+  * Get formatted data from your object. For more info, see [Output](./#output).
   * 
   * @method get
   * @memberof Cite
@@ -845,11 +1067,11 @@ function Cite(data,options) {
   * @param {String} [options.lan="en"] - The language of the output: "en" or "nl"
   * @return The formatted data
   */
-  this.get = function (options,nolog) {
-    if(!nolog)
-      this._log.push({name:'get',arguments:[options]});
+  this.get = function ( options, nolog ) {
+    if( !nolog )
+      this._log.push( { name: 'get', arguments: [ options ] } )
     
-    options = (options||this._options)||{};
+    var options = Object.assign( {}, this._options, options );
     
     switch((options.type||'').toLowerCase()){
       
@@ -1159,6 +1381,9 @@ function Cite(data,options) {
 	break;
     }
   }
+  
+  this.set( data, true )
+  this.options( options, true )
   
 }
 
