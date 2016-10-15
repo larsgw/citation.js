@@ -400,12 +400,13 @@ function Cite(data,options) {
   var _rgx = {
     url:/^(https?:\/\/)?((([a-z\d]([a-z\d-]*[a-z\d])*)\.)+[a-z]{2,}|((\d{1,3}\.){3}\d{1,3})|localhost)(\:\d+)?(\/[-a-z\d%_.~+:]*)*(\?[;&a-z\d%_.~+=-]*)?(\#[-a-z\d_]*)?$/i
   , bibtex: [
-      /^\s*@(.+?)\{\s*(\w+?)\s*,\s*((?:\w+\s*=\s*(?:\{.+?\}|".+?"|\{\{.+?\}\})\s*,\s*)*(?:\w+\s*=\s*(?:\{.+?\}|".+?"|\{\{.+?\}\})\s*))\s*\}\s*$/
+      /(?:})(?=\s*@(?:.+?)\{\s*(?:\w+?)\s*,\s*(?:(?:\w+\s*=\s*(?:\{.+?\}|".+?"|\{\{.+?\}\})\s*,\s*)*(?:\w+\s*=\s*(?:\{.+?\}|".+?"|\{\{.+?\}\})\s*))\s*\})/g
+    , /^\s*@(.+?)\{\s*(\w+?)\s*,\s*((?:\w+\s*=\s*(?:\{.+?\}|".+?"|\{\{.+?\}\})\s*,\s*)*(?:\w+\s*=\s*(?:\{.+?\}|".+?"|\{\{.+?\}\})\s*))\s*\}\s*$/
+    
+    , /,(?=\s*\w+\s*=\s*(?:\{.+?\}|".+?"|\{\{.+?\}\}))/g
     
     , [ /^\s*(?:\{\{|\{|")(.+?)(?:\}\}|\}|")\s*$/g
       , '$1' ]
-    
-    , /,(?=\s*\w+\s*=\s*(?:\{.+?\}|".+?"|\{\{.+?\}\}))/g
     ]
   , wikidata: [
       /(?:\/|^)(Q\d+)$/
@@ -420,8 +421,6 @@ function Cite(data,options) {
     ]
   }
   
-  this._rgx = _rgx
-  
   /**
   * Object containing a list of Wikidata Instances and it's corresponding name as specified by the docs
   * 
@@ -432,8 +431,6 @@ function Cite(data,options) {
     Q3331189:'book',
     Q571:'book'
   }
-  
-  this._wikidataInstances = _wikidataInstances
 
   /**
   * Object containing functions in a list of Wikidata Properties returning it's corresponding property and value as specified by the docs
@@ -445,7 +442,7 @@ function Cite(data,options) {
   var _wikidataProperties = function(a,b){
     switch(b){
       case 'P31'  :
-	return ['type',this._wikidataInstances['Q'+a[0].mainsnak.datavalue.value['numeric-id']]||
+	return ['type',_wikidataInstances['Q'+a[0].mainsnak.datavalue.value['numeric-id']]||
 	(console.warn('This entry type is not recognized and therefore interpreted as \'article\'')||'')+'article'];
 	break;
       case 'P212' : return ['isbn',a[0].mainsnak.datavalue.value]; break;
@@ -469,8 +466,6 @@ function Cite(data,options) {
       default: return false; break;
     }
   }
-  
-  this._wikidataProperties = _wikidataProperties
   
   /**
    * The keywords (for language support)
@@ -503,8 +498,6 @@ function Cite(data,options) {
       available:'Beschikbaar op'      
     }
   }
-  
-  this._wordList = _wordList
   
   /**
    * 
@@ -542,8 +535,6 @@ function Cite(data,options) {
       return result
   }
   
-  this._getFile = _getFile
-  
   /**
    * 
    */
@@ -556,8 +547,8 @@ function Cite(data,options) {
       try {
 	object = JSON.parse(
 	  str
-	    .replace(this._rgx.json[0][0],this._rgx.json[0][1])
-	    .replace(this._rgx.json[1][0],this._rgx.json[1][1])
+	    .replace(_rgx.json[0][0],_rgx.json[0][1])
+	    .replace(_rgx.json[1][0],_rgx.json[1][1])
 	)
       } catch (e) {
 	console.warn('Experimental parser failed. Please improve the JSON. If this is not JSON, please re-read the supported formats.')
@@ -566,45 +557,48 @@ function Cite(data,options) {
     return object
   }
   
-  this._getJSON = _getJSON
-  
   /**
    * 
    */
   var _parseBibTeX = function ( str ) {
-    var str   = str || ''
-      , match = str.match( this._rgx.bibtex[ 0 ] ) || []
-      , res   = { type:match[ 1 ], label:match[ 2 ] }
-      , pairs = match[ 3 ].split(this._rgx.bibtex[ 2 ])
+    var str     = str || ''
+      , entries = str.split( _rgx.bibtex[ 0 ] )
     
-    for ( var i = 0; i < pairs.length; i++ ) {
-      var pair= pairs[i].split('=')
-	, key = (pair[0]||'').trim(/\s/g)
-	, val = (pair[1]||'').replace( this._rgx.bibtex[ 1 ][ 0 ], this._rgx.bibtex[ 1 ][ 1 ] ).replace(/\s+/g,' ');
+    for ( var entryIndex = 0; entryIndex < entries.length; entryIndex++ ) {
+      var entry = entries[ entryIndex ] + ( entryIndex + 1 < entries.length ? '}' : '' )
+        , match = entry.match( _rgx.bibtex[ 1 ] )
+        , res   = { type:match[ 1 ], label:match[ 2 ] }
+	, pairs = match[ 3 ].split(_rgx.bibtex[ 2 ])
       
-      if ( key.length )
-	res[ key ] = val;
+      for ( var i = 0; i < pairs.length; i++ ) {
+	var pair= pairs[i].split('=')
+	  , key = (pair[0]||'').trim(/\s/g)
+	  , val = (pair[1]||'').replace( _rgx.bibtex[ 3 ][ 0 ], _rgx.bibtex[ 3 ][ 1 ] ).replace(/\s+/g,' ');
+	
+	if ( key.length )
+	  res[ key ] = val;
+      }
+      
+      if ( res.hasOwnProperty( 'author' ) )
+	res.author = res.author.split( ' and ' )
+      
+      if ( res.hasOwnProperty( 'editor' ) )
+	res.editor = res.editor.split( ' and ' )
+      
+      if ( res.hasOwnProperty( 'pages' ) )
+	res.pages  = res.pages .split( '--' )
+      
+      if ( res.hasOwnProperty( 'location' ) )
+	res.place = res.location
+      
+      if ( res.hasOwnProperty( 'title' ) )
+	res['title'].replace(/\.$/g,'')
+      
+      entries[ entryIndex ] = res
     }
     
-    if ( res.hasOwnProperty( 'author' ) )
-      res.author = res.author.split( ' and ' )
-    
-    if ( res.hasOwnProperty( 'editor' ) )
-      res.editor = res.editor.split( ' and ' )
-    
-    if ( res.hasOwnProperty( 'pages' ) )
-      res.pages  = res.pages .split( '--' )
-    
-    if ( res.hasOwnProperty( 'location' ) )
-      res.place = res.location
-    
-    if ( res.hasOwnProperty( 'title' ) )
-      res['title'].replace(/({|\.?})/g,'')
-    
-    return [ res ]
+    return entries
   }
-  
-  this._parseBibTeX = _parseBibTeX
   
   /**
    * 
@@ -614,7 +608,7 @@ function Cite(data,options) {
       , res = {};
     
     for (var prop in obj) {
-      var val = this._wikidataProperties(obj[prop],prop)
+      var val = _wikidataProperties(obj[prop],prop)
       if (prop) res[val[0]]=val[1]; else continue;
     }
     
@@ -622,8 +616,6 @@ function Cite(data,options) {
     
     return res
   }
-  
-  this._parseWikidata = _parseWikidata
   
   /**
    * 
@@ -650,8 +642,6 @@ function Cite(data,options) {
     return res
   }
   
-  this._parseContentMine = _parseContentMine
-  
   /**
    * Determine input type (internal use)
    * 
@@ -662,7 +652,7 @@ function Cite(data,options) {
    * @param input The input data
    * @return The input type
    */
-  this._parseInputType = function ( input ) {
+  var _parseInputType = function ( input ) {
     
     switch ( typeof input) {
       
@@ -673,11 +663,11 @@ function Cite(data,options) {
 	  return 'empty'
 	
 	// Wikidata URL
-	else if ( this._rgx.wikidata[ 0 ].test( input ) )
+	else if ( _rgx.wikidata[ 0 ].test( input ) )
 	  return 'url/wikidata'
 	
 	// BibTeX
-	else if ( this._rgx.bibtex  [ 0 ].test( input ) )
+	else if ( _rgx.bibtex  [ 1 ].test( input ) )
 	  return 'string/bibtex'
 	
 	// JSON
@@ -685,7 +675,7 @@ function Cite(data,options) {
 	  return 'string/json'
 	
 	// Else URL
-	else if ( this._rgx.url.test( input ) )
+	else if ( _rgx.url.test( input ) )
 	  return 'url/else'
 	
 	// Else
@@ -752,7 +742,7 @@ function Cite(data,options) {
    * @param type The input type
    * @return The parsed input
    */
-  this._parseInputData = function ( input, type ) {
+  var _parseInputData = function ( input, type ) {
     var output
     
     switch ( type ) {
@@ -760,38 +750,38 @@ function Cite(data,options) {
       case 'url/wikidata':
 	input  =
 	  'https://www.wikidata.org/wiki/Special:EntityData/'
-	  + input.match( this._rgx.wikidata[ 1 ] )[ 1 ] +
+	  + input.match( _rgx.wikidata[ 1 ] )[ 1 ] +
 	  '.json';
 	
-	output = this._parseInput( this._getFile( input ) )
+	output = _parseInput( _getFile( input ) )
 	break;
       
       case 'url/else':
-	output = this._parseInput( this._getFile( input ) )
+	output = _parseInput( _getFile( input ) )
 	break;
       
       case 'jquery':
-	output = this._parseInput( data.val() || data.text() || data.html() )
+	output = _parseInput( data.val() || data.text() || data.html() )
 	break;
       
       case 'html':
-	output = this._parseInput( data.value || data.textContent )
+	output = _parseInput( data.value || data.textContent )
 	break;
       
       case 'string/json':
-	output = this._parseInput( this._getJSON( input ) )
+	output = _parseInput( _getJSON( input ) )
 	break;
       
       case 'string/bibtex':
-	output = this._parseBibTeX( input )
+	output = _parseBibTeX( input )
 	break;
       
       case 'wikidata':
-	output = this._parseWikidata( input )
+	output = _parseWikidata( input )
 	break;
       
       case 'contentmine':
-	output = this._parseContentMine( input )
+	output = _parseContentMine( input )
 	break;
       
       case 'array':
@@ -803,13 +793,7 @@ function Cite(data,options) {
       
       case 'json':
 	output = [ input ]
-	break;     
-      
-      /** TODO
-       * @todo
-       * 
-       * * contentmine
-       */
+	break;
       
       case 'empty'  :
       case 'invalid':
@@ -832,9 +816,9 @@ function Cite(data,options) {
    * @param input The input data
    * @return The parsed input
    */
-  this._parseInput = function ( input ) {
-    var type = this._parseInputType( input )
-      , outp = this._parseInputData( input, type )
+  var _parseInput = function ( input ) {
+    var type = _parseInputType( input )
+      , outp = _parseInputData( input, type )
     
     return outp
   }
@@ -864,7 +848,7 @@ function Cite(data,options) {
   this._input = {
     data: data
   , type: typeof data
-  , format: this._parseInputType( data )
+  , format: _parseInputType( data )
   }
   
   /**
@@ -959,7 +943,7 @@ function Cite(data,options) {
     if ( !nolog )
       this._log.push( { name: 'add', version: this.currentVersion() + 1, arguments: [ data, nolog ] } )
     
-    var input = this._parseInput( data );
+    var input = _parseInput( data );
     
     this.data = this.data.concat( input )
     
@@ -1077,7 +1061,7 @@ function Cite(data,options) {
       
       case 'string':
 	var res = ''
-	  , words = this._wordList[(options.lan||'en')]
+	  , words = _wordList[(options.lan||'en')]
 	
 	switch(options.format){
 	  case 'html':
