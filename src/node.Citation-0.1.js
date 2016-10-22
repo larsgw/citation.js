@@ -8,18 +8,19 @@
  * 
  * # Use
  * 
- *     Usage: node.Citation-0.1 [options]
- *     
- *     Options:
- *     
- *       -h, --help              output usage information
- *       -V, --version           output the version number
- *       -i, --input <path>      Input file
- *       -o, --output <path>     Output file
- *       -m, --output-mime-type  Output file mime type: txt - text/plain, html - text/html, json - text/json
- *       -f, --output-format     Output structure format: txt, html, json. For BibTeX, see --output-style.
- *       -s, --output-style      In case of text or HTML, output the citation following this style (guide). Currently two options: Vancouver, APA, BibTeX
- *       -l, --output-language   Output language. Has influence on some keywords, and date formatting. "en" for English, "nl" for Dutch
+ *    Usage: node.Citation-0.1 [options]
+ *  
+ *    Options:
+ *  
+ *      -h, --help                      output usage information
+ *      -V, --version                   output the version number
+ *      -i, --input <path>              Input file
+ *      -u, --url <url>                 Input url
+ *      -o, --output <path>             Output file (omit file extension)
+ *      -R, --non-real                  Do not output the file in its mime type, but as a string
+ *      -f, --output-format <option>    Output structure format: string, html, json.
+ *      -s, --output-style <option>     Ouput scheme. A combination of --output-format json and --output-style citation-* is considered invalid. Options: csl (Citation Style Lanugage JSON), bibtex, citation-* (where * is any formatting style)
+ *      -l, --output-language <option>  Output language. [RFC 5646](https://tools.ietf.org/html/rfc5646) codes
  * 
  * # Dependencies
  * 
@@ -77,18 +78,18 @@ program
   .option ( '-o, --output <path>',
 	    'Output file (omit file extension)')
   
-  .option ( '-m, --output-mime-type <option>',
-	    'Output file mime type: string, html, json',
-	    'json' )
+  .option ( '-R, --non-real',
+	    'Do not output the file in its mime type, but as a string',
+	    false )
   .option ( '-f, --output-format <option>',
 	    'Output structure format: string, html, json.',
 	    'json' )
   .option ( '-s, --output-style <option>',
-	    'In case of text or HTML, output the citation following this style (guide). ' +
-	    'Options: vancouver, apa, bibtex, json',
-	    'vancouver' )
+	    'Ouput scheme. A combination of --output-format json and --output-style citation-* is considered invalid. ' +
+	    'Options: csl (Citation Style Lanugage JSON), bibtex, citation-* (where * is any formatting style)',
+	    'csl' )
   .option ( '-l, --output-language <option>',
-	    'Output language. Has influence on some keywords, and date formatting. "en" for English, "nl" for Dutch',
+	    'Output language. [RFC 5646](https://tools.ietf.org/html/rfc5646) codes',
 	    'en' )
   
   .parse  ( process.argv )
@@ -125,8 +126,8 @@ if ( input.match(
 
 var data  = new Cite( input )
   , options = {
-    type: 'string',
-    format: ( program.outputFormat === 'string' ) ? 'html' : program.outputFormat,
+    format: 'string',
+    type: program.outputFormat,
     style: program.outputStyle,
     lan: program.outputLanguage
   }

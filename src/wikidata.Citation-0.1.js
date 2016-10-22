@@ -4,13 +4,15 @@
  * @description
  * # Description
  *
- * A Node.js package to transform Wikidata items from Q-numbers to Citation.js standard input format
+ * A Node.js package to transform Wikidata items from Q-numbers or Wikidata JSON to CSL-JSON
  * 
  * # Use
  * 
  *     var wdCite = require( './wikidata.Citation-0.1.js' )
  *     
- *     var citeInput = wdCite( <list of Q-numbers>, <lang> )
+ *     var urlInput = wdCite( <list of Q-numbers>, <lang> )
+ *     
+ *     var dataInput = wdCite( <array of Wikidata JSON Objects>, <lang>)
  * 
  * # Dependencies
  * 
@@ -67,7 +69,18 @@ try {
 /* --------------------------------- */
 /* --------------------------------- */
 
-var getLabel  = function ( q, lang ) {
+var getDate = function ( value ) {
+  var rValue
+    , date = new Date( value )
+  rValue = [
+    ( date.getFullYear()     ).toString()
+  , ( date.getMonth   () + 1 ).toString()
+  , ( date.getDate    ()     ).toString()
+  ]
+  return rValue
+}
+
+var getLabel = function ( q, lang ) {
   var url = wdk.getEntities( q, [ lang ], 'labels' )
   
   var data     = request( 'GET', url ).getBody( 'utf8' )
@@ -101,61 +114,51 @@ var parseProp = function ( prop, value, lang ) { var value = value
     // Author ( q )
     case 'P50':
       rProp = 'authorQ'
-      rValue = getLabel( value, lang )
+      rValue = value.map( function(v){ return { literal: getLabel( v, lang ) } } )
       break;
     
     // Author ( s )
     case 'P2093':
       rProp = 'authorS'
+      rValue = value.map( function(v){ return { literal: v } } )
       break;
     
     // Date ( from )
     case 'P580' :
     case 'P585' :
-      rProp = 'dateFrom'
-      rValue = [
-      , date.getDay  ()
-      , date.getMonth() + 1
-      , date.getFullYear()
-      ]
-      break;
-    
-    // Date ( to )
-    case 'P582' :
-      rProp = 'dateTo'
-      rValue = [
-      , date.getDay  ()
-      , date.getMonth() + 1
-      , date.getFullYear()
-      ]
+      rProp = 'accessed'
+      rValue = getDate( value )
       break;
     
     // DOI
     case 'P356' :
-      rProp = 'doi'
+      rProp = 'DOI'
       break;
     
      // Instance of
     case 'P31'  :
       rProp = 'type'
-      rValue = {
-	Q13442814: 'article'
+      rValue = ( {
+	Q13442814: 'article-journal'
+      , Q18918145: 'article-journal'
+      , Q191067  : 'article'
       , Q3331189 : 'book'
       , Q571     : 'book'
-      }[ value ]
+      }[ value ] || ( 'article-journal' +
+	console.warn( '[set]', 'This entry type is not recognized and therefore interpreted as \'article-journal\'' ) || '' )
+      )
       
       break;
     
     // ISBN 13 & 10
     case 'P212' :
     case 'P957' :
-      rProp = 'isbn'
+      rProp = 'ISBN'
       break;
     
     // Issue
     case 'P433' :
       rProp = 'issue'
-      rValue = parseInt( value )
       break;
     
     // Journal
@@ -166,25 +169,18 @@ var parseProp = function ( prop, value, lang ) { var value = value
     
     // Pages
     case 'P304' :
-      rProp = 'pages'
-      rValue = value.split( '-' ).map( function ( v ) { return parseInt( v ) } )
+      rProp = 'page'
       break;
     
     // Print/edition
     case 'P393' :
-      rProp = 'print'
-      rValue = parseInt( value )
+      rProp = 'edition'
       break;
     
     // Pubdate
     case 'P577' :
-      rProp = 'pubdate'
-      var date = new Date( value )
-      rValue = { from: [
-      , date.getDay  ()
-      , date.getMonth() + 1
-      , date.getFullYear()
-      ] }
+      rProp = 'issued'
+      rValue = getDate( value )
       break;
     
     // Title
@@ -195,7 +191,6 @@ var parseProp = function ( prop, value, lang ) { var value = value
     // Volume
     case 'P478' :
       rProp = 'volume'
-      rValue = parseInt( value )
       break;
     
     case 'P2860': // Cites
@@ -206,7 +201,7 @@ var parseProp = function ( prop, value, lang ) { var value = value
       break;
     
     default:
-      console.warn( 'Property not recognised: ' + prop )
+      console.warn( '[set]', 'Property not recognised: ' + prop )
       break;
   }
   
@@ -219,7 +214,7 @@ var getOutput = function ( url, lang ) {
   
   var output = []
   
-  console.log( 'Getting entity data...' )
+  console.log( 'Receiving entity data...' )
   
   var data     = request( 'GET', url ).getBody( 'utf8' )
     , entities = JSON.parse( data ).entities
@@ -244,7 +239,7 @@ var getOutput = function ( url, lang ) {
     
         entity = entities[ entKey   ]
     
-    var json  = { wikiID: entKey }
+    var json  = { wikiID: entKey, id: entKey }
       , props = Object.keys( entity )
     
     for ( var propIndex = 0; propIndex < props.length; propIndex++ ) {
@@ -259,7 +254,7 @@ var getOutput = function ( url, lang ) {
       delete json[ '' ]
     }
       
-    if ( json.hasOwnProperty( 'dateFrom' ) || json.hasOwnProperty( 'dateTo' ) ) {
+    /*if ( json.hasOwnProperty( 'dateFrom' ) || json.hasOwnProperty( 'dateTo' ) ) {
       json.date = {}
       if ( json.hasOwnProperty( 'dateFrom' ) ) {
 	json.date.from = json.dateFrom
@@ -268,7 +263,7 @@ var getOutput = function ( url, lang ) {
       if ( json.hasOwnProperty( 'dateTo'   ) ) {
 	json.date.to   = json.dateTo
 	delete           json.dateTo   }
-    }
+    }*/
     if ( json.hasOwnProperty( 'authorQ' ) || json.hasOwnProperty( 'authorS' ) ) {
       
       if ( json.hasOwnProperty( 'authorQ' ) && json.hasOwnProperty( 'authorS' ) ) {	
