@@ -1,3 +1,5 @@
+> [Version 0.2](https://github.com/larsgw/citation.js/projects/1/) is being prepared! Behaviour as described below may become deprecated.
+
 # Description
 
 Citation.js converts formats like BibTeX, Wikidata JSON and ContentMine JSON to a custom standard to convert to other formats like APA, Vancouver and back to BibTeX.
