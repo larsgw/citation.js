@@ -2,6 +2,7 @@
 <html>
   <head>
     <title>Demo | Citation.js</title>
+    <meta charset="UTF-8">
     <link rel="shortcut icon" type="image/x-icon" href="../favicon.ico"/>
     <link rel="icon" type="image/x-icon" href="../favicon.ico"/>
     <style>
@@ -14,7 +15,8 @@
       fieldset {border:0 none transparent;padding-left:0;display:inline-block;}
       
       /* Highlight */
-      pre {background-color:#f0f0f0;overflow-x:scroll;}
+      .javascript,.bibtex,.url {white-space:pre;font-family:monospace;}
+      pre {background-color:#f0f0f0;overflow-x:auto;}
 	/* JavaScript/JSON */
 	  .javascript span.default {font-weight:normal;color:#000000;}
 	  .javascript span.important {text-decoration:underline}
@@ -28,6 +30,8 @@
 	  .javascript span.string span {font-weight:normal;color:#bf0303;}
 	  .javascript span.digit {font-weight:normal;color:#b08000;}
 	  .javascript span.normal {font-weight:normal;color:#000;}
+	  .javascript span.delimiter:after,
+	  .javascript span.delimiter:before {content:' '}
 	/* BibTeX */
 	  .bibtex span.default {font-weight:normal;color:#000000;}
 	  .bibtex span.entrytype {font-weight:bold;color:#000000;}
@@ -48,18 +52,29 @@
     <p><b style="font-size:12px;">Note that the inputs are interchangable. You could, for example, paste a URL in the JSON box. The syntax won't be coloured, but the output will be correct.</b></p>
     <h4>JSON:</h4>
     <div id="json-in" data-type="json" class="in javascript" contenteditable="true" spellcheck="false"><!--
--->{
-  type: 'article',
-  author: ['Chadwick D. Rittenhouse','Tony W. Mong','Thomas Hart'],
-  editor: ['Stuart Pimm'],
-  year: 2015,
-  title: 'Weather conditions associated with autumn migration by mule deer in Wyoming',
-  journal: 'PeerJ',
-  volume: 3,
-  pages: [1,21],
-  doi: '10.7717/peerj.1045',
-  publisher: 'PeerJ Inc.'
-}<!--
+-->[
+  {
+    id: "Q23571040",
+    type: "article-journal",
+    title: "Correlation of the Base Strengths of Amines 1",
+    DOI: "10.1021/ja01577a030",
+    author: [
+      {
+	given: "H. K.",
+	family: "Hall"
+      }
+    ],
+    issued: [
+      {
+	date-parts: [ "1957", "1", "1" ]
+      }
+    ],
+    container-title: "Journal of the American Chemical Society",
+    volume: "79",
+    issue: "20",
+    page: "5441-5444"
+  }
+]<!--
       --></div>
     <h4>BibTeX:</h4>
     <div id="bib-in" data-type="bib" class="in bibtex" contenteditable="true" spellcheck="false"><!--
@@ -82,10 +97,10 @@
     <h4>Wikidata/URL:</h4>
     <p><b style="font-size:12px;">Note that Citation.js parses input via chaining. The data the URL points at is captured an re-parsed, so if the URL points to a text file containing an URL pointing to the first URL, you get an infinite loop. However, URL's pointing to itself are accounted for.</b></p>
     <div id="url-in" data-type="url" class="in url" contenteditable="true" spellcheck="false"><!--
-      -->https://www.wikidata.org/wiki/Q23571040<!--
+      -->https://www.wikidata.org/wiki/Q21972834<!--
     --></div>
     <h4>ContentMine/JSON:</h4>
-    <p><b style="font-size:12px;">This is the JSON scheme <a href="http://contentmine.org/">ContentMine</a>'s <a href="https://github.com/ContentMine/quickscrape">quickscrape</a> uses. Some properties are removed to improve readability.</b></p>
+    <p><b style="font-size:12px;">This is the JSON scheme <a href="http://contentmine.org/">ContentMine</a>'s <a href="https://github.com/ContentMine/quickscrape">quickscrape</a> uses. Some properties are omitted to improve readability.</b></p>
     <div id="cm-in" data-type="json" class="in javascript" contenteditable="true" spellcheck="false"><!--
 -->{
   "publisher": {
@@ -157,26 +172,29 @@
      --></div>
     <h2>Output:</h2>
     <fieldset>
+      <legend>HTML or plain text:</legend>
+      <select class="type">
+	<option value="html">HTML</option>
+	<option value="string">Plain text</option>
+      </select>
+    </fieldset>
+    <fieldset>
       <legend>Style:</legend>
-      <select class="format">
-	<option value="Vancouver">Vancouver</option>
-	<option value="APA">APA</option>
-	<option value="JSON">JSON</option>
-	<option value="BibTeX">BibTeX</option>
+      <select class="style">
+	<option value="citation-apa">APA</option>
+	<option value="citation-vancouver">Vancouver</option>
+	<option value="csl">JSON</option>
+	<option value="bibtex">BibTeX</option>
       </select>
     </fieldset>
     <fieldset>
       <legend>Language:</legend>
-      <select class="lan">
-	<option value="en">English</option>
-	<option value="nl">Dutch</option>
-      </select>
-    </fieldset>
-    <fieldset>
-      <legend>HTML or plain text:</legend>
-      <select class="html">
-	<option value="html">HTML</option>
-	<option value="string">Plain text</option>
+      <select class="lang">
+	<option value="en-US">English</option>
+	<option value="fr-FR">French</option>
+	<option value="es-ES">Spanish</option>
+	<option value="de-DE">German</option>
+	<option value="nl-NL">Dutch</option>
       </select>
     </fieldset>
     <h4>From JSON input:</h4>
@@ -184,14 +202,15 @@
     <h4>From BibTeX input:</h4>
     <div id="bib-out" data-type="bib" class="out"></div>
     <h4>From Wikidata/URL input:</h4>
-    <p><b style="font-size:12px;">Note that Citation.js can't parse every Wikidata property. This would require many calls to the database, since properties often have numeric-id's instead of values.</b></p>
+    <!--p><b style="font-size:12px;">Note that Citation.js can't parse every Wikidata property. This would require many calls to the database, since properties often have numeric-id's instead of values.</b></p-->
     <div id="url-out" data-type="url" class="out"></div>
     <h4>From ContentMine input:</h4>
     <div id="cm-out" data-type="cm" class="out"></div>
     <h2>Live code:</h2>
     <pre><code data-type="js" class="javascript"></code></pre>
     <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
-    <script type="text/javascript" src="src/Citation-0.1.js"></script>
+    <script type="text/javascript" src="src/node.citeproc.js"></script>
+    <script type="text/javascript" src="src/citation-0.2.js"></script>
     <script type="text/javascript">
       /* Code highlighting. Feel free to use, but note it isn't that solid */
       jQuery.fn.highlight = function() {
@@ -202,24 +221,24 @@
 	      elm.html(elm.text()
 		.replace(/([^\"]*)([\"][^\"]*[\"])([^\"]*)/gi,'$1<span class="string">$2</span>$3')
 		.replace(/([^\']*)([\'][^\']*[\'])([^\']*)/gi,'$1<span class="string">$2</span>$3')
+		.replace(/(function|this|document|for|if|else|var|true|false|throw|return|while|break|typeof|catch|new|undefined|null|class|yield|let|const|switch|break|case|continue|try|delete|in|of)([\s()]+)/g,
+		  '<span class="native">$1</span>$2')
 		.replace(/(\w+)(?=\.)/gi, '<span class="object">$1</span>')
 		.replace(/(cite)([(<])/gi, '<span class="important">$1</span>$2')
 		.replace(/(cite)([^\(<])/gi, '<span class="important">$1</span>$2')
-		.replace(/(\w+)(\:)/gi,'<span class="key">$1</span>$2')
-		.replace(/([\s\.{};])([\w$]+)\s*([(])/gi,'$1<span class="function">$2</span>$3')
-		.replace(/(function|this|document|for|if|else|var|true|false|throw|return|while|break|typeof|catch|new|undefined|null|class|yield|let|const|switch|break|case|continue|try)([\s()]+)/g,
-		  '<span class="native">$1</span>$2')
+		.replace(/(\w+)(\s*\:)/gi,'<span class="key">$1</span>$2')
+		.replace(/([\s\.{};(])([\w$]+)(?=\s*\()/gi,'$1<span class="function">$2</span>')
 		.replace(/^(.*)(\/\/.*)$/gim,'$1<span class="comment">$2</span>')
 		.replace(/(\/\*[\s\S]*\*\/)/gi,'<span class="comment">$1</span>')
-		.replace(/([^\'\"\w]\s*)(\d+)/gi,'$1<span class="digit">$2</span>')
+		.replace(/(-?(?:\d+\.\d+|\d+\.|\.\d+|\d+)(?:e\d+)?)/gi,'<span class="digit">$1</span>')
 	      );
 	      break;
 	    case 'bib':
 	      elm.html(elm.text()
 		.replace(/(\@)([^\@\{]+)(\{)(\w+)(\,)/gi,'$1<span class="entrytype">$2</span>$3<span class="label">$4</span><span class="default">$5</span>')
+		.replace(/\{(\d+)\}/g,'{<span class="digit">$1</span>}')
 		.replace(/(\{{1,2})([^\{\}]*)(\}{0,3})/gi,'$1<span class="string">$2</span>$3')
 		.replace(/(\w+)\s*(\=)(\s|[^\'\"\w]+)/gi,'<span class="property">$1</span> $2 ')
-		.replace(/([^\'\"\w]\s*)([\d\.\-]+)/gi,'$1<span class="digit">$2</span>')
 	      );
 	      break;
 	    case 'url':
@@ -245,54 +264,90 @@ var jsondata = new Cite(),
       cmdata = new Cite();
   
 $(function(){
-
+  
   // Declare function to update the output
   function update() {
     
-    console.log(0)
+    //console.debug('==================== UPDATE ====================')
     
-    // (Re)setting data
-    jsondata.set($('#json-in').text());
-     bibdata.set($('#bib-in' ).text());
-     urldata.set($('#url-in' ).text());
-      cmdata.set($('#cm-in'  ).text());
-     
-    // (Re)setting options
+    // Get options
     var opt = {
-      type: 'string',
-      style: $('select.format').val(),
-      lan: $('select.lan').val(),
-      format: $('select.html').val()
-    };
-    jsondata.options(opt);
-     bibdata.options(opt);
-     urldata.options(opt);
-      cmdata.options(opt);
+      format: 'string',
+      type  : $('select.type').val(),
+      style : $('select.style').val(),
+      lang  : $('select.lang').val(),
+    }
     
-    console.log( bibdata )
+    //console.debug('--------------------- JSON ---------------------')
     
-    // Getting data
-    $('#json-out').html( jsondata.get() );
-    $('#bib-out' ).html(  bibdata.get() );
-    $('#url-out' ).html(  urldata.get() );
-    $('#cm-out'  ).html(   cmdata.get() );
+      // Set data
+      jsondata.set($('#json-in').text());
       
+      // Set options
+      jsondata.options(opt);
+      
+      // Get data
+      $('#json-out').html( jsondata.get() );
+    
+    //console.debug('------------------- SUCCESS! -------------------')
+    
+    //console.debug('--------------------- BBTX ---------------------')
+     
+      bibdata.set($('#bib-in' ).text());
+	
+      bibdata.options(opt);
+	
+      $('#bib-out' ).html(  bibdata.get() );
+     
+    //console.debug('------------------- SUCCESS! -------------------')
+    
+    //console.debug('--------------------- WDQ0 ---------------------')
+     
+      urldata.set($('#url-in' ).text());
+      
+      urldata.options(opt);
+      
+      $('#url-out' ).html(  urldata.get() );
+    
+    //console.debug('------------------- SUCCESS! -------------------')
+    
+    //console.debug('--------------------- CMQS ---------------------')
+    
+      cmdata.set($('#cm-in'  ).text());
+      
+      cmdata.options(opt);
+      
+      $('#cm-out'  ).html(   cmdata.get() );
+    
+    //console.debug('------------------- SUCCESS! -------------------')
+    
+    //console.debug('=================== SUCCESS! ===================')
+    
+  }
+  
+  // Declare function to execute code async, to prevent page lagging
+  function asyncUpdate () {
+    setTimeout( update, 0 )
   }
   
   // Make output update when input is defocussed...
-  $('.in').on('blur',update);
+  $('.in').on('blur',asyncUpdate);
   // ... or a select tag has changed
-  $('select').on('change',update);
+  $('select').on('change',asyncUpdate);
   
   // Trigger update
-  update();
+  asyncUpdate();
   
 });
     </script>
     <script type="text/javascript">
       $(window).on('load',function(){
+	// Insert live code, directly from the script element (!)
+	$('pre code.javascript').html($('.code').html());	
+	
 	// Highlight all code
 	$('.javascript,.in').highlight();
+	
 	// Remove and re-add highlighting on focus and blur
 	$('.in').focus(function(){$(this).find('span').each(function(){$(this).after(this.textContent);$(this).remove();});});
 	$('.in').blur(function(){$(this).highlight()});

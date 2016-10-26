@@ -3,5 +3,13 @@
   "tags": {
     "allowUnknownTags": true,
     "dictionaries": ["jsdoc","closure"]
+  },
+  "source": {
+    "includePattern": "(?:.+-0\\.2\\.js(doc|x)?|index.js)$",
+    "excludePattern": "(^|\\/|\\\\)_|b\\.js(doc|x)?$"
+  },
+  "templates": {
+    "cleverLinks": false,
+    "monospaceLinks": false
   }
 } 

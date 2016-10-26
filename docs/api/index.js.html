@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: index.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: index.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/** 
+ * @file index.js
+ * 
+ * @description
+ * # Description
+ *
+ * # Input
+ * 
+ * 
+ * # Output
+ * 
+ * 
+ * # Use
+ * 
+ * ## Node.js
+ * 
+ * 
+ * 
+ * ## Browser
+ * 
+ * 
+ * 
+ * # Dependencies
+ * 
+ * * Citation-0.1.js
+ * * wikidata.Citation-0.1.js
+ * * Node.js and following packages:
+ *   * commander
+ *   * striptags
+ *   * fs
+ * 
+ * &lt;br />&lt;br />
+ * - - -
+ * &lt;br />&lt;br />
+ * 
+ * @projectname Citationjs
+ * 
+ * @author Lars Willighagen
+ * @version 0.1
+ * @license
+ * Copyright (c) 2016 Lars Willighagen
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
+
+var program = require( 'commander'       )
+  , fs      = require( 'fs'              )
+  , Cite    = require( './src/citation-0.2.js' )
+
+console.debug = console.log
+
+if ( __filename === process.argv[ 1 ] ) {
+
+  /*-------- Program ---------*/
+  program
+    .version( '0.2' )
+    .usage  ( '[options]' )
+    
+    .option ( '-i, --input &lt;path>',
+	      'Input file')
+    .option ( '-u, --url &lt;url>',
+	      'Input url')
+    .option ( '-t, --text &lt;string>',
+	      'Input text')
+    
+    .option ( '-o, --output &lt;path>',
+	      'Output file (omit file extension)')
+    
+    .option ( '-R, --output-non-real',
+	      'Do not output the file in its mime type, but as a string',
+	      false )
+    .option ( '-f, --output-type &lt;option>',
+	      'Output structure type: string, html, json',
+	      'json' )
+    .option ( '-s, --output-style &lt;option>',
+	      'Ouput scheme. A combination of --output-format json and --output-style citation-* is considered invalid. ' +
+	      'Options: csl (Citation Style Lanugage JSON), bibtex, citation-* (where * is any formatting style)',
+	      'csl' )
+    .option ( '-l, --output-language &lt;option>',
+	      'Output language. [RFC 5646](https://tools.ietf.org/html/rfc5646) codes',
+	      'en-US' )
+    
+    .parse  ( process.argv )
+
+  if ( !process.argv.slice(2).length )
+    program.help()
+  /*--------------------------*/
+  
+  /*-- Validating arguments --*/
+  if ( !( program.input || program.url || program.text ) ) {
+    console.log( 'Please give argument input file, url or text' )
+    process.exit( 1 ) }
+
+  if ( !program.output ) {
+    console.log( 'Please give argument output' )
+    process.exit( 1 ) }
+
+  if ( !fs.existsSync( program.input ) &amp;&amp; program.input ) {
+    console.log( 'Input file does not exist: ' + program.input )
+    process.exit( 1 ) }
+  /*--------------------------*/
+  
+  /*---------- Input ---------*/
+  var input
+
+  if ( program.input )
+    input = fs.readFileSync( program.input, 'utf8' )
+  else if ( program.url || program.text )
+    input = program.url || program.text
+  /*--------------------------*/
+  
+  /*--------- Output ---------*/
+  var data = new Cite( input )
+    , options = {
+      format: 'string' ,
+      type: program.outputType,
+      style: program.outputStyle,
+      lan: program.outputLanguage
+    }
+    , output = data.get( options )
+  
+  if ( !program.outputNonReal &amp;&amp; program.outputType === 'html' )
+    output = '&lt;!DOCTYPE html>&lt;html>&lt;head>&lt;meta charset="UTF-8">&lt;/head>&lt;body>' + output + '&lt;/body>&lt;/html>'
+  /*--------------------------*/
+  
+  /*-------- Extension -------*/
+  var extension
+  
+  if ( program.outputStyle === 'bibtex' &amp;&amp; program.outputType === 'string' )
+    extension = '.bib'
+  
+  else if ( program.outputNonReal )
+    extension = '.txt'
+  
+  else
+    extension = ( '.' + {
+      string: 'txt',
+      html: 'html',
+      json: 'json'
+    }[ program.outputType ] )
+  /*--------------------------*/
+  
+  fs.writeFileSync( program.output + extension, output )
+  
+} else {
+  require( 'module' )
+  
+  module.exports = Cite
+}</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Cite.html">Cite</a></li></ul><h3>Global</h3><ul><li><a href="global.html#fetchBibTeXType">fetchBibTeXType</a></li><li><a href="global.html#fetchCSLLocale">fetchCSLLocale</a></li><li><a href="global.html#fetchCSLStyle">fetchCSLStyle</a></li><li><a href="global.html#fetchFile">fetchFile</a></li><li><a href="global.html#fetchWikidataLabel">fetchWikidataLabel</a></li><li><a href="global.html#fetchWikidataType">fetchWikidataType</a></li><li><a href="global.html#getBibTeX">getBibTeX</a></li><li><a href="global.html#getBibTeXJSON">getBibTeXJSON</a></li><li><a href="global.html#getBibTeXLabel">getBibTeXLabel</a></li><li><a href="global.html#getDate">getDate</a></li><li><a href="global.html#getJSONObjectHTML">getJSONObjectHTML</a></li><li><a href="global.html#getJSONValueHTML">getJSONValueHTML</a></li><li><a href="global.html#getLabel">getLabel</a></li><li><a href="global.html#getName">getName</a></li><li><a href="global.html#parseBibTeX">parseBibTeX</a></li><li><a href="global.html#parseContentMine">parseContentMine</a></li><li><a href="global.html#parseDate">parseDate</a></li><li><a href="global.html#parseInput">parseInput</a></li><li><a href="global.html#parseInputData">parseInputData</a></li><li><a href="global.html#parseInputType">parseInputType</a></li><li><a href="global.html#parseJSON">parseJSON</a></li><li><a href="global.html#parseName">parseName</a></li><li><a href="global.html#parseWikidata">parseWikidata</a></li><li><a href="global.html#parseWikidataInput">parseWikidataInput</a></li><li><a href="global.html#parseWikidataProp">parseWikidataProp</a></li><li><a href="global.html#varCSLLocales">varCSLLocales</a></li><li><a href="global.html#varCSLStyles">varCSLStyles</a></li><li><a href="global.html#varRegex">varRegex</a></li><li><a href="global.html#varWikidataTypes">varWikidataTypes</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.0</a> on Wed Oct 26 2016 18:29:13 GMT+0200 (CEST)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

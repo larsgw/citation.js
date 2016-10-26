@@ -12,22 +12,25 @@
  * 
  * # Use
  * 
+ * ## Browser
+ * 
+ * 
+ * ### Dependencies
+ * 
+ * * citeproc-js (included in the [src/](https://github.com/larsgw/citation.js/tree/master/src) folder)
+ * 
  * ## Node.js
  * 
  * 
  * 
- * ## Browser
+ * ### Dependencies
  * 
- * 
- * 
- * # Dependencies
- * 
- * * Citation-0.1.js
- * * wikidata.Citation-0.1.js
- * * Node.js and following packages:
- *   * commander
- *   * striptags
- *   * fs
+ * * commander
+ * * striptags
+ * * fs
+ * * striptags
+ * * wikidata-sdk
+ * * citeproc-js (Node.js-compatible version included in the [src/](https://github.com/larsgw/citation.js/tree/master/src) folder)
  * 
  * <br /><br />
  * - - -
@@ -36,19 +39,19 @@
  * @projectname Citationjs
  * 
  * @author Lars Willighagen
- * @version 0.1
+ * @version 0.2
  * @license
- * Copyright (c) 2016 Lars Willighagen
+ * Copyright (c) 2016 Lars Willighagen  
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
+ * furnished to do so, subject to the following conditions:  
  *
  * The above copyright notice and this permission notice shall be included in all
- * copies or substantial portions of the Software.
+ * copies or substantial portions of the Software.  
  *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
@@ -61,8 +64,7 @@
 
 var program = require( 'commander'       )
   , fs      = require( 'fs'              )
-  , Cite    = require( './src/Citation-0.1.js' )
-  , wdCite  = require( './src/wikidata.Citation-0.1.js' )
+  , Cite    = require( './src/citation-0.2.js' )
 
 console.debug = console.log
 
@@ -77,6 +79,9 @@ if ( __filename === process.argv[ 1 ] ) {
 	      'Input file')
     .option ( '-u, --url <url>',
 	      'Input url')
+    .option ( '-t, --text <string>',
+	      'Input text')
+    
     .option ( '-o, --output <path>',
 	      'Output file (omit file extension)')
     
@@ -101,8 +106,8 @@ if ( __filename === process.argv[ 1 ] ) {
   /*--------------------------*/
   
   /*-- Validating arguments --*/
-  if ( !( program.input || program.url ) ) {
-    console.log( 'Please give argument input or url' )
+  if ( !( program.input || program.url || program.text ) ) {
+    console.log( 'Please give argument input file, url or text' )
     process.exit( 1 ) }
 
   if ( !program.output ) {
@@ -119,12 +124,8 @@ if ( __filename === process.argv[ 1 ] ) {
 
   if ( program.input )
     input = fs.readFileSync( program.input, 'utf8' )
-  else if ( program.url )
-    input = program.url
-
-  if ( input.match(
-    /((https?:\/\/www.wikidata.org\/entity\/)?Q\d+(\s+|,))*(https?:\/\/www.wikidata.org\/entity\/)?Q\d+/
-  ) ) input = wdCite( input.split( /\s+|,/ ), program.outputLanguage.split( '-' )[ 0 ] )
+  else if ( program.url || program.text )
+    input = program.url || program.text
   /*--------------------------*/
   
   /*--------- Output ---------*/
@@ -161,7 +162,9 @@ if ( __filename === process.argv[ 1 ] ) {
   fs.writeFileSync( program.output + extension, output )
   
 } else {
-  require( 'module' )
-  
-  module.exports = Cite
+  exports.Cite = Cite
+}
+
+exports.printMsg = function() {
+  console.log("This works!");
 }
