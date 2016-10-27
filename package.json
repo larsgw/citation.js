@@ -28,7 +28,7 @@
     "striptags": "latest",
     "fs": "",
     "wikidata-sdk": "",
-    "citeproc-js": "src/citeproc.js"
+    "citeproc-js": "file:./src/citeproc.js"
   },
   "author": "Lars Willighagen (https://larsgw.github.io)",
   "license": "MIT",

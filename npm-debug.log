@@ -4,10 +4,8 @@
 3 info using node@v6.8.0
 4 info git [ 'status', '--porcelain' ]
 5 verbose stack Error: Git working directory not clean.
-5 verbose stack M index.js
-5 verbose stack M src/Citation-0.1.js
-5 verbose stack M src/citeproc.js
-5 verbose stack M src/wikidata.Citation-0.1.js
+5 verbose stack D npm-debug.log
+5 verbose stack M package.json
 5 verbose stack     at /usr/lib/node_modules/npm/lib/version.js:247:19
 5 verbose stack     at /usr/lib/node_modules/npm/lib/utils/no-progress-while-running.js:21:8
 5 verbose stack     at ChildProcess.exithandler (child_process.js:197:7)
@@ -24,10 +22,8 @@
 9 error node v6.8.0
 10 error npm  v3.10.8
 11 error Git working directory not clean.
-11 error M index.js
-11 error M src/Citation-0.1.js
-11 error M src/citeproc.js
-11 error M src/wikidata.Citation-0.1.js
+11 error D npm-debug.log
+11 error M package.json
 12 error If you need help, you may report this error at:
 12 error     <https://github.com/npm/npm/issues>
 13 verbose exit [ 1, true ]
