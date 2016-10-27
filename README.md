@@ -1,114 +1,190 @@
-> [Version 0.2](https://github.com/larsgw/citation.js/projects/1/) is being prepared! Behaviour as described below may become deprecated. Code still in development is stored in the master branch; for the old version, take a look at [docs/demo/src/Citation-0.1.js](https://github.com/larsgw/citation.js/blob/master/docs/demo/src/Citation-0.1.js)
+# Citation.js
 
-# Please take a look at the note above
+Citation.js converts formats like BibTeX, Wikidata JSON and ContentMine JSON to CSL-JSON to convert to other formats like APA, Vancouver and back to BibTeX.
 
-# Description
+Generate docs with `jsdoc ./ README.md -r -c docs/conf.json -d docs/api/`.
 
-Citation.js converts formats like BibTeX, Wikidata JSON and ContentMine JSON to a custom standard to convert to other formats like APA, Vancouver and back to BibTeX.
+[![NPM version](https://img.shields.io/npm/v/citation-js.svg)](https://www.npmjs.org/package/citation-js)
 
 # Use
 
-Use the object constructor `Cite()` with the parameters as listed [below](#input). Then just call one of the functions, e.g. `.get()`, to get your [output](#output).
+## Node.js ([citation-js](https://www.npmjs.org/package/citation-js))
+
+Install the package like this:
+
+    npm install -g citation-js
+
+To run the program, use
+
+    citation-js  [options]
+
+    Options:
+
+      -h, --help                      output usage information
+      -V, --version                   output the version number
+      
+      -i, --input <path>              Input file
+      -u, --url <url>                 Input url
+      -t, --text <string>             Input text
+      
+      -o, --output <path>             Output file (omit file extension)
+      
+      -R, --output-non-real           Do not output the file in its mime type, but as a string
+      -f, --output-type <option>      Output structure type: string, html, json
+      -s, --output-style <option>     Ouput scheme. A combination of --output-format json and --output-style citation-* is considered invalid. Options: csl (Citation Style Lanugage JSON), bibtex, citation-* (where * is any formatting style)
+      -l, --output-language <option>  Output language. [RFC 5646](https://tools.ietf.org/html/rfc5646) codes
+
+To use the [`Cite`](#Cite) constructor, `require()` the module like this:
+
+```js
+var Cite = require('citation-js')
+```
+
+### Dependencies
+
+* commander
+* striptags
+* wikidata-sdk
+* citeproc-js (included automatically)
+
+## Browser
+
+With the following code, the [`Cite`](#Cite) contructor is available.
+
+```html
+<script src="path/to/citation-0.2.js" type="text/javascript"></script>
+```
+
+### Dependencies
+
+* citeproc-js (included in the [src/](https://github.com/larsgw/citation.js/tree/master/src) folder)  
+Include like `<script src="path/to/citeproc.js" type="text/javascript"></script>`
+
+<a name="Cite">
+## Cite
+</a>
+
+Use the object constructor `Cite()` to parse input and get output.
 
 <a name="input">
-## Input
+### Input
 </a>
 
-**When making the `Cite()` object:**
+Make a `Cite` object like this:
 
-1. In the first parameter you pass the string, object or array of objects you want to convert. For the properties supported in the objects, see [JSON](#json).
-2. In the second parameter you pass an object containing options with the following properties. These are the default options for when [getting data](Cite.html#.get).
-  1. `type`: The output datatype: `"html"`, `"string"` or `"json"` (default)
-  2. `format`: The output format: `"html"`, `"string"` or `"json"` (default). This way, you can get a HTML or JSON string instead of an actual object.
-  3. `style`: The output style. See [Output](#output). `"Vancouver"` is default
-  4. `lan`: The language. Currently Dutch (`"nl"`) and English (`"en"`, default) are supported
+```js
+var example = new Cite( <data>, <options> )
+```
 
-**Example:**
+1. In the first parameter you pass the input data. [Input types](#input_type)
+2. In the second parameter you pass the settings. It contains the following properties. These are the default options for using `.get()`.
+  1. `format`: The output format: `"real"` (default) or `"string"`
+  2. `type`: The output type: `"html"`, `"string"` or `"json"` (default).
+  3. `style`: The output style. See [Output](#output). `"csl"` is default
+  4. `lang`: The language of the output. [RFC 5646](https://tools.ietf.org/html/rfc5646) codes. Currently supported: `"en-US"` (default), `"fr-FR"`, `"es-ES"` ,`"de-DE"` and `"nl-NL"`
 
-    var citation = Cite(
-      {}, //data
-      {
-        type:"string",
-        format:"json"
-      }
-    );
-
-Now, when you use the `.get()` function, the default options will get you the data as a JSON string.
-
-<a name="bibtex">
-### BibTeX
+<a name="input_type">
+#### Input types
 </a>
 
-In the BibTeX-part of the input you simply pass a string of a citation in BibTeX-format. For the BibTeX documentation, see [wikipedia](https://en.wikipedia.org/wiki/BibTeX#Bibliographic_information_file).
-
-<a name="json">
-### JSON
-</a>
-
-In the JSON-part of the input you pass an object or the string of an object. Your JSON may be "relaxed"; You don't need to worry about double quotes around every single key. Properties are specified below. Note that not all properties are supported for all types.
-
-* `type`: the type of citation. May be `"book"`, `"chapter"`, `"article"`, `"e-article"`, `"e-publication"`, `"paper"` or `"newspaper-article"`
-* `author`: the author(s), listed in an array. Names don't have to be formatted
-* `editor`: the editor(s), listed in an array. Names don't have to be formatted
-* `chapterauthor`: the authors of the chapter. Names don't have to be formatted
-* `title`: the title of the book, publication, etc
-* `chapter`: the title or number of the chapter
-* `pages`: the pagenumbers of the citated fragment, listed as integers in an array
-* `year`: year of publication, as an integer
-* `pubdate`: object containin following properties, concerning the date of publication
-  * `from`: date of publication, format dd-mm-yyyy, listed as integers in an array
-* `date`: object containin following properties, concerning the date of citation
-  * `from`: date of citation or date of start of conference, format dd-mm-yyyy, listed as integers in an array
-  * `to`: date of end of conference, format dd-mm-yyyy, listed as integers in an array
-* `url`: URL of publication
-* `conference`: object containin following properties, concerning the conference where the thing was presented
-  * `name`: name of conference
-  * `org`: name of organisation where conference was held
-  * `place`: place where conference was held
-  * `country`: country where conference was held
-  * for the date of the conference, use `date` (outside of the `con` object)
-* `journal`: journal the thing is published in
-* `volume`: the volume of the journal the thing is published in
-* `number`: the number of the journal the thing is published in 
-* `place`: the place(s) of publication, listed in an array
-* `publisher`: the publisher as a string
-
-### Other input types
-
-Other supported input types are:
-* A jQuery or HTML element, where it will use the text content of the elements
-* Wikidata JSON, where it will try to get as much relevant properties as possible
-* ContentMine JSON, where it will convert to JSON with custom standard
-* An URL, where it wil use the fetched data, or extract the Wikidata entity. This uses an synchronous request.
+* `url/wikidata`: URL with [Wikidata](https://www.wikidata.org/) [Entity ID](https://www.wikidata.org/wiki/Wikidata:Glossary#Entities.2C_items.2C_properties_and_queries). Gets and parses the entity data
+* `list/wikidata`: List of Wikidata Entity IDs, separated by spaces, newlines or commas. Gets and parses the entity data
+* `json/wikidata`: Wikidata Entity data. Parses the data
+* `json/contentmine`: [ContentMine](http://contentmine.org/) data, as outputted by [quickscrape](https://github.com/ContentMine/quickscrape). Parses the data
+* `json/csl`: [CSL-JSON](https://github.com/citation-style-language/schema#csl-json-schema). Adds the data
+* `string/json`: JSON or JavaScript Object string. Parses and re-evaluates the data
+* `string/bibtex`: [BibTeX](http://www.bibtex.org/) string. Parses the data
+* `jquery/else`: jQuery element. Fetches and re-evaluates the contents
+* `html/else`: HTML DOM element. Fetches and re-evaluates the contents
+* `url/else`: URL. Fetches and re-evaluates the file
+* `list/else`: JavaScript array. Re-evaluates every element in the array
 
 <a name="output">
-## Ouput
+### Ouput
 </a>
 
-When using the `.get()` function, your output depends on the options you pass. If you don't pass any options, the values you passed as default are used. When you haven't passed those, standard options are passed.
+When using the `.get()` function, your output depends on the options you pass. If you don't pass any options, the values you passed as default are used. When you didn't pass default options, standard options are passed.
 
-**`Type` and `Format`**
+#### Type
 
-* JSON: Outputs an object with properties as specified in [Input/JSON](#json). Specify as `"JSON"`. Supports all types. Languages are ignored.
-* String: Outputs a single string with your formatted citation, in the styles below.
-* HTML: Outputs a set of DOM nodes, containing your formatted citation, in the styles below.
+* `json`: Output as JSON. Not possible together with `style:"citation-*"`
+* `html`: Output as HTML
+* `string`: Output as string
 
-**`Styles`**
+#### Style
 
-* Vancouver style; specify as `"Vancouver"`. Supports all languages and all types except `"paper"`. Instead of `"paper"`, use `"article"`.
-* APA style; specify as `"APA"`. Supports all types and languages.
-* BibTeX: specify as `"BibTeX"`. Supports most types and has no languages. If a type is not supported, `misc` is used.
-* JSON style: specify as `"JSON"`. Gets you a HMTL-formatted JSON string.
+* `csl`: Outputs raw CSL-JSON data
+* `bibtex`: Outputs a BibTeX string, or BibTeX-JSON if `type: "json"`
+* `citation-*`: Formatted citation, formatted with citeproc-js. `*` is a [CSL Template](#csl_templates) name.
 
-# Further explanation
+<a name="csl_templates">
+#### CSL Templates
+</a>
 
-Further explanation can be found at the [API](https://larsgw.github.io/citation.js/docs/api/). The explanation of the jQuery plugin can be found there too.
+Currently, the following CSL Templates are suppported in Citation.js.
 
-# Demo
+* `apa`
+* `vancouver`
+* `harvard1`
+
+Different [CSL Templates](https://github.com/citation-style-language/styles) can be used by passing an XML string to `.get()` with the option `template:<string>`. E.g.
+
+```js
+var data = new Cite(...)
+
+data.get({
+  format: 'string',
+  type: 'html',
+  style: 'citation',
+  lang: 'en-US',
+  
+  template: '...' // XML String
+})
+```
+
+Currently, you need to pass `"citation"` to the `style` option for this to work.
+
+#### CSL Locales
+
+If you want different languages than the standard, you can pass a [CSL Locale](https://github.com/citation-style-language/locales) as an XML string to `.get()` with the option `locale:<string>`. E.g.
+
+```js
+var data = new Cite(...)
+
+data.get({
+  format: 'string',
+  type: 'html',
+  style: 'citation-apa',
+  
+  locale: '...' // XML String
+})
+```
+
+### Misc
+
+`Cite` has some more functions:
+
+* `.options(<options>)`: Change default options
+* `.set(<data>)`: Replace all data with new data
+* `.add(<data>)`: Add data
+* `.reset()`: Remove all data
+* `.currentVersion()`: Get current version number
+* `.undo()`: Restore previous version
+* `.retrieveVersion(<version number>)`: Retreive a certain version of the object
+* `.sort()`: Sort all entries on basis of their BibTeX label
+
+# More
+
+## More Docs
+Further explanation can be found [here](https://larsgw.github.io/citation.js/docs/api/). The explanation of the jQuery plugin can be found there too.
+
+## Demo
+
+### NPM Demo
+
+Currently broken, probably due to caching.
+
+### Browser Demos
 
 * [Normal demo](https://larsgw.github.io/citation.js/docs/demo/demo.html)
 * [Demo including jQuery plugin](https://larsgw.github.io/citation.js/docs/demo/jquery.html)
-
-# Dependencies
-
-* None! (Although, when using it in Nodejs, you need sync-request)

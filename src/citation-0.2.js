@@ -1,14 +1,6 @@
 /** 
  * @file Citation-0.2.js
  * 
- * @description
- * 
- * Generate docs with `jsdoc ./ -r -c docs/conf.json -d docs/api/`
- * 
- * <br /><br />
- * - - -
- * <br /><br />
- * 
  * @projectname Citationjs
  * 
  * @author Lars Willighagen
@@ -931,12 +923,7 @@ var parseInputData = function ( input, type ) {
   switch ( type ) {
     
     case 'url/wikidata':
-      input  =
-	'https://www.wikidata.org/wiki/Special:EntityData/'
-	+ input.match( varRegex.wikidata[ 1 ] )[ 1 ] +
-	'.json';
-      
-      output = parseInput( JSON.parse( fetchFile( input ) ) )
+      output = parseInput( parseWikidataInput( input.match( varRegex.wikidata[ 1 ] )[ 1 ] ) )
       break;
     
     case 'list/wikidata':

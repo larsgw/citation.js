@@ -1,40 +1,6 @@
 /** 
  * @file index.js
  * 
- * @description
- * # Description
- *
- * # Input
- * 
- * 
- * # Output
- * 
- * 
- * # Use
- * 
- * ## Browser
- * 
- * 
- * ### Dependencies
- * 
- * * citeproc-js (included in the [src/](https://github.com/larsgw/citation.js/tree/master/src) folder)
- * 
- * ## Node.js
- * 
- * 
- * 
- * ### Dependencies
- * 
- * * commander
- * * striptags
- * * fs
- * * wikidata-sdk
- * * citeproc-js (Node.js-compatible version included in the [src/](https://github.com/larsgw/citation.js/tree/master/src) folder)
- * 
- * <br /><br />
- * - - -
- * <br /><br />
- * 
  * @projectname Citationjs
  * 
  * @author Lars Willighagen
@@ -161,9 +127,7 @@ if ( __filename === process.argv[ 1 ] ) {
   fs.writeFileSync( program.output + extension, output )
   
 } else {
-  exports.Cite = Cite
-}
-
-exports.printMsg = function() {
-  console.log("This works!");
+  require( 'module' )
+  
+  module.exports = Cite
 }

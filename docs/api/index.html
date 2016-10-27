@@ -42,6 +42,130 @@
 
 
 
+    <section>
+        <article><h1>Citation.js</h1><p>Citation.js converts formats like BibTeX, Wikidata JSON and ContentMine JSON to CSL-JSON to convert to other formats like APA, Vancouver and back to BibTeX.</p>
+<p>Generate docs with <code>jsdoc ./ README.md -r -c docs/conf.json -d docs/api/</code>.</p>
+<p><a href="https://www.npmjs.org/package/citation-js"><img src="https://img.shields.io/npm/v/citation-js.svg" alt="NPM version"></a></p>
+<h1>Use</h1><h2>Node.js (<a href="https://www.npmjs.org/package/citation-js">citation-js</a>)</h2><p>Install the package like this:</p>
+<pre class="prettyprint source"><code>npm install -g citation-js</code></pre><p>To run the program, use</p>
+<pre class="prettyprint source"><code>citation-js  [options]
+
+Options:
+
+  -h, --help                      output usage information
+  -V, --version                   output the version number
+
+  -i, --input &lt;path>              Input file
+  -u, --url &lt;url>                 Input url
+  -t, --text &lt;string>             Input text
+
+  -o, --output &lt;path>             Output file (omit file extension)
+
+  -R, --output-non-real           Do not output the file in its mime type, but as a string
+  -f, --output-type &lt;option>      Output structure type: string, html, json
+  -s, --output-style &lt;option>     Ouput scheme. A combination of --output-format json and --output-style citation-* is considered invalid. Options: csl (Citation Style Lanugage JSON), bibtex, citation-* (where * is any formatting style)
+  -l, --output-language &lt;option>  Output language. [RFC 5646](https://tools.ietf.org/html/rfc5646) codes</code></pre><p>To use the <a href="#Cite"><code>Cite</code></a> constructor, <code>require()</code> the module like this:</p>
+<pre class="prettyprint source lang-js"><code>var Cite = require('citation-js')</code></pre><h3>Dependencies</h3><ul>
+<li>commander</li>
+<li>striptags</li>
+<li>wikidata-sdk</li>
+<li>citeproc-js (included automatically)</li>
+</ul>
+<h2>Browser</h2><p>With the following code, the <a href="#Cite"><code>Cite</code></a> contructor is available.</p>
+<pre class="prettyprint source lang-html"><code>&lt;script src=&quot;path/to/citation-0.2.js&quot; type=&quot;text/javascript&quot;>&lt;/script></code></pre><h3>Dependencies</h3><ul>
+<li>citeproc-js (included in the <a href="https://github.com/larsgw/citation.js/tree/master/src">src/</a> folder)<br>Include like <code>&lt;script src=&quot;path/to/citeproc.js&quot; type=&quot;text/javascript&quot;&gt;&lt;/script&gt;</code></li>
+</ul>
+<p><a name="Cite"></p>
+<h2>Cite</h2><p></a></p>
+<p>Use the object constructor <code>Cite()</code> to parse input and get output.</p>
+<p><a name="input"></p>
+<h3>Input</h3><p></a></p>
+<p>Make a <code>Cite</code> object like this:</p>
+<pre class="prettyprint source lang-js"><code>var example = new Cite( &lt;data>, &lt;options> )</code></pre><ol>
+<li>In the first parameter you pass the input data. <a href="#input_type">Input types</a></li>
+<li>In the second parameter you pass the settings. It contains the following properties. These are the default options for using <code>.get()</code>.<ol>
+<li><code>format</code>: The output format: <code>&quot;real&quot;</code> (default) or <code>&quot;string&quot;</code></li>
+<li><code>type</code>: The output type: <code>&quot;html&quot;</code>, <code>&quot;string&quot;</code> or <code>&quot;json&quot;</code> (default).</li>
+<li><code>style</code>: The output style. See <a href="#output">Output</a>. <code>&quot;csl&quot;</code> is default</li>
+<li><code>lang</code>: The language of the output. <a href="https://tools.ietf.org/html/rfc5646">RFC 5646</a> codes. Currently supported: <code>&quot;en-US&quot;</code> (default), <code>&quot;fr-FR&quot;</code>, <code>&quot;es-ES&quot;</code> ,<code>&quot;de-DE&quot;</code> and <code>&quot;nl-NL&quot;</code></li>
+</ol>
+</li>
+</ol>
+<p><a name="input_type"></p>
+<h4>Input types</h4><p></a></p>
+<ul>
+<li><code>url/wikidata</code>: URL with <a href="https://www.wikidata.org/">Wikidata</a> <a href="https://www.wikidata.org/wiki/Wikidata:Glossary#Entities.2C_items.2C_properties_and_queries">Entity ID</a>. Gets and parses the entity data</li>
+<li><code>list/wikidata</code>: List of Wikidata Entity IDs, separated by spaces, newlines or commas. Gets and parses the entity data</li>
+<li><code>json/wikidata</code>: Wikidata Entity data. Parses the data</li>
+<li><code>json/contentmine</code>: <a href="http://contentmine.org/">ContentMine</a> data, as outputted by <a href="https://github.com/ContentMine/quickscrape">quickscrape</a>. Parses the data</li>
+<li><code>json/csl</code>: <a href="https://github.com/citation-style-language/schema#csl-json-schema">CSL-JSON</a>. Adds the data</li>
+<li><code>string/json</code>: JSON or JavaScript Object string. Parses and re-evaluates the data</li>
+<li><code>string/bibtex</code>: <a href="http://www.bibtex.org/">BibTeX</a> string. Parses the data</li>
+<li><code>jquery/else</code>: jQuery element. Fetches and re-evaluates the contents</li>
+<li><code>html/else</code>: HTML DOM element. Fetches and re-evaluates the contents</li>
+<li><code>url/else</code>: URL. Fetches and re-evaluates the file</li>
+<li><code>list/else</code>: JavaScript array. Re-evaluates every element in the array</li>
+</ul>
+<p><a name="output"></p>
+<h3>Ouput</h3><p></a></p>
+<p>When using the <code>.get()</code> function, your output depends on the options you pass. If you don't pass any options, the values you passed as default are used. When you didn't pass default options, standard options are passed.</p>
+<h4>Type</h4><ul>
+<li><code>json</code>: Output as JSON. Not possible together with <code>style:&quot;citation-*&quot;</code></li>
+<li><code>html</code>: Output as HTML</li>
+<li><code>string</code>: Output as string</li>
+</ul>
+<h4>Style</h4><ul>
+<li><code>csl</code>: Outputs raw CSL-JSON data</li>
+<li><code>bibtex</code>: Outputs a BibTeX string, or BibTeX-JSON if <code>type: &quot;json&quot;</code></li>
+<li><code>citation-*</code>: Formatted citation, formatted with citeproc-js. <code>*</code> is a <a href="#csl_templates">CSL Template</a> name.</li>
+</ul>
+<p><a name="csl_templates"></p>
+<h4>CSL Templates</h4><p></a></p>
+<p>Currently, the following CSL Templates are suppported in Citation.js.</p>
+<ul>
+<li><code>apa</code></li>
+<li><code>vancouver</code></li>
+<li><code>harvard1</code></li>
+</ul>
+<p>Different <a href="https://github.com/citation-style-language/styles">CSL Templates</a> can be used by passing an XML string to <code>.get()</code> with the option <code>template:&lt;string&gt;</code>. E.g.</p>
+<pre class="prettyprint source lang-js"><code>var data = new Cite(...)
+
+data.get({
+  format: 'string',
+  type: 'html',
+  style: 'citation',
+  lang: 'en-US',
+
+  template: '...' // XML String
+})</code></pre><p>Currently, you need to pass <code>&quot;citation&quot;</code> to the <code>style</code> option for this to work.</p>
+<h4>CSL Locales</h4><p>If you want different languages than the standard, you can pass a <a href="https://github.com/citation-style-language/locales">CSL Locale</a> as an XML string to <code>.get()</code> with the option <code>locale:&lt;string&gt;</code>. E.g.</p>
+<pre class="prettyprint source lang-js"><code>var data = new Cite(...)
+
+data.get({
+  format: 'string',
+  type: 'html',
+  style: 'citation-apa',
+
+  locale: '...' // XML String
+})</code></pre><h3>Misc</h3><p><code>Cite</code> has some more functions:</p>
+<ul>
+<li><code>.options(&lt;options&gt;)</code>: Change default options</li>
+<li><code>.set(&lt;data&gt;)</code>: Replace all data with new data</li>
+<li><code>.add(&lt;data&gt;)</code>: Add data</li>
+<li><code>.reset()</code>: Remove all data</li>
+<li><code>.currentVersion()</code>: Get current version number</li>
+<li><code>.undo()</code>: Restore previous version</li>
+<li><code>.retrieveVersion(&lt;version number&gt;)</code>: Retreive a certain version of the object</li>
+<li><code>.sort()</code>: Sort all entries on basis of their BibTeX label</li>
+</ul>
+<h1>More</h1><h2>More Docs</h2><p>Further explanation can be found <a href="https://larsgw.github.io/citation.js/docs/api/">here</a>. The explanation of the jQuery plugin can be found there too.</p>
+<h2>Demo</h2><h3>NPM Demo</h3><p>Currently broken, probably due to caching.</p>
+<h3>Browser Demos</h3><ul>
+<li><a href="https://larsgw.github.io/citation.js/docs/demo/demo.html">Normal demo</a></li>
+<li><a href="https://larsgw.github.io/citation.js/docs/demo/jquery.html">Demo including jQuery plugin</a></li>
+</ul></article>
+    </section>
+
 
 
 
@@ -63,19 +187,7 @@
     <div class="container-overview">
     
         
-            <div class="description"><h1>Description</h1><h1>Input</h1><h1>Output</h1><h1>Use</h1><h2>Node.js</h2><h2>Browser</h2><h1>Dependencies</h1><ul>
-<li>Citation-0.1.js</li>
-<li>wikidata.Citation-0.1.js</li>
-<li>Node.js and following packages:<ul>
-<li>commander</li>
-<li>striptags</li>
-<li>fs</li>
-</ul>
-</li>
-</ul>
-<p><br /><br /></p>
-<hr>
-<p><br /><br /></p></div>
+            <div class="description"><p>index.js</p></div>
         
 
         
@@ -85,7 +197,7 @@
 
     
     <dt class="tag-version">Version:</dt>
-    <dd class="tag-version"><ul class="dummy"><li>0.1</li></ul></dd>
+    <dd class="tag-version"><ul class="dummy"><li>0.2</li></ul></dd>
     
 
     
@@ -115,17 +227,17 @@
 
     
     <dt class="tag-license">License:</dt>
-    <dd class="tag-license"><ul class="dummy"><li>Copyright (c) 2016 Lars Willighagen
+    <dd class="tag-license"><ul class="dummy"><li>Copyright (c) 2016 Lars Willighagen  
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
 in the Software without restriction, including without limitation the rights
 to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
 copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
+furnished to do so, subject to the following conditions:  
 
 The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
+copies or substantial portions of the Software.  
 
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
@@ -197,10 +309,7 @@ SOFTWARE.</li></ul></dd>
     <div class="container-overview">
     
         
-            <div class="description"><p>Generate docs with <code>jsdoc ./ -r -c docs/conf.json -d docs/api/</code></p>
-<p><br /><br /></p>
-<hr>
-<p><br /><br /></p></div>
+            <div class="description"><p>Citation-0.2.js</p></div>
         
 
         
@@ -315,7 +424,7 @@ SOFTWARE.</li></ul></dd>
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.0</a> on Wed Oct 26 2016 18:29:13 GMT+0200 (CEST)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.0</a> on Thu Oct 27 2016 15:15:00 GMT+0200 (CEST)
 </footer>
 
 <script> prettyPrint(); </script>

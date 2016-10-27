@@ -6,7 +6,7 @@
   },
   "source": {
     "includePattern": "(?:.+-0\\.2\\.js(doc|x)?|index.js)$",
-    "excludePattern": "(^|\\/|\\\\)_|b\\.js(doc|x)?$"
+    "excludePattern": "(^|\\/|\\\\)_|b\\.js(doc|x)?|docs\\/demo\\/src\\/.+?\\.js$"
   },
   "templates": {
     "cleverLinks": false,

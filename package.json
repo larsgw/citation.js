@@ -22,7 +22,6 @@
   "dependencies": {
     "commander": "",
     "striptags": "latest",
-    "fs": "",
     "wikidata-sdk": ""
   },
   "author": "Lars Willighagen (https://larsgw.github.io)",
