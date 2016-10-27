@@ -5,3 +5,4 @@ test/
 src/jquery.*
 src/html
 debug.html
+npm-debug.log
