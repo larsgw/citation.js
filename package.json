@@ -1,6 +1,6 @@
 {
   "name": "citation-js",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "description": "> [Version 0.2](https://github.com/larsgw/citation.js/projects/1/) is being prepared! Behaviour as described below may become deprecated. Code still in development is stored in the master branch; for the old version, take a look at [docs/demo/src/Citation-0.1.js](https://github.com/larsgw/citation.js/blob/master/docs/demo/src/Citation-0.1.js)",
   "main": "index.js",
   "directories": {
