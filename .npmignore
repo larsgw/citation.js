@@ -4,3 +4,4 @@ src/*-0.1.js
 test/
 src/jquery.*
 src/html
+debug.html

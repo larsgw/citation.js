@@ -1,5 +1,6 @@
 /*
  * Copyright (c) 2009-2016 Frank Bennett
+ *                    2016 Lars Willighagen (added nodejs compatibility)
  * 
  * 	This program is free software: you can redistribute it and/or
  * 	modify it under EITHER
