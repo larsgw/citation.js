@@ -1561,7 +1561,7 @@ return Cite
 
 })(
   ( typeof require  === 'function' ? {
-    CSL: require( './node.citeproc.js' ).CSL
+    CSL: require( './citeproc.js' ).CSL
   , striptags: require( 'striptags' )
   , request: require( 'sync-request' )
   , window: {}
