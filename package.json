@@ -1,0 +1,39 @@
+{
+  "name": "citation-js",
+  "version": "0.2.0",
+  "description": "> [Version 0.2](https://github.com/larsgw/citation.js/projects/1/) is being prepared! Behaviour as described below may become deprecated. Code still in development is stored in the master branch; for the old version, take a look at [docs/demo/src/Citation-0.1.js](https://github.com/larsgw/citation.js/blob/master/docs/demo/src/Citation-0.1.js)",
+  "main": "index.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "files": [
+    "index.js",
+    "src/citation.js"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/larsgw/citation.js.git"
+  },
+  "keywords": [
+    "citation",
+    "bibtex",
+    "wikidata",
+    "contentmine",
+    "quickscrape",
+    "csl",
+    "citeproc"
+  ],
+  "dependencies" : {
+    "commander": "",
+    "striptags": "latest",
+    "fs": "",
+    "wikidata-sdk": "",
+    "citeproc-js": "src/citeproc.js"
+  },
+  "author": "Lars Willighagen (https://larsgw.github.io)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/larsgw/citation.js/issues"
+  },
+  "homepage": "https://github.com/larsgw/citation.js#readme"
+}

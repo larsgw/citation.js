@@ -1,0 +1,6 @@
+docs/
+out/
+src/*-0.1.js
+test/
+src/jquery.*
+src/html

@@ -28,7 +28,6 @@
  * * commander
  * * striptags
  * * fs
- * * striptags
  * * wikidata-sdk
  * * citeproc-js (Node.js-compatible version included in the [src/](https://github.com/larsgw/citation.js/tree/master/src) folder)
  * 

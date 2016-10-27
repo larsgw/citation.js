@@ -123,7 +123,7 @@ var parseProp = function ( prop, value, lang ) { var value = value
       rValue = value.map( function(v){ return { literal: v } } )
       break;
     
-    // Date ( from )
+    // Date
     case 'P580' :
     case 'P585' :
       rProp = 'accessed'
@@ -135,7 +135,7 @@ var parseProp = function ( prop, value, lang ) { var value = value
       rProp = 'DOI'
       break;
     
-     // Instance of
+    // Instance of
     case 'P31'  :
       rProp = 'type'
       rValue = ( {
@@ -232,12 +232,8 @@ var getOutput = function ( url, lang ) {
   ) } else console.log( 'Processing recieved entity data...' )
   
   for ( var entIndex = 0; entIndex < entKeys.length; entIndex++ ) {
-    var entKey = entKeys [ entIndex ]
-      , entity = entities[ entKey   ]
-    
-    entities[ entKey ] = wdk.simplifyClaims( entity.claims )
-    
-        entity = entities[ entKey   ]
+    var entKey = entKeys[ entIndex ]
+      , entity = wdk.simplifyClaims( entities[ entKey ].claims )
     
     var json  = { wikiID: entKey, id: entKey }
       , props = Object.keys( entity )
@@ -254,16 +250,6 @@ var getOutput = function ( url, lang ) {
       delete json[ '' ]
     }
       
-    /*if ( json.hasOwnProperty( 'dateFrom' ) || json.hasOwnProperty( 'dateTo' ) ) {
-      json.date = {}
-      if ( json.hasOwnProperty( 'dateFrom' ) ) {
-	json.date.from = json.dateFrom
-	delete           json.dateFrom }
-      
-      if ( json.hasOwnProperty( 'dateTo'   ) ) {
-	json.date.to   = json.dateTo
-	delete           json.dateTo   }
-    }*/
     if ( json.hasOwnProperty( 'authorQ' ) || json.hasOwnProperty( 'authorS' ) ) {
       
       if ( json.hasOwnProperty( 'authorQ' ) && json.hasOwnProperty( 'authorS' ) ) {	

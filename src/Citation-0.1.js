@@ -1,5 +1,5 @@
 /** 
- * @file Citation-0.1.js
+ * @file Citation-0.2.js
  * 
  * @description
  * 
@@ -11,8 +11,8 @@
  * 
  * @projectname Citationjs
  * 
- * @author Lars Willighagen [lars.willighagen@gmail.com]
- * @version 0.1
+ * @author Lars Willighagen
+ * @version 0.2
  * @license
  * Copyright (c) 2015-2016 Lars Willighagen
  *
@@ -35,22 +35,21 @@
  * SOFTWARE.
  */
 
-var Cite = ( function ( window, modules, nodejsMode, browserMode ) {
+var Cite = ( function ( modules, nodejsMode, browserMode ) {
 
 var CSL = modules.CSL
-  , striptag = modules.striptags
+  , striptags = modules.striptags
+  , request = modules.request
+  , window = modules.window
+  , wdk = modules.wdk
 
 if ( nodejsMode ) {
   
   console.info( '[init]', 'Node.js mode' )
   
-  var window = {}    
-  
 } else if ( browserMode ) {
   
   console.info( '[init]', 'Browser mode' )
-  
-  var window = window
   
 } else throw new Error( 'Code executed in invalid environment' )
 
@@ -73,6 +72,7 @@ var rgx = {
 , wikidata: [
     /(?:\/|^)(Q\d+)$/
   , /(Q\d+)/
+  , /^(?:Q\d+(?:\s+|,))*(?:Q\d+)(?:\s+|,)?$/
   ]
 , json:[
     [ /((?:\[|:|,)\s*)'((?:\\'|[^'])*?[^\\])?'(?=\s*(?:\]|}|,))/g
@@ -85,12 +85,13 @@ var rgx = {
 }
 
 /**
- * Convert a CSL date into the correct format
+ * Convert a CSL date into human-readable format
  * 
- * @function getData
- * @param {Array} date - A date in CSL format
+ * @function getDate
  * 
- * @return The string
+ * @param {Number[]} date - A date in CSL format
+ * 
+ * @return {String} The string
  */
 var getDate = function ( date ) {
   var res  = ''
@@ -111,14 +112,35 @@ var getDate = function ( date ) {
 }
 
 /**
+ * Convert epoch to CSL date
+ * 
+ * @function parseDate
+ * 
+ * @param {Number} value - Epoch time
+ * 
+ * @return {Number[]} Array of integers, representing the date in [ YYYY, MM, DD ]
+ */
+var parseDate = function ( value ) {
+  var rValue
+    , date = new Date( value )
+  rValue = [
+    ( date.getFullYear()     ).toString()
+  , ( date.getMonth   () + 1 ).toString()
+  , ( date.getDate    ()     ).toString()
+  ]
+  return rValue
+}
+
+/**
  * Get CSL from name
  * 
- * @method getCSLName
+ * @method parseName
  * 
- * @param str The name
- * @return The CSL object
+ * @param {String} str - The 
+ * 
+ * @return {Object} The CSL object
  */
-var getCSLName = function ( str ) {
+var parseName = function ( str ) {
   var arr = str.split( rgx.name )
   return {
     given: arr[ 0 ]
@@ -131,8 +153,9 @@ var getCSLName = function ( str ) {
  * 
  * @method getName
  * 
- * @param obj CSL input
- * @return Full name
+ * @param {Object} obj - CSL input
+ * 
+ * @return {String} Full name
  */
 var getName = function ( obj ) {
   return ( (
@@ -149,8 +172,9 @@ var getName = function ( obj ) {
  * 
  * @method getBibTeXType
  * 
- * @param pubType CSL input
- * @return Type
+ * @param {String} pubType - CSL type
+ * 
+ * @return {String} BibTeX type
  */
 var getBibTeXType = function ( pubType ) {
   switch ( pubType ) {
@@ -188,7 +212,8 @@ var CSLTemplates = {
 , vancouver: '<?xml version="1.0" encoding="utf-8"?><style xmlns="http://purl.org/net/xbiblio/csl" class="in-text" version="1.0" demote-non-dropping-particle="sort-only" page-range-format="minimal"><info><title>Vancouver</title><id>http://www.zotero.org/styles/vancouver</id><link href="http://www.zotero.org/styles/vancouver" rel="self"/><link href="http://www.nlm.nih.gov/bsd/uniform_requirements.html" rel="documentation"/><author><name>Michael Berkowitz</name><email>mberkowi@gmu.edu</email></author><contributor><name>Sean Takats</name><email>stakats@gmu.edu</email></contributor><contributor><name>Sebastian Karcher</name></contributor><category citation-format="numeric"/><category field="medicine"/><summary>Vancouver style as outlined by International Committee of Medical Journal Editors Uniform Requirements for Manuscripts Submitted to Biomedical Journals: Sample References</summary><updated>2014-09-06T16:03:01+00:00</updated><rights license="http://creativecommons.org/licenses/by-sa/3.0/">This work is licensed under a Creative Commons Attribution-ShareAlike 3.0 License</rights></info><locale xml:lang="en"><date form="text" delimiter=" "><date-part name="year"/><date-part name="month" form="short" strip-periods="true"/><date-part name="day"/></date><terms><term name="collection-editor" form="long"><single>editor</single><multiple>editors</multiple></term><term name="presented at">presented at</term><term name="available at">available from</term><term name="section" form="short">sect.</term></terms></locale><locale xml:lang="fr"><date form="text" delimiter=" "><date-part name="day"/><date-part name="month" form="short" strip-periods="true"/><date-part name="year"/></date></locale><macro name="author"><names variable="author"><name sort-separator=" " initialize-with="" name-as-sort-order="all" delimiter=", " delimiter-precedes-last="always"/><label form="long" prefix=", "/><substitute><names variable="editor"/></substitute></names></macro><macro name="editor"><names variable="editor" suffix="."><name sort-separator=" " initialize-with="" name-as-sort-order="all" delimiter=", " delimiter-precedes-last="always"/><label form="long" prefix=", "/></names></macro><macro name="chapter-marker"><choose><if type="chapter paper-conference entry-dictionary entry-encyclopedia" match="any"><text term="in" text-case="capitalize-first"/></if></choose></macro><macro name="publisher"><choose><if type="article-journal article-magazine article-newspaper" match="none"><group delimiter=": " suffix=";"><choose><if type="thesis"><text variable="publisher-place" prefix="[" suffix="]"/></if><else-if type="speech"/><else><text variable="publisher-place"/></else></choose><text variable="publisher"/></group></if></choose></macro><macro name="access"><choose><if variable="URL"><group delimiter=": "><text term="available at" text-case="capitalize-first"/><text variable="URL"/></group></if></choose></macro><macro name="accessed-date"><choose><if variable="URL"><group prefix="[" suffix="]" delimiter=" "><text term="cited" text-case="lowercase"/><date variable="accessed" form="text"/></group></if></choose></macro><macro name="container-title"><choose><if type="article-journal article-magazine chapter paper-conference article-newspaper review review-book entry-dictionary entry-encyclopedia" match="any"><group suffix="." delimiter=" "><choose><if type="article-journal review review-book" match="any"><text variable="container-title" form="short" strip-periods="true"/></if><else><text variable="container-title" strip-periods="true"/></else></choose><choose><if variable="URL"><text term="internet" prefix="[" suffix="]" text-case="capitalize-first"/></if></choose></group><text macro="edition" prefix=" "/></if><else-if type="bill legislation" match="any"><group delimiter=", "><group delimiter=". "><text variable="container-title"/><group delimiter=" "><text term="section" form="short" text-case="capitalize-first"/><text variable="section"/></group></group><text variable="number"/></group></else-if><else-if type="speech">'+
 '<group delimiter=": " suffix=";"><group delimiter=" "><text variable="genre" text-case="capitalize-first"/><text term="presented at"/></group><text variable="event"/></group></else-if><else><group delimiter=", " suffix="."><choose><if variable="collection-title" match="none"><group delimiter=" "><label variable="volume" form="short" text-case="capitalize-first"/><text variable="volume"/></group></if></choose><text variable="container-title"/></group></else></choose></macro><macro name="title"><text variable="title"/><choose><if type="article-journal article-magazine chapter paper-conference article-newspaper review review-book entry-dictionary entry-encyclopedia" match="none"><choose><if variable="URL"><text term="internet" prefix=" [" suffix="]" text-case="capitalize-first"/></if></choose><text macro="edition" prefix=". "/></if></choose><choose><if type="thesis"><text variable="genre" prefix=" [" suffix="]"/></if></choose></macro><macro name="edition"><choose><if is-numeric="edition"><group delimiter=" "><number variable="edition" form="ordinal"/><text term="edition" form="short"/></group></if><else><text variable="edition" suffix="."/></else></choose></macro><macro name="date"><choose><if type="article-journal article-magazine article-newspaper review review-book" match="any"><group suffix=";" delimiter=" "><date variable="issued" form="text"/><text macro="accessed-date"/></group></if><else-if type="bill legislation" match="any"><group delimiter=", "><date variable="issued" delimiter=" "><date-part name="month" form="short" strip-periods="true"/><date-part name="day"/></date><date variable="issued"><date-part name="year"/></date></group></else-if><else-if type="report"><date variable="issued" delimiter=" "><date-part name="year"/><date-part name="month" form="short" strip-periods="true"/></date><text macro="accessed-date" prefix=" "/></else-if><else-if type="patent"><group suffix="."><group delimiter=", "><text variable="number"/><date variable="issued"><date-part name="year"/></date></group><text macro="accessed-date" prefix=" "/></group></else-if><else-if type="speech"><group delimiter="; "><group delimiter=" "><date variable="issued" delimiter=" "><date-part name="year"/><date-part name="month" form="short" strip-periods="true"/><date-part name="day"/></date><text macro="accessed-date"/></group><text variable="event-place"/></group></else-if><else><group suffix="."><date variable="issued"><date-part name="year"/></date><text macro="accessed-date" prefix=" "/></group></else></choose></macro><macro name="pages"><choose><if type="article-journal article-magazine article-newspaper review review-book" match="any"><text variable="page" prefix=":"/></if><else-if type="book" match="any"><text variable="number-of-pages" prefix=" "/><choose><if is-numeric="number-of-pages"><label variable="number-of-pages" form="short" prefix=" " plural="never"/></if></choose></else-if><else><group prefix=" " delimiter=" "><label variable="page" form="short" plural="never"/><text variable="page"/></group></else></choose></macro><macro name="journal-location"><choose><if type="article-journal article-magazine review review-book" match="any"><text variable="volume"/><text variable="issue" prefix="(" suffix=")"/></if></choose></macro><macro name="collection-details"><choose><if type="article-journal article-magazine article-newspaper review review-book" match="none"><choose><if variable="collection-title"><group delimiter=" " prefix="(" suffix=")"><names variable="collection-editor" suffix="."><name sort-separator=" " initialize-with="" name-as-sort-order="all" delimiter=", " delimiter-precedes-last="always"/><label form="long" prefix=", "/></names><group delimiter="; "><text variable="collection-title"/><group delimiter=" "><label variable="volume" form="short"/><text variable="volume"/></group></group></group></if></choose></if></choose></macro><macro name="report-details"><choose><if type="report"><text variable="number" prefix="Report No.: "/></if></choose></macro><citation collapse="citation-number">'+
 '<sort><key variable="citation-number"/></sort><layout prefix="(" suffix=")" delimiter=","><text variable="citation-number"/></layout></citation><bibliography et-al-min="7" et-al-use-first="6" second-field-align="flush"><layout><text variable="citation-number" suffix=". "/><group delimiter=". " suffix=". "><text macro="author"/><text macro="title"/></group><group delimiter=" " suffix=". "><group delimiter=": "><text macro="chapter-marker"/><group delimiter=" "><text macro="editor"/><text macro="container-title"/></group></group><text macro="publisher"/><group><text macro="date"/><text macro="journal-location"/><text macro="pages"/></group></group><text macro="collection-details" suffix=". "/><text macro="report-details" suffix=". "/><text macro="access"/></layout></bibliography></style>'
-
+, harvard1: '<?xml version="1.0" encoding="utf-8"?><style xmlns="http://purl.org/net/xbiblio/csl" class="in-text" version="1.0" demote-non-dropping-particle="sort-only"><info><title>Harvard Reference format 1 (author-date)</title><id>http://www.zotero.org/styles/harvard1</id><link href="http://www.zotero.org/styles/harvard1" rel="self"/><link href="http://libweb.anglia.ac.uk/referencing/harvard.htm" rel="documentation"/><author><name>Julian Onions</name><email>julian.onions@gmail.com</email></author><category citation-format="author-date"/><category field="generic-base"/><summary>The Harvard author-date style</summary><updated>2012-09-27T22:06:38+00:00</updated><rights license="http://creativecommons.org/licenses/by-sa/3.0/">This work is licensed under a Creative Commons Attribution-ShareAlike 3.0 License</rights></info><macro name="editor"><names variable="editor" delimiter=", "><name and="symbol" initialize-with=". " delimiter=", "/><label form="short" prefix=", " text-case="lowercase"/></names></macro><macro name="anon"><text term="anonymous" form="short" text-case="capitalize-first" strip-periods="true"/></macro><macro name="author"><names variable="author"><name name-as-sort-order="all" and="symbol" sort-separator=", " initialize-with="." delimiter-precedes-last="never" delimiter=", "/><label form="short" prefix=" " text-case="lowercase"/><substitute><names variable="editor"/><text macro="anon"/></substitute></names></macro><macro name="author-short"><names variable="author"><name form="short" and="symbol" delimiter=", " delimiter-precedes-last="never" initialize-with=". "/><substitute><names variable="editor"/><names variable="translator"/><text macro="anon"/></substitute></names></macro><macro name="access"><choose><if variable="URL"><text value="Available at:" suffix=" "/><text variable="URL"/><group prefix=" [" suffix="]"><text term="accessed" text-case="capitalize-first" suffix=" "/><date variable="accessed"><date-part name="month" suffix=" "/><date-part name="day" suffix=", "/><date-part name="year"/></date></group></if></choose></macro><macro name="title"><choose><if type="bill book graphic legal_case legislation motion_picture report song thesis" match="any"><text variable="title" font-style="italic"/></if><else><text variable="title"/></else></choose></macro><macro name="publisher"><group delimiter=": "><text variable="publisher-place"/><text variable="publisher"/></group></macro><macro name="year-date"><choose><if variable="issued"><date variable="issued"><date-part name="year"/></date></if><else><text term="no date" form="short"/></else></choose></macro><macro name="edition"><choose><if is-numeric="edition"><group delimiter=" "><number variable="edition" form="ordinal"/><text term="edition" form="short"/></group></if><else><text variable="edition" suffix="."/></else></choose></macro><macro name="pages"><group><label variable="page" form="short" suffix=" "/><text variable="page"/></group></macro><citation et-al-min="3" et-al-use-first="1" disambiguate-add-year-suffix="true" disambiguate-add-names="true" disambiguate-add-givenname="true"><layout prefix="(" suffix=")" delimiter="; "><group delimiter=", "><group delimiter=" "><text macro="author-short"/><text macro="year-date"/></group><group><label variable="locator" form="short"/><text variable="locator"/></group></group></layout></citation><bibliography hanging-indent="true" et-al-min="4" et-al-use-first="1"><sort><key macro="author"/><key variable="title"/></sort><layout><text macro="author" suffix=","/><date variable="issued" prefix=" " suffix="."><date-part name="year"/></date><choose><if type="bill book graphic legal_case legislation motion_picture report song" match="any"><group prefix=" " delimiter=" " suffix=","><text macro="title"/><text macro="edition"/><text macro="editor"/></group><text prefix=" " suffix="." macro="publisher"/></if><else-if type="chapter paper-conference" match="any"><text macro="title" prefix=" " suffix="."/><group prefix=" " delimiter=" "><text term="in" text-case="capitalize-first"/>'+
+'<text macro="editor"/><text variable="container-title" font-style="italic" suffix="."/><text variable="collection-title" suffix="."/><text variable="event" suffix="."/><group suffix="." delimiter=", "><text macro="publisher" prefix=" "/><text macro="pages"/></group></group></else-if><else-if type="thesis"><group prefix=" " suffix="." delimiter=". "><text macro="title"/><text variable="genre"/><text macro="publisher"/></group></else-if><else><group suffix="."><text macro="title" prefix=" "/><text macro="editor" prefix=" "/></group><group prefix=" " suffix="."><text variable="container-title" font-style="italic"/><group prefix=", "><text variable="volume"/><text variable="issue" prefix="(" suffix=")"/></group><group prefix=", "><label variable="page" form="short"/><text variable="page"/></group></group></else></choose><text prefix=" " macro="access" suffix="."/></layout></bibliography></style>'
 }
 
 /**
@@ -222,13 +247,100 @@ var locales = {
 /**
  * Retrieve CSL locale
  * 
- * @method retrieveLocale
+ * @method fetchLocale
  * 
- * @param lang lang code
- * @return CSL locale
+ * @param {String} lang - lang code
+ * 
+ * @return {String} CSL locale
  */
-var retrieveLocale = function ( lang ) {
+var fetchLocale = function ( lang ) {
   return locales[ lang ]
+}
+
+/**
+ * Fetch file
+ * 
+ * @method fetchFile
+ * 
+ * @param {String} url - The input url
+ * 
+ * @return {String} The fetched string
+ */
+var fetchFile = function ( url ) {
+  var result
+    , url = typeof encodeURI === 'function' ? encodeURI( url ) : url
+  
+  try {
+    result  = request( 'GET', url ).getBody( 'utf8' )
+  } catch (e) {
+    return console.error( '[set]', 'File could not be fetched')
+  }
+  
+  if ( result === url )
+    return console.error( '[set]', 'Infinite chaining loop detected')
+  
+  else
+    return result
+}
+
+/**
+ * Parse (in)valid JSON
+ * 
+ * @method parseJSON
+ * 
+ * @param {String} str - The input string
+ * 
+ * @return {Object|Object[]|String[]} The parsed object
+ */
+var parseJSON = function ( str ) {
+  var object
+  try {
+    object = JSON.parse( str )
+  } catch (e) {
+    console.info( '[set]', 'Input was not valid JSON, switching to experimental parser for invalid JSON')
+    try {
+      object = JSON.parse(
+	str
+	  .replace( rgx.json[ 0 ][ 0 ], rgx.json[ 0 ][ 1 ] )
+	  .replace( rgx.json[ 1 ][ 0 ], rgx.json[ 1 ][ 1 ] )
+      )
+    } catch (e) {
+      console.error( '[set]', 'Experimental parser failed. Please improve the JSON. If this is not JSON, please re-read the supported formats.')
+    }
+  }
+  return object
+}
+
+/**
+ * Get the names of objects from Wikidata IDs
+ * 
+ * @method parseWikidataLabel
+ * 
+ * @param {String} q - Wikidata IDs, seperated by "|"
+ * @param {String} lang - Language
+ * 
+ * @return {String[]} Array with labels of each prop
+ */
+var parseWikidataLabel = function ( q, lang ) {
+  var url = wdk.hasOwnProperty( 'getEntities' ) ? wdk.getEntities( q, [ lang ], 'labels' ) : (
+  'https://www.wikidata.org/w/api.php' +
+    '?origin=*&action=wbgetentities&languages=en&format=json&props=labels&' + 
+    'ids=' + q )
+  
+  var data     = fetchFile( url )
+    , entities = JSON.parse( data ).entities
+  
+    , entKeys  = Object.keys( entities )
+    , labels   = []
+  
+  for ( var entIndex = 0; entIndex < entKeys.length; entIndex++ ) {
+    var entKey = entKeys [ entIndex ]
+      , entity = entities[ entKey   ]
+    
+    labels.push( entity.labels[ lang ].value )
+  }
+  
+  return labels
 }
 
 /**
@@ -247,103 +359,225 @@ var wikidataInstances = {
 /**
  * Transform property and value from Wikidata format to CSL
  * 
- * @method wikidataProperties
+ * @method parseWikidataProp
  * 
- * @param a Property
- * @param b Value
- * @return Array with new prop and value
+ * @param {String} prop - Property
+ * @param {String|Number} value - Value
+ * @param {String} lang - Language
+ * 
+ * @return {String[]} Array with new prop and value
  */
-var wikidataProperties = function(a,b){
-  switch(b){
-    case 'P31'  :
-      return ['type',wikidataInstances['Q'+a[0].mainsnak.datavalue.value['numeric-id']]||
-      (console.warn('[set]','This entry type is not recognized and therefore interpreted as \'article-journal\'')||'')+'article-journal'];
+var parseWikidataProp = function ( prop, value, lang ) { var value = value
+  
+  if ( !( [ ''
+  , 'P50'
+  , 'P2093'
+  ].indexOf( prop ) > -1 ) ) value = value[ 0 ]
+  
+  var rProp = ''
+    , rValue = value
+  
+  switch ( prop ) {
+    
+    // Author ( q )
+    case 'P50':
+      rProp = 'authorQ'
+      rValue = value.map( function ( name ) { return parseName( getLabel( name, lang ) ) } )
       break;
-    case 'P212' : return ['ISBN'    ,a[0].mainsnak.datavalue.value]; break;
-    case 'P304' : return ['page'    ,a[0].mainsnak.datavalue.value]; break;
-    case 'P356' : return ['DOI'     ,a[0].mainsnak.datavalue.value]; break;
-    case 'P393' : return ['edition' ,a[0].mainsnak.datavalue.value]; break;
-    case 'P433' : return ['issue'   ,parseInt(a[0].mainsnak.datavalue.value)]; break;
-    case 'P478' : return ['volume'  ,parseInt(a[0].mainsnak.datavalue.value)]; break;
-    case 'P577' : return ['issued'  ,[a[0].mainsnak.datavalue.value.time.match(/\+?([\d-]+)T?/)[1].split('-')]]; break;
-    case 'P580' : return ['accessed',[a[0].mainsnak.datavalue.value.time.match(/\+?([\d-]+)T?/)[1].split('-')]]; break;
-    case 'P585' : return ['accessed',[a[0].mainsnak.datavalue.value.time.match(/\+?([\d-]+)T?/)[1].split('-')]]; break;
-    case 'P957' : return ['ISBN'    ,a[0].mainsnak.datavalue.value]; break;
-    case 'P1476': return ['title'   ,typeof a[0].mainsnak.datavalue.value==='object'?a[0].mainsnak.datavalue.value.text:a[0].mainsnak.datavalue.value]; break;
+    
+    // Author ( s )
     case 'P2093':
-      var res = [];
-      for (var i=0;i<a.length;i++) res.push(getCSLName(a[i].mainsnak.datavalue.value))
-      return ['author',res];
+      rProp = 'authorS'
+      rValue = value.map( parseName )
       break;
-    default: return [b,a]; break;
+    
+    // Date
+    case 'P580' :
+    case 'P585' :
+      rProp = 'accessed'
+      rValue = parseDate( value )
+      break;
+    
+    // DOI
+    case 'P356' :
+      rProp = 'DOI'
+      break;
+    
+    // Instance of
+    case 'P31'  :
+      rProp = 'type'
+      rValue = wikidataInstances[ value ]
+      
+      if ( rValue === undefined )
+        console.warn( '[set]', 'This entry type is not recognized and therefore interpreted as \'article-journal\':', value ),
+	rValue = 'article-journal'
+      break;
+    
+    // ISBN 13 & 10
+    case 'P212' :
+    case 'P957' :
+      rProp = 'ISBN'
+      break;
+    
+    // Issue
+    case 'P433' :
+      rProp = 'issue'
+      break;
+    
+    // Journal
+    case 'P1433':
+      rProp = 'container-title'
+      rValue = parseWikidataLabel( value, lang )[ 0 ]
+      break;
+    
+    // Pages
+    case 'P304' :
+      rProp = 'page'
+      break;
+    
+    // Print/edition
+    case 'P393' :
+      rProp = 'edition'
+      break;
+    
+    // Pubdate
+    case 'P577' :
+      rProp = 'issued'
+      rValue = parseDate( value )
+      break;
+    
+    // Title
+    case 'P1476':
+      rProp = 'title'
+      break;
+    
+    // Volume
+    case 'P478' :
+      rProp = 'volume'
+      break;
+    
+    case 'P2860': // Cites
+    case 'P921' : // Main subject
+    case 'P3181': // OpenCitations bibliographic resource ID
+    case 'P364' : // Original language of work
+    case 'P698' : // PMID
+    case 'P932' : // PMCID
+      // Property ignored
+      break;
+    
+    default:
+      console.debug( '[set]', 'Unknown property:', prop )
+      break;
   }
+  
+  return [ rProp, rValue ]
 }
 
 /**
- * Fetch file
+ * Get Wikidata JSON from Wikidata IDs
  * 
- * @method getFile
+ * @method parseWikidataInput
  * 
- * @param url The input string
- * @return The fetched string
+ * @param {String} data - Wikidata IDs
+ * 
+ * @return {Object} Wikidata JSON
  */
-var getFile = function ( url ) {
-  var result
+var parseWikidataInput = function ( data ) {
+  var data = data.split( /(?:\s+|,)/g )
+    , result
   
-  try {
-      
-    if ( browserMode ) {
+  if ( wdk.hasOwnProperty( 'getEntities' ) ) {
+    var url = wdk.getEntities( {
+      ids: data,
+      languages: [ 'en' ]
+    } )
     
-      var xmlHttp = new XMLHttpRequest();
+    if ( Array.isArray( url ) ) {
+      var urls = url
+	, outs = []
+      
+      for ( var urlIndex = 0; urlIndex < urls.length; urlIndex++ ) {
+	var url = urls[ urlIndex ]
+	  , out = JSON.parse( fetchFile( url ) )
+	    outs= outs.concat( out )
+      }
+      
+      result = outs
+    } else result = JSON.parse( fetchFile( url ) )
+  } else {
+    var url =
+    'https://www.wikidata.org/w/api.php?' +
+      'origin=*&' +
+      'action=wbgetentities&' + 
+      'ids=' + data.join( '|' ) + '&' +
+      'languages=en&' +
+      'format=json'
     
-      xmlHttp.open( 'GET', url, false )
-      xmlHttp.send( null )
-      
-      result = xmlHttp.responseText
-      
-    } else if ( nodejsMode ) {
-      
-      var request = require( 'sync-request' )
-	  result  = request( 'GET', url ).getBody( 'utf8' )
-      
-    }
-    
-  } catch (e) {
-    return console.error( '[set]', 'File could not be fetched')
+    result = JSON.parse( fetchFile( url ) )
   }
   
-  if ( result === url )
-    return console.error( '[set]', 'Infinite chaining loop detected')
-  
-  else
-    return result
+  return result
 }
 
 /**
- * Parse (in)valid JSON
+ * Format Wikidata data
  * 
- * @method getJSON
+ * @method parseWikidata
  * 
- * @param str The input string
- * @return The parsed object
+ * @param {Object} data - The input data
+ * 
+ * @return {Object[]} The formatted input data
  */
-var getJSON = function ( str ) {
-  var object
-  try {
-    object = JSON.parse( str )
-  } catch (e) {
-    (console.info||console.warn)( '[set]', 'Input was not valid JSON, switching to experimental parser for invalid JSON')
-    try {
-      object = JSON.parse(
-	str
-	  .replace(rgx.json[0][0],rgx.json[0][1])
-	  .replace(rgx.json[1][0],rgx.json[1][1])
-      )
-    } catch (e) {
-      console.error( '[set]', 'Experimental parser failed. Please improve the JSON. If this is not JSON, please re-read the supported formats.')
+var parseWikidata = function ( data ) {
+  var output = []
+    , entities = data.entities
+    , entKeys  = Object.keys( entities )
+  
+  for ( var entIndex = 0; entIndex < entKeys.length; entIndex++ ) {
+    var entKey = entKeys[ entIndex ]
+      , labels = entities[ entKey ].labels
+      , entity = wdk.simplifyClaims( entities[ entKey ].claims )
+    
+    var json  = { wikiID: entKey, id: entKey }
+      , props = Object.keys( entity )
+    
+    for ( var propIndex = 0; propIndex < props.length; propIndex++ ) {
+      var prop  = props[ propIndex ]
+        , value = entity[ prop ]
+	
+      var resp = parseWikidataProp( prop, value, 'en' )
+      
+      if ( resp[ 0 ].length > 0 )
+	json[ resp[ 0 ] ] = resp[ 1 ]
     }
+      
+    if ( json.hasOwnProperty( 'authorQ' ) || json.hasOwnProperty( 'authorS' ) ) {
+      
+      if ( json.hasOwnProperty( 'authorQ' ) && json.hasOwnProperty( 'authorS' ) ) {	
+	if ( json.authorQ.length >= json.authorS.length )
+	  json.author = json.authorQ
+	else if ( json.authorQ.length < json.authorS.length )
+	  json.author = json.authorS
+	
+	delete        json.authorQ
+	delete        json.authorS
+      } else if ( json.hasOwnProperty( 'authorQ' ) ) {
+	json.author = json.authorQ
+	delete        json.authorQ
+      } else if ( json.hasOwnProperty( 'authorS' ) ) {
+	json.author = json.authorS
+	delete        json.authorS
+      }
+    
+    }
+    
+    if ( !( json.hasOwnProperty( 'title' ) && json.title ) )
+      json.title = labels[ 'en' ].value;
+    
+    output.push( json )
   }
-  return object
+  
+  return output
 }
 
 /**
@@ -351,8 +585,9 @@ var getJSON = function ( str ) {
  * 
  * @method parseBibTeX
  * 
- * @param str The input data
- * @return The formatted input data
+ * @param {String} str - The input data
+ * 
+ * @return {Object} The formatted input data
  */
 var parseBibTeX = function ( str ) {
   var str     = str || ''
@@ -380,35 +615,13 @@ var parseBibTeX = function ( str ) {
 }
 
 /**
- * Format Wikidata data
- * 
- * @method parseWikidata
- * 
- * @param data The input data
- * @return The formatted input data
- */
-var parseWikidata = function ( data ) {
-  var qid = Object.keys(data.entities)[0]
-    , obj = data.entities[ qid ].claims
-    , res = { id: qid };
-  
-  for (var prop in obj) {
-    var val = wikidataProperties(obj[prop],prop)
-    if (prop) res[val[0]]=val[1]; else continue;
-  }
-  
-  res.title = res.title || data.entities[ Object.keys( data.entities )[ 0 ] ].labels.en.value;
-  
-  return res
-}
-
-/**
  * Format ContentMine data
  * 
  * @method parseContentMine
  * 
- * @param data The input data
- * @return The formatted input data
+ * @param {Object} data - The input data
+ * 
+ * @return {Object[]} The formatted input data
  */
 var parseContentMine = function ( data ) {
   var res = {}
@@ -418,7 +631,7 @@ var parseContentMine = function ( data ) {
   
   res.type  = 'article-journal';
   
-  if ( res.hasOwnProperty( 'authors'   ) ) res.author = data.authors.value.map( getCSLName )
+  if ( res.hasOwnProperty( 'authors'   ) ) res.author = data.authors.value.map( parseName )
   if ( res.hasOwnProperty( 'firstpage' ) ) res['page-first']      = res.firstpage, res.page = res.firstpage
   if ( res.hasOwnProperty( 'date'      ) ) res.issued = res.date.split( '-' )
   if ( res.hasOwnProperty( 'year'      ) ) res.year   = res.year ; else
@@ -434,8 +647,9 @@ var parseContentMine = function ( data ) {
  * 
  * @method parseInputType
  * 
- * @param input The input data
- * @return The input type
+ * @param {String|String[]|Object|Object[]} input - The input data
+ * 
+ * @return {String} The input type
  */
 var parseInputType = function ( input ) {
   
@@ -445,11 +659,15 @@ var parseInputType = function ( input ) {
       
       // Empty
 	    if ( input.length === 0 )
-	return 'empty'
+	return 'string/empty'
       
       // Wikidata URL
       else if ( rgx.wikidata[ 0 ].test( input ) )
 	return 'url/wikidata'
+      
+      // Wikidata entity list
+      else if ( rgx.wikidata[ 2 ].test( input ) )
+	return 'list/wikidata'
       
       // BibTeX
       else if ( rgx.bibtex  [ 1 ].test( input ) )
@@ -475,29 +693,29 @@ var parseInputType = function ( input ) {
       
       // Array
       else if ( Array.isArray( input ) )
-	return 'array'
+	return 'list/else'
       
       // jQuery
       else if ( window.jQuery && input instanceof jQuery )
-	return 'jquery'
+	return 'jquery/else'
       
       // HTML
       else if ( window.HMTLElement && input instanceof HMTLElement)
-	return 'html'
+	return 'html/else'
       
       // Wikidata
       else if ( input.hasOwnProperty( 'entities' ) )
-	return 'wikidata'
+	return 'json/wikidata'
       
       // ContentMine
       else if ( input.hasOwnProperty( 'fulltext_html' ) ||
 		input.hasOwnProperty( 'fulltext_xml'  ) ||
 		input.hasOwnProperty( 'fulltext_pdf'  ) )
-	return 'contentmine'
+	return 'json/contentmine'
       
       // Default
       else
-	return 'json'
+	return 'json/csl'
       
       break;
     
@@ -521,9 +739,10 @@ var parseInputType = function ( input ) {
  * 
  * @method parseInputData
  * 
- * @param input The input data
- * @param type The input type
- * @return The parsed input
+ * @param {String|String[]|Object|Object[]} input - The input data
+ * @param {String} type - The input type
+ * 
+ * @return {Object[]} The parsed input
  */
 var parseInputData = function ( input, type ) {
   var output
@@ -536,23 +755,27 @@ var parseInputData = function ( input, type ) {
 	+ input.match( rgx.wikidata[ 1 ] )[ 1 ] +
 	'.json';
       
-      output = parseInput( getFile( input ) )
+      output = parseInput( JSON.parse( fetchFile( input ) ) )
+      break;
+    
+    case 'list/wikidata':
+      output = parseInput( parseWikidataInput( input ) )
       break;
     
     case 'url/else':
-      output = parseInput( getFile( input ) )
+      output = parseInput( fetchFile( input ) )
       break;
     
-    case 'jquery':
+    case 'jquery/else':
       output = parseInput( data.val() || data.text() || data.html() )
       break;
     
-    case 'html':
+    case 'html/else':
       output = parseInput( data.value || data.textContent )
       break;
     
     case 'string/json':
-      output = parseInput( getJSON( input ) )
+      output = parseInput( parseJSON( input ) )
       break;
     
     case 'string/bibtex':
@@ -566,9 +789,9 @@ var parseInputData = function ( input, type ) {
 	
 	  entry = Object.assign( {}, entry, properties )
 	
-	if ( entry.hasOwnProperty( 'author'   ) ) entry.author = entry.author.split( ' and ' ).map( getCSLName )
+	if ( entry.hasOwnProperty( 'author'   ) ) entry.author = entry.author.split( ' and ' ).map( parseName )
 	if ( entry.hasOwnProperty( 'doi'      ) ) entry.DOI    = entry.doi
-	if ( entry.hasOwnProperty( 'editor'   ) ) entry.editor = entry.editor.split( ' and ' ).map( getCSLName )
+	if ( entry.hasOwnProperty( 'editor'   ) ) entry.editor = entry.editor.split( ' and ' ).map( parseName )
 	if ( entry.hasOwnProperty( 'isbn'     ) ) entry.ISBN   = entry.isbn
 	if ( entry.hasOwnProperty( 'issn'     ) ) entry.ISSN   = entry.issn
 	if ( entry.hasOwnProperty( 'journal'  ) ) entry['container-title'] = entry.journal, entry.type = 'article-journal'
@@ -582,25 +805,26 @@ var parseInputData = function ( input, type ) {
       output = bibtex
       break;
     
-    case 'wikidata':
+    case 'json/wikidata':
       output = parseWikidata( input )
       break;
     
-    case 'contentmine':
+    case 'json/contentmine':
       output = parseContentMine( input )
       break;
     
-    case 'array':
+    case 'list/else':
       output = []
       input.forEach( function ( value ) {
 	output = output.concat( parseInput( value ) )
       } )
       break;
     
-    case 'json':
+    case 'json/csl':
       output = [ input ]
       break;
     
+    case 'string/empty':
     case 'empty'  :
     case 'invalid':
     default       :
@@ -617,10 +841,12 @@ var parseInputData = function ( input, type ) {
  * 
  * @method parseInput
  * 
- * @param input The input data
- * @return The parsed input
+ * @param {String|String[]|Object|Object[]} input - The input data
+ * @param {String} [type] - Interpret data as: see [Input](./#input)
+ * 
+ * @return {Object[]} The parsed input
  */
-var parseInput = function ( input ) {
+var parseInput = function ( input, type ) {
   var type = parseInputType( input )
     , outp = parseInputData( input, type )
   
@@ -630,13 +856,14 @@ var parseInput = function ( input ) {
 /**
  * Convert a JSON array or object to HTML.
  * 
- * @function objectToHTML
- * @param {Object} src - The data
+ * @function getJSONObjectHTML
  * 
- * @return The html (in string form)
+ * @param {Object|Object[]|String[]|Number[]} src - The data
+ * 
+ * @return {String} The html (in string form)
  */
 
-var objectToHTML = function ( src ) {
+var getJSONObjectHTML = function ( src ) {
   var res = ''
   
   if ( Array.isArray( src ) ) {
@@ -646,7 +873,7 @@ var objectToHTML = function ( src ) {
     for ( var entry of src ) {
       
       res += '<li>'
-      res += JSONToHTML( entry )
+      res += getJSONValueHTML( entry )
       res += ',</li>'
       
     } 
@@ -662,7 +889,7 @@ var objectToHTML = function ( src ) {
       var entry = src[ prop ]
       
       res += '<li><span class="key">' + prop + '</span><span class="delimiter">:</span>'
-      res += JSONToHTML( entry )
+      res += getJSONValueHTML( entry )
       res += ',</li>'
       
     }
@@ -676,12 +903,13 @@ var objectToHTML = function ( src ) {
 /**
  * Convert JSON to HTML.
  * 
- * @function JSONToHTML
- * @param {Object} src - The data
+ * @function getJSONValueHTML
  * 
- * @return The html (in string form)
+ * @param {Object|String|Number|Object[]|String[]|Number[]} src - The data
+ * 
+ * @return {String} The html (in string form)
  */
-var JSONToHTML = function (src) {
+var getJSONValueHTML = function ( src ) {
   var res = ''
   
   if ( typeof src === 'object' && src !== null ) {
@@ -689,7 +917,7 @@ var JSONToHTML = function (src) {
     if ( Object.keys( src ).length === 0 )
       res += '{}'
     else
-      res += objectToHTML( src )
+      res += getJSONObjectHTML( src )
     
   } else res += '<span class="string">' + JSON.stringify( src ) + '</span>'
   
@@ -697,21 +925,21 @@ var JSONToHTML = function (src) {
 }
 
 /**
- * @author Lars Willighagen [lars.willighagen@gmail.com]
- * @version 0.1
+ * @author Lars Willighagen
+ * @version 0.2
  * @license
- * Copyright (c) 2015-2016 Lars Willighagen
- *
+ * Copyright (c) 2015-2016 Lars Willighagen  
+ * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
- *
+ * furnished to do so, subject to the following conditions:  
+ * 
  * The above copyright notice and this permission notice shall be included in all
- * copies or substantial portions of the Software.
- *
+ * copies or substantial portions of the Software.  
+ * 
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -720,19 +948,19 @@ var JSONToHTML = function (src) {
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  * 
- * @class Cite
+ * @constructor Cite
  * 
- * Create a `Cite` object with almost any kind of data, and manipulate it with its default methods.
+ * @description Create a `Cite` object with almost any kind of data, and manipulate it with its default methods.
  * 
- * @param {(Object[]|Object|String)} data - Pass the data. If no data is passed, an empty object is returned
- * @param {Object} [options={}] - The options for the output
- * @param {String} options.format - The outputted datatype. Real representation (`"real"`, e.g. DOM Object for HTML, JavaScript Object for JSON) or String representation ( `"string"` )
- * @param {String} options.type - The format of the output. `"string"`, `"html"` or `"json"`
- * @param {String} options.style - The style of the output. See [Output](./#output)
- * @param {String} options.lang - The language of the output. [RFC 5646](https://tools.ietf.org/html/rfc5646) codes
+ * @param {String|String[]|Object|Object[]} data - Input data. If no data is passed, an empty object is returned
+ * @param {Object} options - The options for the output
+ * @param {String} [options.format="real"] - The outputted datatype. Real representation (`"real"`, e.g. DOM Object for HTML, JavaScript Object for JSON) or String representation ( `"string"` )
+ * @param {String} [options.type="json"] - The format of the output. `"string"`, `"html"` or `"json"`
+ * @param {String} [options.style="csl"] - The style of the output. See [Output](./#output)
+ * @param {String} [options.lang="en-US"] - The language of the output. [RFC 5646](https://tools.ietf.org/html/rfc5646) codes
  */
 
- var Cite = function Cite (data,options) {
+ function Cite (data,options) {
 
   // Making it Scope-Safe
   if ( !( this instanceof Cite ) )
@@ -743,8 +971,9 @@ var JSONToHTML = function (src) {
    * 
    * @property format {String} The outputted datatype. Real representation (`"real"`, e.g. DOM Object for HTML, JavaScript Object for JSON) or String representation ( `"string"` )
    * @property type {String} The format of the output. `"string"`, `"html"` or `"json"`
-   * @property style {String} The style of the output. See [Output](./#output)
+   * @property style {String} The style of the output. See [Output](../#output)
    * @property lang {String} The language of the output. [RFC 5646](https://tools.ietf.org/html/rfc5646) codes
+   * 
    * @type Object
    * @default {}
    */
@@ -756,6 +985,7 @@ var JSONToHTML = function (src) {
    * @property data The inputted data
    * @property type {String} The datatype of the input
    * @property format {String} The format of the input
+   * 
    * @type Object
    */
   this._input = {
@@ -783,6 +1013,7 @@ var JSONToHTML = function (src) {
    * `.currentVersion()` and similar function **are not** logged, because this would be influenced by function using other functions.
    *
    * @type Object[]
+   * 
    * @property {Object} 0 - The first version, indicated with version 0, containing the object as it was when it was made. The following properties are used for the following properties too.
    * @property {String} 0.name - The name of the called function. In case of the initial version, this is `"init"`.
    * @property {String} 0.version - The version of the object. Undefined when a function that doesn't change the object is called.
@@ -800,8 +1031,9 @@ var JSONToHTML = function (src) {
    * @memberof Cite
    * @this Cite
    * 
-   * @param index data index
-   * @return The label
+   * @param {Number} index - data index
+   * 
+   * @return {String} The label
    */
   this.getLabel = function ( index ) {
     var src = this.data[ index ]
@@ -819,12 +1051,17 @@ var JSONToHTML = function (src) {
    * @memberof Cite
    * @this Cite
    * 
-   * @return The latest version of the object
+   * @return {Number} The latest version of the object
    */
-  this.currentVersion = function(){
-    var version = 0;
-    for(i=0;i<this._log.length;i++){if(this._log[i].version>version)version=this._log[i].version}
-    return version;
+  this.currentVersion = function () {
+    var version = 0
+    
+    for ( var i = 0; i < this._log.length; i++ ) {
+      if ( this._log[ i ].version > version )
+	version = this._log[ i ].version
+    }
+    
+    return version
   }
   
   /**
@@ -834,16 +1071,26 @@ var JSONToHTML = function (src) {
    * @memberof Cite
    * @this Cite
    * 
-   * @param {Integer} The number of the version you want to retrieve. Illegel numbers: numbers under zero, floats, numbers above the current version of the object.
-   * @return The version of the object with the version number passed. `undefined` if an illegal number is passed.
+   * @param {Integer} versnum - The number of the version you want to retrieve. Illegel numbers: numbers under zero, floats, numbers above the current version of the object.
+   * 
+   * @return {Cite} The version of the object with the version number passed. `undefined` if an illegal number is passed.
    */
-  this.retrieveVersion = function(versnum){
-    this._log.push({name:'retrieveVersion',arguments:[versnum]});
-    if (versnum>=0&&versnum<=this.currentVersion()) {
-      var object=new Cite(this._log[0].arguments[0],this._log[0].arguments[1]),
-	  arr=[];
-      for(i=0;i<this._log.length;i++){if(this._log[i].version)arr.push(this._log[i]);}
-      for(k=1;k<=versnum;k++){ object[arr[k].name].apply(object,(arr[k].arguments||[])); }
+  this.retrieveVersion = function ( versnum ) {
+    this._log.push( { name: 'retrieveVersion', arguments: [ versnum ] } )
+    
+    if ( versnum >= 0 && versnum <= this.currentVersion() ) {
+      var object = new Cite( this._log[ 0 ].arguments[ 0 ], this._log[ 0 ].arguments[ 1 ] ),
+	  arr    = []
+      
+      for ( var i = 0; i < this._log.length; i++ ) {
+	if ( this._log[ i ].version )
+	  arr.push( this._log[ i ] )
+      }
+      
+      for ( var k = 1; k <= versnum; k++ ) {
+	object[ arr[ k ].name ].apply( object, arr[ k ].arguments || [] )
+      }
+      
       return object;
     } else return undefined;
   }
@@ -855,22 +1102,24 @@ var JSONToHTML = function (src) {
    * @memberof Cite
    * @this Cite
    * 
-   * @return The last version of the object. `undefined` if used on first version.
+   * @return {Cite} The last version of the object. `undefined` if used on first version.
    */
-  this.undo = function(){
-    return this.retrieveVersion(this.currentVersion()-1);
+  this.undo = function () {
+    return this.retrieveVersion( this.currentVersion() - 1 )
   }
   
   /**
-  * Add an object to the array of objects
-  * 
-  * @method add
-  * @memberof Cite
-  * @this Cite
-  * 
-  * @param data The data to add to your object
-  * @return The updated parent object
-  */
+   * Add an object to the array of objects
+   * 
+   * @method add
+   * @memberof Cite
+   * @this Cite
+   * 
+   * @param {String|String[]|Object|Object[]} data - The data to add to your object
+   * @param {Boolean} nolog - Hide this call from the log (i.e. when used internally)
+   * 
+   * @return {Cite} The updated parent object
+   */
   this.add = function ( data, nolog ) {
     if ( !nolog )
       this._log.push( { name: 'add', version: this.currentVersion() + 1, arguments: [ data, nolog ] } )
@@ -889,8 +1138,10 @@ var JSONToHTML = function (src) {
    * @memberof Cite
    * @this Cite
    * 
-   * @param data The data to replace the data in your object
-   * @return The updated parent object
+   * @param {String|String[]|Object|Object[]} data - The data to replace the data in your object
+   * @param {Boolean} nolog - Hide this call from the log (i.e. when used internally)
+   * 
+   * @return {Cite} The updated parent object
    */
   this.set = function ( data, nolog ) {
     if ( !nolog )
@@ -909,12 +1160,14 @@ var JSONToHTML = function (src) {
    * @memberof Cite
    * @this Cite
    * 
-  * @param {Object} [options={}] - The options for the output
-  * @param {String} options.format - The outputted datatype. Real representation (`"real"`, e.g. DOM Object for HTML, JavaScript Object for JSON) or String representation ( `"string"` )
-  * @param {String} options.type - The format of the output. `"string"`, `"html"` or `"json"`
-  * @param {String} options.style - The style of the output. See [Output](./#output)
-  * @param {String} options.lang - The language of the output. [RFC 5646](https://tools.ietf.org/html/rfc5646) codes
-   * @return The updated parent object
+   * @param {Object} options - The options for the output
+   * @param {String} [options.format="real"] - The outputted datatype. Real representation (`"real"`, e.g. DOM Object for HTML, JavaScript Object for JSON) or String representation ( `"string"` )
+   * @param {String} [options.type="json"] - The format of the output. `"string"`, `"html"` or `"json"`
+   * @param {String} [options.style="csl"] - The style of the output. See [Output](./#output)
+   * @param {String} [options.lang="en-US"] - The language of the output. [RFC 5646](https://tools.ietf.org/html/rfc5646) codes
+   * @param {Boolean} nolog - Hide this call from the log (i.e. when used internally)
+   * 
+   * @return {Cite} The updated parent object
    */
   this.options = function ( options, nolog ) {
     if ( !nolog )
@@ -931,7 +1184,8 @@ var JSONToHTML = function (src) {
    * @method reset
    * @memberof Cite
    * @this Cite
-   * @return The updated, empty parent object (except the log, the log lives)
+   * 
+   * @return {Cite} The updated, empty parent object (except the log, the log lives)
    */
   this.reset = function () {
     this._log.push( { name: 'reset', version: this.currentVersion() + 1, arguments: [] } )
@@ -949,7 +1203,7 @@ var JSONToHTML = function (src) {
    * @memberof Cite
    * @this Cite
    * 
-   * @return The updated parent object
+   * @return {Cite} The updated parent object
    */
   this.sort = function () {
     this._log.push( { name: 'sort', version: this.currentVersion() + 1, arguments: [] } )
@@ -967,18 +1221,20 @@ var JSONToHTML = function (src) {
   }
   
   /**
-  * Get formatted data from your object. For more info, see [Output](./#output).
+  * Get formatted data from your object. For more info, see [Output](../#output).
   * 
   * @method get
   * @memberof Cite
   * @this Cite
   * 
-  * @param {Object} [options={}] - The options for the output
+  * @param {Object} options - The options for the output
   * @param {String} [options.format="real"] - The outputted datatype. Real representation (`"real"`, e.g. DOM Object for HTML, JavaScript Object for JSON) or String representation ( `"string"` )
   * @param {String} [options.type="json"] - The format of the output. `"string"`, `"html"` or `"json"`
-  * @param {String} [options.style="csl"] - The style of the output. See [Output](./#output)
+  * @param {String} [options.style="csl"] - The style of the output. See [Output](../#output)
   * @param {String} [options.lang="en-US"] - The language of the output. [RFC 5646](https://tools.ietf.org/html/rfc5646) codes
-  * @return The formatted data
+  * @param {Boolean} nolog - Hide this call from the log (i.e. when used internally)
+  * 
+  * @return {String|Object[]} The formatted data
   */
   this.get = function ( options, nolog ) {
     if( !nolog )
@@ -987,10 +1243,7 @@ var JSONToHTML = function (src) {
     var result
       , options = Object.assign( { format:'real',type:'json',style:'csl',lang:'en-US' }, this._options, options )
     
-    try { console.info( '[get]',`format: ${options.format} | type: ${options.type} | style: ${options.style} | language: ${options.lang}` )
-    } catch (e) {
-      // Oh well...
-    }
+    console.info( '[get]',`format: ${options.format} | type: ${options.type} | style: ${options.style} | language: ${options.lang}` )
     
     switch ( options.type.toLowerCase() ) {
       case 'html':
@@ -1009,9 +1262,9 @@ var JSONToHTML = function (src) {
 		return _data[ id ]
 	    }
     
-	    var style = options.style.toLowerCase().split( '-' )[ 1 ]
+	    var style = options.style.toLowerCase().split( '-' ).slice( 1 ).join( '-' )
 	      , citeproc= new CSL.Engine(
-	      { retrieveLocale: retrieveLocale, retrieveItem: retrieveItem }
+	      { retrieveLocale: fetchLocale, retrieveItem: retrieveItem }
 	      , CSLTemplates.hasOwnProperty( style ) ? CSLTemplates[ style ] : CSLTemplates[ 'apa' ]
 	      , locales.hasOwnProperty( options.lang ) ? options.lang : 'en-US'
 	      , true
@@ -1032,7 +1285,7 @@ var JSONToHTML = function (src) {
 	    
 	    result = (
 	      bib[0].bibstart +
-	      bib[1].join() +
+	      bib[1].join( '<br>' ) +
 	      bib[0].bibend
 	    )
 	    
@@ -1040,7 +1293,7 @@ var JSONToHTML = function (src) {
 	  
 	  case 'csl':
 	    
-	    result = '<div class="javascript">' + JSONToHTML( this.data ) + '</div>'
+	    result = '<div class="javascript">' + getJSONValueHTML( this.data ) + '</div>'
 	    
 	    break;
 	  
@@ -1108,7 +1361,7 @@ var JSONToHTML = function (src) {
 	
 	var options = Object.assign( {}, options, {type:'html'} )
 	
-	result = striptag( this.get( options, true ) )
+	result = striptags( this.get( options, true ) )
 	
 	break;
       
@@ -1186,10 +1439,12 @@ var JSONToHTML = function (src) {
 return Cite
 
 })(
-  ( typeof window   !== 'undefined' ? window : null )
-, ( typeof require  === 'function'  ? {
+  ( typeof require  === 'function' ? {
     CSL: require( './node.citeproc.js' ).CSL
-  , striptags : require( 'striptags' )
+  , striptags: require( 'striptags' )
+  , request: require( 'sync-request' )
+  , window: {}
+  , wdk: require( 'wikidata-sdk' )
   } : {
     CSL: CSL
   , striptags: function ( html ) {
@@ -1197,6 +1452,89 @@ return Cite
       tmp.innerHTML = html
       return tmp.textContent || tmp.innerText || ''
     }
+  , request: function ( method, url ) {
+      var xhr  
+      
+      try {
+	xhr = new XMLHttpRequest()
+	if ( "withCredentials" in xhr ) {
+	  xhr.open(method, url, false)
+	} else {
+	  xhr = null
+	}
+      } catch ( e ) {
+	xhr = null
+      }
+      
+      if ( xhr ) {
+	xhr.send( null )
+	return { getBody: function () { return xhr.responseText } }
+      } else
+	console.error( 'CORS not supported' )
+	return 'null'
+    }
+  , window: window
+  , wdk: { simplifyClaims: function ( array ) {
+      var obj = {}
+      
+      Object.keys( array ).forEach( function ( id ) {
+	var claims = array[ id ].map( function ( claim ) {
+	  if ( claim.hasOwnProperty( 'mainsnak' ) ) {
+	    var mainsnak = claim.mainsnak
+	      , ref = [mainsnak.datatype, mainsnak.datavalue]
+	      , datatype = ref[0]
+	      , datavalue = ref[1]
+	      , value
+	    
+	    switch (datatype) {
+	      case 'string':
+	      case 'commonsMedia':
+	      case 'external-id':
+		value = datavalue.value
+		break;
+	      
+	      case 'wikibase-item':
+		value = 'Q' + datavalue.value['numeric-id']
+		break;
+	      
+	      case 'time':
+		
+		var month, rest, sign, year;
+		var parts = datavalue.value.time.split( '-' );
+		switch (parts.length) {
+		  case 3:
+		    year  = parts[0],
+		    month = parts[1],
+		    rest  = parts[2]
+		    break;
+		  case 4:
+		    sign  = parts[0],
+		    year  = parts[1],
+		    month = parts[2],
+		    rest  = parts[3],
+		    year  = '-' + year
+		    break;
+		  default:
+		    console.error( '[set]', 'Unknown Wikidata time format:', datavalue.value.time );
+		}
+		var day = rest.slice(0, 2);
+		
+		value = new Date(year, month, day).getTime()
+		break;
+	      
+	      default:
+		value = null
+	    }
+	    return value
+	  } else {
+	    return undefined
+	  }
+	} )
+	obj[ id ] = claims
+      } )
+      
+      return obj
+    } }
   } )
 , ( typeof process  !== 'undefined' && typeof global   !== 'undefined' )
 , ( typeof location !== 'undefined' && typeof document !== 'undefined' )
