@@ -6,10 +6,6 @@
   "directories": {
     "doc": "docs"
   },
-  "files": [
-    "index.js",
-    "src/citation.js"
-  ],
   "repository": {
     "type": "git",
     "url": "git+https://github.com/larsgw/citation.js.git"
