@@ -77,7 +77,7 @@ var example = new Cite( <data>, <options> )
 ```
 
 1. In the first parameter you pass the input data. [Input types](#input_type)
-2. In the second parameter you pass the settings. It contains the following properties. These are the default options for using `.get()`.
+2. In the second parameter you pass the settings. It contains the following properties. These are the default options for using `.get()`
   1. `format`: The output format: `"real"` (default) or `"string"`
   2. `type`: The output type: `"html"`, `"string"` or `"json"` (default).
   3. `style`: The output style. See [Output](#output). `"csl"` is default
@@ -176,15 +176,28 @@ data.get({
 # More
 
 ## More Docs
-Further explanation can be found [here](https://larsgw.github.io/citation.js/docs/api/). The explanation of the jQuery plugin can be found there too.
+Further explanation can be found [here](https://larsgw.github.io/citation.js/api/). The explanation of the jQuery plugin can be found there too.
 
 ## Demo
 
 ### NPM Demo
 
-Currently broken, probably due to caching.
+[Currently broken](https://runkit.com/npm/citation-js). It can't find one of the dependencies. Example code for when it works:
+
+```js
+var Cite = require( 'citation-js' )
+
+var data = new Cite( 'Q21972834', {
+  format: 'string',
+  type: 'html',
+  style: 'citation-apa',
+  lang: 'en-US'
+} )
+
+data.get() // Should implicitly display
+```
 
 ### Browser Demos
 
-* [Normal demo](https://larsgw.github.io/citation.js/docs/demo/demo.html)
-* [Demo including jQuery plugin](https://larsgw.github.io/citation.js/docs/demo/jquery.html)
+* [Normal demo](https://larsgw.github.io/citation.js/demo/demo.html)
+* [Demo including jQuery plugin](https://larsgw.github.io/citation.js/demo/jquery.html)

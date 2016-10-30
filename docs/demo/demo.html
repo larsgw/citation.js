@@ -183,6 +183,7 @@
       <select class="style">
 	<option value="citation-apa">APA</option>
 	<option value="citation-vancouver">Vancouver</option>
+	<option value="citation-harvard1">Harvard</option>
 	<option value="csl">JSON</option>
 	<option value="bibtex">BibTeX</option>
       </select>
@@ -258,10 +259,10 @@
     </script>
     <script class="code" type="text/javascript">
 // Set variable to store data
-var jsondata = new Cite(),
-     bibdata = new Cite(),
-     urldata = new Cite(),
-      cmdata = new Cite();
+var jsondata = new Cite()
+  ,  bibdata = new Cite()
+  ,  urldata = new Cite()
+  ,   cmdata = new Cite()
   
 $(function(){
   
@@ -275,12 +276,11 @@ $(function(){
       cmdata.set( $(   '#cm-in' ).text() )
     
     // Get options
-      
     var opt = {
       format: 'string',
       type  : $( 'select.type'  ).val(),
       style : $( 'select.style' ).val(),
-      lang  : $( 'select.lang'  ).val(),
+      lang  : $( 'select.lang'  ).val()
     }
     
     // Set options
@@ -303,12 +303,12 @@ $(function(){
   }
   
   // Make output update when input is defocussed...
-  $('.in').on('blur',asyncUpdate);
+  $( '.in' ).on( 'blur', asyncUpdate )
   // ... or a select tag has changed
-  $('select').on('change',asyncUpdate);
+  $( 'select' ).on( 'change', asyncUpdate )
   
   // Trigger update
-  asyncUpdate();
+  asyncUpdate()
   
 });
     </script>
