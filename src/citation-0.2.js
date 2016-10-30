@@ -313,8 +313,10 @@ var getBibTeXJSON = function ( src ) {
   if ( src.hasOwnProperty( 'title'     ) ) props.title     = src[ 'title' ]
   if ( src.hasOwnProperty( 'url'       ) ) props.url       = src.url
   if ( src.hasOwnProperty( 'volume'    ) ) props.volume    = src.volume
-  else if ( src.hasOwnProperty( 'issued' ) && Array.isArray( src.issued ) && src.issued[ 0 ][ 'date-parts' ].length === 3 )
-    props.year = src.issued[ 0 ][ 'date-parts' ][ 0 ]
+  if ( src.hasOwnProperty( 'issued'    )
+    && Array.isArray( src.issued )
+    && src.issued[ 0 ][ 'date-parts' ].length === 3
+				         ) props.year      = src.issued[ 0 ][ 'date-parts' ][ 0 ]
   
   res.properties = props
   
@@ -350,29 +352,47 @@ var getBibTeX = function ( src, html ) {
     if ( html )
       res += dict.li_start
     
-    res += '@' + bib.type + '{' + bib.label
+    res += '@' + bib.type + '{' + bib.label + ','
     
     if ( html )
       res += dict.ul_start,
       res += dict.li_start
+    else
+      res += '\n'
     
     var props = Object.keys( bib.properties )
     
     for ( var propIndex = 0; propIndex < props.length; propIndex++ ) {
       var prop = props[ propIndex ]
 	, value= bib.properties[ prop ]
+	, del_start=
+	
+	// Number
+	value == parseInt( value ).toString() ? '' :
+	
+	// Title or other capital-related fields
+	prop === 'title' ? '{{' :
+	
+	// Default
+	'{'
+	
+	, del_end= del_start.replace( /{/g, '}' )
       
-      res += prop + '={' + value + '}'
+      if ( !html )
+	res += '\t'
+      
+      res += prop + '=' + del_start + value + del_end + ','
       
       if ( propIndex + 1 < props.length ) {
-	
-	res += ','
-	
+      
 	if ( html )
 	  res += dict.li_end,
 	  res += dict.li_start
 	
       }
+      
+      if ( !html )
+	res += '\n'
     }
     
     if ( html )
@@ -387,6 +407,8 @@ var getBibTeX = function ( src, html ) {
   
   if ( html )
     res += dict.ul_end
+  else
+    res += '\n'
   
   return res
 }

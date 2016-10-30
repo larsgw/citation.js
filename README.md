@@ -170,7 +170,7 @@ data.get({
 * `.reset()`: Remove all data
 * `.currentVersion()`: Get current version number
 * `.undo()`: Restore previous version
-* `.retrieveVersion(<version number>)`: Retreive a certain version of the object
+* `.retrieveVersion(<version number>)`: Retrieve a certain version of the object
 * `.sort()`: Sort all entries on basis of their BibTeX label
 
 # More
