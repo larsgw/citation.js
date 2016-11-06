@@ -1,0 +1,182 @@
+<pre id="ins">@article{Steinbeck2003,
+  author = {Steinbeck, Christoph and Han, Yongquan and Kuhn, Stefan and Horlacher, Oliver and Luttmann, Edgar and Willighagen, Egon},
+  year = {2003},
+  title = {{The Chemistry Development Kit (CDK): an open-source Java library for Chemo- and Bioinformatics.}},
+  journal = {Journal of chemical information and computer sciences},
+  volume = {43},
+  number = {2},
+  pages = {493--500},
+  doi = {10.1021/ci025584y},
+  isbn = {2214707786},
+  issn = {0095-2338},
+  pmid = {12653513},
+  url = {http://www.ncbi.nlm.nih.gov/pubmed/12653513},
+}
+
+@article{Steinbeck2003,
+  author = {Steinbeck, Christoph and Han, Yongquan and Kuhn, Stefan and Horlacher, Oliver and Luttmann, Edgar and Willighagen, Egon},
+  year = 2003,
+  title = {{The Chemistry Development Kit (CDK): an open-source Java library for Chemo- and Bioinformatics.}},
+  journal = {Journal of chemical information and computer sciences},
+  volume = "43",
+  number = {2},
+  pages = {493--500},
+  doi = "{10.1021/ci025584y}",
+  isbn = {2214707786},
+  issn = {0095-2338},
+  pmid = {12653513},
+  url = {http://www.ncbi.nlm.nih.gov/pubmed/12653513}
+}</pre>
+<hr>
+<pre id="out"></pre>
+
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+
+<script>$(function(){
+
+function flipDel ( str ) {
+  return str
+    .replace( /{/g, '}' )
+    .split( '' )
+    .reverse()
+    .join( '' )
+}
+
+function  getDel ( stack, end_del ) {
+  return stack
+    .slice( 0, end_del.length ? end_del.length - 1 : 0 )
+    .reverse()
+    .join( '' )
+}
+
+var $ins = $('#ins')
+  , $out = $('#out')
+  , str = $ins.text()
+  , arr = []
+
+;(function(){
+
+  var stack = str.split( '' )
+    , curs  = ''
+    , nexr
+    , obj
+  
+  console.profile('Profile')
+  
+  function next ( bool ) {
+    curs = stack.shift()
+    nexr = stack.slice( 0, 1 )[ 0 ]
+  }
+  
+  next()
+  
+  while ( curs ) {
+    
+    arr.push( { type: '', label: '', props: {}} )
+    obj = arr[ arr.length - 1 ]
+    
+    // BEGIN TOP ROW
+    
+    while ( curs !== '@' )
+      next()
+    
+    next()
+    
+    while ( curs !== '{' ) {
+      obj.type += curs
+      next(true)
+    }
+    
+    next()
+    
+    while ( curs !== ',' ) {
+      obj.label += curs
+      next(true)
+    }
+    
+    next()
+    
+    // END TOP ROW
+    
+    while ( /^\s$/.test( curs ) )
+      next()
+    
+    // BEGIN VALUE
+    
+    var key
+      , start_del
+      , end_del
+      , nexs
+      , val
+      , bool_next = true
+    
+    while ( bool_next ) {
+      
+      bool_next = false,
+      key = ''
+      
+      while ( curs !== '=' ) {
+	if ( !/^\s$/.test( curs ) ) {
+	  key += curs
+	  next(true)
+	} else next()
+      }
+      
+      next()
+      
+      while ( /^\s$/.test( curs ) )
+	next()
+      
+      start_del = ''
+      
+      while ( /^["{]$/.test( curs ) ) {
+	start_del += curs
+	next()
+      }
+      
+      val = ''
+      
+      end_del = flipDel( start_del ),
+      nexs    = getDel( stack, end_del )
+      
+      while ( !start_del.length && !end_del.length ?
+	( curs !== ',' )
+      :
+	( curs + nexs !== end_del )
+      ) {
+	val += curs
+	next(true)
+	nexs = getDel( stack, end_del )
+      }
+      
+      while ( curs !== ',' && !/^\s$/.test( curs ) )
+	next()
+      
+      while ( /^\s$/.test( curs ) )
+	next()
+      
+      while ( curs === ',' )
+	next()
+      
+      while ( /^\s$/.test( curs ) )
+	next()
+      
+      if ( curs !== '}' )
+	bool_next = true
+      
+      obj.props[ key ] = val
+    }
+    
+    // END VALUE
+    
+    next()
+  
+  }
+  
+  console.profileEnd()
+  
+  $out.html(JSON.stringify(arr,null,2))
+  
+})();
+
+})</script>
