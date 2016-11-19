@@ -5,6 +5,7 @@ Citation.js converts formats like BibTeX, Wikidata JSON and ContentMine JSON to 
 Generate docs with `jsdoc ./ README.md -r -c docs/conf.json -d docs/api/`.
 
 [![NPM version](https://img.shields.io/npm/v/citation-js.svg)](https://www.npmjs.org/package/citation-js)
+[![Build Status](https://travis-ci.org/larsgw/citation.js.svg?branch=master)](https://travis-ci.org/larsgw/citation.js)
 
 # Use
 
