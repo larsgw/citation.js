@@ -187,9 +187,13 @@ function parseBibTeX ( str ) {
 	// Clean weird commands
 	.replace( /{?(\\[`"'^~=]){?\\?([A-Za-z])}/g, '{$1$2}')
 	.replace( /{?(\\[a-z]){?\\?([A-Za-z])}/g, '{$1 $2}' )
-  //       .replace( /([^\\])\\([#$%&~_^\\{}])/g, '$1$2' )
+// 	.replace( /([^\\])\\([#$%&~_^\\{}])/g, '$1$2' )
+// 	;console.log(stack);stack=stack
 	// Tokenize, with escaped characters in mind
-	.split( new RegExp( '(?!^)(' + 
+	.split( new RegExp( '(?!^)(' +
+	  // Escaped chars
+	  '\\\\\\\\|' +
+	  '\\\\([#$%&~_^{}])|' +
 	  // Regular commands
 	  '\\{\\\\(?:' +
 	  // Accented chars
@@ -358,6 +362,8 @@ function parseBibTeX ( str ) {
 	  
 	  if ( varBibTeXTokens.hasOwnProperty( curs ) )
 	    val += varBibTeXTokens[ curs ]
+	  else if ( curs.match( /^\\([#$%&~_^\\{}])$/ ) )
+	    val += curs.slice( 1 )
 	  else if ( curs.length > 1 )
 // 	    throw new SyntaxError( 'Escape sequence not recognized: ' + curs )
 	    console.error( 'Escape sequence not recognized: ' + curs )

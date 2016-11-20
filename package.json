@@ -4,7 +4,9 @@
   "description": "Citation.js converts formats like BibTeX, Wikidata JSON and ContentMine JSON to CSL-JSON to convert to other formats like APA, Vancouver and back to BibTeX.",
   "main": "index.js",
   "directories": {
-    "doc": "docs"
+    "doc": "docs/api/",
+    "test": "docs/test/spec/",
+    "lib": "src/"
   },
   "repository": {
     "type": "git",
@@ -23,6 +25,13 @@
     "commander": "",
     "striptags": "latest",
     "wikidata-sdk": ""
+  },
+  "devDependencies": {
+    "jasmine-node": "~1.14.5",
+    "jsdoc": "~3.4.2"
+  },
+  "scripts": {
+    "test": "node_modules/.bin/jasmine-node ./docs/test/spec/citation-0.2.spec.js"
   },
   "author": "Lars Willighagen (https://larsgw.github.io)",
   "license": "MIT",
