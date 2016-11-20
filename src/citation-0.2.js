@@ -69,6 +69,29 @@ var varRegex = {
 }
 
 /**
+ * Mapping of BibTeX syntax chars to BibTeX Escaped Chars.
+ * 
+ * From [Zotero's alwaysMap object](https://github.com/zotero/translators/blob/master/BibTeX.js#L225)
+ * [REPO](https://github.com/zotero/translators)
+ * 
+ * Accesed 11/20/2016
+ * 
+ * @constant varBibTeXSyntaxTokens
+ * @default
+ */
+var varBibTeXSyntaxTokens = {
+  "|":"{\\textbar}",
+  "<":"{\\textless}",
+  ">":"{\\textgreater}",
+  "~":"{\\textasciitilde}",
+  "^":"{\\textasciicircum}",
+  "\\":"{\\textbackslash}",
+  // See http://tex.stackexchange.com/questions/230750/open-brace-in-bibtex-fields/230754
+  "{" : "\\{\\vphantom{\\}}",
+  "}" : "\\vphantom{\\{}\\}"
+}
+
+/**
  * Mapping of BibTeX Escaped Chars to Unicode.
  * 
  * From [Zotero's reversed mapping table](https://github.com/zotero/translators/blob/master/BibTeX.js#L2353)
@@ -79,7 +102,6 @@ var varRegex = {
  * @constant varBibTeXTokens
  * @default
  */
-
 var varBibTeXTokens = {
   "\\url":"",				"\\href":"",				"{\\textexclamdown}":"\u00A1",		"{\\textcent}":"\u00A2",
   "{\\textsterling}":"\u00A3",		"{\\textyen}":"\u00A5",			"{\\textbrokenbar}":"\u00A6",		"{\\textsection}":"\u00A7",
@@ -327,7 +349,6 @@ var getName = function ( obj ) {
   
   if ( res.length )
     res = res.slice( 0, -1 )
-  
   else if ( res.hasOwnProperty( 'literal' ) )
     res = obj.literal
   
@@ -368,19 +389,116 @@ var parseName = function ( str ) {
  * @return {String} BibTeX type
  */
 var fetchBibTeXType = function ( pubType ) {
+  
   switch ( pubType ) {
+    case 'article':
+    case 'article-journal':
+    case 'article-magazine':
+    case 'article-newspaper':
+      return 'article';
+      break;
+    
     case 'book':
       return 'book';
       break;
-      
-    case 'article-journal':
-    case 'article-newspaper':
-    case 'article':
-      return 'article';
+    
+    case 'chapter':
+      return 'incollection';
       break;
-      
-    default:
+    
+    case 'manuscript':
+      return 'unpublished';
+      break;
+    
+    case 'paper-conference':
+      return 'inproceedings';
+      break;
+    
+    case 'patent':
+      return 'patent';
+      break;
+    
+    case 'report':
+      return 'techreport';
+      break;
+    
+    case 'thesis':
+      return 'phdthesis'
+      break;
+    
+    case 'graphic':
+    case 'interview':
+    case 'motion_picture':
+    case 'personal_communication':
+    case 'webpage':
       return 'misc';
+      break;
+    
+    default:
+      console.warn( 'CSL publication type not recognized: ' + pubType + '. Interpreting as "misc".' )
+      return 'misc';
+      break;
+  }
+}
+
+/**
+ * BibTeX pub type to CSL pub type
+ * 
+ * @method parseBibTeXType
+ * 
+ * @param {String} pubType - BibTeX type
+ * 
+ * @return {String} CSL type
+ */
+var parseBibTeXType = function ( pubType ) {
+  switch ( pubType ) {
+    
+    case 'article':
+      return 'article-journal';
+      break;
+    
+    case 'book':
+    case 'booklet':
+    case 'manual':
+    case 'misc':
+    case 'proceedings':
+      return 'book';
+      break;
+    
+    case 'inbook':
+    case 'incollection':
+      return 'chapter';
+      break;
+    
+    case 'conference':
+    case 'inproceedings':
+      return 'paper-conference';
+      break;
+    
+    case 'online':
+      return 'webpage'
+      break;
+    
+    case 'patent':
+      return 'patent';
+      break;
+    
+    case 'phdthesis':
+    case 'mastersthesis':
+      return 'thesis';
+      break;
+    
+    case 'techreport':
+      return 'report';
+      break;
+    
+    case 'unpublished':
+      return 'manuscript';
+      break;
+    
+    default:
+      console.warn( 'BibTeX publication type not recognized: ' + pubType + '. Interpreting as "book".' )
+      return 'book';
       break;
   }
 }
@@ -436,18 +554,28 @@ var getBibTeXJSON = function ( src ) {
   if ( src.hasOwnProperty( 'ISBN'      ) ) props.isbn      = src.ISBN
   if ( src.hasOwnProperty( 'ISSN'      ) ) props.issn      = src.ISSN
   if ( src.hasOwnProperty( 'container-title' ) ) props.journal = src[ 'container-title' ]
-  if ( src.hasOwnProperty( 'issue'     ) ) props.issue     = src.issue
+  if ( src.hasOwnProperty( 'issue'     ) ) props.issue     = src.issue.toString()
   if ( src.hasOwnProperty( 'page'      ) ) props.pages     = src.page.replace( '-', '--' )
   if ( src.hasOwnProperty( 'publisher-place' ) ) props.address = src[ 'publisher-place' ]
-  if ( src.hasOwnProperty( 'edition'   ) ) props.edition   = src.edition
+  if ( src.hasOwnProperty( 'edition'   ) ) props.edition   = src.edition.toString()
   if ( src.hasOwnProperty( 'publisher' ) ) props.publisher = src.publisher
   if ( src.hasOwnProperty( 'title'     ) ) props.title     = src[ 'title' ]
   if ( src.hasOwnProperty( 'url'       ) ) props.url       = src.url
-  if ( src.hasOwnProperty( 'volume'    ) ) props.volume    = src.volume
+  if ( src.hasOwnProperty( 'volume'    ) ) props.volume    = src.volume.toString()
   if ( src.hasOwnProperty( 'issued'    )
     && Array.isArray( src.issued )
     && src.issued[ 0 ][ 'date-parts' ].length === 3
-				         ) props.year      = src.issued[ 0 ][ 'date-parts' ][ 0 ]
+				         ) props.year      = src.issued[ 0 ][ 'date-parts' ][ 0 ].toString()
+  
+  var propArr = Object.keys( props )
+  
+  for ( var propIndex = 0; propIndex <  propArr.length; propIndex++ ) {
+    var prop = propArr[ propIndex ]
+    
+    props[ prop ] = props[ prop ].replace( /[|<>~^\\{}]/g, function ( match ) {
+      return varBibTeXSyntaxTokens[ match ]
+    } )
+  }
   
   res.properties = props
   
@@ -599,11 +727,11 @@ var fetchFile = function ( url ) {
   try {
     result  = request( 'GET', url ).getBody( 'utf8' )
   } catch (e) {
-    return console.error( '[set]', 'File could not be fetched')
+    return console.error( '[set]', 'File could not be fetched' )
   }
   
   if ( result === url )
-    return console.error( '[set]', 'Infinite chaining loop detected')
+    return console.error( '[set]', 'Infinite chaining loop detected' )
   
   else
     return result
@@ -1053,7 +1181,7 @@ var parseBibTeXJSON = function ( data ) {
 	entry[ val[ 0 ] ] = val[ 1 ]
     }
     
-    entry.type = 'article-journal'
+    entry.type = parseBibTeXType( entry.type )
     entry.id   = entry.label
     
     delete entry.label
@@ -1085,9 +1213,10 @@ var parseBibTeX = function ( str ) {
 	// Clean weird commands
 	.replace( /{?(\\[`"'^~=]){?\\?([A-Za-z])}/g, '{$1$2}')
 	.replace( /{?(\\[a-z]){?\\?([A-Za-z])}/g, '{$1 $2}' )
-  //       .replace( /([^\\])\\([#$%&~_^\\{}])/g, '$1$2' )
 	// Tokenize, with escaped characters in mind
-	.split( new RegExp( '(?!^)(' + 
+	.split( new RegExp( '(?!^)(' +
+	  // Escaped chars
+	  '\\\\([#$%&~_^\\\\{}])|' +
 	  // Regular commands
 	  '\\{\\\\(?:' +
 	  // Accented chars
@@ -1245,6 +1374,8 @@ var parseBibTeX = function ( str ) {
 	  
 	  if ( varBibTeXTokens.hasOwnProperty( curs ) )
 	    val += varBibTeXTokens[ curs ]
+	  else if ( curs.match( /^\\([#$%&~_^\\{}])$/ ) )
+	    val += curs.slice( 1 )
 	  else if ( curs.length > 1 )
 	    // "Soft", non-breaking error for now
 	    //throw new SyntaxError( 'Escape sequence not recognized: ' + curs )
@@ -1320,9 +1451,13 @@ var parseBibTeX = function ( str ) {
  */
 var parseContentMine = function ( data ) {
   var res = {}
+    
+    , dataKeys = Object.keys( data )
   
-  for ( var prop in data )
+  for ( var dataKeyIndex = 0; dataKeyIndex < dataKeys.length; dataKeyIndex++ ) {
+    var prop = dataKeys[ dataKeyIndex ]
     res[ prop ] = data[ prop ].value[ 0 ]
+  }
   
   res.type  = 'article-journal';
   
@@ -1535,7 +1670,8 @@ var getJSONObjectHTML = function ( src ) {
     
     res += '[<ul style="list-style-type:none">';
     
-    for ( var entry of src ) {
+    for ( var entryIndex = 0; entryIndex < src.length; entryIndex++ ) {
+      var entry = src[ entryIndex ]
       
       res += '<li>'
       res += getJSONValueHTML( entry )
@@ -1726,8 +1862,8 @@ var getJSONValueHTML = function ( src ) {
     this._log.push( { name: 'retrieveVersion', arguments: [ versnum ] } )
     
     if ( versnum >= 0 && versnum <= this.currentVersion() ) {
-      var object = new Cite( this._log[ 0 ].arguments[ 0 ], this._log[ 0 ].arguments[ 1 ] ),
-	  arr    = []
+      var obj = new Cite( this._log[ 0 ].arguments[ 0 ], this._log[ 0 ].arguments[ 1 ] ),
+	  arr = []
       
       for ( var i = 0; i < this._log.length; i++ ) {
 	if ( this._log[ i ].version )
@@ -1735,10 +1871,10 @@ var getJSONValueHTML = function ( src ) {
       }
       
       for ( var k = 1; k <= versnum; k++ ) {
-	object[ arr[ k ].name ].apply( object, arr[ k ].arguments || [] )
+	obj[ arr[ k ].name ].apply( obj, arr[ k ].arguments || [] )
       }
       
-      return object;
+      return obj
     } else return undefined;
   }
   
@@ -2105,6 +2241,7 @@ return Cite
 		
 		var month, rest, sign, year;
 		var parts = datavalue.value.time.split( '-' );
+		
 		switch (parts.length) {
 		  case 3:
 		    year  = parts[0],
@@ -2121,9 +2258,10 @@ return Cite
 		  default:
 		    console.error( '[set]', 'Unknown Wikidata time format:', datavalue.value.time );
 		}
+		
 		var day = rest.slice(0, 2);
 		
-		value = new Date(year, month, day).getTime()
+		value = new Date(year, month - 1, day).getTime()
 		break;
 	      
 	      default:

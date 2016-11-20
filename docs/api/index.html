@@ -45,7 +45,8 @@
     <section>
         <article><h1>Citation.js</h1><p>Citation.js converts formats like BibTeX, Wikidata JSON and ContentMine JSON to CSL-JSON to convert to other formats like APA, Vancouver and back to BibTeX.</p>
 <p>Generate docs with <code>jsdoc ./ README.md -r -c docs/conf.json -d docs/api/</code>.</p>
-<p><a href="https://www.npmjs.org/package/citation-js"><img src="https://img.shields.io/npm/v/citation-js.svg" alt="NPM version"></a></p>
+<p><a href="https://www.npmjs.org/package/citation-js"><img src="https://img.shields.io/npm/v/citation-js.svg" alt="NPM version"></a>
+<a href="https://travis-ci.org/larsgw/citation.js"><img src="https://travis-ci.org/larsgw/citation.js.svg?branch=master" alt="Build Status"></a></p>
 <h1>Use</h1><h2>Node.js (<a href="https://www.npmjs.org/package/citation-js">citation-js</a>)</h2><p>Install the package like this:</p>
 <pre class="prettyprint source"><code>npm install -g citation-js</code></pre><p>To run the program, use</p>
 <pre class="prettyprint source"><code>citation-js  [options]
@@ -155,11 +156,11 @@ data.get({
 <li><code>.reset()</code>: Remove all data</li>
 <li><code>.currentVersion()</code>: Get current version number</li>
 <li><code>.undo()</code>: Restore previous version</li>
-<li><code>.retrieveVersion(&lt;version number&gt;)</code>: Retreive a certain version of the object</li>
+<li><code>.retrieveVersion(&lt;version number&gt;)</code>: Retrieve a certain version of the object</li>
 <li><code>.sort()</code>: Sort all entries on basis of their BibTeX label</li>
 </ul>
 <h1>More</h1><h2>More Docs</h2><p>Further explanation can be found <a href="https://larsgw.github.io/citation.js/api/">here</a>. The explanation of the jQuery plugin can be found there too.</p>
-<h2>Demo</h2><h3>NPM Demo</h3><p><a href="https://runkit.com/npm/citation-js">Currently broken</a>. It can't find one of the dependencies. Example code for when it works:</p>
+<h2>Demo</h2><h3>NPM Demo</h3><p><a href="https://runkit.com/npm/citation-js">NPM Demo</a>. Example code:</p>
 <pre class="prettyprint source lang-js"><code>var Cite = require( 'citation-js' )
 
 var data = new Cite( 'Q21972834', {
@@ -427,13 +428,13 @@ SOFTWARE.</li></ul></dd>
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Cite.html">Cite</a></li></ul><h3>Global</h3><ul><li><a href="global.html#fetchBibTeXType">fetchBibTeXType</a></li><li><a href="global.html#fetchCSLLocale">fetchCSLLocale</a></li><li><a href="global.html#fetchCSLStyle">fetchCSLStyle</a></li><li><a href="global.html#fetchFile">fetchFile</a></li><li><a href="global.html#fetchWikidataLabel">fetchWikidataLabel</a></li><li><a href="global.html#fetchWikidataType">fetchWikidataType</a></li><li><a href="global.html#getBibTeX">getBibTeX</a></li><li><a href="global.html#getBibTeXJSON">getBibTeXJSON</a></li><li><a href="global.html#getBibTeXLabel">getBibTeXLabel</a></li><li><a href="global.html#getDate">getDate</a></li><li><a href="global.html#getJSONObjectHTML">getJSONObjectHTML</a></li><li><a href="global.html#getJSONValueHTML">getJSONValueHTML</a></li><li><a href="global.html#getLabel">getLabel</a></li><li><a href="global.html#getName">getName</a></li><li><a href="global.html#parseBibTeX">parseBibTeX</a></li><li><a href="global.html#parseContentMine">parseContentMine</a></li><li><a href="global.html#parseDate">parseDate</a></li><li><a href="global.html#parseInput">parseInput</a></li><li><a href="global.html#parseInputData">parseInputData</a></li><li><a href="global.html#parseInputType">parseInputType</a></li><li><a href="global.html#parseJSON">parseJSON</a></li><li><a href="global.html#parseName">parseName</a></li><li><a href="global.html#parseWikidata">parseWikidata</a></li><li><a href="global.html#parseWikidataInput">parseWikidataInput</a></li><li><a href="global.html#parseWikidataProp">parseWikidataProp</a></li><li><a href="global.html#varCSLLocales">varCSLLocales</a></li><li><a href="global.html#varCSLStyles">varCSLStyles</a></li><li><a href="global.html#varRegex">varRegex</a></li><li><a href="global.html#varWikidataTypes">varWikidataTypes</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Cite.html">Cite</a></li></ul><h3>Global</h3><ul><li><a href="global.html#fetchBibTeXType">fetchBibTeXType</a></li><li><a href="global.html#fetchCSLLocale">fetchCSLLocale</a></li><li><a href="global.html#fetchCSLStyle">fetchCSLStyle</a></li><li><a href="global.html#fetchFile">fetchFile</a></li><li><a href="global.html#fetchWikidataLabel">fetchWikidataLabel</a></li><li><a href="global.html#fetchWikidataType">fetchWikidataType</a></li><li><a href="global.html#getBibTeX">getBibTeX</a></li><li><a href="global.html#getBibTeXJSON">getBibTeXJSON</a></li><li><a href="global.html#getBibTeXLabel">getBibTeXLabel</a></li><li><a href="global.html#getDate">getDate</a></li><li><a href="global.html#getJSONObjectHTML">getJSONObjectHTML</a></li><li><a href="global.html#getJSONValueHTML">getJSONValueHTML</a></li><li><a href="global.html#getLabel">getLabel</a></li><li><a href="global.html#getName">getName</a></li><li><a href="global.html#parseBibTeX">parseBibTeX</a></li><li><a href="global.html#parseBibTeXJSON">parseBibTeXJSON</a></li><li><a href="global.html#parseBibTeXProp">parseBibTeXProp</a></li><li><a href="global.html#parseBibTeXType">parseBibTeXType</a></li><li><a href="global.html#parseContentMine">parseContentMine</a></li><li><a href="global.html#parseDate">parseDate</a></li><li><a href="global.html#parseInput">parseInput</a></li><li><a href="global.html#parseInputData">parseInputData</a></li><li><a href="global.html#parseInputType">parseInputType</a></li><li><a href="global.html#parseJSON">parseJSON</a></li><li><a href="global.html#parseName">parseName</a></li><li><a href="global.html#parseWikidata">parseWikidata</a></li><li><a href="global.html#parseWikidataJSON">parseWikidataJSON</a></li><li><a href="global.html#parseWikidataProp">parseWikidataProp</a></li><li><a href="global.html#varBibTeXSyntaxTokens">varBibTeXSyntaxTokens</a></li><li><a href="global.html#varBibTeXTokens">varBibTeXTokens</a></li><li><a href="global.html#varCSLLocales">varCSLLocales</a></li><li><a href="global.html#varCSLStyles">varCSLStyles</a></li><li><a href="global.html#varRegex">varRegex</a></li><li><a href="global.html#varWikidataTypes">varWikidataTypes</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.0</a> on Sun Oct 30 2016 15:13:56 GMT+0100 (CET)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.0</a> on Sun Nov 20 2016 17:11:40 GMT+0100 (CET)
 </footer>
 
 <script> prettyPrint(); </script>

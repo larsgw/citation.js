@@ -183,7 +183,7 @@ Further explanation can be found [here](https://larsgw.github.io/citation.js/api
 
 ### NPM Demo
 
-[Currently broken](https://runkit.com/npm/citation-js). It can't find one of the dependencies. Example code for when it works:
+[NPM Demo](https://runkit.com/npm/citation-js). Example code:
 
 ```js
 var Cite = require( 'citation-js' )
