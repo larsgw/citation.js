@@ -22,9 +22,10 @@
     "citeproc"
   ],
   "dependencies": {
-    "commander": "",
-    "striptags": "latest",
-    "wikidata-sdk": ""
+    "commander": "~2.9.0",
+    "striptags": "~2.1.1",
+    "sync-request": "~3.0.1",
+    "wikidata-sdk": "~4.1.0"
   },
   "devDependencies": {
     "jasmine-node": "~1.14.5",
