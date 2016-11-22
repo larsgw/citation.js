@@ -7,42 +7,47 @@
     <style>
       body {margin:0 auto;width:60%;max-width:750px;font-family:'Helvetica Neue', Helvetica, Arial, sans-serif;}
       
-      h1, h2, h3, div, p, img {width:100%;}
       h1, h2, h3 {text-align:center;}
       
-      hr {margin:3em 0;}
+      hr {margin:1em 0;}
       
-      a { color:#333;text-decoration:underline; }
-      a:hover { color:#888;text-decoration:none; }
+      a       { color:black;text-decoration:none;border-bottom:1px solid rgba(0,0,0,.3); }
+      a       { -webkit-transition:border .5s;-moz-transition:border .5s;-ms-transition:border .5s;transition:border .5s; }
+      a:hover { border-color:black; }
+      a.no-border { border: none }
     </style>
   </head>
   <body>
-    <h1>Citation.js</h1>
+    <header>
+      <h1>Citation.js</h1>
     
       <p>Citation.js converts formats like BibTeX, Wikidata JSON and ContentMine JSON to CSL-JSON to convert to other formats like APA, Vancouver and back to BibTeX.</p>
       <p>(Also contains a jQuery plugin to build HTML forms for input)</p>
 
-    <hr>
-    
-      <a href="api"><h2>Docs</h2></a>
-      
-    <hr>
-    
-      <a href="test"><h2>Build test</h2></a>
-      
-    <hr>
-    
-      <a href="demo/demo.html"><h2>Demo</h2>
-	<img width="100%" src="https://larsgw.github.io/img/slider_img-02.png">
-      </a>
+      <p>
+        <a href="api">Docs</a> &#9642;
+        <a href="test">Build test</a> &#9642;
+        <a href="demo/demo.html">API demo</a>
+      </p>
       
       <hr>
       
-      <a href="demo/jquery.html">
-	<h2>jQuery plugin demo</h2>
-	<img width="100%" src="https://larsgw.github.io/img/screenshot_06.png">
-      </a>
-      
+      <p>
+        <a class="no-border" href="https://www.npmjs.org/package/citation-js">
+          <img height="20" src="https://img.shields.io/npm/v/citation-js.svg" alt="NPM version">
+        </a>
+        <a class="no-border" href="https://travis-ci.org/larsgw/citation.js">
+          <img height="20" src="https://travis-ci.org/larsgw/citation.js.svg?branch=master" alt="Build Status">
+        </a>
+      </p>
+    </header>
+    
+    <article>
+      <h2><a href="demo/jquery.html">jQuery plugin demo
+        <img width="100%" src="https://larsgw.github.io/img/screenshot_06.png">
+      </a></h2>
+    </article>
+    
     <a href="https://github.com/larsgw/citation.js"><img style="width: 149px;position: absolute; top: 0; right: 0; border: 0;" src="https://camo.githubusercontent.com/38ef81f8aca64bb9a64448d0d70f1308ef5341ab/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f6461726b626c75655f3132313632312e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png"></a>
   </body>
 </html>
