@@ -80,7 +80,7 @@
 
 .cjs label * { vertical-align: middle; }
 
-.cjs label input[type="text"] {
+.cjs label input[type="text"], .cjs label input[type="number"] {
   display: inline-block;
   border: none;
   border-bottom: 1px solid rgba(0, 0, 0, .12);
@@ -95,7 +95,7 @@
   transition:border .2s linear;
 }
 
-.cjs label input[type="text"]:focus {
+.cjs label input[type="text"]:focus, .cjs label input[type="number"]:focus {
   outline: 0;
   border-bottom: 2px solid #2196F3;
 }
