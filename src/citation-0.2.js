@@ -567,16 +567,6 @@ var getBibTeXJSON = function ( src ) {
     && src.issued[ 0 ][ 'date-parts' ].length === 3
 				         ) props.year      = src.issued[ 0 ][ 'date-parts' ][ 0 ].toString()
   
-  var propArr = Object.keys( props )
-  
-  for ( var propIndex = 0; propIndex <  propArr.length; propIndex++ ) {
-    var prop = propArr[ propIndex ]
-    
-    props[ prop ] = props[ prop ].replace( /[|<>~^\\{}]/g, function ( match ) {
-      return varBibTeXSyntaxTokens[ match ]
-    } )
-  }
-  
   res.properties = props
   
   return res
@@ -623,19 +613,19 @@ var getBibTeX = function ( src, html ) {
     
     for ( var propIndex = 0; propIndex < props.length; propIndex++ ) {
       var prop = props[ propIndex ]
-	, value= bib.properties[ prop ]
+	, value= bib.properties[ prop ].replace( /[|<>~^\\{}]/g, function ( match ) {
+	    return varBibTeXSyntaxTokens[ match ]
+	  } )
 	, del_start=
 	
-	// Number
-	value == parseInt( value ).toString() ? '' :
-	
-	// Title or other capital-related fields
-	prop === 'title' ? '{{' :
-	
-	// Default
-	'{'
-	
-	, del_end= del_start.replace( /{/g, '}' )
+	  // Number
+	  value == parseInt( value ).toString() ? '' :
+	  // Title or other capital-related fields
+	  prop === 'title' ? '{{' :
+	  // Default
+	  '{'
+	  
+	, del_end= del_start.replace( /{/g, '}' ).split( '' ).reverse().join( '' )
       
       if ( !html )
 	res += '\t'
