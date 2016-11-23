@@ -76,15 +76,6 @@ var jQueryCite = (function(){
     section.find('.cjs-place').slice(1).remove()
   }
   
-  var activateForm = function ( elm ) {
-    elm
-      .addClass( 'cjs-active' )
-      .parent()
-      .children( 'section' )
-      .not( elm )
-      .removeClass( 'cjs-active' )
-  }
-  
   /**
    * 
    */
@@ -98,11 +89,18 @@ var jQueryCite = (function(){
     * 
     */
     this._options = Object.assign( {
-      lang: 'en',
-      form: '../docs/src/html/form-en.html',
-      add : function ( self ) {
+      lang : 'en',
+      inputForm: '../docs/src/html/form-en.html',
+      outputForm: '../docs/src/html/form-out-en.html',
+      add  : function ( self ) {
 	console.log(self._form.out,self._data.get())
 	self._form.out.html( self._data.get() )
+      },
+      defaultOptions: {
+	format: 'string',
+	type  : 'html',
+	style : 'citation-apa',
+	lang  : 'en-US'
       }
     }, options || {} )
     
@@ -129,7 +127,15 @@ var jQueryCite = (function(){
         .find( '.cjs-draft' )
         .html( this._draft.get( {}, true ) )
       
+      return this
+    }
+    
+    /**
+     * 
+     */
+    this.updateOut = function () {
       this._form.out
+        .find( '.cjs-output' )
         .html( this._data.get( {}, true ) )
       
       return this
@@ -164,6 +170,23 @@ var jQueryCite = (function(){
       form.attr( {
 	id: '',
 	class: 'cjs cjs-out'
+      } ).load( options.outputForm, function () {
+	
+	//BEGIN Event listeners
+	form.find( '#cjs-opt select.cjs' ).change( function () {
+	  var options = {
+	    format: 'string'
+	  , type:   form.find('#cjs-opt .cjs-type').val()
+	  , style:  form.find('#cjs-opt .cjs-style').val()
+	  , lang:   form.find('#cjs-opt .cjs-lan').val()
+	  }
+	  
+	  self._data.options( options, true )
+	  
+	  self.updateOut()
+	} )
+	//END
+	
       } )
     }
     
@@ -184,24 +207,10 @@ var jQueryCite = (function(){
       
       var options = Object.assign( options || {}, self._options )
       
-      form.addClass( 'cjs cjs-in' ).load( options.form, function () {
+      form.addClass( 'cjs cjs-in' ).load( options.inputForm, function () {
 	
 	//BEGIN Event listeners
 	form.find( '.cjs-chapterauthor, .cjs-author, .cjs-editor, .cjs-place' ).CJSMultipleInput()
-	
-	form.find( '#cjs-opt select.cjs' ).change( function () {
-	  var options = {
-	    format: 'string'
-	  , type:   form.find('#cjs-opt .cjs-type').val()
-	  , style:  form.find('#cjs-opt .cjs-style').val()
-	  , lang:   form.find('#cjs-opt .cjs-lan').val()
-	  }
-	  
-	  self._data.options( options, true )
-	  self._draft.options( options, true )
-	  
-	  self.updateDraft()
-	} )
 	
 	form.find( '#cjs-in-form select.cjs-type' ).change( function () {
           self.updateFields.call( self )
@@ -272,13 +281,51 @@ var jQueryCite = (function(){
             volume: "79",
             issue: "20",
             page: "5441-5444"
-          }
+          },
+	  {
+	    "type": "article-journal",
+	    "author": [
+	      {
+		"given": "Christoph",
+		"family": "Steinbeck"
+	      },
+	      {
+		"given": "Yongquan",
+		"family": "Han"
+	      },
+	      {
+		"given": "Stefan",
+		"family": "Kuhn"
+	      },
+	      {
+		"given": "Oliver",
+		"family": "Horlacher"
+	      },
+	      {
+		"given": "Edgar",
+		"family": "Luttmann"
+	      },
+	      {
+		"given": "Egon",
+		"family": "Willighagen"
+	      }
+	    ],
+	    "year": "2003",
+	    "title": "The Chemistry Development Kit (CDK): an open-source Java library for Chemo- and Bioinformatics",
+	    "container-title": "Journal of chemical information and computer sciences",
+	    "volume": "43",
+	    "issue": "2",
+	    "page": "493-500",
+	    "DOI": "10.1021/ci025584y",
+	    "ISBN": "0095-2338",
+	    "id": "Steinbeck2003"
+	  }
         ] )
         
 	self.updateFields()
-        self.updateDraft()
 	
-	form.find( '#cjs-opt .cjs-type' ).change()
+	self._draft.options( options.defaultOptions, true )
+        self.updateDraft()
 	//END
 	
       } )

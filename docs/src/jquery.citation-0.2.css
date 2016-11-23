@@ -13,7 +13,7 @@
 .ui-tabs-nav {
   background-color: #FFC107;
   padding: 0 0 0 80px;
-  margin-top: 0;
+  margin: 0 0 0 -48px;
 }
 
 .ui-tabs-tab {
@@ -23,11 +23,22 @@
   color: rgba(255,255,255,.7);
   font-size: 15px;
   font-weight: 500;
+  
+  background-color: rgba(255,255,255,0);
+  
+  -webkit-transition: background-color .2s;
+     -moz-transition: background-color .2s;
+      -ms-transition: background-color .2s;
+          transition: background-color .2s;
 }
 
   .ui-tabs-tab:focus,
   .ui-tabs-tab *:focus {
     outline: none;
+  }
+  
+  .ui-tabs-tab:active {
+    background-color: rgba(255,255,255,.3);
   }
   
   .ui-tabs-active {
@@ -54,14 +65,7 @@ body { margin: 0; }
   font-weight: 400;
 }
 
-.cjs-draft {
-  margin: 1em .75em;
-}
-
-.cjs-inputform {
-  margin: 1em .75em;
-}
-
+/*BEGIN Material*/
 .cjs fieldset {
   border: none;
   margin: 2em 0;
@@ -99,6 +103,26 @@ body { margin: 0; }
   cursor:normal;
 }
 
+.cjs select {
+  display: inline-block;
+  height: 26px;
+  width: 200px;
+  
+  background: none;
+  border: none;
+  border-bottom: 1px solid rgba(0, 0, 0, .12);
+  
+  font-size: 16px;
+  font-family: inherit;
+  
+  transition: border .1s linear;
+}
+
+.cjs select:focus {
+  outline: none;
+  border-bottom: 2px solid #2196F3;
+}
+
 .cjs label   { white-space:nowrap;position:relative;margin-right:16px; }
 
 .cjs label * { vertical-align: middle; }
@@ -118,49 +142,84 @@ body { margin: 0; }
 .cjs textarea,
 .cjs label input[type="text"],
 .cjs label input[type="number"],
-.cjs label input[type="url"] {
+.cjs label input[type="url"],
+.cjs label input[type="date"] {
+  margin: 0;
+  
   border: none;
   border-bottom: 1px solid rgba(0, 0, 0, .12);
   font-size: 16px;
-  margin: 0;
   
   transition: border .1s linear;
+}
+
+.cjs label input[type="date"] {
+  font-size: 14px;
 }
 
 .cjs textarea:focus,
 .cjs label input[type="text"]:focus,
 .cjs label input[type="number"]:focus,
-.cjs label input[type="url"]:focus {
+.cjs label input[type="url"]:focus,
+.cjs label input[type="date"]:focus {
   outline: none;
   border-bottom: 2px solid #2196F3;
 }
 
 .cjs label legend {
   display: inline-block;
-  text-align: left;
-  color: inherit;
-  opacity: .5;
-  font-size: 16px;
-  font-weight: 400;
-  padding: 4px 0;
   position: relative;
   left: -200px;
-  bottom: 0;
   height: 26px;
+  padding: 4px 0;
+  
+  bottom: 0;
+  text-align: left;
+  opacity: .5;
+  
+  color: inherit;
+  font-size: 16px;
+  font-weight: 400;
   
   -webkit-pointer-events: none;
      -moz-pointer-events: none;
       -ms-pointer-events: none;
           pointer-events: none;
   
-  transition: all .2s;
+  transition: all .1s;
 }
 
 .cjs label input[type="date"] + legend,
 .cjs label input:focus + legend {
-  bottom: 22px;
+  bottom: 20px;
   left: -205px;
-  font-size: 13px;
-  padding: 0;
   height: 16px;
+  padding: 0;
+  
+  font-size: 13px;
 }
+/*END*/
+
+.cjs-piece {
+  margin-left: 48px;
+}
+
+.cjs-draft {
+  margin: 1em 0;
+  width: 75%;
+  
+  box-shadow: 0 2px 2px 0 rgba(0,0,0,0.14),0 3px 1px -2px rgba(0,0,0,0.2),0 1px 5px 0 rgba(0,0,0,0.12);
+  
+  background-color: white;
+}
+
+.cjs-draft .csl-bib-body br { display: none; }
+.cjs-draft .csl-bib-body .csl-entry { padding: 16px;border-top: 1px solid rgba(0,0,0,.12); }
+.cjs-draft .csl-bib-body .csl-entry:first-child { border: none; }
+
+.cjs-settings fieldset {
+  display: inline;
+  margin: 0 2em 0 0;
+}
+
+/* .cjs-settings fieldset */
