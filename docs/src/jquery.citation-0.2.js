@@ -99,7 +99,7 @@ var jQueryCite = (function(){
     */
     this._options = Object.assign( {
       lang: 'en',
-      form: '../src/html/form-en.html',
+      form: '../docs/src/html/form-en.html',
       add : function ( self ) {
 	console.log(self._form.out,self._data.get())
 	self._form.out.html( self._data.get() )
@@ -125,7 +125,12 @@ var jQueryCite = (function(){
      * 
      */
     this.updateDraft = function () {
-      this._form.in.find( '.cjs-draft' ).html( this._draft.get( {}, true ) )
+      this._form.in
+        .find( '.cjs-draft' )
+        .html( this._draft.get( {}, true ) )
+      
+      this._form.out
+        .html( this._data.get( {}, true ) )
       
       return this
     }
@@ -198,7 +203,9 @@ var jQueryCite = (function(){
 	  self.updateDraft()
 	} )
 	
-	form.find( '#cjs-in-form select.cjs-type' ).change( self.updateFields )
+	form.find( '#cjs-in-form select.cjs-type' ).change( function () {
+          self.updateFields.call( self )
+        } )
 	
 	form.find( 'input[type="submit"]' ).click( function ( e ) {
 	  e.preventDefault()
@@ -244,7 +251,32 @@ var jQueryCite = (function(){
 	  show: { effect: 'slide', direction: 'right', duration: 150 }
 	} )
 	
+        self._draft.set( [
+          {
+            id: "Q23571040",
+            type: "article-journal",
+            title: "Correlation of the Base Strengths of Amines 1",
+            DOI: "10.1021/ja01577a030",
+            author: [
+              {
+                given: "H. K.",
+                family: "Hall"
+              }
+            ],
+            issued: [
+              {
+                'date-parts': [ "1957", "1", "1" ]
+              }
+            ],
+            'container-title': "Journal of the American Chemical Society",
+            volume: "79",
+            issue: "20",
+            page: "5441-5444"
+          }
+        ] )
+        
 	self.updateFields()
+        self.updateDraft()
 	
 	form.find( '#cjs-opt .cjs-type' ).change()
 	//END

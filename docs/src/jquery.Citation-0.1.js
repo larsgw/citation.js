@@ -118,7 +118,7 @@ jQuery.fn.extend({
     $(this).each(function(){
       var form = $(this);
 	  CJS.form = form;
-	  form.load(tmp||('src/html/form-'+lan+'.html'),function(){
+	  form.load(tmp||('../src/html/form-'+lan+'.html'),function(){
 	
 	CJS.draft.options(CJS.options);
 	

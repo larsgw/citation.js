@@ -13,6 +13,7 @@
 .ui-tabs-nav {
   background-color: #FFC107;
   padding: 0 0 0 80px;
+  margin-top: 0;
 }
 
 .ui-tabs-tab {
@@ -24,8 +25,9 @@
   font-weight: 500;
 }
 
-  .ui-tabs-tab:focus, .ui-tabs-tab *:focus {
-    outline: 0;
+  .ui-tabs-tab:focus,
+  .ui-tabs-tab *:focus {
+    outline: none;
   }
   
   .ui-tabs-active {
@@ -42,9 +44,28 @@
   }
 /*END*/
 
+body { margin: 0; }
+
+.cjs h1 {
+  background-color: #FFC107;
+  padding: .83em 104px;
+  margin: 0;
+  color: white;
+  font-weight: 400;
+}
+
+.cjs-draft {
+  margin: 1em .75em;
+}
+
+.cjs-inputform {
+  margin: 1em .75em;
+}
+
 .cjs fieldset {
   border: none;
-  margin: 0 0 1em 0;
+  margin: 2em 0;
+  padding: 0;
 }
 
 .cjs [type="reset"], .cjs [type="button"], .cjs [type="submit"], .cjs button {
@@ -56,7 +77,10 @@
   box-shadow: none;
   border-radius: 0;
   
-  border: none;outline: none;
+  border: none;
+  outline: none;
+  
+  cursor: pointer;
   
   font-family:Roboto;font-weight:500;font-size: 14px;
   text-align: center;text-transform: uppercase;text-decoration:none;
@@ -75,27 +99,68 @@
   cursor:normal;
 }
 
-
 .cjs label   { white-space:nowrap;position:relative;margin-right:16px; }
 
 .cjs label * { vertical-align: middle; }
 
-.cjs label input[type="text"], .cjs label input[type="number"] {
+.cjs label input {
   display: inline-block;
+  padding: 4px 0;
+  height: 26px;
+  width: 200px;
+}
+
+.cjs textarea {
+  width: 400px;
+  height: 300px;
+}
+
+.cjs textarea,
+.cjs label input[type="text"],
+.cjs label input[type="number"],
+.cjs label input[type="url"] {
   border: none;
   border-bottom: 1px solid rgba(0, 0, 0, .12);
   font-size: 16px;
   margin: 0;
-  padding: 4px 0;
-  background: 16px;
-  text-align: left;
-  color: inherit;
-  font-weight:400;
   
-  transition:border .2s linear;
+  transition: border .1s linear;
 }
 
-.cjs label input[type="text"]:focus, .cjs label input[type="number"]:focus {
-  outline: 0;
+.cjs textarea:focus,
+.cjs label input[type="text"]:focus,
+.cjs label input[type="number"]:focus,
+.cjs label input[type="url"]:focus {
+  outline: none;
   border-bottom: 2px solid #2196F3;
+}
+
+.cjs label legend {
+  display: inline-block;
+  text-align: left;
+  color: inherit;
+  opacity: .5;
+  font-size: 16px;
+  font-weight: 400;
+  padding: 4px 0;
+  position: relative;
+  left: -200px;
+  bottom: 0;
+  height: 26px;
+  
+  -webkit-pointer-events: none;
+     -moz-pointer-events: none;
+      -ms-pointer-events: none;
+          pointer-events: none;
+  
+  transition: all .2s;
+}
+
+.cjs label input[type="date"] + legend,
+.cjs label input:focus + legend {
+  bottom: 22px;
+  left: -205px;
+  font-size: 13px;
+  padding: 0;
+  height: 16px;
 }

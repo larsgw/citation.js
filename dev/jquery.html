@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Demo page</title>
+    
+    <meta charset="utf-8" />
+    
+    <link href='https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&subset=latin,greek,latin-ext' rel='stylesheet' type='text/css'>
+    
+    <link type="text/css" rel="stylesheet" href="../docs/src/jquery.citation-0.2.css"/>
+    
+    <link rel="shortcut icon" type="image/x-icon" href="../favicon.ico"/>
+    <link rel="icon" type="image/x-icon" href="../favicon.ico"/>
+  </head>
+  <body>
+    
+    <div id="cjs-in"></div>
+    <div id="cjs-out"></div>
+    
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+    <script type="text/javascript" src="../docs/src/citeproc.js"></script>
+    <script type="text/javascript" src="../docs/src/citation-0.2.js"></script>
+    <script type="text/javascript" src="../docs/src/jquery.citation-0.2.js"></script>
+    <script type="text/javascript">
+      var test;
+      $(function(){
+	var form = new jQueryCite( { lang: 'en' } ) 
+	
+	test=form
+	
+	form.insertInputForm( $( '#cjs-in' ) )
+	form.insertOutputForm( $( '#cjs-out' ) )
+      })
+    </script>
+  </body>
+</html>
