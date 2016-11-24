@@ -43,38 +43,89 @@
  * 
  */
 jQuery.fn.CJSMultipleInput = function () {
-  var elm = $( this ).selector
-  
-  $( elm ).each( function () {
-    $(this).addClass( 'cjs-multipleinput' )
+  var change = function () {
+    var elm = $( this )
     
-    $(this).change( function () {
-           if (  $(this).val() &&  $(elm).last().val() )
-	$(this).after( $(this).clone( true ).val( '' ) )
-      
-      else if (  $(this).val() && !$(elm).next().val() )
-	$(this).next().remove()
-      
-      else if ( !$(this).val() &&  $(elm).next().val() )
-	$(this).remove()
-    } )
+	  if (  elm.val() &&  $(elm).last().val() )
+      elm.after( elm.clone( true ).val( '' ) )
+    
+    else if (  elm.val() && !$(elm).next().val() )
+      elm.next().remove()
+    
+    else if ( !elm.val() &&  $(elm).next().val() )
+      elm.remove()
+  }
+  $(this).each( function () {
+    var elm = $(this)
+    
+    elm.addClass( 'cjs-multipleinput' )
+    
+    elm.keydown( function ( e ) { if ( e.keyCode === 9 ) change.call( this ) } )
+    elm.change( change )
   } )
 }
 
 var jQueryCite = (function(){
   
-  var emptyForm = function () {
-    this._draft.reset()
-    this.updateDraft()
+  var parseName = function ( str ) {
+    if ( str.indexOf( ', ' ) > -1 )
+      var arr = str.split( ', ' ).reverse()
+    else
+      var arr = str.match( /^(?:((?:[A-Z][a-z]*[ -])*[A-Z][a-z]*) )?(?:((?:[a-z]+ )[a-z]+) )?((?:[A-Z][a-z]*[ -])*[A-Z][a-z]*)$/ ) || []
     
-    var section = this._form.in.find( 'section.cjs-active' )
+    var obj = {}
     
-    section.find( 'input, textarea').val('')
-    section.find('.cjs-chapterauthor').slice(1).remove()
-    section.find('.cjs-author').slice(1).remove()
-    section.find('.cjs-editor').slice(1).remove()
-    section.find('.cjs-place').slice(1).remove()
+    if ( arr.length ) {
+      if ( arr[ 1 ] )
+	obj.given = arr[ 1 ]
+      if ( arr[ 2 ] )
+	obj[ 'non-dropping-particles' ] = arr[ 2 ]
+      if ( arr[ 3 ])
+	obj.family = arr[ 3 ]
+    }
+    else
+      obj.family = str
+    
+    return obj
   }
+  
+  var parseDate = function ( value ) {
+    var rValue
+      , date = new Date( value )
+    
+    rValue = [
+      date.getFullYear()
+    , date.getMonth   () + 1
+    , date.getDate    ()
+    ]
+    
+    return [ { 'date-parts': rValue } ]
+  }
+  
+  var DOMToValue = function ( v ) { return $( v ).val() }
+    , emptyValue = function ( v ) { return !!v }
+    , getName    = function ( i ) { return i.toArray().map( DOMToValue ).filter( emptyValue ).map( parseName ) }
+  
+  var formFields = [
+    { propName: 'author', selector: '.cjs-author', prepFunc: getName }
+  , { propName: 'editor', selector: '.cjs-editor', prepFunc: getName }
+  , { propName: 'page', selector: '.cjs-pages'/*TODO*/ }
+  
+    //BEGIN Static
+  , { propName: 'type', selector: '.cjs-type' }
+  
+  , { propName: 'title', selector: '.cjs-title' }
+  , { propName: 'container-title', selector: '.cjs-journal, .cjs-publisher' }
+  
+  , { propName: 'year', selector: '.cjs-year' }
+  , { propName: 'issue', selector: '.cjs-number' }
+  , { propName: 'volume', selector: '.cjs-volume' }
+  , { propName: 'edition', selector: '.cjs-print' }
+  
+  , { propName: 'DOI', selector: '.cjs-doi' }
+  , { propName: 'ISBN', selector: '.cjs-isbn' }
+    //END
+  ]
   
   /**
    * 
@@ -86,8 +137,8 @@ var jQueryCite = (function(){
       return new jQueryCite( options )
     
     /**
-    * 
-    */
+     * 
+     */
     this._options = Object.assign( {
       lang : 'en',
       inputForm: '../docs/src/html/form-en.html',
@@ -161,6 +212,59 @@ var jQueryCite = (function(){
     /**
      * 
      */
+    this.emptyForm = function () {
+      this._draft.reset()
+      this.updateDraft()
+      
+      var section = this._form.in.find( 'section.cjs-active' )
+      
+      section.find( 'input, textarea').val('')
+      section.find('.cjs-chapterauthor').slice(1).remove()
+      section.find('.cjs-author').slice(1).remove()
+      section.find('.cjs-editor').slice(1).remove()
+      section.find('.cjs-place').slice(1).remove()
+    }
+    
+    /**
+     * 
+     */
+    this.getFormData = function () {
+      var data
+        , form = this._form.in.find( '.cjs-inputform[aria-hidden="false"]' )
+        , fType= form.attr( 'id' ).replace( /^cjs-in-/, '' )
+      
+      switch ( fType ) {
+	case 'form':
+	  
+	  data = {}
+	  
+	  for ( var fieldIndex = 0; fieldIndex < formFields.length; fieldIndex++ ) {
+	    var field = formFields[ fieldIndex ]
+	      ,$field = $( field.selector )
+	      , input = $field.toArray().map( DOMToValue ).filter( emptyValue )[ 0 ]
+	      , value = field.prepFunc ? field.prepFunc( $field ) : input
+	    
+	    if ( input && value )
+	      data[ field.propName ] = value
+	  }
+	  
+	  break;
+	
+	case 'json':
+	case 'bibtex':
+	default:
+	  data = form.find( 'textarea' ).val()
+	  break;
+      }
+      
+      console.log( data )
+      
+      return data
+    }
+    
+    /**
+     * 
+     */
     this.insertOutputForm = function ( form, options ) {
       var self = this
         , options = Object.assign( options || {}, self._options )
@@ -201,8 +305,6 @@ var jQueryCite = (function(){
 	return self
       }
       
-      form.empty = function () { emptyForm.call( self ) }
-      
       self._form.in = form
       
       var options = Object.assign( options || {}, self._options )
@@ -223,13 +325,13 @@ var jQueryCite = (function(){
 	  
 	  options.add( self )
 	  
-	  form.empty()
+	  self.emptyForm()
 	} )
 	
 	form.find( 'input[type="reset"]' ).click( function ( e ) {
 	  e.preventDefault()
 	  
-	  form.empty()
+	  self.emptyForm()
 	} )
 	
 	form.find( '#cjs-in-json, #cjs-in-bibtex' ).find( 'textarea' ).change( function () {
@@ -238,10 +340,10 @@ var jQueryCite = (function(){
 	  self.updateDraft()
 	} )
 	
-	form.find( '#cjs-in-form' ).find( 'input' ).change( function () {
-	  var data = {
-	    //TODO
-	  }
+	form.find( '#cjs-in-form' ).find( 'input' ).each( function () {
+	  $( this ).attr( 'required', '' )
+	} ).change( function () {
+	  var data = self.getFormData()
 	  
 	  for ( var i in data ) {
 	    if ( !data[ i ] || data[ i ] === '' )
@@ -254,73 +356,11 @@ var jQueryCite = (function(){
 	} )
 	//END
 	
-	//BEGIN Triggering stuff
+	//BEGIN Setup
 	form.find( '.cjs-input' ).tabs( {
 	  hide: { effect: 'slide', direction: 'left', duration: 50 },
 	  show: { effect: 'slide', direction: 'right', duration: 150 }
 	} )
-	
-        self._draft.set( [
-          {
-            id: "Q23571040",
-            type: "article-journal",
-            title: "Correlation of the Base Strengths of Amines 1",
-            DOI: "10.1021/ja01577a030",
-            author: [
-              {
-                given: "H. K.",
-                family: "Hall"
-              }
-            ],
-            issued: [
-              {
-                'date-parts': [ "1957", "1", "1" ]
-              }
-            ],
-            'container-title': "Journal of the American Chemical Society",
-            volume: "79",
-            issue: "20",
-            page: "5441-5444"
-          },
-	  {
-	    "type": "article-journal",
-	    "author": [
-	      {
-		"given": "Christoph",
-		"family": "Steinbeck"
-	      },
-	      {
-		"given": "Yongquan",
-		"family": "Han"
-	      },
-	      {
-		"given": "Stefan",
-		"family": "Kuhn"
-	      },
-	      {
-		"given": "Oliver",
-		"family": "Horlacher"
-	      },
-	      {
-		"given": "Edgar",
-		"family": "Luttmann"
-	      },
-	      {
-		"given": "Egon",
-		"family": "Willighagen"
-	      }
-	    ],
-	    "year": "2003",
-	    "title": "The Chemistry Development Kit (CDK): an open-source Java library for Chemo- and Bioinformatics",
-	    "container-title": "Journal of chemical information and computer sciences",
-	    "volume": "43",
-	    "issue": "2",
-	    "page": "493-500",
-	    "DOI": "10.1021/ci025584y",
-	    "ISBN": "0095-2338",
-	    "id": "Steinbeck2003"
-	  }
-        ] )
         
 	self.updateFields()
 	

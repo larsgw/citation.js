@@ -68,7 +68,7 @@ body { margin: 0; }
 /*BEGIN Material*/
 .cjs fieldset {
   border: none;
-  margin: 2em 0;
+  margin: 2em 0 2.5em 0;
   padding: 0;
 }
 
@@ -123,7 +123,14 @@ body { margin: 0; }
   border-bottom: 2px solid #2196F3;
 }
 
-.cjs label   { white-space:nowrap;position:relative;margin-right:16px; }
+.cjs label {
+  display: inline-block;
+  position: relative;
+  height: 26px;
+  margin-right: 16px;
+  
+  white-space: nowrap;
+}
 
 .cjs label * { vertical-align: middle; }
 
@@ -153,6 +160,11 @@ body { margin: 0; }
   transition: border .1s linear;
 }
 
+.cjs label input[type="text"] + input,
+.cjs label input[type="number"] + input {
+  margin-left: 8px;
+}
+
 .cjs label input[type="date"] {
   font-size: 14px;
 }
@@ -168,13 +180,12 @@ body { margin: 0; }
 
 .cjs label legend {
   display: inline-block;
-  position: relative;
-  left: -200px;
+  position: absolute;
+  left: 0;
+  bottom: 0;
   height: 26px;
   padding: 4px 0;
   
-  bottom: 0;
-  text-align: left;
   opacity: .5;
   
   color: inherit;
@@ -186,17 +197,21 @@ body { margin: 0; }
       -ms-pointer-events: none;
           pointer-events: none;
   
-  transition: all .1s;
+  transition: all .3s cubic-bezier(0.4,0,0.2,1);
 }
 
-.cjs label input[type="date"] + legend,
-.cjs label input:focus + legend {
-  bottom: 20px;
-  left: -205px;
+.cjs label input[type="date"] ~ legend,
+.cjs label input:focus ~ legend,
+.cjs label input:valid ~ legend {
+  bottom: 26px;
   height: 16px;
   padding: 0;
   
   font-size: 13px;
+}
+
+.cjs label input:focus ~ legend {
+  color: #2196F3;
 }
 /*END*/
 
