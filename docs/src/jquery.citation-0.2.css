@@ -219,7 +219,7 @@ body { margin: 0; }
   margin-left: 48px;
 }
 
-.cjs-draft {
+.cjs-draft, .cjs-output {
   margin: 1em 0;
   width: 75%;
   
@@ -228,13 +228,14 @@ body { margin: 0; }
   background-color: white;
 }
 
-.cjs-draft .csl-bib-body br { display: none; }
-.cjs-draft .csl-bib-body .csl-entry { padding: 16px;border-top: 1px solid rgba(0,0,0,.12); }
-.cjs-draft .csl-bib-body .csl-entry:first-child { border: none; }
+.cjs-draft  .csl-bib-body br,
+.cjs-output .csl-bib-body br { display: none; }
+.cjs-draft  .csl-bib-body .csl-entry,
+.cjs-output .csl-bib-body .csl-entry { padding: 16px;border-top: 1px solid rgba(0,0,0,.12); }
+.cjs-draft  .csl-bib-body .csl-entry:first-child,
+.cjs-output .csl-bib-body .csl-entry:first-child { border: none; }
 
 .cjs-settings fieldset {
   display: inline;
   margin: 0 2em 0 0;
 }
-
-/* .cjs-settings fieldset */

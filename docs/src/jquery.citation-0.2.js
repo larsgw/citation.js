@@ -115,7 +115,7 @@ var jQueryCite = (function(){
   , { propName: 'type', selector: '.cjs-type' }
   
   , { propName: 'title', selector: '.cjs-title' }
-  , { propName: 'container-title', selector: '.cjs-journal, .cjs-publisher' }
+  , { propName: 'container-title', selector: '.cjs-inputform[aria-hidden="false"] .cjs-journal, .cjs-inputform[aria-hidden="false"] .cjs-publisher' }
   
   , { propName: 'year', selector: '.cjs-year' }
   , { propName: 'issue', selector: '.cjs-number' }
@@ -143,10 +143,7 @@ var jQueryCite = (function(){
       lang : 'en',
       inputForm: '../docs/src/html/form-en.html',
       outputForm: '../docs/src/html/form-out-en.html',
-      add  : function ( self ) {
-	console.log(self._form.out,self._data.get())
-	self._form.out.html( self._data.get() )
-      },
+      add  : function ( self ) {},
       defaultOptions: {
 	format: 'string',
 	type  : 'html',
@@ -187,7 +184,9 @@ var jQueryCite = (function(){
     this.updateOut = function () {
       this._form.out
         .find( '.cjs-output' )
-        .html( this._data.get( {}, true ) )
+        .html( this._data.get( this._data._options, true ) )
+      
+      console.log(this._data._options)
       
       return this
     }
@@ -278,19 +277,20 @@ var jQueryCite = (function(){
 	
 	//BEGIN Event listeners
 	form.find( '#cjs-opt select.cjs' ).change( function () {
-	  var options = {
+	  var newOptions = {
 	    format: 'string'
 	  , type:   form.find('#cjs-opt .cjs-type').val()
 	  , style:  form.find('#cjs-opt .cjs-style').val()
 	  , lang:   form.find('#cjs-opt .cjs-lan').val()
 	  }
 	  
-	  self._data.options( options, true )
-	  
+	  self._data.options( newOptions, true )
 	  self.updateOut()
 	} )
 	//END
 	
+        self._data.options( self._options.defaultOptions, true )
+        
       } )
     }
     
@@ -325,6 +325,7 @@ var jQueryCite = (function(){
 	  
 	  options.add( self )
 	  
+          self.updateOut()
 	  self.emptyForm()
 	} )
 	
