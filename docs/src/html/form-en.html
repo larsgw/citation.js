@@ -12,126 +12,95 @@
     <fieldset class="cjs cjs-book cjs-chapter cjs-article cjs-e-article cjs-e-publication cjs-paper cjs-newspaper-article">
       <select class="cjs cjs-type">
 	<option value="book">Book</option>
-	<option value="chapter">Chapter</option>
-	<option value="article">Article</option>
-	<option value="e-article">E-article</option>
-	<option value="e-publication">E-publication</option>
-	<option value="paper">Paper</option>
-	<option value="newspaper-article">Newspaper</option>
+	<option value="incollection">Chapter</option>
+	<option value="paper-conference">Paper</option>
+	<option value="article-journal">Article</option>
+	<option value="article-newspaper">Newspaper</option>
+	<option value="webpage">Webpage</option>
       </select>
     </fieldset>
     
-    <fieldset class="cjs cjs-chapter">
-      <label>
-	<input class="cjs cjs-chapterauthor" type="text"></input>
-        <legend>Chapter author</legend>
-      </label>
-    </fieldset>
-    
-    <fieldset class="cjs cjs-chapter">
-      <label>
-	<input class="cjs cjs-chapter" type="text"></input>
-	<legend>Chapter</legend>
-      </label>
-    </fieldset>
-    
-    <fieldset class="cjs cjs-book cjs-chapter cjs-article cjs-e-article cjs-e-publication cjs-paper cjs-newspaper-article">
+    <fieldset class="cjs cjs-field-book cjs-field-incollection cjs-field-paper-conference">
       <label>
 	<input class="cjs cjs-author" type="text"></input>
-	<legend>Author</legend>
+        <legend>Author</legend>
       </label>
     </fieldset>
     
-    <fieldset class="cjs cjs-book cjs-chapter">
+    <fieldset class="cjs cjs-field-book cjs-field-incollection cjs-field-paper-conference">
       <label>
 	<input class="cjs cjs-editor" type="text"></input>
-	<legend>Editor</legend>
+        <legend>Editor</legend>
       </label>
     </fieldset>
     
-    <fieldset class="cjs cjs-e-publication cjs-newspaper-article">
+    <fieldset class="cjs cjs-field-book cjs-field-incollection cjs-field-paper-conference">
       <label>
-	<input class="cjs cjs-pubdate" type="date"></input>
-	<legend>Publication date</legend>
+	<input class="cjs cjs-accessed" type="date"></input>
+        <legend>Accessed</legend>
       </label>
     </fieldset>
     
-    <fieldset class="cjs cjs-e-article cjs-e-publication">
+    <fieldset class="cjs cjs-field-book cjs-field-incollection cjs-field-paper-conference">
       <label>
-	<input class="cjs cjs-date" type="date"></input>
-	<legend>Citated on</legend>
+	<input class="cjs cjs-issued" type="date"></input>
+        <legend>Publication date</legend>
       </label>
     </fieldset>
     
-    <fieldset class="cjs cjs-book cjs-e-article cjs-chapter cjs-article cjs-paper">
+    <fieldset class="cjs cjs-field-book cjs-field-incollection">
       <label>
-	<input class="cjs cjs-year" type="number" min="1950"></input>
-	<legend>Year</legend>
+	<input class="cjs cjs-edition" type="number" min="0"></input>
+        <legend>Edition</legend>
       </label>
     </fieldset>
     
-    <fieldset class="cjs cjs-book cjs-chapter cjs-article cjs-e-article cjs-e-publication cjs-paper cjs-newspaper-article">
+    <fieldset class="cjs cjs-field-book cjs-field-incollection cjs-field-paper-conference">
       <label>
-        <input class="cjs cjs-title" type="text"></input>
-        <legend>Title</legend>
+	<input class="cjs cjs-isbn" type="text"></input>
+        <legend>ISBN</legend>
       </label>
     </fieldset>
     
-    <fieldset class="cjs cjs-article cjs-e-article cjs-newspaper-article">
+    <fieldset class="cjs cjs-field-book cjs-field-incollection">
       <label>
-        <input class="cjs cjs-journal" type="text"></input>
-        <legend>Journal</legend>
-      </label>
-    </fieldset>
-    
-    <fieldset class="cjs cjs-article cjs-e-article cjs-journal">
-      <label>
-        <input class="cjs cjs-volume" type="number"></input>
-        <legend>Volume</legend>
-      </label>
-    </fieldset>
-    
-    <fieldset class="cjs cjs-article cjs-e-article cjs-journal">
-      <label>
-        <input class="cjs cjs-number" type="number"></input>
-        <legend>Number</legend>
-      </label>
-    </fieldset>
-    
-    <fieldset class="cjs cjs-chapter cjs-article cjs-e-article cjs-paper cjs-newspaper-article">
-      <label>
-        <input class="cjs cjs-pages cjs-from" type="number"></input>
-        <legend>First page</legend>
-        <input class="cjs cjs-pages cjs-to" type="number"></input>
-        <legend>Last page</legend>
-      </label>
-    </fieldset>
-    
-    <fieldset class="cjs cjs-e-article cjs-e-publication">
-      <label>
-        <input class="cjs cjs-url" type="text"></input>
-        <legend>URL</legend>
-      </label>
-    </fieldset>
-    
-    <fieldset class="cjs cjs-book cjs-chapter">
-      <label>
-        <input class="cjs cjs-print" type="number"></input>
-        <legend>Print</legend>
-      </label>
-    </fieldset>
-    
-    <fieldset class="cjs cjs-book cjs-chapter">
-      <label>
-        <input class="cjs cjs-place" type="text"></input>
+	<input class="cjs cjs-place" type="text"></input>
         <legend>Place</legend>
       </label>
     </fieldset>
     
-    <fieldset class="cjs cjs-book cjs-chapter">
+    <fieldset class="cjs cjs-field-paper-conference">
       <label>
-        <input class="cjs cjs-publisher" type="text"></input>
+	<input class="cjs cjs-publisher-place" type="text"></input>
+        <legend>Place</legend>
+      </label>
+    </fieldset>
+    
+    <fieldset class="cjs cjs-field-boo cjs-field-incollectionk">
+      <label>
+	<input class="cjs cjs-publisher" type="text"></input>
         <legend>Publisher</legend>
+      </label>
+    </fieldset>
+    
+    <fieldset class="cjs cjs-field-book cjs-field-incollection">
+      <label>
+	<input class="cjs cjs-title" type="text"></input>
+        <legend>Title</legend>
+      </label>
+    </fieldset>
+    
+    <fieldset class="cjs cjs-field-book cjs-field-incollection">
+      <label>
+	<input class="cjs cjs-volume" type="number" min="0"></input>
+        <legend>Volume</legend>
+      </label>
+    </fieldset>
+    
+    <fieldset class="cjs cjs-field-book cjs-field-incollection">
+      <label>
+	<input class="cjs cjs-url" type="url"></input>
+        <legend>URL</legend>
       </label>
     </fieldset>
     <!--END-->

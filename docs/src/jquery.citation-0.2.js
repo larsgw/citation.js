@@ -55,6 +55,7 @@ jQuery.fn.CJSMultipleInput = function () {
     else if ( !elm.val() &&  $(elm).next().val() )
       elm.remove()
   }
+  
   $(this).each( function () {
     var elm = $(this)
     
@@ -107,24 +108,6 @@ var jQueryCite = (function(){
     , getName    = function ( i ) { return i.toArray().map( DOMToValue ).filter( emptyValue ).map( parseName ) }
   
   var formFields = [
-    { propName: 'author', selector: '.cjs-author', prepFunc: getName }
-  , { propName: 'editor', selector: '.cjs-editor', prepFunc: getName }
-  , { propName: 'page', selector: '.cjs-pages'/*TODO*/ }
-  
-    //BEGIN Static
-  , { propName: 'type', selector: '.cjs-type' }
-  
-  , { propName: 'title', selector: '.cjs-title' }
-  , { propName: 'container-title', selector: '.cjs-inputform[aria-hidden="false"] .cjs-journal, .cjs-inputform[aria-hidden="false"] .cjs-publisher' }
-  
-  , { propName: 'year', selector: '.cjs-year' }
-  , { propName: 'issue', selector: '.cjs-number' }
-  , { propName: 'volume', selector: '.cjs-volume' }
-  , { propName: 'edition', selector: '.cjs-print' }
-  
-  , { propName: 'DOI', selector: '.cjs-doi' }
-  , { propName: 'ISBN', selector: '.cjs-isbn' }
-    //END
   ]
   
   /**
