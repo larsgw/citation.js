@@ -43,26 +43,33 @@
  * 
  */
 jQuery.fn.CJSMultipleInput = function () {
-  var change = function () {
-    var elm = $( this )
-    
-	  if (  elm.val() &&  $(elm).last().val() )
-      elm.after( elm.clone( true ).val( '' ) )
-    
-    else if (  elm.val() && !$(elm).next().val() )
-      elm.next().remove()
-    
-    else if ( !elm.val() &&  $(elm).next().val() )
-      elm.remove()
-  }
-  
   $(this).each( function () {
     var elm = $(this)
     
     elm.addClass( 'cjs-multipleinput' )
     
-    elm.keydown( function ( e ) { if ( e.keyCode === 9 ) change.call( this ) } )
-    elm.change( change )
+    elm.focus( function () {
+      
+      var $this = $( this )
+        , $last = $this.parent().children( 'input' ).last()
+      
+      if ( $this.is( $last ) )
+        $this.after( $this.clone( true ).val( '' ) )
+      
+    } )
+    
+    elm.blur( function () {
+      
+      var $this = $( this )
+        , $last = $this.parent().children( 'input' ).last()
+      
+      if ( $this.is( $last ) || ( $this.is( $last.prev() ) && $this.val() !== '' ) )
+        return undefined
+      
+      $last.remove()
+      
+    } )
+    
   } )
 }
 
@@ -105,9 +112,36 @@ var jQueryCite = (function(){
   
   var DOMToValue = function ( v ) { return $( v ).val() }
     , emptyValue = function ( v ) { return !!v }
-    , getName    = function ( i ) { return i.toArray().map( DOMToValue ).filter( emptyValue ).map( parseName ) }
+    , $ToValList = function ( i ) { return i.toArray().map( DOMToValue ).filter( emptyValue ) }
+    
+    , getName    = function ( i ) { return $ToValList( i ).map( parseName ) }
+    , getPages   = function ( i ) { return $ToValList( i ).slice( 0, 2 ).join( '-' ) }
+    , getDate    = function ( i ) { return parseDate( i.val() ) }
   
   var formFields = [
+    { propName: 'title' }
+  , { propName: 'container-title' }
+  
+  , { propName: 'author', prepFunc: getName }
+  , { propName: 'container-author', prepFunc: getName }
+  , { propName: 'editor', prepFunc: getName }
+  
+  , { propName: 'edition' }
+  , { propName: 'issue' }
+  , { propName: 'volume' }
+  , { propName: 'page', prepFunc: getPages }
+  
+  , { propName: 'event' }
+  , { propName: 'publisher' }
+  , { propName: 'publisher-place' }
+  
+  , { propName: 'URL' }
+  , { propName: 'DOI' }
+  , { propName: 'ISBN' }
+  , { propName: 'ISSN' }
+  
+  , { propName: 'issued', prepFunc: getDate }
+  , { propName: 'accessed', prepFunc: getDate }
   ]
   
   /**
@@ -169,8 +203,6 @@ var jQueryCite = (function(){
         .find( '.cjs-output' )
         .html( this._data.get( this._data._options, true ) )
       
-      console.log(this._data._options)
-      
       return this
     }
     
@@ -179,13 +211,15 @@ var jQueryCite = (function(){
      */
     this.updateFields = function () {
       var form = this._form.in
-        , val = form.find('select.cjs-type').val()
+        , val  = form.find('[data-cjs-field="type"]').val()
       
-      form.find( '#cjs-in-form fieldset' ).each( function () {
-	if ( $( this ).hasClass( 'cjs-' + val ) )
-	  $( this ).show()
+      form.find( '#cjs-in-form fieldset[data-cjs-field-type]' ).each( function () {
+	var $this = $( this )
+	
+	if ( $this.is( '[data-cjs-field-type~="' + val + '"]' ) )
+	  $this.attr( 'data-cjs-field-state', 'visible' )
 	else
-	  $( this ).hide()
+	  $this.attr( 'data-cjs-field-state', 'hidden' )
       } )
       
       return this
@@ -200,11 +234,10 @@ var jQueryCite = (function(){
       
       var section = this._form.in.find( 'section.cjs-active' )
       
-      section.find( 'input, textarea').val('')
-      section.find('.cjs-chapterauthor').slice(1).remove()
-      section.find('.cjs-author').slice(1).remove()
-      section.find('.cjs-editor').slice(1).remove()
-      section.find('.cjs-place').slice(1).remove()
+      section.find( 'input, textarea' ).val( '' )
+      section.find( 'fieldset' ).each( function () {
+	$( this ).find( '.cjs-multipleinput' ).slice( 1 ).remove()
+      } )
     }
     
     /**
@@ -222,11 +255,14 @@ var jQueryCite = (function(){
 	  
 	  for ( var fieldIndex = 0; fieldIndex < formFields.length; fieldIndex++ ) {
 	    var field = formFields[ fieldIndex ]
-	      ,$field = $( field.selector )
-	      , input = $field.toArray().map( DOMToValue ).filter( emptyValue )[ 0 ]
+	      
+	      ,$field = form.find( 'fieldset[data-cjs-field-state="visible"]' )
+			    .find( '[data-cjs-field="' + field.propName + '"]' )
+	      
+	      , input = $ToValList( $field )[ 0 ]
 	      , value = field.prepFunc ? field.prepFunc( $field ) : input
 	    
-	    if ( input && value )
+	    if ( $field.data( 'cjs-field-state' ) !== 'hidden' && input && value )
 	      data[ field.propName ] = value
 	  }
 	  
@@ -238,8 +274,6 @@ var jQueryCite = (function(){
 	  data = form.find( 'textarea' ).val()
 	  break;
       }
-      
-      console.log( data )
       
       return data
     }
@@ -259,7 +293,7 @@ var jQueryCite = (function(){
       } ).load( options.outputForm, function () {
 	
 	//BEGIN Event listeners
-	form.find( '#cjs-opt select.cjs' ).change( function () {
+	form.find( '#cjs-opt select' ).change( function () {
 	  var newOptions = {
 	    format: 'string'
 	  , type:   form.find('#cjs-opt .cjs-type').val()
@@ -270,6 +304,100 @@ var jQueryCite = (function(){
 	  self._data.options( newOptions, true )
 	  self.updateOut()
 	} )
+        
+        form.find( '.cjs-export button' )
+          .click( function ( e ) { e.preventDefault() })
+          .filter( '.cjs-export-copy' )
+            .click( function () {
+              
+              var text = self._data.get( self._data._options, true )
+                , $tmp = $( '<div contenteditable></div>' )
+              
+              var fb = function () {
+                $tmp.remove()
+                
+                if ( window.prompt( 'Please copy the following text:', text ) !== null )
+                  return true
+                else
+                  return false
+              }
+              
+              $tmp
+                .html( text )
+                .appendTo( 'body' )
+                .select()
+              
+              try {
+                
+                console.log($tmp.text())
+                
+                if ( document.execCommand( 'copy' ) ) {
+                  $tmp.remove()
+                  return true
+                }
+                fb()
+              } catch (e) {
+                fb()
+              }
+              
+            } )
+          .end()
+          .filter( '.cjs-export-save' )
+            .click( function () {
+              
+              var extensions = {
+                'application/msword'  : 'docx'
+              , 'text/plain'          : 'txt'
+              , 'application/json'    : 'json'
+              , 'application/x-bibtex': 'bib'
+              }
+              
+              var opt  = self._data._options
+                , gopt = Object.assign( {}, opt )
+                , mime = 'text/plain'
+              
+              if ( opt.style.match( /^citation-/ ) ) {
+                if ( opt.type === 'html' )
+                  mime = 'application/msword'
+                else
+                  mime = 'text/plain'
+              }
+              
+              if ( opt.style === 'bibtex' )
+                mime = 'application/x-bibtex',
+                gopt.type = gopt.format = 'string'
+              
+              if ( opt.style === 'csl' )
+                mime = 'application/json',
+                gopt.type = gopt.format = 'string'
+              
+              var date = new Date()
+                , dstr = [ date.getDate (), date.getMonth  (), date.getFullYear() ].join( '/' )
+                , tstr = [ date.getHours(), date.getMinutes(), date.getSeconds () ].join( '-' )
+                , name = [ 'Bibliography', dstr, tstr ].join( '_' )
+                , ext  = extensions[ mime ]
+                , file = [ name, ext ].join( '.' )
+                
+                , str  = self._data.get( gopt, true )
+                , blob = new Blob( [ '\ufeff', str ], { type: mime } )
+                
+                , url  = URL.createObjectURL( blob )
+                , link = document.createElement( 'A' )
+              
+              link.href     = url
+              link.download = file
+              
+              document.body.appendChild( link )
+              
+              if ( navigator.msSaveOrOpenBlob )
+                navigator.msSaveOrOpenBlob( blob, file )
+              else
+                link.click()
+              
+              document.body.removeChild( link )
+              
+            } )
+          .end()
 	//END
 	
         self._data.options( self._options.defaultOptions, true )
@@ -295,10 +423,11 @@ var jQueryCite = (function(){
       form.addClass( 'cjs cjs-in' ).load( options.inputForm, function () {
 	
 	//BEGIN Event listeners
-	form.find( '.cjs-chapterauthor, .cjs-author, .cjs-editor, .cjs-place' ).CJSMultipleInput()
+	form.find( '[data-cjs-field="author"], [data-cjs-field="container-author"], [data-cjs-field="editor"]' )
+	  .CJSMultipleInput()
 	
-	form.find( '#cjs-in-form select.cjs-type' ).change( function () {
-          self.updateFields.call( self )
+	form.find( '#cjs-in-form select[data-cjs-field="type"]' ).change( function () {
+          self.updateFields()
         } )
 	
 	form.find( 'input[type="submit"]' ).click( function ( e ) {

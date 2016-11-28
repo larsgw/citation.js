@@ -55,16 +55,6 @@
   }
 /*END*/
 
-body { margin: 0; }
-
-.cjs h1 {
-  background-color: #FFC107;
-  padding: .83em 104px;
-  margin: 0;
-  color: white;
-  font-weight: 400;
-}
-
 /*BEGIN Material*/
 .cjs fieldset {
   border: none;
@@ -215,6 +205,16 @@ body { margin: 0; }
 }
 /*END*/
 
+body { margin: 0; }
+
+.cjs h1 {
+  background-color: #FFC107;
+  padding: .83em 104px;
+  margin: 0;
+  color: white;
+  font-weight: 400;
+}
+
 .cjs-piece {
   margin-left: 48px;
 }
@@ -234,6 +234,10 @@ body { margin: 0; }
 .cjs-output .csl-bib-body .csl-entry { padding: 16px;border-top: 1px solid rgba(0,0,0,.12); }
 .cjs-draft  .csl-bib-body .csl-entry:first-child,
 .cjs-output .csl-bib-body .csl-entry:first-child { border: none; }
+
+#cjs-in-form fieldset[data-cjs-field-state="hidden"] {
+  display: none;
+}
 
 .cjs-settings fieldset {
   display: inline;
