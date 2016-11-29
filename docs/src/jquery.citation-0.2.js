@@ -201,7 +201,17 @@ var jQueryCite = (function(){
     this.updateOut = function () {
       this._form.out
         .find( '.cjs-output' )
-        .html( this._data.get( this._data._options, true ) )
+        .html( this._data.get( {}, true ) )
+        
+        /*.find( '.csl-entry' ).each( function () {
+          var $this = $( this )
+          
+          $( '<div title="Remove entry" class="csl-entry-remove">x</div>' )
+            .appendTo( $this )
+            .click( function () {
+              
+            } )
+        } )*/
       
       return this
     }
@@ -301,17 +311,31 @@ var jQueryCite = (function(){
 	  , lang:   form.find('#cjs-opt .cjs-lan').val()
 	  }
 	  
+	  var button = form.find( '.cjs-output-edit-sort' )
+          
+	  if ( newOptions.style.match( /^citation-/ ) )
+            button.attr( 'disabled', '' )
+          else
+            button.removeAttr( 'disabled' )
+	  
 	  self._data.options( newOptions, true )
 	  self.updateOut()
 	} )
         
-        form.find( '.cjs-export button' )
+        form.find( '.cjs-export, .cjs-output-edit' ).find( 'button' )
           .click( function ( e ) { e.preventDefault() })
+          .filter( '.cjs-output-edit-sort' )
+            .click( function () {
+              self._data.sort( true )
+              
+              self.updateOut()
+            } )
+          .end()
           .filter( '.cjs-export-copy' )
             .click( function () {
               
-              var text = self._data.get( self._data._options, true )
-                , $tmp = $( '<div contenteditable></div>' )
+              var text = self._form.out.find( '.cjs-output' ).text()
+                , $tmp = $( '<textarea>' )
               
               var fb = function () {
                 $tmp.remove()
@@ -323,21 +347,22 @@ var jQueryCite = (function(){
               }
               
               $tmp
-                .html( text )
+                .val( text )
                 .appendTo( 'body' )
                 .select()
               
               try {
                 
-                console.log($tmp.text())
-                
                 if ( document.execCommand( 'copy' ) ) {
                   $tmp.remove()
                   return true
-                }
-                fb()
+                } else
+                  fb()
+                
               } catch (e) {
+                
                 fb()
+                
               }
               
             } )
@@ -400,7 +425,9 @@ var jQueryCite = (function(){
           .end()
 	//END
 	
-        self._data.options( self._options.defaultOptions, true )
+        form.find( '#cjs-opt select' ).first().trigger( 'change' )
+        
+        //self._data.options( self._options.defaultOptions, true )
         
       } )
     }

@@ -285,6 +285,23 @@ var varCSLLocales = {
 }
 
 /**
+ * Object containing HTML strings for building JSON and BibTeX. Made to match citeproc, for compatability.
+ * 
+ * @constant varHTMLDict
+ * @default
+ */
+var varHTMLDict = {
+  wr_start : '<div class="csl-bib-body">'
+, wr_end   : '</div>'
+, en_start : '<div class="csl-entry">'
+, en_end   : '</div>'
+, ul_start : '<ul style="list-style-type:none">'
+, ul_end   : '</ul>'
+, li_start : '<li>'
+, li_end   : '</li>'
+}
+
+/**
  * Convert a CSL date into human-readable format
  * 
  * @function getDate
@@ -594,22 +611,17 @@ var getBibTeXJSON = function ( src ) {
  */
 var getBibTeX = function ( src, html ) {
   var res = ''
-    , dict= {
-    ul_start : '<ul style="list-style-type:none">'
-  , ul_end   : '</ul>'
-  , li_start : '<li>'
-  , li_end   : '</li>'
-  }
+    , dict= varHTMLDict
   
   if ( html )
-    res += dict.ul_start
+    res += dict.wr_start
   
   for ( var i = 0; i < src.length; i++ ) {
     var entry = src[ i ]
       , bib   = getBibTeXJSON( entry )
     
     if ( html )
-      res += dict.li_start
+      res += dict.en_start
     
     res += '@' + bib.type + '{' + bib.label + ','
     
@@ -661,11 +673,11 @@ var getBibTeX = function ( src, html ) {
     res += '}'
     
     if ( html )
-      res += dict.li_end
+      res += dict.en_end
   }
   
   if ( html )
-    res += dict.ul_end
+    res += dict.wr_end
   else
     res += '\n'
   
@@ -1728,6 +1740,62 @@ var getJSONValueHTML = function ( src ) {
 }
 
 /**
+ * Get a JSON HTML string from CSL
+ * 
+ * @method getJSON
+ * 
+ * @param {Object[]} src - Input CSL
+ * 
+ * @return {String} JSON HTML string
+ */
+var getJSON = function ( src ) {
+  var res = ''
+    , dict= varHTMLDict
+  
+  res += dict.wr_start
+  res += '['
+  
+  for ( var i = 0; i < src.length; i++ ) {
+    var entry = src[ i ]
+    
+    res += dict.en_start
+    res += '{'
+    
+    res += dict.ul_start
+    res += dict.li_start
+    
+    var props = Object.keys( entry )
+    
+    for ( var propIndex = 0; propIndex < props.length; propIndex++ ) {
+      var prop = props[ propIndex ]
+        , value= entry[ prop ]
+      
+      res += prop + ':' + getJSONValueHTML( value )
+      
+      if ( propIndex + 1 < props.length )
+        res += ',',
+        res += dict.li_end,
+        res += dict.li_start
+    }
+    
+    res += dict.li_end
+    res += dict.ul_end
+    
+    res += '}'
+    
+    if ( i + 1 < src.length )
+      res += ','
+    
+    res += dict.en_end
+  }
+  
+  res += dict.wr_end
+  res += ']'
+  
+  return res
+}
+
+/**
  * @author Lars Willighagen
  * @version 0.2
  * @license
@@ -1986,12 +2054,15 @@ var getJSONValueHTML = function ( src ) {
    * @memberof Cite
    * @this Cite
    * 
+   * @param {Boolean} nolog - Hide this call from the log (i.e. when used internally)
+   * 
    * @return {Cite} The updated parent object
    */
-  this.sort = function () {
-    this._log.push( { name: 'sort', version: this.currentVersion() + 1, arguments: [] } )
+  this.sort = function ( nolog ) {
+    if( !nolog )
+      this._log.push( { name: 'sort', version: this.currentVersion() + 1, arguments: [] } )
     
-    this.data.sort( function ( a, b ) {
+    this.data = this.data.sort( function ( a, b ) {
       var labela = getLabel( a )
 	, labelb = getLabel( b )
       
@@ -2004,23 +2075,23 @@ var getJSONValueHTML = function ( src ) {
   }
   
   /**
-  * Get formatted data from your object. For more info, see [Output](../#output).
-  * 
-  * @method get
-  * @memberof Cite
-  * @this Cite
-  * 
-  * @param {Object} options - The options for the output
-  * @param {String} [options.format="real"] - The outputted datatype. Real representation (`"real"`, e.g. DOM Object for HTML, JavaScript Object for JSON) or String representation ( `"string"` )
-  * @param {String} [options.type="json"] - The format of the output. `"string"`, `"html"` or `"json"`
-  * @param {String} [options.style="csl"] - The style of the output. See [Output](../#output)
-  * @param {String} [options.lang="en-US"] - The language of the output. [RFC 5646](https://tools.ietf.org/html/rfc5646) codes
-  * @param {String} [options.locale] - Custom CSL locale for citeproc
-  * @param {String} [options.template] - Custom CSL style template for citeproc
-  * @param {Boolean} nolog - Hide this call from the log (i.e. when used internally)
-  * 
-  * @return {String|Object[]} The formatted data
-  */
+   * Get formatted data from your object. For more info, see [Output](../#output).
+   * 
+   * @method get
+   * @memberof Cite
+   * @this Cite
+   * 
+   * @param {Object} options - The options for the output
+   * @param {String} [options.format="real"] - The outputted datatype. Real representation (`"real"`, e.g. DOM Object for HTML, JavaScript Object for JSON) or String representation ( `"string"` )
+   * @param {String} [options.type="json"] - The format of the output. `"string"`, `"html"` or `"json"`
+   * @param {String} [options.style="csl"] - The style of the output. See [Output](../#output)
+   * @param {String} [options.lang="en-US"] - The language of the output. [RFC 5646](https://tools.ietf.org/html/rfc5646) codes
+   * @param {String} [options.locale] - Custom CSL locale for citeproc
+   * @param {String} [options.template] - Custom CSL style template for citeproc
+   * @param {Boolean} nolog - Hide this call from the log (i.e. when used internally)
+   * 
+   * @return {String|Object[]} The formatted data
+   */
   this.get = function ( options, nolog ) {
     if( !nolog )
       this._log.push( { name: 'get', arguments: [ options ] } )
@@ -2092,7 +2163,7 @@ var getJSONValueHTML = function ( src ) {
 	  
 	  case 'csl':
 	    
-	    result = getJSONValueHTML( this.data )
+	    result = getJSON/*ValueHTML*/( this.data )
 	    
 	    break;
 	  
