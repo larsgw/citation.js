@@ -1,4 +1,32 @@
-/** 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: src/jquery.citation-0.2.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: src/jquery.citation-0.2.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/** 
  * @file jquery.Citation-0.2.js
  * 
  * @description
@@ -75,7 +103,7 @@ jQuery.fn.CJSMultipleInput = function () {
       var $this = $( this )
         , $last = $this.parent().children( 'input' ).last()
       
-      if ( $this.is( $last ) || ( $this.is( $last.prev() ) && $this.val() !== '' ) )
+      if ( $this.is( $last ) || ( $this.is( $last.prev() ) &amp;&amp; $this.val() !== '' ) )
         return undefined
       
       $last.remove()
@@ -208,9 +236,9 @@ var jQueryCite = (function(){
      * @type Object
      */
     this._options = Object.assign( {
-      inputForm : '<section class="cjs-piece cjs-input"><ul><li><a class="cjs" href="#cjs-in-form">Input</a></li><li><a class="cjs" href="#cjs-in-json">JSON</a></li><li><a class="cjs" href="#cjs-in-bibtex">BibTeX</a></li></ul><section id="cjs-in-form" class="cjs-inputform"><fieldset><select data-cjs-field="type"><option value="book">Book</option><option value="incollection">Chapter</option><option value="paper-conference">Paper</option><option value="article-journal">Article</option><option value="article-magazine">Magazine article</option><option value="article-newspaper">Newspaper article</option><option value="webpage">Webpage</option></select></fieldset><!--BEGIN FORM--><fieldset data-cjs-field-type="incollection"><label><input data-cjs-field="title" type="text"><legend>Chapter title</legend></label></fieldset><fieldset data-cjs-field-type="incollection"><label><input data-cjs-field="container-title" type="text"><legend>Book title</legend></label></fieldset><fieldset data-cjs-field-type="book paper-conference article-journal article-magazine article-newspaper webpage"><label><input data-cjs-field="title" type="text"><legend>Title</legend></label></fieldset><fieldset data-cjs-field-type="article-journal"><label><input data-cjs-field="container-title" type="text"><legend>Journal</legend></label></fieldset><fieldset data-cjs-field-type="article-magazine"><label><input data-cjs-field="container-title" type="text"><legend>Magazine</legend></label></fieldset><fieldset data-cjs-field-type="article-newspaper"><label><input data-cjs-field="container-title" type="text"><legend>Newspaper</legend></label></fieldset><fieldset data-cjs-field-type="webpage"><label><input data-cjs-field="container-title" type="text"><legend>Website</legend></label></fieldset><fieldset data-cjs-field-type="incollection"><label><input data-cjs-field="author" type="text"><legend>Chapter author</legend></label></fieldset><fieldset data-cjs-field-type="incollection"><label><input data-cjs-field="container-author" type="text"><legend>Author</legend></label></fieldset><fieldset data-cjs-field-type="book paper-conference article-journal article-magazine article-newspaper webpage"><label><input data-cjs-field="author" type="text"><legend>Author</legend></label></fieldset><fieldset data-cjs-field-type="book incollection paper-conference article-journal article-magazine article-newspaper"><label><input data-cjs-field="editor" type="text"><legend>Editor</legend></label></fieldset><fieldset data-cjs-field-type="book incollection article-newspaper"><label><input data-cjs-field="edition" type="number" min="1"><legend>Edition</legend></label></fieldset><fieldset data-cjs-field-type="paper-conference article-journal"><label><input data-cjs-field="issue" type="number" min="1"><legend>Issue</legend></label></fieldset><fieldset data-cjs-field-type="book incollection paper-conference article-journal article-magazine"><label><input data-cjs-field="volume" type="number" min="1"><legend>Volume</legend></label></fieldset><fieldset data-cjs-field-type="incollection article-journal article-magazine article-newspaper"><label><input data-cjs-field="page" type="number" min="1"><input data-cjs-field="page" type="number" min="1"><legend>Pages</legend></label></fieldset><fieldset data-cjs-field-type="paper-conference"><label><input data-cjs-field="event" type="text"><legend>Conference</legend></label></fieldset><fieldset data-cjs-field-type="book incollection paper-conference"><label><input data-cjs-field="publisher" type="text"><legend>Publisher</legend></label></fieldset><fieldset data-cjs-field-type="book incollection article-newspaper"><label><input data-cjs-field="publisher-place" type="text"><legend>Place</legend></label></fieldset><fieldset><label><input data-cjs-field="URL" type="url"><legend>URL</legend></label></fieldset><fieldset data-cjs-field-type="paper-conference article-journal"><label><input data-cjs-field="DOI" type="text"><legend>DOI</legend></label></fieldset>\
-                   <fieldset data-cjs-field-type="book incollection paper-conference"><label><input data-cjs-field="ISBN" type="text"><legend>ISBN</legend></label></fieldset><fieldset data-cjs-field-type="article-journal article-magazine article-newspaper"><label><input data-cjs-field="ISSN" type="text"><legend>ISSN</legend></label></fieldset><fieldset><label><input data-cjs-field="issued" type="date"><legend>Issued</legend></label></fieldset><fieldset><label><input data-cjs-field="accessed" type="date"><legend>Accessed</legend></label></fieldset><!--END--></section><section id="cjs-in-json" class="cjs-inputform"><fieldset class="cjs"><textarea class="cjs-JSON" placeholder="e.g. \'{ &#10;author:\'Jan van der Linden\' &#10;}\'"></textarea></fieldset></section><section id="cjs-in-bibtex" class="cjs-inputform"><fieldset class="cjs"><textarea class="cjs-BibTeX" placeholder="e.g. \'@book{aarts2001titel,&#10;title={{Titel}},&#10;author={Aarts, J.},&#10;year={2001},&#10;publisher={Uitgever},&#10;}\'"></textarea></fieldset></section></section><section class="cjs-piece cjs-preview"><div class="cjs-draft"></div><input class="cjs-add" type="submit" value="Add"> <input class="cjs-delete" type="reset" value="Delete"></section>',
-      outputForm: '<section class="cjs-piece cjs-settings"><h2>Output</h2><form id="cjs-opt"><fieldset><select class="cjs-type"><option value="html">Normal</option><option value="string">Plain text</option></select></fieldset><fieldset><select class="cjs-style"><optgroup label="Formatted"><option value="citation-apa">APA</option><option value="citation-vancouver">Vancouver</option><option value="citation-harvard1">Harvard</option></optgroup><option value="bibtex">BibTeX</option><option value="csl">JSON</option></select></fieldset><fieldset><select class="cjs-lan"><option value="en-US">English</option><option value="es-ES">Spanish</option><option value="du-DU">German</option><option value="fr-FR">French</option><option value="nl-NL">Dutch</option></select></fieldset></form></section><section class="cjs-piece"><div class="cjs-output"></div><form class="cjs-output-edit"><button type="submit" class="cjs-output-edit-sort">Sort</button></form></section><section class="cjs-piece cjs-export"><h2>Export</h2><form><button type="submit" class="cjs-export-copy">Copy</button> <button type="submit" class="cjs-export-save">Download</button></form></section>',
+      inputForm : '&lt;section class="cjs-piece cjs-input">&lt;ul>&lt;li>&lt;a class="cjs" href="#cjs-in-form">Input&lt;/a>&lt;/li>&lt;li>&lt;a class="cjs" href="#cjs-in-json">JSON&lt;/a>&lt;/li>&lt;li>&lt;a class="cjs" href="#cjs-in-bibtex">BibTeX&lt;/a>&lt;/li>&lt;/ul>&lt;section id="cjs-in-form" class="cjs-inputform">&lt;fieldset>&lt;select data-cjs-field="type">&lt;option value="book">Book&lt;/option>&lt;option value="incollection">Chapter&lt;/option>&lt;option value="paper-conference">Paper&lt;/option>&lt;option value="article-journal">Article&lt;/option>&lt;option value="article-magazine">Magazine article&lt;/option>&lt;option value="article-newspaper">Newspaper article&lt;/option>&lt;option value="webpage">Webpage&lt;/option>&lt;/select>&lt;/fieldset>&lt;!--BEGIN FORM-->&lt;fieldset data-cjs-field-type="incollection">&lt;label>&lt;input data-cjs-field="title" type="text">&lt;legend>Chapter title&lt;/legend>&lt;/label>&lt;/fieldset>&lt;fieldset data-cjs-field-type="incollection">&lt;label>&lt;input data-cjs-field="container-title" type="text">&lt;legend>Book title&lt;/legend>&lt;/label>&lt;/fieldset>&lt;fieldset data-cjs-field-type="book paper-conference article-journal article-magazine article-newspaper webpage">&lt;label>&lt;input data-cjs-field="title" type="text">&lt;legend>Title&lt;/legend>&lt;/label>&lt;/fieldset>&lt;fieldset data-cjs-field-type="article-journal">&lt;label>&lt;input data-cjs-field="container-title" type="text">&lt;legend>Journal&lt;/legend>&lt;/label>&lt;/fieldset>&lt;fieldset data-cjs-field-type="article-magazine">&lt;label>&lt;input data-cjs-field="container-title" type="text">&lt;legend>Magazine&lt;/legend>&lt;/label>&lt;/fieldset>&lt;fieldset data-cjs-field-type="article-newspaper">&lt;label>&lt;input data-cjs-field="container-title" type="text">&lt;legend>Newspaper&lt;/legend>&lt;/label>&lt;/fieldset>&lt;fieldset data-cjs-field-type="webpage">&lt;label>&lt;input data-cjs-field="container-title" type="text">&lt;legend>Website&lt;/legend>&lt;/label>&lt;/fieldset>&lt;fieldset data-cjs-field-type="incollection">&lt;label>&lt;input data-cjs-field="author" type="text">&lt;legend>Chapter author&lt;/legend>&lt;/label>&lt;/fieldset>&lt;fieldset data-cjs-field-type="incollection">&lt;label>&lt;input data-cjs-field="container-author" type="text">&lt;legend>Author&lt;/legend>&lt;/label>&lt;/fieldset>&lt;fieldset data-cjs-field-type="book paper-conference article-journal article-magazine article-newspaper webpage">&lt;label>&lt;input data-cjs-field="author" type="text">&lt;legend>Author&lt;/legend>&lt;/label>&lt;/fieldset>&lt;fieldset data-cjs-field-type="book incollection paper-conference article-journal article-magazine article-newspaper">&lt;label>&lt;input data-cjs-field="editor" type="text">&lt;legend>Editor&lt;/legend>&lt;/label>&lt;/fieldset>&lt;fieldset data-cjs-field-type="book incollection article-newspaper">&lt;label>&lt;input data-cjs-field="edition" type="number" min="1">&lt;legend>Edition&lt;/legend>&lt;/label>&lt;/fieldset>&lt;fieldset data-cjs-field-type="paper-conference article-journal">&lt;label>&lt;input data-cjs-field="issue" type="number" min="1">&lt;legend>Issue&lt;/legend>&lt;/label>&lt;/fieldset>&lt;fieldset data-cjs-field-type="book incollection paper-conference article-journal article-magazine">&lt;label>&lt;input data-cjs-field="volume" type="number" min="1">&lt;legend>Volume&lt;/legend>&lt;/label>&lt;/fieldset>&lt;fieldset data-cjs-field-type="incollection article-journal article-magazine article-newspaper">&lt;label>&lt;input data-cjs-field="page" type="number" min="1">&lt;input data-cjs-field="page" type="number" min="1">&lt;legend>Pages&lt;/legend>&lt;/label>&lt;/fieldset>&lt;fieldset data-cjs-field-type="paper-conference">&lt;label>&lt;input data-cjs-field="event" type="text">&lt;legend>Conference&lt;/legend>&lt;/label>&lt;/fieldset>&lt;fieldset data-cjs-field-type="book incollection paper-conference">&lt;label>&lt;input data-cjs-field="publisher" type="text">&lt;legend>Publisher&lt;/legend>&lt;/label>&lt;/fieldset>&lt;fieldset data-cjs-field-type="book incollection article-newspaper">&lt;label>&lt;input data-cjs-field="publisher-place" type="text">&lt;legend>Place&lt;/legend>&lt;/label>&lt;/fieldset>&lt;fieldset>&lt;label>&lt;input data-cjs-field="URL" type="url">&lt;legend>URL&lt;/legend>&lt;/label>&lt;/fieldset>&lt;fieldset data-cjs-field-type="paper-conference article-journal">&lt;label>&lt;input data-cjs-field="DOI" type="text">&lt;legend>DOI&lt;/legend>&lt;/label>&lt;/fieldset>\
+                   &lt;fieldset data-cjs-field-type="book incollection paper-conference">&lt;label>&lt;input data-cjs-field="ISBN" type="text">&lt;legend>ISBN&lt;/legend>&lt;/label>&lt;/fieldset>&lt;fieldset data-cjs-field-type="article-journal article-magazine article-newspaper">&lt;label>&lt;input data-cjs-field="ISSN" type="text">&lt;legend>ISSN&lt;/legend>&lt;/label>&lt;/fieldset>&lt;fieldset>&lt;label>&lt;input data-cjs-field="issued" type="date">&lt;legend>Issued&lt;/legend>&lt;/label>&lt;/fieldset>&lt;fieldset>&lt;label>&lt;input data-cjs-field="accessed" type="date">&lt;legend>Accessed&lt;/legend>&lt;/label>&lt;/fieldset>&lt;!--END-->&lt;/section>&lt;section id="cjs-in-json" class="cjs-inputform">&lt;fieldset class="cjs">&lt;textarea class="cjs-JSON" placeholder="e.g. \'{ &amp;#10;author:\'Jan van der Linden\' &amp;#10;}\'">&lt;/textarea>&lt;/fieldset>&lt;/section>&lt;section id="cjs-in-bibtex" class="cjs-inputform">&lt;fieldset class="cjs">&lt;textarea class="cjs-BibTeX" placeholder="e.g. \'@book{aarts2001titel,&amp;#10;title={{Titel}},&amp;#10;author={Aarts, J.},&amp;#10;year={2001},&amp;#10;publisher={Uitgever},&amp;#10;}\'">&lt;/textarea>&lt;/fieldset>&lt;/section>&lt;/section>&lt;section class="cjs-piece cjs-preview">&lt;div class="cjs-draft">&lt;/div>&lt;input class="cjs-add" type="submit" value="Add"> &lt;input class="cjs-delete" type="reset" value="Delete">&lt;/section>',
+      outputForm: '&lt;section class="cjs-piece cjs-settings">&lt;h2>Output&lt;/h2>&lt;form id="cjs-opt">&lt;fieldset>&lt;select class="cjs-type">&lt;option value="html">Normal&lt;/option>&lt;option value="string">Plain text&lt;/option>&lt;/select>&lt;/fieldset>&lt;fieldset>&lt;select class="cjs-style">&lt;optgroup label="Formatted">&lt;option value="citation-apa">APA&lt;/option>&lt;option value="citation-vancouver">Vancouver&lt;/option>&lt;option value="citation-harvard1">Harvard&lt;/option>&lt;/optgroup>&lt;option value="bibtex">BibTeX&lt;/option>&lt;option value="csl">JSON&lt;/option>&lt;/select>&lt;/fieldset>&lt;fieldset>&lt;select class="cjs-lan">&lt;option value="en-US">English&lt;/option>&lt;option value="es-ES">Spanish&lt;/option>&lt;option value="du-DU">German&lt;/option>&lt;option value="fr-FR">French&lt;/option>&lt;option value="nl-NL">Dutch&lt;/option>&lt;/select>&lt;/fieldset>&lt;/form>&lt;/section>&lt;section class="cjs-piece">&lt;div class="cjs-output">&lt;/div>&lt;form class="cjs-output-edit">&lt;button type="submit" class="cjs-output-edit-sort">Sort&lt;/button>&lt;/form>&lt;/section>&lt;section class="cjs-piece cjs-export">&lt;h2>Export&lt;/h2>&lt;form>&lt;button type="submit" class="cjs-export-copy">Copy&lt;/button> &lt;button type="submit" class="cjs-export-save">Download&lt;/button>&lt;/form>&lt;/section>',
       add  : function ( self ) {},
       defaultOptions: {
 	format: 'string',
@@ -278,7 +306,7 @@ var jQueryCite = (function(){
         /*.find( '.csl-entry' ).each( function () {
           var $this = $( this )
           
-          $( '<div title="Remove entry" class="csl-entry-remove">x</div>' )
+          $( '&lt;div title="Remove entry" class="csl-entry-remove">x&lt;/div>' )
             .appendTo( $this )
             .click( function () {
               
@@ -353,7 +381,7 @@ var jQueryCite = (function(){
 	  
 	  data = {}
 	  
-	  for ( var fieldIndex = 0; fieldIndex < formFields.length; fieldIndex++ ) {
+	  for ( var fieldIndex = 0; fieldIndex &lt; formFields.length; fieldIndex++ ) {
 	    var field = formFields[ fieldIndex ]
 	      
 	      ,$field = form.find( 'fieldset[data-cjs-field-state="visible"]' )
@@ -362,7 +390,7 @@ var jQueryCite = (function(){
 	      , input = $ToValList( $field )[ 0 ]
 	      , value = field.prepFunc ? field.prepFunc( $field ) : input
 	    
-	    if ( $field.data( 'cjs-field-state' ) !== 'hidden' && input && value )
+	    if ( $field.data( 'cjs-field-state' ) !== 'hidden' &amp;&amp; input &amp;&amp; value )
 	      data[ field.propName ] = value
 	  }
 	  
@@ -435,7 +463,7 @@ var jQueryCite = (function(){
           .click( function () {
             
             var text = self._form.out.find( '.cjs-output' ).text()
-              , $tmp = $( '<textarea>' )
+              , $tmp = $( '&lt;textarea>' )
             
             var fb = function () {
               $tmp.remove()
@@ -622,3 +650,26 @@ var jQueryCite = (function(){
   
   return jQueryCite
 })()
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Cite.html">Cite</a></li><li><a href="jQuery.html">jQuery</a></li><li><a href="jQueryCite.html">jQueryCite</a></li></ul><h3>Global</h3><ul><li><a href="global.html#fetchBibTeXType">fetchBibTeXType</a></li><li><a href="global.html#fetchCSLLocale">fetchCSLLocale</a></li><li><a href="global.html#fetchCSLStyle">fetchCSLStyle</a></li><li><a href="global.html#fetchFile">fetchFile</a></li><li><a href="global.html#fetchWikidataLabel">fetchWikidataLabel</a></li><li><a href="global.html#fetchWikidataType">fetchWikidataType</a></li><li><a href="global.html#getBibTeX">getBibTeX</a></li><li><a href="global.html#getBibTeXJSON">getBibTeXJSON</a></li><li><a href="global.html#getBibTeXLabel">getBibTeXLabel</a></li><li><a href="global.html#getDate">getDate</a></li><li><a href="global.html#getJSON">getJSON</a></li><li><a href="global.html#getJSONObjectHTML">getJSONObjectHTML</a></li><li><a href="global.html#getJSONValueHTML">getJSONValueHTML</a></li><li><a href="global.html#getLabel">getLabel</a></li><li><a href="global.html#getName">getName</a></li><li><a href="global.html#parseBibTeX">parseBibTeX</a></li><li><a href="global.html#parseBibTeXJSON">parseBibTeXJSON</a></li><li><a href="global.html#parseBibTeXProp">parseBibTeXProp</a></li><li><a href="global.html#parseBibTeXType">parseBibTeXType</a></li><li><a href="global.html#parseContentMine">parseContentMine</a></li><li><a href="global.html#parseDate">parseDate</a></li><li><a href="global.html#parseInput">parseInput</a></li><li><a href="global.html#parseInputData">parseInputData</a></li><li><a href="global.html#parseInputType">parseInputType</a></li><li><a href="global.html#parseJSON">parseJSON</a></li><li><a href="global.html#parseName">parseName</a></li><li><a href="global.html#parseWikidata">parseWikidata</a></li><li><a href="global.html#parseWikidataJSON">parseWikidataJSON</a></li><li><a href="global.html#parseWikidataProp">parseWikidataProp</a></li><li><a href="global.html#varBibTeXSyntaxTokens">varBibTeXSyntaxTokens</a></li><li><a href="global.html#varBibTeXTokens">varBibTeXTokens</a></li><li><a href="global.html#varCSLLocales">varCSLLocales</a></li><li><a href="global.html#varCSLStyles">varCSLStyles</a></li><li><a href="global.html#varHTMLDict">varHTMLDict</a></li><li><a href="global.html#varRegex">varRegex</a></li><li><a href="global.html#varWikidataTypes">varWikidataTypes</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.0</a> on Wed Nov 30 2016 21:22:32 GMT+0100 (CET)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

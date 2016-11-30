@@ -131,119 +131,119 @@ var varBibTeXSyntaxTokens = {
  * @default
  */
 var varBibTeXTokens = {
-  "\\url":"",				"\\href":"",				"{\\textexclamdown}":"\u00A1",		"{\\textcent}":"\u00A2",
-  "{\\textsterling}":"\u00A3",		"{\\textyen}":"\u00A5",			"{\\textbrokenbar}":"\u00A6",		"{\\textsection}":"\u00A7",
-  "{\\textasciidieresis}":"\u00A8",	"{\\textcopyright}":"\u00A9",		"{\\textordfeminine}":"\u00AA",		"{\\guillemotleft}":"\u00AB",
-  "{\\textlnot}":"\u00AC",		"{\\textregistered}":"\u00AE",		"{\\textasciimacron}":"\u00AF",		"{\\textdegree}":"\u00B0",
-  "{\\textpm}":"\u00B1",		"{\\texttwosuperior}":"\u00B2",		"{\\textthreesuperior}":"\u00B3",	"{\\textasciiacute}":"\u00B4",
-  "{\\textmu}":"\u00B5",		"{\\textparagraph}":"\u00B6",		"{\\textperiodcentered}":"\u00B7",	"{\\c\\ }":"\u00B8",
-  "{\\textonesuperior}":"\u00B9",	"{\\textordmasculine}":"\u00BA",	"{\\guillemotright}":"\u00BB",		"{\\textonequarter}":"\u00BC",
-  "{\\textonehalf}":"\u00BD",		"{\\textthreequarters}":"\u00BE",	"{\\textquestiondown}":"\u00BF",	"{\\AE}":"\u00C6",
-  "{\\DH}":"\u00D0",			"{\\texttimes}":"\u00D7",		"{\\O}":"\u00D8",			"{\\TH}":"\u00DE",
-  "{\\ss}":"\u00DF",			"{\\ae}":"\u00E6",			"{\\dh}":"\u00F0",			"{\\textdiv}":"\u00F7",
-  "{\\o}":"\u00F8",			"{\\th}":"\u00FE",			"{\\i}":"\u0131",			"{\\NG}":"\u014A",
-  "{\\ng}":"\u014B",			"{\\OE}":"\u0152",			"{\\oe}":"\u0153",			"{\\textasciicircum}":"\u02C6",
-  "{\\textacutedbl}":"\u02DD",		"$\\Gamma$":"\u0393",			"$\\Delta$":"\u0394",			"$\\Theta$":"\u0398",
-  "$\\Lambda$":"\u039B",		"$\\Xi$":"\u039E",			"$\\Pi$":"\u03A0",			"$\\Sigma$":"\u03A3",
-  "$\\Phi$":"\u03A6",			"$\\Psi$":"\u03A8",			"$\\Omega$":"\u03A9",			"$\\alpha$":"\u03B1",
-  "$\\beta$":"\u03B2",			"$\\gamma$":"\u03B3",			"$\\delta$":"\u03B4",			"$\\varepsilon$":"\u03B5",
-  "$\\zeta$":"\u03B6",			"$\\eta$":"\u03B7",			"$\\theta$":"\u03B8",			"$\\iota$":"\u03B9",
-  "$\\kappa$":"\u03BA",			"$\\lambda$":"\u03BB",			"$\\mu$":"\u03BC",			"$\\nu$":"\u03BD",
-  "$\\xi$":"\u03BE",			"$\\pi$":"\u03C0",			"$\\rho$":"\u03C1",			"$\\varsigma$":"\u03C2",
-  "$\\sigma$":"\u03C3",			"$\\tau$":"\u03C4",			"$\\upsilon$":"\u03C5",			"$\\varphi$":"\u03C6",
-  "$\\chi$":"\u03C7",			"$\\psi$":"\u03C8",			"$\\omega$":"\u03C9",			"$\\vartheta$":"\u03D1",
-  "$\\Upsilon$":"\u03D2",		"$\\phi$":"\u03D5",			"$\\varpi$":"\u03D6",			"$\\varrho$":"\u03F1",
-  "$\\epsilon$":"\u03F5",		"{\\textendash}":"\u2013",		"{\\textemdash}":"\u2014",		"---":"\u2014",
-  "--":"\u2013",			"{\\textbardbl}":"\u2016",		"{\\textunderscore}":"\u2017",		"{\\textquoteleft}":"\u2018",
-  "{\\textquoteright}":"\u2019",	"{\\quotesinglbase}":"\u201A",		"{\\textquotedblleft}":"\u201C",	"{\\textquotedblright}":"\u201D",
-  "{\\quotedblbase}":"\u201E",		"{\\textdagger}":"\u2020",		"{\\textdaggerdbl}":"\u2021",		"{\\textbullet}":"\u2022",
-  "{\\textellipsis}":"\u2026",		"{\\textperthousand}":"\u2030",		"'''":"\u2034",				"''":"\u201D",
-  "``":"\u201C",			"```":"\u2037",				"{\\guilsinglleft}":"\u2039",		"{\\guilsinglright}":"\u203A",
-  "!!":"\u203C",			"{\\textfractionsolidus}":"\u2044",	"?!":"\u2048",				"!?":"\u2049",
-  "$^{0}$":"\u2070",			"$^{4}$":"\u2074",			"$^{5}$":"\u2075",			"$^{6}$":"\u2076",
-  "$^{7}$":"\u2077",			"$^{8}$":"\u2078",			"$^{9}$":"\u2079",			"$^{+}$":"\u207A",
-  "$^{-}$":"\u207B",			"$^{=}$":"\u207C",			"$^{(}$":"\u207D",			"$^{)}$":"\u207E",
-  "$^{n}$":"\u207F",			"$_{0}$":"\u2080",			"$_{1}$":"\u2081",			"$_{2}$":"\u2082",
-  "$_{3}$":"\u2083",			"$_{4}$":"\u2084",			"$_{5}$":"\u2085",			"$_{6}$":"\u2086",
-  "$_{7}$":"\u2087",			"$_{8}$":"\u2088",			"$_{9}$":"\u2089",			"$_{+}$":"\u208A",
-  "$_{-}$":"\u208B",			"$_{=}$":"\u208C",			"$_{(}$":"\u208D",			"$_{)}$":"\u208E",
-  "{\\texteuro}":"\u20AC",		"{\\textcelsius}":"\u2103",		"{\\textnumero}":"\u2116",		"{\\textcircledP}":"\u2117",
-  "{\\textservicemark}":"\u2120",	"{TEL}":"\u2121",			"{\\texttrademark}":"\u2122",		"{\\textohm}":"\u2126",
-  "{\\textestimated}":"\u212E",		"{\\`A}":"\u00C0",			"{\\'A}":"\u00C1",			"{\\^A}":"\u00C2",
-  "{\\~A}":"\u00C3",			"{\\\"A}":"\u00C4",			"{\\r A}":"\u00C5",			"{\\c C}":"\u00C7",
-  "{\\`E}":"\u00C8",			"{\\'E}":"\u00C9",			"{\\^E}":"\u00CA",			"{\\\"E}":"\u00CB",
-  "{\\`I}":"\u00CC",			"{\\'I}":"\u00CD",			"{\\^I}":"\u00CE",			"{\\\"I}":"\u00CF",
-  "{\\~N}":"\u00D1",			"{\\`O}":"\u00D2",			"{\\'O}":"\u00D3",			"{\\^O}":"\u00D4",
-  "{\\~O}":"\u00D5",			"{\\\"O}":"\u00D6",			"{\\`U}":"\u00D9",			"{\\'U}":"\u00DA",
-  "{\\^U}":"\u00DB",			"{\\\"U}":"\u00DC",			"{\\'Y}":"\u00DD",			"{\\`a}":"\u00E0",
-  "{\\'a}":"\u00E1",			"{\\^a}":"\u00E2",			"{\\~a}":"\u00E3",			"{\\\"a}":"\u00E4",
-  "{\\r a}":"\u00E5",			"{\\c c}":"\u00E7",			"{\\`e}":"\u00E8",			"{\\'e}":"\u00E9",
-  "{\\^e}":"\u00EA",			"{\\\"e}":"\u00EB",			"{\\`i}":"\u00EC",			"{\\'i}":"\u00ED",
-  "{\\^i}":"\u00EE",			"{\\\"i}":"\u00EF",			"{\\~n}":"\u00F1",			"{\\`o}":"\u00F2",
-  "{\\'o}":"\u00F3",			"{\\^o}":"\u00F4",			"{\\~o}":"\u00F5",			"{\\\"o}":"\u00F6",
-  "{\\`u}":"\u00F9",			"{\\'u}":"\u00FA",			"{\\^u}":"\u00FB",			"{\\\"u}":"\u00FC",
-  "{\\'y}":"\u00FD",			"{\\\"y}":"\u00FF",			"{\\=A}":"\u0100",			"{\\=a}":"\u0101",
-  "{\\u A}":"\u0102",			"{\\u a}":"\u0103",			"{\\k A}":"\u0104",			"{\\k a}":"\u0105",
-  "{\\'C}":"\u0106",			"{\\'c}":"\u0107",			"{\\^C}":"\u0108",			"{\\^c}":"\u0109",
-  "{\\.C}":"\u010A",			"{\\.c}":"\u010B",			"{\\v C}":"\u010C",			"{\\v c}":"\u010D",
-  "{\\v D}":"\u010E",			"{\\v d}":"\u010F",			"{\\=E}":"\u0112",			"{\\=e}":"\u0113",
-  "{\\u E}":"\u0114",			"{\\u e}":"\u0115",			"{\\.E}":"\u0116",			"{\\.e}":"\u0117",
-  "{\\k E}":"\u0118",			"{\\k e}":"\u0119",			"{\\v E}":"\u011A",			"{\\v e}":"\u011B",
-  "{\\^G}":"\u011C",			"{\\^g}":"\u011D",			"{\\u G}":"\u011E",			"{\\u g}":"\u011F",
-  "{\\.G}":"\u0120",			"{\\.g}":"\u0121",			"{\\c G}":"\u0122",			"{\\c g}":"\u0123",
-  "{\\^H}":"\u0124",			"{\\^h}":"\u0125",			"{\\~I}":"\u0128",			"{\\~i}":"\u0129",
-  "{\\=I}":"\u012A",			"{\\=i}":"\u012B",			"{\\=\\i}":"\u012B",			"{\\u I}":"\u012C",
-  "{\\u i}":"\u012D",			"{\\k I}":"\u012E",			"{\\k i}":"\u012F",			"{\\.I}":"\u0130",
-  "{\\^J}":"\u0134",			"{\\^j}":"\u0135",			"{\\c K}":"\u0136",			"{\\c k}":"\u0137",
-  "{\\'L}":"\u0139",			"{\\'l}":"\u013A",			"{\\c L}":"\u013B",			"{\\c l}":"\u013C",
-  "{\\v L}":"\u013D",			"{\\v l}":"\u013E",			"{\\L }":"\u0141",			"{\\l }":"\u0142",
-  "{\\'N}":"\u0143",			"{\\'n}":"\u0144",			"{\\c N}":"\u0145",			"{\\c n}":"\u0146",
-  "{\\v N}":"\u0147",			"{\\v n}":"\u0148",			"{\\=O}":"\u014C",			"{\\=o}":"\u014D",
-  "{\\u O}":"\u014E",			"{\\u o}":"\u014F",			"{\\H O}":"\u0150",			"{\\H o}":"\u0151",
-  "{\\'R}":"\u0154",			"{\\'r}":"\u0155",			"{\\c R}":"\u0156",			"{\\c r}":"\u0157",
-  "{\\v R}":"\u0158",			"{\\v r}":"\u0159",			"{\\'S}":"\u015A",			"{\\'s}":"\u015B",
-  "{\\^S}":"\u015C",			"{\\^s}":"\u015D",			"{\\c S}":"\u015E",			"{\\c s}":"\u015F",
-  "{\\v S}":"\u0160",			"{\\v s}":"\u0161",			"{\\c T}":"\u0162",			"{\\c t}":"\u0163",
-  "{\\v T}":"\u0164",			"{\\v t}":"\u0165",			"{\\~U}":"\u0168",			"{\\~u}":"\u0169",
-  "{\\=U}":"\u016A",			"{\\=u}":"\u016B",			"{\\u U}":"\u016C",			"{\\u u}":"\u016D",
-  "{\\r U}":"\u016E",			"{\\r u}":"\u016F",			"{\\H U}":"\u0170",			"{\\H u}":"\u0171",
-  "{\\k U}":"\u0172",			"{\\k u}":"\u0173",			"{\\^W}":"\u0174",			"{\\^w}":"\u0175",
-  "{\\^Y}":"\u0176",			"{\\^y}":"\u0177",			"{\\\"Y}":"\u0178",			"{\\'Z}":"\u0179",
-  "{\\'z}":"\u017A",			"{\\.Z}":"\u017B",			"{\\.z}":"\u017C",			"{\\v Z}":"\u017D",
-  "{\\v z}":"\u017E",			"{\\v A}":"\u01CD",			"{\\v a}":"\u01CE",			"{\\v I}":"\u01CF",
-  "{\\v i}":"\u01D0",			"{\\v O}":"\u01D1",			"{\\v o}":"\u01D2",			"{\\v U}":"\u01D3",
-  "{\\v u}":"\u01D4",			"{\\v G}":"\u01E6",			"{\\v g}":"\u01E7",			"{\\v K}":"\u01E8",
-  "{\\v k}":"\u01E9",			"{\\k O}":"\u01EA",			"{\\k o}":"\u01EB",			"{\\v j}":"\u01F0",
-  "{\\'G}":"\u01F4",			"{\\'g}":"\u01F5",			"{\\.B}":"\u1E02",			"{\\.b}":"\u1E03",
-  "{\\d B}":"\u1E04",			"{\\d b}":"\u1E05",			"{\\b B}":"\u1E06",			"{\\b b}":"\u1E07",
-  "{\\.D}":"\u1E0A",			"{\\.d}":"\u1E0B",			"{\\d D}":"\u1E0C",			"{\\d d}":"\u1E0D",
-  "{\\b D}":"\u1E0E",			"{\\b d}":"\u1E0F",			"{\\c D}":"\u1E10",			"{\\c d}":"\u1E11",
-  "{\\.F}":"\u1E1E",			"{\\.f}":"\u1E1F",			"{\\=G}":"\u1E20",			"{\\=g}":"\u1E21",
-  "{\\.H}":"\u1E22",			"{\\.h}":"\u1E23",			"{\\d H}":"\u1E24",			"{\\d h}":"\u1E25",
-  "{\\\"H}":"\u1E26",			"{\\\"h}":"\u1E27",			"{\\c H}":"\u1E28",			"{\\c h}":"\u1E29",
-  "{\\'K}":"\u1E30",			"{\\'k}":"\u1E31",			"{\\d K}":"\u1E32",			"{\\d k}":"\u1E33",
-  "{\\b K}":"\u1E34",			"{\\b k}":"\u1E35",			"{\\d L}":"\u1E36",			"{\\d l}":"\u1E37",
-  "{\\b L}":"\u1E3A",			"{\\b l}":"\u1E3B",			"{\\'M}":"\u1E3E",			"{\\'m}":"\u1E3F",
-  "{\\.M}":"\u1E40",			"{\\.m}":"\u1E41",			"{\\d M}":"\u1E42",			"{\\d m}":"\u1E43",
-  "{\\.N}":"\u1E44",			"{\\.n}":"\u1E45",			"{\\d N}":"\u1E46",			"{\\d n}":"\u1E47",
-  "{\\b N}":"\u1E48",			"{\\b n}":"\u1E49",			"{\\'P}":"\u1E54",			"{\\'p}":"\u1E55",
-  "{\\.P}":"\u1E56",			"{\\.p}":"\u1E57",			"{\\.R}":"\u1E58",			"{\\.r}":"\u1E59",
-  "{\\d R}":"\u1E5A",			"{\\d r}":"\u1E5B",			"{\\b R}":"\u1E5E",			"{\\b r}":"\u1E5F",
-  "{\\.S}":"\u1E60",			"{\\.s}":"\u1E61",			"{\\d S}":"\u1E62",			"{\\d s}":"\u1E63",
-  "{\\.T}":"\u1E6A",			"{\\.t}":"\u1E6B",			"{\\d T}":"\u1E6C",			"{\\d t}":"\u1E6D",
-  "{\\b T}":"\u1E6E",			"{\\b t}":"\u1E6F",			"{\\~V}":"\u1E7C",			"{\\~v}":"\u1E7D",
-  "{\\d V}":"\u1E7E",			"{\\d v}":"\u1E7F",			"{\\`W}":"\u1E80",			"{\\`w}":"\u1E81",
-  "{\\'W}":"\u1E82",			"{\\'w}":"\u1E83",			"{\\\"W}":"\u1E84",			"{\\\"w}":"\u1E85",
-  "{\\.W}":"\u1E86",			"{\\.w}":"\u1E87",			"{\\d W}":"\u1E88",			"{\\d w}":"\u1E89",
-  "{\\.X}":"\u1E8A",			"{\\.x}":"\u1E8B",			"{\\\"X}":"\u1E8C",			"{\\\"x}":"\u1E8D",
-  "{\\.Y}":"\u1E8E",			"{\\.y}":"\u1E8F",			"{\\^Z}":"\u1E90",			"{\\^z}":"\u1E91",
-  "{\\d Z}":"\u1E92",			"{\\d z}":"\u1E93",			"{\\b Z}":"\u1E94",			"{\\b z}":"\u1E95",
-  "{\\b h}":"\u1E96",			"{\\\"t}":"\u1E97",			"{\\r w}":"\u1E98",			"{\\r y}":"\u1e99",
-  "{\\d A}":"\u1EA0",			"{\\d a}":"\u1EA1",			"{\\d E}":"\u1EB8",			"{\\d e}":"\u1EB9",
-  "{\\~E}":"\u1EBC",			"{\\~e}":"\u1EBD",			"{\\d I}":"\u1ECA",			"{\\d i}":"\u1ECB",
-  "{\\d O}":"\u1ECC",			"{\\d o}":"\u1ECD",			"{\\d U}":"\u1EE4",			"{\\d u}":"\u1EE5",
-  "{\\`Y}":"\u1EF2",			"{\\`y}":"\u1EF3",			"{\\d Y}":"\u1EF4",			"{\\d y}":"\u1EF5",
-  "{\\~Y}":"\u1EF8",			"{\\~y}":"\u1EF9",			"{\\~}":"\u223C",			"~":"\u00A0" 
+  "\\url":"",                           "\\href":"",                            "{\\textexclamdown}":"\u00A1",          "{\\textcent}":"\u00A2",
+  "{\\textsterling}":"\u00A3",          "{\\textyen}":"\u00A5",                 "{\\textbrokenbar}":"\u00A6",           "{\\textsection}":"\u00A7",
+  "{\\textasciidieresis}":"\u00A8",     "{\\textcopyright}":"\u00A9",           "{\\textordfeminine}":"\u00AA",         "{\\guillemotleft}":"\u00AB",
+  "{\\textlnot}":"\u00AC",              "{\\textregistered}":"\u00AE",          "{\\textasciimacron}":"\u00AF",         "{\\textdegree}":"\u00B0",
+  "{\\textpm}":"\u00B1",                "{\\texttwosuperior}":"\u00B2",         "{\\textthreesuperior}":"\u00B3",       "{\\textasciiacute}":"\u00B4",
+  "{\\textmu}":"\u00B5",                "{\\textparagraph}":"\u00B6",           "{\\textperiodcentered}":"\u00B7",      "{\\c\\ }":"\u00B8",
+  "{\\textonesuperior}":"\u00B9",       "{\\textordmasculine}":"\u00BA",        "{\\guillemotright}":"\u00BB",          "{\\textonequarter}":"\u00BC",
+  "{\\textonehalf}":"\u00BD",           "{\\textthreequarters}":"\u00BE",       "{\\textquestiondown}":"\u00BF",        "{\\AE}":"\u00C6",
+  "{\\DH}":"\u00D0",                    "{\\texttimes}":"\u00D7",               "{\\O}":"\u00D8",                       "{\\TH}":"\u00DE",
+  "{\\ss}":"\u00DF",                    "{\\ae}":"\u00E6",                      "{\\dh}":"\u00F0",                      "{\\textdiv}":"\u00F7",
+  "{\\o}":"\u00F8",                     "{\\th}":"\u00FE",                      "{\\i}":"\u0131",                       "{\\NG}":"\u014A",
+  "{\\ng}":"\u014B",                    "{\\OE}":"\u0152",                      "{\\oe}":"\u0153",                      "{\\textasciicircum}":"\u02C6",
+  "{\\textacutedbl}":"\u02DD",          "$\\Gamma$":"\u0393",                   "$\\Delta$":"\u0394",                   "$\\Theta$":"\u0398",
+  "$\\Lambda$":"\u039B",                "$\\Xi$":"\u039E",                      "$\\Pi$":"\u03A0",                      "$\\Sigma$":"\u03A3",
+  "$\\Phi$":"\u03A6",                   "$\\Psi$":"\u03A8",                     "$\\Omega$":"\u03A9",                   "$\\alpha$":"\u03B1",
+  "$\\beta$":"\u03B2",                  "$\\gamma$":"\u03B3",                   "$\\delta$":"\u03B4",                   "$\\varepsilon$":"\u03B5",
+  "$\\zeta$":"\u03B6",                  "$\\eta$":"\u03B7",                     "$\\theta$":"\u03B8",                   "$\\iota$":"\u03B9",
+  "$\\kappa$":"\u03BA",                 "$\\lambda$":"\u03BB",                  "$\\mu$":"\u03BC",                      "$\\nu$":"\u03BD",
+  "$\\xi$":"\u03BE",                    "$\\pi$":"\u03C0",                      "$\\rho$":"\u03C1",                     "$\\varsigma$":"\u03C2",
+  "$\\sigma$":"\u03C3",                 "$\\tau$":"\u03C4",                     "$\\upsilon$":"\u03C5",                 "$\\varphi$":"\u03C6",
+  "$\\chi$":"\u03C7",                   "$\\psi$":"\u03C8",                     "$\\omega$":"\u03C9",                   "$\\vartheta$":"\u03D1",
+  "$\\Upsilon$":"\u03D2",               "$\\phi$":"\u03D5",                     "$\\varpi$":"\u03D6",                   "$\\varrho$":"\u03F1",
+  "$\\epsilon$":"\u03F5",               "{\\textendash}":"\u2013",              "{\\textemdash}":"\u2014",              "---":"\u2014",
+  "--":"\u2013",                        "{\\textbardbl}":"\u2016",              "{\\textunderscore}":"\u2017",          "{\\textquoteleft}":"\u2018",
+  "{\\textquoteright}":"\u2019",        "{\\quotesinglbase}":"\u201A",          "{\\textquotedblleft}":"\u201C",        "{\\textquotedblright}":"\u201D",
+  "{\\quotedblbase}":"\u201E",          "{\\textdagger}":"\u2020",              "{\\textdaggerdbl}":"\u2021",           "{\\textbullet}":"\u2022",
+  "{\\textellipsis}":"\u2026",          "{\\textperthousand}":"\u2030",         "'''":"\u2034",                         "''":"\u201D",
+  "``":"\u201C",                        "```":"\u2037",                         "{\\guilsinglleft}":"\u2039",           "{\\guilsinglright}":"\u203A",
+  "!!":"\u203C",                        "{\\textfractionsolidus}":"\u2044",     "?!":"\u2048",                          "!?":"\u2049",
+  "$^{0}$":"\u2070",                    "$^{4}$":"\u2074",                      "$^{5}$":"\u2075",                      "$^{6}$":"\u2076",
+  "$^{7}$":"\u2077",                    "$^{8}$":"\u2078",                      "$^{9}$":"\u2079",                      "$^{+}$":"\u207A",
+  "$^{-}$":"\u207B",                    "$^{=}$":"\u207C",                      "$^{(}$":"\u207D",                      "$^{)}$":"\u207E",
+  "$^{n}$":"\u207F",                    "$_{0}$":"\u2080",                      "$_{1}$":"\u2081",                      "$_{2}$":"\u2082",
+  "$_{3}$":"\u2083",                    "$_{4}$":"\u2084",                      "$_{5}$":"\u2085",                      "$_{6}$":"\u2086",
+  "$_{7}$":"\u2087",                    "$_{8}$":"\u2088",                      "$_{9}$":"\u2089",                      "$_{+}$":"\u208A",
+  "$_{-}$":"\u208B",                    "$_{=}$":"\u208C",                      "$_{(}$":"\u208D",                      "$_{)}$":"\u208E",
+  "{\\texteuro}":"\u20AC",              "{\\textcelsius}":"\u2103",             "{\\textnumero}":"\u2116",              "{\\textcircledP}":"\u2117",
+  "{\\textservicemark}":"\u2120",       "{TEL}":"\u2121",                       "{\\texttrademark}":"\u2122",           "{\\textohm}":"\u2126",
+  "{\\textestimated}":"\u212E",         "{\\`A}":"\u00C0",                      "{\\'A}":"\u00C1",                      "{\\^A}":"\u00C2",
+  "{\\~A}":"\u00C3",                    "{\\\"A}":"\u00C4",                     "{\\r A}":"\u00C5",                     "{\\c C}":"\u00C7",
+  "{\\`E}":"\u00C8",                    "{\\'E}":"\u00C9",                      "{\\^E}":"\u00CA",                      "{\\\"E}":"\u00CB",
+  "{\\`I}":"\u00CC",                    "{\\'I}":"\u00CD",                      "{\\^I}":"\u00CE",                      "{\\\"I}":"\u00CF",
+  "{\\~N}":"\u00D1",                    "{\\`O}":"\u00D2",                      "{\\'O}":"\u00D3",                      "{\\^O}":"\u00D4",
+  "{\\~O}":"\u00D5",                    "{\\\"O}":"\u00D6",                     "{\\`U}":"\u00D9",                      "{\\'U}":"\u00DA",
+  "{\\^U}":"\u00DB",                    "{\\\"U}":"\u00DC",                     "{\\'Y}":"\u00DD",                      "{\\`a}":"\u00E0",
+  "{\\'a}":"\u00E1",                    "{\\^a}":"\u00E2",                      "{\\~a}":"\u00E3",                      "{\\\"a}":"\u00E4",
+  "{\\r a}":"\u00E5",                   "{\\c c}":"\u00E7",                     "{\\`e}":"\u00E8",                      "{\\'e}":"\u00E9",
+  "{\\^e}":"\u00EA",                    "{\\\"e}":"\u00EB",                     "{\\`i}":"\u00EC",                      "{\\'i}":"\u00ED",
+  "{\\^i}":"\u00EE",                    "{\\\"i}":"\u00EF",                     "{\\~n}":"\u00F1",                      "{\\`o}":"\u00F2",
+  "{\\'o}":"\u00F3",                    "{\\^o}":"\u00F4",                      "{\\~o}":"\u00F5",                      "{\\\"o}":"\u00F6",
+  "{\\`u}":"\u00F9",                    "{\\'u}":"\u00FA",                      "{\\^u}":"\u00FB",                      "{\\\"u}":"\u00FC",
+  "{\\'y}":"\u00FD",                    "{\\\"y}":"\u00FF",                     "{\\=A}":"\u0100",                      "{\\=a}":"\u0101",
+  "{\\u A}":"\u0102",                   "{\\u a}":"\u0103",                     "{\\k A}":"\u0104",                     "{\\k a}":"\u0105",
+  "{\\'C}":"\u0106",                    "{\\'c}":"\u0107",                      "{\\^C}":"\u0108",                      "{\\^c}":"\u0109",
+  "{\\.C}":"\u010A",                    "{\\.c}":"\u010B",                      "{\\v C}":"\u010C",                     "{\\v c}":"\u010D",
+  "{\\v D}":"\u010E",                   "{\\v d}":"\u010F",                     "{\\=E}":"\u0112",                      "{\\=e}":"\u0113",
+  "{\\u E}":"\u0114",                   "{\\u e}":"\u0115",                     "{\\.E}":"\u0116",                      "{\\.e}":"\u0117",
+  "{\\k E}":"\u0118",                   "{\\k e}":"\u0119",                     "{\\v E}":"\u011A",                     "{\\v e}":"\u011B",
+  "{\\^G}":"\u011C",                    "{\\^g}":"\u011D",                      "{\\u G}":"\u011E",                     "{\\u g}":"\u011F",
+  "{\\.G}":"\u0120",                    "{\\.g}":"\u0121",                      "{\\c G}":"\u0122",                     "{\\c g}":"\u0123",
+  "{\\^H}":"\u0124",                    "{\\^h}":"\u0125",                      "{\\~I}":"\u0128",                      "{\\~i}":"\u0129",
+  "{\\=I}":"\u012A",                    "{\\=i}":"\u012B",                      "{\\=\\i}":"\u012B",                    "{\\u I}":"\u012C",
+  "{\\u i}":"\u012D",                   "{\\k I}":"\u012E",                     "{\\k i}":"\u012F",                     "{\\.I}":"\u0130",
+  "{\\^J}":"\u0134",                    "{\\^j}":"\u0135",                      "{\\c K}":"\u0136",                     "{\\c k}":"\u0137",
+  "{\\'L}":"\u0139",                    "{\\'l}":"\u013A",                      "{\\c L}":"\u013B",                     "{\\c l}":"\u013C",
+  "{\\v L}":"\u013D",                   "{\\v l}":"\u013E",                     "{\\L }":"\u0141",                      "{\\l }":"\u0142",
+  "{\\'N}":"\u0143",                    "{\\'n}":"\u0144",                      "{\\c N}":"\u0145",                     "{\\c n}":"\u0146",
+  "{\\v N}":"\u0147",                   "{\\v n}":"\u0148",                     "{\\=O}":"\u014C",                      "{\\=o}":"\u014D",
+  "{\\u O}":"\u014E",                   "{\\u o}":"\u014F",                     "{\\H O}":"\u0150",                     "{\\H o}":"\u0151",
+  "{\\'R}":"\u0154",                    "{\\'r}":"\u0155",                      "{\\c R}":"\u0156",                     "{\\c r}":"\u0157",
+  "{\\v R}":"\u0158",                   "{\\v r}":"\u0159",                     "{\\'S}":"\u015A",                      "{\\'s}":"\u015B",
+  "{\\^S}":"\u015C",                    "{\\^s}":"\u015D",                      "{\\c S}":"\u015E",                     "{\\c s}":"\u015F",
+  "{\\v S}":"\u0160",                   "{\\v s}":"\u0161",                     "{\\c T}":"\u0162",                     "{\\c t}":"\u0163",
+  "{\\v T}":"\u0164",                   "{\\v t}":"\u0165",                     "{\\~U}":"\u0168",                      "{\\~u}":"\u0169",
+  "{\\=U}":"\u016A",                    "{\\=u}":"\u016B",                      "{\\u U}":"\u016C",                     "{\\u u}":"\u016D",
+  "{\\r U}":"\u016E",                   "{\\r u}":"\u016F",                     "{\\H U}":"\u0170",                     "{\\H u}":"\u0171",
+  "{\\k U}":"\u0172",                   "{\\k u}":"\u0173",                     "{\\^W}":"\u0174",                      "{\\^w}":"\u0175",
+  "{\\^Y}":"\u0176",                    "{\\^y}":"\u0177",                      "{\\\"Y}":"\u0178",                     "{\\'Z}":"\u0179",
+  "{\\'z}":"\u017A",                    "{\\.Z}":"\u017B",                      "{\\.z}":"\u017C",                      "{\\v Z}":"\u017D",
+  "{\\v z}":"\u017E",                   "{\\v A}":"\u01CD",                     "{\\v a}":"\u01CE",                     "{\\v I}":"\u01CF",
+  "{\\v i}":"\u01D0",                   "{\\v O}":"\u01D1",                     "{\\v o}":"\u01D2",                     "{\\v U}":"\u01D3",
+  "{\\v u}":"\u01D4",                   "{\\v G}":"\u01E6",                     "{\\v g}":"\u01E7",                     "{\\v K}":"\u01E8",
+  "{\\v k}":"\u01E9",                   "{\\k O}":"\u01EA",                     "{\\k o}":"\u01EB",                     "{\\v j}":"\u01F0",
+  "{\\'G}":"\u01F4",                    "{\\'g}":"\u01F5",                      "{\\.B}":"\u1E02",                      "{\\.b}":"\u1E03",
+  "{\\d B}":"\u1E04",                   "{\\d b}":"\u1E05",                     "{\\b B}":"\u1E06",                     "{\\b b}":"\u1E07",
+  "{\\.D}":"\u1E0A",                    "{\\.d}":"\u1E0B",                      "{\\d D}":"\u1E0C",                     "{\\d d}":"\u1E0D",
+  "{\\b D}":"\u1E0E",                   "{\\b d}":"\u1E0F",                     "{\\c D}":"\u1E10",                     "{\\c d}":"\u1E11",
+  "{\\.F}":"\u1E1E",                    "{\\.f}":"\u1E1F",                      "{\\=G}":"\u1E20",                      "{\\=g}":"\u1E21",
+  "{\\.H}":"\u1E22",                    "{\\.h}":"\u1E23",                      "{\\d H}":"\u1E24",                     "{\\d h}":"\u1E25",
+  "{\\\"H}":"\u1E26",                   "{\\\"h}":"\u1E27",                     "{\\c H}":"\u1E28",                     "{\\c h}":"\u1E29",
+  "{\\'K}":"\u1E30",                    "{\\'k}":"\u1E31",                      "{\\d K}":"\u1E32",                     "{\\d k}":"\u1E33",
+  "{\\b K}":"\u1E34",                   "{\\b k}":"\u1E35",                     "{\\d L}":"\u1E36",                     "{\\d l}":"\u1E37",
+  "{\\b L}":"\u1E3A",                   "{\\b l}":"\u1E3B",                     "{\\'M}":"\u1E3E",                      "{\\'m}":"\u1E3F",
+  "{\\.M}":"\u1E40",                    "{\\.m}":"\u1E41",                      "{\\d M}":"\u1E42",                     "{\\d m}":"\u1E43",
+  "{\\.N}":"\u1E44",                    "{\\.n}":"\u1E45",                      "{\\d N}":"\u1E46",                     "{\\d n}":"\u1E47",
+  "{\\b N}":"\u1E48",                   "{\\b n}":"\u1E49",                     "{\\'P}":"\u1E54",                      "{\\'p}":"\u1E55",
+  "{\\.P}":"\u1E56",                    "{\\.p}":"\u1E57",                      "{\\.R}":"\u1E58",                      "{\\.r}":"\u1E59",
+  "{\\d R}":"\u1E5A",                   "{\\d r}":"\u1E5B",                     "{\\b R}":"\u1E5E",                     "{\\b r}":"\u1E5F",
+  "{\\.S}":"\u1E60",                    "{\\.s}":"\u1E61",                      "{\\d S}":"\u1E62",                     "{\\d s}":"\u1E63",
+  "{\\.T}":"\u1E6A",                    "{\\.t}":"\u1E6B",                      "{\\d T}":"\u1E6C",                     "{\\d t}":"\u1E6D",
+  "{\\b T}":"\u1E6E",                   "{\\b t}":"\u1E6F",                     "{\\~V}":"\u1E7C",                      "{\\~v}":"\u1E7D",
+  "{\\d V}":"\u1E7E",                   "{\\d v}":"\u1E7F",                     "{\\`W}":"\u1E80",                      "{\\`w}":"\u1E81",
+  "{\\'W}":"\u1E82",                    "{\\'w}":"\u1E83",                      "{\\\"W}":"\u1E84",                     "{\\\"w}":"\u1E85",
+  "{\\.W}":"\u1E86",                    "{\\.w}":"\u1E87",                      "{\\d W}":"\u1E88",                     "{\\d w}":"\u1E89",
+  "{\\.X}":"\u1E8A",                    "{\\.x}":"\u1E8B",                      "{\\\"X}":"\u1E8C",                     "{\\\"x}":"\u1E8D",
+  "{\\.Y}":"\u1E8E",                    "{\\.y}":"\u1E8F",                      "{\\^Z}":"\u1E90",                      "{\\^z}":"\u1E91",
+  "{\\d Z}":"\u1E92",                   "{\\d z}":"\u1E93",                     "{\\b Z}":"\u1E94",                     "{\\b z}":"\u1E95",
+  "{\\b h}":"\u1E96",                   "{\\\"t}":"\u1E97",                     "{\\r w}":"\u1E98",                     "{\\r y}":"\u1e99",
+  "{\\d A}":"\u1EA0",                   "{\\d a}":"\u1EA1",                     "{\\d E}":"\u1EB8",                     "{\\d e}":"\u1EB9",
+  "{\\~E}":"\u1EBC",                    "{\\~e}":"\u1EBD",                      "{\\d I}":"\u1ECA",                     "{\\d i}":"\u1ECB",
+  "{\\d O}":"\u1ECC",                   "{\\d o}":"\u1ECD",                     "{\\d U}":"\u1EE4",                     "{\\d u}":"\u1EE5",
+  "{\\`Y}":"\u1EF2",                    "{\\`y}":"\u1EF3",                      "{\\d Y}":"\u1EF4",                     "{\\d y}":"\u1EF5",
+  "{\\~Y}":"\u1EF8",                    "{\\~y}":"\u1EF9",                      "{\\~}":"\u223C",                       "~":"\u00A0" 
 }
 
 /**
@@ -310,6 +310,23 @@ var varCSLLocales = {
 , 'es-ES': '&lt;?xml version="1.0" encoding="utf-8"?>&lt;locale xmlns="http://purl.org/net/xbiblio/csl" version="1.0" xml:lang="es-ES">&lt;info>&lt;rights license="http://creativecommons.org/licenses/by-sa/3.0/">This work is licensed under a Creative Commons Attribution-ShareAlike 3.0 License&lt;/rights>&lt;updated>2012-07-04T23:31:02+00:00&lt;/updated>&lt;/info>&lt;style-options punctuation-in-quote="false"/>&lt;date form="text">&lt;date-part name="day" suffix=" de "/>&lt;date-part name="month" suffix=" de "/>&lt;date-part name="year"/>&lt;/date>&lt;date form="numeric">&lt;date-part name="day" form="numeric-leading-zeros" suffix="/"/>&lt;date-part name="month" form="numeric-leading-zeros" suffix="/"/>&lt;date-part name="year"/>&lt;/date>&lt;terms>&lt;term name="accessed">accedido&lt;/term>&lt;term name="and">y&lt;/term>&lt;term name="and others">y otros&lt;/term>&lt;term name="anonymous">anónimo&lt;/term>&lt;term name="anonymous" form="short">anón.&lt;/term>&lt;term name="at">en&lt;/term>&lt;term name="available at">disponible en&lt;/term>&lt;term name="by">de&lt;/term>&lt;term name="circa">circa&lt;/term>&lt;term name="circa" form="short">c.&lt;/term>&lt;term name="cited">citado&lt;/term>&lt;term name="edition">&lt;single>edición&lt;/single>&lt;multiple>ediciones&lt;/multiple>&lt;/term>&lt;term name="edition" form="short">ed.&lt;/term>&lt;term name="et-al">et&amp;#160;al.&lt;/term>&lt;term name="forthcoming">previsto&lt;/term>&lt;term name="from">a partir de&lt;/term>&lt;term name="ibid">ibid.&lt;/term>&lt;term name="in">en&lt;/term>&lt;term name="in press">en imprenta&lt;/term>&lt;term name="internet">internet&lt;/term>&lt;term name="interview">entrevista&lt;/term>&lt;term name="letter">carta&lt;/term>&lt;term name="no date">sin fecha&lt;/term>&lt;term name="no date" form="short">s.&amp;#160;f.&lt;/term>&lt;term name="online">en línea&lt;/term>&lt;term name="presented at">presentado en&lt;/term>&lt;term name="reference">&lt;single>referencia&lt;/single>&lt;multiple>referencias&lt;/multiple>&lt;/term>&lt;term name="reference" form="short">&lt;single>ref.&lt;/single>&lt;multiple>refs.&lt;/multiple>&lt;/term>&lt;term name="retrieved">recuperado&lt;/term>&lt;term name="scale">escala&lt;/term>&lt;term name="version">versión&lt;/term>&lt;term name="ad">d.&amp;#160;C.&lt;/term>&lt;term name="bc">a.&amp;#160;C.&lt;/term>&lt;term name="open-quote">«&lt;/term>&lt;term name="close-quote">»&lt;/term>&lt;term name="open-inner-quote">“&lt;/term>&lt;term name="close-inner-quote">”&lt;/term>&lt;term name="page-range-delimiter">-&lt;/term>&lt;term name="ordinal">.ª&lt;/term>&lt;term name="long-ordinal-01">primera&lt;/term>&lt;term name="long-ordinal-02">segunda&lt;/term>&lt;term name="long-ordinal-03">tercera&lt;/term>&lt;term name="long-ordinal-04">cuarta&lt;/term>&lt;term name="long-ordinal-05">quinta&lt;/term>&lt;term name="long-ordinal-06">sexta&lt;/term>&lt;term name="long-ordinal-07">séptima&lt;/term>&lt;term name="long-ordinal-08">octava&lt;/term>&lt;term name="long-ordinal-09">novena&lt;/term>&lt;term name="long-ordinal-10">décima&lt;/term>&lt;term name="book">&lt;single>libro&lt;/single>&lt;multiple>libros&lt;/multiple>&lt;/term>&lt;term name="chapter">&lt;single>capítulo&lt;/single>&lt;multiple>capítulos&lt;/multiple>&lt;/term>&lt;term name="column">&lt;single>columna&lt;/single>&lt;multiple>columnas&lt;/multiple>&lt;/term>&lt;term name="figure">&lt;single>figura&lt;/single>&lt;multiple>figuras&lt;/multiple>&lt;/term>&lt;term name="folio">&lt;single>folio&lt;/single>&lt;multiple>folios&lt;/multiple>&lt;/term>&lt;term name="issue">&lt;single>número&lt;/single>&lt;multiple>números&lt;/multiple>&lt;/term>&lt;term name="line">&lt;single>línea&lt;/single>&lt;multiple>líneas&lt;/multiple>&lt;/term>&lt;term name="note">&lt;single>nota&lt;/single>&lt;multiple>notas&lt;/multiple>&lt;/term>&lt;term name="opus">&lt;single>opus&lt;/single>&lt;multiple>opera&lt;/multiple>&lt;/term>&lt;term name="page">&lt;single>página&lt;/single>&lt;multiple>páginas&lt;/multiple>&lt;/term>&lt;term name="number-of-pages">&lt;single>página&lt;/single>&lt;multiple>páginas&lt;/multiple>&lt;/term>&lt;term name="paragraph">&lt;single>párrafo&lt;/single>&lt;multiple>párrafos&lt;/multiple>&lt;/term>&lt;term name="part">&lt;single>parte&lt;/single>&lt;multiple>partes&lt;/multiple>&lt;/term>&lt;term name="section">&lt;single>sección&lt;/single>&lt;multiple>secciones&lt;/multiple>&lt;/term>&lt;term name="sub verbo">&lt;single>sub voce&lt;/single>&lt;multiple>sub vocibus&lt;/multiple>&lt;/term>&lt;term name="verse">&lt;single>verso&lt;/single>&lt;multiple>versos&lt;/multiple>&lt;/term>&lt;term name="volume">&lt;single>volumen&lt;/single>&lt;multiple>volúmenes&lt;/multiple>&lt;/term>&lt;term name="book" form="short">lib.&lt;/term>'+
 '&lt;term name="chapter" form="short">cap.&lt;/term>&lt;term name="column" form="short">col.&lt;/term>&lt;term name="figure" form="short">fig.&lt;/term>&lt;term name="folio" form="short">f.&lt;/term>&lt;term name="issue" form="short">n.º&lt;/term>&lt;term name="line" form="short">l.&lt;/term>&lt;term name="note" form="short">n.&lt;/term>&lt;term name="opus" form="short">op.&lt;/term>&lt;term name="page" form="short">&lt;single>p.&lt;/single>&lt;multiple>pp.&lt;/multiple>&lt;/term>&lt;term name="number-of-pages" form="short">&lt;single>p.&lt;/single>&lt;multiple>pp.&lt;/multiple>&lt;/term>&lt;term name="paragraph" form="short">párr.&lt;/term>&lt;term name="part" form="short">pt.&lt;/term>&lt;term name="section" form="short">sec.&lt;/term>&lt;term name="sub verbo" form="short">&lt;single>s.&amp;#160;v.&lt;/single>&lt;multiple>s.&amp;#160;vv.&lt;/multiple>&lt;/term>&lt;term name="verse" form="short">&lt;single>v.&lt;/single>&lt;multiple>vv.&lt;/multiple>&lt;/term>&lt;term name="volume" form="short">&lt;single>vol.&lt;/single>&lt;multiple>vols.&lt;/multiple>&lt;/term>&lt;term name="paragraph" form="symbol">&lt;single>§&lt;/single>&lt;multiple>§&lt;/multiple>&lt;/term>&lt;term name="section" form="symbol">&lt;single>§&lt;/single>&lt;multiple>§&lt;/multiple>&lt;/term>&lt;term name="director">&lt;single>director&lt;/single>&lt;multiple>directores&lt;/multiple>&lt;/term>&lt;term name="editor">&lt;single>editor&lt;/single>&lt;multiple>editores&lt;/multiple>&lt;/term>&lt;term name="editorial-director">&lt;single>editor&lt;/single>&lt;multiple>editores&lt;/multiple>&lt;/term>&lt;term name="illustrator">&lt;single>ilustrador&lt;/single>&lt;multiple>ilustradores&lt;/multiple>&lt;/term>&lt;term name="translator">&lt;single>traductor&lt;/single>&lt;multiple>traductores&lt;/multiple>&lt;/term>&lt;term name="editortranslator">&lt;single>editor y traductor&lt;/single>&lt;multiple>editores y traductores&lt;/multiple>&lt;/term>&lt;term name="director" form="short">&lt;single>dir.&lt;/single>&lt;multiple>dirs.&lt;/multiple>&lt;/term>&lt;term name="editor" form="short">&lt;single>ed.&lt;/single>&lt;multiple>eds.&lt;/multiple>&lt;/term>&lt;term name="editorial-director" form="short">&lt;single>ed.&lt;/single>&lt;multiple>eds.&lt;/multiple>&lt;/term>&lt;term name="illustrator" form="short">&lt;single>ilust.&lt;/single>&lt;multiple>ilusts.&lt;/multiple>&lt;/term>&lt;term name="translator" form="short">&lt;single>trad.&lt;/single>&lt;multiple>trads.&lt;/multiple>&lt;/term>&lt;term name="editortranslator" form="short">&lt;single>ed. y trad.&lt;/single>&lt;multiple>eds. y trads.&lt;/multiple>&lt;/term>&lt;term name="container-author" form="verb">de&lt;/term>&lt;term name="director" form="verb">dirigido por&lt;/term>&lt;term name="editor" form="verb">editado por&lt;/term>&lt;term name="editorial-director" form="verb">editado por&lt;/term>&lt;term name="illustrator" form="verb">ilustrado por&lt;/term>&lt;term name="interviewer" form="verb">entrevistado por&lt;/term>&lt;term name="recipient" form="verb">a&lt;/term>&lt;term name="reviewed-author" form="verb">por&lt;/term>&lt;term name="translator" form="verb">traducido por&lt;/term>&lt;term name="editortranslator" form="verb">editado y traducido por&lt;/term>&lt;term name="director" form="verb-short">dir.&lt;/term>&lt;term name="editor" form="verb-short">ed.&lt;/term>&lt;term name="editorial-director" form="verb-short">ed.&lt;/term>&lt;term name="illustrator" form="verb-short">ilust.&lt;/term>&lt;term name="translator" form="verb-short">trad.&lt;/term>&lt;term name="editortranslator" form="verb-short">ed. y trad.&lt;/term>&lt;term name="month-01">enero&lt;/term>&lt;term name="month-02">febrero&lt;/term>&lt;term name="month-03">marzo&lt;/term>&lt;term name="month-04">abril&lt;/term>&lt;term name="month-05">mayo&lt;/term>&lt;term name="month-06">junio&lt;/term>&lt;term name="month-07">julio&lt;/term>&lt;term name="month-08">agosto&lt;/term>&lt;term name="month-09">septiembre&lt;/term>&lt;term name="month-10">octubre&lt;/term>&lt;term name="month-11">noviembre&lt;/term>&lt;term name="month-12">diciembre&lt;/term>&lt;term name="month-01" form="short">ene.&lt;/term>&lt;term name="month-02" form="short">feb.&lt;/term>&lt;term name="month-03" form="short">mar.&lt;/term>&lt;term name="month-04" form="short">abr.&lt;/term>&lt;term name="month-05" form="short">may&lt;/term>&lt;term name="month-06" form="short">jun.&lt;/term>&lt;term name="month-07" form="short">jul.&lt;/term>&lt;term name="month-08" form="short">ago.&lt;/term>&lt;term name="month-09" form="short">sep.&lt;/term>&lt;term name="month-10" form="short">oct.&lt;/term>&lt;term name="month-11" form="short">nov.&lt;/term>&lt;term name="month-12" form="short">'+
 'dic.&lt;/term>&lt;term name="season-01">primavera&lt;/term>&lt;term name="season-02">verano&lt;/term>&lt;term name="season-03">otoño&lt;/term>&lt;term name="season-04">invierno&lt;/term>&lt;/terms>&lt;/locale>'
+}
+
+/**
+ * Object containing HTML strings for building JSON and BibTeX. Made to match citeproc, for compatability.
+ * 
+ * @constant varHTMLDict
+ * @default
+ */
+var varHTMLDict = {
+  wr_start : '&lt;div class="csl-bib-body">'
+, wr_end   : '&lt;/div>'
+, en_start : '&lt;div class="csl-entry">'
+, en_end   : '&lt;/div>'
+, ul_start : '&lt;ul style="list-style-type:none">'
+, ul_end   : '&lt;/ul>'
+, li_start : '&lt;li>'
+, li_end   : '&lt;/li>'
 }
 
 /**
@@ -593,17 +610,7 @@ var getBibTeXJSON = function ( src ) {
   if ( src.hasOwnProperty( 'issued'    )
     &amp;&amp; Array.isArray( src.issued )
     &amp;&amp; src.issued[ 0 ][ 'date-parts' ].length === 3
-				         ) props.year      = src.issued[ 0 ][ 'date-parts' ][ 0 ].toString()
-  
-  var propArr = Object.keys( props )
-  
-  for ( var propIndex = 0; propIndex &lt;  propArr.length; propIndex++ ) {
-    var prop = propArr[ propIndex ]
-    
-    props[ prop ] = props[ prop ].replace( /[|&lt;>~^\\{}]/g, function ( match ) {
-      return varBibTeXSyntaxTokens[ match ]
-    } )
-  }
+                                         ) props.year      = src.issued[ 0 ][ 'date-parts' ][ 0 ].toString()
   
   res.properties = props
   
@@ -622,22 +629,17 @@ var getBibTeXJSON = function ( src ) {
  */
 var getBibTeX = function ( src, html ) {
   var res = ''
-    , dict= {
-    ul_start : '&lt;ul style="list-style-type:none">'
-  , ul_end   : '&lt;/ul>'
-  , li_start : '&lt;li>'
-  , li_end   : '&lt;/li>'
-  }
+    , dict= varHTMLDict
   
   if ( html )
-    res += dict.ul_start
+    res += dict.wr_start
   
   for ( var i = 0; i &lt; src.length; i++ ) {
     var entry = src[ i ]
       , bib   = getBibTeXJSON( entry )
     
     if ( html )
-      res += dict.li_start
+      res += dict.en_start
     
     res += '@' + bib.type + '{' + bib.label + ','
     
@@ -651,35 +653,35 @@ var getBibTeX = function ( src, html ) {
     
     for ( var propIndex = 0; propIndex &lt; props.length; propIndex++ ) {
       var prop = props[ propIndex ]
-	, value= bib.properties[ prop ]
-	, del_start=
-	
-	// Number
-	value == parseInt( value ).toString() ? '' :
-	
-	// Title or other capital-related fields
-	prop === 'title' ? '{{' :
-	
-	// Default
-	'{'
-	
-	, del_end= del_start.replace( /{/g, '}' )
+        , value= bib.properties[ prop ].replace( /[|&lt;>~^\\{}]/g, function ( match ) {
+            return varBibTeXSyntaxTokens[ match ]
+          } )
+        , del_start=
+        
+          // Number
+          value == parseInt( value ).toString() ? '' :
+          // Title or other capital-related fields
+          prop === 'title' ? '{{' :
+          // Default
+          '{'
+          
+        , del_end= del_start.replace( /{/g, '}' ).split( '' ).reverse().join( '' )
       
       if ( !html )
-	res += '\t'
+        res += '\t'
       
       res += prop + '=' + del_start + value + del_end + ','
       
       if ( propIndex + 1 &lt; props.length ) {
       
-	if ( html )
-	  res += dict.li_end,
-	  res += dict.li_start
-	
+        if ( html )
+          res += dict.li_end,
+          res += dict.li_start
+        
       }
       
       if ( !html )
-	res += '\n'
+        res += '\n'
     }
     
     if ( html )
@@ -689,11 +691,11 @@ var getBibTeX = function ( src, html ) {
     res += '}'
     
     if ( html )
-      res += dict.li_end
+      res += dict.en_end
   }
   
   if ( html )
-    res += dict.ul_end
+    res += dict.wr_end
   else
     res += '\n'
   
@@ -782,9 +784,9 @@ var parseJSON = function ( str ) {
     console.info( '[set]', 'Input was not valid JSON, switching to experimental parser for invalid JSON')
     try {
       object = JSON.parse(
-	str
-	  .replace( varRegex.json[ 0 ][ 0 ], varRegex.json[ 0 ][ 1 ] )
-	  .replace( varRegex.json[ 1 ][ 0 ], varRegex.json[ 1 ][ 1 ] )
+        str
+          .replace( varRegex.json[ 0 ][ 0 ], varRegex.json[ 0 ][ 1 ] )
+          .replace( varRegex.json[ 1 ][ 0 ], varRegex.json[ 1 ][ 1 ] )
       )
     } catch (e) {
       console.error( '[set]', 'Experimental parser failed. Please improve the JSON. If this is not JSON, please re-read the supported formats.')
@@ -892,7 +894,7 @@ var parseWikidataProp = function ( prop, value, lang ) { var value = value
       
       if ( rValue === undefined )
         console.warn( '[set]', 'This entry type is not recognized and therefore interpreted as \'article-journal\':', value ),
-	rValue = 'article-journal'
+        rValue = 'article-journal'
       break;
     
     // ISBN 13 &amp; 10
@@ -976,12 +978,12 @@ var parseWikidata = function ( data ) {
     
     if ( Array.isArray( url ) ) {
       var urls = url
-	, outs = []
+        , outs = []
       
       for ( var urlIndex = 0; urlIndex &lt; urls.length; urlIndex++ ) {
-	var url = urls[ urlIndex ]
-	  , out = JSON.parse( fetchFile( url ) )
-	    outs= outs.concat( out )
+        var url = urls[ urlIndex ]
+          , out = JSON.parse( fetchFile( url ) )
+            outs= outs.concat( out )
       }
       
       result = outs
@@ -1026,30 +1028,30 @@ var parseWikidataJSON = function ( data ) {
     for ( var propIndex = 0; propIndex &lt; props.length; propIndex++ ) {
       var prop  = props[ propIndex ]
         , value = entity[ prop ]
-	
+        
       var resp = parseWikidataProp( prop, value, 'en' )
       
       if ( resp[ 0 ].length > 0 )
-	json[ resp[ 0 ] ] = resp[ 1 ]
+        json[ resp[ 0 ] ] = resp[ 1 ]
     }
     
     // It still has to combine authors from string value and numeric-id value :(
     if ( json.hasOwnProperty( 'authorQ' ) || json.hasOwnProperty( 'authorS' ) ) {
       
-      if ( json.hasOwnProperty( 'authorQ' ) &amp;&amp; json.hasOwnProperty( 'authorS' ) ) {	
-	if ( json.authorQ.length >= json.authorS.length )
-	  json.author = json.authorQ
-	else if ( json.authorQ.length &lt; json.authorS.length )
-	  json.author = json.authorS
-	
-	delete        json.authorQ
-	delete        json.authorS
+      if ( json.hasOwnProperty( 'authorQ' ) &amp;&amp; json.hasOwnProperty( 'authorS' ) ) {     
+        if ( json.authorQ.length >= json.authorS.length )
+          json.author = json.authorQ
+        else if ( json.authorQ.length &lt; json.authorS.length )
+          json.author = json.authorS
+        
+        delete        json.authorQ
+        delete        json.authorS
       } else if ( json.hasOwnProperty( 'authorQ' ) ) {
-	json.author = json.authorQ
-	delete        json.authorQ
+        json.author = json.authorQ
+        delete        json.authorQ
       } else if ( json.hasOwnProperty( 'authorS' ) ) {
-	json.author = json.authorS
-	delete        json.authorS
+        json.author = json.authorS
+        delete        json.authorS
       }
     
     }
@@ -1206,7 +1208,7 @@ var parseBibTeXJSON = function ( data ) {
       var val = parseBibTeXProp( prop, entry.properties[ prop ] )
       
       if ( val !== undefined )
-	entry[ val[ 0 ] ] = val[ 1 ]
+        entry[ val[ 0 ] ] = val[ 1 ]
     }
     
     entry.type = parseBibTeXType( entry.type )
@@ -1238,54 +1240,54 @@ var parseBibTeX = function ( str ) {
     entries = []
     
     var stack = str
-	// Clean weird commands
-	.replace( /{?(\\[`"'^~=]){?\\?([A-Za-z])}/g, '{$1$2}')
-	.replace( /{?(\\[a-z]){?\\?([A-Za-z])}/g, '{$1 $2}' )
-	// Tokenize, with escaped characters in mind
-	.split( new RegExp( '(?!^)(' +
-	  // Escaped chars
-	  '\\\\([#$%&amp;~_^\\\\{}])|' +
-	  // Regular commands
-	  '\\{\\\\(?:' +
-	  // Accented chars
-	    // Vowel regular
-	    '[`\'^~"=][AEIOUYaeiouy]|' +
-	    // Consonant regular
-	    '(?:[cv] |[\'])[CcDdGgKkLlNnRrSs]|' +
-	    // A-E
-	    '(?:[dkruv] )[Aa]|(?:[db] |\\.)[Bb]|[.^][Cc]|(?:[bd] |\\.)[Dd]|(?:[dkuv] |[.])[Ee]|' +
-	    // F-J
-	    '\\.[Ff]|(?:u |[=.^\'])[Gg]|(?:[cd] |[.^"])[Hh]|b h|[dv] [Ii]|=\\\\i|\\.I|(?:v |\\^)[Jj]|' +
-	    // K-O
-	    '(?:[bd] |\')[Kk]|[bd] [Ll]|[Ll] |(?:d |[.\'])[Mm]|(?:[bd] |[~.])[Nn]|[dHkuv] [Oo]|'+
-	    // P-U
-	    '[.\'][Pp]|(?:[bd] |[.])[Rr]|(?:d |[.^])[Ss]|(?:[bcdv] |[.])[Tt]|" t|[dHkruv] [Uu]|' +
-	    // V-Z
-	    '(?:d |[~])[Vv]|(?:d |[`".\'^])[Ww]|r w|[."][Xx]|(?:d |[.])[Yy]|r y|(?:[bdv] |[\'.^])[Zz]|' +
-	  // No break space
-	    '~|' +
-	  // Commands
-	    '\\w+' +
-	  ')\\}|' +
-	  // Greek letters and other symbols
-	  '\$\\\\(?:[A-Z]?[a-z]+|\\#|%&lt;)\\\\$|' +
-	  // Subscript and superscript
-	  '\\$[^_]\\{[0-9+-=()n]\\}\\$|' +
-	  // --, ---, '', ''', ``, ```
-	  '---|--|\'\'\'|\'\'|```|``|' +
-	  // ?!, !!, !?
-	  '\\?!|' + '!!|' + '!\\?\'|' +
-	  // \url and \href
-	  '\\\\(?:url|href)|' +
-	  '[\\s\\S]' +
-	')', 'g' ) )
-	.filter( function ( v ) { return !!v } )
+        // Clean weird commands
+        .replace( /{?(\\[`"'^~=]){?\\?([A-Za-z])}/g, '{$1$2}')
+        .replace( /{?(\\[a-z]){?\\?([A-Za-z])}/g, '{$1 $2}' )
+        // Tokenize, with escaped characters in mind
+        .split( new RegExp( '(?!^)(' +
+          // Escaped chars
+          '\\\\([#$%&amp;~_^\\\\{}])|' +
+          // Regular commands
+          '\\{\\\\(?:' +
+          // Accented chars
+            // Vowel regular
+            '[`\'^~"=][AEIOUYaeiouy]|' +
+            // Consonant regular
+            '(?:[cv] |[\'])[CcDdGgKkLlNnRrSs]|' +
+            // A-E
+            '(?:[dkruv] )[Aa]|(?:[db] |\\.)[Bb]|[.^][Cc]|(?:[bd] |\\.)[Dd]|(?:[dkuv] |[.])[Ee]|' +
+            // F-J
+            '\\.[Ff]|(?:u |[=.^\'])[Gg]|(?:[cd] |[.^"])[Hh]|b h|[dv] [Ii]|=\\\\i|\\.I|(?:v |\\^)[Jj]|' +
+            // K-O
+            '(?:[bd] |\')[Kk]|[bd] [Ll]|[Ll] |(?:d |[.\'])[Mm]|(?:[bd] |[~.])[Nn]|[dHkuv] [Oo]|'+
+            // P-U
+            '[.\'][Pp]|(?:[bd] |[.])[Rr]|(?:d |[.^])[Ss]|(?:[bcdv] |[.])[Tt]|" t|[dHkruv] [Uu]|' +
+            // V-Z
+            '(?:d |[~])[Vv]|(?:d |[`".\'^])[Ww]|r w|[."][Xx]|(?:d |[.])[Yy]|r y|(?:[bdv] |[\'.^])[Zz]|' +
+          // No break space
+            '~|' +
+          // Commands
+            '\\w+' +
+          ')\\}|' +
+          // Greek letters and other symbols
+          '\$\\\\(?:[A-Z]?[a-z]+|\\#|%&lt;)\\\\$|' +
+          // Subscript and superscript
+          '\\$[^_]\\{[0-9+-=()n]\\}\\$|' +
+          // --, ---, '', ''', ``, ```
+          '---|--|\'\'\'|\'\'|```|``|' +
+          // ?!, !!, !?
+          '\\?!|' + '!!|' + '!\\?\'|' +
+          // \url and \href
+          '\\\\(?:url|href)|' +
+          '[\\s\\S]' +
+        ')', 'g' ) )
+        .filter( function ( v ) { return !!v } )
       
       , whitespace= varRegex.bibtex[ 1 ]
       , syntax= varRegex.bibtex[ 2 ]
       
       , dels  = {
-	'"': '"'
+        '"': '"'
       , '{': '}'
       , '"{': '}"'
       , '{{': '}}'
@@ -1299,160 +1301,160 @@ var parseBibTeX = function ( str ) {
     while ( curs ) {
       
       while ( whitespace.test( curs ) )
-	curs = stack[ ++index ]
+        curs = stack[ ++index ]
       
       if ( !curs )
-	break
+        break
       
       entries.push( { type: '', label: '', properties: {}} )
       obj = entries[ entries.length - 1 ]
       
       if ( curs === '@' )
-	curs = stack[ ++index ]
+        curs = stack[ ++index ]
       else
-	throw new SyntaxError( `Unexpected token at index ${index}. Expected "@", got "${curs}".`  )
+        throw new SyntaxError( `Unexpected token at index ${index}. Expected "@", got "${curs}".`  )
       
       while ( whitespace.test( curs ) )
-	curs = stack[ ++index ]
+        curs = stack[ ++index ]
       
       while ( ( !whitespace.test( curs ) &amp;&amp; !syntax.test( curs ) ) || curs.length > 1 )
-	obj.type += curs
+        obj.type += curs
       , curs = stack[ ++index ]
       
       obj.type = obj.type.toLowerCase()
       
       while ( whitespace.test( curs ) )
-	curs = stack[ ++index ]
+        curs = stack[ ++index ]
       
       if ( curs === '{' )
-	curs = stack[ ++index ]
+        curs = stack[ ++index ]
       else
-	throw new SyntaxError( `Unexpected token at index ${index}. Expected "{", got "${curs}".`  )
+        throw new SyntaxError( `Unexpected token at index ${index}. Expected "{", got "${curs}".`  )
       
       while ( whitespace.test( curs ) )
-	curs = stack[ ++index ]
+        curs = stack[ ++index ]
       
       while ( ( !whitespace.test( curs ) &amp;&amp; !syntax.test( curs ) ) || curs.length > 1 ) {
-	obj.label += curs
-	curs = stack[ ++index ]
+        obj.label += curs
+        curs = stack[ ++index ]
       }
       
       while ( whitespace.test( curs ) )
-	curs = stack[ ++index ]
+        curs = stack[ ++index ]
       
       if ( curs === ',' )
-	curs = stack[ ++index ]
+        curs = stack[ ++index ]
       else
-	throw new SyntaxError( `Unexpected token at index ${index}. Expected ",", got "${curs}".`  )
+        throw new SyntaxError( `Unexpected token at index ${index}. Expected ",", got "${curs}".`  )
       
       while ( whitespace.test( curs ) )
-	curs = stack[ ++index ]
+        curs = stack[ ++index ]
       
       var
-	  key
-	, val
-	
-	, start_del
-	, end_del
-	
-	, nexs
+          key
+        , val
+        
+        , start_del
+        , end_del
+        
+        , nexs
       
       while ( curs !== '}' ) {
-	
-	key       = '',
-	val       = '',
-	start_del = ''
-	
-	while ( curs &amp;&amp; !whitespace.test( curs ) &amp;&amp; curs !== '=' )
-	  key += curs,
-	  curs = stack[ ++index ]
-	
-	while ( whitespace.test( curs ) )
-	  curs = stack[ ++index ]
-	
-	if ( curs === '=' )
-	  curs = stack[ ++index ]
-	else
-	  throw new SyntaxError( `Unexpected token at index ${index}. Expected "=", got "${curs}".`  )
-	
-	while ( whitespace.test( curs ) )
-	  curs = stack[ ++index ]
-	
-	while ( syntax.test( curs ) )
-	  start_del += curs,
-	  curs = stack[ ++index ]
-	
-	if ( !dels.hasOwnProperty( start_del ) )
-	  throw new SyntaxError(
-	    `Unexpected field delimiter at index ${index}. Expected ` +
-	    `${ Object.keys(dels).map( function ( v ) { return `"${v}"` } ).join( ', ' ) }, got "${start_del}".`
-	  )
-	
-	end_del = dels[ start_del ],
-	nexs    = stack
-	  .slice( index + 1, index + ( end_del.length ? end_del.length : 1 ) )
-	  .reverse()
-	  .join( '' )
-	
-	while ( curs &amp;&amp; ( end_del === '' ?
-	  ( curs !== ',' )
-	:
-	  ( curs + nexs !== end_del )
-	) ) {
-	  
-	  if ( varBibTeXTokens.hasOwnProperty( curs ) )
-	    val += varBibTeXTokens[ curs ]
-	  else if ( curs.match( /^\\([#$%&amp;~_^\\{}])$/ ) )
-	    val += curs.slice( 1 )
-	  else if ( curs.length > 1 )
-	    // "Soft", non-breaking error for now
-	    //throw new SyntaxError( 'Escape sequence not recognized: ' + curs )
-	    console.error( 'Escape sequence not recognized: ' + curs )
-	  else
-	    val += curs
-	  
-	  curs = stack[ ++index ]
-	  nexs = stack
-	    .slice( index + 1, index + ( end_del.length ? end_del.length : 1 ) )
-	    .reverse()
-	    .join( '' )
-	}
-	
-	key = key
-	  .trim()
-	  .replace( /\s+/g, ' ' )
-	  .toLowerCase()
-	
-	val = val
-	  .replace( /[{}]/g, '' )
-	  .trim()
-	  .replace( /\s+/g, ' ' )
-	
-	obj.properties[ key ] = val
-	
-	end_del = end_del.split( '' )
-	
-	while ( end_del.pop() )
-	  curs = stack[ ++index ]
-	
-	while ( whitespace.test( curs ) )
-	  curs = stack[ ++index ]
-	
-	if ( curs === '}' )
-	  break
-	else if ( curs === ',' )
-	  curs = stack[ ++index ]
-	else
-	  throw new SyntaxError( `Unexpected token at index ${index}. Expected ",", "}", got "${curs}".`  )
-	
-	while ( whitespace.test( curs ) )
-	  curs = stack[ ++index ]
+        
+        key       = '',
+        val       = '',
+        start_del = ''
+        
+        while ( curs &amp;&amp; !whitespace.test( curs ) &amp;&amp; curs !== '=' )
+          key += curs,
+          curs = stack[ ++index ]
+        
+        while ( whitespace.test( curs ) )
+          curs = stack[ ++index ]
+        
+        if ( curs === '=' )
+          curs = stack[ ++index ]
+        else
+          throw new SyntaxError( `Unexpected token at index ${index}. Expected "=", got "${curs}".`  )
+        
+        while ( whitespace.test( curs ) )
+          curs = stack[ ++index ]
+        
+        while ( syntax.test( curs ) )
+          start_del += curs,
+          curs = stack[ ++index ]
+        
+        if ( !dels.hasOwnProperty( start_del ) )
+          throw new SyntaxError(
+            `Unexpected field delimiter at index ${index}. Expected ` +
+            `${ Object.keys(dels).map( function ( v ) { return `"${v}"` } ).join( ', ' ) }, got "${start_del}".`
+          )
+        
+        end_del = dels[ start_del ],
+        nexs    = stack
+          .slice( index + 1, index + ( end_del.length ? end_del.length : 1 ) )
+          .reverse()
+          .join( '' )
+        
+        while ( curs &amp;&amp; ( end_del === '' ?
+          ( curs !== ',' )
+        :
+          ( curs + nexs !== end_del )
+        ) ) {
+          
+          if ( varBibTeXTokens.hasOwnProperty( curs ) )
+            val += varBibTeXTokens[ curs ]
+          else if ( curs.match( /^\\([#$%&amp;~_^\\{}])$/ ) )
+            val += curs.slice( 1 )
+          else if ( curs.length > 1 )
+            // "Soft", non-breaking error for now
+            //throw new SyntaxError( 'Escape sequence not recognized: ' + curs )
+            console.error( 'Escape sequence not recognized: ' + curs )
+          else
+            val += curs
+          
+          curs = stack[ ++index ]
+          nexs = stack
+            .slice( index + 1, index + ( end_del.length ? end_del.length : 1 ) )
+            .reverse()
+            .join( '' )
+        }
+        
+        key = key
+          .trim()
+          .replace( /\s+/g, ' ' )
+          .toLowerCase()
+        
+        val = val
+          .replace( /[{}]/g, '' )
+          .trim()
+          .replace( /\s+/g, ' ' )
+        
+        obj.properties[ key ] = val
+        
+        end_del = end_del.split( '' )
+        
+        while ( end_del.pop() )
+          curs = stack[ ++index ]
+        
+        while ( whitespace.test( curs ) )
+          curs = stack[ ++index ]
+        
+        if ( curs === '}' )
+          break
+        else if ( curs === ',' )
+          curs = stack[ ++index ]
+        else
+          throw new SyntaxError( `Unexpected token at index ${index}. Expected ",", "}", got "${curs}".`  )
+        
+        while ( whitespace.test( curs ) )
+          curs = stack[ ++index ]
       }
       
       if ( curs === '}' )
-	curs = stack[ ++index ]
+        curs = stack[ ++index ]
       else
-	throw new SyntaxError( `Unexpected token at index ${index}. Expected "}", got "${curs}".`  )
+        throw new SyntaxError( `Unexpected token at index ${index}. Expected "}", got "${curs}".`  )
     
     }
   
@@ -1515,64 +1517,64 @@ var parseInputType = function ( input ) {
     case 'string':
       
       // Empty
-	    if ( input.length === 0 )
-	return 'string/empty'
+            if ( input.length === 0 )
+        return 'string/empty'
       
       // Wikidata URL
       else if ( varRegex.wikidata[ 0 ].test( input ) )
-	return 'url/wikidata'
+        return 'url/wikidata'
       
       // Wikidata entity list
       else if ( varRegex.wikidata[ 2 ].test( input ) )
-	return 'list/wikidata'
+        return 'list/wikidata'
       
       // BibTeX
       else if ( varRegex.bibtex  [ 0 ].test( input ) )
-	return 'string/bibtex'
+        return 'string/bibtex'
       
       // JSON
       else if ( /^\s*(\{|\[)/.test( input ) )
-	return 'string/json'
+        return 'string/json'
       
       // Else URL
       else if ( varRegex.url.test( input ) )
-	return 'url/else'
+        return 'url/else'
       
       // Else
       else
-	return console.warn( '[set]', 'This format is not supported or recognised' ) || 'invalid'
+        return console.warn( '[set]', 'This format is not supported or recognised' ) || 'invalid'
       
     case 'object':
       
       // Empty
-	    if ( input === null )
-	return 'empty'
+            if ( input === null )
+        return 'empty'
       
       // Array
       else if ( Array.isArray( input ) )
-	return 'list/else'
+        return 'list/else'
       
       // jQuery
       else if ( window.jQuery &amp;&amp; input instanceof jQuery )
-	return 'jquery/else'
+        return 'jquery/else'
       
       // HTML
       else if ( window.HMTLElement &amp;&amp; input instanceof HMTLElement)
-	return 'html/else'
+        return 'html/else'
       
       // Wikidata
       else if ( input.hasOwnProperty( 'entities' ) )
-	return 'json/wikidata'
+        return 'json/wikidata'
       
       // ContentMine
       else if ( input.hasOwnProperty( 'fulltext_html' ) ||
-		input.hasOwnProperty( 'fulltext_xml'  ) ||
-		input.hasOwnProperty( 'fulltext_pdf'  ) )
-	return 'json/contentmine'
+                input.hasOwnProperty( 'fulltext_xml'  ) ||
+                input.hasOwnProperty( 'fulltext_pdf'  ) )
+        return 'json/contentmine'
       
       // Default
       else
-	return 'json/csl'
+        return 'json/csl'
       
       break;
     
@@ -1645,7 +1647,7 @@ var parseInputData = function ( input, type ) {
     case 'list/else':
       output = []
       input.forEach( function ( value ) {
-	output = output.concat( parseInput( value ) )
+        output = output.concat( parseInput( value ) )
       } )
       break;
     
@@ -1751,6 +1753,62 @@ var getJSONValueHTML = function ( src ) {
       res += getJSONObjectHTML( src )
     
   } else res += '&lt;span class="string">' + JSON.stringify( src ) + '&lt;/span>'
+  
+  return res
+}
+
+/**
+ * Get a JSON HTML string from CSL
+ * 
+ * @method getJSON
+ * 
+ * @param {Object[]} src - Input CSL
+ * 
+ * @return {String} JSON HTML string
+ */
+var getJSON = function ( src ) {
+  var res = ''
+    , dict= varHTMLDict
+  
+  res += dict.wr_start
+  res += '['
+  
+  for ( var i = 0; i &lt; src.length; i++ ) {
+    var entry = src[ i ]
+    
+    res += dict.en_start
+    res += '{'
+    
+    res += dict.ul_start
+    res += dict.li_start
+    
+    var props = Object.keys( entry )
+    
+    for ( var propIndex = 0; propIndex &lt; props.length; propIndex++ ) {
+      var prop = props[ propIndex ]
+        , value= entry[ prop ]
+      
+      res += prop + ':' + getJSONValueHTML( value )
+      
+      if ( propIndex + 1 &lt; props.length )
+        res += ',',
+        res += dict.li_end,
+        res += dict.li_start
+    }
+    
+    res += dict.li_end
+    res += dict.ul_end
+    
+    res += '}'
+    
+    if ( i + 1 &lt; src.length )
+      res += ','
+    
+    res += dict.en_end
+  }
+  
+  res += dict.wr_end
+  res += ']'
   
   return res
 }
@@ -1869,7 +1927,7 @@ var getJSONValueHTML = function ( src ) {
     
     for ( var i = 0; i &lt; this._log.length; i++ ) {
       if ( this._log[ i ].version > version )
-	version = this._log[ i ].version
+        version = this._log[ i ].version
     }
     
     return version
@@ -1891,15 +1949,15 @@ var getJSONValueHTML = function ( src ) {
     
     if ( versnum >= 0 &amp;&amp; versnum &lt;= this.currentVersion() ) {
       var obj = new Cite( this._log[ 0 ].arguments[ 0 ], this._log[ 0 ].arguments[ 1 ] ),
-	  arr = []
+          arr = []
       
       for ( var i = 0; i &lt; this._log.length; i++ ) {
-	if ( this._log[ i ].version )
-	  arr.push( this._log[ i ] )
+        if ( this._log[ i ].version )
+          arr.push( this._log[ i ] )
       }
       
       for ( var k = 1; k &lt;= versnum; k++ ) {
-	obj[ arr[ k ].name ].apply( obj, arr[ k ].arguments || [] )
+        obj[ arr[ k ].name ].apply( obj, arr[ k ].arguments || [] )
       }
       
       return obj
@@ -2014,17 +2072,20 @@ var getJSONValueHTML = function ( src ) {
    * @memberof Cite
    * @this Cite
    * 
+   * @param {Boolean} nolog - Hide this call from the log (i.e. when used internally)
+   * 
    * @return {Cite} The updated parent object
    */
-  this.sort = function () {
-    this._log.push( { name: 'sort', version: this.currentVersion() + 1, arguments: [] } )
+  this.sort = function ( nolog ) {
+    if( !nolog )
+      this._log.push( { name: 'sort', version: this.currentVersion() + 1, arguments: [] } )
     
-    this.data.sort( function ( a, b ) {
+    this.data = this.data.sort( function ( a, b ) {
       var labela = getLabel( a )
-	, labelb = getLabel( b )
+        , labelb = getLabel( b )
       
       return labela != labelb ?
-	( labela > labelb ? 1 : -1 )
+        ( labela > labelb ? 1 : -1 )
       : 0 ;
     } )
     
@@ -2032,167 +2093,167 @@ var getJSONValueHTML = function ( src ) {
   }
   
   /**
-  * Get formatted data from your object. For more info, see [Output](../#output).
-  * 
-  * @method get
-  * @memberof Cite
-  * @this Cite
-  * 
-  * @param {Object} options - The options for the output
-  * @param {String} [options.format="real"] - The outputted datatype. Real representation (`"real"`, e.g. DOM Object for HTML, JavaScript Object for JSON) or String representation ( `"string"` )
-  * @param {String} [options.type="json"] - The format of the output. `"string"`, `"html"` or `"json"`
-  * @param {String} [options.style="csl"] - The style of the output. See [Output](../#output)
-  * @param {String} [options.lang="en-US"] - The language of the output. [RFC 5646](https://tools.ietf.org/html/rfc5646) codes
-  * @param {String} [options.locale] - Custom CSL locale for citeproc
-  * @param {String} [options.template] - Custom CSL style template for citeproc
-  * @param {Boolean} nolog - Hide this call from the log (i.e. when used internally)
-  * 
-  * @return {String|Object[]} The formatted data
-  */
+   * Get formatted data from your object. For more info, see [Output](../#output).
+   * 
+   * @method get
+   * @memberof Cite
+   * @this Cite
+   * 
+   * @param {Object} options - The options for the output
+   * @param {String} [options.format="real"] - The outputted datatype. Real representation (`"real"`, e.g. DOM Object for HTML, JavaScript Object for JSON) or String representation ( `"string"` )
+   * @param {String} [options.type="json"] - The format of the output. `"string"`, `"html"` or `"json"`
+   * @param {String} [options.style="csl"] - The style of the output. See [Output](../#output)
+   * @param {String} [options.lang="en-US"] - The language of the output. [RFC 5646](https://tools.ietf.org/html/rfc5646) codes
+   * @param {String} [options.locale] - Custom CSL locale for citeproc
+   * @param {String} [options.template] - Custom CSL style template for citeproc
+   * @param {Boolean} nolog - Hide this call from the log (i.e. when used internally)
+   * 
+   * @return {String|Object[]} The formatted data
+   */
   this.get = function ( options, nolog ) {
     if( !nolog )
       this._log.push( { name: 'get', arguments: [ options ] } )
     
     var result
       , options = Object.assign(
-	{ format:'real',type:'json',style:'csl',lang:'en-US' },
-	this._options,
-	{ locale: '', template: '' },
-	options
+        { format:'real',type:'json',style:'csl',lang:'en-US' },
+        this._options,
+        { locale: '', template: '' },
+        options
       )
     
     switch ( options.type.toLowerCase() ) {
       case 'html':
-	
-	switch ( options.style.toLowerCase().split( '-' )[ 0 ] ) {
-	  case 'citation':
-	    
-	    var _data = this.data
-	    
-	    var fetchCSLItem = function ( id ) {
-	      for ( var entryIndex = 0; entryIndex &lt; _data.length; entryIndex++ ) {
- 		var entry = _data[ entryIndex ]
-		if ( entry.id === id )
-		  return entry
-	      }
-	      if ( parseInt( id ) + 1 )
-		return _data[ id ]
-	    }
+        
+        switch ( options.style.toLowerCase().split( '-' )[ 0 ] ) {
+          case 'citation':
+            
+            var _data = this.data
+            
+            var fetchCSLItem = function ( id ) {
+              for ( var entryIndex = 0; entryIndex &lt; _data.length; entryIndex++ ) {
+                var entry = _data[ entryIndex ]
+                if ( entry.id === id )
+                  return entry
+              }
+              if ( parseInt( id ) + 1 )
+                return _data[ id ]
+            }
     
-	    var style = options.style.toLowerCase().split( '-' ).slice( 1 ).join( '-' )
-	        
-	        // Make citeproc config etc.
-	      , citeproc= new CSL.Engine(
-		  {
-		    retrieveLocale: options.locale ?
-		      function () { return options.locale }
-		    :
-		      fetchCSLLocale
-		  , retrieveItem: fetchCSLItem
-		  }
-		  , options.template ? options.template : fetchCSLStyle( style )
-		  , fetchCSLLocale( options.lang ) ? options.lang : 'en-US'
-		  , true
-		)
-	      , itemIDs = []
-	    
-	    // Make ID list
-	    for ( var entryIndex = 0; entryIndex &lt; this.data.length; entryIndex++ ) {
-	      var entry = this.data[ entryIndex ]
-	      if ( entry.hasOwnProperty( 'id' ) )
-		itemIDs.push( entry.id )
-	      else
-		entry.id = itemIDs[ itemIDs.push( 'temp_id_' + entryIndex ) - 1 ]
-	    }
-	    
-	    // Get HTML
-	    citeproc.updateItems(itemIDs)
-	    
-	    var bib = citeproc.makeBibliography()
-	    
-	    result = (
-	      bib[0].bibstart +
-	      bib[1].join( '&lt;br>' ) +
-	      bib[0].bibend
-	    )
-	    
-	    break;
-	  
-	  case 'csl':
-	    
-	    result = getJSONValueHTML( this.data )
-	    
-	    break;
-	  
-	  case 'bibtex':
-	    
-	    result = getBibTeX( this.data, true )
-	    
-	    break;
-	}
-	
+            var style = options.style.toLowerCase().split( '-' ).slice( 1 ).join( '-' )
+                
+                // Make citeproc config etc.
+              , citeproc= new CSL.Engine(
+                  {
+                    retrieveLocale: options.locale ?
+                      function () { return options.locale }
+                    :
+                      fetchCSLLocale
+                  , retrieveItem: fetchCSLItem
+                  }
+                  , options.template ? options.template : fetchCSLStyle( style )
+                  , fetchCSLLocale( options.lang ) ? options.lang : 'en-US'
+                  , true
+                )
+              , itemIDs = []
+            
+            // Make ID list
+            for ( var entryIndex = 0; entryIndex &lt; this.data.length; entryIndex++ ) {
+              var entry = this.data[ entryIndex ]
+              if ( entry.hasOwnProperty( 'id' ) )
+                itemIDs.push( entry.id )
+              else
+                entry.id = itemIDs[ itemIDs.push( 'temp_id_' + entryIndex ) - 1 ]
+            }
+            
+            // Get HTML
+            citeproc.updateItems(itemIDs)
+            
+            var bib = citeproc.makeBibliography()
+            
+            result = (
+              bib[0].bibstart +
+              bib[1].join( '&lt;br>' ) +
+              bib[0].bibend
+            )
+            
+            break;
+          
+          case 'csl':
+            
+            result = getJSON/*ValueHTML*/( this.data )
+            
+            break;
+          
+          case 'bibtex':
+            
+            result = getBibTeX( this.data, true )
+            
+            break;
+        }
+        
         break;
       
       case 'string':
-	
-	switch ( options.style.toLowerCase().split( '-' )[ 0 ] ) {
-	  case 'bibtex':
-	    
-	    result = getBibTeX( this.data, false )
-	    
-	    break;
-	  
-	  case 'citation':
-	    
-	    var options = Object.assign( {}, options, {type:'html'} )
-	
-	    result = striptags( this.get( options, true ) )
-	    
-	    break;
-	  
-	  case 'csl':
-	    
-	    result = JSON.stringify( this.data )
-	    
-	    break;
-	}
-	
-	break;
+        
+        switch ( options.style.toLowerCase().split( '-' )[ 0 ] ) {
+          case 'bibtex':
+            
+            result = getBibTeX( this.data, false )
+            
+            break;
+          
+          case 'citation':
+            
+            var options = Object.assign( {}, options, {type:'html'} )
+        
+            result = striptags( this.get( options, true ) )
+            
+            break;
+          
+          case 'csl':
+            
+            result = JSON.stringify( this.data )
+            
+            break;
+        }
+        
+        break;
       
       case 'json':
-	
-	switch ( options.style.toLowerCase().split( '-' )[ 0 ] ) {
-	  case 'csl':
-	    
-	    result = JSON.stringify( this.data )
-	    
-	    break;
-	  
-	  case 'bibtex':
-	    
-	    var src = JSON.parse( JSON.stringify( this.data ) )
-	    
-	    result = JSON.stringify( src.map( getBibTeXJSON ) )
-	    
-	    break;
-	  
-	  case 'citation':
-	    
-	    result = console.error( '[get]', 'Combination type/style of json/citation-* is not valid:', options.type + '/' + options.style )
-	    
-	    break;
-	}
-	
-	break;
+        
+        switch ( options.style.toLowerCase().split( '-' )[ 0 ] ) {
+          case 'csl':
+            
+            result = JSON.stringify( this.data )
+            
+            break;
+          
+          case 'bibtex':
+            
+            var src = JSON.parse( JSON.stringify( this.data ) )
+            
+            result = JSON.stringify( src.map( getBibTeXJSON ) )
+            
+            break;
+          
+          case 'citation':
+            
+            result = console.error( '[get]', 'Combination type/style of json/citation-* is not valid:', options.type + '/' + options.style )
+            
+            break;
+        }
+        
+        break;
     }
     
     if ( options.format === 'real' ) {
       if ( options.type === 'json' )
-	result = JSON.parse( result )
+        result = JSON.parse( result )
       else if ( browserMode &amp;&amp; options.type === 'html' ) {
-	var tmp = document.createElement( 'div' )
-	tmp.innerHTML = result
-	result = result.childNodes
+        var tmp = document.createElement( 'div' )
+        tmp.innerHTML = result
+        result = result.childNodes
       }
     }
     
@@ -2224,83 +2285,83 @@ return Cite
       var xhr  
       
       try {
-	xhr = new XMLHttpRequest()
-	if ( xhr.withCredentials !== undefined ) {
-	  xhr.open(method, url, false)
-	} else {
-	  xhr = null
-	}
+        xhr = new XMLHttpRequest()
+        if ( xhr.withCredentials !== undefined ) {
+          xhr.open(method, url, false)
+        } else {
+          xhr = null
+        }
       } catch ( e ) {
-	xhr = null
+        xhr = null
       }
       
       if ( xhr ) {
-	xhr.send( null )
-	return { getBody: function () { return xhr.responseText } }
+        xhr.send( null )
+        return { getBody: function () { return xhr.responseText } }
       } else
-	console.error( 'CORS not supported' )
-	return 'null'
+        console.error( 'CORS not supported' )
+        return 'null'
     }
   , window: window
   , wdk: { simplifyClaims: function ( array ) {
       var obj = {}
       
       Object.keys( array ).forEach( function ( id ) {
-	var claims = array[ id ].map( function ( claim ) {
-	  if ( claim.hasOwnProperty( 'mainsnak' ) ) {
-	    var mainsnak = claim.mainsnak
-	      , ref = [mainsnak.datatype, mainsnak.datavalue]
-	      , datatype = ref[0]
-	      , datavalue = ref[1]
-	      , value
-	    
-	    switch (datatype) {
-	      case 'string':
-	      case 'commonsMedia':
-	      case 'external-id':
-		value = datavalue.value
-		break;
-	      
-	      case 'wikibase-item':
-		value = 'Q' + datavalue.value['numeric-id']
-		break;
-	      
-	      case 'time':
-		
-		var month, rest, sign, year;
-		var parts = datavalue.value.time.split( '-' );
-		
-		switch (parts.length) {
-		  case 3:
-		    year  = parts[0],
-		    month = parts[1],
-		    rest  = parts[2]
-		    break;
-		  case 4:
-		    sign  = parts[0],
-		    year  = parts[1],
-		    month = parts[2],
-		    rest  = parts[3],
-		    year  = '-' + year
-		    break;
-		  default:
-		    console.error( '[set]', 'Unknown Wikidata time format:', datavalue.value.time );
-		}
-		
-		var day = rest.slice(0, 2);
-		
-		value = new Date(year, month - 1, day).getTime()
-		break;
-	      
-	      default:
-		value = null
-	    }
-	    return value
-	  } else {
-	    return undefined
-	  }
-	} )
-	obj[ id ] = claims
+        var claims = array[ id ].map( function ( claim ) {
+          if ( claim.hasOwnProperty( 'mainsnak' ) ) {
+            var mainsnak = claim.mainsnak
+              , ref = [mainsnak.datatype, mainsnak.datavalue]
+              , datatype = ref[0]
+              , datavalue = ref[1]
+              , value
+            
+            switch (datatype) {
+              case 'string':
+              case 'commonsMedia':
+              case 'external-id':
+                value = datavalue.value
+                break;
+              
+              case 'wikibase-item':
+                value = 'Q' + datavalue.value['numeric-id']
+                break;
+              
+              case 'time':
+                
+                var month, rest, sign, year;
+                var parts = datavalue.value.time.split( '-' );
+                
+                switch (parts.length) {
+                  case 3:
+                    year  = parts[0],
+                    month = parts[1],
+                    rest  = parts[2]
+                    break;
+                  case 4:
+                    sign  = parts[0],
+                    year  = parts[1],
+                    month = parts[2],
+                    rest  = parts[3],
+                    year  = '-' + year
+                    break;
+                  default:
+                    console.error( '[set]', 'Unknown Wikidata time format:', datavalue.value.time );
+                }
+                
+                var day = rest.slice(0, 2);
+                
+                value = new Date(year, month - 1, day).getTime()
+                break;
+              
+              default:
+                value = null
+            }
+            return value
+          } else {
+            return undefined
+          }
+        } )
+        obj[ id ] = claims
       } )
       
       return obj
@@ -2322,13 +2383,13 @@ if ( typeof require  === 'function' )
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Cite.html">Cite</a></li></ul><h3>Global</h3><ul><li><a href="global.html#fetchBibTeXType">fetchBibTeXType</a></li><li><a href="global.html#fetchCSLLocale">fetchCSLLocale</a></li><li><a href="global.html#fetchCSLStyle">fetchCSLStyle</a></li><li><a href="global.html#fetchFile">fetchFile</a></li><li><a href="global.html#fetchWikidataLabel">fetchWikidataLabel</a></li><li><a href="global.html#fetchWikidataType">fetchWikidataType</a></li><li><a href="global.html#getBibTeX">getBibTeX</a></li><li><a href="global.html#getBibTeXJSON">getBibTeXJSON</a></li><li><a href="global.html#getBibTeXLabel">getBibTeXLabel</a></li><li><a href="global.html#getDate">getDate</a></li><li><a href="global.html#getJSONObjectHTML">getJSONObjectHTML</a></li><li><a href="global.html#getJSONValueHTML">getJSONValueHTML</a></li><li><a href="global.html#getLabel">getLabel</a></li><li><a href="global.html#getName">getName</a></li><li><a href="global.html#parseBibTeX">parseBibTeX</a></li><li><a href="global.html#parseBibTeXJSON">parseBibTeXJSON</a></li><li><a href="global.html#parseBibTeXProp">parseBibTeXProp</a></li><li><a href="global.html#parseBibTeXType">parseBibTeXType</a></li><li><a href="global.html#parseContentMine">parseContentMine</a></li><li><a href="global.html#parseDate">parseDate</a></li><li><a href="global.html#parseInput">parseInput</a></li><li><a href="global.html#parseInputData">parseInputData</a></li><li><a href="global.html#parseInputType">parseInputType</a></li><li><a href="global.html#parseJSON">parseJSON</a></li><li><a href="global.html#parseName">parseName</a></li><li><a href="global.html#parseWikidata">parseWikidata</a></li><li><a href="global.html#parseWikidataJSON">parseWikidataJSON</a></li><li><a href="global.html#parseWikidataProp">parseWikidataProp</a></li><li><a href="global.html#varBibTeXSyntaxTokens">varBibTeXSyntaxTokens</a></li><li><a href="global.html#varBibTeXTokens">varBibTeXTokens</a></li><li><a href="global.html#varCSLLocales">varCSLLocales</a></li><li><a href="global.html#varCSLStyles">varCSLStyles</a></li><li><a href="global.html#varRegex">varRegex</a></li><li><a href="global.html#varWikidataTypes">varWikidataTypes</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Cite.html">Cite</a></li><li><a href="jQuery.html">jQuery</a></li><li><a href="jQueryCite.html">jQueryCite</a></li></ul><h3>Global</h3><ul><li><a href="global.html#fetchBibTeXType">fetchBibTeXType</a></li><li><a href="global.html#fetchCSLLocale">fetchCSLLocale</a></li><li><a href="global.html#fetchCSLStyle">fetchCSLStyle</a></li><li><a href="global.html#fetchFile">fetchFile</a></li><li><a href="global.html#fetchWikidataLabel">fetchWikidataLabel</a></li><li><a href="global.html#fetchWikidataType">fetchWikidataType</a></li><li><a href="global.html#getBibTeX">getBibTeX</a></li><li><a href="global.html#getBibTeXJSON">getBibTeXJSON</a></li><li><a href="global.html#getBibTeXLabel">getBibTeXLabel</a></li><li><a href="global.html#getDate">getDate</a></li><li><a href="global.html#getJSON">getJSON</a></li><li><a href="global.html#getJSONObjectHTML">getJSONObjectHTML</a></li><li><a href="global.html#getJSONValueHTML">getJSONValueHTML</a></li><li><a href="global.html#getLabel">getLabel</a></li><li><a href="global.html#getName">getName</a></li><li><a href="global.html#parseBibTeX">parseBibTeX</a></li><li><a href="global.html#parseBibTeXJSON">parseBibTeXJSON</a></li><li><a href="global.html#parseBibTeXProp">parseBibTeXProp</a></li><li><a href="global.html#parseBibTeXType">parseBibTeXType</a></li><li><a href="global.html#parseContentMine">parseContentMine</a></li><li><a href="global.html#parseDate">parseDate</a></li><li><a href="global.html#parseInput">parseInput</a></li><li><a href="global.html#parseInputData">parseInputData</a></li><li><a href="global.html#parseInputType">parseInputType</a></li><li><a href="global.html#parseJSON">parseJSON</a></li><li><a href="global.html#parseName">parseName</a></li><li><a href="global.html#parseWikidata">parseWikidata</a></li><li><a href="global.html#parseWikidataJSON">parseWikidataJSON</a></li><li><a href="global.html#parseWikidataProp">parseWikidataProp</a></li><li><a href="global.html#varBibTeXSyntaxTokens">varBibTeXSyntaxTokens</a></li><li><a href="global.html#varBibTeXTokens">varBibTeXTokens</a></li><li><a href="global.html#varCSLLocales">varCSLLocales</a></li><li><a href="global.html#varCSLStyles">varCSLStyles</a></li><li><a href="global.html#varHTMLDict">varHTMLDict</a></li><li><a href="global.html#varRegex">varRegex</a></li><li><a href="global.html#varWikidataTypes">varWikidataTypes</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.0</a> on Sun Nov 20 2016 17:11:40 GMT+0100 (CET)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.0</a> on Wed Nov 30 2016 21:22:32 GMT+0100 (CET)
 </footer>
 
 <script> prettyPrint(); </script>
