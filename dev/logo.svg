@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="128" height="128" viewBox="0 0 128 128" xmlns="http://www.w3.org/2000/svg" version="1.1">
+  
+  <defs>
+    <linearGradient id="Gradient1" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="black" stop-opacity=".30"></stop>
+      <stop offset="70%" stop-color="black" stop-opacity="0"></stop>
+      <stop offset="100%" stop-color="black" stop-opacity="0"></stop>
+    </linearGradient>
+    <linearGradient id="Gradient2" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="black" stop-opacity=".30"></stop>
+      <stop offset="40%" stop-color="black" stop-opacity="0"></stop>
+      <stop offset="50%" stop-color="black" stop-opacity="0"></stop>
+    </linearGradient>
+    <pattern id="Cell_small" x="0" y="0" width=".25" height=".25">
+      <rect x="0" y="0" width="4" height="4" fill="transparent" stroke="black" stroke-width=".125"/>
+    </pattern>
+    <pattern id="Cell" x="0" y="0" width=".125" height=".125">
+      <rect x="0" y="0" width="16" height="16" fill="url(#Cell_small)" stroke="black" stroke-width=".25"/>
+    </pattern>
+    <pattern id="Grid" x="0" y="0" width="1" height="1">
+      <g opacity=".25">
+        <rect x="0" width="128" y="0" height="128" fill="url(#Cell)" />
+        <g id="grid_line">
+          <line x1="0" x2="128" y1="0" y2="128" stroke="black" stroke-width=".25" />
+          <line x1="128" x2="0" y1="0" y2="128" stroke="black" stroke-width=".25" />
+        </g>
+        <g id="grid_circle">
+          <circle cx="64" cy="64" r="16" fill="transparent" stroke="black" stroke-width=".25" />
+          <circle cx="64" cy="64" r="32" fill="transparent" stroke="black" stroke-width=".25" />
+          <circle cx="64" cy="64" r="48" fill="transparent" stroke="black" stroke-width=".25" />
+          <circle cx="64" cy="64" r="64" fill="transparent" stroke="black" stroke-width=".25" />
+        </g>
+        <!--<g id="grid_key">
+          <path fill="transparent" stroke="black" stroke-width=".25" d="
+            M64 24 h48 a8 8,0,0,1,8 8 v64 a8 8,0,0,1,-8 8 h-96 a8 8,0,0,1,-8 -8 v-64 a8 8,0,0,1,8 -8 Z
+            M64 16 h40 a8 8,0,0,1,8 8 v80 a8 8,0,0,1,-8 8 h-80 a8 8,0,0,1,-8 -8 v-80 a8 8,0,0,1,8 -8 Z
+            M64  8 h32 a8 8,0,0,1,8 8 v96 a8 8,0,0,1,-8 8 h-64 a8 8,0,0,1,-8 -8 v-96 a8 8,0,0,1,8 -8 Z
+          " ></path>
+        </g>-->
+      </g>
+    </pattern>
+  </defs>
+  
+  <g id="sec_2">
+    <rect x="0" width="128" y="0" height="128" fill="#FFC107" />
+  </g>
+  
+  <!---->
+  <g id="sec_grid">
+    <rect x="0" width="128" y="0" height="128" fill="url(#Grid)" />
+  </g>
+  <!---->
+  
+  <g id="sec_3">
+    <path fill="url(#Gradient1)" d="
+      M64 32
+      A32 32,0,1,0,86.627416997969522 86.627416997969522
+      L128 128
+      L128 60.11774900609143
+      L97.94112549695428 30.058874503045722
+      L86.627416997969522 41.37258300203048
+      A32 32,0,0,0,64 32
+      Z
+    "></path>
+    
+    <path fill="url(#Gradient1)" d="
+      M97.94112549695428 97.94112549695428
+      A48 48,0,0,1,30.058874503045722 97.94112549695428
+      L60.11774900609143 128
+      L128 128
+      Z
+    "></path>
+    
+    <path fill="white" d="
+      M97.94112549695428 30.058874503045722
+      A48 48,0,1,0,97.94112549695428 97.94112549695428
+      L86.627416997969522 86.627416997969522
+      A32 32,0,1,1,86.627416997969522 41.37258300203048
+      Z
+    " ></path>
+  </g>
+  
+  <g id="sec_4">
+    <path fill="url(#Gradient2)" d="
+      M86 14
+      l42 42
+      v44
+      l-50 -50
+      l4 -32
+      Z
+    "></path>
+    <path fill="url(#Gradient2)" d="
+      M98.5 16
+      l29.5 29.5
+      v41
+      l-38.5 -38.5
+      l8 -2
+      v-24
+      Z
+    "></path>
+    <path fill="url(#Gradient2)" d="
+      M114 14
+      l42 42
+      v44
+      l-50 -50
+      l8 -4
+      l-2 -16
+      l2 -16
+      Z
+    "></path>
+    
+    <g fill="white">
+      <path d="
+        M80 16
+        m0 -2
+        h6 v4 h-4
+        v28
+        h4 v4 h-8
+        v-36
+        Z
+        
+        M112 16
+        m0 -2
+        h-6 v4 h4
+        v28
+        h-4 v4 h8
+        v-36
+        Z
+      "></path>
+      
+      <path fill="white" d="
+        M86.735 48
+        m2.6593406593406597 -2.7692307692307696
+        l4.945054945054945 -0.6153846153846154
+        v-23.97802197802198
+        l-5.032967032967034 0.08791208791208792
+        v-2.7032967032967035
+        l9.362637362637363 -2.0219780219780223
+        v28.615384615384617
+        l4.923076923076923 0.6153846153846154
+        v2.7692307692307696
+        h-14.197802197802199
+        v-2.7692307692307696
+        
+        Z
+      "></path>
+    </g>
+  </g>
+  
+</svg>
