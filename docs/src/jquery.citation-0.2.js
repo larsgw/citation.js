@@ -462,7 +462,7 @@ var jQueryCite = (function(){
   var parseCookie = function ( v ) {
     var pair = v.split( '=' )
       , key  = decodeURIComponent( pair[ 0 ].trim() )
-      , val  = decodeURIComponent( pair[ 1 ].trim() )
+      , val  = pair[ 1 ] ? decodeURIComponent( pair[ 1 ].trim() ) : ''
     
     return [ key, val ]
   }
@@ -1185,7 +1185,7 @@ var jQueryCite = (function(){
       
       //BEGIN Event listeners
       form.find( '.cjs-opt select' ).change( function () {
-        var siblings = $( this ).siblings( 'select' ).andSelf()
+        var siblings = $( this ).closest( 'fieldset' ).siblings( 'fieldset' ).andSelf().find( 'select' )
         
         var newOptions = {
           format: 'string'
