@@ -27,6 +27,12 @@
  * SOFTWARE.
  */
 
+/**
+ * [CSL](https://citeproc-js.readthedocs.io/en/latest/csl-json/markup.html#csl-json-items) element
+ * 
+ * @class CSL
+ */
+
 var Cite = ( function ( modules, nodejsMode, browserMode ) {
 
 var CSL = modules.CSL
@@ -43,6 +49,7 @@ console.info( '[init]', nodejsMode ? 'Node.js' : browserMode ? 'Browser' : '', '
 /**
  * Object containing several RegExp patterns, mostly used for parsing (*full of shame*) and recognizing data types
  * 
+ * @access private
  * @constant varRegex
  * @default
  */
@@ -76,6 +83,7 @@ var varRegex = {
  * 
  * Accesed 11/20/2016
  * 
+ * @access private
  * @constant varBibTeXSyntaxTokens
  * @default
  */
@@ -99,6 +107,7 @@ var varBibTeXSyntaxTokens = {
  * 
  * Accesed 11/09/2016
  * 
+ * @access private
  * @constant varBibTeXTokens
  * @default
  */
@@ -221,6 +230,7 @@ var varBibTeXTokens = {
 /**
  * Object containing a list of Wikidata Instances and it's corresponding name as specified by the docs
  * 
+ * @access private
  * @constant varWikidataTypes
  * @default
  */
@@ -240,6 +250,7 @@ var varWikidataTypes = {
  * 
  * Accesed 10/22/2016
  * 
+ * @access private
  * @constant varCSLStyles
  * @default
  */
@@ -263,6 +274,7 @@ var varCSLStyles = {
  * 
  * Accesed 10/22/2016
  * 
+ * @access private
  * @constant varCSLLocales
  * @default
  */
@@ -285,8 +297,18 @@ var varCSLLocales = {
 }
 
 /**
+ * Object containing CSL Engines
+ * 
+ * @access private
+ * @constant varCSLEngines
+ * @default
+ */
+var varCSLEngines = {}
+
+/**
  * Object containing HTML strings for building JSON and BibTeX. Made to match citeproc, for compatability.
  * 
+ * @access private
  * @constant varHTMLDict
  * @default
  */
@@ -304,6 +326,7 @@ var varHTMLDict = {
 /**
  * Convert a CSL date into human-readable format
  * 
+ * @access private
  * @function getDate
  * 
  * @param {String[]} date - A date in CSL format
@@ -327,6 +350,7 @@ var getDate = function ( date ) {
 /**
  * Convert epoch to CSL date
  * 
+ * @access private
  * @function parseDate
  * 
  * @param {Number|String} value - Epoch time or string in format "YYYY-MM-DD"
@@ -349,6 +373,7 @@ var parseDate = function ( value ) {
 /**
  * Get name from CSL
  * 
+ * @access private
  * @method getName
  * 
  * @param {Object} obj - CSL input
@@ -375,9 +400,10 @@ var getName = function ( obj ) {
 /**
  * Get CSL from name
  * 
+ * @access private
  * @method parseName
  * 
- * @param {String} str - The 
+ * @param {String} str - string 
  * 
  * @return {Object} The CSL object
  */
@@ -397,8 +423,73 @@ var parseName = function ( str ) {
 }
 
 /**
+ * Add data-* attribute to a HTML string
+ * 
+ * @access private
+ * @method getAttributedEntry
+ * 
+ * @param {String} string - HTML string
+ * @param {String} name - attribute name
+ * @param {String} value - attribute value
+ * 
+ * @return {String} HTML string with attribute
+ */
+var getAttributedEntry = function ( string, name, value ) {
+  return string.replace( /^\s*<[a-z]+/, function ( match ) {
+    return `${match} data-${name}="${value}"`
+  } )
+}
+
+/**
+ * Add CSL identifiers to entry
+ * 
+ * @access private
+ * @method getPrefixedEntry
+ * 
+ * @param {String} value - HTML string
+ * @param {Number} index - ID index
+ * @param {String[]} list - ID list
+ * 
+ * @return {String} HTML string with CSL ID
+ */
+var getPrefixedEntry = function ( value, index, list ) {
+  var id = list[ index ]
+  return getAttributedEntry( value, 'csl-entry-id', id )
+}
+
+/**
+ * Generate ID
+ * 
+ * @access private
+ * @method fetchId
+ * 
+ * @param {String[]} list - old ID list
+ * @param {Number} index - current ID index
+ * @param {String} prefix - ID prefix
+ * 
+ * @return {String} CSL ID
+ */
+var fetchId = function ( list, index, prefix ) {
+  var arr = list.slice()
+    , id  = arr[ index ]
+    , del = ','
+  
+  while ( true ) {
+    arr[ index ] = id = prefix + Math.random().toString().slice( 2 )
+    
+    if (
+      typeof id === 'string' &&
+      ( arr.join( del ).match( `(?:^|${del})${id}(?:$|${del})` ) || [] ).length === 1
+    ) break
+  }
+  
+  return id
+}
+
+/**
  * CSL pub type to BibTeX pub type
  * 
+ * @access private
  * @method fetchBibTeXType
  * 
  * @param {String} pubType - CSL type
@@ -461,6 +552,7 @@ var fetchBibTeXType = function ( pubType ) {
 /**
  * BibTeX pub type to CSL pub type
  * 
+ * @access private
  * @method parseBibTeXType
  * 
  * @param {String} pubType - BibTeX type
@@ -523,9 +615,10 @@ var parseBibTeXType = function ( pubType ) {
 /**
  * Get a BibTeX label from CSL data
  * 
+ * @access private
  * @method getBibTeXLabel
  * 
- * @param {Object} src - Input CSL
+ * @param {CSL} src - Input CSL
  * 
  * @return {String} The label
  */
@@ -549,9 +642,10 @@ var getBibTeXLabel = function ( src ) {
 /**
  * Get BibTeX-JSON from CSL(-JSON)
  * 
+ * @access private
  * @method getBibTeXJSON
  * 
- * @param {Object} src - Input CSL
+ * @param {CSL} src - Input CSL
  * 
  * @return {Object} Output BibTeX-JSON
  */
@@ -592,9 +686,10 @@ var getBibTeXJSON = function ( src ) {
 /**
  * Get a BibTeX (HTML) string from CSL
  * 
+ * @access private
  * @method getBibTeX
  * 
- * @param {Object[]} src - Input CSL
+ * @param {CSL[]} src - Input CSL
  * @param {Boolean} html - Output as HTML string (instead of plain text)
  * 
  * @return {String} BibTeX (HTML) string
@@ -677,9 +772,10 @@ var getBibTeX = function ( src, html ) {
 /**
  * Get a label from CSL data
  * 
+ * @access private
  * @method getLabel
  * 
- * @param {Object} src - Input CSL
+ * @param {CSL} src - Input CSL
  * 
  * @return {String} The label
  */
@@ -690,6 +786,7 @@ var getLabel = function ( src ) {
 /**
  * Retrieve CSL locale
  * 
+ * @access private
  * @method fetchCSLLocale
  * 
  * @param {String} lang - lang code
@@ -703,6 +800,7 @@ var fetchCSLLocale = function ( lang ) {
 /**
  * Retrieve CSL style
  * 
+ * @access private
  * @method fetchCSLStyle
  * 
  * @param {String} [style="apa"] - style name
@@ -714,8 +812,79 @@ var fetchCSLStyle = function ( style ) {
 }
 
 /**
+ * @callback Cite~retrieveItem
+ * @param {String} id - Citation id
+ * @return {CSL} CSL Citation object
+ */
+
+/**
+ * @callback Cite~retrieveLocale
+ * @param {String} lang - Language code
+ * @return {String} CSL Locale
+ */
+
+/**
+ * Retrieve CSL parsing engine
+ * 
+ * @access private
+ * @method fetchCSLEngine
+ * 
+ * @param {String} style - CSL style id
+ * @param {String} lang - Language code
+ * @param {String} template - CSL XML template
+ * @param {Cite~retrieveItem} retrieveItem - Code to retreive item
+ * @param {Cite~retrieveLocale} retrieveLocale - Code to retreive locale
+ * 
+ * @return {Object} CSL Engine
+ */
+var fetchCSLEngine = function ( style, lang, template, retrieveItem, retrieveLocale ) {
+  var prop = style + '|' + lang
+    , engine
+  
+  if ( varCSLEngines.hasOwnProperty( prop ) )
+    engine = varCSLEngines[ prop ],
+    engine.sys.retrieveItem = retrieveItem
+  else
+    engine = varCSLEngines[ prop ] = new CSL.Engine( { retrieveLocale: retrieveLocale, retrieveItem: retrieveItem }, template, lang, true )
+  
+  return engine
+}
+
+/**
+ * Retrieve CSL item callback function
+ * 
+ * @access private
+ * @method fetchCSLItemCallback
+ * 
+ * @param {CSL[]} data - CSL array
+ * 
+ * @return {Cite~retrieveItem} Code to retreive item
+ */
+var fetchCSLItemCallback = function ( data ) {
+  var _data = data
+  var fetchCSLItem = function ( id ) {
+    var res
+    
+    for ( var entryIndex = 0; entryIndex < _data.length; entryIndex++ ) {
+      var entry = _data[ entryIndex ]
+      
+      if ( entry.id === id )
+        res = entry
+    }
+    
+    if ( !res && parseInt( id ) + 1 )
+      res = _data[ id ]
+    
+    return res
+  }
+  return fetchCSLItem
+}
+
+
+/**
  * Fetch file
  * 
+ * @access private
  * @method fetchFile
  * 
  * @param {String} url - The input url
@@ -742,6 +911,7 @@ var fetchFile = function ( url ) {
 /**
  * Parse (in)valid JSON
  * 
+ * @access private
  * @method parseJSON
  * 
  * @param {String} str - The input string
@@ -770,6 +940,7 @@ var parseJSON = function ( str ) {
 /**
  * Get CSL type from Wikidata type (P31)
  * 
+ * @access private
  * @method fetchWikidataType
  * 
  * @param {String} value - Input P31 Wikidata ID
@@ -783,6 +954,7 @@ var fetchWikidataType = function ( value ) {
 /**
  * Get the names of objects from Wikidata IDs
  * 
+ * @access private
  * @method fetchWikidataLabel
  * 
  * @param {String} q - Wikidata IDs, seperated by "|"
@@ -815,6 +987,7 @@ var fetchWikidataLabel = function ( q, lang ) {
 /**
  * Transform property and value from Wikidata format to CSL
  * 
+ * @access private
  * @method parseWikidataProp
  * 
  * @param {String} prop - Property
@@ -932,6 +1105,7 @@ var parseWikidataProp = function ( prop, value, lang ) { var value = value
 /**
  * Get Wikidata JSON from Wikidata IDs
  * 
+ * @access private
  * @method parseWikidata
  * 
  * @param {String} data - Wikidata IDs
@@ -978,11 +1152,12 @@ var parseWikidata = function ( data ) {
 /**
  * Format Wikidata data
  * 
+ * @access private
  * @method parseWikidataJSON
  * 
  * @param {Object} data - The input data
  * 
- * @return {Object[]} The formatted input data
+ * @return {CSL[]} The formatted input data
  */
 var parseWikidataJSON = function ( data ) {
   var output = []
@@ -1040,6 +1215,7 @@ var parseWikidataJSON = function ( data ) {
 /**
  * Transform property and value from BibTeX-JSON format to CSL-JSON
  * 
+ * @access private
  * @method parseBibTeXProp
  * 
  * @param {String} prop - Property
@@ -1164,11 +1340,12 @@ var parseBibTeXProp = function ( prop, value ) {
 /**
  * Format BibTeX JSON data
  * 
+ * @access private
  * @method parseBibTeXJSON
  * 
  * @param {Object[]} data - The input data
  * 
- * @return {Object[]} The formatted input data
+ * @return {CSL[]} The formatted input data
  */
 var parseBibTeXJSON = function ( data ) {
   var output = []
@@ -1198,11 +1375,12 @@ var parseBibTeXJSON = function ( data ) {
 /**
  * Format BibTeX data
  * 
+ * @access private
  * @method parseBibTeX
  * 
  * @param {String} str - The input data
  * 
- * @return {Object} The formatted input data
+ * @return {CSL[]} The formatted input data
  */
 var parseBibTeX = function ( str ) {
   
@@ -1445,11 +1623,12 @@ var parseBibTeX = function ( str ) {
 /**
  * Format ContentMine data
  * 
+ * @access private
  * @method parseContentMine
  * 
  * @param {Object} data - The input data
  * 
- * @return {Object[]} The formatted input data
+ * @return {CSL[]} The formatted input data
  */
 var parseContentMine = function ( data ) {
   var res = {}
@@ -1476,6 +1655,7 @@ var parseContentMine = function ( data ) {
 /**
  * Determine input type (internal use)
  * 
+ * @access private
  * @method parseInputType
  * 
  * @param {String|String[]|Object|Object[]} input - The input data
@@ -1568,12 +1748,13 @@ var parseInputType = function ( input ) {
 /**
  * Standardise input (internal use)
  * 
+ * @access private
  * @method parseInputData
  * 
  * @param {String|String[]|Object|Object[]} input - The input data
  * @param {String} type - The input type
  * 
- * @return {Object[]} The parsed input
+ * @return {CSL[]} The parsed input
  */
 var parseInputData = function ( input, type ) {
   var output
@@ -1642,11 +1823,12 @@ var parseInputData = function ( input, type ) {
 /**
  * Parse input (internal use). Wrapper for `parseInputType()` and `parseInputData()`
  * 
+ * @access private
  * @method parseInput
  * 
  * @param {String|String[]|Object|Object[]} input - The input data
  * 
- * @return {Object[]} The parsed input
+ * @return {CSL[]} The parsed input
  */
 var parseInput = function ( input ) {
   var type = parseInputType( input )
@@ -1658,6 +1840,7 @@ var parseInput = function ( input ) {
 /**
  * Convert a JSON array or object to HTML.
  * 
+ * @access private
  * @function getJSONObjectHTML
  * 
  * @param {Object|Object[]|String[]|Number[]} src - The data
@@ -1706,6 +1889,7 @@ var getJSONObjectHTML = function ( src ) {
 /**
  * Convert JSON to HTML.
  * 
+ * @access private
  * @function getJSONValueHTML
  * 
  * @param {Object|String|Number|Object[]|String[]|Number[]} src - The data
@@ -1732,9 +1916,10 @@ var getJSONValueHTML = function ( src ) {
 /**
  * Get a JSON HTML string from CSL
  * 
+ * @access private
  * @method getJSON
  * 
- * @param {Object[]} src - Input CSL
+ * @param {CSL[]} src - Input CSL
  * 
  * @return {String} JSON HTML string
  */
@@ -1813,7 +1998,7 @@ var getJSON = function ( src ) {
  * 
  * @description Create a `Cite` object with almost any kind of data, and manipulate it with its default methods.
  * 
- * @param {String|String[]|Object|Object[]} data - Input data. If no data is passed, an empty object is returned
+ * @param {String|CSL|Object|String[]|CSL[]|Object[]} data - Input data. If no data is passed, an empty object is returned
  * @param {Object} options - The options for the output
  * @param {String} [options.format="real"] - The outputted datatype. Real representation (`"real"`, e.g. DOM Object for HTML, JavaScript Object for JSON) or String representation ( `"string"` )
  * @param {String} [options.type="json"] - The format of the output. `"string"`, `"html"` or `"json"`
@@ -1912,7 +2097,7 @@ var getJSON = function ( src ) {
    * @memberof Cite
    * @this Cite
    * 
-   * @param {Integer} versnum - The number of the version you want to retrieve. Illegel numbers: numbers under zero, floats, numbers above the current version of the object.
+   * @param {Number} versnum - The number of the version you want to retrieve. Illegel numbers: numbers under zero, floats, numbers above the current version of the object.
    * 
    * @return {Cite} The version of the object with the version number passed. `undefined` if an illegal number is passed.
    */
@@ -1950,13 +2135,36 @@ var getJSON = function ( src ) {
   }
   
   /**
+   * Get a sorted ID list
+   * 
+   * @method getIds
+   * @memberof Cite
+   * @this Cite
+   * 
+   * @param {Boolean} nolog - Hide this call from the log (i.e. when used internally)
+   * 
+   * @return {String[]} List of IDs
+   */
+  this.getIds = function ( nolog ) {
+    if( !nolog )
+      this._log.push( { name: 'getIds' } )
+    
+    var list = []
+    
+    for ( var entryIndex = 0; entryIndex < this.data.length; entryIndex++ )
+      list.push( this.data[ entryIndex ].id )
+    
+    return list
+  }
+  
+  /**
    * Add an object to the array of objects
    * 
    * @method add
    * @memberof Cite
    * @this Cite
    * 
-   * @param {String|String[]|Object|Object[]} data - The data to add to your object
+   * @param {String|CSL|Object|String[]|CSL[]|Object[]} data - The data to add to your object
    * @param {Boolean} nolog - Hide this call from the log (i.e. when used internally)
    * 
    * @return {Cite} The updated parent object
@@ -1965,9 +2173,14 @@ var getJSON = function ( src ) {
     if ( !nolog )
       this._log.push( { name: 'add', version: this.currentVersion() + 1, arguments: [ data, nolog ] } )
     
-    var input = parseInput( data );
-    
+    var input = parseInput( data )
     this.data = this.data.concat( input )
+    
+    var itemIds = this.getIds( true )
+    for ( var entryIndex = 0; entryIndex < this.data.length; entryIndex++ ) {
+      if ( !this.data[ entryIndex ].hasOwnProperty( 'id' ) )
+        this.data[ entryIndex ].id = fetchId( itemIds, entryIndex, 'temp_id_' )
+    }
     
     return this
   }
@@ -1979,7 +2192,7 @@ var getJSON = function ( src ) {
    * @memberof Cite
    * @this Cite
    * 
-   * @param {String|String[]|Object|Object[]} data - The data to replace the data in your object
+   * @param {String|CSL|Object|String[]|CSL[]|Object[]} data - The data to replace the data in your object
    * @param {Boolean} nolog - Hide this call from the log (i.e. when used internally)
    * 
    * @return {Cite} The updated parent object
@@ -2086,81 +2299,52 @@ var getJSON = function ( src ) {
     if( !nolog )
       this._log.push( { name: 'get', arguments: [ options ] } )
     
-    var result
+    var _data   = JSON.parse( JSON.stringify( this.data ) )
+      , result
+      
       , options = Object.assign(
-        { format:'real',type:'json',style:'csl',lang:'en-US' },
-        this._options,
-        { locale: '', template: '' },
-        options
-      )
+          { format:'real',type:'json',style:'csl',lang:'en-US' },
+          this._options,
+          { locale: '', template: '' },
+          options )
+      
+      , type    = options.type.toLowerCase()
+      , styleParts = options.style.toLowerCase().split( '-' )
+      , style   = styleParts[ 0 ]
+      , styleFormat = styleParts.slice( 1 ).join( '-' )
     
-    switch ( options.type.toLowerCase() ) {
+    switch ( type ) {
       case 'html':
         
-        switch ( options.style.toLowerCase().split( '-' )[ 0 ] ) {
+        switch ( style ) {
+          
           case 'citation':
+            var cb_locale = !options.locale ? fetchCSLLocale : function () { return options.locale }
+              , cb_item   = fetchCSLItemCallback( _data )
+              , template  = options.template ? options.template : fetchCSLStyle( styleFormat )
+              , lang      = fetchCSLLocale( options.lang ) ? options.lang : 'en-US'
+              , citeproc  = fetchCSLEngine( styleFormat, lang, template, cb_item, cb_locale )
+              
+              , sortIds   = citeproc.updateItems( this.getIds( true ) )
+              , bib       = citeproc.makeBibliography()
+              
+              , start     = bib[ 0 ].bibstart
+              , body      = bib[ 1 ]
+              , end       = bib[ 0 ].bibend
             
-            var _data = this.data
-            
-            var fetchCSLItem = function ( id ) {
-              for ( var entryIndex = 0; entryIndex < _data.length; entryIndex++ ) {
-                var entry = _data[ entryIndex ]
-                if ( entry.id === id )
-                  return entry
-              }
-              if ( parseInt( id ) + 1 )
-                return _data[ id ]
-            }
-    
-            var style = options.style.toLowerCase().split( '-' ).slice( 1 ).join( '-' )
-                
-                // Make citeproc config etc.
-              , citeproc= new CSL.Engine(
-                  {
-                    retrieveLocale: options.locale ?
-                      function () { return options.locale }
-                    :
-                      fetchCSLLocale
-                  , retrieveItem: fetchCSLItem
-                  }
-                  , options.template ? options.template : fetchCSLStyle( style )
-                  , fetchCSLLocale( options.lang ) ? options.lang : 'en-US'
-                  , true
-                )
-              , itemIDs = []
-            
-            // Make ID list
-            for ( var entryIndex = 0; entryIndex < this.data.length; entryIndex++ ) {
-              var entry = this.data[ entryIndex ]
-              if ( entry.hasOwnProperty( 'id' ) )
-                itemIDs.push( entry.id )
-              else
-                entry.id = itemIDs[ itemIDs.push( 'temp_id_' + entryIndex ) - 1 ]
+            for ( var i = 0; i < body.length; i++ ) {
+              body[ i ] = getPrefixedEntry( body[ i ], i, sortIds )
             }
             
-            // Get HTML
-            citeproc.updateItems(itemIDs)
-            
-            var bib = citeproc.makeBibliography()
-            
-            result = (
-              bib[0].bibstart +
-              bib[1].join( '<br>' ) +
-              bib[0].bibend
-            )
-            
+            result = start + body.join( '<br />' ) + end
             break;
           
           case 'csl':
-            
-            result = getJSON/*ValueHTML*/( this.data )
-            
+            result = getJSON( _data )
             break;
           
           case 'bibtex':
-            
-            result = getBibTeX( this.data, true )
-            
+            result = getBibTeX( _data, true )
             break;
         }
         
@@ -2168,25 +2352,19 @@ var getJSON = function ( src ) {
       
       case 'string':
         
-        switch ( options.style.toLowerCase().split( '-' )[ 0 ] ) {
+        switch ( style ) {
+          
           case 'bibtex':
-            
-            result = getBibTeX( this.data, false )
-            
+            result = getBibTeX( _data, false )
             break;
           
           case 'citation':
-            
             var options = Object.assign( {}, options, {type:'html'} )
-        
             result = striptags( this.get( options, true ) )
-            
             break;
           
           case 'csl':
-            
-            result = JSON.stringify( this.data )
-            
+            result = JSON.stringify( _data )
             break;
         }
         
@@ -2194,25 +2372,19 @@ var getJSON = function ( src ) {
       
       case 'json':
         
-        switch ( options.style.toLowerCase().split( '-' )[ 0 ] ) {
+        switch ( style ) {
+          
           case 'csl':
-            
-            result = JSON.stringify( this.data )
-            
+            result = JSON.stringify( _data )
             break;
           
           case 'bibtex':
-            
-            var src = JSON.parse( JSON.stringify( this.data ) )
-            
-            result = JSON.stringify( src.map( getBibTeXJSON ) )
-            
+            result = JSON.stringify( _data.map( getBibTeXJSON ) )
             break;
           
           case 'citation':
-            
-            result = console.error( '[get]', 'Combination type/style of json/citation-* is not valid:', options.type + '/' + options.style )
-            
+            console.error( '[get]', 'Combination type/style of json/citation-* is not valid:', options.type + '/' + options.style )
+            result = undefined
             break;
         }
         
@@ -2309,6 +2481,7 @@ return Cite
                     month = parts[1],
                     rest  = parts[2]
                     break;
+                  
                   case 4:
                     sign  = parts[0],
                     year  = parts[1],
@@ -2316,8 +2489,10 @@ return Cite
                     rest  = parts[3],
                     year  = '-' + year
                     break;
+                  
                   default:
                     console.error( '[set]', 'Unknown Wikidata time format:', datavalue.value.time );
+                    break;
                 }
                 
                 var day = rest.slice(0, 2);

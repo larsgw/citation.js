@@ -7,7 +7,7 @@
   "opts": {
     "template": "templates/default",
     "encoding": "utf8",
-    "destination": "docs/api",
+    "destination": "dev/api",
     "recurse": true
   },
   "source": {

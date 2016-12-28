@@ -15,7 +15,6 @@
       currentWindowOnload();
     }
 
-    document.querySelector('.version').innerHTML = jasmineEnv.versionString();
     execJasmine();
   };
 
