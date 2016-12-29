@@ -15,6 +15,9 @@
     "excludePattern": "(^|\\/|\\\\)_|b\\.js|(?:docs\\/src\\/.+?\\.js$)"
   },
   "templates": {
+    "default": {
+      "layoutFile": "./docs/static/tmpl/layout.tmpl"
+    },
     "cleverLinks": false,
     "monospaceLinks": false
   }
