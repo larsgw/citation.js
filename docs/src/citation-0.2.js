@@ -957,16 +957,25 @@ var fetchWikidataType = function ( value ) {
  * @access private
  * @method fetchWikidataLabel
  * 
- * @param {String} q - Wikidata IDs, seperated by "|"
+ * @param {String|String[]} q - Wikidata IDs
  * @param {String} lang - Language
  * 
  * @return {String[]} Array with labels of each prop
  */
 var fetchWikidataLabel = function ( q, lang ) {
-  var url = wdk.hasOwnProperty( 'getEntities' ) ? wdk.getEntities( q, [ lang ], 'labels' ) : (
+  var ids
+  
+  if ( Array.isArray( q ) )
+    ids = q.join( '|' )
+  else if ( typeof q === 'string' )
+    ids = q
+  else
+    ids = ''
+  
+  var url = wdk.hasOwnProperty( 'getEntities' ) ? wdk.getEntities( ids, [ lang ], 'labels' ) : (
   'https://www.wikidata.org/w/api.php' +
     '?origin=*&action=wbgetentities&languages=en&format=json&props=labels&' + 
-    'ids=' + q )
+    'ids=' + ids )
   
   var data     = fetchFile( url )
     , entities = JSON.parse( data ).entities
@@ -1011,7 +1020,7 @@ var parseWikidataProp = function ( prop, value, lang ) { var value = value
     // Author ( q )
     case 'P50':
       rProp = 'authorQ'
-      rValue = value.map( function ( name ) { return parseName( fetchWikidataLabel( name, lang ) ) } )
+      rValue = fetchWikidataLabel( value, lang ).map( parseName )
       break;
     
     // Author ( s )

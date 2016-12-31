@@ -137,13 +137,22 @@ describe( 'Cite object', function () {
   describe( 'input', function () {
     
     describe( 'Wikidata URL', function () {
-      var test = new Cite( 'https://www.wikidata.org/wiki/Q21972834' )
+      var test_1 = new Cite( 'https://www.wikidata.org/wiki/Q21972834' )
+        , test_2 = new Cite( 'https://www.wikidata.org/wiki/Q27795847' )
       
       it( 'handles input type', function () {
-	expect( test._input.format ).toBe( 'url/wikidata' )
+        expect( test_1._input.format ).toBe( 'url/wikidata' )
+        expect( test_2._input.format ).toBe( 'url/wikidata' )
       } )
+      
       it( 'parses input', function () {
-	expect( JSON.stringify( test.data ) ).toBe( '[{"wikiID":"Q21972834","id":"Q21972834","DOI":"10.1093/bioinformatics/btt178","type":"article-journal","title":"Assembling the 20 Gb white spruce (Picea glauca) genome from whole-genome shotgun sequencing data","volume":"29","issue":"12","issued":[{"date-parts":[2013,6,15]}],"page":"1492-7","container-title":"Bioinformatics","author":[{"given":"Inanc","family":"Birol"},{"given":"Anthony","family":"Raymond"},{"given":"Shaun D","family":"Jackman"},{"given":"Stephen","family":"Pleasance"},{"given":"Robin","family":"Coope"},{"given":"Greg A","family":"Taylor"},{"given":"Macaire Man Saint","family":"Yuen"},{"given":"Christopher I","family":"Keeling"},{"given":"Dana","family":"Brand"},{"given":"Benjamin P","family":"Vandervalk"},{"given":"Heather","family":"Kirk"},{"given":"Pawan","family":"Pandoh"},{"given":"Richard A","family":"Moore"},{"given":"Yongjun","family":"Zhao"},{"given":"Andrew J","family":"Mungall"},{"given":"Barry","family":"Jaquish"},{"given":"Alvin","family":"Yanchuk"},{"given":"Carol","family":"Ritland"},{"given":"Brian","family":"Boyle"},{"given":"Jean","family":"Bousquet"},{"given":"Kermit","family":"Ritland"},{"given":"John","family":"Mackay"},{"given":"Jörg","family":"Bohlmann"},{"given":"Steven J M","family":"Jones"}]}]' )
+        expect( JSON.stringify( test_1.data ) ).toBe( '[{"wikiID":"Q21972834","id":"Q21972834","DOI":"10.1093/bioinformatics/btt178","type":"article-journal","title":"Assembling the 20 Gb white spruce (Picea glauca) genome from whole-genome shotgun sequencing data","volume":"29","issue":"12","issued":[{"date-parts":[2013,6,15]}],"page":"1492-7","container-title":"Bioinformatics","author":[{"given":"Inanc","family":"Birol"},{"given":"Anthony","family":"Raymond"},{"given":"Shaun D","family":"Jackman"},{"given":"Stephen","family":"Pleasance"},{"given":"Robin","family":"Coope"},{"given":"Greg A","family":"Taylor"},{"given":"Macaire Man Saint","family":"Yuen"},{"given":"Christopher I","family":"Keeling"},{"given":"Dana","family":"Brand"},{"given":"Benjamin P","family":"Vandervalk"},{"given":"Heather","family":"Kirk"},{"given":"Pawan","family":"Pandoh"},{"given":"Richard A","family":"Moore"},{"given":"Yongjun","family":"Zhao"},{"given":"Andrew J","family":"Mungall"},{"given":"Barry","family":"Jaquish"},{"given":"Alvin","family":"Yanchuk"},{"given":"Carol","family":"Ritland"},{"given":"Brian","family":"Boyle"},{"given":"Jean","family":"Bousquet"},{"given":"Kermit","family":"Ritland"},{"given":"John","family":"Mackay"},{"given":"Jörg","family":"Bohlmann"},{"given":"Steven J M","family":"Jones"}]}]' )
+      } )
+      
+      describe( 'with linked authors', function () {
+        it( 'parses input', function () {
+          expect( JSON.stringify( test_2.data ) ).toBe( '[{"wikiID":"Q27795847","id":"Q27795847","DOI":"10.1038/nbt.3689","type":"article-journal","issued":[{"date-parts":[2016,11,8]}],"title":"SPLASH, a hashed identifier for mass spectra","volume":"34","page":"1099–1101","container-title":"Nature Biotechnology","author":[{"given":"Gert","family":"Wohlgemuth"},{"given":"Sajjan S","family":"Mehta"},{"given":"Ramon F","family":"Mejia"},{"given":"Steffen","family":"Neumann"},{"given":"Diego","family":"Pedrosa"},{"given":"Tomáš","family":"Pluskal"},{"given":"Michael","family":"Wilson"},{"given":"Masanori","family":"Arita"},{"given":"Pieter C","family":"Dorrestein"},{"given":"Nuno","family":"Bandeira"},{"given":"Mingxun","family":"Wang"},{"given":"Tobias","family":"Schulze"},{"given":"Reza M","family":"Salek"},{"given":"Venkata Chandrasekhar","family":"Nainala"},{"given":"Robert","family":"Mistrik"},{"given":"Takaaki","family":"Nishioka"},{"given":"Oliver","family":"Fiehn"}]}]' )
+        } )
       } )
     } )
     
