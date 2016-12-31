@@ -966,19 +966,19 @@ var fetchWikidataLabel = function ( q, lang ) {
   var ids
   
   if ( Array.isArray( q ) )
-    ids = q.join( '|' )
-  else if ( typeof q === 'string' )
     ids = q
+  else if ( typeof q === 'string' )
+    ids = q.split( '|' )
   else
     ids = ''
   
   var url = wdk.hasOwnProperty( 'getEntities' ) ? wdk.getEntities( ids, [ lang ], 'labels' ) : (
   'https://www.wikidata.org/w/api.php' +
     '?origin=*&action=wbgetentities&languages=en&format=json&props=labels&' + 
-    'ids=' + ids )
+    'ids=' + ids.join( '|' ) )
   
   var data     = fetchFile( url )
-    , entities = JSON.parse( data ).entities
+    , entities = JSON.parse( data ).entities || {}
   
     , entKeys  = Object.keys( entities )
     , labels   = []
