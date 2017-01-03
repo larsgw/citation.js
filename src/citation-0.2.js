@@ -994,6 +994,23 @@ var fetchWikidataLabel = function ( q, lang ) {
 }
 
 /**
+ * Get series ordinal from qualifiers object
+ * 
+ * @access private
+ * @method parseWikidataProp
+ * 
+ * @param {Object} qualifiers - qualifiers object
+ * 
+ * @return {Number} series ordinal or -1
+ */
+var parseWikidataP1545 = function ( qualifiers ) {
+  if ( qualifiers.P1545 )
+    return parseInt( qualifiers.P1545[ 0 ] )
+  else
+    return -1
+}
+
+/**
  * Transform property and value from Wikidata format to CSL
  * 
  * @access private
@@ -1005,28 +1022,41 @@ var fetchWikidataLabel = function ( q, lang ) {
  * 
  * @return {String[]} Array with new prop and value
  */
-var parseWikidataProp = function ( prop, value, lang ) { var value = value
+var parseWikidataProp = function ( prop, value, lang ) {
   
-  if ( !( [ ''
-  , 'P50'
-  , 'P2093'
-  ].indexOf( prop ) > -1 ) ) value = value[ 0 ]
+  switch ( prop ) {
+    case 'P50':
+    case 'P2093':
+      value = value.slice()
+      break;
+    
+    default:
+      value = value[ 0 ].value
+      break;
+  }
   
   var rProp = ''
-    , rValue = value
+    , rValue= value
   
   switch ( prop ) {
     
     // Author ( q )
     case 'P50':
       rProp = 'authorQ'
-      rValue = fetchWikidataLabel( value, lang ).map( parseName )
+      rValue = value.map( function ( v ) {
+        return [
+          parseName( fetchWikidataLabel( v.value, lang )[ 0 ] )
+        , parseWikidataP1545( v.qualifiers )
+        ]
+      } )
       break;
     
     // Author ( s )
     case 'P2093':
       rProp = 'authorS'
-      rValue = value.map( parseName )
+      rValue = value.map( function ( v ) {
+        return [ parseName( v.value ), parseWikidataP1545( v.qualifiers ) ]
+      } )
       break;
     
     // Date
@@ -1176,7 +1206,7 @@ var parseWikidataJSON = function ( data ) {
   for ( var entIndex = 0; entIndex < entKeys.length; entIndex++ ) {
     var entKey = entKeys[ entIndex ]
       , labels = entities[ entKey ].labels
-      , entity = wdk.simplifyClaims( entities[ entKey ].claims )
+      , entity = wdk.simplifyClaims( entities[ entKey ].claims, null, null, true )
     
     var json  = { wikiID: entKey, id: entKey }
       , props = Object.keys( entity )
@@ -1184,7 +1214,7 @@ var parseWikidataJSON = function ( data ) {
     for ( var propIndex = 0; propIndex < props.length; propIndex++ ) {
       var prop  = props[ propIndex ]
         , value = entity[ prop ]
-        
+      
       var resp = parseWikidataProp( prop, value, 'en' )
       
       if ( resp[ 0 ].length > 0 )
@@ -1195,10 +1225,7 @@ var parseWikidataJSON = function ( data ) {
     if ( json.hasOwnProperty( 'authorQ' ) || json.hasOwnProperty( 'authorS' ) ) {
       
       if ( json.hasOwnProperty( 'authorQ' ) && json.hasOwnProperty( 'authorS' ) ) {     
-        if ( json.authorQ.length >= json.authorS.length )
-          json.author = json.authorQ
-        else if ( json.authorQ.length < json.authorS.length )
-          json.author = json.authorS
+        json.author = json.authorQ.concat( json.authorS )
         
         delete        json.authorQ
         delete        json.authorS
@@ -1209,7 +1236,10 @@ var parseWikidataJSON = function ( data ) {
         json.author = json.authorS
         delete        json.authorS
       }
-    
+      
+      json.author = json.author
+        .sort( function sortNames ( a, b ) { return a[ 1 ] - b[ 1 ] } )
+        .map ( function  mapNames ( v    ) { return v[ 0 ]          } )
     }
     
     if ( !( json.hasOwnProperty( 'title' ) && json.title ) )
@@ -2457,70 +2487,94 @@ return Cite
     }
   , window: window
   , wdk: { simplifyClaims: function ( array ) {
-      var obj = {}
+      var normalizeWikidataTime = function ( wikidataTime ) {
+        var fullDateData = function ( sign, rest ) {
+          return new Date( ( sign === '-' ? '-00' : '' ) + rest )
+        }
+        
+        var parseInvalideDate = function ( sign, rest ) {
+          var ref  = rest.split( 'T' )[ 0 ].split( '-' )
+            , year = ref[0]
+            , month= ref[1]
+            , day  = ref[2];
+          
+          return fullDateData( sign, year )
+        }
+        
+        var sign = wikidataTime[ 0 ]
+          , rest = wikidataTime.slice( 1 )
+          , date = fullDateData( sign, rest )
+        
+        return date.toString() === 'Invalid Date' ? parseInvalideDate(sign, rest) : date
+      }
       
-      Object.keys( array ).forEach( function ( id ) {
-        var claims = array[ id ].map( function ( claim ) {
-          if ( claim.hasOwnProperty( 'mainsnak' ) ) {
-            var mainsnak = claim.mainsnak
-              , ref = [mainsnak.datatype, mainsnak.datavalue]
-              , datatype = ref[0]
-              , datavalue = ref[1]
-              , value
-            
-            switch (datatype) {
-              case 'string':
-              case 'commonsMedia':
-              case 'external-id':
-                value = datavalue.value
-                break;
-              
-              case 'wikibase-item':
-                value = 'Q' + datavalue.value['numeric-id']
-                break;
-              
-              case 'time':
-                
-                var month, rest, sign, year;
-                var parts = datavalue.value.time.split( '-' );
-                
-                switch (parts.length) {
-                  case 3:
-                    year  = parts[0],
-                    month = parts[1],
-                    rest  = parts[2]
-                    break;
-                  
-                  case 4:
-                    sign  = parts[0],
-                    year  = parts[1],
-                    month = parts[2],
-                    rest  = parts[3],
-                    year  = '-' + year
-                    break;
-                  
-                  default:
-                    console.error( '[set]', 'Unknown Wikidata time format:', datavalue.value.time );
-                    break;
-                }
-                
-                var day = rest.slice(0, 2);
-                
-                value = new Date(year, month - 1, day).getTime()
-                break;
-              
-              default:
-                value = null
-            }
-            return value
-          } else {
-            return undefined
+      var simplifyClaim = function ( claim, boolean ) {
+        var mainsnak   = claim.mainsnak
+          , qualifiers = claim.qualifiers
+          , value
+        
+        if ( mainsnak == null )
+          return null
+        
+        var datatype = mainsnak.datatype
+          , datavalue = mainsnak.datavalue;
+        
+        if ( datavalue == null )
+          return null
+        
+        switch ( datatype ) {
+          case 'string':
+          case 'commonsMedia':
+          case 'url':
+          case 'external-id':
+            value = datavalue.value
+            break;
+          case 'monolingualtext':
+            value = datavalue.value.text
+            break;
+          case 'wikibase-item':
+          case 'wikibase-property':
+            value = datavalue.value.id
+            break;
+          case 'time':
+            value = normalizeWikidataTime( datavalue.value.time ).getTime()
+            break;
+          case 'quantity':
+            value = parseFloat( datavalue.value.amount )
+            break;
+        }
+        
+        if ( boolean ) {
+          var simpleQualifiers = {}
+          
+          for ( var id in qualifiers ) {
+            simpleQualifiers[ id ] = qualifiers[ id ].slice().map( claim => ({ mainsnak: claim }) )
           }
-        } )
-        obj[ id ] = claims
-      } )
+          
+          return {
+            value: value,
+            qualifiers: simplifyClaims( simpleQualifiers, false )
+          }
+        } else
+          return value
+      }
       
-      return obj
+      var simplifyPropertyClaims = function ( propClaims, boolean ) {
+        return propClaims.map( function ( claim ) {
+          return simplifyClaim( claim, boolean )
+        } ).filter( function ( obj ) { return !!obj } )
+      }
+      
+      var simplifyClaims = function ( claims, boolean ) {
+        var simpleClaims = {}
+        
+        for ( var id in claims )
+          simpleClaims[ id ] = simplifyPropertyClaims( claims[ id ], boolean )
+        
+        return simpleClaims
+      }
+      
+      return simplifyClaims( array, true )
     } }
   } )
 , ( typeof process  !== 'undefined' && typeof global   !== 'undefined' )
