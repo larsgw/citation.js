@@ -151,19 +151,46 @@ describe( 'Cite object', function () {
       
       describe( 'with linked authors', function () {
         it( 'parses input', function () {
-          expect( JSON.stringify( test_2.data ) ).toBe( '[{"wikiID":"Q27795847","id":"Q27795847","DOI":"10.1038/nbt.3689","type":"article-journal","issued":[{"date-parts":[2016,11,8]}],"title":"SPLASH, a hashed identifier for mass spectra","volume":"34","page":"1099–1101","container-title":"Nature Biotechnology","author":[{"given":"Gert","family":"Wohlgemuth"},{"given":"Sajjan S","family":"Mehta"},{"given":"Ramon F","family":"Mejia"},{"given":"Steffen","family":"Neumann"},{"given":"Diego","family":"Pedrosa"},{"given":"Tomáš","family":"Pluskal"},{"given":"Emma","family":"Schymanski"},{"given":"Egon","family":"Willighagen"},{"given":"Michael","family":"Wilson"},{"given":"David S","family":"Wishart"},{"given":"Masanori","family":"Arita"},{"given":"Pieter C","family":"Dorrestein"},{"given":"Nuno","family":"Bandeira"},{"given":"Mingxun","family":"Wang"},{"given":"Tobias","family":"Schulze"},{"given":"Reza M","family":"Salek"},{"given":"Christoph","family":"Steinbeck"},{"given":"Venkata Chandrasekhar","family":"Nainala"},{"given":"Robert","family":"Mistrik"},{"given":"Takaaki","family":"Nishioka"},{"given":"Oliver","family":"Fiehn"}]}]' )
+          expect( JSON.stringify( test_2.data ) ).toBe( '[{"wikiID":"Q27795847","id":"Q27795847","DOI":"10.1038/nbt.3689","type":"article-journal","issued":[{"date-parts":[2016,11,8]}],"title":"SPLASH, a hashed identifier for mass spectra","volume":"34","page":"1099–1101","container-title":"Nature Biotechnology","URL":"http://rdcu.be/msZj","author":[{"given":"Gert","family":"Wohlgemuth"},{"given":"Sajjan S","family":"Mehta"},{"given":"Ramon F","family":"Mejia"},{"given":"Steffen","family":"Neumann"},{"given":"Diego","family":"Pedrosa"},{"given":"Tomáš","family":"Pluskal"},{"given":"Emma","family":"Schymanski"},{"given":"Egon","family":"Willighagen"},{"given":"Michael","family":"Wilson"},{"given":"David S","family":"Wishart"},{"given":"Masanori","family":"Arita"},{"given":"Pieter C","family":"Dorrestein"},{"given":"Nuno","family":"Bandeira"},{"given":"Mingxun","family":"Wang"},{"given":"Tobias","family":"Schulze"},{"given":"Reza M","family":"Salek"},{"given":"Christoph","family":"Steinbeck"},{"given":"Venkata Chandrasekhar","family":"Nainala"},{"given":"Robert","family":"Mistrik"},{"given":"Takaaki","family":"Nishioka"},{"given":"Oliver","family":"Fiehn"}]}]' )
         } )
       } )
     } )
     
     describe( 'BibTeX string', function () {
-      var test = new Cite( '@article{Steinbeck2003, author = {Steinbeck, Christoph and Han, Yongquan and Kuhn, Stefan and Horlacher, Oliver and Luttmann, Edgar and Willighagen, Egon}, year = {2003}, title = {{The Chemistry Development Kit (CDK): an open-source Java library for Chemo- and Bioinformatics.}}, journal = {Journal of chemical information and computer sciences}, volume = {43}, number = {2}, pages = {493--500}, doi = {10.1021/ci025584y}, isbn = {2214707786}, issn = {0095-2338}, pmid = {12653513}, url = {http://www.ncbi.nlm.nih.gov/pubmed/12653513} }' )
+      var test_1 = new Cite( '@article{Steinbeck2003, author = {Steinbeck, Christoph and Han, Yongquan and Kuhn, Stefan and Horlacher, Oliver and Luttmann, Edgar and Willighagen, Egon}, year = {2003}, title = {{The Chemistry Development Kit (CDK): an open-source Java library for Chemo- and Bioinformatics.}}, journal = {Journal of chemical information and computer sciences}, volume = {43}, number = {2}, pages = {493--500}, doi = {10.1021/ci025584y}, isbn = {2214707786}, issn = {0095-2338}, pmid = {12653513}, url = {http://www.ncbi.nlm.nih.gov/pubmed/12653513} }' )
+        , test_2 = new Cite( '@inproceedings{Ekstrand:2009:RYD,\
+ author = {Michael D. Ekstrand and John T. Riedl},\
+ title = {rv you\'re dumb: Identifying Discarded Work in Wiki Article History},\
+ booktitle = {Proceedings of the 5th International Symposium on Wikis and Open Collaboration},\
+ series = {WikiSym \'09},\
+ year = {2009},\
+ isbn = {978-1-60558-730-1},\
+ location = {Orlando, Florida},\
+ pages = {4:1--4:10},\
+ articleno = {4},\
+ numpages = {10},\
+ url = {https://dx.doi.org/10.1145/1641309.1641317},\
+ doi = {10.1145/1641309.1641317},\
+ acmid = {1641317},\
+ publisher = {ACM},\
+ address = {New York, NY, USA},\
+ keywords = {Wiki, Wikipedia, article history, visualization},\
+}\
+' )
       
       it( 'handles input type', function () {
-	expect( test._input.format ).toBe( 'string/bibtex' )
+	expect( test_1._input.format ).toBe( 'string/bibtex' )
+        expect( test_2._input.format ).toBe( 'string/bibtex' )
       } )
+      
       it( 'parses input', function () {
-	expect( JSON.stringify( test.data ) ).toBe( '[{"type":"article-journal","author":[{"given":"Christoph","family":"Steinbeck"},{"given":"Yongquan","family":"Han"},{"given":"Stefan","family":"Kuhn"},{"given":"Oliver","family":"Horlacher"},{"given":"Edgar","family":"Luttmann"},{"given":"Egon","family":"Willighagen"}],"year":"2003","title":"The Chemistry Development Kit (CDK): an open-source Java library for Chemo- and Bioinformatics","container-title":"Journal of chemical information and computer sciences","volume":"43","issue":"2","page":"493-500","DOI":"10.1021/ci025584y","ISBN":"0095-2338","id":"Steinbeck2003"}]' )
+	expect( JSON.stringify( test_1.data ) ).toBe( '[{"type":"article-journal","author":[{"given":"Christoph","family":"Steinbeck"},{"given":"Yongquan","family":"Han"},{"given":"Stefan","family":"Kuhn"},{"given":"Oliver","family":"Horlacher"},{"given":"Edgar","family":"Luttmann"},{"given":"Egon","family":"Willighagen"}],"year":"2003","title":"The Chemistry Development Kit (CDK): an open-source Java library for Chemo- and Bioinformatics","container-title":"Journal of chemical information and computer sciences","volume":"43","issue":"2","page":"493-500","DOI":"10.1021/ci025584y","ISBN":"2214707786","ISSN":"0095-2338","URL":"http://www.ncbi.nlm.nih.gov/pubmed/12653513","id":"Steinbeck2003"}]' )
+      } )
+      
+      describe( 'with whitespace and unknown fields', function () {
+        it( 'parses input', function () {
+          expect( JSON.stringify( test_2.data ) ).toBe( '[{"type":"paper-conference","author":[{"given":"Michael D.","family":"Ekstrand"},{"given":"John T.","family":"Riedl"}],"title":"rv you\'re dumb: Identifying Discarded Work in Wiki Article History","container-title":"Proceedings of the 5th International Symposium on Wikis and Open Collaboration","collection-title":"WikiSym \'09","year":"2009","ISBN":"978-1-60558-730-1","publisher-place":"New York, NY, USA","page":"4:1-4:10","URL":"https://dx.doi.org/10.1145/1641309.1641317","DOI":"10.1145/1641309.1641317","publisher":"ACM","id":"Ekstrand:2009:RYD"}]' )
+        } )
       } )
     } )
     

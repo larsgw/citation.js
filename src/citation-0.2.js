@@ -1119,6 +1119,11 @@ var parseWikidataProp = function ( prop, value, lang ) {
       rProp = 'title'
       break;
     
+    // URL
+    case 'P953': // (full work available at)
+      rProp = 'URL'
+      break;
+    
     // Volume
     case 'P478' :
       rProp = 'volume'
@@ -1130,6 +1135,7 @@ var parseWikidataProp = function ( prop, value, lang ) {
     case 'P364' : // Original language of work
     case 'P698' : // PMID
     case 'P932' : // PMCID
+    case 'P1104': // Number of pages
       // Property ignored
       break;
     
@@ -1269,9 +1275,19 @@ var parseBibTeXProp = function ( prop, value ) {
   
   switch ( prop ) {
     
+    // Address
+    case 'address':
+      rProp = 'publisher-place'
+      break;
+    
     // Author
     case 'author':
       rValue = value.split( ' and ' ).map( parseName )
+      break;
+    
+    // Book title
+    case 'booktitle':
+      rProp = 'container-title'
       break;
     
     // DOI
@@ -1296,7 +1312,7 @@ var parseBibTeXProp = function ( prop, value ) {
     
     // ISSN
     case 'issn':
-      rProp = 'ISBN'
+      rProp = 'ISSN'
       break;
     
     // Issue
@@ -1343,10 +1359,20 @@ var parseBibTeXProp = function ( prop, value ) {
       // Nothing necessary, as far as I know
       break;
     
+    // Series
+    case 'series':
+      rProp = 'collection-title'
+      break;
+    
     // Title
     case 'title':
       rProp = 'title'
       rValue = value.replace(/\.$/g,'')
+      break;
+    
+    // URL
+    case 'url':
+      rProp = 'URL'
       break;
     
     // Volume
@@ -1359,7 +1385,7 @@ var parseBibTeXProp = function ( prop, value ) {
     case 'language': // Language
     case 'note': // Note
     case 'pmid': // PMID
-    case 'url': // URL
+    case 'numpages': // Number of pages
       // Property ignored
       rProp = rValue = undefined
       break;
