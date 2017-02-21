@@ -4,49 +4,1002 @@
     <title>Citation.js</title>
     <link rel="shortcut icon" type="image/png" href="favicon.png"/>
     <link rel="icon" type="image/png" href="favicon.png"/>
+    <link href='https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&subset=latin,greek,latin-ext' rel='stylesheet' type='text/css'>
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+    <script type="text/javascript">
+      /* Code highlighting. Feel free to use, but note it isn't that solid */
+      jQuery.fn.highlight = function() {
+        $(this).each(function(){
+          var elm = $(this);
+          elm.html(elm.text()
+            .replace(/([^\"]*)([\"][^\"]*[\"])([^\"]*)/gi,'$1<span class="string">$2</span>$3')
+            .replace(/([^\']*)([\'][^\']*[\'])([^\']*)/gi,'$1<span class="string">$2</span>$3')
+            .replace(/(\w+)(?=\.)/gi, '<span class="object">$1</span>')
+            .replace(/(cite)([(<])/gi, '<span class="important">$1</span>$2')
+            .replace(/(cite)([^\(<])/gi, '<span class="important">$1</span>$2')
+            .replace(/(\w+)(\s*\:)/gi,'<span class="key">$1</span>$2')
+            .replace(/([\s\.{};(])([\w$]+)(?=\s*\()/gi,'$1<span class="function">$2</span>')
+            .replace(/^(.*)(\/\/.*)$/gim,'$1<span class="comment">$2</span>')
+            .replace(/(\/\*[\s\S]*?\*\/)/gi,'<span class="comment">$1</span>')
+            .replace(/(-?(?:\d+\.\d+|\d+\.|\.\d+|\d+)(?:e\d+)?)/gi,'<span class="digit">$1</span>')
+            .replace(/(@(?:file|author|version|class|param|return))(\W)(\{[\w\|]+\})?/g, '<span class="jsdoc">$1</span>$2<span class="jsdoc-object">$3</span>')
+            .replace(/(@\w+)(\W)/g, '<span class="jsdoc-unknown">$1</span>$2')
+            .replace(/(function|this|document|for|if|else|var|true|false|throw|return|while|break|typeof|catch|new|undefined|null|class|yield|let|const|switch|break|case|continue|try|delete|in|of)([\s()]+)/g,
+              '<span class="native">$1</span>$2')
+          );
+        });
+      }
+    </script>
     <style>
-      body {margin:0 auto;width:60%;max-width:750px;font-family:'Helvetica Neue', Helvetica, Arial, sans-serif;}
-      
-      h1, h2, h3 {text-align:center;}
-      
-      hr {margin:1em 0;}
-      
-      a       { color:black;text-decoration:none;border-bottom:1px solid rgba(0,0,0,.3); }
-      a       { -webkit-transition:border .5s;-moz-transition:border .5s;-ms-transition:border .5s;transition:border .5s; }
-      a:hover { border-color:black; }
-      a.no-border { border: none }
+body {margin:0;font-family:Roboto, 'Helvetica Neue', Helvetica, Arial, sans-serif;height:100%;
+overflow:hidden}
+
+footer {
+  position:fixed;
+  bottom:0;
+  left:0;right:0;
+  padding:5px;
+  background:#111;opacity:.9;
+  color:#ccc;
+  font-size:11px;
+}
+
+header {
+  position:fixed;
+  top:0;
+  left:0;right:0;
+  color:#ccc;
+}
+
+article {
+  position:fixed;
+  top:0;bottom:0;
+  left:0;right:0;
+}
+
+header nav ul {
+  margin:0;padding:0;
+  height:100px;
+  background:#111;
+  opacity:.9;
+}
+
+header nav ul li {
+  display:inline-block;
+  width:24.5%;
+  text-align:center
+}
+
+header nav ul li a {
+  display:inline-block;
+  border:none;
+  width:100%;height:100px;
+  line-height:100px;
+  font-size:large;
+  color:white;
+}
+
+header nav ul li a:hover {
+  background-color:black;
+}
+
+#fork {
+  position:absolute;
+  top:100%;right:0;
+}
+
+a       { color:rgba(255,255,255,.7);border-color:rgba(255,255,255,.7);border-bottom:1px solid;text-decoration:none; }
+a       { -webkit-transition:all .5s;-moz-transition:all .5s;-ms-transition:all .5s;transition:all .5s; }
+a:hover { color:white;border-color:white; }
+a.no-border { border: none }
+
+article a       { color:black;border-color:rgba(0,0,0,.3);border-bottom:1px solid;text-decoration:none; }
+article a       { -webkit-transition:all .5s;-moz-transition:all .5s;-ms-transition:all .5s;transition:all .5s; }
+article a:hover { border-color:black; }
+
+*,*:after,*:before{box-sizing:border-box;}
+
+/*BEGIN BANNER*/
+body > .citation-js { position: fixed;bottom:100px; }
+body > .citation-js { font-size: 50px;padding: 35px 140px 35px 70px;background: #333; }
+body > .citation-js * { vertical-align: middle }
+body > .citation-js img { height: 1.4em; }
+body > .citation-js span { font-weight: bold; position: relative; left: -.1em;font-family: Roboto; }
+body > .citation-js span { color: rgb(255,255,255); text-shadow: 5px 5px 5px rgba(0,0,0,.5); }
+body > .citation-js:before {
+  content:'';
+  display:block;
+  height: 0;
+  position:absolute;
+  bottom:100%;
+  
+  width:0;
+  height:0;
+  border-style: solid;
+  border-width: calc(35px + .7em) 0 0 calc(70px + 1.4em);
+  border-color: transparent transparent transparent #111;
+  left:100%;
+}
+body > .citation-js:after {
+  content:'';
+  position:absolute;
+  left:100%;
+  top:0;
+  
+  border-style: solid;
+  border-width: calc(70px + 1.4em) calc(70px + 1.4em) 0 0;
+  border-color: #222 transparent transparent transparent;
+}
+/*END*/
+
+/*BEGIN Highlight */
+body > .code > pre {background-color:#f0f0f0;overflow-x:auto;font-size:6px;margin:0;}
+body > .code > pre {overflow:hidden;position:relative;z-index:-1}
+body > .code > pre section { width:50%;height:100%;float:left;overflow:hidden; }
+body > .code > pre code {white-space:pre;font-family:monospace;}
+body > .code > pre code span.default {font-weight:normal;color:#000000;}
+body > .code > pre code span.important {text-decoration:underline}
+body > .code > pre code span.key {font-weight:normal;color:#0057ae;}
+body > .code > pre code span.function {font-weight:normal;color:#644a9b;}
+body > .code > pre code span.native {font-weight:bold;color:#000;}
+body > .code > pre code span.object {font-weight:normal;color:#006e28;}
+body > .code > pre code span.comment,
+body > .code > pre code span.comment span {font-weight:normal;color:#888;}
+body > .code > pre code span.comment span.jsdoc,
+body > .code > pre code span.comment span.jsdoc span {font-weight:bold;color:#CA60CA;}
+body > .code > pre code span.comment span.jsdoc-unknown {font-weight:bold;color:#458C61;}
+body > .code > pre code span.comment span.jsdoc-object {font-weight:bold;color:#0095FF;}
+body > .code > pre code span.string ,
+body > .code > pre code span.string span {font-weight:normal;color:#bf0303;}
+body > .code > pre code span.digit {font-weight:normal;color:#b08000;}
+body > .code > pre code span.normal {font-weight:normal;color:#000;}
+body > .code > pre code span.delimiter:after,
+body > .code > pre code span.delimiter:before {content:' '}
+/*END */
+
+.text { position:absolute;-moz-columns:2;columns:2;-moz-column-gap:70px;column-gap:70px; }
+.text.a1 { left:70px;right:70px;top:150px;bottom:250px; }
+.text > section { padding:.5cm;background:white;margin-bottom:1cm; }
+.text > section { box-shadow: 0 4px 5px rgba(0,0,0,.25); }
+.text > section h1 { font-family: Roboto;background:#FFC107;color:white;text-shadow: 2px 2px 2px rgba(0,0,0,.5); }
+.text > section.grey h1 { background:#333; }
+.text > section h1 { margin:-.5cm;margin-bottom:.25cm;padding:.25cm .5cm; }
     </style>
   </head>
   <body>
-    <header>
-      <h1>Citation.js</h1>
-    
-      <p>Citation.js converts formats like BibTeX, Wikidata JSON and ContentMine JSON to CSL-JSON to convert to other formats like APA, Vancouver and back to BibTeX.</p>
-      <p>(Also contains a jQuery plugin to build HTML forms for input)</p>
 
-      <p>
-        <a href="api">Docs</a> &#9642;
-        <a href="test">Build test</a> &#9642;
-        <a href="demo/demo.html">API demo</a>
-      </p>
-      
-      <hr>
-      
-      <p>
-        <a class="no-border" href="https://www.npmjs.org/package/citation-js">
-          <img height="20" src="https://img.shields.io/npm/v/citation-js.svg" alt="NPM version">
-        </a>
-        <a class="no-border" href="https://travis-ci.org/larsgw/citation.js">
-          <img height="20" src="https://travis-ci.org/larsgw/citation.js.svg?branch=master" alt="Build Status">
-        </a>
-      </p>
-    </header>
+<div class="citation-js">
+  <img src="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiIHN0YW5kYWxvbmU9Im5vIj8+Cjxzdmcgd2lkdGg9IjEyOCIgaGVpZ2h0PSIxMjgiIHZpZXdCb3g9IjAgMCAxMjggMTI4IiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZlcnNpb249IjEuMSI+CiAgCiAgPGRlZnM+CiAgICA8bGluZWFyR3JhZGllbnQgaWQ9IkdyYWRpZW50MSIgeDE9IjAiIHkxPSIwIiB4Mj0iMSIgeTI9IjEiPgogICAgICA8c3RvcCBvZmZzZXQ9IjAlIiBzdG9wLWNvbG9yPSJibGFjayIgc3RvcC1vcGFjaXR5PSIuMzAiPjwvc3RvcD4KICAgICAgPHN0b3Agb2Zmc2V0PSI3MCUiIHN0b3AtY29sb3I9ImJsYWNrIiBzdG9wLW9wYWNpdHk9IjAiPjwvc3RvcD4KICAgICAgPHN0b3Agb2Zmc2V0PSIxMDAlIiBzdG9wLWNvbG9yPSJibGFjayIgc3RvcC1vcGFjaXR5PSIwIj48L3N0b3A+CiAgICA8L2xpbmVhckdyYWRpZW50PgogICAgPGxpbmVhckdyYWRpZW50IGlkPSJHcmFkaWVudDIiIHgxPSIwIiB5MT0iMCIgeDI9IjEiIHkyPSIxIj4KICAgICAgPHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iYmxhY2siIHN0b3Atb3BhY2l0eT0iLjMwIj48L3N0b3A+CiAgICAgIDxzdG9wIG9mZnNldD0iNDAlIiBzdG9wLWNvbG9yPSJibGFjayIgc3RvcC1vcGFjaXR5PSIwIj48L3N0b3A+CiAgICAgIDxzdG9wIG9mZnNldD0iNTAlIiBzdG9wLWNvbG9yPSJibGFjayIgc3RvcC1vcGFjaXR5PSIwIj48L3N0b3A+CiAgICA8L2xpbmVhckdyYWRpZW50PgogICAgPHBhdHRlcm4gaWQ9IkNlbGxfc21hbGwiIHg9IjAiIHk9IjAiIHdpZHRoPSIuMjUiIGhlaWdodD0iLjI1Ij4KICAgICAgPHJlY3QgeD0iMCIgeT0iMCIgd2lkdGg9IjQiIGhlaWdodD0iNCIgZmlsbD0idHJhbnNwYXJlbnQiIHN0cm9rZT0iYmxhY2siIHN0cm9rZS13aWR0aD0iLjEyNSIvPgogICAgPC9wYXR0ZXJuPgogICAgPHBhdHRlcm4gaWQ9IkNlbGwiIHg9IjAiIHk9IjAiIHdpZHRoPSIuMTI1IiBoZWlnaHQ9Ii4xMjUiPgogICAgICA8cmVjdCB4PSIwIiB5PSIwIiB3aWR0aD0iMTYiIGhlaWdodD0iMTYiIGZpbGw9InVybCgjQ2VsbF9zbWFsbCkiIHN0cm9rZT0iYmxhY2siIHN0cm9rZS13aWR0aD0iLjI1Ii8+CiAgICA8L3BhdHRlcm4+CiAgICA8cGF0dGVybiBpZD0iR3JpZCIgeD0iMCIgeT0iMCIgd2lkdGg9IjEiIGhlaWdodD0iMSI+CiAgICAgIDxnIG9wYWNpdHk9Ii4yNSI+CiAgICAgICAgPHJlY3QgeD0iMCIgd2lkdGg9IjEyOCIgeT0iMCIgaGVpZ2h0PSIxMjgiIGZpbGw9InVybCgjQ2VsbCkiIC8+CiAgICAgICAgPGcgaWQ9ImdyaWRfbGluZSI+CiAgICAgICAgICA8bGluZSB4MT0iMCIgeDI9IjEyOCIgeTE9IjAiIHkyPSIxMjgiIHN0cm9rZT0iYmxhY2siIHN0cm9rZS13aWR0aD0iLjI1IiAvPgogICAgICAgICAgPGxpbmUgeDE9IjEyOCIgeDI9IjAiIHkxPSIwIiB5Mj0iMTI4IiBzdHJva2U9ImJsYWNrIiBzdHJva2Utd2lkdGg9Ii4yNSIgLz4KICAgICAgICA8L2c+CiAgICAgICAgPGcgaWQ9ImdyaWRfY2lyY2xlIj4KICAgICAgICAgIDxjaXJjbGUgY3g9IjY0IiBjeT0iNjQiIHI9IjE2IiBmaWxsPSJ0cmFuc3BhcmVudCIgc3Ryb2tlPSJibGFjayIgc3Ryb2tlLXdpZHRoPSIuMjUiIC8+CiAgICAgICAgICA8Y2lyY2xlIGN4PSI2NCIgY3k9IjY0IiByPSIzMiIgZmlsbD0idHJhbnNwYXJlbnQiIHN0cm9rZT0iYmxhY2siIHN0cm9rZS13aWR0aD0iLjI1IiAvPgogICAgICAgICAgPGNpcmNsZSBjeD0iNjQiIGN5PSI2NCIgcj0iNDgiIGZpbGw9InRyYW5zcGFyZW50IiBzdHJva2U9ImJsYWNrIiBzdHJva2Utd2lkdGg9Ii4yNSIgLz4KICAgICAgICAgIDxjaXJjbGUgY3g9IjY0IiBjeT0iNjQiIHI9IjY0IiBmaWxsPSJ0cmFuc3BhcmVudCIgc3Ryb2tlPSJibGFjayIgc3Ryb2tlLXdpZHRoPSIuMjUiIC8+CiAgICAgICAgPC9nPgogICAgICAgIDwhLS08ZyBpZD0iZ3JpZF9rZXkiPgogICAgICAgICAgPHBhdGggZmlsbD0idHJhbnNwYXJlbnQiIHN0cm9rZT0iYmxhY2siIHN0cm9rZS13aWR0aD0iLjI1IiBkPSIKICAgICAgICAgICAgTTY0IDI0IGg0OCBhOCA4LDAsMCwxLDggOCB2NjQgYTggOCwwLDAsMSwtOCA4IGgtOTYgYTggOCwwLDAsMSwtOCAtOCB2LTY0IGE4IDgsMCwwLDEsOCAtOCBaCiAgICAgICAgICAgIE02NCAxNiBoNDAgYTggOCwwLDAsMSw4IDggdjgwIGE4IDgsMCwwLDEsLTggOCBoLTgwIGE4IDgsMCwwLDEsLTggLTggdi04MCBhOCA4LDAsMCwxLDggLTggWgogICAgICAgICAgICBNNjQgIDggaDMyIGE4IDgsMCwwLDEsOCA4IHY5NiBhOCA4LDAsMCwxLC04IDggaC02NCBhOCA4LDAsMCwxLC04IC04IHYtOTYgYTggOCwwLDAsMSw4IC04IFoKICAgICAgICAgICIgPjwvcGF0aD4KICAgICAgICA8L2c+LS0+CiAgICAgIDwvZz4KICAgIDwvcGF0dGVybj4KICA8L2RlZnM+CiAgCiAgPGcgaWQ9InNlY18yIj4KICAgIDxyZWN0IHg9IjAiIHdpZHRoPSIxMjgiIHk9IjAiIGhlaWdodD0iMTI4IiBmaWxsPSIjRkZDMTA3IiAvPgogIDwvZz4
+  KICAKICA8IS0tLS0+CiAgPGcgaWQ9InNlY19ncmlkIj4KICAgIDxyZWN0IHg9IjAiIHdpZHRoPSIxMjgiIHk9IjAiIGhlaWdodD0iMTI4IiBmaWxsPSJ1cmwoI0dyaWQpIiAvPgogIDwvZz4KICA8IS0tLS0+CiAgCiAgPGcgaWQ9InNlY18zIj4KICAgIDxwYXRoIGZpbGw9InVybCgjR3JhZGllbnQxKSIgZD0iCiAgICAgIE02NCAzMgogICAgICBBMzIgMzIsMCwxLDAsODYuNjI3NDE2OTk3OTY5NTIyIDg2LjYyNzQxNjk5Nzk2OTUyMgogICAgICBMMTI4IDEyOAogICAgICBMMTI4IDYwLjExNzc0OTAwNjA5MTQzCiAgICAgIEw5Ny45NDExMjU0OTY5NTQyOCAzMC4wNTg4NzQ1MDMwNDU3MjIKICAgICAgTDg2LjYyNzQxNjk5Nzk2OTUyMiA0MS4zNzI1ODMwMDIwMzA0OAogICAgICBBMzIgMzIsMCwwLDAsNjQgMzIKICAgICAgWgogICAgIj48L3BhdGg+CiAgICAKICAgIDxwYXRoIGZpbGw9InVybCgjR3JhZGllbnQxKSIgZD0iCiAgICAgIE05Ny45NDExMjU0OTY5NTQyOCA5Ny45NDExMjU0OTY5NTQyOAogICAgICBBNDggNDgsMCwwLDEsMzAuMDU4ODc0NTAzMDQ1NzIyIDk3Ljk0MTEyNTQ5Njk1NDI4CiAgICAgIEw2MC4xMTc3NDkwMDYwOTE0MyAxMjgKICAgICAgTDEyOCAxMjgKICAgICAgWgogICAgIj48L3BhdGg+CiAgICAKICAgIDxwYXRoIGZpbGw9IndoaXRlIiBkPSIKICAgICAgTTk3Ljk0MTEyNTQ5Njk1NDI4IDMwLjA1ODg3NDUwMzA0NTcyMgogICAgICBBNDggNDgsMCwxLDAsOTcuOTQxMTI1NDk2OTU0MjggOTcuOTQxMTI1NDk2OTU0MjgKICAgICAgTDg2LjYyNzQxNjk5Nzk2OTUyMiA4Ni42Mjc0MTY5OTc5Njk1MjIKICAgICAgQTMyIDMyLDAsMSwxLDg2LjYyNzQxNjk5Nzk2OTUyMiA0MS4zNzI1ODMwMDIwMzA0OAogICAgICBaCiAgICAiID48L3BhdGg+CiAgPC9nPgogIAogIDxnIGlkPSJzZWNfNCI+CiAgICA8cGF0aCBmaWxsPSJ1cmwoI0dyYWRpZW50MikiIGQ9IgogICAgICBNODYgMTQKICAgICAgbDQyIDQyCiAgICAgIHY0NAogICAgICBsLTUwIC01MAogICAgICBsNCAtMzIKICAgICAgWgogICAgIj48L3BhdGg+CiAgICA8cGF0aCBmaWxsPSJ1cmwoI0dyYWRpZW50MikiIGQ9IgogICAgICBNOTguNSAxNgogICAgICBsMjkuNSAyOS41CiAgICAgIHY0MQogICAgICBsLTM4LjUgLTM4LjUKICAgICAgbDggLTIKICAgICAgdi0yNAogICAgICBaCiAgICAiPjwvcGF0aD4KICAgIDxwYXRoIGZpbGw9InVybCgjR3JhZGllbnQyKSIgZD0iCiAgICAgIE0xMTQgMTQKICAgICAgbDQyIDQyCiAgICAgIHY0NAogICAgICBsLTUwIC01MAogICAgICBsOCAtNAogICAgICBsLTIgLTE2CiAgICAgIGwyIC0xNgogICAgICBaCiAgICAiPjwvcGF0aD4KICAgIAogICAgPGcgZmlsbD0id2hpdGUiPgogICAgICA8cGF0aCBkPSIKICAgICAgICBNODAgMTYKICAgICAgICBtMCAtMgogICAgICAgIGg2IHY0IGgtNAogICAgICAgIHYyOAogICAgICAgIGg0IHY0IGgtOAogICAgICAgIHYtMzYKICAgICAgICBaCiAgICAgICAgCiAgICAgICAgTTExMiAxNgogICAgICAgIG0wIC0yCiAgICAgICAgaC02IHY0IGg0CiAgICAgICAgdjI4CiAgICAgICAgaC00IHY0IGg4CiAgICAgICAgdi0zNgogICAgICAgIFoKICAgICAgIj48L3BhdGg+CiAgICAgIAogICAgICA8cGF0aCBmaWxsPSJ3aGl0ZSIgZD0iCiAgICAgICAgTTg2LjczNSA0OAogICAgICAgIG0yLjY1OTM0MDY1OTM0MDY1OTcgLTIuNzY5MjMwNzY5MjMwNzY5NgogICAgICAgIGw0Ljk0NTA1NDk0NTA1NDk0NSAtMC42MTUzODQ2MTUzODQ2MTU0CiAgICAgICAgdi0yMy45NzgwMjE5NzgwMjE5OAogICAgICAgIGwtNS4wMzI5NjcwMzI5NjcwMzQgMC4wODc5MTIwODc5MTIwODc5MgogICAgICAgIHYtMi43MDMyOTY3MDMyOTY3MDM1CiAgICAgICAgbDkuMzYyNjM3MzYyNjM3MzYzIC0yLjAyMTk3ODAyMTk3ODAyMjMKICAgICAgICB2MjguNjE1Mzg0NjE1Mzg0NjE3CiAgICAgICAgbDQuOTIzMDc2OTIzMDc2OTIzIDAuNjE1Mzg0NjE1Mzg0NjE1NAogICAgICAgIHYyLjc2OTIzMDc2OTIzMDc2OTYKICAgICAgICBoLTE0LjE5NzgwMjE5NzgwMjE5OQogICAgICAgIHYtMi43NjkyMzA3NjkyMzA3Njk2CiAgICAgICAgCiAgICAgICAgWgogICAgICAiPjwvcGF0aD4KICAgIDwvZz4KICA8L2c+CiAgCjwvc3ZnPg==" />
+  <span>itation.js</span>
+</div>
+
+<div class="code"><pre>
+<section><code data-type="js">
+/** 
+ * @file Citation-0.2.js
+ * 
+ * @projectname Citationjs
+ * 
+ * @author Lars Willighagen
+ * @version 0.2
+ * @license
+ * Copyright (c) 2015-2016 Lars Willighagen  
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:  
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.  
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
+
+/**
+ * [CSL](https://citeproc-js.readthedocs.io/en/latest/csl-json/markup.html#csl-json-items) element
+ * 
+ * @class CSL
+ */
+
+var Cite = ( function ( modules, nodejsMode, browserMode ) {
+
+var CSL = modules.CSL
+  , striptags = modules.striptags
+  , request = modules.request
+  , window = modules.window
+  , wdk = modules.wdk
+
+if ( !nodejsMode &amp;&amp; !browserMode )
+  throw new Error( 'Code executed in invalid environment' )
+
+console.info( '[init]', nodejsMode ? 'Node.js' : browserMode ? 'Browser' : '', 'mode' )
+
+/**
+ * Object containing several RegExp patterns, mostly used for parsing (*full of shame*) and recognizing data types
+ * 
+ * @access private
+ * @constant varRegex
+ * @default
+ */
+var varRegex = {
+  url:/^(https?:\/\/)?((([a-z\d]([a-z\d-]*[a-z\d])*)\.)+[a-z]{2,}|((\d{1,3}\.){3}\d{1,3})|localhost)(\:\d+)?(\/[-a-z\d%_.~+:]*)*(\?[;&amp;a-z\d%_.~+=-]*)?(\#[-a-z\d_]*)?$/i
+, bibtex: [
+    /^(?:\s*@\s*[^@]+?\s*\{\s*[^@]+?\s*,\s*[^@]+\})+\s*$/
+  , /^\s$/
+  ]
+, wikidata: [
+    /(?:\/|^)(Q\d+)$/
+  , /(Q\d+)/
+  , /^(?:Q\d+(?:\s+|,))*(?:Q\d+)(?:\s+|,)?$/
+  ]
+, json:[
+    [ /((?:\[|:|,)\s*)'((?:\\'|[^'])*?[^\\])?'(?=\s*(?:\]|}|,))/g
+    , '$1"$2"' ]
+  ]
+, name: / (?=(?:[a-z]+ )*(?:[A-Z][a-z]*[-])*(?:[A-Z][a-z]*)$)/
+}
+
+/**
+ * Mapping of BibTeX syntax chars to BibTeX Escaped Chars.
+ * 
+ * From [Zoteros alwaysMap object](https://github.com/zotero/translators/blob/master/BibTeX.js#L225)
+ * [REPO](https://github.com/zotero/translators)
+ * 
+ * Accesed 11/20/2016
+ * 
+ * @access private
+ * @constant varBibTeXSyntaxTokens
+ * @default
+ */
+var varBibTeXSyntaxTokens = {
+  "|":"{\\textbar}",
+  "&lt;":"{\\textless}",
+  ">":"{\\textgreater}",
+  "~":"{\\textasciitilde}",
+  "^":"{\\textasciicircum}",
+  "\\":"{\\textbackslash}",
+  // See http://tex.stackexchange.com/questions/230750/open-brace-in-bibtex-fields/230754
+  "{" : "\\{\\vphantom{\\}}",
+  "}" : "\\vphantom{\\{}\\}"
+}
+
+/**
+ * Mapping of BibTeX Escaped Chars to Unicode.
+ * 
+ * From [Zoteros reversed mapping table](https://github.com/zotero/translators/blob/master/BibTeX.js#L2353)
+ * [REPO](https://github.com/zotero/translators)
+ * 
+ * Accesed 11/09/2016
+ * 
+ * @access private
+ * @constant varBibTeXTokens
+ * @default
+ */
+var varBibTeXTokens = {
+  "\\url":"",                           "\\href":"",                            "{\\textexclamdown}":"\u00A1",          "{\\textcent}":"\u00A2",
+  "{\\textsterling}":"\u00A3",          "{\\textyen}":"\u00A5",                 "{\\textbrokenbar}":"\u00A6",           "{\\textsection}":"\u00A7",
+  "{\\textasciidieresis}":"\u00A8",     "{\\textcopyright}":"\u00A9",           "{\\textordfeminine}":"\u00AA",         "{\\guillemotleft}":"\u00AB",
+  "{\\textlnot}":"\u00AC",              "{\\textregistered}":"\u00AE",          "{\\textasciimacron}":"\u00AF",         "{\\textdegree}":"\u00B0",
+  "{\\textpm}":"\u00B1",                "{\\texttwosuperior}":"\u00B2",         "{\\textthreesuperior}":"\u00B3",       "{\\textasciiacute}":"\u00B4",
+  "{\\textmu}":"\u00B5",                "{\\textparagraph}":"\u00B6",           "{\\textperiodcentered}":"\u00B7",      "{\\c\\ }":"\u00B8",
+  "{\\textonesuperior}":"\u00B9",       "{\\textordmasculine}":"\u00BA",        "{\\guillemotright}":"\u00BB",          "{\\textonequarter}":"\u00BC",
+  "{\\textonehalf}":"\u00BD",           "{\\textthreequarters}":"\u00BE",       "{\\textquestiondown}":"\u00BF",        "{\\AE}":"\u00C6",
+  "{\\DH}":"\u00D0",                    "{\\texttimes}":"\u00D7",               "{\\O}":"\u00D8",                       "{\\TH}":"\u00DE",
+  "{\\ss}":"\u00DF",                    "{\\ae}":"\u00E6",                      "{\\dh}":"\u00F0",                      "{\\textdiv}":"\u00F7",
+  "{\\o}":"\u00F8",                     "{\\th}":"\u00FE",                      "{\\i}":"\u0131",                       "{\\NG}":"\u014A",
+  "{\\ng}":"\u014B",                    "{\\OE}":"\u0152",                      "{\\oe}":"\u0153",                      "{\\textasciicircum}":"\u02C6",
+  "{\\textacutedbl}":"\u02DD",          "$\\Gamma$":"\u0393",                   "$\\Delta$":"\u0394",                   "$\\Theta$":"\u0398",
+  "$\\Lambda$":"\u039B",                "$\\Xi$":"\u039E",                      "$\\Pi$":"\u03A0",                      "$\\Sigma$":"\u03A3",
+  "$\\Phi$":"\u03A6",                   "$\\Psi$":"\u03A8",                     "$\\Omega$":"\u03A9",                   "$\\alpha$":"\u03B1",
+  "$\\beta$":"\u03B2",                  "$\\gamma$":"\u03B3",                   "$\\delta$":"\u03B4",                   "$\\varepsilon$":"\u03B5",
+  "$\\zeta$":"\u03B6",                  "$\\eta$":"\u03B7",                     "$\\theta$":"\u03B8",                   "$\\iota$":"\u03B9",
+  "$\\kappa$":"\u03BA",                 "$\\lambda$":"\u03BB",                  "$\\mu$":"\u03BC",                      "$\\nu$":"\u03BD",
+  "$\\xi$":"\u03BE",                    "$\\pi$":"\u03C0",                      "$\\rho$":"\u03C1",                     "$\\varsigma$":"\u03C2",
+  "$\\sigma$":"\u03C3",                 "$\\tau$":"\u03C4",                     "$\\upsilon$":"\u03C5",                 "$\\varphi$":"\u03C6",
+  "$\\chi$":"\u03C7",                   "$\\psi$":"\u03C8",                     "$\\omega$":"\u03C9",                   "$\\vartheta$":"\u03D1",
+  "$\\Upsilon$":"\u03D2",               "$\\phi$":"\u03D5",                     "$\\varpi$":"\u03D6",                   "$\\varrho$":"\u03F1",
+  "$\\epsilon$":"\u03F5",               "{\\textendash}":"\u2013",              "{\\textemdash}":"\u2014",              "---":"\u2014",
+  "--":"\u2013",                        "{\\textbardbl}":"\u2016",              "{\\textunderscore}":"\u2017",          "{\\textquoteleft}":"\u2018",
+  "{\\textquoteright}":"\u2019",        "{\\quotesinglbase}":"\u201A",          "{\\textquotedblleft}":"\u201C",        "{\\textquotedblright}":"\u201D",
+  "{\\quotedblbase}":"\u201E",          "{\\textdagger}":"\u2020",              "{\\textdaggerdbl}":"\u2021",           "{\\textbullet}":"\u2022",
+  "{\\textellipsis}":"\u2026",          "{\\textperthousand}":"\u2030"
+}
+
+/**
+ * Object containing a list of Wikidata Instances and its corresponding name as specified by the docs
+ * 
+ * @access private
+ * @constant varWikidataTypes
+ * @default
+ */
+var varWikidataTypes = {
+  Q13442814: 'article-journal'
+, Q18918145: 'article-journal'
+, Q191067  : 'article'
+, Q3331189 : 'book'
+, Q571     : 'book'
+}
+
+/**
+ * Object containing CSL Engines
+ * 
+ * @access private
+ * @constant varCSLEngines
+ * @default
+ */
+var varCSLEngines = {}
+
+/**
+ * Object containing HTML strings for building JSON and BibTeX. Made to match citeproc, for compatability.
+ * 
+ * @access private
+ * @constant varHTMLDict
+ * @default
+ */
+var varHTMLDict = {
+  wr_start : '&lt;div class="csl-bib-body">'
+, wr_end   : '&lt;/div>'
+, en_start : '&lt;div class="csl-entry">'
+, en_end   : '&lt;/div>'
+, ul_start : '&lt;ul style="list-style-type:none">'
+, ul_end   : '&lt;/ul>'
+, li_start : '&lt;li>'
+, li_end   : '&lt;/li>'
+}
+
+/**
+ * Convert a CSL date into human-readable format
+ * 
+ * @access private
+ * @function getDate
+ * 
+ * @param {String[]} date - A date in CSL format
+ * 
+ * @return {String} The string
+ */
+var getDate = function ( date ) {
+  var res  = ''
+    , date = date[ 0 ][ 'date-parts' ]
+  
+  if ( date.length === 3 )
+    res += [
+      ('000'+ date[ 0 ] ).slice( -4 )
+    , ( '0' + date[ 1 ] ).slice( -2 )
+    , ( '0' + date[ 2 ] ).slice( -2 )
+    ].join( '-' )
+  
+  return res
+}
+
+/**
+ * Convert epoch to CSL date
+ * 
+ * @access private
+ * @function parseDate
+ * 
+ * @param {Number|String} value - Epoch time or string in format "YYYY-MM-DD"
+ * 
+ * @return {Object[]} Array of an object, containing the property "date-parts" with the value [ YYYY, MM, DD ]
+ */
+var parseDate = function ( value ) {
+  var rValue
+    , date = new Date( value )
+  
+  rValue = [
+    date.getFullYear()
+  , date.getMonth   () + 1
+  , date.getDate    ()
+  ]
+  
+  return [ { 'date-parts': rValue } ]
+}
+
+/**
+ * Get name from CSL
+ * 
+ * @access private
+ * @method getName
+ * 
+ * @param {Object} obj - CSL input
+ * 
+ * @return {String} Full name
+ */
+var getName = function ( obj ) {
+  var arr = [ 'dropping-particle', 'given', 'suffix', 'non-dropping-particle', 'family' ]
+    , res = ''
+  
+  for ( var i = 0; i &lt; arr.length; i++ ) {
+    if ( obj.hasOwnProperty( arr[ i ] ) )
+      res += obj[ arr[ i ] ] + ' '
+  }
+  
+  if ( res.length )
+    res = res.slice( 0, -1 )
+  else if ( res.hasOwnProperty( 'literal' ) )
+    res = obj.literal
+  
+  return res
+}
+</code></section>
+<section><code data-type="js">
+/**
+ * Get CSL from name
+ * 
+ * @access private
+ * @method parseName
+ * 
+ * @param {String} str - string 
+ * 
+ * @return {Object} The CSL object
+ */
+var parseName = function ( str ) {
+  
+  if ( str.indexOf( ', ' ) > -1 )
+    var arr = str.split( ', ' ).reverse()
+  else
+    var arr = str.split( varRegex.name )
+  
+  var obj = {
+    given : arr[ 0 ]
+  , family: arr[ 1 ]
+  }
+  
+  return obj
+}
+
+/**
+ * Add data-* attribute to a HTML string
+ * 
+ * @access private
+ * @method getAttributedEntry
+ * 
+ * @param {String} string - HTML string
+ * @param {String} name - attribute name
+ * @param {String} value - attribute value
+ * 
+ * @return {String} HTML string with attribute
+ */
+var getAttributedEntry = function ( string, name, value ) {
+  return string.replace( /^\s*&lt;[a-z]+/, function ( match ) {
+    return `${match} data-${name}="${value}"`
+  } )
+}
+
+/**
+ * Add CSL identifiers to entry
+ * 
+ * @access private
+ * @method getPrefixedEntry
+ * 
+ * @param {String} value - HTML string
+ * @param {Number} index - ID index
+ * @param {String[]} list - ID list
+ * 
+ * @return {String} HTML string with CSL ID
+ */
+var getPrefixedEntry = function ( value, index, list ) {
+  var id = list[ index ]
+  return getAttributedEntry( value, 'csl-entry-id', id )
+}
+
+/**
+ * Generate ID
+ * 
+ * @access private
+ * @method fetchId
+ * 
+ * @param {String[]} list - old ID list
+ * @param {Number} index - current ID index
+ * @param {String} prefix - ID prefix
+ * 
+ * @return {String} CSL ID
+ */
+var fetchId = function ( list, index, prefix ) {
+  var arr = list.slice()
+    , id  = arr[ index ]
+    , del = ','
+  
+  while ( true ) {
+    arr[ index ] = id = prefix + Math.random().toString().slice( 2 )
     
+    if (
+      typeof id === 'string' &amp;&amp;
+      ( arr.join( del ).match( `(?:^|${del})${id}(?:$|${del})` ) || [] ).length === 1
+    ) break
+  }
+  
+  return id
+}
+
+/**
+ * CSL pub type to BibTeX pub type
+ * 
+ * @access private
+ * @method fetchBibTeXType
+ * 
+ * @param {String} pubType - CSL type
+ * 
+ * @return {String} BibTeX type
+ */
+var fetchBibTeXType = function ( pubType ) {
+  
+  switch ( pubType ) {
+    case 'article':
+    case 'article-journal':
+    case 'article-magazine':
+    case 'article-newspaper':
+      return 'article';
+      break;
+    
+    case 'book':
+      return 'book';
+      break;
+    
+    case 'chapter':
+      return 'incollection';
+      break;
+    
+    case 'manuscript':
+      return 'unpublished';
+      break;
+    
+    case 'paper-conference':
+      return 'inproceedings';
+      break;
+    
+    case 'patent':
+      return 'patent';
+      break;
+    
+    case 'report':
+      return 'techreport';
+      break;
+    
+    case 'thesis':
+      return 'phdthesis'
+      break;
+    
+    case 'graphic':
+    case 'interview':
+    case 'motion_picture':
+    case 'personal_communication':
+    case 'webpage':
+      return 'misc';
+      break;
+    
+    default:
+      console.warn( 'CSL publication type not recognized: ' + pubType + '. Interpreting as "misc".' )
+      return 'misc';
+      break;
+  }
+}
+
+/**
+ * BibTeX pub type to CSL pub type
+ * 
+ * @access private
+ * @method parseBibTeXType
+ * 
+ * @param {String} pubType - BibTeX type
+ * 
+ * @return {String} CSL type
+ */
+var parseBibTeXType = function ( pubType ) {
+  switch ( pubType ) {
+    
+    case 'article':
+      return 'article-journal';
+      break;
+    
+    case 'book':
+    case 'booklet':
+    case 'manual':
+    case 'misc':
+    case 'proceedings':
+      return 'book';
+      break;
+    
+    case 'inbook':
+    case 'incollection':
+      return 'chapter';
+      break;
+    
+    case 'conference':
+    case 'inproceedings':
+      return 'paper-conference';
+      break;
+    
+    case 'online':
+      return 'webpage'
+      break;
+    
+    case 'patent':
+      return 'patent';
+      break;
+    
+    case 'phdthesis':
+    case 'mastersthesis':
+      return 'thesis';
+      break;
+    
+    case 'techreport':
+      return 'report';
+      break;
+    
+    case 'unpublished':
+      return 'manuscript';
+      break;
+    
+    default:
+      console.warn( 'BibTeX publication type not recognized: ' + pubType + '. Interpreting as "book".' )
+      return 'book';
+      break;
+  }
+}
+
+/**
+ * Get a BibTeX label from CSL data
+ * 
+ * @access private
+ * @method getBibTeXLabel
+ * 
+ * @param {CSL} src - Input CSL
+ * 
+ * @return {String} The label
+ */
+var getBibTeXLabel = function ( src ) {
+  var res = ''
+  
+  if ( src.hasOwnProperty( 'author' ) &amp;&amp; Array.isArray( src.author ) &amp;&amp; src.author.length > 0 )
+    res += src.author[ 0 ].family || src.author[ 0 ].literal
+  
+  if ( src.hasOwnProperty( 'year' ) )
+    res += src.year
+  else if ( src.issued &amp;&amp; src.issued[ 0 ] &amp;&amp; src.issued[ 0 ][ 'date-parts' ] )
+    res += src.issued[ 0 ][ 'date-parts' ][ 0 ]
+  
+  if ( src.hasOwnProperty( 'title' ) )
+    res += src.title.replace(/^(the|a|an) /i,'').split(' ')[ 0 ]
+  
+  return res
+}
+
+/**
+ * Get BibTeX-JSON from CSL(-JSON)
+ * 
+ * @access private
+ * @method getBibTeXJSON
+ * 
+ * @param {CSL} src - Input CSL
+ * 
+ * @return {Object} Output BibTeX-JSON
+ */
+var getBibTeXJSON = function ( src ) {
+  var src = JSON.parse( JSON.stringify( src ) )
+    , res = {}
+    , props = {}
+  
+  res.label = src.label || getBibTeXLabel( src )
+  res.type  = fetchBibTeXType( src.type )
+  
+  if ( src.hasOwnProperty( 'author'    ) ) props.author    = src.author.slice().map( getName ).join( ' and ' )
+  if ( src.hasOwnProperty( 'event'     ) ) props.organization = src.event
+  if ( src.hasOwnProperty( 'accessed'  ) ) props.note      = '[Online; accesed ' + getDate( src.accessed ) + ']'
+  if ( src.hasOwnProperty( 'DOI'       ) ) props.doi       = src.DOI
+  if ( src.hasOwnProperty( 'editor'    ) ) props.editor    = src.editor.slice().map( getName ).join( ' and ' )
+  if ( src.hasOwnProperty( 'ISBN'      ) ) props.isbn      = src.ISBN
+  if ( src.hasOwnProperty( 'ISSN'      ) ) props.issn      = src.ISSN
+  if ( src.hasOwnProperty( 'container-title' ) ) props.journal = src[ 'container-title' ]
+  if ( src.hasOwnProperty( 'issue'     ) ) props.issue     = src.issue.toString()
+  if ( src.hasOwnProperty( 'page'      ) ) props.pages     = src.page.replace( '-', '--' )
+  if ( src.hasOwnProperty( 'publisher-place' ) ) props.address = src[ 'publisher-place' ]
+  if ( src.hasOwnProperty( 'edition'   ) ) props.edition   = src.edition.toString()
+  if ( src.hasOwnProperty( 'publisher' ) ) props.publisher = src.publisher
+  if ( src.hasOwnProperty( 'title'     ) ) props.title     = src[ 'title' ]
+  if ( src.hasOwnProperty( 'url'       ) ) props.url       = src.url
+  if ( src.hasOwnProperty( 'volume'    ) ) props.volume    = src.volume.toString()
+  if ( src.hasOwnProperty( 'issued'    )
+    &amp;&amp; Array.isArray( src.issued )
+    &amp;&amp; src.issued[ 0 ][ 'date-parts' ].length === 3
+                                         ) props.year      = src.issued[ 0 ][ 'date-parts' ][ 0 ].toString()
+  
+  res.properties = props
+  
+  return res
+}
+
+/**
+ * Get a BibTeX (HTML) string from CSL
+ * 
+ * @access private
+ * @method getBibTeX
+ * 
+ * @param {CSL[]} src - Input CSL
+ * @param {Boolean} html - Output as HTML string (instead of plain text)
+ * 
+ * @return {String} BibTeX (HTML) string
+ */
+var getBibTeX = function ( src, html ) {
+  var res = ''
+    , dict= varHTMLDict
+  
+  if ( html )
+    res += dict.wr_start
+  
+  for ( var i = 0; i &lt; src.length; i++ ) {
+    var entry = src[ i ]
+      , bib   = getBibTeXJSON( entry )
+    
+    if ( html )
+      res += dict.en_start
+    
+    res += '@' + bib.type + '{' + bib.label + ','
+    
+    if ( html )
+      res += dict.ul_start,
+      res += dict.li_start
+    else
+      res += '\n'
+    
+    var props = Object.keys( bib.properties )
+    
+    for ( var propIndex = 0; propIndex &lt; props.length; propIndex++ ) {
+      var prop = props[ propIndex ]
+        , value= bib.properties[ prop ].replace( /[|&lt;>~^\\{}]/g, function ( match ) {
+            return varBibTeXSyntaxTokens[ match ]
+          } )
+        , del_start=
+        
+          // Number
+          value == parseInt( value ).toString() ? '' :
+          // Title or other capital-related fields
+          prop === 'title' ? '{{' :
+          // Default
+          '{'
+          
+        , del_end= del_start.replace( /{/g, '}' ).split( '' ).reverse().join( '' )
+      
+      if ( !html )
+        res += '\t'
+      
+      res += prop + '=' + del_start + value + del_end + ','
+      
+      if ( propIndex + 1 &lt; props.length ) {
+      
+        if ( html )
+          res += dict.li_end,
+          res += dict.li_start
+        
+      }
+      
+      if ( !html )
+        res += '\n'
+    }
+    
+    if ( html )
+      res += dict.li_end,
+      res += dict.ul_end
+    
+    res += '}'
+    
+    if ( html )
+      res += dict.en_end
+  }
+  
+  if ( html )
+    res += dict.wr_end
+  else
+    res += '\n'
+  
+  return res
+}
+
+/**
+ * Get a label from CSL data
+ * 
+ * @access private
+ * @method getLabel
+ * 
+ * @param {CSL} src - Input CSL
+ * 
+ * @return {String} The label
+ */
+var getLabel = function ( src ) {
+  return getBibTeXLabel( src )
+}
+
+/**
+ * Retrieve CSL locale
+ * 
+ * @access private
+ * @method fetchCSLLocale
+ * 
+ * @param {String} lang - lang code
+ * 
+ * @return {String} CSL locale
+ */
+var fetchCSLLocale = function ( lang ) {
+  return varCSLLocales[ lang ]
+}
+
+/**
+ * Retrieve CSL style
+ * 
+ * @access private
+ * @method fetchCSLStyle
+ * 
+ * @param {String} [style="apa"] - style name
+ * 
+ * @return {String} CSL style
+ */
+var fetchCSLStyle = function ( style ) {
+  return varCSLStyles.hasOwnProperty( style || '' ) ? varCSLStyles[ style ] : varCSLStyles[ 'apa' ]
+}
+
+/**
+ * @callback Cite~retrieveItem
+ * @param {String} id - Citation id
+ * @return {CSL} CSL Citation object
+ */
+
+/**
+ * @callback Cite~retrieveLocale
+ * @param {String} lang - Language code
+ * @return {String} CSL Locale
+ */
+
+/**
+ * Retrieve CSL parsing engine
+ * 
+ * @access private
+ * @method fetchCSLEngine
+ * 
+ * @param {String} style - CSL style id
+ * @param {String} lang - Language code
+ * @param {String} template - CSL XML template
+ * @param {Cite~retrieveItem} retrieveItem - Code to retreive item
+ * @param {Cite~retrieveLocale} retrieveLocale - Code to retreive locale
+ * 
+ * @return {Object} CSL Engine
+ */
+var fetchCSLEngine = function ( style, lang, template, retrieveItem, retrieveLocale ) {
+  var prop = style + '|' + lang
+    , engine
+  
+  if ( varCSLEngines.hasOwnProperty( prop ) )
+    engine = varCSLEngines[ prop ],
+    engine.sys.retrieveItem = retrieveItem
+  else
+    engine = varCSLEngines[ prop ] = new CSL.Engine( { retrieveLocale: retrieveLocale, retrieveItem: retrieveItem }, template, lang, true )
+  
+  return engine
+}
+
+/**
+ * Retrieve CSL item callback function
+ * 
+ * @access private
+ * @method fetchCSLItemCallback
+ * 
+ * @param {CSL[]} data - CSL array
+ * 
+ * @return {Cite~retrieveItem} Code to retreive item
+ */
+var fetchCSLItemCallback = function ( data ) {
+  var _data = data
+  var fetchCSLItem = function ( id ) {
+    var res
+    
+    for ( var entryIndex = 0; entryIndex &lt; _data.length; entryIndex++ ) {
+      var entry = _data[ entryIndex ]
+      
+      if ( entry.id === id )
+        res = entry
+    }
+    
+    if ( !res &amp;&amp; parseInt( id ) + 1 )
+      res = _data[ id ]
+    
+    return res
+  }
+  return fetchCSLItem
+}
+
+
+/**
+ * Fetch file
+ * 
+ * @access private
+ * @method fetchFile
+ * 
+ * @param {String} url - The input url
+ * 
+ * @return {String} The fetched string
+ */
+var fetchFile = function ( url ) {
+  var result
+    , url = typeof encodeURI === 'function' ? encodeURI( url ) : url
+  
+  try {
+    result  = request( 'GET', url ).getBody( 'utf8' )
+  } catch (e) {
+    return console.error( '[set]', 'File could not be fetched' )
+  }
+  
+  if ( result === url )
+    return console.error( '[set]', 'Infinite chaining loop detected' )
+  
+  else
+    return result
+}
+</code></section>
+</pre></div>
+
     <article>
-      <h2><a href="demo/jquery.html">jQuery plugin demo</a></h2>
-      <iframe src="demo/jquery.html" style="height:500px;width:100%;border:1px solid;margin-top:1em"></iframe>
+      <div class="text a1">
+      <section style="margin-bottom:250px;">
+        <h1>Citation.js</h1>
+        <p>Citation.js converts formats like BibTeX, Wikidata JSON and ContentMine JSON to CSL-JSON to convert to other formats like APA, Vancouver and back to BibTeX.</p>
+        <p>(Also contains a jQuery plugin to build HTML forms for input)</p>
+        <hr>
+        
+        <p>
+          <a class="no-border" href="https://www.npmjs.org/package/citation-js">
+            <img height="20" src="https://img.shields.io/npm/v/citation-js.svg" alt="NPM version">
+          </a>
+          <a class="no-border" href="https://npmjs.org/citation-js">
+            <img height="20" src="https://img.shields.io/npm/dt/citation-js.svg" alt="NPM total downloads">
+          </a>
+          <a class="no-border" href="https://travis-ci.org/larsgw/citation.js">
+            <img height="20" src="https://travis-ci.org/larsgw/citation.js.svg?branch=master" alt="Build Status">
+          </a>
+        </p>
+      </section>
+      <section class="grey">
+        <h1>Features</h1>
+        <ul>
+          <li>Coversion from Wikidata, Wikidata IDs, BibTeX, ContentMine quickscrape output to CSL-JSON</li>
+          <li>Coversion from CSL-JSON to BibTeX and formatted citations (with custom templates)</li>
+          <li>Sorting</li>
+          <li>Version control</li>
+          <li>Node.js, browser, and a command-line interface</li>
+        </ul>
+      </section>
+      </div>
     </article>
     
-    <a href="https://github.com/larsgw/citation.js"><img style="width: 149px;position: absolute; top: 0; right: 0; border: 0;" src="https://camo.githubusercontent.com/38ef81f8aca64bb9a64448d0d70f1308ef5341ab/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f6461726b626c75655f3132313632312e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png"></a>
+    <header>
+      <nav>
+        <ul style="list-style-type:none">
+          <li><a href="demo/jquery.html">Example</a></li>
+          <li><a href="api">Docs</a></li>
+          <li><a href="demo/demo.html">API demo</a></li>
+          <li><a href="test">Build test</a></li>
+        </ul>
+      </nav>
+      <a id="fork" href="https://github.com/larsgw/citation.js"><img style="width: 149px;position: absolute; top: 0; right: 0; border: 0;" src="https://camo.githubusercontent.com/38ef81f8aca64bb9a64448d0d70f1308ef5341ab/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f6461726b626c75655f3132313632312e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png"></a>
+    </header>
+    
+    <footer>
+      &copy; 2017 Lars Willighagen
+      <span style="left:0;right:0;position:absolute;text-align:center">Citation.js</span>
+      <span style="right:5px;position:absolute">
+        <a href="https://larsgw.github.io">larsgw.github.io</a>
+      </span>
+    </footer>
+    
+    <script>$(function(){
+      $('.code pre code').highlight();
+    })</script>
   </body>
 </html>
