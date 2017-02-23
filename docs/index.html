@@ -31,11 +31,15 @@
       }
     </script>
     <style>
-body {margin:0;font-family:Roboto, 'Helvetica Neue', Helvetica, Arial, sans-serif;height:100%;
-overflow:hidden}
+html {background-color:#333;}
+
+body {margin:0 auto;font-family:Roboto, 'Helvetica Neue', Helvetica, Arial, sans-serif;height:100%;
+max-width:1000px;position:absolute;left:0;right:0;top:0;bottom:0;
+box-shadow:-1px 1px 3px rgba(0,0,0,.4),1px 1px 3px rgba(0,0,0,.4);
+}
 
 footer {
-  position:fixed;
+  position:absolute;
   bottom:0;
   left:0;right:0;
   padding:5px;
@@ -45,14 +49,14 @@ footer {
 }
 
 header {
-  position:fixed;
+  position:absolute;
   top:0;
   left:0;right:0;
   color:#ccc;
 }
 
 article {
-  position:fixed;
+  position:absolute;
   top:0;bottom:0;
   left:0;right:0;
 }
@@ -100,7 +104,7 @@ article a:hover { border-color:black; }
 *,*:after,*:before{box-sizing:border-box;}
 
 /*BEGIN BANNER*/
-body > .citation-js { position: fixed;bottom:100px; }
+body > .citation-js { position: absolute;bottom:100px; }
 body > .citation-js { font-size: 50px;padding: 35px 140px 35px 70px;background: #333; }
 body > .citation-js * { vertical-align: middle }
 body > .citation-js img { height: 1.4em; }
@@ -133,6 +137,7 @@ body > .citation-js:after {
 /*END*/
 
 /*BEGIN Highlight */
+body > .code { position:absolute;left:0;right:0;top:0;bottom:0;overflow:hidden; }
 body > .code > pre {background-color:#f0f0f0;overflow-x:auto;font-size:6px;margin:0;}
 body > .code > pre {overflow:hidden;position:relative;z-index:-1}
 body > .code > pre section { width:50%;height:100%;float:left;overflow:hidden; }
@@ -158,7 +163,7 @@ body > .code > pre code span.delimiter:before {content:' '}
 /*END */
 
 .text { position:absolute;-moz-columns:2;columns:2;-moz-column-gap:70px;column-gap:70px; }
-.text.a1 { left:70px;right:70px;top:150px;bottom:250px; }
+.text.a1 { left:70px;right:70px;top:150px;/*bottom:250px;*/ }
 .text > section { padding:.5cm;background:white;margin-bottom:1cm; }
 .text > section { box-shadow: 0 4px 5px rgba(0,0,0,.25); }
 .text > section h1 { font-family: Roboto;background:#FFC107;color:white;text-shadow: 2px 2px 2px rgba(0,0,0,.5); }
