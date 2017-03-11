@@ -3,6 +3,16 @@ var Cite = typeof Cite !== 'undefined' ?
 :
   require( '../../../index.js' )
 
+var customTemplate = 
+  '<?xml version="1.0" encoding="utf-8"?>' +
+    '<style xmlns="http://purl.org/net/xbiblio/csl" class="in-text" version="1.0" demote-non-dropping-particle="sort-only" page-range-format="minimal">' +
+      '<bibliography>' +
+        '<layout>' +
+          '<text variable="title"/>' +
+        '</layout>' +
+      '</bibliography>' +
+  '</style>'
+
 describe( 'Cite object', function () {
   
   describe( 'init', function () {
@@ -231,6 +241,29 @@ describe( 'Cite object', function () {
       
       it( 'outputs correctly', function () {
 	expect( out ).toBe( 'Hall, H. K. Correlation of the Base Strengths of Amines 1. Journal of the American Chemical Society, 79(20), 5441–5444. https://doi.org/10.1021/ja01577a030' )
+      } )
+    } )
+    
+    describe( 'CSL Custom templates', function () {
+      it( 'outputs correctly', function () {
+        var out = test.get( {
+          format: 'string',
+          type: 'string',
+          style: 'citation-custom',
+          template: customTemplate
+        } ).trim()
+        
+        expect( out ).toBe( 'Correlation of the Base Strengths of Amines 1' )
+      } )
+      
+      it( 'registers for second call', function () {
+        var out = test.get( {
+          format: 'string',
+          type: 'string',
+          style: 'citation-custom'
+        } ).trim()
+        
+        expect( out ).toBe( 'Correlation of the Base Strengths of Amines 1' )
       } )
     } )
     

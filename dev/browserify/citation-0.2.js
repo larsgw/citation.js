@@ -33,20 +33,12 @@
  * @class CSL
  */
 
-var Cite = ( function () {
+module.exports = ( function () {
 
-//var  nodejsMode = ( typeof process  !== 'undefined' && typeof global   !== 'undefined' )
-//var browserMode = ( typeof location !== 'undefined' && typeof document !== 'undefined' )
-
-var CSL = require( './citeproc.js' ).CSL
-  , striptags = require( 'striptags' )
-  , request = require( 'sync-request' )
-  , wdk = require( 'wikidata-sdk' )
-
-/*if ( nodejsMode === browserMode )
-  throw new Error( 'Code executed in invalid environment' )
-
-console.info( '[init]', nodejsMode ? 'Node.js' : browserMode ? 'Browser' : '', 'mode' )*/
+var CSL = require('./citeproc.js').CSL
+  , striptags = require('striptags')
+  , request = require('sync-request')
+  , wdk = require('wikidata-sdk')
 
 /**
  * Object containing several RegExp patterns, mostly used for parsing (*full of shame*) and recognizing data types
@@ -898,7 +890,7 @@ var fetchFile = function ( url ) {
     , url = typeof encodeURI === 'function' ? encodeURI( url ) : url
   
   try {
-    result  = request( 'GET', url ).getBody( 'utf8' )
+    result  = request( 'GET', url, { uri: url } ).getBody( 'utf8' )
   } catch (e) {
     return console.error( '[set]', 'File could not be fetched' )
   }
@@ -974,10 +966,10 @@ var fetchWikidataLabel = function ( q, lang ) {
   else
     ids = ''
   
-  var url = wdk.hasOwnProperty( 'getEntities' ) ? wdk.getEntities( ids, [ lang ], 'labels' ) : (
+  var url = /*wdk.hasOwnProperty( 'getEntities' ) ?*/ wdk.getEntities( ids, [ lang ], 'labels' ) /*: (
   'https://www.wikidata.org/w/api.php' +
     '?origin=*&action=wbgetentities&languages=en&format=json&props=labels&' + 
-    'ids=' + ids.join( '|' ) )
+    'ids=' + ids.join( '|' ) )*/
   
   var data     = fetchFile( url )
     , entities = JSON.parse( data ).entities || {}
@@ -1121,6 +1113,11 @@ var parseWikidataProp = function ( prop, value, lang ) {
       rProp = 'title'
       break;
     
+    // URL
+    case 'P953': // (full work available at)
+      rProp = 'URL'
+      break;
+    
     // Volume
     case 'P478' :
       rProp = 'volume'
@@ -1132,6 +1129,7 @@ var parseWikidataProp = function ( prop, value, lang ) {
     case 'P364' : // Original language of work
     case 'P698' : // PMID
     case 'P932' : // PMCID
+    case 'P1104': // Number of pages
       // Property ignored
       break;
     
@@ -1157,11 +1155,11 @@ var parseWikidata = function ( data ) {
   var data = data.split( /(?:\s+|,)/g )
     , result
   
-  if ( wdk.hasOwnProperty( 'getEntities' ) ) {
-    var url = wdk.getEntities( {
-      ids: data,
-      languages: [ 'en' ]
-    } )
+//   if ( wdk.hasOwnProperty( 'getEntities' ) ) {
+    var url = wdk.getEntities( data, [ 'en' ] )
+//       ids: data,
+//       languages: [ 'en' ]
+//     } )
     
     if ( Array.isArray( url ) ) {
       var urls = url
@@ -1175,17 +1173,17 @@ var parseWikidata = function ( data ) {
       
       result = outs
     } else result = JSON.parse( fetchFile( url ) )
-  } else {
-    var url =
-    'https://www.wikidata.org/w/api.php?' +
-      'origin=*&' +
-      'action=wbgetentities&' + 
-      'ids=' + data.join( '|' ) + '&' +
-      'languages=en&' +
-      'format=json'
-    
-    result = JSON.parse( fetchFile( url ) )
-  }
+//   } else {
+//     var url =
+//     'https://www.wikidata.org/w/api.php?' +
+//       'origin=*&' +
+//       'action=wbgetentities&' + 
+//       'ids=' + data.join( '|' ) + '&' +
+//       'languages=en&' +
+//       'format=json'
+//     
+//     result = JSON.parse( fetchFile( url ) )
+//   }
   
   return result
 }
@@ -1271,9 +1269,19 @@ var parseBibTeXProp = function ( prop, value ) {
   
   switch ( prop ) {
     
+    // Address
+    case 'address':
+      rProp = 'publisher-place'
+      break;
+    
     // Author
     case 'author':
       rValue = value.split( ' and ' ).map( parseName )
+      break;
+    
+    // Book title
+    case 'booktitle':
+      rProp = 'container-title'
       break;
     
     // DOI
@@ -1298,7 +1306,7 @@ var parseBibTeXProp = function ( prop, value ) {
     
     // ISSN
     case 'issn':
-      rProp = 'ISBN'
+      rProp = 'ISSN'
       break;
     
     // Issue
@@ -1345,10 +1353,20 @@ var parseBibTeXProp = function ( prop, value ) {
       // Nothing necessary, as far as I know
       break;
     
+    // Series
+    case 'series':
+      rProp = 'collection-title'
+      break;
+    
     // Title
     case 'title':
       rProp = 'title'
       rValue = value.replace(/\.$/g,'')
+      break;
+    
+    // URL
+    case 'url':
+      rProp = 'URL'
       break;
     
     // Volume
@@ -1361,7 +1379,7 @@ var parseBibTeXProp = function ( prop, value ) {
     case 'language': // Language
     case 'note': // Note
     case 'pmid': // PMID
-    case 'url': // URL
+    case 'numpages': // Number of pages
       // Property ignored
       rProp = rValue = undefined
       break;
@@ -1748,11 +1766,11 @@ var parseInputType = function ( input ) {
         return 'list/else'
       
       // jQuery
-      else if ( window.jQuery && input instanceof window.jQuery )
+      else if ( window.jQuery && input instanceof jQuery )
         return 'jquery/else'
       
       // HTML
-      else if ( window.HMTLElement && input instanceof window.HMTLElement)
+      else if ( window.HMTLElement && input instanceof HMTLElement)
         return 'html/else'
       
       // Wikidata
@@ -2433,20 +2451,13 @@ var getJSON = function ( src ) {
     }
     
     if ( options.format === 'real' ) {
-      
       if ( options.type === 'json' )
         result = JSON.parse( result )
-      
-      else if (
-        options.type === 'html' &&
-        typeof document !== 'undefined' &&
-        typeof document.createElement === 'function'
-      ) {
+      else if ( browserMode && options.type === 'html' ) {
         var tmp = document.createElement( 'div' )
         tmp.innerHTML = result
         result = result.childNodes
       }
-      
     }
     
     return result
@@ -2460,5 +2471,3 @@ var getJSON = function ( src ) {
 return Cite
 
 })()
-
-module.exports = Cite
