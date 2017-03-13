@@ -1,7 +1,4 @@
-var Cite = typeof Cite !== 'undefined' ?
-  Cite
-:
-  require( '../../../index.js' )
+var Cite = require( '../index.js' )
 
 var customTemplate = 
   '<?xml version="1.0" encoding="utf-8"?>' +
@@ -39,8 +36,8 @@ describe( 'Cite object', function () {
       test.add( {} )
       
       it( 'works', function () {
-	expect( test.data.length ).toBe( 2 )
-	expect( test._log.length ).toBe( 2 )
+        expect( test.data.length ).toBe( 2 )
+        expect( test._log.length ).toBe( 2 )
       } )
     } )
     
@@ -50,8 +47,8 @@ describe( 'Cite object', function () {
       test.set( {} )
       
       it( 'works', function () {
-	expect( test.data.length ).toBe( 1 )
-	expect( test._log.length ).toBe( 2 )
+        expect( test.data.length ).toBe( 1 )
+        expect( test._log.length ).toBe( 2 )
       } )
     } )
     
@@ -61,8 +58,8 @@ describe( 'Cite object', function () {
       test.reset()
       
       it( 'works', function () {
-	expect( test.data.length ).toBe( 0 )
-	expect( test._log.length ).toBe( 2 )
+        expect( test.data.length ).toBe( 0 )
+        expect( test._log.length ).toBe( 2 )
       } )
     } )
     
@@ -72,8 +69,8 @@ describe( 'Cite object', function () {
       test.options( { format: 'string' } )
       
       it( 'works', function () {
-	expect( test._options.format ).toBe( 'string' )
-	expect( test._log.length ).toBe( 2 )
+        expect( test._options.format ).toBe( 'string' )
+        expect( test._log.length ).toBe( 2 )
       } )
     } )
     
@@ -81,9 +78,9 @@ describe( 'Cite object', function () {
       var test = new Cite( input )
       
       it( 'works', function () {
-	expect( test.currentVersion() ).toBe( 0 )
-	test.add( {} )
-	expect( test.currentVersion() ).toBe( 1 )
+        expect( test.currentVersion() ).toBe( 0 )
+        test.add( {} )
+        expect( test.currentVersion() ).toBe( 1 )
       } )
     } )
     
@@ -91,18 +88,18 @@ describe( 'Cite object', function () {
       var test = new Cite( input )
       
       it( 'works', function () {
-	expect( test._log.length ).toBe( 1 )
-	expect( test.data.length ).toBe( 1 )
-	
-	test.add( {} )
-	
-	expect( test._log.length ).toBe( 2 )
-	expect( test.data.length ).toBe( 2 )
-	
-	test = test.retrieveVersion( 0 )
-	
-	expect( test._log.length ).toBe( 1 )
-	expect( test.data.length ).toBe( 1 )
+        expect( test._log.length ).toBe( 1 )
+        expect( test.data.length ).toBe( 1 )
+        
+        test.add( {} )
+        
+        expect( test._log.length ).toBe( 2 )
+        expect( test.data.length ).toBe( 2 )
+        
+        test = test.retrieveVersion( 0 )
+        
+        expect( test._log.length ).toBe( 1 )
+        expect( test.data.length ).toBe( 1 )
       } )
     } )
     
@@ -110,35 +107,35 @@ describe( 'Cite object', function () {
       var test = new Cite( input )
       
       it( 'works', function () {
-	expect( test._log.length ).toBe( 1 )
-	expect( test.data.length ).toBe( 1 )
-	
-	test.add( {} )
-	
-	expect( test._log.length ).toBe( 2 )
-	expect( test.data.length ).toBe( 2 )
-	
-	test = test.undo()
-	
-	expect( test._log.length ).toBe( 1 )
-	expect( test.data.length ).toBe( 1 )
+        expect( test._log.length ).toBe( 1 )
+        expect( test.data.length ).toBe( 1 )
+        
+        test.add( {} )
+        
+        expect( test._log.length ).toBe( 2 )
+        expect( test.data.length ).toBe( 2 )
+        
+        test = test.undo()
+        
+        expect( test._log.length ).toBe( 1 )
+        expect( test.data.length ).toBe( 1 )
       } )
     } )
     
     describe( 'sort()', function () {
       var test = new Cite( [
-	{ author: [ { family: 'b' } ], id: 'b' }
+        { author: [ { family: 'b' } ], id: 'b' }
       , { author: [ { family: 'a' } ], id: 'a' }
       ] )
       
       it( 'works', function () {
-	expect( test.data[ 0 ].author[ 0 ].family ).toBe( 'b' )
-	expect( test.data[ 1 ].author[ 0 ].family ).toBe( 'a' )
-	
-	test.sort()
-	
-	expect( test.data[ 0 ].author[ 0 ].family ).toBe( 'a' )
-	expect( test.data[ 1 ].author[ 0 ].family ).toBe( 'b' )
+        expect( test.data[ 0 ].author[ 0 ].family ).toBe( 'b' )
+        expect( test.data[ 1 ].author[ 0 ].family ).toBe( 'a' )
+        
+        test.sort()
+        
+        expect( test.data[ 0 ].author[ 0 ].family ).toBe( 'a' )
+        expect( test.data[ 1 ].author[ 0 ].family ).toBe( 'b' )
       } )
     } )
     
@@ -189,12 +186,12 @@ describe( 'Cite object', function () {
 ' )
       
       it( 'handles input type', function () {
-	expect( test_1._input.format ).toBe( 'string/bibtex' )
+        expect( test_1._input.format ).toBe( 'string/bibtex' )
         expect( test_2._input.format ).toBe( 'string/bibtex' )
       } )
       
       it( 'parses input', function () {
-	expect( JSON.stringify( test_1.data ) ).toBe( '[{"type":"article-journal","author":[{"given":"Christoph","family":"Steinbeck"},{"given":"Yongquan","family":"Han"},{"given":"Stefan","family":"Kuhn"},{"given":"Oliver","family":"Horlacher"},{"given":"Edgar","family":"Luttmann"},{"given":"Egon","family":"Willighagen"}],"year":"2003","title":"The Chemistry Development Kit (CDK): an open-source Java library for Chemo- and Bioinformatics","container-title":"Journal of chemical information and computer sciences","volume":"43","issue":"2","page":"493-500","DOI":"10.1021/ci025584y","ISBN":"2214707786","ISSN":"0095-2338","URL":"http://www.ncbi.nlm.nih.gov/pubmed/12653513","id":"Steinbeck2003"}]' )
+        expect( JSON.stringify( test_1.data ) ).toBe( '[{"type":"article-journal","author":[{"given":"Christoph","family":"Steinbeck"},{"given":"Yongquan","family":"Han"},{"given":"Stefan","family":"Kuhn"},{"given":"Oliver","family":"Horlacher"},{"given":"Edgar","family":"Luttmann"},{"given":"Egon","family":"Willighagen"}],"year":"2003","title":"The Chemistry Development Kit (CDK): an open-source Java library for Chemo- and Bioinformatics","container-title":"Journal of chemical information and computer sciences","volume":"43","issue":"2","page":"493-500","DOI":"10.1021/ci025584y","ISBN":"2214707786","ISSN":"0095-2338","URL":"http://www.ncbi.nlm.nih.gov/pubmed/12653513","id":"Steinbeck2003"}]' )
       } )
       
       describe( 'with whitespace and unknown fields', function () {
@@ -208,10 +205,10 @@ describe( 'Cite object', function () {
       var test = new Cite( '[ { id: "Q23571040", type: "article-journal", title: "Correlation of the Base Strengths of Amines 1", DOI: "10.1021/ja01577a030", author: [ { given: "H. K.", family: "Hall" } ], issued: [ { date-parts: [ "1957", "1", "1" ] } ], container-title: "Journal of the American Chemical Society", volume: "79", issue: "20", page: "5441-5444" } ]' )
       
       it( 'handles input type', function () {
-	expect( test._input.format ).toBe( 'string/json' )
+        expect( test._input.format ).toBe( 'string/json' )
       } )
       it( 'parses input', function () {
-	expect( JSON.stringify( test.data ) ).toBe( '[{"id":"Q23571040","type":"article-journal","title":"Correlation of the Base Strengths of Amines 1","DOI":"10.1021/ja01577a030","author":[{"given":"H. K.","family":"Hall"}],"issued":[{"date-parts":["1957","1","1"]}],"container-title":"Journal of the American Chemical Society","volume":"79","issue":"20","page":"5441-5444"}]' )
+        expect( JSON.stringify( test.data ) ).toBe( '[{"id":"Q23571040","type":"article-journal","title":"Correlation of the Base Strengths of Amines 1","DOI":"10.1021/ja01577a030","author":[{"given":"H. K.","family":"Hall"}],"issued":[{"date-parts":["1957","1","1"]}],"container-title":"Journal of the American Chemical Society","volume":"79","issue":"20","page":"5441-5444"}]' )
       } )
     } )
     
@@ -219,10 +216,10 @@ describe( 'Cite object', function () {
       var test = new Cite( JSON.parse( '{ "publisher": { "value": [ "BioMed Central" ] }, "journal": { "value": [ "Journal of Ethnobiology and Ethnomedicine" ] }, "title": { "value": [ "Gitksan medicinal plants-cultural choice and efficacy" ] }, "authors": { "value": [ "Leslie Main Johnson" ] }, "date": { "value": [ "2006-06-21" ] }, "doi": { "value": [ "10.1186/1746-4269-2-29" ] }, "volume": { "value": [ "2" ] }, "issue": { "value": [ "1" ] }, "firstpage": { "value": [ "1" ] }, "fulltext_html": { "value": [ "http://ethnobiomed.biomedcentral.com/articles/10.1186/1746-4269-2-29" ] }, "fulltext_pdf": { "value": [ "http://ethnobiomed.biomedcentral.com/track/pdf/10.1186/1746-4269-2-29?site=http://ethnobiomed.biomedcentral.com" ] }, "license": { "value": [ "This article is published under license to BioMed Central Ltd. This is an Open Access article distributed under the terms of the Creative Commons Attribution License (http://creativecommons.org/licenses/by/2.0), which permits unrestricted use, distribution, and reproduction in any medium, provided the original work is properly cited." ] }, "copyright": { "value": [ "2006 Johnson; licensee BioMed Central Ltd." ] } }' ) )
       
       it( 'handles input type', function () {
-	expect( test._input.format ).toBe( 'json/contentmine' )
+        expect( test._input.format ).toBe( 'json/contentmine' )
       } )
       it( 'parses input', function () {
-	expect( JSON.stringify( test.data ) ).toBe( '[{"publisher":"BioMed Central","journal":"Journal of Ethnobiology and Ethnomedicine","title":"Gitksan medicinal plants-cultural choice and efficacy","authors":"Leslie Main Johnson","date":"2006-06-21","doi":"10.1186/1746-4269-2-29","volume":"2","issue":"1","firstpage":"1","fulltext_html":"http://ethnobiomed.biomedcentral.com/articles/10.1186/1746-4269-2-29","fulltext_pdf":"http://ethnobiomed.biomedcentral.com/track/pdf/10.1186/1746-4269-2-29?site=http://ethnobiomed.biomedcentral.com","license":"This article is published under license to BioMed Central Ltd. This is an Open Access article distributed under the terms of the Creative Commons Attribution License (http://creativecommons.org/licenses/by/2.0), which permits unrestricted use, distribution, and reproduction in any medium, provided the original work is properly cited.","copyright":"2006 Johnson; licensee BioMed Central Ltd.","type":"article-journal","author":[{"given":"Leslie Main","family":"Johnson"}],"page-first":"1","page":"1","issued":[{"date-parts":[2006,6,21]}],"container-title":"Journal of Ethnobiology and Ethnomedicine","id":"10.1186/1746-4269-2-29","DOI":"10.1186/1746-4269-2-29"}]' )
+        expect( JSON.stringify( test.data ) ).toBe( '[{"publisher":"BioMed Central","journal":"Journal of Ethnobiology and Ethnomedicine","title":"Gitksan medicinal plants-cultural choice and efficacy","authors":"Leslie Main Johnson","date":"2006-06-21","doi":"10.1186/1746-4269-2-29","volume":"2","issue":"1","firstpage":"1","fulltext_html":"http://ethnobiomed.biomedcentral.com/articles/10.1186/1746-4269-2-29","fulltext_pdf":"http://ethnobiomed.biomedcentral.com/track/pdf/10.1186/1746-4269-2-29?site=http://ethnobiomed.biomedcentral.com","license":"This article is published under license to BioMed Central Ltd. This is an Open Access article distributed under the terms of the Creative Commons Attribution License (http://creativecommons.org/licenses/by/2.0), which permits unrestricted use, distribution, and reproduction in any medium, provided the original work is properly cited.","copyright":"2006 Johnson; licensee BioMed Central Ltd.","type":"article-journal","author":[{"given":"Leslie Main","family":"Johnson"}],"page-first":"1","page":"1","issued":[{"date-parts":[2006,6,21]}],"container-title":"Journal of Ethnobiology and Ethnomedicine","id":"10.1186/1746-4269-2-29","DOI":"10.1186/1746-4269-2-29"}]' )
       } )
     } )
     
@@ -234,13 +231,13 @@ describe( 'Cite object', function () {
     
     describe( 'CSL APA plain text', function () {
       var out = test.get( {
-	format: 'string',
-	type: 'string',
-	style: 'citation-apa'
+        format: 'string',
+        type: 'string',
+        style: 'citation-apa'
       } ).trim()
       
       it( 'outputs correctly', function () {
-	expect( out ).toBe( 'Hall, H. K. Correlation of the Base Strengths of Amines 1. Journal of the American Chemical Society, 79(20), 5441–5444. https://doi.org/10.1021/ja01577a030' )
+        expect( out ).toBe( 'Hall, H. K. Correlation of the Base Strengths of Amines 1. Journal of the American Chemical Society, 79(20), 5441–5444. https://doi.org/10.1021/ja01577a030' )
       } )
     } )
     
@@ -269,37 +266,37 @@ describe( 'Cite object', function () {
     
     describe( 'CSL JSON plain text', function () {
       var out = test.get( {
-	format: 'string',
-	type: 'json',
-	style: 'csl'
+        format: 'string',
+        type: 'json',
+        style: 'csl'
       } ).trim()
       
       it( 'outputs correctly', function () {
-	expect( out ).toBe( '[{"id":"Q23571040","type":"article-journal","title":"Correlation of the Base Strengths of Amines 1","DOI":"10.1021/ja01577a030","author":[{"given":"H. K.","family":"Hall"}],"issued":[{"date-parts":["1957","1","1"]}],"container-title":"Journal of the American Chemical Society","volume":"79","issue":"20","page":"5441-5444"}]' )
+        expect( out ).toBe( '[{"id":"Q23571040","type":"article-journal","title":"Correlation of the Base Strengths of Amines 1","DOI":"10.1021/ja01577a030","author":[{"given":"H. K.","family":"Hall"}],"issued":[{"date-parts":["1957","1","1"]}],"container-title":"Journal of the American Chemical Society","volume":"79","issue":"20","page":"5441-5444"}]' )
       } )
     } )
     
     describe( 'BibTeX plain text', function () {
       var out = test.get( {
-	format: 'string',
-	type: 'string',
-	style: 'bibtex'
+        format: 'string',
+        type: 'string',
+        style: 'bibtex'
       } ).trim().replace( /\s+/g, ' ' )
       
       it( 'outputs correctly', function () {
-	expect( out ).toBe( '@article{Hall1957Correlation, author={H. K. Hall}, doi={10.1021/ja01577a030}, journal={Journal of the American Chemical Society}, issue=20, pages={5441--5444}, title={{Correlation of the Base Strengths of Amines 1}}, volume=79, year=1957, }' )
+        expect( out ).toBe( '@article{Hall1957Correlation, author={H. K. Hall}, doi={10.1021/ja01577a030}, journal={Journal of the American Chemical Society}, issue=20, pages={5441--5444}, title={{Correlation of the Base Strengths of Amines 1}}, volume=79, year=1957, }' )
       } )
     } )
     
     describe( 'BibTeX JSON', function () {
       var out = test.get( {
-	format: 'string',
-	type: 'json',
-	style: 'bibtex'
+        format: 'string',
+        type: 'json',
+        style: 'bibtex'
       } ).trim()
       
       it( 'outputs correctly', function () {
-	expect( out ).toBe( '[{"label":"Hall1957Correlation","type":"article","properties":{"author":"H. K. Hall","doi":"10.1021/ja01577a030","journal":"Journal of the American Chemical Society","issue":"20","pages":"5441--5444","title":"Correlation of the Base Strengths of Amines 1","volume":"79","year":"1957"}}]' )
+        expect( out ).toBe( '[{"label":"Hall1957Correlation","type":"article","properties":{"author":"H. K. Hall","doi":"10.1021/ja01577a030","journal":"Journal of the American Chemical Society","issue":"20","pages":"5441--5444","title":"Correlation of the Base Strengths of Amines 1","volume":"79","year":"1957"}}]' )
       } )
     } )
     

@@ -66,18 +66,12 @@
  * @class CSL
  */
 
-var Cite = ( function ( modules, nodejsMode, browserMode ) {
+module.exports = ( function () {
 
-var CSL = modules.CSL
-  , striptags = modules.striptags
-  , request = modules.request
-  , window = modules.window
-  , wdk = modules.wdk
-
-if ( !nodejsMode &amp;&amp; !browserMode )
-  throw new Error( 'Code executed in invalid environment' )
-
-console.info( '[init]', nodejsMode ? 'Node.js' : browserMode ? 'Browser' : '', 'mode' )
+var CSL = require('./citeproc.js').CSL
+  , striptags = require('striptags')
+  , request = require('sync-request')
+  , wdk = require('wikidata-sdk')
 
 /**
  * Object containing several RegExp patterns, mostly used for parsing (*full of shame*) and recognizing data types
@@ -929,7 +923,7 @@ var fetchFile = function ( url ) {
     , url = typeof encodeURI === 'function' ? encodeURI( url ) : url
   
   try {
-    result  = request( 'GET', url ).getBody( 'utf8' )
+    result  = request( 'GET', url, { uri: url } ).getBody( 'utf8' )
   } catch (e) {
     return console.error( '[set]', 'File could not be fetched' )
   }
@@ -990,19 +984,25 @@ var fetchWikidataType = function ( value ) {
  * @access private
  * @method fetchWikidataLabel
  * 
- * @param {String} q - Wikidata IDs, seperated by "|"
+ * @param {String|String[]} q - Wikidata IDs
  * @param {String} lang - Language
  * 
  * @return {String[]} Array with labels of each prop
  */
 var fetchWikidataLabel = function ( q, lang ) {
-  var url = wdk.hasOwnProperty( 'getEntities' ) ? wdk.getEntities( q, [ lang ], 'labels' ) : (
-  'https://www.wikidata.org/w/api.php' +
-    '?origin=*&amp;action=wbgetentities&amp;languages=en&amp;format=json&amp;props=labels&amp;' + 
-    'ids=' + q )
+  var ids
+  
+  if ( Array.isArray( q ) )
+    ids = q
+  else if ( typeof q === 'string' )
+    ids = q.split( '|' )
+  else
+    ids = ''
+  
+  var url = wdk.getEntities( ids, [ lang ], 'labels' )
   
   var data     = fetchFile( url )
-    , entities = JSON.parse( data ).entities
+    , entities = JSON.parse( data ).entities || {}
   
     , entKeys  = Object.keys( entities )
     , labels   = []
@@ -1018,6 +1018,23 @@ var fetchWikidataLabel = function ( q, lang ) {
 }
 
 /**
+ * Get series ordinal from qualifiers object
+ * 
+ * @access private
+ * @method parseWikidataProp
+ * 
+ * @param {Object} qualifiers - qualifiers object
+ * 
+ * @return {Number} series ordinal or -1
+ */
+var parseWikidataP1545 = function ( qualifiers ) {
+  if ( qualifiers.P1545 )
+    return parseInt( qualifiers.P1545[ 0 ] )
+  else
+    return -1
+}
+
+/**
  * Transform property and value from Wikidata format to CSL
  * 
  * @access private
@@ -1029,28 +1046,41 @@ var fetchWikidataLabel = function ( q, lang ) {
  * 
  * @return {String[]} Array with new prop and value
  */
-var parseWikidataProp = function ( prop, value, lang ) { var value = value
+var parseWikidataProp = function ( prop, value, lang ) {
   
-  if ( !( [ ''
-  , 'P50'
-  , 'P2093'
-  ].indexOf( prop ) > -1 ) ) value = value[ 0 ]
+  switch ( prop ) {
+    case 'P50':
+    case 'P2093':
+      value = value.slice()
+      break;
+    
+    default:
+      value = value[ 0 ].value
+      break;
+  }
   
   var rProp = ''
-    , rValue = value
+    , rValue= value
   
   switch ( prop ) {
     
     // Author ( q )
     case 'P50':
       rProp = 'authorQ'
-      rValue = value.map( function ( name ) { return parseName( fetchWikidataLabel( name, lang ) ) } )
+      rValue = value.map( function ( v ) {
+        return [
+          parseName( fetchWikidataLabel( v.value, lang )[ 0 ] )
+        , parseWikidataP1545( v.qualifiers )
+        ]
+      } )
       break;
     
     // Author ( s )
     case 'P2093':
       rProp = 'authorS'
-      rValue = value.map( parseName )
+      rValue = value.map( function ( v ) {
+        return [ parseName( v.value ), parseWikidataP1545( v.qualifiers ) ]
+      } )
       break;
     
     // Date
@@ -1113,6 +1143,11 @@ var parseWikidataProp = function ( prop, value, lang ) { var value = value
       rProp = 'title'
       break;
     
+    // URL
+    case 'P953': // (full work available at)
+      rProp = 'URL'
+      break;
+    
     // Volume
     case 'P478' :
       rProp = 'volume'
@@ -1124,6 +1159,7 @@ var parseWikidataProp = function ( prop, value, lang ) { var value = value
     case 'P364' : // Original language of work
     case 'P698' : // PMID
     case 'P932' : // PMCID
+    case 'P1104': // Number of pages
       // Property ignored
       break;
     
@@ -1149,35 +1185,20 @@ var parseWikidata = function ( data ) {
   var data = data.split( /(?:\s+|,)/g )
     , result
   
-  if ( wdk.hasOwnProperty( 'getEntities' ) ) {
-    var url = wdk.getEntities( {
-      ids: data,
-      languages: [ 'en' ]
-    } )
+  var url = wdk.getEntities( data, [ 'en' ] )
+  
+  if ( Array.isArray( url ) ) {
+    var urls = url
+      , outs = []
     
-    if ( Array.isArray( url ) ) {
-      var urls = url
-        , outs = []
-      
-      for ( var urlIndex = 0; urlIndex &lt; urls.length; urlIndex++ ) {
-        var url = urls[ urlIndex ]
-          , out = JSON.parse( fetchFile( url ) )
-            outs= outs.concat( out )
-      }
-      
-      result = outs
-    } else result = JSON.parse( fetchFile( url ) )
-  } else {
-    var url =
-    'https://www.wikidata.org/w/api.php?' +
-      'origin=*&amp;' +
-      'action=wbgetentities&amp;' + 
-      'ids=' + data.join( '|' ) + '&amp;' +
-      'languages=en&amp;' +
-      'format=json'
+    for ( var urlIndex = 0; urlIndex &lt; urls.length; urlIndex++ ) {
+      var url = urls[ urlIndex ]
+        , out = JSON.parse( fetchFile( url ) )
+          outs= outs.concat( out )
+    }
     
-    result = JSON.parse( fetchFile( url ) )
-  }
+    result = outs
+  } else result = JSON.parse( fetchFile( url ) )
   
   return result
 }
@@ -1200,7 +1221,7 @@ var parseWikidataJSON = function ( data ) {
   for ( var entIndex = 0; entIndex &lt; entKeys.length; entIndex++ ) {
     var entKey = entKeys[ entIndex ]
       , labels = entities[ entKey ].labels
-      , entity = wdk.simplifyClaims( entities[ entKey ].claims )
+      , entity = wdk.simplifyClaims( entities[ entKey ].claims, null, null, true )
     
     var json  = { wikiID: entKey, id: entKey }
       , props = Object.keys( entity )
@@ -1208,7 +1229,7 @@ var parseWikidataJSON = function ( data ) {
     for ( var propIndex = 0; propIndex &lt; props.length; propIndex++ ) {
       var prop  = props[ propIndex ]
         , value = entity[ prop ]
-        
+      
       var resp = parseWikidataProp( prop, value, 'en' )
       
       if ( resp[ 0 ].length > 0 )
@@ -1219,10 +1240,7 @@ var parseWikidataJSON = function ( data ) {
     if ( json.hasOwnProperty( 'authorQ' ) || json.hasOwnProperty( 'authorS' ) ) {
       
       if ( json.hasOwnProperty( 'authorQ' ) &amp;&amp; json.hasOwnProperty( 'authorS' ) ) {     
-        if ( json.authorQ.length >= json.authorS.length )
-          json.author = json.authorQ
-        else if ( json.authorQ.length &lt; json.authorS.length )
-          json.author = json.authorS
+        json.author = json.authorQ.concat( json.authorS )
         
         delete        json.authorQ
         delete        json.authorS
@@ -1233,7 +1251,10 @@ var parseWikidataJSON = function ( data ) {
         json.author = json.authorS
         delete        json.authorS
       }
-    
+      
+      json.author = json.author
+        .sort( function sortNames ( a, b ) { return a[ 1 ] - b[ 1 ] } )
+        .map ( function  mapNames ( v    ) { return v[ 0 ]          } )
     }
     
     if ( !( json.hasOwnProperty( 'title' ) &amp;&amp; json.title ) )
@@ -1263,9 +1284,19 @@ var parseBibTeXProp = function ( prop, value ) {
   
   switch ( prop ) {
     
+    // Address
+    case 'address':
+      rProp = 'publisher-place'
+      break;
+    
     // Author
     case 'author':
       rValue = value.split( ' and ' ).map( parseName )
+      break;
+    
+    // Book title
+    case 'booktitle':
+      rProp = 'container-title'
       break;
     
     // DOI
@@ -1290,7 +1321,7 @@ var parseBibTeXProp = function ( prop, value ) {
     
     // ISSN
     case 'issn':
-      rProp = 'ISBN'
+      rProp = 'ISSN'
       break;
     
     // Issue
@@ -1337,10 +1368,20 @@ var parseBibTeXProp = function ( prop, value ) {
       // Nothing necessary, as far as I know
       break;
     
+    // Series
+    case 'series':
+      rProp = 'collection-title'
+      break;
+    
     // Title
     case 'title':
       rProp = 'title'
       rValue = value.replace(/\.$/g,'')
+      break;
+    
+    // URL
+    case 'url':
+      rProp = 'URL'
       break;
     
     // Volume
@@ -1353,7 +1394,7 @@ var parseBibTeXProp = function ( prop, value ) {
     case 'language': // Language
     case 'note': // Note
     case 'pmid': // PMID
-    case 'url': // URL
+    case 'numpages': // Number of pages
       // Property ignored
       rProp = rValue = undefined
       break;
@@ -2444,116 +2485,7 @@ var getJSON = function ( src ) {
 
 return Cite
 
-})(
-  ( typeof require  === 'function' ? {
-    CSL: require( './citeproc.js' ).CSL
-  , striptags: require( 'striptags' )
-  , request: require( 'sync-request' )
-  , window: {}
-  , wdk: require( 'wikidata-sdk' )
-  } : {
-    CSL: CSL
-  , striptags: function ( html ) {
-      var tmp = document.createElement( 'div' )
-      tmp.innerHTML = html
-      return tmp.textContent || tmp.innerText || ''
-    }
-  , request: function ( method, url ) {
-      var xhr  
-      
-      try {
-        xhr = new XMLHttpRequest()
-        if ( xhr.withCredentials !== undefined ) {
-          xhr.open(method, url, false)
-        } else {
-          xhr = null
-        }
-      } catch ( e ) {
-        xhr = null
-      }
-      
-      if ( xhr ) {
-        xhr.send( null )
-        return { getBody: function () { return xhr.responseText } }
-      } else
-        console.error( 'CORS not supported' )
-        return 'null'
-    }
-  , window: window
-  , wdk: { simplifyClaims: function ( array ) {
-      var obj = {}
-      
-      Object.keys( array ).forEach( function ( id ) {
-        var claims = array[ id ].map( function ( claim ) {
-          if ( claim.hasOwnProperty( 'mainsnak' ) ) {
-            var mainsnak = claim.mainsnak
-              , ref = [mainsnak.datatype, mainsnak.datavalue]
-              , datatype = ref[0]
-              , datavalue = ref[1]
-              , value
-            
-            switch (datatype) {
-              case 'string':
-              case 'commonsMedia':
-              case 'external-id':
-                value = datavalue.value
-                break;
-              
-              case 'wikibase-item':
-                value = 'Q' + datavalue.value['numeric-id']
-                break;
-              
-              case 'time':
-                
-                var month, rest, sign, year;
-                var parts = datavalue.value.time.split( '-' );
-                
-                switch (parts.length) {
-                  case 3:
-                    year  = parts[0],
-                    month = parts[1],
-                    rest  = parts[2]
-                    break;
-                  
-                  case 4:
-                    sign  = parts[0],
-                    year  = parts[1],
-                    month = parts[2],
-                    rest  = parts[3],
-                    year  = '-' + year
-                    break;
-                  
-                  default:
-                    console.error( '[set]', 'Unknown Wikidata time format:', datavalue.value.time );
-                    break;
-                }
-                
-                var day = rest.slice(0, 2);
-                
-                value = new Date(year, month - 1, day).getTime()
-                break;
-              
-              default:
-                value = null
-            }
-            return value
-          } else {
-            return undefined
-          }
-        } )
-        obj[ id ] = claims
-      } )
-      
-      return obj
-    } }
-  } )
-, ( typeof process  !== 'undefined' &amp;&amp; typeof global   !== 'undefined' )
-, ( typeof location !== 'undefined' &amp;&amp; typeof document !== 'undefined' )
-)
-
-if ( typeof require  === 'function' )
-  require( 'module' ),
-  module.exports = Cite</code></pre>
+})()</code></pre>
         </article>
     </section>
 
@@ -2569,7 +2501,7 @@ if ( typeof require  === 'function' )
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.0</a> on Thu Dec 29 2016 22:27:08 GMT+0100 (CET)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.0</a> on Mon Mar 13 2017 21:29:02 GMT+0100 (CET)
 </footer>
 
 <script> prettyPrint(); </script>

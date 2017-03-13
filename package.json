@@ -28,14 +28,18 @@
     "wikidata-sdk": ">=4.2.0"
   },
   "devDependencies": {
+    "browserify": "^13.1.1",
     "jasmine-node": "~1.14.5",
     "jsdoc": "~3.4.2"
   },
   "scripts": {
-    "test": "node_modules/.bin/jasmine-node ./docs/test/spec/citation-0.2.spec.js"
+    "test": "jasmine-node test/citation-0.2.spec.js",
+    "build": "browserify -r ./index.js:citation-js -o build/browser.js"
   },
   "author": "Lars Willighagen (https://larsgw.github.io)",
   "license": "MIT",
+  "bin": "bin/cmd.js",
+  "man": "bin/man.txt",
   "bugs": {
     "url": "https://github.com/larsgw/citation.js/issues"
   },

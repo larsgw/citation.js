@@ -111,13 +111,7 @@
 </ul>
 </li>
 </ul>
-<p><a id="citation" href="#citation"></p>
-<h1>Citation.js</h1><p></a></p>
-<p><a id="citation.use" href="#citation.use"></p>
-<h2>Use</h2><p></a></p>
-<p><a id="citation.use.node" href="#citation.use.node"></p>
-<h3>Node.js</h3><p></a></p>
-<p>Install the package (<a href="https://www.npmjs.org/package/citation-js">citation-js</a>) like this:</p>
+<h1><a id="citation" href="#citation">Citation.js</a></h1><h2><a id="citation.use" href="#citation.use">Use</a></h2><h3><a id="citation.use.node" href="#citation.use.node">Node.js</a></h3><p>Install the package (<a href="https://www.npmjs.org/package/citation-js">citation-js</a>) like this:</p>
 <pre class="prettyprint source"><code>npm install -g citation-js</code></pre><p>To run the program, use</p>
 <pre class="prettyprint source"><code>citation-js  [options]
 
@@ -135,48 +129,29 @@ Options:
   -R, --output-non-real           Do not output the file in its mime type, but as a string
   -f, --output-type &lt;option>      Output structure type: string, html, json
   -s, --output-style &lt;option>     Ouput scheme. A combination of --output-format json and --output-style citation-* is considered invalid. Options: csl (Citation Style Lanugage JSON), bibtex, citation-* (where * is any formatting style)
-  -l, --output-language &lt;option>  Output language. [RFC 5646](https://tools.ietf.org/html/rfc5646) codes</code></pre><p>To use the <a href="#Cite"><code>Cite</code></a> constructor, <code>require()</code> the module like this:</p>
-<pre class="prettyprint source lang-js"><code>var Cite = require('citation-js')</code></pre><p><a id="citation.use.node.dependencies" href="#citation.use.node.dependencies"></p>
-<h4>Dependencies</h4><p></a></p>
-<ul>
-<li>commander</li>
-<li>striptags</li>
-<li>wikidata-sdk</li>
-<li>citeproc-js (included automatically)</li>
+  -l, --output-language &lt;option>  Output language. [RFC 5646](https://tools.ietf.org/html/rfc5646) codes</code></pre><p>To use the <a href="#citation.cite"><code>Cite</code></a> constructor, <code>require()</code> the module like this:</p>
+<pre class="prettyprint source lang-js"><code>var Cite = require('citation-js')</code></pre><h4><a id="citation.use.node.dependencies" href="#citation.use.node.dependencies">Dependencies</a></h4><ul>
+<li><a href="">commander</a></li>
+<li><a href="">striptags</a></li>
+<li><a href="">sync-request</a></li>
+<li><a href="">wikidata-sdk</a></li>
+<li><a href="">citeproc-js</a> (no NPM module, is included)</li>
 </ul>
-<p><a id="citation.use.browser" href="#citation.use.browser"></p>
-<h3>Browser</h3><p></a></p>
-<p>With the following code, the <a href="#Cite"><code>Cite</code></a> contructor is available.</p>
-<pre class="prettyprint source lang-html"><code>&lt;script src=&quot;path/to/citation-0.2.js&quot; type=&quot;text/javascript&quot;>&lt;/script></code></pre><p><a id="citation.use.browser.dependencies" href="#citation.use.browser.dependencies"></p>
-<h4>Dependencies</h4><p></a></p>
-<ul>
-<li>citeproc-js (included in the <a href="https://github.com/larsgw/citation.js/tree/master/src">src/</a> folder)<br>Include like <code>&lt;script src=&quot;path/to/citeproc.js&quot; type=&quot;text/javascript&quot;&gt;&lt;/script&gt;</code></li>
-</ul>
-<p><a name="Cite">
-<a id="citation.cite" href="#citation.cite"></p>
-<h3>Cite</h3><p></a>
-</a></p>
-<p>Use the object constructor <code>Cite()</code> to parse input and get output.</p>
-<p><a name="input">
-<a id="citation.cite.in" href="#citation.cite.in"></p>
-<h4>Input</h4><p></a>
-</a></p>
-<p>Make a <code>Cite</code> object like this:</p>
+<h3><a id="citation.use.browser" href="#citation.use.browser">Browser</a></h3><p>With the following code, you can <code>require('citation-js')</code> to get the <a href="#citation.cite"><code>Cite</code></a> contructor.</p>
+<pre class="prettyprint source lang-html"><code>&lt;script src=&quot;path/to/browser.js&quot; type=&quot;text/javascript&quot;>&lt;/script></code></pre><h4><a id="citation.use.browser.dependencies" href="#citation.use.browser.dependencies">Dependencies</a></h4><p>Dependencies are the same as the ones above, with the exception of <code>commander</code>. They are all included in <code>browser.js</code>.</p>
+<h3><a id="citation.cite" href="#citation.cite">Cite</a></h3><p>Use the object constructor <code>Cite()</code> to parse input and get output.</p>
+<h4><a id="citation.cite.in" href="#citation.cite.in">Input</a></h4><p>Make a <code>Cite</code> object like this:</p>
 <pre class="prettyprint source lang-js"><code>var example = new Cite( &lt;data>, &lt;options> )</code></pre><ol>
-<li>In the first parameter you pass the input data. <a href="#input_type">Input types</a></li>
+<li>In the first parameter you pass the input data. <a href="#citation.cite.in.type">Input types</a></li>
 <li>In the second parameter you pass the settings. It contains the following properties. These are the default options for using <code>.get()</code><ol>
 <li><code>format</code>: The output format: <code>&quot;real&quot;</code> (default) or <code>&quot;string&quot;</code></li>
 <li><code>type</code>: The output type: <code>&quot;html&quot;</code>, <code>&quot;string&quot;</code> or <code>&quot;json&quot;</code> (default).</li>
-<li><code>style</code>: The output style. See <a href="#output">Output</a>. <code>&quot;csl&quot;</code> is default</li>
+<li><code>style</code>: The output style. See <a href="#citation.cite.out">Output</a>. <code>&quot;csl&quot;</code> is default</li>
 <li><code>lang</code>: The language of the output. <a href="https://tools.ietf.org/html/rfc5646">RFC 5646</a> codes. Currently supported: <code>&quot;en-US&quot;</code> (default), <code>&quot;fr-FR&quot;</code>, <code>&quot;es-ES&quot;</code> ,<code>&quot;de-DE&quot;</code> and <code>&quot;nl-NL&quot;</code></li>
 </ol>
 </li>
 </ol>
-<p><a name="input_type">
-<a id="citation.cite.in.type" href="#citation.cite.in.type"></p>
-<h5>Input types</h5><p></a>
-</a></p>
-<ul>
+<h5><a id="citation.cite.in.type" href="#citation.cite.in.type">Input types</a></h5><ul>
 <li><code>url/wikidata</code>: URL with <a href="https://www.wikidata.org/">Wikidata</a> <a href="https://www.wikidata.org/wiki/Wikidata:Glossary#Entities.2C_items.2C_properties_and_queries">Entity ID</a>. Gets and parses the entity data</li>
 <li><code>list/wikidata</code>: List of Wikidata Entity IDs, separated by spaces, newlines or commas. Gets and parses the entity data</li>
 <li><code>json/wikidata</code>: Wikidata Entity data. Parses the data</li>
@@ -189,30 +164,18 @@ Options:
 <li><code>url/else</code>: URL. Fetches and re-evaluates the file</li>
 <li><code>list/else</code>: JavaScript array. Re-evaluates every element in the array</li>
 </ul>
-<p><a name="output">
-<a id="citation.cite.out" href="#citation.cite.out"></p>
-<h4>Ouput</h4><p></a>
-</a></p>
-<p>When using the <code>.get()</code> function, your output depends on the options you pass. If you don't pass any options, the values you passed as default are used. When you didn't pass default options, standard options are passed.</p>
-<p><a id="citation.cite.out.type" href="#citation.cite.out.type"></p>
-<h5>Type</h5><p></a></p>
-<ul>
+<h4><a id="citation.cite.out" href="#citation.cite.out">Ouput</a></h4><p>When using the <code>.get()</code> function, your output depends on the options you pass. If you don't pass any options, the values you passed as default are used. When you didn't pass default options, standard options are passed.</p>
+<h5><a id="citation.cite.out.type" href="#citation.cite.out.type">Type</a></h5><ul>
 <li><code>json</code>: Output as JSON. Not possible together with <code>style:&quot;citation-*&quot;</code></li>
 <li><code>html</code>: Output as HTML</li>
 <li><code>string</code>: Output as string</li>
 </ul>
-<p><a id="citation.cite.out.style" href="#citation.cite.out.style"></p>
-<h5>Style</h5><p></a></p>
-<ul>
+<h5><a id="citation.cite.out.style" href="#citation.cite.out.style">Style</a></h5><ul>
 <li><code>csl</code>: Outputs raw CSL-JSON data</li>
 <li><code>bibtex</code>: Outputs a BibTeX string, or BibTeX-JSON if <code>type: &quot;json&quot;</code></li>
-<li><code>citation-*</code>: Formatted citation, formatted with citeproc-js. <code>*</code> is a <a href="#csl_templates">CSL Template</a> name.</li>
+<li><code>citation-*</code>: Formatted citation, formatted with citeproc-js. <code>*</code> is a <a href="#citation.cite.out.templates">CSL Template</a> name.</li>
 </ul>
-<p><a name="csl_templates">
-<a id="citation.cite.out.templates" href="#citation.cite.out.templates"></p>
-<h5>CSL Templates</h5><p></a>
-</a></p>
-<p>Currently, the following CSL Templates are suppported in Citation.js.</p>
+<h5><a id="citation.cite.out.templates" href="#citation.cite.out.templates">CSL Templates</a></h5><p>Currently, the following CSL Templates are suppported in Citation.js.</p>
 <ul>
 <li><code>apa</code></li>
 <li><code>vancouver</code></li>
@@ -229,9 +192,7 @@ data.get({
 
   template: '...' // XML String
 })</code></pre><p>Currently, you need to pass <code>&quot;citation&quot;</code> to the <code>style</code> option for this to work.</p>
-<p><a id="citation.cite.out.locales" href="#citation.cite.out.locales"></p>
-<h5>CSL Locales</h5><p></a></p>
-<p>If you want different languages than the standard, you can pass a <a href="https://github.com/citation-style-language/locales">CSL Locale</a> as an XML string to <code>.get()</code> with the option <code>locale:&lt;string&gt;</code>. E.g.</p>
+<h5><a id="citation.cite.out.locales" href="#citation.cite.out.locales">CSL Locales</a></h5><p>If you want different languages than the standard, you can pass a <a href="https://github.com/citation-style-language/locales">CSL Locale</a> as an XML string to <code>.get()</code> with the option <code>locale:&lt;string&gt;</code>. E.g.</p>
 <pre class="prettyprint source lang-js"><code>var data = new Cite(...)
 
 data.get({
@@ -240,9 +201,7 @@ data.get({
   style: 'citation-apa',
 
   locale: '...' // XML String
-})</code></pre><p><a id="citation.cite.misc" href="#citation.cite.misc"></p>
-<h4>Misc</h4><p></a></p>
-<p><code>Cite</code> has some more functions:</p>
+})</code></pre><h4><a id="citation.cite.misc" href="#citation.cite.misc">Misc</a></h4><p><code>Cite</code> has some more functions:</p>
 <ul>
 <li><code>.options(&lt;options&gt;)</code>: Change default options</li>
 <li><code>.set(&lt;data&gt;)</code>: Replace all data with new data</li>
@@ -253,39 +212,23 @@ data.get({
 <li><code>.retrieveVersion(&lt;version number&gt;)</code>: Retrieve a certain version of the object</li>
 <li><code>.sort()</code>: Sort all entries on basis of their BibTeX label</li>
 </ul>
-<p><a id="jquery" href="#jquery"></p>
-<h1>jquery.Citation.js</h1><p></a></p>
-<p>This plugin builds a form for input for the <code>Cite</code> object.</p>
-<p><a id="jquery.use" href="#jquery.use"></p>
-<h2>Use</h2><p></a></p>
-<p>After including the necessary files like below,
+<h1><a id="jquery" href="#jquery">jquery.Citation.js</a></h1><p>This plugin builds a form for input for the <code>Cite</code> object.</p>
+<h2><a id="jquery.use" href="#jquery.use">Use</a></h2><p>After including the necessary files like below,
 you can make a new <code>jQueryCite</code> object.</p>
 <pre class="prettyprint source lang-html"><code>&lt;script type=&quot;text/javascript&quot; src=&quot;path/to/jquery.js&quot;>&lt;/script>
 &lt;script type=&quot;text/javascript&quot; src=&quot;path/to/citeproc.js&quot;>&lt;/script>
 &lt;script type=&quot;text/javascript&quot; src=&quot;path/to/citation-0.2.js&quot;>&lt;/script>
-&lt;script type=&quot;text/javascript&quot; src=&quot;path/to/jquery.citation-0.2.js&quot;>&lt;/script></code></pre><p><a name="jQueryCite">
-<a id="jquery.cite" href="#jquery.cite"></p>
-<h3>jQueryCite</h3><p></a>
-</a></p>
-<p>Make a new <code>jQueryCite</code> object like this:</p>
+&lt;script type=&quot;text/javascript&quot; src=&quot;path/to/jquery.citation-0.2.js&quot;>&lt;/script></code></pre><h3><a id="jquery.cite" href="#jquery.cite">jQueryCite</a></h3><p>Make a new <code>jQueryCite</code> object like this:</p>
 <pre class="prettyprint source lang-js"><code>var example = new jQueryCite( &lt;options> )</code></pre><p>The options are:</p>
 <ol>
-<li><code>defaultOptions</code>: <a href="#Cite">Options</a> to be passed to <code>Cite</code></li>
+<li><code>defaultOptions</code>: <a href="#citation.cite">Options</a> to be passed to <code>Cite</code></li>
 <li><code>saveInCookies</code>: Save data in cookies when <code>.save()</code>d</li>
 <li><code>add</code>: Callback to execute when data is submitted to collection</li>
 <li><code>inputForm</code> and <code>outputForm</code>: HTML template (see <a href="#jquery.form">docs</a>)</li>
 </ol>
 <p>See also <a href="jQueryCite.html#jQueryCite">API Docs</a></p>
-<p><a name="jquery.form">
-<a id="jquery.cite.form" href="#jquery.cite.form"></p>
-<h3>HTML templates</h3><p></a>
-</a></p>
-<p>Of course, you can include all sorts of things in the templates, but the following things are going to get used. Templates below are in <a href="https://github.com/pugjs/pug">Jade/Pug</a>. Elements may be wrapped in containers, but the general hierarchy should be like this</p>
-<p><span name="jquery.form.in">
-<a id="jquery.cite.form.in" href="#jquery.cite.form.in"></p>
-<h4>Input form</h4><p></a>
-</span></p>
-<pre class="prettyprint source"><code>.cjs-in
+<h3><a name="jquery.form"><a id="jquery.cite.form" href="#jquery.cite.form">HTML templates</a></a></h3><p>Of course, you can include all sorts of things in the templates, but the following things are going to get used. Templates below are in <a href="https://github.com/pugjs/pug">Jade/Pug</a>. Elements may be wrapped in containers, but the general hierarchy should be like this</p>
+<h4><span name="jquery.form.in"><a id="jquery.cite.form.in" href="#jquery.cite.form.in">Input form</a></span></h4><pre class="prettyprint source"><code>.cjs-in
   .cjs-piece.cjs-input
     // List of fieldsets, see below
   .cjs-piece.cjs-import
@@ -294,11 +237,7 @@ you can make a new <code>jQueryCite</code> object.</p>
   .cjs-piece.cjs-preview
     .cjs-draft // Element holding draft
     .cjs-add // Submit (and clear) draft
-    .cjs-delete // Clear draft</code></pre><p><a name="jquery.form.in.fields">
-<a id="jquery.cite.form.in.fields" href="#jquery.cite.form.in.fields"></p>
-<h5>Input form fields</h5><p></a>
-</a></p>
-<p>Form fields consist of a <code>fieldset</code> element and inside an <code>input</code> element, with the following attributes:</p>
+    .cjs-delete // Clear draft</code></pre><h5><a name="jquery.form.in.fields"><a id="jquery.cite.form.in.fields" href="#jquery.cite.form.in.fields">Input form fields</a></a></h5><p>Form fields consist of a <code>fieldset</code> element and inside an <code>input</code> element, with the following attributes:</p>
 <ul>
 <li><code>fieldset</code><ul>
 <li><code>data-cjs-field-type</code>: For what publication types should this field be visible (omit when it should always be visible)</li>
@@ -317,11 +256,7 @@ you can make a new <code>jQueryCite</code> object.</p>
 <li>Fields <code>author</code>, <code>container-author</code>, <code>editor</code> and <code>publisher-title</code> get <code>.CJSMultipleInput()</code>, so multiple <code>input</code>s aren't necessary, as they're added dynamically</li>
 <li>One of the fields, preferably the first one, should be a <code>select</code> (<code>data-cjs-field=&quot;type&quot;</code>), containing publication type options</li>
 </ul>
-<p><a name="jquery.form.out">
-<a id="jquery.cite.form.out" href="#jquery.cite.form.out"></p>
-<h4>Output form</h4><p></a>
-</a></p>
-<pre class="prettyprint source"><code>.cjs-out
+<h4><a name="jquery.form.out"><a id="jquery.cite.form.out" href="#jquery.cite.form.out">Output form</a></a></h4><pre class="prettyprint source"><code>.cjs-out
   .cjs-piece.cjs-settings
     .cjs-opt
       fieldset
@@ -348,23 +283,13 @@ you can make a new <code>jQueryCite</code> object.</p>
     .cjs-output // Holds data
   .cjs-piece.cjs-export
     .cjs-export-copy // Copy data on click
-    .cjs-export-save // Download data on click</code></pre><p><a id="jquery.dependencies" href="#jquery.dependencies"></p>
-<h2>Dependencies</h2><p></a></p>
-<ul>
+    .cjs-export-save // Download data on click</code></pre><h2><a id="jquery.dependencies" href="#jquery.dependencies">Dependencies</a></h2><ul>
 <li>jQuery</li>
 <li>Citeproc-js</li>
 <li>Citation.js</li>
 </ul>
-<p><a id="more" href="#more"></p>
-<h1>More</h1><p></a></p>
-<p><a id="more.docs" href="#more.docs"></p>
-<h2>More Docs</h2><p></a>
-Further explanation can be found <a href="https://larsgw.github.io/citation.js/api/">here</a>. The explanation of the jQuery plugin can be found there too.</p>
-<p><a id="more.demo" href="#more.demo"></p>
-<h2>Demo</h2><p></a></p>
-<p><a id="more.demo.npm" href="#more.demo.npm"></p>
-<h3>NPM Demo</h3><p></a></p>
-<p><a href="https://runkit.com/npm/citation-js">NPM Demo</a>. Example code:</p>
+<h1><a id="more" href="#more">More</a></h1><h2><a id="more.docs" href="#more.docs">More Docs</a></h2><p>Further explanation can be found <a href="https://larsgw.github.io/citation.js/api/">here</a>. The explanation of the jQuery plugin can be found there too.</p>
+<h2><a id="more.demo" href="#more.demo">Demo</a></h2><h3><a id="more.demo.npm" href="#more.demo.npm">NPM Demo</a></h3><p><a href="https://runkit.com/npm/citation-js">NPM Demo</a>. Example code:</p>
 <pre class="prettyprint source lang-js"><code>var Cite = require( 'citation-js' )
 
 var data = new Cite( 'Q21972834', {
@@ -374,9 +299,7 @@ var data = new Cite( 'Q21972834', {
   lang: 'en-US'
 } )
 
-data.get() // Should implicitly display</code></pre><p><a id="more.demo.browser" href="#more.demo.browser"></p>
-<h3>Browser Demos</h3><p></a></p>
-<ul>
+data.get() // Should implicitly display</code></pre><h3><a id="more.demo.browser" href="#more.demo.browser">Browser Demos</a></h3><ul>
 <li><a href="https://larsgw.github.io/citation.js/demo/demo.html">Normal demo</a></li>
 <li><a href="https://larsgw.github.io/citation.js/demo/jquery.html">Demo including jQuery plugin</a></li>
 </ul></article>
@@ -640,7 +563,7 @@ SOFTWARE.</li></ul></dd>
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.0</a> on Thu Dec 29 2016 22:27:08 GMT+0100 (CET)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.0</a> on Mon Mar 13 2017 21:29:02 GMT+0100 (CET)
 </footer>
 
 <script> prettyPrint(); </script>

@@ -966,10 +966,7 @@ var fetchWikidataLabel = function ( q, lang ) {
   else
     ids = ''
   
-  var url = /*wdk.hasOwnProperty( 'getEntities' ) ?*/ wdk.getEntities( ids, [ lang ], 'labels' ) /*: (
-  'https://www.wikidata.org/w/api.php' +
-    '?origin=*&action=wbgetentities&languages=en&format=json&props=labels&' + 
-    'ids=' + ids.join( '|' ) )*/
+  var url = wdk.getEntities( ids, [ lang ], 'labels' )
   
   var data     = fetchFile( url )
     , entities = JSON.parse( data ).entities || {}
@@ -1155,35 +1152,20 @@ var parseWikidata = function ( data ) {
   var data = data.split( /(?:\s+|,)/g )
     , result
   
-//   if ( wdk.hasOwnProperty( 'getEntities' ) ) {
-    var url = wdk.getEntities( data, [ 'en' ] )
-//       ids: data,
-//       languages: [ 'en' ]
-//     } )
+  var url = wdk.getEntities( data, [ 'en' ] )
+  
+  if ( Array.isArray( url ) ) {
+    var urls = url
+      , outs = []
     
-    if ( Array.isArray( url ) ) {
-      var urls = url
-        , outs = []
-      
-      for ( var urlIndex = 0; urlIndex < urls.length; urlIndex++ ) {
-        var url = urls[ urlIndex ]
-          , out = JSON.parse( fetchFile( url ) )
-            outs= outs.concat( out )
-      }
-      
-      result = outs
-    } else result = JSON.parse( fetchFile( url ) )
-//   } else {
-//     var url =
-//     'https://www.wikidata.org/w/api.php?' +
-//       'origin=*&' +
-//       'action=wbgetentities&' + 
-//       'ids=' + data.join( '|' ) + '&' +
-//       'languages=en&' +
-//       'format=json'
-//     
-//     result = JSON.parse( fetchFile( url ) )
-//   }
+    for ( var urlIndex = 0; urlIndex < urls.length; urlIndex++ ) {
+      var url = urls[ urlIndex ]
+        , out = JSON.parse( fetchFile( url ) )
+          outs= outs.concat( out )
+    }
+    
+    result = outs
+  } else result = JSON.parse( fetchFile( url ) )
   
   return result
 }

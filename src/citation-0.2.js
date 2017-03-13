@@ -33,18 +33,12 @@
  * @class CSL
  */
 
-var Cite = ( function ( modules, nodejsMode, browserMode ) {
+module.exports = ( function () {
 
-var CSL = modules.CSL
-  , striptags = modules.striptags
-  , request = modules.request
-  , window = modules.window
-  , wdk = modules.wdk
-
-if ( !nodejsMode && !browserMode )
-  throw new Error( 'Code executed in invalid environment' )
-
-console.info( '[init]', nodejsMode ? 'Node.js' : browserMode ? 'Browser' : '', 'mode' )
+var CSL = require('./citeproc.js').CSL
+  , striptags = require('striptags')
+  , request = require('sync-request')
+  , wdk = require('wikidata-sdk')
 
 /**
  * Object containing several RegExp patterns, mostly used for parsing (*full of shame*) and recognizing data types
@@ -896,7 +890,7 @@ var fetchFile = function ( url ) {
     , url = typeof encodeURI === 'function' ? encodeURI( url ) : url
   
   try {
-    result  = request( 'GET', url ).getBody( 'utf8' )
+    result  = request( 'GET', url, { uri: url } ).getBody( 'utf8' )
   } catch (e) {
     return console.error( '[set]', 'File could not be fetched' )
   }
@@ -972,10 +966,7 @@ var fetchWikidataLabel = function ( q, lang ) {
   else
     ids = ''
   
-  var url = wdk.hasOwnProperty( 'getEntities' ) ? wdk.getEntities( ids, [ lang ], 'labels' ) : (
-  'https://www.wikidata.org/w/api.php' +
-    '?origin=*&action=wbgetentities&languages=en&format=json&props=labels&' + 
-    'ids=' + ids.join( '|' ) )
+  var url = wdk.getEntities( ids, [ lang ], 'labels' )
   
   var data     = fetchFile( url )
     , entities = JSON.parse( data ).entities || {}
@@ -1140,7 +1131,7 @@ var parseWikidataProp = function ( prop, value, lang ) {
       break;
     
     default:
-      console.debug( '[set]', 'Unknown property:', prop )
+      console.info( '[set]', 'Unknown property:', prop )
       break;
   }
   
@@ -1161,35 +1152,20 @@ var parseWikidata = function ( data ) {
   var data = data.split( /(?:\s+|,)/g )
     , result
   
-  if ( wdk.hasOwnProperty( 'getEntities' ) ) {
-    var url = wdk.getEntities( {
-      ids: data,
-      languages: [ 'en' ]
-    } )
+  var url = wdk.getEntities( data, [ 'en' ] )
+  
+  if ( Array.isArray( url ) ) {
+    var urls = url
+      , outs = []
     
-    if ( Array.isArray( url ) ) {
-      var urls = url
-        , outs = []
-      
-      for ( var urlIndex = 0; urlIndex < urls.length; urlIndex++ ) {
-        var url = urls[ urlIndex ]
-          , out = JSON.parse( fetchFile( url ) )
-            outs= outs.concat( out )
-      }
-      
-      result = outs
-    } else result = JSON.parse( fetchFile( url ) )
-  } else {
-    var url =
-    'https://www.wikidata.org/w/api.php?' +
-      'origin=*&' +
-      'action=wbgetentities&' + 
-      'ids=' + data.join( '|' ) + '&' +
-      'languages=en&' +
-      'format=json'
+    for ( var urlIndex = 0; urlIndex < urls.length; urlIndex++ ) {
+      var url = urls[ urlIndex ]
+        , out = JSON.parse( fetchFile( url ) )
+          outs= outs.concat( out )
+    }
     
-    result = JSON.parse( fetchFile( url ) )
-  }
+    result = outs
+  } else result = JSON.parse( fetchFile( url ) )
   
   return result
 }
@@ -1391,7 +1367,7 @@ var parseBibTeXProp = function ( prop, value ) {
       break;
     
     default:
-      console.debug( '[set]', 'Unknown property:', prop )
+      console.info( '[set]', 'Unknown property:', prop )
       rProp = rValue = undefined
       break;
   }
@@ -1772,11 +1748,11 @@ var parseInputType = function ( input ) {
         return 'list/else'
       
       // jQuery
-      else if ( window.jQuery && input instanceof jQuery )
+      else if ( typeof jQuery !== 'undefined' && input instanceof jQuery )
         return 'jquery/else'
       
       // HTML
-      else if ( window.HMTLElement && input instanceof HMTLElement)
+      else if ( typeof HMTLElement !== 'undefined' && input instanceof HMTLElement)
         return 'html/else'
       
       // Wikidata
@@ -2476,137 +2452,4 @@ var getJSON = function ( src ) {
 
 return Cite
 
-})(
-  ( typeof require  === 'function' ? {
-    CSL: require( './citeproc.js' ).CSL
-  , striptags: require( 'striptags' )
-  , request: require( 'sync-request' )
-  , window: {}
-  , wdk: require( 'wikidata-sdk' )
-  } : {
-    CSL: CSL
-  , striptags: function ( html ) {
-      var tmp = document.createElement( 'div' )
-      tmp.innerHTML = html
-      return tmp.textContent || tmp.innerText || ''
-    }
-  , request: function ( method, url ) {
-      var xhr  
-      
-      try {
-        xhr = new XMLHttpRequest()
-        if ( xhr.withCredentials !== undefined ) {
-          xhr.open(method, url, false)
-        } else {
-          xhr = null
-        }
-      } catch ( e ) {
-        xhr = null
-      }
-      
-      if ( xhr ) {
-        xhr.send( null )
-        return { getBody: function () { return xhr.responseText } }
-      } else
-        console.error( 'CORS not supported' )
-        return 'null'
-    }
-  , window: window
-  , wdk: { simplifyClaims: function ( array ) {
-      var normalizeWikidataTime = function ( wikidataTime ) {
-        var fullDateData = function ( sign, rest ) {
-          return new Date( ( sign === '-' ? '-00' : '' ) + rest )
-        }
-        
-        var parseInvalideDate = function ( sign, rest ) {
-          var ref  = rest.split( 'T' )[ 0 ].split( '-' )
-            , year = ref[0]
-            , month= ref[1]
-            , day  = ref[2];
-          
-          return fullDateData( sign, year )
-        }
-        
-        var sign = wikidataTime[ 0 ]
-          , rest = wikidataTime.slice( 1 )
-          , date = fullDateData( sign, rest )
-        
-        return date.toString() === 'Invalid Date' ? parseInvalideDate(sign, rest) : date
-      }
-      
-      var simplifyClaim = function ( claim, boolean ) {
-        var mainsnak   = claim.mainsnak
-          , qualifiers = claim.qualifiers
-          , value
-        
-        if ( mainsnak == null )
-          return null
-        
-        var datatype = mainsnak.datatype
-          , datavalue = mainsnak.datavalue;
-        
-        if ( datavalue == null )
-          return null
-        
-        switch ( datatype ) {
-          case 'string':
-          case 'commonsMedia':
-          case 'url':
-          case 'external-id':
-            value = datavalue.value
-            break;
-          case 'monolingualtext':
-            value = datavalue.value.text
-            break;
-          case 'wikibase-item':
-          case 'wikibase-property':
-            value = datavalue.value.id
-            break;
-          case 'time':
-            value = normalizeWikidataTime( datavalue.value.time ).getTime()
-            break;
-          case 'quantity':
-            value = parseFloat( datavalue.value.amount )
-            break;
-        }
-        
-        if ( boolean ) {
-          var simpleQualifiers = {}
-          
-          for ( var id in qualifiers ) {
-            simpleQualifiers[ id ] = qualifiers[ id ].slice().map( claim => ({ mainsnak: claim }) )
-          }
-          
-          return {
-            value: value,
-            qualifiers: simplifyClaims( simpleQualifiers, false )
-          }
-        } else
-          return value
-      }
-      
-      var simplifyPropertyClaims = function ( propClaims, boolean ) {
-        return propClaims.map( function ( claim ) {
-          return simplifyClaim( claim, boolean )
-        } ).filter( function ( obj ) { return !!obj } )
-      }
-      
-      var simplifyClaims = function ( claims, boolean ) {
-        var simpleClaims = {}
-        
-        for ( var id in claims )
-          simpleClaims[ id ] = simplifyPropertyClaims( claims[ id ], boolean )
-        
-        return simpleClaims
-      }
-      
-      return simplifyClaims( array, true )
-    } }
-  } )
-, ( typeof process  !== 'undefined' && typeof global   !== 'undefined' )
-, ( typeof location !== 'undefined' && typeof document !== 'undefined' )
-)
-
-if ( typeof require  === 'function' )
-  require( 'module' ),
-  module.exports = Cite
+})()

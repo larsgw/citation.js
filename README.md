@@ -37,17 +37,11 @@ Generate docs with `jsdoc ./src README.md -c docs/conf.json`.
     * [NPM Demo](#more.demo.npm)
     * [Browser Demos](#more.demo.browser)
 
-<a id="citation" href="#citation">
-# Citation.js
-</a>
+# <a id="citation" href="#citation">Citation.js</a>
 
-<a id="citation.use" href="#citation.use">
-## Use
-</a>
+## <a id="citation.use" href="#citation.use">Use</a>
 
-<a id="citation.use.node" href="#citation.use.node">
-### Node.js
-</a>
+### <a id="citation.use.node" href="#citation.use.node">Node.js</a>
 
 Install the package ([citation-js](https://www.npmjs.org/package/citation-js)) like this:
 
@@ -73,51 +67,37 @@ To run the program, use
       -s, --output-style <option>     Ouput scheme. A combination of --output-format json and --output-style citation-* is considered invalid. Options: csl (Citation Style Lanugage JSON), bibtex, citation-* (where * is any formatting style)
       -l, --output-language <option>  Output language. [RFC 5646](https://tools.ietf.org/html/rfc5646) codes
 
-To use the [`Cite`](#Cite) constructor, `require()` the module like this:
+To use the [`Cite`](#citation.cite) constructor, `require()` the module like this:
 
 ```js
 var Cite = require('citation-js')
 ```
 
-<a id="citation.use.node.dependencies" href="#citation.use.node.dependencies">
-#### Dependencies
-</a>
+#### <a id="citation.use.node.dependencies" href="#citation.use.node.dependencies">Dependencies</a>
 
-* commander
-* striptags
-* wikidata-sdk
-* citeproc-js (included automatically)
+* [commander](https://www.npmjs.com/package/commander)
+* [striptags](https://www.npmjs.com/package/striptags)
+* [sync-request](https://www.npmjs.com/package/sync-request)
+* [wikidata-sdk](https://www.npmjs.com/package/wikidata-sdk)
+* [citeproc-js](https://citeproc-js.readthedocs.io) (no NPM module, is included)
 
-<a id="citation.use.browser" href="#citation.use.browser">
-### Browser
-</a>
+### <a id="citation.use.browser" href="#citation.use.browser">Browser</a>
 
-With the following code, the [`Cite`](#Cite) contructor is available.
+With the following code, you can `require('citation-js')` to get the [`Cite`](#citation.cite) contructor.
 
 ```html
-<script src="path/to/citation-0.2.js" type="text/javascript"></script>
+<script src="path/to/browser.js" type="text/javascript"></script>
 ```
 
-<a id="citation.use.browser.dependencies" href="#citation.use.browser.dependencies">
-#### Dependencies
-</a>
+#### <a id="citation.use.browser.dependencies" href="#citation.use.browser.dependencies">Dependencies</a>
 
-* citeproc-js (included in the [src/](https://github.com/larsgw/citation.js/tree/master/src) folder)  
-Include like `<script src="path/to/citeproc.js" type="text/javascript"></script>`
+Dependencies are the same as the ones above, with the exception of `commander`. They are all included in `browser.js`.
 
-<a name="Cite">
-<a id="citation.cite" href="#citation.cite">
-### Cite
-</a>
-</a>
+### <a id="citation.cite" href="#citation.cite">Cite</a>
 
 Use the object constructor `Cite()` to parse input and get output.
 
-<a name="input">
-<a id="citation.cite.in" href="#citation.cite.in">
-#### Input
-</a>
-</a>
+#### <a id="citation.cite.in" href="#citation.cite.in">Input</a>
 
 Make a `Cite` object like this:
 
@@ -125,18 +105,14 @@ Make a `Cite` object like this:
 var example = new Cite( <data>, <options> )
 ```
 
-1. In the first parameter you pass the input data. [Input types](#input_type)
+1. In the first parameter you pass the input data. [Input types](#citation.cite.in.type)
 2. In the second parameter you pass the settings. It contains the following properties. These are the default options for using `.get()`
   1. `format`: The output format: `"real"` (default) or `"string"`
   2. `type`: The output type: `"html"`, `"string"` or `"json"` (default).
-  3. `style`: The output style. See [Output](#output). `"csl"` is default
+  3. `style`: The output style. See [Output](#citation.cite.out). `"csl"` is default
   4. `lang`: The language of the output. [RFC 5646](https://tools.ietf.org/html/rfc5646) codes. Currently supported: `"en-US"` (default), `"fr-FR"`, `"es-ES"` ,`"de-DE"` and `"nl-NL"`
 
-<a name="input_type">
-<a id="citation.cite.in.type" href="#citation.cite.in.type">
-##### Input types
-</a>
-</a>
+##### <a id="citation.cite.in.type" href="#citation.cite.in.type">Input types</a>
 
 * `url/wikidata`: URL with [Wikidata](https://www.wikidata.org/) [Entity ID](https://www.wikidata.org/wiki/Wikidata:Glossary#Entities.2C_items.2C_properties_and_queries). Gets and parses the entity data
 * `list/wikidata`: List of Wikidata Entity IDs, separated by spaces, newlines or commas. Gets and parses the entity data
@@ -150,35 +126,23 @@ var example = new Cite( <data>, <options> )
 * `url/else`: URL. Fetches and re-evaluates the file
 * `list/else`: JavaScript array. Re-evaluates every element in the array
 
-<a name="output">
-<a id="citation.cite.out" href="#citation.cite.out">
-#### Ouput
-</a>
-</a>
+#### <a id="citation.cite.out" href="#citation.cite.out">Ouput</a>
 
 When using the `.get()` function, your output depends on the options you pass. If you don't pass any options, the values you passed as default are used. When you didn't pass default options, standard options are passed.
 
-<a id="citation.cite.out.type" href="#citation.cite.out.type">
-##### Type
-</a>
+##### <a id="citation.cite.out.type" href="#citation.cite.out.type">Type</a>
 
 * `json`: Output as JSON. Not possible together with `style:"citation-*"`
 * `html`: Output as HTML
 * `string`: Output as string
 
-<a id="citation.cite.out.style" href="#citation.cite.out.style">
-##### Style
-</a>
+##### <a id="citation.cite.out.style" href="#citation.cite.out.style">Style</a>
 
 * `csl`: Outputs raw CSL-JSON data
 * `bibtex`: Outputs a BibTeX string, or BibTeX-JSON if `type: "json"`
-* `citation-*`: Formatted citation, formatted with citeproc-js. `*` is a [CSL Template](#csl_templates) name.
+* `citation-*`: Formatted citation, formatted with citeproc-js. `*` is a [CSL Template](#citation.cite.out.templates) name.
 
-<a name="csl_templates">
-<a id="citation.cite.out.templates" href="#citation.cite.out.templates">
-##### CSL Templates
-</a>
-</a>
+##### <a id="citation.cite.out.templates" href="#citation.cite.out.templates">CSL Templates</a>
 
 Currently, the following CSL Templates are suppported in Citation.js.
 
@@ -203,9 +167,7 @@ data.get({
 
 Currently, you need to pass `"citation"` to the `style` option for this to work.
 
-<a id="citation.cite.out.locales" href="#citation.cite.out.locales">
-##### CSL Locales
-</a>
+##### <a id="citation.cite.out.locales" href="#citation.cite.out.locales">CSL Locales</a>
 
 If you want different languages than the standard, you can pass a [CSL Locale](https://github.com/citation-style-language/locales) as an XML string to `.get()` with the option `locale:<string>`. E.g.
 
@@ -220,9 +182,7 @@ data.get({
   locale: '...' // XML String
 })
 ```
-<a id="citation.cite.misc" href="#citation.cite.misc">
-#### Misc
-</a>
+#### <a id="citation.cite.misc" href="#citation.cite.misc">Misc</a>
 
 `Cite` has some more functions:
 
@@ -235,15 +195,11 @@ data.get({
 * `.retrieveVersion(<version number>)`: Retrieve a certain version of the object
 * `.sort()`: Sort all entries on basis of their BibTeX label
 
-<a id="jquery" href="#jquery">
-# jquery.Citation.js
-</a>
+# <a id="jquery" href="#jquery">jquery.Citation.js</a>
 
 This plugin builds a form for input for the `Cite` object.
 
-<a id="jquery.use" href="#jquery.use">
-## Use
-</a>
+## <a id="jquery.use" href="#jquery.use">Use</a>
 
 After including the necessary files like below,
 you can make a new `jQueryCite` object.
@@ -255,11 +211,7 @@ you can make a new `jQueryCite` object.
 <script type="text/javascript" src="path/to/jquery.citation-0.2.js"></script>
 ```
 
-<a name="jQueryCite">
-<a id="jquery.cite" href="#jquery.cite">
-### jQueryCite
-</a>
-</a>
+### <a id="jquery.cite" href="#jquery.cite">jQueryCite</a>
 
 Make a new `jQueryCite` object like this:
 
@@ -269,26 +221,18 @@ var example = new jQueryCite( <options> )
 
 The options are:
 
-1. `defaultOptions`: [Options](#Cite) to be passed to `Cite`
+1. `defaultOptions`: [Options](#citation.cite) to be passed to `Cite`
 2. `saveInCookies`: Save data in cookies when `.save()`d
 3. `add`: Callback to execute when data is submitted to collection
 4. `inputForm` and `outputForm`: HTML template (see [docs](#jquery.form))
 
 See also [API Docs](jQueryCite.html#jQueryCite)
 
-<a name="jquery.form">
-<a id="jquery.cite.form" href="#jquery.cite.form">
-### HTML templates
-</a>
-</a>
+### <a name="jquery.form"><a id="jquery.cite.form" href="#jquery.cite.form">HTML templates</a></a>
 
 Of course, you can include all sorts of things in the templates, but the following things are going to get used. Templates below are in [Jade/Pug](https://github.com/pugjs/pug). Elements may be wrapped in containers, but the general hierarchy should be like this
 
-<span name="jquery.form.in">
-<a id="jquery.cite.form.in" href="#jquery.cite.form.in">
-#### Input form
-</a>
-</span>
+#### <span name="jquery.form.in"><a id="jquery.cite.form.in" href="#jquery.cite.form.in">Input form</a></span>
 
 ```
 .cjs-in
@@ -303,11 +247,7 @@ Of course, you can include all sorts of things in the templates, but the followi
     .cjs-delete // Clear draft
 ```
 
-<a name="jquery.form.in.fields">
-<a id="jquery.cite.form.in.fields" href="#jquery.cite.form.in.fields">
-##### Input form fields
-</a>
-</a>
+##### <a name="jquery.form.in.fields"><a id="jquery.cite.form.in.fields" href="#jquery.cite.form.in.fields">Input form fields</a></a>
 
 Form fields consist of a `fieldset` element and inside an `input` element, with the following attributes:
 
@@ -324,11 +264,7 @@ Exceptions:
 * Fields `author`, `container-author`, `editor` and `publisher-title` get `.CJSMultipleInput()`, so multiple `input`s aren't necessary, as they're added dynamically
 * One of the fields, preferably the first one, should be a `select` (`data-cjs-field="type"`), containing publication type options
 
-<a name="jquery.form.out">
-<a id="jquery.cite.form.out" href="#jquery.cite.form.out">
-#### Output form
-</a>
-</a>
+#### <a name="jquery.form.out"><a id="jquery.cite.form.out" href="#jquery.cite.form.out">Output form</a></a>
 
 ```
 .cjs-out
@@ -361,30 +297,21 @@ Exceptions:
     .cjs-export-save // Download data on click
 ```
 
-<a id="jquery.dependencies" href="#jquery.dependencies">
-## Dependencies
-</a>
+## <a id="jquery.dependencies" href="#jquery.dependencies">Dependencies</a>
 
 * jQuery
 * Citeproc-js
 * Citation.js
 
-<a id="more" href="#more">
-# More
-</a>
+# <a id="more" href="#more">More</a>
 
-<a id="more.docs" href="#more.docs">
-## More Docs
-</a>
+## <a id="more.docs" href="#more.docs">More Docs</a>
+
 Further explanation can be found [here](https://larsgw.github.io/citation.js/api/). The explanation of the jQuery plugin can be found there too.
 
-<a id="more.demo" href="#more.demo">
-## Demo
-</a>
+## <a id="more.demo" href="#more.demo">Demo</a>
 
-<a id="more.demo.npm" href="#more.demo.npm">
-### NPM Demo
-</a>
+### <a id="more.demo.npm" href="#more.demo.npm">NPM Demo</a>
 
 [NPM Demo](https://runkit.com/npm/citation-js). Example code:
 
@@ -401,9 +328,7 @@ var data = new Cite( 'Q21972834', {
 data.get() // Should implicitly display
 ```
 
-<a id="more.demo.browser" href="#more.demo.browser">
-### Browser Demos
-</a>
+### <a id="more.demo.browser" href="#more.demo.browser">Browser Demos</a>
 
 * [Normal demo](https://larsgw.github.io/citation.js/demo/demo.html)
 * [Demo including jQuery plugin](https://larsgw.github.io/citation.js/demo/jquery.html)
