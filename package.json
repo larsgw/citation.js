@@ -39,7 +39,7 @@
   "author": "Lars Willighagen (https://larsgw.github.io)",
   "license": "MIT",
   "bin": "bin/cmd.js",
-  "man": "bin/man.txt",
+  "man": "bin/man/citation-js.1",
   "bugs": {
     "url": "https://github.com/larsgw/citation.js/issues"
   },
