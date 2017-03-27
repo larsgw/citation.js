@@ -34,7 +34,10 @@
   },
   "scripts": {
     "test": "jasmine-node test/citation-0.2.spec.js",
-    "build": "browserify -r ./index.js:citation-js -o build/browser.js"
+    "build": "browserify -r ./index.js:citation-js -o build/browser.js",
+    "update": "cp build/browser.js docs/src/browser.js",
+    "build-test": "browserify -e test/citation-0.2.spec.js -o build/test.browser.js",
+    "update-test": "cp build/test.browser.js docs/src/test.browser.js"
   },
   "author": "Lars Willighagen (https://larsgw.github.io)",
   "license": "MIT",

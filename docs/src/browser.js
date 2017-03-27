@@ -1759,6 +1759,10 @@ var CSL = require('./citeproc.js').CSL
   , request = require('sync-request')
   , wdk = require('wikidata-sdk')
 
+var CITE_VERSION = '0.3.0-3'
+  , CITEPROC_VERSION = CSL.PROCESSOR_VERSION
+  , CSL_VERSION = CSL.PROCESSOR_VERSION
+
 /**
  * Object containing several RegExp patterns, mostly used for parsing (*full of shame*) and recognizing data types
  * 
@@ -3766,34 +3770,33 @@ var getJSON = function ( src ) {
  * @param {String} [options.lang="en-US"] - The language of the output. [RFC 5646](https://tools.ietf.org/html/rfc5646) codes
  */
 
- function Cite (data,options) {
-
+function Cite (data,options) {
   // Making it Scope-Safe
   if ( !( this instanceof Cite ) )
     return new Cite( data, options )
   
   /**
-   * The default options for the output
-   * 
-   * @property format {String} The outputted datatype. Real representation (`"real"`, e.g. DOM Object for HTML, JavaScript Object for JSON) or String representation ( `"string"` )
-   * @property type {String} The format of the output. `"string"`, `"html"` or `"json"`
-   * @property style {String} The style of the output. See [Output](../#output)
-   * @property lang {String} The language of the output. [RFC 5646](https://tools.ietf.org/html/rfc5646) codes
-   * 
-   * @type Object
-   * @default {}
-   */
+  * The default options for the output
+  * 
+  * @property format {String} The outputted datatype. Real representation (`"real"`, e.g. DOM Object for HTML, JavaScript Object for JSON) or String representation ( `"string"` )
+  * @property type {String} The format of the output. `"string"`, `"html"` or `"json"`
+  * @property style {String} The style of the output. See [Output](../#output)
+  * @property lang {String} The language of the output. [RFC 5646](https://tools.ietf.org/html/rfc5646) codes
+  * 
+  * @type Object
+  * @default {}
+  */
   this._options = options || {}
   
   /**
-   * Information about the input data
-   *
-   * @property data The inputted data
-   * @property type {String} The datatype of the input
-   * @property format {String} The format of the input
-   * 
-   * @type Object
-   */
+  * Information about the input data
+  *
+  * @property data The inputted data
+  * @property type {String} The datatype of the input
+  * @property format {String} The format of the input
+  * 
+  * @type Object
+  */
   this._input = {
     data: data
   , type: typeof data
@@ -3801,372 +3804,373 @@ var getJSON = function ( src ) {
   }
   
   /**
-   * The data formatted to JSON
-   *
-   * @type Object
-   * @default []
-   */
+  * The data formatted to JSON
+  *
+  * @type Object
+  * @default []
+  */
   this.data = []
   
   /**
-   * The log, containing all logged data.
-   * 
-   * These are the names of each called function, together with it's input. If the `Cite` object is changed, the version number gets updated as well.
-   * 
-   * The `.reset()` function **does not** have any influence on the log. This way, you can still undo all changes.
-   * 
-   * <br /><br />
-   * `.currentVersion()` and similar function **are not** logged, because this would be influenced by function using other functions.
-   *
-   * @type Object[]
-   * 
-   * @property {Object} 0 - The first version, indicated with version 0, containing the object as it was when it was made. The following properties are used for the following properties too.
-   * @property {String} 0.name - The name of the called function. In case of the initial version, this is `"init"`.
-   * @property {String} 0.version - The version of the object. Undefined when a function that doesn't change the object is called.
-   * @property {Array} 0.arguments - The arguments passed in the called function.
-   */
+  * The log, containing all logged data.
+  * 
+  * These are the names of each called function, together with it's input. If the `Cite` object is changed, the version number gets updated as well.
+  * 
+  * The `.reset()` function **does not** have any influence on the log. This way, you can still undo all changes.
+  * 
+  * <br /><br />
+  * `.currentVersion()` and similar function **are not** logged, because this would be influenced by function using other functions.
+  *
+  * @type Object[]
+  * 
+  * @property {Object} 0 - The first version, indicated with version 0, containing the object as it was when it was made. The following properties are used for the following properties too.
+  * @property {String} 0.name - The name of the called function. In case of the initial version, this is `"init"`.
+  * @property {String} 0.version - The version of the object. Undefined when a function that doesn't change the object is called.
+  * @property {Array} 0.arguments - The arguments passed in the called function.
+  */
   this._log = [
     {name:'init',version:'0',arguments:[this._input.data,this._options]}
   ]
   
-  // Public methods
-  
-  /**
-   * 
-   * @method currentVersion
-   * @memberof Cite
-   * @this Cite
-   * 
-   * @return {Number} The latest version of the object
-   */
-  this.currentVersion = function () {
-    var version = 0
-    
-    for ( var i = 0; i < this._log.length; i++ ) {
-      if ( this._log[ i ].version > version )
-        version = this._log[ i ].version
-    }
-    
-    return version
-  }
-  
-  /**
-   * Does not change the current object.
-   * 
-   * @method retrieveVersion
-   * @memberof Cite
-   * @this Cite
-   * 
-   * @param {Number} versnum - The number of the version you want to retrieve. Illegel numbers: numbers under zero, floats, numbers above the current version of the object.
-   * 
-   * @return {Cite} The version of the object with the version number passed. `undefined` if an illegal number is passed.
-   */
-  this.retrieveVersion = function ( versnum ) {
-    this._log.push( { name: 'retrieveVersion', arguments: [ versnum ] } )
-    
-    if ( versnum >= 0 && versnum <= this.currentVersion() ) {
-      var obj = new Cite( this._log[ 0 ].arguments[ 0 ], this._log[ 0 ].arguments[ 1 ] ),
-          arr = []
-      
-      for ( var i = 0; i < this._log.length; i++ ) {
-        if ( this._log[ i ].version )
-          arr.push( this._log[ i ] )
-      }
-      
-      for ( var k = 1; k <= versnum; k++ ) {
-        obj[ arr[ k ].name ].apply( obj, arr[ k ].arguments || [] )
-      }
-      
-      return obj
-    } else return undefined;
-  }
-  
-  /**
-   * Does not change the current object. Undoes the last edit made.
-   * 
-   * @method undo
-   * @memberof Cite
-   * @this Cite
-   * 
-   * @return {Cite} The last version of the object. `undefined` if used on first version.
-   */
-  this.undo = function () {
-    return this.retrieveVersion( this.currentVersion() - 1 )
-  }
-  
-  /**
-   * Get a sorted ID list
-   * 
-   * @method getIds
-   * @memberof Cite
-   * @this Cite
-   * 
-   * @param {Boolean} nolog - Hide this call from the log (i.e. when used internally)
-   * 
-   * @return {String[]} List of IDs
-   */
-  this.getIds = function ( nolog ) {
-    if( !nolog )
-      this._log.push( { name: 'getIds' } )
-    
-    var list = []
-    
-    for ( var entryIndex = 0; entryIndex < this.data.length; entryIndex++ )
-      list.push( this.data[ entryIndex ].id )
-    
-    return list
-  }
-  
-  /**
-   * Add an object to the array of objects
-   * 
-   * @method add
-   * @memberof Cite
-   * @this Cite
-   * 
-   * @param {String|CSL|Object|String[]|CSL[]|Object[]} data - The data to add to your object
-   * @param {Boolean} nolog - Hide this call from the log (i.e. when used internally)
-   * 
-   * @return {Cite} The updated parent object
-   */
-  this.add = function ( data, nolog ) {
-    if ( !nolog )
-      this._log.push( { name: 'add', version: this.currentVersion() + 1, arguments: [ data, nolog ] } )
-    
-    var input = parseInput( data )
-    this.data = this.data.concat( input )
-    
-    var itemIds = this.getIds( true )
-    for ( var entryIndex = 0; entryIndex < this.data.length; entryIndex++ ) {
-      if ( !this.data[ entryIndex ].hasOwnProperty( 'id' ) )
-        this.data[ entryIndex ].id = fetchId( itemIds, entryIndex, 'temp_id_' )
-    }
-    
-    return this
-  }
-  
-  /**
-   * Recreate a `Cite` object with almost any kind of data, and manipulate it with its default methods.
-   * 
-   * @method set
-   * @memberof Cite
-   * @this Cite
-   * 
-   * @param {String|CSL|Object|String[]|CSL[]|Object[]} data - The data to replace the data in your object
-   * @param {Boolean} nolog - Hide this call from the log (i.e. when used internally)
-   * 
-   * @return {Cite} The updated parent object
-   */
-  this.set = function ( data, nolog ) {
-    if ( !nolog )
-      this._log.push( { name: 'set', version: this.currentVersion() + 1, arguments: [ data, nolog ] } )
-    
-    this.data = []
-    this.add( data, true )
-    
-    return this
-  }
-  
-  /**
-   * Change the default options of a `Cite` object.
-   * 
-   * @method options
-   * @memberof Cite
-   * @this Cite
-   * 
-   * @param {Object} options - The options for the output
-   * @param {String} [options.format="real"] - The outputted datatype. Real representation (`"real"`, e.g. DOM Object for HTML, JavaScript Object for JSON) or String representation ( `"string"` )
-   * @param {String} [options.type="json"] - The format of the output. `"string"`, `"html"` or `"json"`
-   * @param {String} [options.style="csl"] - The style of the output. See [Output](./#output)
-   * @param {String} [options.lang="en-US"] - The language of the output. [RFC 5646](https://tools.ietf.org/html/rfc5646) codes
-   * @param {Boolean} nolog - Hide this call from the log (i.e. when used internally)
-   * 
-   * @return {Cite} The updated parent object
-   */
-  this.options = function ( options, nolog ) {
-    if ( !nolog )
-      this._log.push( { name: 'options', version: this.currentVersion() + 1, arguments: [ options ] } )
-    
-    Object.assign( this._options, options )
-    
-    return this
-  }
-  
-  /**
-   * Reset a `Cite` object.
-   * 
-   * @method reset
-   * @memberof Cite
-   * @this Cite
-   * 
-   * @return {Cite} The updated, empty parent object (except the log, the log lives)
-   */
-  this.reset = function () {
-    this._log.push( { name: 'reset', version: this.currentVersion() + 1, arguments: [] } )
-    
-    this.data     = []
-    this._options = {}
-    
-    return this
-  }
-  
-  /**
-   * Sort the datasets alphabetically, on basis of it's BibTeX label
-   * 
-   * @method sort
-   * @memberof Cite
-   * @this Cite
-   * 
-   * @param {Boolean} nolog - Hide this call from the log (i.e. when used internally)
-   * 
-   * @return {Cite} The updated parent object
-   */
-  this.sort = function ( nolog ) {
-    if( !nolog )
-      this._log.push( { name: 'sort', version: this.currentVersion() + 1, arguments: [] } )
-    
-    this.data = this.data.sort( function ( a, b ) {
-      var labela = getLabel( a )
-        , labelb = getLabel( b )
-      
-      return labela != labelb ?
-        ( labela > labelb ? 1 : -1 )
-      : 0 ;
-    } )
-    
-    return this
-  }
-  
-  /**
-   * Get formatted data from your object. For more info, see [Output](../#output).
-   * 
-   * @method get
-   * @memberof Cite
-   * @this Cite
-   * 
-   * @param {Object} options - The options for the output
-   * @param {String} [options.format="real"] - The outputted datatype. Real representation (`"real"`, e.g. DOM Object for HTML, JavaScript Object for JSON) or String representation ( `"string"` )
-   * @param {String} [options.type="json"] - The format of the output. `"string"`, `"html"` or `"json"`
-   * @param {String} [options.style="csl"] - The style of the output. See [Output](../#output)
-   * @param {String} [options.lang="en-US"] - The language of the output. [RFC 5646](https://tools.ietf.org/html/rfc5646) codes
-   * @param {String} [options.locale] - Custom CSL locale for citeproc
-   * @param {String} [options.template] - Custom CSL style template for citeproc
-   * @param {Boolean} nolog - Hide this call from the log (i.e. when used internally)
-   * 
-   * @return {String|Object[]} The formatted data
-   */
-  this.get = function ( options, nolog ) {
-    if( !nolog )
-      this._log.push( { name: 'get', arguments: [ options ] } )
-    
-    var _data   = JSON.parse( JSON.stringify( this.data ) )
-      , result
-      
-      , options = Object.assign(
-          { format:'real',type:'json',style:'csl',lang:'en-US' },
-          this._options,
-          { locale: '', template: '' },
-          options )
-      
-      , type    = options.type.toLowerCase()
-      , styleParts = options.style.toLowerCase().split( '-' )
-      , style   = styleParts[ 0 ]
-      , styleFormat = styleParts.slice( 1 ).join( '-' )
-    
-    switch ( type ) {
-      case 'html':
-        
-        switch ( style ) {
-          
-          case 'citation':
-            var cb_locale = !options.locale ? fetchCSLLocale : function () { return options.locale }
-              , cb_item   = fetchCSLItemCallback( _data )
-              , template  = options.template ? options.template : fetchCSLStyle( styleFormat )
-              , lang      = fetchCSLLocale( options.lang ) ? options.lang : 'en-US'
-              , citeproc  = fetchCSLEngine( styleFormat, lang, template, cb_item, cb_locale )
-              
-              , sortIds   = citeproc.updateItems( this.getIds( true ) )
-              , bib       = citeproc.makeBibliography()
-              
-              , start     = bib[ 0 ].bibstart
-              , body      = bib[ 1 ]
-              , end       = bib[ 0 ].bibend
-            
-            for ( var i = 0; i < body.length; i++ ) {
-              body[ i ] = getPrefixedEntry( body[ i ], i, sortIds )
-            }
-            
-            result = start + body.join( '<br />' ) + end
-            break;
-          
-          case 'csl':
-            result = getJSON( _data )
-            break;
-          
-          case 'bibtex':
-            result = getBibTeX( _data, true )
-            break;
-        }
-        
-        break;
-      
-      case 'string':
-        
-        switch ( style ) {
-          
-          case 'bibtex':
-            result = getBibTeX( _data, false )
-            break;
-          
-          case 'citation':
-            var options = Object.assign( {}, options, {type:'html'} )
-            result = striptags( this.get( options, true ) )
-            break;
-          
-          case 'csl':
-            result = JSON.stringify( _data )
-            break;
-        }
-        
-        break;
-      
-      case 'json':
-        
-        switch ( style ) {
-          
-          case 'csl':
-            result = JSON.stringify( _data )
-            break;
-          
-          case 'bibtex':
-            result = JSON.stringify( _data.map( getBibTeXJSON ) )
-            break;
-          
-          case 'citation':
-            console.error( '[get]', 'Combination type/style of json/citation-* is not valid:', options.type + '/' + options.style )
-            result = undefined
-            break;
-        }
-        
-        break;
-    }
-    
-    if ( options.format === 'real' ) {
-      if ( options.type === 'json' )
-        result = JSON.parse( result )
-      else if ( browserMode && options.type === 'html' ) {
-        var tmp = document.createElement( 'div' )
-        tmp.innerHTML = result
-        result = result.childNodes
-      }
-    }
-    
-    return result
-  }
-  
   this.set( data, true )
   this.options( options, true )
+}
+
+Cite.CITE_VERSION = CITE_VERSION
+Cite.CITEPROC_VERSION = CITEPROC_VERSION
+Cite.CSL_VERSION = CSL_VERSION
+
+/**
+  * 
+  * @method currentVersion
+  * @memberof Cite
+  * @this Cite
+  * 
+  * @return {Number} The latest version of the object
+  */
+Cite.prototype.currentVersion = function () {
+  var version = 0
   
+  for ( var i = 0; i < this._log.length; i++ ) {
+    if ( this._log[ i ].version > version )
+      version = this._log[ i ].version
+  }
+  
+  return version
+}
+
+/**
+  * Does not change the current object.
+  * 
+  * @method retrieveVersion
+  * @memberof Cite
+  * @this Cite
+  * 
+  * @param {Number} versnum - The number of the version you want to retrieve. Illegel numbers: numbers under zero, floats, numbers above the current version of the object.
+  * 
+  * @return {Cite} The version of the object with the version number passed. `undefined` if an illegal number is passed.
+  */
+Cite.prototype.retrieveVersion = function ( versnum ) {
+  this._log.push( { name: 'retrieveVersion', arguments: [ versnum ] } )
+  
+  if ( versnum >= 0 && versnum <= this.currentVersion() ) {
+    var obj = new Cite( this._log[ 0 ].arguments[ 0 ], this._log[ 0 ].arguments[ 1 ] ),
+        arr = []
+    
+    for ( var i = 0; i < this._log.length; i++ ) {
+      if ( this._log[ i ].version )
+        arr.push( this._log[ i ] )
+    }
+    
+    for ( var k = 1; k <= versnum; k++ ) {
+      obj[ arr[ k ].name ].apply( obj, arr[ k ].arguments || [] )
+    }
+    
+    return obj
+  } else return undefined;
+}
+
+/**
+  * Does not change the current object. Undoes the last edit made.
+  * 
+  * @method undo
+  * @memberof Cite
+  * @this Cite
+  * 
+  * @return {Cite} The last version of the object. `undefined` if used on first version.
+  */
+Cite.prototype.undo = function () {
+  return this.retrieveVersion( this.currentVersion() - 1 )
+}
+
+/**
+  * Get a sorted ID list
+  * 
+  * @method getIds
+  * @memberof Cite
+  * @this Cite
+  * 
+  * @param {Boolean} nolog - Hide this call from the log (i.e. when used internally)
+  * 
+  * @return {String[]} List of IDs
+  */
+Cite.prototype.getIds = function ( nolog ) {
+  if( !nolog )
+    this._log.push( { name: 'getIds' } )
+  
+  var list = []
+  
+  for ( var entryIndex = 0; entryIndex < this.data.length; entryIndex++ )
+    list.push( this.data[ entryIndex ].id )
+  
+  return list
+}
+
+/**
+  * Add an object to the array of objects
+  * 
+  * @method add
+  * @memberof Cite
+  * @this Cite
+  * 
+  * @param {String|CSL|Object|String[]|CSL[]|Object[]} data - The data to add to your object
+  * @param {Boolean} nolog - Hide this call from the log (i.e. when used internally)
+  * 
+  * @return {Cite} The updated parent object
+  */
+Cite.prototype.add = function ( data, nolog ) {
+  if ( !nolog )
+    this._log.push( { name: 'add', version: this.currentVersion() + 1, arguments: [ data, nolog ] } )
+  
+  var input = parseInput( data )
+  this.data = this.data.concat( input )
+  
+  var itemIds = this.getIds( true )
+  for ( var entryIndex = 0; entryIndex < this.data.length; entryIndex++ ) {
+    if ( !this.data[ entryIndex ].hasOwnProperty( 'id' ) )
+      this.data[ entryIndex ].id = fetchId( itemIds, entryIndex, 'temp_id_' )
+  }
+  
+  return this
+}
+
+/**
+  * Recreate a `Cite` object with almost any kind of data, and manipulate it with its default methods.
+  * 
+  * @method set
+  * @memberof Cite
+  * @this Cite
+  * 
+  * @param {String|CSL|Object|String[]|CSL[]|Object[]} data - The data to replace the data in your object
+  * @param {Boolean} nolog - Hide this call from the log (i.e. when used internally)
+  * 
+  * @return {Cite} The updated parent object
+  */
+Cite.prototype.set = function ( data, nolog ) {
+  if ( !nolog )
+    this._log.push( { name: 'set', version: this.currentVersion() + 1, arguments: [ data, nolog ] } )
+  
+  this.data = []
+  this.add( data, true )
+  
+  return this
+}
+
+/**
+  * Change the default options of a `Cite` object.
+  * 
+  * @method options
+  * @memberof Cite
+  * @this Cite
+  * 
+  * @param {Object} options - The options for the output
+  * @param {String} [options.format="real"] - The outputted datatype. Real representation (`"real"`, e.g. DOM Object for HTML, JavaScript Object for JSON) or String representation ( `"string"` )
+  * @param {String} [options.type="json"] - The format of the output. `"string"`, `"html"` or `"json"`
+  * @param {String} [options.style="csl"] - The style of the output. See [Output](./#output)
+  * @param {String} [options.lang="en-US"] - The language of the output. [RFC 5646](https://tools.ietf.org/html/rfc5646) codes
+  * @param {Boolean} nolog - Hide this call from the log (i.e. when used internally)
+  * 
+  * @return {Cite} The updated parent object
+  */
+Cite.prototype.options = function ( options, nolog ) {
+  if ( !nolog )
+    this._log.push( { name: 'options', version: this.currentVersion() + 1, arguments: [ options ] } )
+  
+  Object.assign( this._options, options )
+  
+  return this
+}
+
+/**
+  * Reset a `Cite` object.
+  * 
+  * @method reset
+  * @memberof Cite
+  * @this Cite
+  * 
+  * @return {Cite} The updated, empty parent object (except the log, the log lives)
+  */
+Cite.prototype.reset = function () {
+  this._log.push( { name: 'reset', version: this.currentVersion() + 1, arguments: [] } )
+  
+  this.data     = []
+  this._options = {}
+  
+  return this
+}
+
+/**
+  * Sort the datasets alphabetically, on basis of it's BibTeX label
+  * 
+  * @method sort
+  * @memberof Cite
+  * @this Cite
+  * 
+  * @param {Boolean} nolog - Hide this call from the log (i.e. when used internally)
+  * 
+  * @return {Cite} The updated parent object
+  */
+Cite.prototype.sort = function ( nolog ) {
+  if( !nolog )
+    this._log.push( { name: 'sort', version: this.currentVersion() + 1, arguments: [] } )
+  
+  this.data = this.data.sort( function ( a, b ) {
+    var labela = getLabel( a )
+      , labelb = getLabel( b )
+    
+    return labela != labelb ?
+      ( labela > labelb ? 1 : -1 )
+    : 0 ;
+  } )
+  
+  return this
+}
+
+/**
+  * Get formatted data from your object. For more info, see [Output](../#output).
+  * 
+  * @method get
+  * @memberof Cite
+  * @this Cite
+  * 
+  * @param {Object} options - The options for the output
+  * @param {String} [options.format="real"] - The outputted datatype. Real representation (`"real"`, e.g. DOM Object for HTML, JavaScript Object for JSON) or String representation ( `"string"` )
+  * @param {String} [options.type="json"] - The format of the output. `"string"`, `"html"` or `"json"`
+  * @param {String} [options.style="csl"] - The style of the output. See [Output](../#output)
+  * @param {String} [options.lang="en-US"] - The language of the output. [RFC 5646](https://tools.ietf.org/html/rfc5646) codes
+  * @param {String} [options.locale] - Custom CSL locale for citeproc
+  * @param {String} [options.template] - Custom CSL style template for citeproc
+  * @param {Boolean} nolog - Hide this call from the log (i.e. when used internally)
+  * 
+  * @return {String|Object[]} The formatted data
+  */
+Cite.prototype.get = function ( options, nolog ) {
+  if( !nolog )
+    this._log.push( { name: 'get', arguments: [ options ] } )
+  
+  var _data   = JSON.parse( JSON.stringify( this.data ) )
+    , result
+    
+    , options = Object.assign(
+        { format:'real',type:'json',style:'csl',lang:'en-US' },
+        this._options,
+        { locale: '', template: '' },
+        options )
+    
+    , type    = options.type.toLowerCase()
+    , styleParts = options.style.toLowerCase().split( '-' )
+    , style   = styleParts[ 0 ]
+    , styleFormat = styleParts.slice( 1 ).join( '-' )
+  
+  switch ( type ) {
+    case 'html':
+      
+      switch ( style ) {
+        
+        case 'citation':
+          var cb_locale = !options.locale ? fetchCSLLocale : function () { return options.locale }
+            , cb_item   = fetchCSLItemCallback( _data )
+            , template  = options.template ? options.template : fetchCSLStyle( styleFormat )
+            , lang      = fetchCSLLocale( options.lang ) ? options.lang : 'en-US'
+            , citeproc  = fetchCSLEngine( styleFormat, lang, template, cb_item, cb_locale )
+            
+            , sortIds   = citeproc.updateItems( this.getIds( true ) )
+            , bib       = citeproc.makeBibliography()
+            
+            , start     = bib[ 0 ].bibstart
+            , body      = bib[ 1 ]
+            , end       = bib[ 0 ].bibend
+          
+          for ( var i = 0; i < body.length; i++ ) {
+            body[ i ] = getPrefixedEntry( body[ i ], i, sortIds )
+          }
+          
+          result = start + body.join( '<br />' ) + end
+          break;
+        
+        case 'csl':
+          result = getJSON( _data )
+          break;
+        
+        case 'bibtex':
+          result = getBibTeX( _data, true )
+          break;
+      }
+      
+      break;
+    
+    case 'string':
+      
+      switch ( style ) {
+        
+        case 'bibtex':
+          result = getBibTeX( _data, false )
+          break;
+        
+        case 'citation':
+          var options = Object.assign( {}, options, {type:'html'} )
+          result = striptags( this.get( options, true ) )
+          break;
+        
+        case 'csl':
+          result = JSON.stringify( _data )
+          break;
+      }
+      
+      break;
+    
+    case 'json':
+      
+      switch ( style ) {
+        
+        case 'csl':
+          result = JSON.stringify( _data )
+          break;
+        
+        case 'bibtex':
+          result = JSON.stringify( _data.map( getBibTeXJSON ) )
+          break;
+        
+        case 'citation':
+          console.error( '[get]', 'Combination type/style of json/citation-* is not valid:', options.type + '/' + options.style )
+          result = undefined
+          break;
+      }
+      
+      break;
+  }
+  
+  if ( options.format === 'real' ) {
+    if ( options.type === 'json' )
+      result = JSON.parse( result )
+    else if ( browserMode && options.type === 'html' ) {
+      var tmp = document.createElement( 'div' )
+      tmp.innerHTML = result
+      result = result.childNodes
+    }
+  }
+  
+  return result
 }
 
 return Cite
