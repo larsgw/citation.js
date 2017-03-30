@@ -2148,11 +2148,13 @@ Cite.prototype.currentVersion = function () {
   * @this Cite
   * 
   * @param {Number} versnum - The number of the version you want to retrieve. Illegel numbers: numbers under zero, floats, numbers above the current version of the object.
+  * @param {Boolean} nolog - Hide this call from the log (i.e. when used internally)
   * 
   * @return {Cite} The version of the object with the version number passed. `undefined` if an illegal number is passed.
   */
-Cite.prototype.retrieveVersion = function ( versnum ) {
-  this._log.push( { name: 'retrieveVersion', arguments: [ versnum ] } )
+Cite.prototype.retrieveVersion = function ( versnum, nolog ) {
+  if( !nolog )
+    this._log.push( { name: 'retrieveVersion', arguments: [ versnum ] } )
   
   if ( versnum >= 0 && versnum <= this.currentVersion() ) {
     var obj = new Cite( this._log[ 0 ].arguments[ 0 ], this._log[ 0 ].arguments[ 1 ] ),
@@ -2178,10 +2180,15 @@ Cite.prototype.retrieveVersion = function ( versnum ) {
   * @memberof Cite
   * @this Cite
   * 
+  * @param {Boolean} nolog - Hide this call from the log (i.e. when used internally)
+  * 
   * @return {Cite} The last version of the object. `undefined` if used on first version.
   */
-Cite.prototype.undo = function () {
-  return this.retrieveVersion( this.currentVersion() - 1 )
+Cite.prototype.undo = function ( nolog ) {
+  if( !nolog )
+    this._log.push( { name: 'undo' } )
+  
+  return this.retrieveVersion( this.currentVersion() - 1, true )
 }
 
 /**
