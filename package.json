@@ -25,16 +25,16 @@
     "commander": "~2.9.0",
     "striptags": "~2.1.1",
     "sync-request": "~3.0.1",
-    "wikidata-sdk": ">=4.2.0"
+    "wikidata-sdk": "^5.1.4"
   },
   "devDependencies": {
     "brfs": "^1.4.3",
     "browserify": "^13.3.0",
-    "jasmine-node": "~1.14.5",
+    "jasmine": "^2.5.3",
     "jsdoc": "~3.4.2"
   },
   "scripts": {
-    "test": "jasmine-node test/citation-0.2.spec.js",
+    "test": "jasmine test/citation-0.2.spec.js",
     "build": "browserify -r ./index.js:citation-js -o build/browser.js",
     "update": "cp build/browser.js docs/src/browser.js",
     "build-test": "browserify -t brfs -e test/citation-0.2.spec.js -o build/test.browser.js",
@@ -46,6 +46,9 @@
   "man": "bin/man/citation-js.1",
   "bugs": {
     "url": "https://github.com/larsgw/citation.js/issues"
+  },
+  "engines": {
+    "node": ">=6.0.0"
   },
   "homepage": "https://github.com/larsgw/citation.js#readme"
 }
