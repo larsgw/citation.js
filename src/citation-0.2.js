@@ -891,7 +891,6 @@ var fetchCSLItemCallback = function ( data ) {
  */
 var fetchFile = function ( url ) {
   var result
-    , url = typeof encodeURI === 'function' ? encodeURI( url ) : url
   
   try {
     result  = request( 'GET', url, { uri: url } ).getBody( 'utf8' )
@@ -1714,8 +1713,11 @@ var parseInputType = function ( input ) {
     case 'string':
       
       // Empty
-            if ( input.length === 0 )
+           if ( input.length === 0 )
         return 'string/empty'
+      
+      else if ( /^\s+$/.test( input ) )
+        return 'string/whitespace'
       
       // Wikidata URL
       else if ( varRegex.wikidata[ 0 ].test( input ) )
@@ -1854,6 +1856,7 @@ var parseInputData = function ( input, type ) {
       break;
     
     case 'string/empty':
+    case 'string/whitespace':
     case 'empty'  :
     case 'invalid':
     default       :
@@ -1877,7 +1880,13 @@ var parseInputData = function ( input, type ) {
  */
 var parseInput = function ( input ) {
   var type = parseInputType( input )
-    , outp = parseInputData( input, type )
+    , main = type.split('/')[0]
+  
+  if ( main === 'list' ||
+       main === 'json' )
+    input = deepCopy(input)
+  
+  var outp = parseInputData( input, type )
   
   return outp
 }
@@ -2013,6 +2022,20 @@ var getJSON = function ( src ) {
   res += ']'
   
   return res
+}
+
+/**
+ * Duplicate objects to prevent Cite changing values outside of own scope
+ * 
+ * @access private
+ * @method deepCopy
+ * 
+ * @param {Object} obj - Input object
+ * 
+ * @return {Object} Duplicated object
+ */
+var deepCopy = function (obj) {
+  return JSON.parse(JSON.stringify(obj))
 }
 
 /**
