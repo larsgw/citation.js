@@ -1,7 +1,10 @@
 branches:
   only:
     - master
+    - /^(fix|feature|dev)\/\w+$/
 language: node_js
 node_js:
   - "6"
+before_install:
+  - npm install -g npm@latest
 sudo: false
