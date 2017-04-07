@@ -1165,87 +1165,124 @@ function handleQs(url, query) {
 }
 
 },{"qs":3}],13:[function(require,module,exports){
-const wikidataTimeToDateObject = require('./wikidata_time_to_date_object')
+const toDateObject = require('./wikidata_time_to_date_object')
 
 const helpers = {}
 helpers.isNumericId = (id) => /^[0-9]+$/.test(id)
-helpers.isWikidataId = (id) => /^(Q|P)[0-9]+$/.test(id)
-helpers.isWikidataEntityId = (id) => /^Q[0-9]+$/.test(id)
-helpers.isWikidataPropertyId = (id) => /^P[0-9]+$/.test(id)
-
-helpers.normalizeId = function (id, numericId, type = 'Q') {
-  if (helpers.isNumericId(id)) {
-    return numericId ? id : `${type}${id}`
-  } else if (helpers.isWikidataId(id)) {
-    return numericId ? id.slice(1) : id
-  } else {
-    throw new Error('invalid id')
-  }
-}
+helpers.isEntityId = (id) => /^(Q|P)[0-9]+$/.test(id)
+helpers.isItemId = (id) => /^Q[0-9]+$/.test(id)
+helpers.isPropertyId = (id) => /^P[0-9]+$/.test(id)
 
 helpers.getNumericId = function (id) {
-  if (!(helpers.isWikidataId(id))) throw new Error(`invalid wikidata id: ${id}`)
+  if (!(helpers.isEntityId(id))) throw new Error(`invalid wikidata id: ${id}`)
   return id.replace(/Q|P/, '')
 }
 
-helpers.normalizeIds = function (ids, numericId, type = 'Q') {
-  return ids.map((id) => helpers.normalizeId(id, numericId, type))
+helpers.wikidataTimeToDateObject = toDateObject
+
+// Try to parse the date or return the input
+const bestEffort = (fn) => (value) => {
+  try {
+    return fn(value)
+  } catch (err) {
+    return value
+  }
 }
 
-helpers.wikidataTimeToDateObject = wikidataTimeToDateObject
+const toEpochTime = (wikidataTime) => toDateObject(wikidataTime).getTime()
+const toISOString = (wikidataTime) => toDateObject(wikidataTime).toISOString()
 
-helpers.wikidataTimeToEpochTime = function (wikidataTime) {
-  return wikidataTimeToDateObject(wikidataTime).getTime()
-}
-
-helpers.wikidataTimeToISOString = function (wikidataTime) {
-  return wikidataTimeToDateObject(wikidataTime).toISOString()
-}
-
-// keeping normalizeWikidataTime as legacy
-helpers.normalizeWikidataTime = helpers.wikidataTimeToEpochTime
+helpers.wikidataTimeToEpochTime = bestEffort(toEpochTime)
+helpers.wikidataTimeToISOString = bestEffort(toISOString)
 
 module.exports = helpers
 
-},{"./wikidata_time_to_date_object":16}],14:[function(require,module,exports){
-const simplifyClaims = require('./simplify_claims')
+},{"./wikidata_time_to_date_object":19}],14:[function(require,module,exports){
+const { wikidataTimeToISOString, wikidataTimeToEpochTime } = require('./helpers')
+
+const simple = (datavalue) => datavalue.value
+const monolingualtext = (datavalue) => datavalue.value.text
+const item = (datavalue, options) => prefixedId(datavalue, options.entityPrefix)
+const property = (datavalue, options) => {
+  return prefixedId(datavalue, options.propertyPrefix)
+}
+const prefixedId = function (datavalue, prefix) {
+  const { id } = datavalue.value
+  return typeof prefix === 'string' ? `${prefix}:${id}` : id
+}
+const quantity = (datavalue) => parseFloat(datavalue.value.amount)
+const coordinate = (datavalue) => {
+  return [ datavalue.value.latitude, datavalue.value.longitude ]
+}
+const time = (datavalue, options) => {
+  return getTimeConverter(options.timeConverter)(datavalue.value.time)
+}
+const getTimeConverter = (key = 'iso') => timeConverters[key]
+const identity = (arg) => arg
+
+const timeConverters = {
+  iso: wikidataTimeToISOString,
+  epoch: wikidataTimeToEpochTime,
+  none: identity
+}
+
+const claimParsers = {
+  string: simple,
+  commonsMedia: simple,
+  url: simple,
+  'external-id': simple,
+  math: simple,
+  monolingualtext,
+  'wikibase-item': item,
+  'wikibase-property': property,
+  time,
+  quantity,
+  'globe-coordinate': coordinate
+}
+
+module.exports = (datatype, datavalue, options) => {
+  return claimParsers[datatype](datavalue, options)
+}
+
+},{"./helpers":13}],15:[function(require,module,exports){
+const simplifyEntity = require('./simplify_entity')
 
 module.exports = {
   wd: {
     entities: function (res) {
       res = res.body || res
       const { entities } = res
-      for (let id in entities) {
-        let entity = entities[id]
-        entity.claims = simplifyClaims(entity.claims)
-      }
+      Object.keys(entities).forEach(entityId => {
+        entities[entityId] = simplifyEntity(entities[entityId])
+      })
       return entities
     }
   }
 }
 
-},{"./simplify_claims":15}],15:[function(require,module,exports){
-const helpers = require('./helpers')
+},{"./simplify_entity":17}],16:[function(require,module,exports){
+const parseClaim = require('./parse_claim')
 
 // Expects an entity 'claims' object
 // Ex: entity.claims
-const simplifyClaims = function (claims, entityPrefix, propertyPrefix, keepQualifiers) {
+const simplifyClaims = function (claims, ...options) {
+  const { propertyPrefix } = parseOptions(options)
   const simpleClaims = {}
   for (let id in claims) {
     let propClaims = claims[id]
     if (propertyPrefix) {
       id = propertyPrefix + ':' + id
     }
-    simpleClaims[id] = simplifyPropertyClaims(propClaims, entityPrefix, propertyPrefix, keepQualifiers)
+    simpleClaims[id] = simplifyPropertyClaims(propClaims, ...options)
   }
   return simpleClaims
 }
 
 // Expects the 'claims' array of a particular property
 // Ex: entity.claims.P369
-const simplifyPropertyClaims = function (propClaims, entityPrefix, propertyPrefix, keepQualifiers) {
+const simplifyPropertyClaims = function (propClaims, ...options) {
   return propClaims
-  .map((claim) => simplifyClaim(claim, entityPrefix, propertyPrefix, keepQualifiers))
+  .map((claim) => simplifyClaim(claim, ...options))
   .filter(nonNull)
 }
 
@@ -1253,80 +1290,89 @@ const nonNull = (obj) => obj != null
 
 // Expects a single claim object
 // Ex: entity.claims.P369[0]
-const simplifyClaim = function (claim, entityPrefix, propertyPrefix, keepQualifiers) {
+const simplifyClaim = function (claim, ...options) {
+  options = parseOptions(options)
+  const { keepQualifiers } = options
   // tries to replace wikidata deep claim object by a simple value
   // e.g. a string, an entity Qid or an epoch time number
   const { mainsnak, qualifiers } = claim
 
-  // should only happen in snaktype: `novalue` cases or alikes
-  if (mainsnak == null) return null
-
-  const { datatype, datavalue } = mainsnak
-  // known case: snaktype set to `somevalue`
-  if (datavalue == null) return null
-
-  let value = null
-
-  switch (datatype) {
-    case 'string':
-    case 'commonsMedia':
-    case 'url':
-    case 'external-id':
-      value = datavalue.value
-      break
-    case 'monolingualtext':
-      value = datavalue.value.text
-      break
-    case 'wikibase-item':
-      value = prefixedId(datavalue, entityPrefix)
-      break
-    case 'wikibase-property':
-      value = prefixedId(datavalue, propertyPrefix)
-      break
-    case 'time':
-      value = helpers.normalizeWikidataTime(datavalue.value.time)
-      break
-    case 'quantity':
-      value = parseFloat(datavalue.value.amount)
-      break
-    case 'globe-coordinate':
-      value = getLatLngFromCoordinates(datavalue.value)
-      break
-  }
-
-  if (keepQualifiers) {
-    const simpleQualifiers = {}
-
-    for (let qualifierProp in qualifiers) {
-      simpleQualifiers[qualifierProp] = qualifiers[qualifierProp]
-        .map(prepareQualifierClaim)
-    }
-
-    return {
-      value,
-      qualifiers: simplifyClaims(simpleQualifiers, entityPrefix, propertyPrefix)
-    }
+  var datatype, datavalue, isQualifier
+  if (mainsnak) {
+    datatype = mainsnak.datatype
+    datavalue = mainsnak.datavalue
+    // Known case: snaktype set to `somevalue`
+    if (!datavalue) return null
   } else {
-    return value
+    // Should only happen in snaktype: `novalue` cases or alikes
+    if (!(claim && claim.datavalue)) return null
+    // Qualifiers have no mainsnak, and define datatype, datavalue on claim
+    datavalue = claim.datavalue
+    datatype = claim.datatype
+    isQualifier = true
+  }
+
+  const value = parseClaim(datatype, datavalue, options)
+
+  // Qualifiers should not attempt to keep sub-qualifiers
+  if (!keepQualifiers || isQualifier) return value
+
+  // When keeping qualifiers, the value becomes an object
+  // instead of a direct value
+  return { value, qualifiers: simplifyClaims(qualifiers, options) }
+}
+
+const parseOptions = function (options) {
+  if (options == null) return {}
+
+  if (options[0] && typeof options[0] === 'object') return options[0]
+
+  // Legacy interface
+  var [ entityPrefix, propertyPrefix, keepQualifiers ] = options
+  return { entityPrefix, propertyPrefix, keepQualifiers }
+}
+
+module.exports = { simplifyClaims, simplifyPropertyClaims, simplifyClaim }
+
+},{"./parse_claim":14}],17:[function(require,module,exports){
+const { simplifyClaims } = require('./simplify_claims')
+const simplify = require('./simplify_text_attributes')
+
+module.exports = (entity) => {
+  return {
+    id: entity.id,
+    type: entity.type,
+    modified: entity.modified,
+    labels: simplify.labels(entity.labels),
+    descriptions: simplify.descriptions(entity.descriptions),
+    aliases: simplify.aliases(entity.aliases),
+    claims: simplifyClaims(entity.claims),
+    sitelinks: simplify.sitelinks(entity.sitelinks)
   }
 }
 
-const prefixedId = function (datavalue, prefix) {
-  const { id } = datavalue.value
-  return typeof prefix === 'string' ? `${prefix}:${id}` : id
+},{"./simplify_claims":16,"./simplify_text_attributes":18}],18:[function(require,module,exports){
+const simplifyTextAttributes = (multivalue, attribute) => data => {
+  const simplifiedData = {}
+  Object.keys(data).forEach(lang => {
+    let obj = data[lang]
+    simplifiedData[lang] = multivalue ? obj.map(getValue) : obj[attribute]
+  })
+  return simplifiedData
 }
 
-const getLatLngFromCoordinates = (value) => [ value.latitude, value.longitude ]
+const getValue = (obj) => obj.value
 
-const prepareQualifierClaim = (claim) => ({ mainsnak: claim })
+const labelsOrDescription = simplifyTextAttributes(false, 'value')
 
 module.exports = {
-  simplifyClaims: simplifyClaims,
-  simplifyPropertyClaims: simplifyPropertyClaims,
-  simplifyClaim: simplifyClaim
+  labels: labelsOrDescription,
+  descriptions: labelsOrDescription,
+  aliases: simplifyTextAttributes(true, 'value'),
+  sitelinks: simplifyTextAttributes(false, 'title')
 }
 
-},{"./helpers":13}],16:[function(require,module,exports){
+},{}],19:[function(require,module,exports){
 module.exports = function (wikidataTime) {
   const sign = wikidataTime[0]
   const rest = wikidataTime.slice(1)
@@ -1358,7 +1404,7 @@ const parseInvalideDate = function (sign, rest) {
   return fullDateData(sign, year)
 }
 
-},{}],17:[function(require,module,exports){
+},{}],20:[function(require,module,exports){
 const wdk = module.exports = {}
 
 wdk.searchEntities = require('./queries/search_entities')
@@ -1369,45 +1415,42 @@ wdk.sparqlQuery = require('./queries/sparql_query')
 wdk.getReverseClaims = require('./queries/get_reverse_claims')
 wdk.parse = require('./helpers/parse_responses')
 
-const { simplifyClaim, simplifyPropertyClaims, simplifyClaims } = require('./helpers/simplify_claims')
-wdk.simplifyClaim = simplifyClaim
-wdk.simplifyPropertyClaims = simplifyPropertyClaims
-wdk.simplifyClaims = simplifyClaims
+const claimsSimplifiers = require('./helpers/simplify_claims')
+const simplifySparqlResults = require('./queries/simplify_sparql_results')
 
+wdk.simplify = require('../lib/helpers/simplify_text_attributes')
+wdk.simplify.entity = require('../lib/helpers/simplify_entity')
+wdk.simplify.claim = claimsSimplifiers.simplifyClaim
+wdk.simplify.propertyClaims = claimsSimplifiers.simplifyPropertyClaims
+wdk.simplify.claims = claimsSimplifiers.simplifyClaims
+wdk.simplify.sparqlResults = simplifySparqlResults
+
+// Legacy
 wdk.simplifySparqlResults = require('./queries/simplify_sparql_results')
+Object.assign(wdk, claimsSimplifiers)
 
 // Aliases
 wdk.getWikidataIdsFromWikipediaTitles = wdk.getWikidataIdsFromSitelinks
 
-// Making helpers both available from root
-// and from wdk.helpers
-const helpers = require('./helpers/helpers')
-wdk.helpers = helpers
-// equivalent to _.extend wdk, helpers
-for (let key in helpers) {
-  wdk[key] = helpers[key]
-}
+Object.assign(wdk, require('./helpers/helpers'))
 
-},{"./helpers/helpers":13,"./helpers/parse_responses":14,"./helpers/simplify_claims":15,"./queries/get_entities":18,"./queries/get_many_entities":19,"./queries/get_reverse_claims":20,"./queries/get_wikidata_ids_from_sitelinks":21,"./queries/search_entities":22,"./queries/simplify_sparql_results":23,"./queries/sparql_query":24}],18:[function(require,module,exports){
-const helpers = require('../helpers/helpers')
+},{"../lib/helpers/simplify_entity":17,"../lib/helpers/simplify_text_attributes":18,"./helpers/helpers":13,"./helpers/parse_responses":15,"./helpers/simplify_claims":16,"./queries/get_entities":21,"./queries/get_many_entities":22,"./queries/get_reverse_claims":23,"./queries/get_wikidata_ids_from_sitelinks":24,"./queries/search_entities":25,"./queries/simplify_sparql_results":26,"./queries/sparql_query":27}],21:[function(require,module,exports){
 const buildUrl = require('../utils/build_url')
 const { isPlainObject, forceArray, shortLang } = require('../utils/utils')
 
 module.exports = function (ids, languages, props, format) {
   // polymorphism: arguments can be passed as an object keys
   if (isPlainObject(ids)) {
-    // Not using destructuring assigment there as it messes with both babel and standard
-    const params = ids
-    ids = params.ids
-    languages = params.languages
-    props = params.props
-    format = params.format
+    ({ ids, languages, props, format } = ids)
   }
 
   format = format || 'json'
 
   // ids can't be let empty
   if (!(ids && ids.length > 0)) throw new Error('no id provided')
+
+  // Allow to pass ids as a single string
+  ids = forceArray(ids)
 
   if (ids.length > 50) {
     console.warn(`getEntities accepts 50 ids max to match Wikidata API limitations:
@@ -1419,13 +1462,11 @@ module.exports = function (ids, languages, props, format) {
   // Properties can be either one property as a string
   // or an array or properties;
   // either case me just want to deal with arrays
-  ids = helpers.normalizeIds(forceArray(ids))
-  props = forceArray(props)
 
   const query = {
     action: 'wbgetentities',
     ids: ids.join('|'),
-    format: format
+    format
   }
 
   if (languages) {
@@ -1433,12 +1474,12 @@ module.exports = function (ids, languages, props, format) {
     query.languages = languages.join('|')
   }
 
-  if (props && props.length > 0) query.props = props.join('|')
+  if (props && props.length > 0) query.props = forceArray(props).join('|')
 
   return buildUrl(query)
 }
 
-},{"../helpers/helpers":13,"../utils/build_url":25,"../utils/utils":27}],19:[function(require,module,exports){
+},{"../utils/build_url":28,"../utils/utils":30}],22:[function(require,module,exports){
 const getEntities = require('./get_entities')
 const { isPlainObject } = require('../utils/utils')
 
@@ -1469,28 +1510,46 @@ const getIdsGroups = function (ids) {
   return groups
 }
 
-},{"../utils/utils":27,"./get_entities":18}],20:[function(require,module,exports){
+},{"../utils/utils":30,"./get_entities":21}],23:[function(require,module,exports){
 const helpers = require('../helpers/helpers')
 const sparqlQuery = require('./sparql_query')
 
-module.exports = function (property, value, limit = 1000) {
-  if (helpers.isWikidataEntityId(value)) {
-    value = `wd:${value}`
-  } else if (typeof value === 'string') {
-    value = `\`${value}\``
-  }
-
-  const sparql = `
-    SELECT ?subject WHERE {
-      ?subject wdt:${property} ${value} .
-    }
-    LIMIT ${limit}
-    `
-
+module.exports = function (property, value, options = {}) {
+  var { limit, caseInsensitive } = options
+  limit = limit || 1000
+  const sparqlFn = caseInsensitive ? caseInsensitiveValueQuery : directValueQuery
+  const valueString = getValueString(value)
+  const sparql = sparqlFn(property, valueString, limit)
   return sparqlQuery(sparql)
 }
 
-},{"../helpers/helpers":13,"./sparql_query":24}],21:[function(require,module,exports){
+function getValueString (value) {
+  if (helpers.isItemId(value)) {
+    value = `wd:${value}`
+  } else if (typeof value === 'string') {
+    value = `'${value}'`
+  }
+  return value
+}
+
+function directValueQuery (property, value, limit) {
+  return `SELECT ?subject WHERE {
+      ?subject wdt:${property} ${value} .
+    }
+    LIMIT ${limit}`
+}
+
+// Discussion on how to make this query optimal:
+// http://stackoverflow.com/q/43073266/3324977
+function caseInsensitiveValueQuery (property, value, limit) {
+  return `SELECT ?subject WHERE {
+    ?subject wdt:${property} ?value .
+    FILTER (lcase(?value) = ${value.toLowerCase()})
+  }
+  LIMIT ${limit}`
+}
+
+},{"../helpers/helpers":13,"./sparql_query":27}],24:[function(require,module,exports){
 const buildUrl = require('../utils/build_url')
 const { isPlainObject, forceArray, shortLang } = require('../utils/utils')
 
@@ -1540,7 +1599,7 @@ module.exports = function (titles, sites, languages, props, format) {
 // convert 2 letters language code to Wikipedia sitelinks code
 const parseSite = (site) => site.length === 2 ? `${site}wiki` : site
 
-},{"../utils/build_url":25,"../utils/utils":27}],22:[function(require,module,exports){
+},{"../utils/build_url":28,"../utils/utils":30}],25:[function(require,module,exports){
 const buildUrl = require('../utils/build_url')
 const { isPlainObject } = require('../utils/utils')
 
@@ -1573,7 +1632,7 @@ module.exports = function (search, language, limit, format, uselang) {
   })
 }
 
-},{"../utils/build_url":25,"../utils/utils":27}],23:[function(require,module,exports){
+},{"../utils/build_url":28,"../utils/utils":30}],26:[function(require,module,exports){
 module.exports = function (input) {
   if (typeof input === 'string') input = JSON.parse(input)
 
@@ -1660,13 +1719,15 @@ const getSimplifiedResult = function (varsWithLabel, varsWithout) {
   }
 }
 
-},{}],24:[function(require,module,exports){
+},{}],27:[function(require,module,exports){
+const { fixedEncodeURIComponent } = require('../utils/utils')
+
 module.exports = function (sparql) {
-  const query = encodeURIComponent(sparql)
+  const query = fixedEncodeURIComponent(sparql)
   return `https://query.wikidata.org/sparql?format=json&query=${query}`
 }
 
-},{}],25:[function(require,module,exports){
+},{"../utils/utils":30}],28:[function(require,module,exports){
 const wikidataApiRoot = 'https://www.wikidata.org/w/api.php'
 const isBrowser = typeof location !== 'undefined' && typeof document !== 'undefined'
 const qs = isBrowser ? require('./querystring_lite') : require('querystring')
@@ -1678,7 +1739,7 @@ module.exports = function (queryObj) {
   return wikidataApiRoot + '?' + qs.stringify(queryObj)
 }
 
-},{"./querystring_lite":26,"querystring":9}],26:[function(require,module,exports){
+},{"./querystring_lite":29,"querystring":9}],29:[function(require,module,exports){
 module.exports = {
   stringify: function (queryObj) {
     var qstring = ''
@@ -1697,10 +1758,10 @@ module.exports = {
   }
 }
 
-},{}],27:[function(require,module,exports){
+},{}],30:[function(require,module,exports){
 module.exports = {
-  // languages have to be 2-letters language codes
-  shortLang: (language) => language.slice(0, 2),
+  // Ex: keep only 'fr' in 'fr_FR'
+  shortLang: (language) => language.toLowerCase().split(/[^a-z]/)[0],
 
   // a polymorphism helper:
   // accept either a string or an array and return an array
@@ -1713,10 +1774,18 @@ module.exports = {
   isPlainObject: function (obj) {
     if (!obj || typeof obj !== 'object' || obj instanceof Array) return false
     return true
+  },
+
+  // encodeURIComponent ignores !, ', (, ), and *
+  // cf https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/encodeURIComponent#Description
+  fixedEncodeURIComponent: function (str) {
+    return encodeURIComponent(str).replace(/[!'()*]/g, encodeCharacter)
   }
 }
 
-},{}],28:[function(require,module,exports){
+const encodeCharacter = (c) => '%' + c.charCodeAt(0).toString(16)
+
+},{}],31:[function(require,module,exports){
 /** 
  * @file Citation-0.2.js
  * 
@@ -4206,7 +4275,7 @@ Cite.prototype.get = function ( options, nolog ) {
 return Cite
 
 })()
-},{"./citeproc.js":29,"striptags":10,"sync-request":11,"wikidata-sdk":17}],29:[function(require,module,exports){
+},{"./citeproc.js":32,"striptags":10,"sync-request":11,"wikidata-sdk":20}],32:[function(require,module,exports){
 /*
  * Copyright (c) 2009-2016 Frank Bennett
  * 
@@ -20505,4 +20574,4 @@ CSL.parseParticles = function(){
 }();
 },{}],"citation-js":[function(require,module,exports){
 module.exports = require('./src/citation-0.2.js')
-},{"./src/citation-0.2.js":28}]},{},[]);
+},{"./src/citation-0.2.js":31}]},{},[]);

@@ -107,7 +107,7 @@ describe('Cite object', function () {
       const spy = jasmine.createSpy('Cite'),
             tst = new spy()
       
-      expect(spy).wasCalled()
+      expect(spy).toHaveBeenCalled()
     })
     
     it('returns a Cite object', function () {
