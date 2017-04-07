@@ -30,11 +30,11 @@
   "devDependencies": {
     "brfs": "^1.4.3",
     "browserify": "^13.3.0",
-    "jasmine": "^2.5.3",
-    "jsdoc": "~3.4.2"
+    "jasmine-node": "^1.14.5",
+    "jsdoc": "^3.4.2"
   },
   "scripts": {
-    "test": "jasmine test/citation-0.2.spec.js",
+    "test": "jasmine-node test/citation-0.2.spec.js",
     "build": "browserify -r ./index.js:citation-js -o build/browser.js",
     "update": "cp build/browser.js docs/src/browser.js",
     "build-test": "browserify -t brfs -e test/citation-0.2.spec.js -o build/test.browser.js",

@@ -4,7 +4,5 @@ branches:
     - /^(fix|feature|dev)\/\w+$/
 language: node_js
 node_js:
-  - "6.8.0"
-before_install:
-  - npm install -g npm@3.10.8 && npm --version
+  - "node"
 sudo: false
