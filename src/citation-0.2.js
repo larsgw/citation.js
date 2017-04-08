@@ -2215,7 +2215,7 @@ Cite.prototype.undo = function ( nolog ) {
 }
 
 /**
-  * Get a sorted ID list
+  * Get a list of the data entry IDs, in the order of that list
   * 
   * @method getIds
   * @memberof Cite

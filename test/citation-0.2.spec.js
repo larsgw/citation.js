@@ -247,8 +247,8 @@ describe('Cite object', function () {
         
         const out = test.getIds()
         
-        expect(out[0]).toBe('a')
-        expect(out[1]).toBe('b')
+        expect(out[0]).toBe('b')
+        expect(out[1]).toBe('a')
       })
       
       it('doesn\'t change parent data', function () {
