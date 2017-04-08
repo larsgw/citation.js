@@ -34,11 +34,10 @@
     "jsdoc": "^3.4.2"
   },
   "scripts": {
-    "test": "jasmine-node test/citation-0.2.spec.js",
-    "build": "browserify -r ./index.js:citation-js -o build/browser.js",
-    "update": "cp build/browser.js docs/src/browser.js",
-    "build-test": "browserify -t brfs -e test/citation-0.2.spec.js -o build/test.browser.js",
-    "update-test": "cp build/test.browser.js docs/src/test.browser.js"
+    "test": "node_modules/jasmine-node/bin/jasmine-node test/citation-0.2.spec.js",
+    "build": "browserify -r ./index.js:citation-js -o build/browser.js && cp build/browser.js docs/src/browser.js",
+    "build-test": "browserify -t brfs -e test/citation-0.2.spec.js -o build/test.browser.js && cp build/test.browser.js docs/src/test.browser.js",
+    "build-docs": "jsdoc ./src README.md -c docs/conf.json"
   },
   "author": "Lars Willighagen (https://larsgw.github.io)",
   "license": "MIT",
