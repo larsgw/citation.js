@@ -1786,6 +1786,61 @@ module.exports = {
 const encodeCharacter = (c) => '%' + c.charCodeAt(0).toString(16)
 
 },{}],31:[function(require,module,exports){
+module.exports={
+  "name": "citation-js",
+  "version": "0.3.0-3",
+  "description": "Citation.js converts formats like BibTeX, Wikidata JSON and ContentMine JSON to CSL-JSON to convert to other formats like APA, Vancouver and back to BibTeX.",
+  "main": "index.js",
+  "directories": {
+    "doc": "docs/api/",
+    "test": "docs/test/spec/",
+    "lib": "src/"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/larsgw/citation.js.git"
+  },
+  "keywords": [
+    "citation",
+    "bibtex",
+    "wikidata",
+    "contentmine",
+    "quickscrape",
+    "csl",
+    "citeproc"
+  ],
+  "dependencies": {
+    "commander": "~2.9.0",
+    "striptags": "~2.1.1",
+    "sync-request": "~3.0.1",
+    "wikidata-sdk": "^5.1.4"
+  },
+  "devDependencies": {
+    "brfs": "^1.4.3",
+    "browserify": "^13.3.0",
+    "jasmine-node": "^1.14.5",
+    "jsdoc": "^3.4.2"
+  },
+  "scripts": {
+    "test": "node_modules/jasmine-node/bin/jasmine-node test/citation-0.2.spec.js",
+    "build": "browserify -r ./index.js:citation-js -o build/browser.js && cp build/browser.js docs/src/browser.js",
+    "build-test": "browserify -t brfs -e test/citation-0.2.spec.js -o build/test.browser.js && cp build/test.browser.js docs/src/test.browser.js",
+    "build-docs": "jsdoc ./src README.md -c docs/conf.json"
+  },
+  "author": "Lars Willighagen (https://larsgw.github.io)",
+  "license": "MIT",
+  "bin": "bin/cmd.js",
+  "man": "bin/man/citation-js.1",
+  "bugs": {
+    "url": "https://github.com/larsgw/citation.js/issues"
+  },
+  "engines": {
+    "node": ">=6.0.0"
+  },
+  "homepage": "https://github.com/larsgw/citation.js#readme"
+}
+
+},{}],32:[function(require,module,exports){
 /** 
  * @file Citation-0.2.js
  * 
@@ -1828,9 +1883,8 @@ var CSL = require('./citeproc.js').CSL
   , request = require('sync-request')
   , wdk = require('wikidata-sdk')
 
-var CITE_VERSION = '0.3.0-3'
+var CITE_VERSION = require('../package.json').version
   , CITEPROC_VERSION = CSL.PROCESSOR_VERSION
-  , CSL_VERSION = CSL.PROCESSOR_VERSION
 
 /**
  * Object containing several RegExp patterns, mostly used for parsing (*full of shame*) and recognizing data types
@@ -3496,7 +3550,7 @@ var parseContentMine = function ( data ) {
  */
 var parseInputType = function ( input ) {
   
-  switch ( typeof input) {
+  switch ( typeof input ) {
     
     case 'string':
       
@@ -3531,15 +3585,13 @@ var parseInputType = function ( input ) {
       else
         return console.warn( '[set]', 'This format is not supported or recognised' ) || 'invalid'
       
+      break;
+    
     case 'object':
       
       // Empty
-            if ( input === null )
+           if ( input === null )
         return 'empty'
-      
-      // Array
-      else if ( Array.isArray( input ) )
-        return 'list/else'
       
       // jQuery
       else if ( typeof jQuery !== 'undefined' && input instanceof jQuery )
@@ -3549,19 +3601,41 @@ var parseInputType = function ( input ) {
       else if ( typeof HMTLElement !== 'undefined' && input instanceof HMTLElement)
         return 'html/else'
       
-      // Wikidata
-      else if ( input.hasOwnProperty( 'entities' ) )
-        return 'json/wikidata'
+      // Array
+      else if ( Array.isArray(input) ) {
+        
+        /*// Array of Wikidata IDs
+               if ( input.filter() )
+          return 'array/wikidata'
+        
+        // Array of CSL-JSON
+        else */if ( input.filter( v => parseInputType(v) === 'object/csl' ).length === input.length )
+          return 'array/csl'
+        
+        // Array of misc or multiple types
+        else
+          return 'array/else'
+        
+      }
       
-      // ContentMine
-      else if ( input.hasOwnProperty( 'fulltext_html' ) ||
-                input.hasOwnProperty( 'fulltext_xml'  ) ||
-                input.hasOwnProperty( 'fulltext_pdf'  ) )
-        return 'json/contentmine'
-      
-      // Default
-      else
-        return 'json/csl'
+      // Object
+      else {
+        
+        // Wikidata
+             if ( input.hasOwnProperty( 'entities' ) )
+          return 'object/wikidata'
+        
+        // ContentMine
+        else if ( (input.fulltext_html && Array.isArray(input.fulltext_html.value)) ||
+                  (input.fulltext_xml  && Array.isArray(input.fulltext_xml .value)) ||
+                  (input.fulltext_pdf  && Array.isArray(input.fulltext_pdf .value)) )
+          return 'object/contentmine'
+        
+        // CSL-JSON
+        else
+          return 'object/csl'
+        
+      }
       
       break;
     
@@ -3597,50 +3671,54 @@ var parseInputData = function ( input, type ) {
   switch ( type ) {
     
     case 'url/wikidata':
-      output = parseInput( parseWikidata( input.match( varRegex.wikidata[ 1 ] )[ 1 ] ) )
+      output = parseWikidata( input.match( varRegex.wikidata[ 1 ] )[ 1 ] )
       break;
     
     case 'list/wikidata':
-      output = parseInput( parseWikidata( input ) )
+      output = parseWikidata( input )
       break;
     
     case 'url/else':
-      output = parseInput( fetchFile( input ) )
+      output = fetchFile( input )
       break;
     
     case 'jquery/else':
-      output = parseInput( data.val() || data.text() || data.html() )
+      output = data.val() || data.text() || data.html()
       break;
     
     case 'html/else':
-      output = parseInput( data.value || data.textContent )
+      output = data.value || data.textContent
       break;
     
     case 'string/json':
-      output = parseInput( parseJSON( input ) )
+      output = parseJSON( input )
       break;
     
     case 'string/bibtex':
       output = parseBibTeXJSON( parseBibTeX( input ) )
       break;
     
-    case 'json/wikidata':
+    case 'object/wikidata':
       output = parseWikidataJSON( input )
       break;
     
-    case 'json/contentmine':
+    case 'object/contentmine':
       output = parseContentMine( input )
       break;
     
-    case 'list/else':
+    case 'array/else':
       output = []
       input.forEach( function ( value ) {
         output = output.concat( parseInput( value ) )
       } )
       break;
     
-    case 'json/csl':
+    case 'object/csl':
       output = [ input ]
+      break;
+    
+    case 'array/csl':
+      output = input
       break;
     
     case 'string/empty':
@@ -3657,7 +3735,26 @@ var parseInputData = function ( input, type ) {
 }
 
 /**
- * Parse input (internal use). Wrapper for `parseInputType()` and `parseInputData()`
+ * Parse input once.
+ * 
+ * @access private
+ * @method parseInputChainLink
+ * 
+ * @param {String|String[]|Object|Object[]} input - The input data
+ * 
+ * @return {CSL[]} The parsed input
+ */
+var parseInputChainLink = function ( input ) {
+  var type = parseInputType( input )
+  
+  if ( type.match(/^(array|object)\//) )
+    input = deepCopy( input )
+  
+  return parseInputData( input, type )
+}
+
+/**
+ * Parse input until success.
  * 
  * @access private
  * @method parseInput
@@ -3667,16 +3764,18 @@ var parseInputData = function ( input, type ) {
  * @return {CSL[]} The parsed input
  */
 var parseInput = function ( input ) {
-  var type = parseInputType( input )
-    , main = type.split('/')[0]
+  var output = input,
+      type = parseInputType( output )
   
-  if ( main === 'list' ||
-       main === 'json' )
-    input = deepCopy(input)
+  if ( type.match(/^(array|object)\//) )
+    output = deepCopy( output )
   
-  var outp = parseInputData( input, type )
+  while ( type !== 'array/csl' ) {
+    output = parseInputData( output, type )
+    type = parseInputType( output )
+  }
   
-  return outp
+  return output
 }
 
 /**
@@ -3928,9 +4027,35 @@ function Cite (data,options) {
   this.options( options, true )
 }
 
-Cite.CITE_VERSION = CITE_VERSION
-Cite.CITEPROC_VERSION = CITEPROC_VERSION
-Cite.CSL_VERSION = CSL_VERSION
+var utilVersion = Object.freeze( {
+  cite: CITE_VERSION
+, citeproc: CITEPROC_VERSION
+} )
+
+var libInput = Object.freeze( {
+  chain: parseInput
+, chainLink: parseInputChainLink
+, data: parseInputData
+, type: parseInputType
+} )
+
+var libParse = Object.freeze( {
+  input: libInput
+} )
+
+Object.defineProperty( Cite, 'parse', {
+  configurable: false
+, enumerable: true
+, value: libParse
+, writable: false
+} )
+
+Object.defineProperty( Cite, 'version', {
+  configurable: false
+, enumerable: true
+, value: utilVersion
+, writable: false
+} )
 
 /**
   * 
@@ -4275,7 +4400,7 @@ Cite.prototype.get = function ( options, nolog ) {
 return Cite
 
 })()
-},{"./citeproc.js":32,"striptags":10,"sync-request":11,"wikidata-sdk":20}],32:[function(require,module,exports){
+},{"../package.json":31,"./citeproc.js":33,"striptags":10,"sync-request":11,"wikidata-sdk":20}],33:[function(require,module,exports){
 /*
  * Copyright (c) 2009-2016 Frank Bennett
  * 
@@ -20574,4 +20699,4 @@ CSL.parseParticles = function(){
 }();
 },{}],"citation-js":[function(require,module,exports){
 module.exports = require('./src/citation-0.2.js')
-},{"./src/citation-0.2.js":31}]},{},[]);
+},{"./src/citation-0.2.js":32}]},{},[]);

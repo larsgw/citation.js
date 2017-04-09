@@ -263,48 +263,47 @@ describe('Cite object', function () {
   describe('input', function () {
     
     describe('Wikidata URL', function () {
-      const test = new Cite(testInput.wd.url)
-      
       it('handles input type', function () {
-        expect(test._input.format).toBe('url/wikidata')
+        expect(Cite.parse.input.type(testInput.wd.url)).toBe('url/wikidata')
       })
       
       it('parses input correctly', function () {
-        expect(test.data[0].wikiID).toBe(testOutput.wd.id)
+        const test = Cite.parse.input.chain(testInput.wd.url)
+        expect(test[0].wikiID).toBe(testOutput.wd.id)
       })
     })
     
     describe('Wikidata ID list', function () {
       describe('separated by spaces', function () {
-        const test = new Cite(testInput.wd.list.space)
-        
         it('handles input type', function () {
-          expect(test._input.format).toBe('list/wikidata')
+          expect(Cite.parse.input.type(testInput.wd.list.space)).toBe('list/wikidata')
         })
+        
         it('parses input correctly', function () {
-          expect(test.data[0].wikiID).toBe(testOutput.wd.id)
+          const test = Cite.parse.input.chain(testInput.wd.list.space)
+          expect(test[0].wikiID).toBe(testOutput.wd.id)
         })
       })
       
       describe('separated by newlines', function () {
-        const test = new Cite(testInput.wd.list.newline)
-        
         it('handles input type', function () {
-          expect(test._input.format).toBe('list/wikidata')
+          expect(Cite.parse.input.type(testInput.wd.list.newline)).toBe('list/wikidata')
         })
+        
         it('parses input correctly', function () {
-          expect(test.data[0].wikiID).toBe(testOutput.wd.id)
+          const test = Cite.parse.input.chain(testInput.wd.list.newline)
+          expect(test[0].wikiID).toBe(testOutput.wd.id)
         })
       })
       
       describe('separated by commas', function () {
-        const test = new Cite(testInput.wd.list.comma)
-        
         it('handles input type', function () {
-          expect(test._input.format).toBe('list/wikidata')
+          expect(Cite.parse.input.type(testInput.wd.list.comma)).toBe('list/wikidata')
         })
+        
         it('parses input correctly', function () {
-          expect(test.data[0].wikiID).toBe(testOutput.wd.id)
+          const test = Cite.parse.input.chain(testInput.wd.list.comma)
+          expect(test[0].wikiID).toBe(testOutput.wd.id)
         })
       })
     })
@@ -314,8 +313,8 @@ describe('Cite object', function () {
             test_2 = new Cite(testInput.wd.author)
       
       it('handles input type', function () {
-        expect(test_1._input.format).toBe('json/wikidata')
-        expect(test_2._input.format).toBe('json/wikidata')
+        expect(test_1._input.format).toBe('object/wikidata')
+        expect(test_2._input.format).toBe('object/wikidata')
       })
       
       it('parses input correctly', function () {
@@ -353,7 +352,7 @@ describe('Cite object', function () {
       const test = new Cite(testInput.csl.simple[0])
       
       it('handles input type', function () {
-        expect(test._input.format).toBe('json/csl')
+        expect(test._input.format).toBe('object/csl')
       })
       it('parses input correctly', function () {
         expect(test.data).toEqual(testInput.csl.simple)
@@ -364,7 +363,7 @@ describe('Cite object', function () {
       const test = new Cite(testInput.bibjson.simple)
       
       it('handles input type', function () {
-        expect(test._input.format).toBe('json/contentmine')
+        expect(test._input.format).toBe('object/contentmine')
       })
       it('parses input correctly', function () {
         expect(test.data).toEqual(testOutput.bibjson.simple)
@@ -376,7 +375,7 @@ describe('Cite object', function () {
             test = new Cite(data)
       
       it('handles input type', function () {
-        expect(test._input.format).toBe('list/else')
+        expect(test._input.format).toBe('array/csl')
       })
       it('parses input correctly', function () {
         expect(test.data).toEqual(data)
@@ -391,7 +390,7 @@ describe('Cite object', function () {
               test = new Cite([[obj_1], obj_2])
         
         it('handles input type', function () {
-          expect(test._input.format).toBe('list/else')
+          expect(test._input.format).toBe('array/else')
         })
         it('parses input correctly', function () {
           expect(test.data).toEqual([obj_1, obj_2])

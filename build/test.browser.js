@@ -1,6 +1,6 @@
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
 module.exports = require('./src/citation-0.2.js')
-},{"./src/citation-0.2.js":32}],2:[function(require,module,exports){
+},{"./src/citation-0.2.js":33}],2:[function(require,module,exports){
 'use strict';
 
 module.exports = Response;
@@ -1788,6 +1788,61 @@ module.exports = {
 const encodeCharacter = (c) => '%' + c.charCodeAt(0).toString(16)
 
 },{}],32:[function(require,module,exports){
+module.exports={
+  "name": "citation-js",
+  "version": "0.3.0-3",
+  "description": "Citation.js converts formats like BibTeX, Wikidata JSON and ContentMine JSON to CSL-JSON to convert to other formats like APA, Vancouver and back to BibTeX.",
+  "main": "index.js",
+  "directories": {
+    "doc": "docs/api/",
+    "test": "docs/test/spec/",
+    "lib": "src/"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/larsgw/citation.js.git"
+  },
+  "keywords": [
+    "citation",
+    "bibtex",
+    "wikidata",
+    "contentmine",
+    "quickscrape",
+    "csl",
+    "citeproc"
+  ],
+  "dependencies": {
+    "commander": "~2.9.0",
+    "striptags": "~2.1.1",
+    "sync-request": "~3.0.1",
+    "wikidata-sdk": "^5.1.4"
+  },
+  "devDependencies": {
+    "brfs": "^1.4.3",
+    "browserify": "^13.3.0",
+    "jasmine-node": "^1.14.5",
+    "jsdoc": "^3.4.2"
+  },
+  "scripts": {
+    "test": "node_modules/jasmine-node/bin/jasmine-node test/citation-0.2.spec.js",
+    "build": "browserify -r ./index.js:citation-js -o build/browser.js && cp build/browser.js docs/src/browser.js",
+    "build-test": "browserify -t brfs -e test/citation-0.2.spec.js -o build/test.browser.js && cp build/test.browser.js docs/src/test.browser.js",
+    "build-docs": "jsdoc ./src README.md -c docs/conf.json"
+  },
+  "author": "Lars Willighagen (https://larsgw.github.io)",
+  "license": "MIT",
+  "bin": "bin/cmd.js",
+  "man": "bin/man/citation-js.1",
+  "bugs": {
+    "url": "https://github.com/larsgw/citation.js/issues"
+  },
+  "engines": {
+    "node": ">=6.0.0"
+  },
+  "homepage": "https://github.com/larsgw/citation.js#readme"
+}
+
+},{}],33:[function(require,module,exports){
 /** 
  * @file Citation-0.2.js
  * 
@@ -1830,9 +1885,8 @@ var CSL = require('./citeproc.js').CSL
   , request = require('sync-request')
   , wdk = require('wikidata-sdk')
 
-var CITE_VERSION = '0.3.0-3'
+var CITE_VERSION = require('../package.json').version
   , CITEPROC_VERSION = CSL.PROCESSOR_VERSION
-  , CSL_VERSION = CSL.PROCESSOR_VERSION
 
 /**
  * Object containing several RegExp patterns, mostly used for parsing (*full of shame*) and recognizing data types
@@ -3498,7 +3552,7 @@ var parseContentMine = function ( data ) {
  */
 var parseInputType = function ( input ) {
   
-  switch ( typeof input) {
+  switch ( typeof input ) {
     
     case 'string':
       
@@ -3533,15 +3587,13 @@ var parseInputType = function ( input ) {
       else
         return console.warn( '[set]', 'This format is not supported or recognised' ) || 'invalid'
       
+      break;
+    
     case 'object':
       
       // Empty
-            if ( input === null )
+           if ( input === null )
         return 'empty'
-      
-      // Array
-      else if ( Array.isArray( input ) )
-        return 'list/else'
       
       // jQuery
       else if ( typeof jQuery !== 'undefined' && input instanceof jQuery )
@@ -3551,19 +3603,41 @@ var parseInputType = function ( input ) {
       else if ( typeof HMTLElement !== 'undefined' && input instanceof HMTLElement)
         return 'html/else'
       
-      // Wikidata
-      else if ( input.hasOwnProperty( 'entities' ) )
-        return 'json/wikidata'
+      // Array
+      else if ( Array.isArray(input) ) {
+        
+        /*// Array of Wikidata IDs
+               if ( input.filter() )
+          return 'array/wikidata'
+        
+        // Array of CSL-JSON
+        else */if ( input.filter( v => parseInputType(v) === 'object/csl' ).length === input.length )
+          return 'array/csl'
+        
+        // Array of misc or multiple types
+        else
+          return 'array/else'
+        
+      }
       
-      // ContentMine
-      else if ( input.hasOwnProperty( 'fulltext_html' ) ||
-                input.hasOwnProperty( 'fulltext_xml'  ) ||
-                input.hasOwnProperty( 'fulltext_pdf'  ) )
-        return 'json/contentmine'
-      
-      // Default
-      else
-        return 'json/csl'
+      // Object
+      else {
+        
+        // Wikidata
+             if ( input.hasOwnProperty( 'entities' ) )
+          return 'object/wikidata'
+        
+        // ContentMine
+        else if ( (input.fulltext_html && Array.isArray(input.fulltext_html.value)) ||
+                  (input.fulltext_xml  && Array.isArray(input.fulltext_xml .value)) ||
+                  (input.fulltext_pdf  && Array.isArray(input.fulltext_pdf .value)) )
+          return 'object/contentmine'
+        
+        // CSL-JSON
+        else
+          return 'object/csl'
+        
+      }
       
       break;
     
@@ -3599,50 +3673,54 @@ var parseInputData = function ( input, type ) {
   switch ( type ) {
     
     case 'url/wikidata':
-      output = parseInput( parseWikidata( input.match( varRegex.wikidata[ 1 ] )[ 1 ] ) )
+      output = parseWikidata( input.match( varRegex.wikidata[ 1 ] )[ 1 ] )
       break;
     
     case 'list/wikidata':
-      output = parseInput( parseWikidata( input ) )
+      output = parseWikidata( input )
       break;
     
     case 'url/else':
-      output = parseInput( fetchFile( input ) )
+      output = fetchFile( input )
       break;
     
     case 'jquery/else':
-      output = parseInput( data.val() || data.text() || data.html() )
+      output = data.val() || data.text() || data.html()
       break;
     
     case 'html/else':
-      output = parseInput( data.value || data.textContent )
+      output = data.value || data.textContent
       break;
     
     case 'string/json':
-      output = parseInput( parseJSON( input ) )
+      output = parseJSON( input )
       break;
     
     case 'string/bibtex':
       output = parseBibTeXJSON( parseBibTeX( input ) )
       break;
     
-    case 'json/wikidata':
+    case 'object/wikidata':
       output = parseWikidataJSON( input )
       break;
     
-    case 'json/contentmine':
+    case 'object/contentmine':
       output = parseContentMine( input )
       break;
     
-    case 'list/else':
+    case 'array/else':
       output = []
       input.forEach( function ( value ) {
         output = output.concat( parseInput( value ) )
       } )
       break;
     
-    case 'json/csl':
+    case 'object/csl':
       output = [ input ]
+      break;
+    
+    case 'array/csl':
+      output = input
       break;
     
     case 'string/empty':
@@ -3659,7 +3737,26 @@ var parseInputData = function ( input, type ) {
 }
 
 /**
- * Parse input (internal use). Wrapper for `parseInputType()` and `parseInputData()`
+ * Parse input once.
+ * 
+ * @access private
+ * @method parseInputChainLink
+ * 
+ * @param {String|String[]|Object|Object[]} input - The input data
+ * 
+ * @return {CSL[]} The parsed input
+ */
+var parseInputChainLink = function ( input ) {
+  var type = parseInputType( input )
+  
+  if ( type.match(/^(array|object)\//) )
+    input = deepCopy( input )
+  
+  return parseInputData( input, type )
+}
+
+/**
+ * Parse input until success.
  * 
  * @access private
  * @method parseInput
@@ -3669,16 +3766,18 @@ var parseInputData = function ( input, type ) {
  * @return {CSL[]} The parsed input
  */
 var parseInput = function ( input ) {
-  var type = parseInputType( input )
-    , main = type.split('/')[0]
+  var output = input,
+      type = parseInputType( output )
   
-  if ( main === 'list' ||
-       main === 'json' )
-    input = deepCopy(input)
+  if ( type.match(/^(array|object)\//) )
+    output = deepCopy( output )
   
-  var outp = parseInputData( input, type )
+  while ( type !== 'array/csl' ) {
+    output = parseInputData( output, type )
+    type = parseInputType( output )
+  }
   
-  return outp
+  return output
 }
 
 /**
@@ -3930,9 +4029,35 @@ function Cite (data,options) {
   this.options( options, true )
 }
 
-Cite.CITE_VERSION = CITE_VERSION
-Cite.CITEPROC_VERSION = CITEPROC_VERSION
-Cite.CSL_VERSION = CSL_VERSION
+var utilVersion = Object.freeze( {
+  cite: CITE_VERSION
+, citeproc: CITEPROC_VERSION
+} )
+
+var libInput = Object.freeze( {
+  chain: parseInput
+, chainLink: parseInputChainLink
+, data: parseInputData
+, type: parseInputType
+} )
+
+var libParse = Object.freeze( {
+  input: libInput
+} )
+
+Object.defineProperty( Cite, 'parse', {
+  configurable: false
+, enumerable: true
+, value: libParse
+, writable: false
+} )
+
+Object.defineProperty( Cite, 'version', {
+  configurable: false
+, enumerable: true
+, value: utilVersion
+, writable: false
+} )
 
 /**
   * 
@@ -4277,7 +4402,7 @@ Cite.prototype.get = function ( options, nolog ) {
 return Cite
 
 })()
-},{"./citeproc.js":33,"striptags":11,"sync-request":12,"wikidata-sdk":21}],33:[function(require,module,exports){
+},{"../package.json":32,"./citeproc.js":34,"striptags":11,"sync-request":12,"wikidata-sdk":21}],34:[function(require,module,exports){
 /*
  * Copyright (c) 2009-2016 Frank Bennett
  * 
@@ -20574,7 +20699,7 @@ CSL.parseParticles = function(){
         }
     }
 }();
-},{}],34:[function(require,module,exports){
+},{}],35:[function(require,module,exports){
 var Cite = require('../index.js');
 
 const file_1 = "{\"entities\":{\"Q21972834\":{\"pageid\":24004990,\"ns\":0,\"title\":\"Q21972834\",\"lastrevid\":468197350,\"modified\":\"2017-03-19T14:57:48Z\",\"type\":\"item\",\"id\":\"Q21972834\",\"labels\":{\"en\":{\"language\":\"en\",\"value\":\"Assembling the 20 Gb white spruce (Picea glauca) genome from whole-genome shotgun sequencing data\"},\"nl\":{\"language\":\"nl\",\"value\":\"Assembling the 20 Gb white spruce (Picea glauca) genome from whole-genome shotgun sequencing data\"}},\"descriptions\":{\"en\":{\"language\":\"en\",\"value\":\"scientific article\"},\"nl\":{\"language\":\"nl\",\"value\":\"wetenschappelijk artikel (gepubliceerd op 2013/06/15)\"},\"cs\":{\"language\":\"cs\",\"value\":\"v\\u011bdeck\\u00fd \\u010dl\\u00e1nek publikovan\\u00fd v roce 2013\"},\"fr\":{\"language\":\"fr\",\"value\":\"article scientifique (publi\\u00e9 2013/06/15)\"},\"it\":{\"language\":\"it\",\"value\":\"articolo scientifico (pubblicato il 2013/06/15)\"},\"da\":{\"language\":\"da\",\"value\":\"videnskabelig artikel (udgivet  2013/06/15)\"},\"sk\":{\"language\":\"sk\",\"value\":\"vedeck\\u00fd \\u010dl\\u00e1nok (publikovan\\u00fd 2013/06/15)\"},\"pt\":{\"language\":\"pt\",\"value\":\"artigo cient\\u00edfico (publicado na 2013/06/15)\"},\"hy\":{\"language\":\"hy\",\"value\":\"\\u0563\\u056b\\u057f\\u0561\\u056f\\u0561\\u0576 \\u0570\\u0578\\u0564\\u057e\\u0561\\u056e\"}},\"aliases\":[],\"claims\":{\"P698\":[{\"mainsnak\":{\"snaktype\":\"value\",\"property\":\"P698\",\"datavalue\":{\"value\":\"23698863\",\"type\":\"string\"},\"datatype\":\"external-id\"},\"type\":\"statement\",\"id\":\"Q21972834$D435A2F3-E2A8-45A7-922A-A6BB72F9A79C\",\"rank\":\"normal\"}],\"P932\":[{\"mainsnak\":{\"snaktype\":\"value\",\"property\":\"P932\",\"datavalue\":{\"value\":\"3673215\",\"type\":\"string\"},\"datatype\":\"external-id\"},\"type\":\"statement\",\"id\":\"Q21972834$F4959183-FB89-410E-BF33-DF9B1AF81ECE\",\"rank\":\"normal\"}],\"P31\":[{\"mainsnak\":{\"snaktype\":\"value\",\"property\":\"P31\",\"datavalue\":{\"value\":{\"entity-type\":\"item\",\"numeric-id\":13442814,\"id\":\"Q13442814\"},\"type\":\"wikibase-entityid\"},\"datatype\":\"wikibase-item\"},\"type\":\"statement\",\"id\":\"Q21972834$E4DCC072-BD1A-4FDF-BFED-E1D981E5E81F\",\"rank\":\"normal\"}],\"P1476\":[{\"mainsnak\":{\"snaktype\":\"value\",\"property\":\"P1476\",\"datavalue\":{\"value\":{\"text\":\"Assembling the 20 Gb white spruce (Picea glauca) genome from whole-genome shotgun sequencing data\",\"language\":\"en\"},\"type\":\"monolingualtext\"},\"datatype\":\"monolingualtext\"},\"type\":\"statement\",\"id\":\"Q21972834$D8C2FFB6-2710-4AFA-92A3-A859ABAA1FED\",\"rank\":\"normal\"}],\"P364\":[{\"mainsnak\":{\"snaktype\":\"value\",\"property\":\"P364\",\"datavalue\":{\"value\":{\"entity-type\":\"item\",\"numeric-id\":1860,\"id\":\"Q1860\"},\"type\":\"wikibase-entityid\"},\"datatype\":\"wikibase-item\"},\"type\":\"statement\",\"id\":\"Q21972834$D55F7830-D04D-48B0-B739-9E4CC9B2F275\",\"rank\":\"normal\"}],\"P478\":[{\"mainsnak\":{\"snaktype\":\"value\",\"property\":\"P478\",\"datavalue\":{\"value\":\"29\",\"type\":\"string\"},\"datatype\":\"string\"},\"type\":\"statement\",\"id\":\"Q21972834$963935D7-041A-4E92-9D9B-F254A5426BAD\",\"rank\":\"normal\"}],\"P433\":[{\"mainsnak\":{\"snaktype\":\"value\",\"property\":\"P433\",\"datavalue\":{\"value\":\"12\",\"type\":\"string\"},\"datatype\":\"string\"},\"type\":\"statement\",\"id\":\"Q21972834$47B925A9-A53F-43A3-888D-BEA79E399D4D\",\"rank\":\"normal\"}],\"P577\":[{\"mainsnak\":{\"snaktype\":\"value\",\"property\":\"P577\",\"datavalue\":{\"value\":{\"time\":\"+2013-06-15T00:00:00Z\",\"timezone\":0,\"before\":0,\"after\":0,\"precision\":11,\"calendarmodel\":\"http://www.wikidata.org/entity/Q1985727\"},\"type\":\"time\"},\"datatype\":\"time\"},\"type\":\"statement\",\"id\":\"Q21972834$9EDE475C-7403-4A66-A6A5-0458E7782689\",\"rank\":\"normal\"}],\"P304\":[{\"mainsnak\":{\"snaktype\":\"value\",\"property\":\"P304\",\"datavalue\":{\"value\":\"1492-7\",\"type\":\"string\"},\"datatype\":\"string\"},\"type\":\"statement\",\"id\":\"Q21972834$92D5DD57-B5F0-42B6-9508-6D5CEB82FF3C\",\"rank\":\"normal\"}],\"P2093\":[{\"mainsnak\":{\"snaktype\":\"value\",\"property\":\"P2093\",\"datavalue\":{\"value\":\"Inanc Birol\",\"type\":\"string\"},\"datatype\":\"string\"},\"type\":\"statement\",\"qualifiers\":{\"P1545\":[{\"snaktype\":\"value\",\"property\":\"P1545\",\"hash\":\"862c83ca2949d7eb8f41b4bf1a4521ed18cdebb8\",\"datavalue\":{\"value\":\"1\",\"type\":\"string\"},\"datatype\":\"string\"}]},\"qualifiers-order\":[\"P1545\"],\"id\":\"Q21972834$CCE7BCBB-5804-4CCA-B762-83EEA827F32D\",\"rank\":\"normal\"},{\"mainsnak\":{\"snaktype\":\"value\",\"property\":\"P2093\",\"datavalue\":{\"value\":\"Anthony Raymond\",\"type\":\"string\"},\"datatype\":\"string\"},\"type\":\"statement\",\"qualifiers\":{\"P1545\":[{\"snaktype\":\"value\",\"property\":\"P1545\",\"hash\":\"af1310a34ec80620d4fdd7bb8ca76e492fe6630e\",\"datavalue\":{\"value\":\"2\",\"type\":\"string\"},\"datatype\":\"string\"}]},\"qualifiers-order\":[\"P1545\"],\"id\":\"Q21972834$BC54A9F8-68FF-4F6E-8111-A449A15BDB57\",\"rank\":\"normal\"},{\"mainsnak\":{\"snaktype\":\"value\",\"property\":\"P2093\",\"datavalue\":{\"value\":\"Shaun D Jackman\",\"type\":\"string\"},\"datatype\":\"string\"},\"type\":\"statement\",\"qualifiers\":{\"P1545\":[{\"snaktype\":\"value\",\"property\":\"P1545\",\"hash\":\"3c1e388cba3487113121af5bfa59a2f657bf21bd\",\"datavalue\":{\"value\":\"3\",\"type\":\"string\"},\"datatype\":\"string\"}]},\"qualifiers-order\":[\"P1545\"],\"id\":\"Q21972834$CB76DCFD-DA2A-4673-ACDB-B8CA71D1069C\",\"rank\":\"normal\"},{\"mainsnak\":{\"snaktype\":\"value\",\"property\":\"P2093\",\"datavalue\":{\"value\":\"Stephen Pleasance\",\"type\":\"string\"},\"datatype\":\"string\"},\"type\":\"statement\",\"qualifiers\":{\"P1545\":[{\"snaktype\":\"value\",\"property\":\"P1545\",\"hash\":\"a82b0aa3ccf1a266e15473824b4391f6d9da4be0\",\"datavalue\":{\"value\":\"4\",\"type\":\"string\"},\"datatype\":\"string\"}]},\"qualifiers-order\":[\"P1545\"],\"id\":\"Q21972834$CC360BCE-0D0D-4E92-8F68-1780D1106620\",\"rank\":\"normal\"},{\"mainsnak\":{\"snaktype\":\"value\",\"property\":\"P2093\",\"datavalue\":{\"value\":\"Robin Coope\",\"type\":\"string\"},\"datatype\":\"string\"},\"type\":\"statement\",\"qualifiers\":{\"P1545\":[{\"snaktype\":\"value\",\"property\":\"P1545\",\"hash\":\"c8e1b85012703eb0f44ff876ec773596f3794872\",\"datavalue\":{\"value\":\"5\",\"type\":\"string\"},\"datatype\":\"string\"}]},\"qualifiers-order\":[\"P1545\"],\"id\":\"Q21972834$EC1B7589-BE7F-450C-B4AE-978EF4440682\",\"rank\":\"normal\"},{\"mainsnak\":{\"snaktype\":\"value\",\"property\":\"P2093\",\"datavalue\":{\"value\":\"Greg A Taylor\",\"type\":\"string\"},\"datatype\":\"string\"},\"type\":\"statement\",\"qualifiers\":{\"P1545\":[{\"snaktype\":\"value\",\"property\":\"P1545\",\"hash\":\"5d30572c5a5693878a66231c29c9bb3e4a870527\",\"datavalue\":{\"value\":\"6\",\"type\":\"string\"},\"datatype\":\"string\"}]},\"qualifiers-order\":[\"P1545\"],\"id\":\"Q21972834$AA1A005B-0985-4CCB-AB13-782A3385EB54\",\"rank\":\"normal\"},{\"mainsnak\":{\"snaktype\":\"value\",\"property\":\"P2093\",\"datavalue\":{\"value\":\"Macaire Man Saint Yuen\",\"type\":\"string\"},\"datatype\":\"string\"},\"type\":\"statement\",\"qualifiers\":{\"P1545\":[{\"snaktype\":\"value\",\"property\":\"P1545\",\"hash\":\"ecdcd65e6c9f103dedc06d856ce957af15050f7b\",\"datavalue\":{\"value\":\"7\",\"type\":\"string\"},\"datatype\":\"string\"}]},\"qualifiers-order\":[\"P1545\"],\"id\":\"Q21972834$A0812623-AA81-48CB-AA51-1E04CCC21FE9\",\"rank\":\"normal\"},{\"mainsnak\":{\"snaktype\":\"value\",\"property\":\"P2093\",\"datavalue\":{\"value\":\"Christopher I Keeling\",\"type\":\"string\"},\"datatype\":\"string\"},\"type\":\"statement\",\"qualifiers\":{\"P1545\":[{\"snaktype\":\"value\",\"property\":\"P1545\",\"hash\":\"c6a0d2bbafefdc6d21b25af4357c9887085c2f89\",\"datavalue\":{\"value\":\"8\",\"type\":\"string\"},\"datatype\":\"string\"}]},\"qualifiers-order\":[\"P1545\"],\"id\":\"Q21972834$10084000-8CC4-466F-8FCC-E391C12D9C27\",\"rank\":\"normal\"},{\"mainsnak\":{\"snaktype\":\"value\",\"property\":\"P2093\",\"datavalue\":{\"value\":\"Dana Brand\",\"type\":\"string\"},\"datatype\":\"string\"},\"type\":\"statement\",\"qualifiers\":{\"P1545\":[{\"snaktype\":\"value\",\"property\":\"P1545\",\"hash\":\"ebbb7b4bd5f12eaa0eb9415b51fd725fd993a644\",\"datavalue\":{\"value\":\"9\",\"type\":\"string\"},\"datatype\":\"string\"}]},\"qualifiers-order\":[\"P1545\"],\"id\":\"Q21972834$6A62350D-4505-43DF-A8D4-719B8282ED8E\",\"rank\":\"normal\"},{\"mainsnak\":{\"snaktype\":\"value\",\"property\":\"P2093\",\"datavalue\":{\"value\":\"Benjamin P Vandervalk\",\"type\":\"string\"},\"datatype\":\"string\"},\"type\":\"statement\",\"qualifiers\":{\"P1545\":[{\"snaktype\":\"value\",\"property\":\"P1545\",\"hash\":\"6d824c4548dc9c84054b9e446b8ea72e50efebba\",\"datavalue\":{\"value\":\"10\",\"type\":\"string\"},\"datatype\":\"string\"}]},\"qualifiers-order\":[\"P1545\"],\"id\":\"Q21972834$B78884CC-1F88-45B1-B1B3-DD9DDF2B2FBE\",\"rank\":\"normal\"},{\"mainsnak\":{\"snaktype\":\"value\",\"property\":\"P2093\",\"datavalue\":{\"value\":\"Heather Kirk\",\"type\":\"string\"},\"datatype\":\"string\"},\"type\":\"statement\",\"qualifiers\":{\"P1545\":[{\"snaktype\":\"value\",\"property\":\"P1545\",\"hash\":\"938c75f8b1bafb9e19a4c1a079b8b8e5d997c7fa\",\"datavalue\":{\"value\":\"11\",\"type\":\"string\"},\"datatype\":\"string\"}]},\"qualifiers-order\":[\"P1545\"],\"id\":\"Q21972834$C9117C71-EAEB-4DC0-909B-9876C53A3802\",\"rank\":\"normal\"},{\"mainsnak\":{\"snaktype\":\"value\",\"property\":\"P2093\",\"datavalue\":{\"value\":\"Pawan Pandoh\",\"type\":\"string\"},\"datatype\":\"string\"},\"type\":\"statement\",\"qualifiers\":{\"P1545\":[{\"snaktype\":\"value\",\"property\":\"P1545\",\"hash\":\"472f0889b6914293dcbc4d0f62bb3e3ce6d37ce0\",\"datavalue\":{\"value\":\"12\",\"type\":\"string\"},\"datatype\":\"string\"}]},\"qualifiers-order\":[\"P1545\"],\"id\":\"Q21972834$22C57E2F-6C2C-46DC-B184-0CA7F529B6C3\",\"rank\":\"normal\"},{\"mainsnak\":{\"snaktype\":\"value\",\"property\":\"P2093\",\"datavalue\":{\"value\":\"Richard A Moore\",\"type\":\"string\"},\"datatype\":\"string\"},\"type\":\"statement\",\"qualifiers\":{\"P1545\":[{\"snaktype\":\"value\",\"property\":\"P1545\",\"hash\":\"a0d6d71b9401a527331dc2a8a59c54448b5ad98c\",\"datavalue\":{\"value\":\"13\",\"type\":\"string\"},\"datatype\":\"string\"}]},\"qualifiers-order\":[\"P1545\"],\"id\":\"Q21972834$C86DCED7-41A0-4653-9E9F-AEDD1BB5392C\",\"rank\":\"normal\"},{\"mainsnak\":{\"snaktype\":\"value\",\"property\":\"P2093\",\"datavalue\":{\"value\":\"Yongjun Zhao\",\"type\":\"string\"},\"datatype\":\"string\"},\"type\":\"statement\",\"qualifiers\":{\"P1545\":[{\"snaktype\":\"value\",\"property\":\"P1545\",\"hash\":\"89d1857be00646d34838dc372e42882e3e20dca2\",\"datavalue\":{\"value\":\"14\",\"type\":\"string\"},\"datatype\":\"string\"}]},\"qualifiers-order\":[\"P1545\"],\"id\":\"Q21972834$507B8D2B-1EA4-492D-93E8-3D9236BDECB7\",\"rank\":\"normal\"},{\"mainsnak\":{\"snaktype\":\"value\",\"property\":\"P2093\",\"datavalue\":{\"value\":\"Andrew J Mungall\",\"type\":\"string\"},\"datatype\":\"string\"},\"type\":\"statement\",\"qualifiers\":{\"P1545\":[{\"snaktype\":\"value\",\"property\":\"P1545\",\"hash\":\"502af995394385a6c11fd2f00b65598853ceedc5\",\"datavalue\":{\"value\":\"15\",\"type\":\"string\"},\"datatype\":\"string\"}]},\"qualifiers-order\":[\"P1545\"],\"id\":\"Q21972834$99499BC4-F219-4E8E-B79C-0FFC4AF1919F\",\"rank\":\"normal\"},{\"mainsnak\":{\"snaktype\":\"value\",\"property\":\"P2093\",\"datavalue\":{\"value\":\"Barry Jaquish\",\"type\":\"string\"},\"datatype\":\"string\"},\"type\":\"statement\",\"qualifiers\":{\"P1545\":[{\"snaktype\":\"value\",\"property\":\"P1545\",\"hash\":\"f83c26be8edcec43a735fc3c85792c85d186a3c0\",\"datavalue\":{\"value\":\"16\",\"type\":\"string\"},\"datatype\":\"string\"}]},\"qualifiers-order\":[\"P1545\"],\"id\":\"Q21972834$2A452CB5-1392-48A3-8BDF-C3859ECD2CD7\",\"rank\":\"normal\"},{\"mainsnak\":{\"snaktype\":\"value\",\"property\":\"P2093\",\"datavalue\":{\"value\":\"Alvin Yanchuk\",\"type\":\"string\"},\"datatype\":\"string\"},\"type\":\"statement\",\"qualifiers\":{\"P1545\":[{\"snaktype\":\"value\",\"property\":\"P1545\",\"hash\":\"a89a718f20b227073f3b4f3aa4ad0e99ba77b542\",\"datavalue\":{\"value\":\"17\",\"type\":\"string\"},\"datatype\":\"string\"}]},\"qualifiers-order\":[\"P1545\"],\"id\":\"Q21972834$ED126A91-2089-4B3C-8BB6-D7FE81E05C63\",\"rank\":\"normal\"},{\"mainsnak\":{\"snaktype\":\"value\",\"property\":\"P2093\",\"datavalue\":{\"value\":\"Carol Ritland\",\"type\":\"string\"},\"datatype\":\"string\"},\"type\":\"statement\",\"qualifiers\":{\"P1545\":[{\"snaktype\":\"value\",\"property\":\"P1545\",\"hash\":\"c5201cb20b41dc2f0e2cf1361e16829d4cfbeac8\",\"datavalue\":{\"value\":\"18\",\"type\":\"string\"},\"datatype\":\"string\"}]},\"qualifiers-order\":[\"P1545\"],\"id\":\"Q21972834$F64D5FE6-92D9-4818-9BB6-D162DBA85A97\",\"rank\":\"normal\"},{\"mainsnak\":{\"snaktype\":\"value\",\"property\":\"P2093\",\"datavalue\":{\"value\":\"Brian Boyle\",\"type\":\"string\"},\"datatype\":\"string\"},\"type\":\"statement\",\"qualifiers\":{\"P1545\":[{\"snaktype\":\"value\",\"property\":\"P1545\",\"hash\":\"5ffccd25ee75ecddecb8ccbb1a59226cc3ba535a\",\"datavalue\":{\"value\":\"19\",\"type\":\"string\"},\"datatype\":\"string\"}]},\"qualifiers-order\":[\"P1545\"],\"id\":\"Q21972834$9D020847-DAD2-4573-8896-C6826BEBB4DD\",\"rank\":\"normal\"},{\"mainsnak\":{\"snaktype\":\"value\",\"property\":\"P2093\",\"datavalue\":{\"value\":\"Jean Bousquet\",\"type\":\"string\"},\"datatype\":\"string\"},\"type\":\"statement\",\"qualifiers\":{\"P1545\":[{\"snaktype\":\"value\",\"property\":\"P1545\",\"hash\":\"481220fb9e6317d9e822186cb47365497d25e036\",\"datavalue\":{\"value\":\"20\",\"type\":\"string\"},\"datatype\":\"string\"}]},\"qualifiers-order\":[\"P1545\"],\"id\":\"Q21972834$76CDF015-D56A-4539-9A29-ED6328566BA9\",\"rank\":\"normal\"},{\"mainsnak\":{\"snaktype\":\"value\",\"property\":\"P2093\",\"datavalue\":{\"value\":\"Kermit Ritland\",\"type\":\"string\"},\"datatype\":\"string\"},\"type\":\"statement\",\"qualifiers\":{\"P1545\":[{\"snaktype\":\"value\",\"property\":\"P1545\",\"hash\":\"a39223fc722bb1c9ca54fe188d9596d0c68f055e\",\"datavalue\":{\"value\":\"21\",\"type\":\"string\"},\"datatype\":\"string\"}]},\"qualifiers-order\":[\"P1545\"],\"id\":\"Q21972834$72D5B3B1-FBCD-4290-BEEE-7685B6721AA1\",\"rank\":\"normal\"},{\"mainsnak\":{\"snaktype\":\"value\",\"property\":\"P2093\",\"datavalue\":{\"value\":\"John Mackay\",\"type\":\"string\"},\"datatype\":\"string\"},\"type\":\"statement\",\"qualifiers\":{\"P1545\":[{\"snaktype\":\"value\",\"property\":\"P1545\",\"hash\":\"9cbb98590835f35bfb66ed07cbb2eb8d11df44f6\",\"datavalue\":{\"value\":\"22\",\"type\":\"string\"},\"datatype\":\"string\"}]},\"qualifiers-order\":[\"P1545\"],\"id\":\"Q21972834$382410E5-912A-4D08-BEA6-238379D5BA61\",\"rank\":\"normal\"},{\"mainsnak\":{\"snaktype\":\"value\",\"property\":\"P2093\",\"datavalue\":{\"value\":\"J\\u00f6rg Bohlmann\",\"type\":\"string\"},\"datatype\":\"string\"},\"type\":\"statement\",\"qualifiers\":{\"P1545\":[{\"snaktype\":\"value\",\"property\":\"P1545\",\"hash\":\"4f1ac2caf70d43bd788bfc3a341e0bb0bbfd1d74\",\"datavalue\":{\"value\":\"23\",\"type\":\"string\"},\"datatype\":\"string\"}]},\"qualifiers-order\":[\"P1545\"],\"id\":\"Q21972834$AB1BF467-D7E4-484F-A9EE-C132AA0DADA3\",\"rank\":\"normal\"},{\"mainsnak\":{\"snaktype\":\"value\",\"property\":\"P2093\",\"datavalue\":{\"value\":\"Steven J M Jones\",\"type\":\"string\"},\"datatype\":\"string\"},\"type\":\"statement\",\"qualifiers\":{\"P1545\":[{\"snaktype\":\"value\",\"property\":\"P1545\",\"hash\":\"94cf58b8db10ca17aedd1fafdf9f40a82b8bdc91\",\"datavalue\":{\"value\":\"24\",\"type\":\"string\"},\"datatype\":\"string\"}]},\"qualifiers-order\":[\"P1545\"],\"id\":\"Q21972834$E584D000-D3FA-48EB-B0B6-18A64D489469\",\"rank\":\"normal\"}],\"P2860\":[{\"mainsnak\":{\"snaktype\":\"value\",\"property\":\"P2860\",\"datavalue\":{\"value\":{\"entity-type\":\"item\",\"numeric-id\":21183990,\"id\":\"Q21183990\"},\"type\":\"wikibase-entityid\"},\"datatype\":\"wikibase-item\"},\"type\":\"statement\",\"id\":\"Q21972834$067675E1-BE45-48EC-9927-9B505DCD2C38\",\"rank\":\"normal\",\"references\":[{\"hash\":\"8500b2f44393a196a3228b76ca7bc69e1f3f5cc1\",\"snaks\":{\"P248\":[{\"snaktype\":\"value\",\"property\":\"P248\",\"datavalue\":{\"value\":{\"entity-type\":\"item\",\"numeric-id\":229883,\"id\":\"Q229883\"},\"type\":\"wikibase-entityid\"},\"datatype\":\"wikibase-item\"}],\"P854\":[{\"snaktype\":\"value\",\"property\":\"P854\",\"datavalue\":{\"value\":\"https://eutils.ncbi.nlm.nih.gov/entrez/eutils/elink.fcgi?dbfrom=pmc&linkname=pmc_refs_pubmed&retmode=json&id=3673215\",\"type\":\"string\"},\"datatype\":\"url\"}],\"P813\":[{\"snaktype\":\"value\",\"property\":\"P813\",\"datavalue\":{\"value\":{\"time\":\"+2017-03-19T00:00:00Z\",\"timezone\":0,\"before\":0,\"after\":0,\"precision\":11,\"calendarmodel\":\"http://www.wikidata.org/entity/Q1985727\"},\"type\":\"time\"},\"datatype\":\"time\"}]},\"snaks-order\":[\"P248\",\"P854\",\"P813\"]}]},{\"mainsnak\":{\"snaktype\":\"value\",\"property\":\"P2860\",\"datavalue\":{\"value\":{\"entity-type\":\"item\",\"numeric-id\":22065964,\"id\":\"Q22065964\"},\"type\":\"wikibase-entityid\"},\"datatype\":\"wikibase-item\"},\"type\":\"statement\",\"id\":\"Q21972834$B272C2D7-F0C1-4B7E-B5F0-ADBD60D235EB\",\"rank\":\"normal\",\"references\":[{\"hash\":\"8500b2f44393a196a3228b76ca7bc69e1f3f5cc1\",\"snaks\":{\"P248\":[{\"snaktype\":\"value\",\"property\":\"P248\",\"datavalue\":{\"value\":{\"entity-type\":\"item\",\"numeric-id\":229883,\"id\":\"Q229883\"},\"type\":\"wikibase-entityid\"},\"datatype\":\"wikibase-item\"}],\"P854\":[{\"snaktype\":\"value\",\"property\":\"P854\",\"datavalue\":{\"value\":\"https://eutils.ncbi.nlm.nih.gov/entrez/eutils/elink.fcgi?dbfrom=pmc&linkname=pmc_refs_pubmed&retmode=json&id=3673215\",\"type\":\"string\"},\"datatype\":\"url\"}],\"P813\":[{\"snaktype\":\"value\",\"property\":\"P813\",\"datavalue\":{\"value\":{\"time\":\"+2017-03-19T00:00:00Z\",\"timezone\":0,\"before\":0,\"after\":0,\"precision\":11,\"calendarmodel\":\"http://www.wikidata.org/entity/Q1985727\"},\"type\":\"time\"},\"datatype\":\"time\"}]},\"snaks-order\":[\"P248\",\"P854\",\"P813\"]}]},{\"mainsnak\":{\"snaktype\":\"value\",\"property\":\"P2860\",\"datavalue\":{\"value\":{\"entity-type\":\"item\",\"numeric-id\":24629733,\"id\":\"Q24629733\"},\"type\":\"wikibase-entityid\"},\"datatype\":\"wikibase-item\"},\"type\":\"statement\",\"id\":\"Q21972834$85D12800-291A-4885-8DDE-42657DE6E026\",\"rank\":\"normal\",\"references\":[{\"hash\":\"8500b2f44393a196a3228b76ca7bc69e1f3f5cc1\",\"snaks\":{\"P248\":[{\"snaktype\":\"value\",\"property\":\"P248\",\"datavalue\":{\"value\":{\"entity-type\":\"item\",\"numeric-id\":229883,\"id\":\"Q229883\"},\"type\":\"wikibase-entityid\"},\"datatype\":\"wikibase-item\"}],\"P854\":[{\"snaktype\":\"value\",\"property\":\"P854\",\"datavalue\":{\"value\":\"https://eutils.ncbi.nlm.nih.gov/entrez/eutils/elink.fcgi?dbfrom=pmc&linkname=pmc_refs_pubmed&retmode=json&id=3673215\",\"type\":\"string\"},\"datatype\":\"url\"}],\"P813\":[{\"snaktype\":\"value\",\"property\":\"P813\",\"datavalue\":{\"value\":{\"time\":\"+2017-03-19T00:00:00Z\",\"timezone\":0,\"before\":0,\"after\":0,\"precision\":11,\"calendarmodel\":\"http://www.wikidata.org/entity/Q1985727\"},\"type\":\"time\"},\"datatype\":\"time\"}]},\"snaks-order\":[\"P248\",\"P854\",\"P813\"]}]},{\"mainsnak\":{\"snaktype\":\"value\",\"property\":\"P2860\",\"datavalue\":{\"value\":{\"entity-type\":\"item\",\"numeric-id\":24625559,\"id\":\"Q24625559\"},\"type\":\"wikibase-entityid\"},\"datatype\":\"wikibase-item\"},\"type\":\"statement\",\"id\":\"Q21972834$EA35C15C-3F08-41DE-A369-06B084B6BAA3\",\"rank\":\"normal\",\"references\":[{\"hash\":\"8500b2f44393a196a3228b76ca7bc69e1f3f5cc1\",\"snaks\":{\"P248\":[{\"snaktype\":\"value\",\"property\":\"P248\",\"datavalue\":{\"value\":{\"entity-type\":\"item\",\"numeric-id\":229883,\"id\":\"Q229883\"},\"type\":\"wikibase-entityid\"},\"datatype\":\"wikibase-item\"}],\"P854\":[{\"snaktype\":\"value\",\"property\":\"P854\",\"datavalue\":{\"value\":\"https://eutils.ncbi.nlm.nih.gov/entrez/eutils/elink.fcgi?dbfrom=pmc&linkname=pmc_refs_pubmed&retmode=json&id=3673215\",\"type\":\"string\"},\"datatype\":\"url\"}],\"P813\":[{\"snaktype\":\"value\",\"property\":\"P813\",\"datavalue\":{\"value\":{\"time\":\"+2017-03-19T00:00:00Z\",\"timezone\":0,\"before\":0,\"after\":0,\"precision\":11,\"calendarmodel\":\"http://www.wikidata.org/entity/Q1985727\"},\"type\":\"time\"},\"datatype\":\"time\"}]},\"snaks-order\":[\"P248\",\"P854\",\"P813\"]}]},{\"mainsnak\":{\"snaktype\":\"value\",\"property\":\"P2860\",\"datavalue\":{\"value\":{\"entity-type\":\"item\",\"numeric-id\":22122211,\"id\":\"Q22122211\"},\"type\":\"wikibase-entityid\"},\"datatype\":\"wikibase-item\"},\"type\":\"statement\",\"id\":\"Q21972834$9F920256-4000-405C-AACB-E96C6D992603\",\"rank\":\"normal\",\"references\":[{\"hash\":\"8500b2f44393a196a3228b76ca7bc69e1f3f5cc1\",\"snaks\":{\"P248\":[{\"snaktype\":\"value\",\"property\":\"P248\",\"datavalue\":{\"value\":{\"entity-type\":\"item\",\"numeric-id\":229883,\"id\":\"Q229883\"},\"type\":\"wikibase-entityid\"},\"datatype\":\"wikibase-item\"}],\"P854\":[{\"snaktype\":\"value\",\"property\":\"P854\",\"datavalue\":{\"value\":\"https://eutils.ncbi.nlm.nih.gov/entrez/eutils/elink.fcgi?dbfrom=pmc&linkname=pmc_refs_pubmed&retmode=json&id=3673215\",\"type\":\"string\"},\"datatype\":\"url\"}],\"P813\":[{\"snaktype\":\"value\",\"property\":\"P813\",\"datavalue\":{\"value\":{\"time\":\"+2017-03-19T00:00:00Z\",\"timezone\":0,\"before\":0,\"after\":0,\"precision\":11,\"calendarmodel\":\"http://www.wikidata.org/entity/Q1985727\"},\"type\":\"time\"},\"datatype\":\"time\"}]},\"snaks-order\":[\"P248\",\"P854\",\"P813\"]}]},{\"mainsnak\":{\"snaktype\":\"value\",\"property\":\"P2860\",\"datavalue\":{\"value\":{\"entity-type\":\"item\",\"numeric-id\":21183889,\"id\":\"Q21183889\"},\"type\":\"wikibase-entityid\"},\"datatype\":\"wikibase-item\"},\"type\":\"statement\",\"id\":\"Q21972834$8F12AA50-1D1B-42C6-B6AD-E9A9587F53EB\",\"rank\":\"normal\",\"references\":[{\"hash\":\"8500b2f44393a196a3228b76ca7bc69e1f3f5cc1\",\"snaks\":{\"P248\":[{\"snaktype\":\"value\",\"property\":\"P248\",\"datavalue\":{\"value\":{\"entity-type\":\"item\",\"numeric-id\":229883,\"id\":\"Q229883\"},\"type\":\"wikibase-entityid\"},\"datatype\":\"wikibase-item\"}],\"P854\":[{\"snaktype\":\"value\",\"property\":\"P854\",\"datavalue\":{\"value\":\"https://eutils.ncbi.nlm.nih.gov/entrez/eutils/elink.fcgi?dbfrom=pmc&linkname=pmc_refs_pubmed&retmode=json&id=3673215\",\"type\":\"string\"},\"datatype\":\"url\"}],\"P813\":[{\"snaktype\":\"value\",\"property\":\"P813\",\"datavalue\":{\"value\":{\"time\":\"+2017-03-19T00:00:00Z\",\"timezone\":0,\"before\":0,\"after\":0,\"precision\":11,\"calendarmodel\":\"http://www.wikidata.org/entity/Q1985727\"},\"type\":\"time\"},\"datatype\":\"time\"}]},\"snaks-order\":[\"P248\",\"P854\",\"P813\"]}]},{\"mainsnak\":{\"snaktype\":\"value\",\"property\":\"P2860\",\"datavalue\":{\"value\":{\"entity-type\":\"item\",\"numeric-id\":21261967,\"id\":\"Q21261967\"},\"type\":\"wikibase-entityid\"},\"datatype\":\"wikibase-item\"},\"type\":\"statement\",\"id\":\"Q21972834$A4899485-8489-4D70-82E7-82C216106962\",\"rank\":\"normal\",\"references\":[{\"hash\":\"8500b2f44393a196a3228b76ca7bc69e1f3f5cc1\",\"snaks\":{\"P248\":[{\"snaktype\":\"value\",\"property\":\"P248\",\"datavalue\":{\"value\":{\"entity-type\":\"item\",\"numeric-id\":229883,\"id\":\"Q229883\"},\"type\":\"wikibase-entityid\"},\"datatype\":\"wikibase-item\"}],\"P854\":[{\"snaktype\":\"value\",\"property\":\"P854\",\"datavalue\":{\"value\":\"https://eutils.ncbi.nlm.nih.gov/entrez/eutils/elink.fcgi?dbfrom=pmc&linkname=pmc_refs_pubmed&retmode=json&id=3673215\",\"type\":\"string\"},\"datatype\":\"url\"}],\"P813\":[{\"snaktype\":\"value\",\"property\":\"P813\",\"datavalue\":{\"value\":{\"time\":\"+2017-03-19T00:00:00Z\",\"timezone\":0,\"before\":0,\"after\":0,\"precision\":11,\"calendarmodel\":\"http://www.wikidata.org/entity/Q1985727\"},\"type\":\"time\"},\"datatype\":\"time\"}]},\"snaks-order\":[\"P248\",\"P854\",\"P813\"]}]},{\"mainsnak\":{\"snaktype\":\"value\",\"property\":\"P2860\",\"datavalue\":{\"value\":{\"entity-type\":\"item\",\"numeric-id\":24807126,\"id\":\"Q24807126\"},\"type\":\"wikibase-entityid\"},\"datatype\":\"wikibase-item\"},\"type\":\"statement\",\"id\":\"Q21972834$FD2F304E-61D2-41EE-8AB5-B5CA1267B7CB\",\"rank\":\"normal\",\"references\":[{\"hash\":\"8500b2f44393a196a3228b76ca7bc69e1f3f5cc1\",\"snaks\":{\"P248\":[{\"snaktype\":\"value\",\"property\":\"P248\",\"datavalue\":{\"value\":{\"entity-type\":\"item\",\"numeric-id\":229883,\"id\":\"Q229883\"},\"type\":\"wikibase-entityid\"},\"datatype\":\"wikibase-item\"}],\"P854\":[{\"snaktype\":\"value\",\"property\":\"P854\",\"datavalue\":{\"value\":\"https://eutils.ncbi.nlm.nih.gov/entrez/eutils/elink.fcgi?dbfrom=pmc&linkname=pmc_refs_pubmed&retmode=json&id=3673215\",\"type\":\"string\"},\"datatype\":\"url\"}],\"P813\":[{\"snaktype\":\"value\",\"property\":\"P813\",\"datavalue\":{\"value\":{\"time\":\"+2017-03-19T00:00:00Z\",\"timezone\":0,\"before\":0,\"after\":0,\"precision\":11,\"calendarmodel\":\"http://www.wikidata.org/entity/Q1985727\"},\"type\":\"time\"},\"datatype\":\"time\"}]},\"snaks-order\":[\"P248\",\"P854\",\"P813\"]}]},{\"mainsnak\":{\"snaktype\":\"value\",\"property\":\"P2860\",\"datavalue\":{\"value\":{\"entity-type\":\"item\",\"numeric-id\":21045365,\"id\":\"Q21045365\"},\"type\":\"wikibase-entityid\"},\"datatype\":\"wikibase-item\"},\"type\":\"statement\",\"id\":\"Q21972834$113AD736-4A2B-479D-BA9D-0615FEA01A84\",\"rank\":\"normal\",\"references\":[{\"hash\":\"8500b2f44393a196a3228b76ca7bc69e1f3f5cc1\",\"snaks\":{\"P248\":[{\"snaktype\":\"value\",\"property\":\"P248\",\"datavalue\":{\"value\":{\"entity-type\":\"item\",\"numeric-id\":229883,\"id\":\"Q229883\"},\"type\":\"wikibase-entityid\"},\"datatype\":\"wikibase-item\"}],\"P854\":[{\"snaktype\":\"value\",\"property\":\"P854\",\"datavalue\":{\"value\":\"https://eutils.ncbi.nlm.nih.gov/entrez/eutils/elink.fcgi?dbfrom=pmc&linkname=pmc_refs_pubmed&retmode=json&id=3673215\",\"type\":\"string\"},\"datatype\":\"url\"}],\"P813\":[{\"snaktype\":\"value\",\"property\":\"P813\",\"datavalue\":{\"value\":{\"time\":\"+2017-03-19T00:00:00Z\",\"timezone\":0,\"before\":0,\"after\":0,\"precision\":11,\"calendarmodel\":\"http://www.wikidata.org/entity/Q1985727\"},\"type\":\"time\"},\"datatype\":\"time\"}]},\"snaks-order\":[\"P248\",\"P854\",\"P813\"]}]},{\"mainsnak\":{\"snaktype\":\"value\",\"property\":\"P2860\",\"datavalue\":{\"value\":{\"entity-type\":\"item\",\"numeric-id\":22122143,\"id\":\"Q22122143\"},\"type\":\"wikibase-entityid\"},\"datatype\":\"wikibase-item\"},\"type\":\"statement\",\"id\":\"Q21972834$16FE34E1-5AAC-4D98-898A-7CC4699861F0\",\"rank\":\"normal\",\"references\":[{\"hash\":\"8500b2f44393a196a3228b76ca7bc69e1f3f5cc1\",\"snaks\":{\"P248\":[{\"snaktype\":\"value\",\"property\":\"P248\",\"datavalue\":{\"value\":{\"entity-type\":\"item\",\"numeric-id\":229883,\"id\":\"Q229883\"},\"type\":\"wikibase-entityid\"},\"datatype\":\"wikibase-item\"}],\"P854\":[{\"snaktype\":\"value\",\"property\":\"P854\",\"datavalue\":{\"value\":\"https://eutils.ncbi.nlm.nih.gov/entrez/eutils/elink.fcgi?dbfrom=pmc&linkname=pmc_refs_pubmed&retmode=json&id=3673215\",\"type\":\"string\"},\"datatype\":\"url\"}],\"P813\":[{\"snaktype\":\"value\",\"property\":\"P813\",\"datavalue\":{\"value\":{\"time\":\"+2017-03-19T00:00:00Z\",\"timezone\":0,\"before\":0,\"after\":0,\"precision\":11,\"calendarmodel\":\"http://www.wikidata.org/entity/Q1985727\"},\"type\":\"time\"},\"datatype\":\"time\"}]},\"snaks-order\":[\"P248\",\"P854\",\"P813\"]}]},{\"mainsnak\":{\"snaktype\":\"value\",\"property\":\"P2860\",\"datavalue\":{\"value\":{\"entity-type\":\"item\",\"numeric-id\":22065842,\"id\":\"Q22065842\"},\"type\":\"wikibase-entityid\"},\"datatype\":\"wikibase-item\"},\"type\":\"statement\",\"id\":\"Q21972834$A0BF94ED-B679-4A17-B68A-2FE7AF6858AA\",\"rank\":\"normal\",\"references\":[{\"hash\":\"8500b2f44393a196a3228b76ca7bc69e1f3f5cc1\",\"snaks\":{\"P248\":[{\"snaktype\":\"value\",\"property\":\"P248\",\"datavalue\":{\"value\":{\"entity-type\":\"item\",\"numeric-id\":229883,\"id\":\"Q229883\"},\"type\":\"wikibase-entityid\"},\"datatype\":\"wikibase-item\"}],\"P854\":[{\"snaktype\":\"value\",\"property\":\"P854\",\"datavalue\":{\"value\":\"https://eutils.ncbi.nlm.nih.gov/entrez/eutils/elink.fcgi?dbfrom=pmc&linkname=pmc_refs_pubmed&retmode=json&id=3673215\",\"type\":\"string\"},\"datatype\":\"url\"}],\"P813\":[{\"snaktype\":\"value\",\"property\":\"P813\",\"datavalue\":{\"value\":{\"time\":\"+2017-03-19T00:00:00Z\",\"timezone\":0,\"before\":0,\"after\":0,\"precision\":11,\"calendarmodel\":\"http://www.wikidata.org/entity/Q1985727\"},\"type\":\"time\"},\"datatype\":\"time\"}]},\"snaks-order\":[\"P248\",\"P854\",\"P813\"]}]},{\"mainsnak\":{\"snaktype\":\"value\",\"property\":\"P2860\",\"datavalue\":{\"value\":{\"entity-type\":\"item\",\"numeric-id\":25938991,\"id\":\"Q25938991\"},\"type\":\"wikibase-entityid\"},\"datatype\":\"wikibase-item\"},\"type\":\"statement\",\"id\":\"Q21972834$513BAA39-8D82-4485-A25D-DB222C90B284\",\"rank\":\"normal\",\"references\":[{\"hash\":\"8500b2f44393a196a3228b76ca7bc69e1f3f5cc1\",\"snaks\":{\"P248\":[{\"snaktype\":\"value\",\"property\":\"P248\",\"datavalue\":{\"value\":{\"entity-type\":\"item\",\"numeric-id\":229883,\"id\":\"Q229883\"},\"type\":\"wikibase-entityid\"},\"datatype\":\"wikibase-item\"}],\"P854\":[{\"snaktype\":\"value\",\"property\":\"P854\",\"datavalue\":{\"value\":\"https://eutils.ncbi.nlm.nih.gov/entrez/eutils/elink.fcgi?dbfrom=pmc&linkname=pmc_refs_pubmed&retmode=json&id=3673215\",\"type\":\"string\"},\"datatype\":\"url\"}],\"P813\":[{\"snaktype\":\"value\",\"property\":\"P813\",\"datavalue\":{\"value\":{\"time\":\"+2017-03-19T00:00:00Z\",\"timezone\":0,\"before\":0,\"after\":0,\"precision\":11,\"calendarmodel\":\"http://www.wikidata.org/entity/Q1985727\"},\"type\":\"time\"},\"datatype\":\"time\"}]},\"snaks-order\":[\"P248\",\"P854\",\"P813\"]}]},{\"mainsnak\":{\"snaktype\":\"value\",\"property\":\"P2860\",\"datavalue\":{\"value\":{\"entity-type\":\"item\",\"numeric-id\":27860816,\"id\":\"Q27860816\"},\"type\":\"wikibase-entityid\"},\"datatype\":\"wikibase-item\"},\"type\":\"statement\",\"id\":\"Q21972834$DD899F96-5D71-4BBC-A87E-B710B870C6C3\",\"rank\":\"normal\",\"references\":[{\"hash\":\"8500b2f44393a196a3228b76ca7bc69e1f3f5cc1\",\"snaks\":{\"P248\":[{\"snaktype\":\"value\",\"property\":\"P248\",\"datavalue\":{\"value\":{\"entity-type\":\"item\",\"numeric-id\":229883,\"id\":\"Q229883\"},\"type\":\"wikibase-entityid\"},\"datatype\":\"wikibase-item\"}],\"P854\":[{\"snaktype\":\"value\",\"property\":\"P854\",\"datavalue\":{\"value\":\"https://eutils.ncbi.nlm.nih.gov/entrez/eutils/elink.fcgi?dbfrom=pmc&linkname=pmc_refs_pubmed&retmode=json&id=3673215\",\"type\":\"string\"},\"datatype\":\"url\"}],\"P813\":[{\"snaktype\":\"value\",\"property\":\"P813\",\"datavalue\":{\"value\":{\"time\":\"+2017-03-19T00:00:00Z\",\"timezone\":0,\"before\":0,\"after\":0,\"precision\":11,\"calendarmodel\":\"http://www.wikidata.org/entity/Q1985727\"},\"type\":\"time\"},\"datatype\":\"time\"}]},\"snaks-order\":[\"P248\",\"P854\",\"P813\"]}]}],\"P1433\":[{\"mainsnak\":{\"snaktype\":\"value\",\"property\":\"P1433\",\"datavalue\":{\"value\":{\"entity-type\":\"item\",\"numeric-id\":4914910,\"id\":\"Q4914910\"},\"type\":\"wikibase-entityid\"},\"datatype\":\"wikibase-item\"},\"type\":\"statement\",\"id\":\"Q21972834$72BB933D-4685-4F38-AE7C-1FBB71952A69\",\"rank\":\"normal\",\"references\":[{\"hash\":\"b28161529c0364292a8cfa0d6bba43b07f20a220\",\"snaks\":{\"P248\":[{\"snaktype\":\"value\",\"property\":\"P248\",\"datavalue\":{\"value\":{\"entity-type\":\"item\",\"numeric-id\":180686,\"id\":\"Q180686\"},\"type\":\"wikibase-entityid\"},\"datatype\":\"wikibase-item\"}]},\"snaks-order\":[\"P248\"]}]}],\"P3181\":[{\"mainsnak\":{\"snaktype\":\"value\",\"property\":\"P3181\",\"datavalue\":{\"value\":\"475928\",\"type\":\"string\"},\"datatype\":\"external-id\"},\"type\":\"statement\",\"id\":\"Q21972834$FDDF4A83-6970-4A50-8A59-26DFA5C2621C\",\"rank\":\"normal\",\"references\":[{\"hash\":\"dddcd22da5416e1b89c60d679e3171626efce131\",\"snaks\":{\"P248\":[{\"snaktype\":\"value\",\"property\":\"P248\",\"datavalue\":{\"value\":{\"entity-type\":\"item\",\"numeric-id\":26382154,\"id\":\"Q26382154\"},\"type\":\"wikibase-entityid\"},\"datatype\":\"wikibase-item\"}]},\"snaks-order\":[\"P248\"]}]}],\"P921\":[{\"mainsnak\":{\"snaktype\":\"value\",\"property\":\"P921\",\"datavalue\":{\"value\":{\"entity-type\":\"item\",\"numeric-id\":128116,\"id\":\"Q128116\"},\"type\":\"wikibase-entityid\"},\"datatype\":\"wikibase-item\"},\"type\":\"statement\",\"id\":\"Q21972834$e8eae0f3-4581-47f5-9528-04c967854423\",\"rank\":\"normal\"},{\"mainsnak\":{\"snaktype\":\"value\",\"property\":\"P921\",\"datavalue\":{\"value\":{\"entity-type\":\"item\",\"numeric-id\":1073526,\"id\":\"Q1073526\"},\"type\":\"wikibase-entityid\"},\"datatype\":\"wikibase-item\"},\"type\":\"statement\",\"id\":\"Q21972834$64a4a2b9-4d01-0532-bfd4-605bd9484f3c\",\"rank\":\"normal\"}],\"P356\":[{\"mainsnak\":{\"snaktype\":\"value\",\"property\":\"P356\",\"datavalue\":{\"value\":\"10.1093/BIOINFORMATICS/BTT178\",\"type\":\"string\"},\"datatype\":\"external-id\"},\"type\":\"statement\",\"id\":\"Q21972834$2FB0F783-8FE0-4E40-9080-7CD9DBD6906B\",\"rank\":\"normal\"}]},\"sitelinks\":[]}}}",
@@ -20839,48 +20964,47 @@ describe('Cite object', function () {
   describe('input', function () {
     
     describe('Wikidata URL', function () {
-      const test = new Cite(testInput.wd.url)
-      
       it('handles input type', function () {
-        expect(test._input.format).toBe('url/wikidata')
+        expect(Cite.parse.input.type(testInput.wd.url)).toBe('url/wikidata')
       })
       
       it('parses input correctly', function () {
-        expect(test.data[0].wikiID).toBe(testOutput.wd.id)
+        const test = Cite.parse.input.chain(testInput.wd.url)
+        expect(test[0].wikiID).toBe(testOutput.wd.id)
       })
     })
     
     describe('Wikidata ID list', function () {
       describe('separated by spaces', function () {
-        const test = new Cite(testInput.wd.list.space)
-        
         it('handles input type', function () {
-          expect(test._input.format).toBe('list/wikidata')
+          expect(Cite.parse.input.type(testInput.wd.list.space)).toBe('list/wikidata')
         })
+        
         it('parses input correctly', function () {
-          expect(test.data[0].wikiID).toBe(testOutput.wd.id)
+          const test = Cite.parse.input.chain(testInput.wd.list.space)
+          expect(test[0].wikiID).toBe(testOutput.wd.id)
         })
       })
       
       describe('separated by newlines', function () {
-        const test = new Cite(testInput.wd.list.newline)
-        
         it('handles input type', function () {
-          expect(test._input.format).toBe('list/wikidata')
+          expect(Cite.parse.input.type(testInput.wd.list.newline)).toBe('list/wikidata')
         })
+        
         it('parses input correctly', function () {
-          expect(test.data[0].wikiID).toBe(testOutput.wd.id)
+          const test = Cite.parse.input.chain(testInput.wd.list.newline)
+          expect(test[0].wikiID).toBe(testOutput.wd.id)
         })
       })
       
       describe('separated by commas', function () {
-        const test = new Cite(testInput.wd.list.comma)
-        
         it('handles input type', function () {
-          expect(test._input.format).toBe('list/wikidata')
+          expect(Cite.parse.input.type(testInput.wd.list.comma)).toBe('list/wikidata')
         })
+        
         it('parses input correctly', function () {
-          expect(test.data[0].wikiID).toBe(testOutput.wd.id)
+          const test = Cite.parse.input.chain(testInput.wd.list.comma)
+          expect(test[0].wikiID).toBe(testOutput.wd.id)
         })
       })
     })
@@ -20890,8 +21014,8 @@ describe('Cite object', function () {
             test_2 = new Cite(testInput.wd.author)
       
       it('handles input type', function () {
-        expect(test_1._input.format).toBe('json/wikidata')
-        expect(test_2._input.format).toBe('json/wikidata')
+        expect(test_1._input.format).toBe('object/wikidata')
+        expect(test_2._input.format).toBe('object/wikidata')
       })
       
       it('parses input correctly', function () {
@@ -20929,7 +21053,7 @@ describe('Cite object', function () {
       const test = new Cite(testInput.csl.simple[0])
       
       it('handles input type', function () {
-        expect(test._input.format).toBe('json/csl')
+        expect(test._input.format).toBe('object/csl')
       })
       it('parses input correctly', function () {
         expect(test.data).toEqual(testInput.csl.simple)
@@ -20940,7 +21064,7 @@ describe('Cite object', function () {
       const test = new Cite(testInput.bibjson.simple)
       
       it('handles input type', function () {
-        expect(test._input.format).toBe('json/contentmine')
+        expect(test._input.format).toBe('object/contentmine')
       })
       it('parses input correctly', function () {
         expect(test.data).toEqual(testOutput.bibjson.simple)
@@ -20952,7 +21076,7 @@ describe('Cite object', function () {
             test = new Cite(data)
       
       it('handles input type', function () {
-        expect(test._input.format).toBe('list/else')
+        expect(test._input.format).toBe('array/csl')
       })
       it('parses input correctly', function () {
         expect(test.data).toEqual(data)
@@ -20967,7 +21091,7 @@ describe('Cite object', function () {
               test = new Cite([[obj_1], obj_2])
         
         it('handles input type', function () {
-          expect(test._input.format).toBe('list/else')
+          expect(test._input.format).toBe('array/else')
         })
         it('parses input correctly', function () {
           expect(test.data).toEqual([obj_1, obj_2])
@@ -21173,4 +21297,4 @@ describe('Cite object', function () {
     })
   })
 })
-},{"../index.js":1}]},{},[34]);
+},{"../index.js":1}]},{},[35]);
