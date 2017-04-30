@@ -8,7 +8,11 @@ const testOutput = {
   wd: {
     id: 'Q21972834',
     simple: [{"wikiID":"Q21972834","id":"Q21972834","type":"article-journal","title":"Assembling the 20 Gb white spruce (Picea glauca) genome from whole-genome shotgun sequencing data","volume":"29","issue":"12","issued":[{"date-parts":[2013,6,15]}],"page":"1492-7","container-title":"Bioinformatics","DOI":"10.1093/BIOINFORMATICS/BTT178","author":[{"given":"Inanc","family":"Birol"},{"given":"Anthony","family":"Raymond"},{"given":"Shaun D","family":"Jackman"},{"given":"Stephen","family":"Pleasance"},{"given":"Robin","family":"Coope"},{"given":"Greg A","family":"Taylor"},{"given":"Macaire Man Saint","family":"Yuen"},{"given":"Christopher I","family":"Keeling"},{"given":"Dana","family":"Brand"},{"given":"Benjamin P","family":"Vandervalk"},{"given":"Heather","family":"Kirk"},{"given":"Pawan","family":"Pandoh"},{"given":"Richard A","family":"Moore"},{"given":"Yongjun","family":"Zhao"},{"given":"Andrew J","family":"Mungall"},{"given":"Barry","family":"Jaquish"},{"given":"Alvin","family":"Yanchuk"},{"given":"Carol","family":"Ritland"},{"given":"Brian","family":"Boyle"},{"given":"Jean","family":"Bousquet"},{"given":"Kermit","family":"Ritland"},{"given":"John","family":"Mackay"},{"given":"Jörg","family":"Bohlmann"},{"given":"Steven J M","family":"Jones"}]}],
-    author: [{"wikiID":"Q27795847","id":"Q27795847","type":"article-journal","issued":[{"date-parts":[2016,11,8]}],"title":"SPLASH, a hashed identifier for mass spectra","volume":"34","page":"1099–1101","container-title":"Nature Biotechnology","URL":"http://rdcu.be/msZj","DOI":"10.1038/NBT.3689","author":[{"given":"Gert","family":"Wohlgemuth"},{"given":"Sajjan S","family":"Mehta"},{"given":"Ramon F","family":"Mejia"},{"given":"Steffen","family":"Neumann"},{"given":"Diego","family":"Pedrosa"},{"given":"Tomáš","family":"Pluskal"},{"given":"Emma","family":"Schymanski"},{"given":"Egon","family":"Willighagen"},{"given":"Michael","family":"Wilson"},{"given":"David S","family":"Wishart"},{"given":"Masanori","family":"Arita"},{"given":"Pieter C","family":"Dorrestein"},{"given":"Nuno","family":"Bandeira"},{"given":"Mingxun","family":"Wang"},{"given":"Tobias","family":"Schulze"},{"given":"Reza M","family":"Salek"},{"given":"Christoph","family":"Steinbeck"},{"given":"Venkata Chandrasekhar","family":"Nainala"},{"given":"Robert","family":"Mistrik"},{"given":"Takaaki","family":"Nishioka"},{"given":"Oliver","family":"Fiehn"}]}]
+    author: [{"wikiID":"Q27795847","id":"Q27795847","type":"article-journal","issued":[{"date-parts":[2016,11,8]}],"title":"SPLASH, a hashed identifier for mass spectra","volume":"34","page":"1099–1101","container-title":"Nature Biotechnology","URL":"http://rdcu.be/msZj","DOI":"10.1038/NBT.3689","author":[{"given":"Gert","family":"Wohlgemuth"},{"given":"Sajjan S","family":"Mehta"},{"given":"Ramon F","family":"Mejia"},{"given":"Steffen","family":"Neumann"},{"given":"Diego","family":"Pedrosa"},{"given":"Tomáš","family":"Pluskal"},{"given":"Emma","family":"Schymanski"},{"given":"Egon","family":"Willighagen"},{"given":"Michael","family":"Wilson"},{"given":"David S","family":"Wishart"},{"given":"Masanori","family":"Arita"},{"given":"Pieter C","family":"Dorrestein"},{"given":"Nuno","family":"Bandeira"},{"given":"Mingxun","family":"Wang"},{"given":"Tobias","family":"Schulze"},{"given":"Reza M","family":"Salek"},{"given":"Christoph","family":"Steinbeck"},{"given":"Venkata Chandrasekhar","family":"Nainala"},{"given":"Robert","family":"Mistrik"},{"given":"Takaaki","family":"Nishioka"},{"given":"Oliver","family":"Fiehn"}]}],
+    api: [
+      'https://www.wikidata.org/w/api.php?action=wbgetentities&ids=Q21972834&format=json&languages=en',
+      'https://www.wikidata.org/w/api.php?action=wbgetentities&ids=Q21972834%7CQ27795847&format=json&languages=en'
+    ]
   },
   bibtex: {
     simple: [{"type":"article-journal","author":[{"given":"Christoph","family":"Steinbeck"},{"given":"Yongquan","family":"Han"},{"given":"Stefan","family":"Kuhn"},{"given":"Oliver","family":"Horlacher"},{"given":"Edgar","family":"Luttmann"},{"given":"Egon","family":"Willighagen"}],"year":"2003","title":"The Chemistry Development Kit (CDK): an open-source Java library for Chemo- and Bioinformatics","container-title":"Journal of chemical information and computer sciences","volume":"43","issue":"2","page":"493-500","DOI":"10.1021/ci025584y","ISBN":"2214707786","ISSN":"0095-2338","URL":"http://www.ncbi.nlm.nih.gov/pubmed/12653513","id":"Steinbeck2003"}],
@@ -268,8 +272,8 @@ describe('Cite object', function () {
       })
       
       it('parses input correctly', function () {
-        const test = Cite.parse.input.chain(testInput.wd.url)
-        expect(test[0].wikiID).toBe(testOutput.wd.id)
+        const test = Cite.parse.input.chainLink(testInput.wd.url)
+        expect(test[0].replace(/[&?]origin=\*/,'')).toBe(testOutput.wd.api[0])
       })
     })
     
@@ -280,8 +284,8 @@ describe('Cite object', function () {
         })
         
         it('parses input correctly', function () {
-          const test = Cite.parse.input.chain(testInput.wd.list.space)
-          expect(test[0].wikiID).toBe(testOutput.wd.id)
+          const test = Cite.parse.input.chainLink(testInput.wd.list.space)
+          expect(test[0].replace(/[&?]origin=\*/,'')).toBe(testOutput.wd.api[1])
         })
       })
       
@@ -291,8 +295,8 @@ describe('Cite object', function () {
         })
         
         it('parses input correctly', function () {
-          const test = Cite.parse.input.chain(testInput.wd.list.newline)
-          expect(test[0].wikiID).toBe(testOutput.wd.id)
+          const test = Cite.parse.input.chainLink(testInput.wd.list.newline)
+          expect(test[0].replace(/[&?]origin=\*/,'')).toBe(testOutput.wd.api[1])
         })
       })
       
@@ -302,8 +306,8 @@ describe('Cite object', function () {
         })
         
         it('parses input correctly', function () {
-          const test = Cite.parse.input.chain(testInput.wd.list.comma)
-          expect(test[0].wikiID).toBe(testOutput.wd.id)
+          const test = Cite.parse.input.chainLink(testInput.wd.list.comma)
+          expect(test[0].replace(/[&?]origin=\*/,'')).toBe(testOutput.wd.api[1])
         })
       })
     })

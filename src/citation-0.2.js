@@ -58,9 +58,10 @@ var varRegex = {
   , /^[@{}"=,\\]$/
   ]
 , wikidata: [
-    /(?:\/|^)(Q\d+)$/
-  , /(Q\d+)/
-  , /^(?:Q\d+(?:\s+|,))*(?:Q\d+)(?:\s+|,)?$/
+    /^\s*(Q\d+)\s*$/,
+    /^\s*((?:Q\d+(?:\s+|,|))*Q\d+)\s*$/,
+    /^(https?:\/\/(?:www\.)wikidata.org\/w\/api\.php(?:\?.*)?)$/,
+    /\/(Q\d+)(?:[#?\/]|\s*$)/
   ]
 , json:[
     [ /((?:\[|:|,)\s*)'((?:\\'|[^'])*?[^\\])?'(?=\s*(?:\]|}|,))/g
@@ -877,7 +878,6 @@ var fetchCSLItemCallback = function ( data ) {
   return fetchCSLItem
 }
 
-
 /**
  * Fetch file
  * 
@@ -894,14 +894,10 @@ var fetchFile = function ( url ) {
   try {
     result  = request( 'GET', url, { uri: url } ).getBody( 'utf8' )
   } catch (e) {
-    return console.error( '[set]', 'File could not be fetched' )
+    console.error( '[set]', 'File could not be fetched' )
   }
   
-  if ( result === url )
-    return console.error( '[set]', 'Infinite chaining loop detected' )
-  
-  else
-    return result
+  return result
 }
 
 /**
@@ -1151,25 +1147,9 @@ var parseWikidataProp = function ( prop, value, lang ) {
  * @return {Object} Wikidata JSON
  */
 var parseWikidata = function ( data ) {
-  var data = data.split( /(?:\s+|,)/g )
-    , result
+  var data = data.split( /(?:\s+|,\s*)/g )
   
-  var url = wdk.getEntities( data, [ 'en' ] )
-  
-  if ( Array.isArray( url ) ) {
-    var urls = url
-      , outs = []
-    
-    for ( var urlIndex = 0; urlIndex < urls.length; urlIndex++ ) {
-      var url = urls[ urlIndex ]
-        , out = JSON.parse( fetchFile( url ) )
-          outs= outs.concat( out )
-    }
-    
-    result = outs
-  } else result = JSON.parse( fetchFile( url ) )
-  
-  return result
+  return [].concat(wdk.getEntities( data, [ 'en' ] ))
 }
 
 /**
@@ -1718,13 +1698,21 @@ var parseInputType = function ( input ) {
       else if ( /^\s+$/.test( input ) )
         return 'string/whitespace'
       
-      // Wikidata URL
+      // Wikidata ID
       else if ( varRegex.wikidata[ 0 ].test( input ) )
-        return 'url/wikidata'
+        return 'string/wikidata'
       
       // Wikidata entity list
-      else if ( varRegex.wikidata[ 2 ].test( input ) )
+      else if ( varRegex.wikidata[ 1 ].test( input ) )
         return 'list/wikidata'
+      
+      // Wikidata API URL
+      else if ( varRegex.wikidata[ 2 ].test( input ) )
+        return 'api/wikidata'
+      
+      // Wikidata URL
+      else if ( varRegex.wikidata[ 3 ].test( input ) )
+        return 'url/wikidata'
       
       // BibTeX
       else if ( varRegex.bibtex  [ 0 ].test( input ) )
@@ -1761,12 +1749,16 @@ var parseInputType = function ( input ) {
       // Array
       else if ( Array.isArray(input) ) {
         
-        /*// Array of Wikidata IDs
-               if ( input.filter() )
+        // Empty array (counts as csl for parsing purposes)
+             if ( input.length === 0 )
+          return 'array/csl'
+        
+        // Array of Wikidata IDs
+        else if ( input.filter( v => parseInputType(v) === 'string/wikidata' ).length === input.length )
           return 'array/wikidata'
         
         // Array of CSL-JSON
-        else */if ( input.filter( v => parseInputType(v) === 'object/csl' ).length === input.length )
+        else if ( input.filter( v => parseInputType(v) === 'object/csl' ).length === input.length )
           return 'array/csl'
         
         // Array of misc or multiple types
@@ -1827,12 +1819,24 @@ var parseInputData = function ( input, type ) {
   
   switch ( type ) {
     
-    case 'url/wikidata':
-      output = parseWikidata( input.match( varRegex.wikidata[ 1 ] )[ 1 ] )
+    case 'string/wikidata':
+      output = parseWikidata( input.match( varRegex.wikidata[ 0 ] )[ 1 ] )
       break;
     
     case 'list/wikidata':
-      output = parseWikidata( input )
+      output = parseWikidata( input.match( varRegex.wikidata[ 1 ] )[ 1 ] )
+      break;
+    
+    case 'api/wikidata':
+      output = fetchFile( input )
+      break;
+    
+    case 'url/wikidata':
+      output = parseWikidata( input.match( varRegex.wikidata[ 3 ] )[ 1 ] )
+      break;
+    
+    case 'array/wikidata':
+      output = parseWikidata( input.join(',') )
       break;
     
     case 'url/else':
@@ -1927,6 +1931,7 @@ var parseInput = function ( input ) {
   if ( type.match(/^(array|object)\//) )
     output = deepCopy( output )
   
+  // TODO max recursion level
   while ( type !== 'array/csl' ) {
     output = parseInputData( output, type )
     type = parseInputType( output )

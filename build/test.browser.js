@@ -1903,9 +1903,10 @@ var varRegex = {
   , /^[@{}"=,\\]$/
   ]
 , wikidata: [
-    /(?:\/|^)(Q\d+)$/
-  , /(Q\d+)/
-  , /^(?:Q\d+(?:\s+|,))*(?:Q\d+)(?:\s+|,)?$/
+    /^\s*(Q\d+)\s*$/,
+    /^\s*((?:Q\d+(?:\s+|,|))*Q\d+)\s*$/,
+    /^(https?:\/\/(?:www\.)wikidata.org\/w\/api\.php(?:\?.*)?)$/,
+    /\/(Q\d+)(?:[#?\/]|\s*$)/
   ]
 , json:[
     [ /((?:\[|:|,)\s*)'((?:\\'|[^'])*?[^\\])?'(?=\s*(?:\]|}|,))/g
@@ -2722,7 +2723,6 @@ var fetchCSLItemCallback = function ( data ) {
   return fetchCSLItem
 }
 
-
 /**
  * Fetch file
  * 
@@ -2739,14 +2739,10 @@ var fetchFile = function ( url ) {
   try {
     result  = request( 'GET', url, { uri: url } ).getBody( 'utf8' )
   } catch (e) {
-    return console.error( '[set]', 'File could not be fetched' )
+    console.error( '[set]', 'File could not be fetched' )
   }
   
-  if ( result === url )
-    return console.error( '[set]', 'Infinite chaining loop detected' )
-  
-  else
-    return result
+  return result
 }
 
 /**
@@ -2996,25 +2992,9 @@ var parseWikidataProp = function ( prop, value, lang ) {
  * @return {Object} Wikidata JSON
  */
 var parseWikidata = function ( data ) {
-  var data = data.split( /(?:\s+|,)/g )
-    , result
+  var data = data.split( /(?:\s+|,\s*)/g )
   
-  var url = wdk.getEntities( data, [ 'en' ] )
-  
-  if ( Array.isArray( url ) ) {
-    var urls = url
-      , outs = []
-    
-    for ( var urlIndex = 0; urlIndex < urls.length; urlIndex++ ) {
-      var url = urls[ urlIndex ]
-        , out = JSON.parse( fetchFile( url ) )
-          outs= outs.concat( out )
-    }
-    
-    result = outs
-  } else result = JSON.parse( fetchFile( url ) )
-  
-  return result
+  return [].concat(wdk.getEntities( data, [ 'en' ] ))
 }
 
 /**
@@ -3563,13 +3543,21 @@ var parseInputType = function ( input ) {
       else if ( /^\s+$/.test( input ) )
         return 'string/whitespace'
       
-      // Wikidata URL
+      // Wikidata ID
       else if ( varRegex.wikidata[ 0 ].test( input ) )
-        return 'url/wikidata'
+        return 'string/wikidata'
       
       // Wikidata entity list
-      else if ( varRegex.wikidata[ 2 ].test( input ) )
+      else if ( varRegex.wikidata[ 1 ].test( input ) )
         return 'list/wikidata'
+      
+      // Wikidata API URL
+      else if ( varRegex.wikidata[ 2 ].test( input ) )
+        return 'api/wikidata'
+      
+      // Wikidata URL
+      else if ( varRegex.wikidata[ 3 ].test( input ) )
+        return 'url/wikidata'
       
       // BibTeX
       else if ( varRegex.bibtex  [ 0 ].test( input ) )
@@ -3606,12 +3594,16 @@ var parseInputType = function ( input ) {
       // Array
       else if ( Array.isArray(input) ) {
         
-        /*// Array of Wikidata IDs
-               if ( input.filter() )
+        // Array of CSL-JSON
+             if ( input.length === 0 )
+          return 'array/csl'
+        
+        // Array of Wikidata IDs
+        else if ( input.filter( v => parseInputType(v) === 'string/wikidata' ).length === input.length )
           return 'array/wikidata'
         
         // Array of CSL-JSON
-        else */if ( input.filter( v => parseInputType(v) === 'object/csl' ).length === input.length )
+        else if ( input.filter( v => parseInputType(v) === 'object/csl' ).length === input.length )
           return 'array/csl'
         
         // Array of misc or multiple types
@@ -3672,12 +3664,24 @@ var parseInputData = function ( input, type ) {
   
   switch ( type ) {
     
-    case 'url/wikidata':
-      output = parseWikidata( input.match( varRegex.wikidata[ 1 ] )[ 1 ] )
+    case 'string/wikidata':
+      output = parseWikidata( input.match( varRegex.wikidata[ 0 ] )[ 1 ] )
       break;
     
     case 'list/wikidata':
-      output = parseWikidata( input )
+      output = parseWikidata( input.match( varRegex.wikidata[ 1 ] )[ 1 ] )
+      break;
+    
+    case 'api/wikidata':
+      output = fetchFile( input )
+      break;
+    
+    case 'url/wikidata':
+      output = parseWikidata( input.match( varRegex.wikidata[ 3 ] )[ 1 ] )
+      break;
+    
+    case 'array/wikidata':
+      output = parseWikidata( input.join(',') )
       break;
     
     case 'url/else':
@@ -3772,6 +3776,7 @@ var parseInput = function ( input ) {
   if ( type.match(/^(array|object)\//) )
     output = deepCopy( output )
   
+  // TODO max recursion level
   while ( type !== 'array/csl' ) {
     output = parseInputData( output, type )
     type = parseInputType( output )
@@ -20709,7 +20714,11 @@ const testOutput = {
   wd: {
     id: 'Q21972834',
     simple: [{"wikiID":"Q21972834","id":"Q21972834","type":"article-journal","title":"Assembling the 20 Gb white spruce (Picea glauca) genome from whole-genome shotgun sequencing data","volume":"29","issue":"12","issued":[{"date-parts":[2013,6,15]}],"page":"1492-7","container-title":"Bioinformatics","DOI":"10.1093/BIOINFORMATICS/BTT178","author":[{"given":"Inanc","family":"Birol"},{"given":"Anthony","family":"Raymond"},{"given":"Shaun D","family":"Jackman"},{"given":"Stephen","family":"Pleasance"},{"given":"Robin","family":"Coope"},{"given":"Greg A","family":"Taylor"},{"given":"Macaire Man Saint","family":"Yuen"},{"given":"Christopher I","family":"Keeling"},{"given":"Dana","family":"Brand"},{"given":"Benjamin P","family":"Vandervalk"},{"given":"Heather","family":"Kirk"},{"given":"Pawan","family":"Pandoh"},{"given":"Richard A","family":"Moore"},{"given":"Yongjun","family":"Zhao"},{"given":"Andrew J","family":"Mungall"},{"given":"Barry","family":"Jaquish"},{"given":"Alvin","family":"Yanchuk"},{"given":"Carol","family":"Ritland"},{"given":"Brian","family":"Boyle"},{"given":"Jean","family":"Bousquet"},{"given":"Kermit","family":"Ritland"},{"given":"John","family":"Mackay"},{"given":"Jörg","family":"Bohlmann"},{"given":"Steven J M","family":"Jones"}]}],
-    author: [{"wikiID":"Q27795847","id":"Q27795847","type":"article-journal","issued":[{"date-parts":[2016,11,8]}],"title":"SPLASH, a hashed identifier for mass spectra","volume":"34","page":"1099–1101","container-title":"Nature Biotechnology","URL":"http://rdcu.be/msZj","DOI":"10.1038/NBT.3689","author":[{"given":"Gert","family":"Wohlgemuth"},{"given":"Sajjan S","family":"Mehta"},{"given":"Ramon F","family":"Mejia"},{"given":"Steffen","family":"Neumann"},{"given":"Diego","family":"Pedrosa"},{"given":"Tomáš","family":"Pluskal"},{"given":"Emma","family":"Schymanski"},{"given":"Egon","family":"Willighagen"},{"given":"Michael","family":"Wilson"},{"given":"David S","family":"Wishart"},{"given":"Masanori","family":"Arita"},{"given":"Pieter C","family":"Dorrestein"},{"given":"Nuno","family":"Bandeira"},{"given":"Mingxun","family":"Wang"},{"given":"Tobias","family":"Schulze"},{"given":"Reza M","family":"Salek"},{"given":"Christoph","family":"Steinbeck"},{"given":"Venkata Chandrasekhar","family":"Nainala"},{"given":"Robert","family":"Mistrik"},{"given":"Takaaki","family":"Nishioka"},{"given":"Oliver","family":"Fiehn"}]}]
+    author: [{"wikiID":"Q27795847","id":"Q27795847","type":"article-journal","issued":[{"date-parts":[2016,11,8]}],"title":"SPLASH, a hashed identifier for mass spectra","volume":"34","page":"1099–1101","container-title":"Nature Biotechnology","URL":"http://rdcu.be/msZj","DOI":"10.1038/NBT.3689","author":[{"given":"Gert","family":"Wohlgemuth"},{"given":"Sajjan S","family":"Mehta"},{"given":"Ramon F","family":"Mejia"},{"given":"Steffen","family":"Neumann"},{"given":"Diego","family":"Pedrosa"},{"given":"Tomáš","family":"Pluskal"},{"given":"Emma","family":"Schymanski"},{"given":"Egon","family":"Willighagen"},{"given":"Michael","family":"Wilson"},{"given":"David S","family":"Wishart"},{"given":"Masanori","family":"Arita"},{"given":"Pieter C","family":"Dorrestein"},{"given":"Nuno","family":"Bandeira"},{"given":"Mingxun","family":"Wang"},{"given":"Tobias","family":"Schulze"},{"given":"Reza M","family":"Salek"},{"given":"Christoph","family":"Steinbeck"},{"given":"Venkata Chandrasekhar","family":"Nainala"},{"given":"Robert","family":"Mistrik"},{"given":"Takaaki","family":"Nishioka"},{"given":"Oliver","family":"Fiehn"}]}],
+    api: [
+      'https://www.wikidata.org/w/api.php?action=wbgetentities&ids=Q21972834&format=json&languages=en',
+      'https://www.wikidata.org/w/api.php?action=wbgetentities&ids=Q21972834%7CQ27795847&format=json&languages=en'
+    ]
   },
   bibtex: {
     simple: [{"type":"article-journal","author":[{"given":"Christoph","family":"Steinbeck"},{"given":"Yongquan","family":"Han"},{"given":"Stefan","family":"Kuhn"},{"given":"Oliver","family":"Horlacher"},{"given":"Edgar","family":"Luttmann"},{"given":"Egon","family":"Willighagen"}],"year":"2003","title":"The Chemistry Development Kit (CDK): an open-source Java library for Chemo- and Bioinformatics","container-title":"Journal of chemical information and computer sciences","volume":"43","issue":"2","page":"493-500","DOI":"10.1021/ci025584y","ISBN":"2214707786","ISSN":"0095-2338","URL":"http://www.ncbi.nlm.nih.gov/pubmed/12653513","id":"Steinbeck2003"}],
@@ -20969,8 +20978,8 @@ describe('Cite object', function () {
       })
       
       it('parses input correctly', function () {
-        const test = Cite.parse.input.chain(testInput.wd.url)
-        expect(test[0].wikiID).toBe(testOutput.wd.id)
+        const test = Cite.parse.input.chainLink(testInput.wd.url)
+        expect(test[0].replace(/[&?]origin=\*/,'')).toBe(testOutput.wd.api[0])
       })
     })
     
@@ -20981,8 +20990,8 @@ describe('Cite object', function () {
         })
         
         it('parses input correctly', function () {
-          const test = Cite.parse.input.chain(testInput.wd.list.space)
-          expect(test[0].wikiID).toBe(testOutput.wd.id)
+          const test = Cite.parse.input.chainLink(testInput.wd.list.space)
+          expect(test[0].replace(/[&?]origin=\*/,'')).toBe(testOutput.wd.api[1])
         })
       })
       
@@ -20992,8 +21001,8 @@ describe('Cite object', function () {
         })
         
         it('parses input correctly', function () {
-          const test = Cite.parse.input.chain(testInput.wd.list.newline)
-          expect(test[0].wikiID).toBe(testOutput.wd.id)
+          const test = Cite.parse.input.chainLink(testInput.wd.list.newline)
+          expect(test[0].replace(/[&?]origin=\*/,'')).toBe(testOutput.wd.api[1])
         })
       })
       
@@ -21003,8 +21012,8 @@ describe('Cite object', function () {
         })
         
         it('parses input correctly', function () {
-          const test = Cite.parse.input.chain(testInput.wd.list.comma)
-          expect(test[0].wikiID).toBe(testOutput.wd.id)
+          const test = Cite.parse.input.chainLink(testInput.wd.list.comma)
+          expect(test[0].replace(/[&?]origin=\*/,'')).toBe(testOutput.wd.api[1])
         })
       })
     })
