@@ -1,5 +1,5 @@
 const fs = require('fs'),
-      Cite = require('../index.js')
+      Cite = require('../lib/index.js')
 
 const file_1 = fs.readFileSync(__dirname + '/Q21972834.json', 'utf8'),
       file_2 = fs.readFileSync(__dirname + '/Q27795847.json', 'utf8')

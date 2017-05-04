@@ -31,13 +31,15 @@
 
 var program = require( 'commander'       )
   , fs      = require( 'fs'              )
-  , Cite    = require( '../index.js' )
+  , path    = require( 'path'            )
+  , cjs     = require( '../package.json' )
+  , Cite    = require( path.join('..', cjs.main) )
 
 console.debug = console.log
 
 /*-------- Program ---------*/
 program
-  .version( '0.2.15' )
+  .version( cjs.version )
   .usage  ( '[options]' )
   
   .option ( '-i, --input <path>',

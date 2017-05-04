@@ -2,10 +2,10 @@
   "name": "citation-js",
   "version": "0.3.0-4",
   "description": "Citation.js converts formats like BibTeX, Wikidata JSON and ContentMine JSON to CSL-JSON to convert to other formats like APA, Vancouver and back to BibTeX.",
-  "main": "index.js",
+  "main": "lib/index.js",
   "directories": {
     "doc": "docs/api/",
-    "test": "docs/test/spec/",
+    "test": "test/",
     "lib": "src/"
   },
   "repository": {
@@ -22,21 +22,38 @@
     "citeproc"
   ],
   "dependencies": {
+    "babel-polyfill": "^6.23.0",
+    "citeproc": "^2.0.2",
     "commander": "~2.9.0",
+    "deep-freeze": "0.0.1",
     "striptags": "~2.1.1",
     "sync-request": "~3.0.1",
     "wikidata-sdk": "^5.1.4"
   },
   "devDependencies": {
+    "babel-cli": "^6.24.1",
+    "babel-core": "^6.24.1",
+    "babel-polyfill": "^6.23.0",
+    "babel-preset-es2015": "^6.24.1",
+    "babel-preset-stage-0": "^6.24.1",
     "brfs": "^1.4.3",
     "browserify": "^13.3.0",
     "jasmine-node": "^1.14.5",
     "jsdoc": "^3.4.2"
   },
+  "babel": {
+    "presets": [
+      "es2015",
+      "stage-0"
+    ]
+  },
   "scripts": {
     "test": "node_modules/jasmine-node/bin/jasmine-node test/citation-0.2.spec.js",
-    "build": "browserify -r ./index.js:citation-js -o build/browser.js && cp build/browser.js docs/src/browser.js",
-    "build-test": "browserify -t brfs -e test/citation-0.2.spec.js -o build/test.browser.js && cp build/test.browser.js docs/src/test.browser.js",
+    "babel": "babel src -d lib",
+    "dev:test": "npm run babel && npm run test",
+    "dev:test-browser": "npm run babel && npm run test && npm run build && npm run build-test",
+    "build": "browserify -r ./lib/index.js:citation-js -o build/citation.js && cp build/citation.js docs/src/citation.js",
+    "build-test": "browserify -t brfs -e test/citation-0.2.spec.js -o build/test.citation.js && cp build/test.citation.js docs/src/test.citation.js",
     "build-docs": "jsdoc ./src README.md -c docs/conf.json"
   },
   "author": "Lars Willighagen (https://larsgw.github.io)",
