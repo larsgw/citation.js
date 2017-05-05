@@ -13,7 +13,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 /**
  * Object containing CSL Engines
- * 
+ *
  * @access private
  * @constant varCSLEngines
  * @default
@@ -34,23 +34,28 @@ var varCSLEngines = {};
 
 /**
  * Retrieve CSL parsing engine
- * 
+ *
  * @access private
  * @method fetchCSLEngine
- * 
+ *
  * @param {String} style - CSL style id
  * @param {String} lang - Language code
  * @param {String} template - CSL XML template
  * @param {Cite~retrieveItem} retrieveItem - Code to retreive item
  * @param {Cite~retrieveLocale} retrieveLocale - Code to retreive locale
- * 
+ *
  * @return {Object} CSL Engine
  */
 var fetchCSLEngine = function fetchCSLEngine(style, lang, template, retrieveItem, retrieveLocale) {
-  var prop = style + '|' + lang,
-      engine;
+  var prop = style + '|' + lang;
+  var engine = void 0;
 
-  if (varCSLEngines.hasOwnProperty(prop)) engine = varCSLEngines[prop], engine.sys.retrieveItem = retrieveItem;else engine = varCSLEngines[prop] = new _citeproc2.default.Engine({ retrieveLocale: retrieveLocale, retrieveItem: retrieveItem }, template, lang, true);
+  if (varCSLEngines.hasOwnProperty(prop)) {
+    engine = varCSLEngines[prop];
+    engine.sys.retrieveItem = retrieveItem;
+  } else {
+    engine = varCSLEngines[prop] = new _citeproc2.default.Engine({ retrieveLocale: retrieveLocale, retrieveItem: retrieveItem }, template, lang, true);
+  }
 
   return engine;
 };
@@ -94,30 +99,22 @@ Object.defineProperty(exports, "__esModule", {
 });
 /**
  * Retrieve CSL item callback function
- * 
+ *
  * @access private
  * @method fetchCSLItemCallback
- * 
+ *
  * @param {CSL[]} data - CSL array
- * 
+ *
  * @return {Cite~retrieveItem} Code to retreive item
  */
 var fetchCSLItemCallback = function fetchCSLItemCallback(data) {
   var _data = data;
-  var fetchCSLItem = function fetchCSLItem(id) {
-    var res;
 
-    for (var entryIndex = 0; entryIndex < _data.length; entryIndex++) {
-      var entry = _data[entryIndex];
-
-      if (entry.id === id) res = entry;
-    }
-
-    if (!res && parseInt(id) + 1) res = _data[id];
-
-    return res;
+  return function (id) {
+    return _data.find(function (entry) {
+      return entry.id === id;
+    });
   };
-  return fetchCSLItem;
 };
 
 exports.default = fetchCSLItemCallback;
@@ -129,32 +126,36 @@ Object.defineProperty(exports, "__esModule", {
 });
 /**
  * Object containing CSL locales
- * 
- * Locales from the [CSL Project](http://citationstyles.org/)  
+ *
+ * Locales from the [CSL Project](http://citationstyles.org/)<br>
  * [REPO](https://github.com/citation-style-language/locales)
- * 
+ *
  * Accesed 10/22/2016
- * 
+ *
  * @access private
  * @constant varCSLLocales
  * @default
  */
 var varCSLLocales = {
-  'en-US': '<?xml version="1.0" encoding="utf-8"?><locale xmlns="http://purl.org/net/xbiblio/csl" version="1.0" xml:lang="en-US"><info><rights license="http://creativecommons.org/licenses/by-sa/3.0/">This work is licensed under a Creative Commons Attribution-ShareAlike 3.0 License</rights><updated>2015-10-10T23:31:02+00:00</updated></info><style-options punctuation-in-quote="true"/><date form="text"><date-part name="month" suffix=" "/><date-part name="day" suffix=", "/><date-part name="year"/></date><date form="numeric"><date-part name="month" form="numeric-leading-zeros" suffix="/"/><date-part name="day" form="numeric-leading-zeros" suffix="/"/><date-part name="year"/></date><terms><term name="accessed">accessed</term><term name="and">and</term><term name="and others">and others</term><term name="anonymous">anonymous</term><term name="anonymous" form="short">anon.</term><term name="at">at</term><term name="available at">available at</term><term name="by">by</term><term name="circa">circa</term><term name="circa" form="short">c.</term><term name="cited">cited</term><term name="edition"><single>edition</single><multiple>editions</multiple></term><term name="edition" form="short">ed.</term><term name="et-al">et al.</term><term name="forthcoming">forthcoming</term><term name="from">from</term><term name="ibid">ibid.</term><term name="in">in</term><term name="in press">in press</term><term name="internet">internet</term><term name="interview">interview</term><term name="letter">letter</term><term name="no date">no date</term><term name="no date" form="short">n.d.</term><term name="online">online</term><term name="presented at">presented at the</term><term name="reference"><single>reference</single><multiple>references</multiple></term><term name="reference" form="short"><single>ref.</single><multiple>refs.</multiple></term><term name="retrieved">retrieved</term><term name="scale">scale</term><term name="version">version</term><term name="ad">AD</term><term name="bc">BC</term><term name="open-quote">“</term><term name="close-quote">”</term><term name="open-inner-quote">‘</term><term name="close-inner-quote">’</term><term name="page-range-delimiter">–</term><term name="ordinal">th</term><term name="ordinal-01">st</term><term name="ordinal-02">nd</term><term name="ordinal-03">rd</term><term name="ordinal-11">th</term><term name="ordinal-12">th</term><term name="ordinal-13">th</term><term name="long-ordinal-01">first</term><term name="long-ordinal-02">second</term><term name="long-ordinal-03">third</term><term name="long-ordinal-04">fourth</term><term name="long-ordinal-05">fifth</term><term name="long-ordinal-06">sixth</term><term name="long-ordinal-07">seventh</term><term name="long-ordinal-08">eighth</term><term name="long-ordinal-09">ninth</term><term name="long-ordinal-10">tenth</term><term name="book"><single>book</single><multiple>books</multiple></term><term name="chapter"><single>chapter</single><multiple>chapters</multiple></term><term name="column"><single>column</single><multiple>columns</multiple></term><term name="figure"><single>figure</single><multiple>figures</multiple></term><term name="folio"><single>folio</single><multiple>folios</multiple></term><term name="issue"><single>number</single><multiple>numbers</multiple></term><term name="line"><single>line</single><multiple>lines</multiple></term><term name="note"><single>note</single><multiple>notes</multiple></term><term name="opus"><single>opus</single><multiple>opera</multiple></term><term name="page"><single>page</single><multiple>pages</multiple></term><term name="number-of-pages"><single>page</single><multiple>pages</multiple></term><term name="paragraph"><single>paragraph</single><multiple>paragraphs</multiple></term><term name="part"><single>part</single><multiple>parts</multiple></term><term name="section"><single>section</single><multiple>sections</multiple></term><term name="sub verbo"><single>sub verbo</single><multiple>sub verbis</multiple></term><term name="verse"><single>verse</single><multiple>verses</multiple>' + '</term><term name="volume"><single>volume</single><multiple>volumes</multiple></term><term name="book" form="short"><single>bk.</single><multiple>bks.</multiple></term><term name="chapter" form="short"><single>chap.</single><multiple>chaps.</multiple></term><term name="column" form="short"><single>col.</single><multiple>cols.</multiple></term><term name="figure" form="short"><single>fig.</single><multiple>figs.</multiple></term><term name="folio" form="short"><single>fol.</single><multiple>fols.</multiple></term><term name="issue" form="short"><single>no.</single><multiple>nos.</multiple></term><term name="line" form="short"><single>l.</single><multiple>ll.</multiple></term><term name="note" form="short"><single>n.</single><multiple>nn.</multiple></term><term name="opus" form="short"><single>op.</single><multiple>opp.</multiple></term><term name="page" form="short"><single>p.</single><multiple>pp.</multiple></term><term name="number-of-pages" form="short"><single>p.</single><multiple>pp.</multiple></term><term name="paragraph" form="short"><single>para.</single><multiple>paras.</multiple></term><term name="part" form="short"><single>pt.</single><multiple>pts.</multiple></term><term name="section" form="short"><single>sec.</single><multiple>secs.</multiple></term><term name="sub verbo" form="short"><single>s.v.</single><multiple>s.vv.</multiple></term><term name="verse" form="short"><single>v.</single><multiple>vv.</multiple></term><term name="volume" form="short"><single>vol.</single><multiple>vols.</multiple></term><term name="paragraph" form="symbol"><single>¶</single><multiple>¶¶</multiple></term><term name="section" form="symbol"><single>§</single><multiple>§§</multiple></term><term name="director"><single>director</single><multiple>directors</multiple></term><term name="editor"><single>editor</single><multiple>editors</multiple></term><term name="editorial-director"><single>editor</single><multiple>editors</multiple></term><term name="illustrator"><single>illustrator</single><multiple>illustrators</multiple></term><term name="translator"><single>translator</single><multiple>translators</multiple></term><term name="editortranslator"><single>editor &amp; translator</single><multiple>editors &amp; translators</multiple></term><term name="director" form="short"><single>dir.</single><multiple>dirs.</multiple></term><term name="editor" form="short"><single>ed.</single><multiple>eds.</multiple></term><term name="editorial-director" form="short"><single>ed.</single><multiple>eds.</multiple></term><term name="illustrator" form="short"><single>ill.</single><multiple>ills.</multiple></term><term name="translator" form="short"><single>tran.</single><multiple>trans.</multiple></term><term name="editortranslator" form="short"><single>ed. &amp; tran.</single><multiple>eds. &amp; trans.</multiple></term><term name="container-author" form="verb">by</term><term name="director" form="verb">directed by</term><term name="editor" form="verb">edited by</term><term name="editorial-director" form="verb">edited by</term><term name="illustrator" form="verb">illustrated by</term><term name="interviewer" form="verb">interview by</term><term name="recipient" form="verb">to</term><term name="reviewed-author" form="verb">by</term><term name="translator" form="verb">translated by</term><term name="editortranslator" form="verb">edited &amp; translated by</term><term name="director" form="verb-short">dir. by</term><term name="editor" form="verb-short">ed. by</term><term name="editorial-director" form="verb-short">ed. by</term><term name="illustrator" form="verb-short">illus. by</term><term name="translator" form="verb-short">trans. by</term><term name="editortranslator" form="verb-short">ed. &amp; trans. by</term><term name="month-01">January</term><term name="month-02">February</term><term name="month-03">March</term><term name="month-04">April</term><term name="month-05">May</term><term name="month-06">June</term><term name="month-07">July</term><term name="month-08">August</term><term name="month-09">September</term>' + '<term name="month-10">October</term><term name="month-11">November</term><term name="month-12">December</term><term name="month-01" form="short">Jan.</term><term name="month-02" form="short">Feb.</term><term name="month-03" form="short">Mar.</term><term name="month-04" form="short">Apr.</term><term name="month-05" form="short">May</term><term name="month-06" form="short">Jun.</term><term name="month-07" form="short">Jul.</term><term name="month-08" form="short">Aug.</term><term name="month-09" form="short">Sep.</term><term name="month-10" form="short">Oct.</term><term name="month-11" form="short">Nov.</term><term name="month-12" form="short">Dec.</term><term name="season-01">Spring</term><term name="season-02">Summer</term><term name="season-03">Autumn</term><term name="season-04">Winter</term></terms></locale>',
-  'nl-NL': '<?xml version="1.0" encoding="utf-8"?><locale xmlns="http://purl.org/net/xbiblio/csl" version="1.0" xml:lang="nl-NL"><info><translator><name>Rintze Zelle</name><uri>http://twitter.com/rintzezelle</uri></translator><rights license="http://creativecommons.org/licenses/by-sa/3.0/">This work is licensed under a Creative Commons Attribution-ShareAlike 3.0 License</rights><updated>2012-07-04T23:31:02+00:00</updated></info><style-options punctuation-in-quote="false"/><date form="text"><date-part name="day" suffix=" "/><date-part name="month" suffix=" "/><date-part name="year"/></date><date form="numeric"><date-part name="day" suffix="-" range-delimiter="/"/><date-part name="month" form="numeric" suffix="-" range-delimiter="/"/><date-part name="year"/></date><terms><term name="accessed">geraadpleegd</term><term name="and">en</term><term name="and others">en anderen</term><term name="anonymous">anoniem</term><term name="anonymous" form="short">anon.</term><term name="at">bij</term><term name="available at">beschikbaar op</term><term name="by">door</term><term name="circa">circa</term><term name="circa" form="short">c.</term><term name="cited">geciteerd</term><term name="edition"><single>editie</single><multiple>edities</multiple></term><term name="edition" form="short">ed.</term><term name="et-al">e.a.</term><term name="forthcoming">in voorbereiding</term><term name="from">van</term><term name="ibid">ibid.</term><term name="in">in</term><term name="in press">in druk</term><term name="internet">internet</term><term name="interview">interview</term><term name="letter">brief</term><term name="no date">zonder datum</term><term name="no date" form="short">z.d.</term><term name="online">online</term><term name="presented at">gepresenteerd bij</term><term name="reference"><single>referentie</single><multiple>referenties</multiple></term><term name="reference" form="short"><single>ref.</single><multiple>refs.</multiple></term><term name="retrieved">geraadpleegd</term><term name="scale">schaal</term><term name="version">versie</term><term name="ad">AD</term><term name="bc">BC</term><term name="open-quote">“</term><term name="close-quote">”</term><term name="open-inner-quote">‘</term><term name="close-inner-quote">’</term><term name="page-range-delimiter">–</term><term name="ordinal">ste</term><term name="ordinal-00" match="whole-number">de</term><term name="ordinal-02" match="last-two-digits">de</term><term name="ordinal-03" match="last-two-digits">de</term><term name="ordinal-04" match="last-two-digits">de</term><term name="ordinal-05" match="last-two-digits">de</term><term name="ordinal-06" match="last-two-digits">de</term><term name="ordinal-07" match="last-two-digits">de</term><term name="ordinal-09" match="last-two-digits">de</term><term name="ordinal-10">de</term><term name="ordinal-11">de</term><term name="ordinal-12">de</term><term name="ordinal-13">de</term><term name="ordinal-14">de</term><term name="ordinal-15">de</term><term name="ordinal-16">de</term><term name="ordinal-17">de</term><term name="ordinal-18">de</term><term name="ordinal-19">de</term><term name="long-ordinal-01">eerste</term><term name="long-ordinal-02">tweede</term><term name="long-ordinal-03">derde</term><term name="long-ordinal-04">vierde</term><term name="long-ordinal-05">vijfde</term><term name="long-ordinal-06">zesde</term><term name="long-ordinal-07">zevende</term><term name="long-ordinal-08">achtste</term><term name="long-ordinal-09">negende</term><term name="long-ordinal-10">tiende</term><term name="book"><single>boek</single><multiple>boeken</multiple></term><term name="chapter"><single>hoofdstuk</single><multiple>hoofdstukken</multiple></term><term name="column"><single>column</single><multiple>columns</multiple></term><term name="figure"><single>figuur</single><multiple>figuren</multiple></term><term name="folio"><single>folio</single><multiple>folio\'s</multiple></term><term name="issue"><single>nummer</single><multiple>nummers</multiple></term><term name="line"><single>regel</single><multiple>regels</multiple>' + '</term><term name="note"><single>aantekening</single><multiple>aantekeningen</multiple></term><term name="opus"><single>opus</single><multiple>opera</multiple></term><term name="page"><single>pagina</single><multiple>pagina\'s</multiple></term><term name="number-of-pages"><single>pagina</single><multiple>pagina\'s</multiple></term><term name="paragraph"><single>paragraaf</single><multiple>paragrafen</multiple></term><term name="part"><single>deel</single><multiple>delen</multiple></term><term name="section"><single>sectie</single><multiple>secties</multiple></term><term name="sub verbo"><single>sub verbo</single><multiple>sub verbis</multiple></term><term name="verse"><single>vers</single><multiple>versen</multiple></term><term name="volume"><single>volume</single><multiple>volumes</multiple></term><term name="book" form="short">bk.</term><term name="chapter" form="short">hfdst.</term><term name="column" form="short">col.</term><term name="figure" form="short">fig.</term><term name="folio" form="short">f.</term><term name="issue" form="short">nr.</term><term name="line" form="short">l.</term><term name="note" form="short">n.</term><term name="opus" form="short">op.</term><term name="page" form="short"><single>p.</single><multiple>pp.</multiple></term><term name="number-of-pages" form="short"><single>p.</single><multiple>pp.</multiple></term><term name="paragraph" form="short">par.</term><term name="part" form="short">deel</term><term name="section" form="short">sec.</term><term name="sub verbo" form="short"><single>s.v.</single><multiple>s.vv.</multiple></term><term name="verse" form="short"><single>v.</single><multiple>vv.</multiple></term><term name="volume" form="short"><single>vol.</single><multiple>vols.</multiple></term><term name="paragraph" form="symbol"><single>¶</single><multiple>¶¶</multiple></term><term name="section" form="symbol"><single>§</single><multiple>§§</multiple></term><term name="director"><single>regisseur</single><multiple>regisseurs</multiple></term><term name="editor"><single>redacteur</single><multiple>redacteuren</multiple></term><term name="editorial-director"><single>redacteur</single><multiple>redacteuren</multiple></term><term name="illustrator"><single>illustrator</single><multiple>illustrators</multiple></term><term name="translator"><single>vertaler</single><multiple>vertalers</multiple></term><term name="editortranslator"><single>redacteur &amp; vertaler</single><multiple>redacteuren &amp; vertalers</multiple></term><term name="director" form="short"><single>reg.</single><multiple>reg.</multiple></term><term name="editor" form="short"><single>red.</single><multiple>red.</multiple></term><term name="editorial-director" form="short"><single>red.</single><multiple>red.</multiple></term><term name="illustrator" form="short"><single>ill.</single><multiple>ill.</multiple></term><term name="translator" form="short"><single>vert.</single><multiple>vert.</multiple></term><term name="editortranslator" form="short"><single>red. &amp; vert.</single><multiple>red. &amp; vert.</multiple></term><term name="container-author" form="verb">door</term><term name="director" form="verb">geregisseerd door</term><term name="editor" form="verb">bewerkt door</term><term name="editorial-director" form="verb">bewerkt door</term><term name="illustrator" form="verb">geïllustreerd door</term><term name="interviewer" form="verb">geïnterviewd door</term><term name="recipient" form="verb">ontvangen door</term><term name="reviewed-author" form="verb">door</term><term name="translator" form="verb">vertaald door</term><term name="editortranslator" form="verb">bewerkt &amp; vertaald door</term><term name="director" form="verb-short">geregisseerd door</term><term name="editor" form="verb-short">bewerkt door</term><term name="editorial-director" form="verb-short">bewerkt door</term><term name="illustrator" form="verb-short">geïllustreerd door</term><term name="translator" form="verb-short">vertaald door</term><term name="editortranslator" form="verb-short">bewerkt &amp; vertaald door</term>' + '<term name="month-01">januari</term><term name="month-02">februari</term><term name="month-03">maart</term><term name="month-04">april</term><term name="month-05">mei</term><term name="month-06">juni</term><term name="month-07">juli</term><term name="month-08">augustus</term><term name="month-09">september</term><term name="month-10">oktober</term><term name="month-11">november</term><term name="month-12">december</term><term name="month-01" form="short">jan.</term><term name="month-02" form="short">feb.</term><term name="month-03" form="short">mrt.</term><term name="month-04" form="short">apr.</term><term name="month-05" form="short">mei</term><term name="month-06" form="short">jun.</term><term name="month-07" form="short">jul.</term><term name="month-08" form="short">aug.</term><term name="month-09" form="short">sep.</term><term name="month-10" form="short">okt.</term><term name="month-11" form="short">nov.</term><term name="month-12" form="short">dec.</term><term name="season-01">lente</term><term name="season-02">zomer</term><term name="season-03">herst</term><term name="season-04">winter</term></terms></locale>',
-  'fr-FR': '<?xml version="1.0" encoding="utf-8"?><locale xmlns="http://purl.org/net/xbiblio/csl" version="1.0" xml:lang="fr-FR"><info><translator><name>Grégoire Colly</name></translator><rights license="http://creativecommons.org/licenses/by-sa/3.0/">This work is licensed under a Creative Commons Attribution-ShareAlike 3.0 License</rights><updated>2012-07-04T23:31:02+00:00</updated></info><style-options punctuation-in-quote="false" limit-day-ordinals-to-day-1="true"/><date form="text"><date-part name="day" suffix=" "/><date-part name="month" suffix=" "/><date-part name="year"/></date><date form="numeric"><date-part name="day" form="numeric-leading-zeros" suffix="/"/><date-part name="month" form="numeric-leading-zeros" suffix="/"/><date-part name="year"/></date><terms><term name="accessed">consulté le</term><term name="and">et</term><term name="and others">et autres</term><term name="anonymous">anonyme</term><term name="anonymous" form="short">anon.</term><term name="at">sur</term><term name="available at">disponible sur</term><term name="by">par</term><term name="circa">vers</term><term name="circa" form="short">v.</term><term name="cited">cité</term><term name="edition" gender="feminine"><single>édition</single><multiple>éditions</multiple></term><term name="edition" form="short">éd.</term><term name="et-al">et al.</term><term name="forthcoming">à paraître</term><term name="from">à l\'adresse</term><term name="ibid">ibid.</term><term name="in">in</term><term name="in press">sous presse</term><term name="internet">Internet</term><term name="interview">entretien</term><term name="letter">lettre</term><term name="no date">sans date</term><term name="no date" form="short">s.&#160;d.</term><term name="online">en ligne</term><term name="presented at">présenté à</term><term name="reference"><single>référence</single><multiple>références</multiple></term><term name="reference" form="short"><single>réf.</single><multiple>réf.</multiple></term><term name="retrieved">consulté</term><term name="scale">échelle</term><term name="version">version</term><term name="ad">apr. J.-C.</term><term name="bc">av. J.-C.</term><term name="open-quote">«&#160;</term><term name="close-quote">&#160;»</term><term name="open-inner-quote">“</term><term name="close-inner-quote">”</term><term name="page-range-delimiter">&#8209;</term><term name="ordinal">ᵉ</term><term name="ordinal-01" gender-form="feminine" match="whole-number">ʳᵉ</term><term name="ordinal-01" gender-form="masculine" match="whole-number">ᵉʳ</term><term name="long-ordinal-01">premier</term><term name="long-ordinal-02">deuxième</term><term name="long-ordinal-03">troisième</term><term name="long-ordinal-04">quatrième</term><term name="long-ordinal-05">cinquième</term><term name="long-ordinal-06">sixième</term><term name="long-ordinal-07">septième</term><term name="long-ordinal-08">huitième</term><term name="long-ordinal-09">neuvième</term><term name="long-ordinal-10">dixième</term><term name="book"><single>livre</single><multiple>livres</multiple></term><term name="chapter"><single>chapitre</single><multiple>chapitres</multiple></term><term name="column"><single>colonne</single><multiple>colonnes</multiple></term><term name="figure"><single>figure</single><multiple>figures</multiple></term><term name="folio"><single>folio</single><multiple>folios</multiple></term><term name="issue" gender="masculine"><single>numéro</single><multiple>numéros</multiple></term><term name="line"><single>ligne</single><multiple>lignes</multiple></term><term name="note"><single>note</single><multiple>notes</multiple></term><term name="opus"><single>opus</single><multiple>opus</multiple></term><term name="page"><single>page</single><multiple>pages</multiple></term><term name="number-of-pages"><single>page</single><multiple>pages</multiple></term><term name="paragraph"><single>paragraphe</single><multiple>paragraphes</multiple></term><term name="part"><single>partie</single><multiple>parties</multiple></term><term name="section"><single>section</single><multiple>sections</multiple>' + '</term><term name="sub verbo"><single>sub verbo</single><multiple>sub verbis</multiple></term><term name="verse"><single>verset</single><multiple>versets</multiple></term><term name="volume" gender="masculine"><single>volume</single><multiple>volumes</multiple></term><term name="book" form="short">liv.</term><term name="chapter" form="short">chap.</term><term name="column" form="short">col.</term><term name="figure" form="short">fig.</term><term name="folio" form="short"><single>fᵒ</single><multiple>fᵒˢ</multiple></term><term name="issue" form="short"><single>nᵒ</single><multiple>nᵒˢ</multiple></term><term name="line" form="short">l.</term><term name="note" form="short">n.</term><term name="opus" form="short">op.</term><term name="page" form="short"><single>p.</single><multiple>p.</multiple></term><term name="number-of-pages" form="short"><single>p.</single><multiple>p.</multiple></term><term name="paragraph" form="short">paragr.</term><term name="part" form="short">part.</term><term name="section" form="short">sect.</term><term name="sub verbo" form="short"><single>s.&#160;v.</single><multiple>s.&#160;vv.</multiple></term><term name="verse" form="short"><single>v.</single><multiple>v.</multiple></term><term name="volume" form="short"><single>vol.</single><multiple>vol.</multiple></term><term name="paragraph" form="symbol"><single>§</single><multiple>§</multiple></term><term name="section" form="symbol"><single>§</single><multiple>§</multiple></term><term name="director"><single>réalisateur</single><multiple>réalisateurs</multiple></term><term name="editor"><single>éditeur</single><multiple>éditeurs</multiple></term><term name="editorial-director"><single>directeur</single><multiple>directeurs</multiple></term><term name="illustrator"><single>illustrateur</single><multiple>illustrateurs</multiple></term><term name="translator"><single>traducteur</single><multiple>traducteurs</multiple></term><term name="editortranslator"><single>éditeur et traducteur</single><multiple>éditeurs et traducteurs</multiple></term><term name="director" form="short"><single>réal.</single><multiple>réal.</multiple></term><term name="editor" form="short"><single>éd.</single><multiple>éd.</multiple></term><term name="editorial-director" form="short"><single>dir.</single><multiple>dir.</multiple></term><term name="illustrator" form="short"><single>ill.</single><multiple>ill.</multiple></term><term name="translator" form="short"><single>trad.</single><multiple>trad.</multiple></term><term name="editortranslator" form="short"><single>éd. et trad.</single><multiple>éd. et trad.</multiple></term><term name="container-author" form="verb">par</term><term name="director" form="verb">réalisé par</term><term name="editor" form="verb">édité par</term><term name="editorial-director" form="verb">sous la direction de</term><term name="illustrator" form="verb">illustré par</term><term name="interviewer" form="verb">entretien réalisé par</term><term name="recipient" form="verb">à</term><term name="reviewed-author" form="verb">par</term><term name="translator" form="verb">traduit par</term><term name="editortranslator" form="verb">édité et traduit par</term><term name="director" form="verb-short">réal. par</term><term name="editor" form="verb-short">éd. par</term><term name="editorial-director" form="verb-short">ss la dir. de</term><term name="illustrator" form="verb-short">ill. par</term><term name="translator" form="verb-short">trad. par</term><term name="editortranslator" form="verb-short">éd. et trad. par</term><term name="month-01" gender="masculine">janvier</term><term name="month-02" gender="masculine">février</term><term name="month-03" gender="masculine">mars</term><term name="month-04" gender="masculine">avril</term><term name="month-05" gender="masculine">mai</term><term name="month-06" gender="masculine">juin</term><term name="month-07" gender="masculine">juillet</term><term name="month-08" gender="masculine">août</term><term name="month-09" gender="masculine">septembre</term><term name="month-10" gender="masculine">' + 'octobre</term><term name="month-11" gender="masculine">novembre</term><term name="month-12" gender="masculine">décembre</term><term name="month-01" form="short">janv.</term><term name="month-02" form="short">févr.</term><term name="month-03" form="short">mars</term><term name="month-04" form="short">avr.</term><term name="month-05" form="short">mai</term><term name="month-06" form="short">juin</term><term name="month-07" form="short">juill.</term><term name="month-08" form="short">août</term><term name="month-09" form="short">sept.</term><term name="month-10" form="short">oct.</term><term name="month-11" form="short">nov.</term><term name="month-12" form="short">déc.</term><term name="season-01">printemps</term><term name="season-02">été</term><term name="season-03">automne</term><term name="season-04">hiver</term></terms></locale>',
-  'de-DE': '<?xml version="1.0" encoding="utf-8"?><locale xmlns="http://purl.org/net/xbiblio/csl" version="1.0" xml:lang="de-DE"><info><rights license="http://creativecommons.org/licenses/by-sa/3.0/">This work is licensed under a Creative Commons Attribution-ShareAlike 3.0 License</rights><updated>2012-07-04T23:31:02+00:00</updated></info><style-options punctuation-in-quote="false"/><date form="text"><date-part name="day" form="ordinal" suffix=" "/><date-part name="month" suffix=" "/><date-part name="year"/></date><date form="numeric"><date-part name="day" form="numeric-leading-zeros" suffix="."/><date-part name="month" form="numeric-leading-zeros" suffix="."/><date-part name="year"/></date><terms><term name="accessed">zugegriffen</term><term name="and">und</term><term name="and others">und andere</term><term name="anonymous">ohne Autor</term><term name="anonymous" form="short">o.&#160;A.</term><term name="at">auf</term><term name="available at">verfügbar unter</term><term name="by">von</term><term name="circa">circa</term><term name="circa" form="short">ca.</term><term name="cited">zitiert</term><term name="edition"><single>Auflage</single><multiple>Auflagen</multiple></term><term name="edition" form="short">Aufl.</term><term name="et-al">u.&#160;a.</term><term name="forthcoming">i.&#160;E.</term><term name="from">von</term><term name="ibid">ebd.</term><term name="in">in</term><term name="in press">im Druck</term><term name="internet">Internet</term><term name="interview">Interview</term><term name="letter">Brief</term><term name="no date">ohne Datum</term><term name="no date" form="short">o.&#160;J.</term><term name="online">online</term><term name="presented at">gehalten auf der</term><term name="reference"><single>Referenz</single><multiple>Referenzen</multiple></term><term name="reference" form="short"><single>Ref.</single><multiple>Ref.</multiple></term><term name="retrieved">abgerufen</term><term name="scale">Maßstab</term><term name="version">Version</term><term name="ad">n.&#160;Chr.</term><term name="bc">v.&#160;Chr.</term><term name="open-quote">„</term><term name="close-quote">“</term><term name="open-inner-quote">‚</term><term name="close-inner-quote">‘</term><term name="page-range-delimiter">–</term><term name="ordinal">.</term><term name="long-ordinal-01">erster</term><term name="long-ordinal-02">zweiter</term><term name="long-ordinal-03">dritter</term><term name="long-ordinal-04">vierter</term><term name="long-ordinal-05">fünfter</term><term name="long-ordinal-06">sechster</term><term name="long-ordinal-07">siebter</term><term name="long-ordinal-08">achter</term><term name="long-ordinal-09">neunter</term><term name="long-ordinal-10">zehnter</term><term name="book"><single>Buch</single><multiple>Bücher</multiple></term><term name="chapter"><single>Kapitel</single><multiple>Kapitel</multiple></term><term name="column"><single>Spalte</single><multiple>Spalten</multiple></term><term name="figure"><single>Abbildung</single><multiple>Abbildungen</multiple></term><term name="folio"><single>Blatt</single><multiple>Blätter</multiple></term><term name="issue"><single>Nummer</single><multiple>Nummern</multiple></term><term name="line"><single>Zeile</single><multiple>Zeilen</multiple></term><term name="note"><single>Note</single><multiple>Noten</multiple></term><term name="opus"><single>Opus</single><multiple>Opera</multiple></term><term name="page"><single>Seite</single><multiple>Seiten</multiple></term><term name="number-of-pages"><single>Seite</single><multiple>Seiten</multiple></term><term name="paragraph"><single>Absatz</single><multiple>Absätze</multiple></term><term name="part"><single>Teil</single><multiple>Teile</multiple></term><term name="section"><single>Abschnitt</single><multiple>Abschnitte</multiple></term><term name="sub verbo"><single>sub verbo</single><multiple>sub verbis</multiple></term><term name="verse"><single>Vers</single><multiple>Verse</multiple></term><term name="volume"><single>Band</single><multiple>Bände</multiple></term><term name="book" form="short">B.</term>' + '<term name="chapter" form="short">Kap.</term><term name="column" form="short">Sp.</term><term name="figure" form="short">Abb.</term><term name="folio" form="short">Fol.</term><term name="issue" form="short">Nr.</term><term name="line" form="short">Z.</term><term name="note" form="short">N.</term><term name="opus" form="short">op.</term><term name="page" form="short"><single>S.</single><multiple>S.</multiple></term><term name="number-of-pages" form="short"><single>S.</single><multiple>S.</multiple></term><term name="paragraph" form="short">Abs.</term><term name="part" form="short">Teil</term><term name="section" form="short">Abschn.</term><term name="sub verbo" form="short"><single>s.&#160;v.</single><multiple>s.&#160;vv.</multiple></term><term name="verse" form="short"><single>V.</single><multiple>V.</multiple></term><term name="volume" form="short"><single>Bd.</single><multiple>Bde.</multiple></term><term name="paragraph" form="symbol"><single>¶</single><multiple>¶¶</multiple></term><term name="section" form="symbol"><single>§</single><multiple>§§</multiple></term><term name="director"><single>Regisseur</single><multiple>Regisseure</multiple></term><term name="editor"><single>Herausgeber</single><multiple>Herausgeber</multiple></term><term name="collection-editor"><single>Reihenherausgeber</single><multiple>Reihenherausgeber</multiple></term><term name="editorial-director"><single>Herausgeber</single><multiple>Herausgeber</multiple></term><term name="illustrator"><single>Illustrator</single><multiple>Illustratoren</multiple></term><term name="translator"><single>Übersetzer</single><multiple>Übersetzer</multiple></term><term name="editortranslator"><single>Herausgeber&#160;&amp; Übersetzer</single><multiple>Herausgeber&#160;&amp; Übersetzer</multiple></term><term name="director" form="short"><single>Reg.</single><multiple>Reg.</multiple></term><term name="editor" form="short"><single>Hrsg.</single><multiple>Hrsg.</multiple></term><term name="collection-editor" form="short"><single>Hrsg.</single><multiple>Hrsg.</multiple></term><term name="editorial-director" form="short"><single>Hrsg.</single><multiple>Hrsg.</multiple></term><term name="illustrator" form="short"><single>Ill.</single><multiple>Ill.</multiple></term><term name="translator" form="short"><single>Übers.</single><multiple>Übers.</multiple></term><term name="editortranslator" form="short"><single>Hrsg.&#160;&amp; Übers.</single><multiple>Hrsg.&#160;&amp; Übers</multiple></term><term name="container-author" form="verb">von</term><term name="director" form="verb">Regie von</term><term name="editor" form="verb">herausgegeben von</term><term name="collection-editor" form="verb">herausgegeben von</term><term name="editorial-director" form="verb">herausgegeben von</term><term name="illustrator" form="verb">illustriert von</term><term name="interviewer" form="verb">interviewt von</term><term name="recipient" form="verb">an</term><term name="reviewed-author" form="verb">von</term><term name="translator" form="verb">übersetzt von</term><term name="editortranslator" form="verb">herausgegeben und übersetzt von</term><term name="director" form="verb-short">Reg.</term><term name="editor" form="verb-short">hg. von</term><term name="collection-editor" form="verb-short">hg. von</term><term name="editorial-director" form="verb-short">hg. von</term><term name="illustrator" form="verb-short">illus. von</term><term name="translator" form="verb-short">übers. von</term><term name="editortranslator" form="verb-short">hg.&#160;&amp; übers. von</term><term name="month-01">Januar</term><term name="month-02">Februar</term><term name="month-03">März</term><term name="month-04">April</term><term name="month-05">Mai</term><term name="month-06">Juni</term><term name="month-07">Juli</term><term name="month-08">August</term><term name="month-09">September</term><term name="month-10">Oktober</term><term name="month-11">November</term><term name="month-12">Dezember</term><term name="month-01" form="short">Jan.</term><term name="month-02" form="short">Feb.</term>' + '<term name="month-03" form="short">März</term><term name="month-04" form="short">Apr.</term><term name="month-05" form="short">Mai</term><term name="month-06" form="short">Juni</term><term name="month-07" form="short">Juli</term><term name="month-08" form="short">Aug.</term><term name="month-09" form="short">Sep.</term><term name="month-10" form="short">Okt.</term><term name="month-11" form="short">Nov.</term><term name="month-12" form="short">Dez.</term><term name="season-01">Frühjahr</term><term name="season-02">Sommer</term><term name="season-03">Herbst</term><term name="season-04">Winter</term></terms></locale>',
-  'es-ES': '<?xml version="1.0" encoding="utf-8"?><locale xmlns="http://purl.org/net/xbiblio/csl" version="1.0" xml:lang="es-ES"><info><rights license="http://creativecommons.org/licenses/by-sa/3.0/">This work is licensed under a Creative Commons Attribution-ShareAlike 3.0 License</rights><updated>2012-07-04T23:31:02+00:00</updated></info><style-options punctuation-in-quote="false"/><date form="text"><date-part name="day" suffix=" de "/><date-part name="month" suffix=" de "/><date-part name="year"/></date><date form="numeric"><date-part name="day" form="numeric-leading-zeros" suffix="/"/><date-part name="month" form="numeric-leading-zeros" suffix="/"/><date-part name="year"/></date><terms><term name="accessed">accedido</term><term name="and">y</term><term name="and others">y otros</term><term name="anonymous">anónimo</term><term name="anonymous" form="short">anón.</term><term name="at">en</term><term name="available at">disponible en</term><term name="by">de</term><term name="circa">circa</term><term name="circa" form="short">c.</term><term name="cited">citado</term><term name="edition"><single>edición</single><multiple>ediciones</multiple></term><term name="edition" form="short">ed.</term><term name="et-al">et&#160;al.</term><term name="forthcoming">previsto</term><term name="from">a partir de</term><term name="ibid">ibid.</term><term name="in">en</term><term name="in press">en imprenta</term><term name="internet">internet</term><term name="interview">entrevista</term><term name="letter">carta</term><term name="no date">sin fecha</term><term name="no date" form="short">s.&#160;f.</term><term name="online">en línea</term><term name="presented at">presentado en</term><term name="reference"><single>referencia</single><multiple>referencias</multiple></term><term name="reference" form="short"><single>ref.</single><multiple>refs.</multiple></term><term name="retrieved">recuperado</term><term name="scale">escala</term><term name="version">versión</term><term name="ad">d.&#160;C.</term><term name="bc">a.&#160;C.</term><term name="open-quote">«</term><term name="close-quote">»</term><term name="open-inner-quote">“</term><term name="close-inner-quote">”</term><term name="page-range-delimiter">-</term><term name="ordinal">.ª</term><term name="long-ordinal-01">primera</term><term name="long-ordinal-02">segunda</term><term name="long-ordinal-03">tercera</term><term name="long-ordinal-04">cuarta</term><term name="long-ordinal-05">quinta</term><term name="long-ordinal-06">sexta</term><term name="long-ordinal-07">séptima</term><term name="long-ordinal-08">octava</term><term name="long-ordinal-09">novena</term><term name="long-ordinal-10">décima</term><term name="book"><single>libro</single><multiple>libros</multiple></term><term name="chapter"><single>capítulo</single><multiple>capítulos</multiple></term><term name="column"><single>columna</single><multiple>columnas</multiple></term><term name="figure"><single>figura</single><multiple>figuras</multiple></term><term name="folio"><single>folio</single><multiple>folios</multiple></term><term name="issue"><single>número</single><multiple>números</multiple></term><term name="line"><single>línea</single><multiple>líneas</multiple></term><term name="note"><single>nota</single><multiple>notas</multiple></term><term name="opus"><single>opus</single><multiple>opera</multiple></term><term name="page"><single>página</single><multiple>páginas</multiple></term><term name="number-of-pages"><single>página</single><multiple>páginas</multiple></term><term name="paragraph"><single>párrafo</single><multiple>párrafos</multiple></term><term name="part"><single>parte</single><multiple>partes</multiple></term><term name="section"><single>sección</single><multiple>secciones</multiple></term><term name="sub verbo"><single>sub voce</single><multiple>sub vocibus</multiple></term><term name="verse"><single>verso</single><multiple>versos</multiple></term><term name="volume"><single>volumen</single><multiple>volúmenes</multiple></term><term name="book" form="short">lib.</term>' + '<term name="chapter" form="short">cap.</term><term name="column" form="short">col.</term><term name="figure" form="short">fig.</term><term name="folio" form="short">f.</term><term name="issue" form="short">n.º</term><term name="line" form="short">l.</term><term name="note" form="short">n.</term><term name="opus" form="short">op.</term><term name="page" form="short"><single>p.</single><multiple>pp.</multiple></term><term name="number-of-pages" form="short"><single>p.</single><multiple>pp.</multiple></term><term name="paragraph" form="short">párr.</term><term name="part" form="short">pt.</term><term name="section" form="short">sec.</term><term name="sub verbo" form="short"><single>s.&#160;v.</single><multiple>s.&#160;vv.</multiple></term><term name="verse" form="short"><single>v.</single><multiple>vv.</multiple></term><term name="volume" form="short"><single>vol.</single><multiple>vols.</multiple></term><term name="paragraph" form="symbol"><single>§</single><multiple>§</multiple></term><term name="section" form="symbol"><single>§</single><multiple>§</multiple></term><term name="director"><single>director</single><multiple>directores</multiple></term><term name="editor"><single>editor</single><multiple>editores</multiple></term><term name="editorial-director"><single>editor</single><multiple>editores</multiple></term><term name="illustrator"><single>ilustrador</single><multiple>ilustradores</multiple></term><term name="translator"><single>traductor</single><multiple>traductores</multiple></term><term name="editortranslator"><single>editor y traductor</single><multiple>editores y traductores</multiple></term><term name="director" form="short"><single>dir.</single><multiple>dirs.</multiple></term><term name="editor" form="short"><single>ed.</single><multiple>eds.</multiple></term><term name="editorial-director" form="short"><single>ed.</single><multiple>eds.</multiple></term><term name="illustrator" form="short"><single>ilust.</single><multiple>ilusts.</multiple></term><term name="translator" form="short"><single>trad.</single><multiple>trads.</multiple></term><term name="editortranslator" form="short"><single>ed. y trad.</single><multiple>eds. y trads.</multiple></term><term name="container-author" form="verb">de</term><term name="director" form="verb">dirigido por</term><term name="editor" form="verb">editado por</term><term name="editorial-director" form="verb">editado por</term><term name="illustrator" form="verb">ilustrado por</term><term name="interviewer" form="verb">entrevistado por</term><term name="recipient" form="verb">a</term><term name="reviewed-author" form="verb">por</term><term name="translator" form="verb">traducido por</term><term name="editortranslator" form="verb">editado y traducido por</term><term name="director" form="verb-short">dir.</term><term name="editor" form="verb-short">ed.</term><term name="editorial-director" form="verb-short">ed.</term><term name="illustrator" form="verb-short">ilust.</term><term name="translator" form="verb-short">trad.</term><term name="editortranslator" form="verb-short">ed. y trad.</term><term name="month-01">enero</term><term name="month-02">febrero</term><term name="month-03">marzo</term><term name="month-04">abril</term><term name="month-05">mayo</term><term name="month-06">junio</term><term name="month-07">julio</term><term name="month-08">agosto</term><term name="month-09">septiembre</term><term name="month-10">octubre</term><term name="month-11">noviembre</term><term name="month-12">diciembre</term><term name="month-01" form="short">ene.</term><term name="month-02" form="short">feb.</term><term name="month-03" form="short">mar.</term><term name="month-04" form="short">abr.</term><term name="month-05" form="short">may</term><term name="month-06" form="short">jun.</term><term name="month-07" form="short">jul.</term><term name="month-08" form="short">ago.</term><term name="month-09" form="short">sep.</term><term name="month-10" form="short">oct.</term><term name="month-11" form="short">nov.</term><term name="month-12" form="short">' + 'dic.</term><term name="season-01">primavera</term><term name="season-02">verano</term><term name="season-03">otoño</term><term name="season-04">invierno</term></terms></locale>'
+  'en-US': '<?xml version="1.0" encoding="utf-8"?><locale xmlns="http://purl.org/net/xbiblio/csl" version="1.0" xml:lang="en-US"><info><rights license="http://creativecommons.org/licenses/by-sa/3.0/">This work is licensed under a Creative Commons Attribution-ShareAlike 3.0 License</rights><updated>2015-10-10T23:31:02+00:00</updated></info><style-options punctuation-in-quote="true"/><date form="text"><date-part name="month" suffix=" "/><date-part name="day" suffix=", "/><date-part name="year"/></date><date form="numeric"><date-part name="month" form="numeric-leading-zeros" suffix="/"/><date-part name="day" form="numeric-leading-zeros" suffix="/"/><date-part name="year"/></date><terms><term name="accessed">accessed</term><term name="and">and</term><term name="and others">and others</term><term name="anonymous">anonymous</term><term name="anonymous" form="short">anon.</term><term name="at">at</term><term name="available at">available at</term><term name="by">by</term><term name="circa">circa</term><term name="circa" form="short">c.</term><term name="cited">cited</term><term name="edition"><single>edition</single><multiple>editions</multiple></term><term name="edition" form="short">ed.</term><term name="et-al">et al.</term><term name="forthcoming">forthcoming</term><term name="from">from</term><term name="ibid">ibid.</term><term name="in">in</term><term name="in press">in press</term><term name="internet">internet</term><term name="interview">interview</term><term name="letter">letter</term><term name="no date">no date</term><term name="no date" form="short">n.d.</term><term name="online">online</term><term name="presented at">presented at the</term><term name="reference"><single>reference</single><multiple>references</multiple></term><term name="reference" form="short"><single>ref.</single><multiple>refs.</multiple></term><term name="retrieved">retrieved</term><term name="scale">scale</term><term name="version">version</term><term name="ad">AD</term><term name="bc">BC</term><term name="open-quote">\u201C</term><term name="close-quote">\u201D</term><term name="open-inner-quote">\u2018</term><term name="close-inner-quote">\u2019</term><term name="page-range-delimiter">\u2013</term><term name="ordinal">th</term><term name="ordinal-01">st</term><term name="ordinal-02">nd</term><term name="ordinal-03">rd</term><term name="ordinal-11">th</term><term name="ordinal-12">th</term><term name="ordinal-13">th</term><term name="long-ordinal-01">first</term><term name="long-ordinal-02">second</term><term name="long-ordinal-03">third</term><term name="long-ordinal-04">fourth</term><term name="long-ordinal-05">fifth</term><term name="long-ordinal-06">sixth</term><term name="long-ordinal-07">seventh</term><term name="long-ordinal-08">eighth</term><term name="long-ordinal-09">ninth</term><term name="long-ordinal-10">tenth</term><term name="book"><single>book</single><multiple>books</multiple></term><term name="chapter"><single>chapter</single><multiple>chapters</multiple></term><term name="column"><single>column</single><multiple>columns</multiple></term><term name="figure"><single>figure</single><multiple>figures</multiple></term><term name="folio"><single>folio</single><multiple>folios</multiple></term><term name="issue"><single>number</single><multiple>numbers</multiple></term><term name="line"><single>line</single><multiple>lines</multiple></term><term name="note"><single>note</single><multiple>notes</multiple></term><term name="opus"><single>opus</single><multiple>opera</multiple></term><term name="page"><single>page</single><multiple>pages</multiple></term><term name="number-of-pages"><single>page</single><multiple>pages</multiple></term><term name="paragraph"><single>paragraph</single><multiple>paragraphs</multiple></term><term name="part"><single>part</single><multiple>parts</multiple></term><term name="section"><single>section</single><multiple>sections</multiple></term><term name="sub verbo"><single>sub verbo</single><multiple>sub verbis</multiple></term><term name="verse"><single>verse</single><multiple>verses</multiple>\n</term><term name="volume"><single>volume</single><multiple>volumes</multiple></term><term name="book" form="short"><single>bk.</single><multiple>bks.</multiple></term><term name="chapter" form="short"><single>chap.</single><multiple>chaps.</multiple></term><term name="column" form="short"><single>col.</single><multiple>cols.</multiple></term><term name="figure" form="short"><single>fig.</single><multiple>figs.</multiple></term><term name="folio" form="short"><single>fol.</single><multiple>fols.</multiple></term><term name="issue" form="short"><single>no.</single><multiple>nos.</multiple></term><term name="line" form="short"><single>l.</single><multiple>ll.</multiple></term><term name="note" form="short"><single>n.</single><multiple>nn.</multiple></term><term name="opus" form="short"><single>op.</single><multiple>opp.</multiple></term><term name="page" form="short"><single>p.</single><multiple>pp.</multiple></term><term name="number-of-pages" form="short"><single>p.</single><multiple>pp.</multiple></term><term name="paragraph" form="short"><single>para.</single><multiple>paras.</multiple></term><term name="part" form="short"><single>pt.</single><multiple>pts.</multiple></term><term name="section" form="short"><single>sec.</single><multiple>secs.</multiple></term><term name="sub verbo" form="short"><single>s.v.</single><multiple>s.vv.</multiple></term><term name="verse" form="short"><single>v.</single><multiple>vv.</multiple></term><term name="volume" form="short"><single>vol.</single><multiple>vols.</multiple></term><term name="paragraph" form="symbol"><single>\xB6</single><multiple>\xB6\xB6</multiple></term><term name="section" form="symbol"><single>\xA7</single><multiple>\xA7\xA7</multiple></term><term name="director"><single>director</single><multiple>directors</multiple></term><term name="editor"><single>editor</single><multiple>editors</multiple></term><term name="editorial-director"><single>editor</single><multiple>editors</multiple></term><term name="illustrator"><single>illustrator</single><multiple>illustrators</multiple></term><term name="translator"><single>translator</single><multiple>translators</multiple></term><term name="editortranslator"><single>editor &amp; translator</single><multiple>editors &amp; translators</multiple></term><term name="director" form="short"><single>dir.</single><multiple>dirs.</multiple></term><term name="editor" form="short"><single>ed.</single><multiple>eds.</multiple></term><term name="editorial-director" form="short"><single>ed.</single><multiple>eds.</multiple></term><term name="illustrator" form="short"><single>ill.</single><multiple>ills.</multiple></term><term name="translator" form="short"><single>tran.</single><multiple>trans.</multiple></term><term name="editortranslator" form="short"><single>ed. &amp; tran.</single><multiple>eds. &amp; trans.</multiple></term><term name="container-author" form="verb">by</term><term name="director" form="verb">directed by</term><term name="editor" form="verb">edited by</term><term name="editorial-director" form="verb">edited by</term><term name="illustrator" form="verb">illustrated by</term><term name="interviewer" form="verb">interview by</term><term name="recipient" form="verb">to</term><term name="reviewed-author" form="verb">by</term><term name="translator" form="verb">translated by</term><term name="editortranslator" form="verb">edited &amp; translated by</term><term name="director" form="verb-short">dir. by</term><term name="editor" form="verb-short">ed. by</term><term name="editorial-director" form="verb-short">ed. by</term><term name="illustrator" form="verb-short">illus. by</term><term name="translator" form="verb-short">trans. by</term><term name="editortranslator" form="verb-short">ed. &amp; trans. by</term><term name="month-01">January</term><term name="month-02">February</term><term name="month-03">March</term><term name="month-04">April</term><term name="month-05">May</term><term name="month-06">June</term><term name="month-07">July</term><term name="month-08">August</term><term name="month-09">September</term>\n<term name="month-10">October</term><term name="month-11">November</term><term name="month-12">December</term><term name="month-01" form="short">Jan.</term><term name="month-02" form="short">Feb.</term><term name="month-03" form="short">Mar.</term><term name="month-04" form="short">Apr.</term><term name="month-05" form="short">May</term><term name="month-06" form="short">Jun.</term><term name="month-07" form="short">Jul.</term><term name="month-08" form="short">Aug.</term><term name="month-09" form="short">Sep.</term><term name="month-10" form="short">Oct.</term><term name="month-11" form="short">Nov.</term><term name="month-12" form="short">Dec.</term><term name="season-01">Spring</term><term name="season-02">Summer</term><term name="season-03">Autumn</term><term name="season-04">Winter</term></terms></locale>',
+
+  'nl-NL': '<?xml version="1.0" encoding="utf-8"?><locale xmlns="http://purl.org/net/xbiblio/csl" version="1.0" xml:lang="nl-NL"><info><translator><name>Rintze Zelle</name><uri>http://twitter.com/rintzezelle</uri></translator><rights license="http://creativecommons.org/licenses/by-sa/3.0/">This work is licensed under a Creative Commons Attribution-ShareAlike 3.0 License</rights><updated>2012-07-04T23:31:02+00:00</updated></info><style-options punctuation-in-quote="false"/><date form="text"><date-part name="day" suffix=" "/><date-part name="month" suffix=" "/><date-part name="year"/></date><date form="numeric"><date-part name="day" suffix="-" range-delimiter="/"/><date-part name="month" form="numeric" suffix="-" range-delimiter="/"/><date-part name="year"/></date><terms><term name="accessed">geraadpleegd</term><term name="and">en</term><term name="and others">en anderen</term><term name="anonymous">anoniem</term><term name="anonymous" form="short">anon.</term><term name="at">bij</term><term name="available at">beschikbaar op</term><term name="by">door</term><term name="circa">circa</term><term name="circa" form="short">c.</term><term name="cited">geciteerd</term><term name="edition"><single>editie</single><multiple>edities</multiple></term><term name="edition" form="short">ed.</term><term name="et-al">e.a.</term><term name="forthcoming">in voorbereiding</term><term name="from">van</term><term name="ibid">ibid.</term><term name="in">in</term><term name="in press">in druk</term><term name="internet">internet</term><term name="interview">interview</term><term name="letter">brief</term><term name="no date">zonder datum</term><term name="no date" form="short">z.d.</term><term name="online">online</term><term name="presented at">gepresenteerd bij</term><term name="reference"><single>referentie</single><multiple>referenties</multiple></term><term name="reference" form="short"><single>ref.</single><multiple>refs.</multiple></term><term name="retrieved">geraadpleegd</term><term name="scale">schaal</term><term name="version">versie</term><term name="ad">AD</term><term name="bc">BC</term><term name="open-quote">\u201C</term><term name="close-quote">\u201D</term><term name="open-inner-quote">\u2018</term><term name="close-inner-quote">\u2019</term><term name="page-range-delimiter">\u2013</term><term name="ordinal">ste</term><term name="ordinal-00" match="whole-number">de</term><term name="ordinal-02" match="last-two-digits">de</term><term name="ordinal-03" match="last-two-digits">de</term><term name="ordinal-04" match="last-two-digits">de</term><term name="ordinal-05" match="last-two-digits">de</term><term name="ordinal-06" match="last-two-digits">de</term><term name="ordinal-07" match="last-two-digits">de</term><term name="ordinal-09" match="last-two-digits">de</term><term name="ordinal-10">de</term><term name="ordinal-11">de</term><term name="ordinal-12">de</term><term name="ordinal-13">de</term><term name="ordinal-14">de</term><term name="ordinal-15">de</term><term name="ordinal-16">de</term><term name="ordinal-17">de</term><term name="ordinal-18">de</term><term name="ordinal-19">de</term><term name="long-ordinal-01">eerste</term><term name="long-ordinal-02">tweede</term><term name="long-ordinal-03">derde</term><term name="long-ordinal-04">vierde</term><term name="long-ordinal-05">vijfde</term><term name="long-ordinal-06">zesde</term><term name="long-ordinal-07">zevende</term><term name="long-ordinal-08">achtste</term><term name="long-ordinal-09">negende</term><term name="long-ordinal-10">tiende</term><term name="book"><single>boek</single><multiple>boeken</multiple></term><term name="chapter"><single>hoofdstuk</single><multiple>hoofdstukken</multiple></term><term name="column"><single>column</single><multiple>columns</multiple></term><term name="figure"><single>figuur</single><multiple>figuren</multiple></term><term name="folio"><single>folio</single><multiple>folio\'s</multiple></term><term name="issue"><single>nummer</single><multiple>nummers</multiple></term><term name="line"><single>regel</single><multiple>regels</multiple>\n</term><term name="note"><single>aantekening</single><multiple>aantekeningen</multiple></term><term name="opus"><single>opus</single><multiple>opera</multiple></term><term name="page"><single>pagina</single><multiple>pagina\'s</multiple></term><term name="number-of-pages"><single>pagina</single><multiple>pagina\'s</multiple></term><term name="paragraph"><single>paragraaf</single><multiple>paragrafen</multiple></term><term name="part"><single>deel</single><multiple>delen</multiple></term><term name="section"><single>sectie</single><multiple>secties</multiple></term><term name="sub verbo"><single>sub verbo</single><multiple>sub verbis</multiple></term><term name="verse"><single>vers</single><multiple>versen</multiple></term><term name="volume"><single>volume</single><multiple>volumes</multiple></term><term name="book" form="short">bk.</term><term name="chapter" form="short">hfdst.</term><term name="column" form="short">col.</term><term name="figure" form="short">fig.</term><term name="folio" form="short">f.</term><term name="issue" form="short">nr.</term><term name="line" form="short">l.</term><term name="note" form="short">n.</term><term name="opus" form="short">op.</term><term name="page" form="short"><single>p.</single><multiple>pp.</multiple></term><term name="number-of-pages" form="short"><single>p.</single><multiple>pp.</multiple></term><term name="paragraph" form="short">par.</term><term name="part" form="short">deel</term><term name="section" form="short">sec.</term><term name="sub verbo" form="short"><single>s.v.</single><multiple>s.vv.</multiple></term><term name="verse" form="short"><single>v.</single><multiple>vv.</multiple></term><term name="volume" form="short"><single>vol.</single><multiple>vols.</multiple></term><term name="paragraph" form="symbol"><single>\xB6</single><multiple>\xB6\xB6</multiple></term><term name="section" form="symbol"><single>\xA7</single><multiple>\xA7\xA7</multiple></term><term name="director"><single>regisseur</single><multiple>regisseurs</multiple></term><term name="editor"><single>redacteur</single><multiple>redacteuren</multiple></term><term name="editorial-director"><single>redacteur</single><multiple>redacteuren</multiple></term><term name="illustrator"><single>illustrator</single><multiple>illustrators</multiple></term><term name="translator"><single>vertaler</single><multiple>vertalers</multiple></term><term name="editortranslator"><single>redacteur &amp; vertaler</single><multiple>redacteuren &amp; vertalers</multiple></term><term name="director" form="short"><single>reg.</single><multiple>reg.</multiple></term><term name="editor" form="short"><single>red.</single><multiple>red.</multiple></term><term name="editorial-director" form="short"><single>red.</single><multiple>red.</multiple></term><term name="illustrator" form="short"><single>ill.</single><multiple>ill.</multiple></term><term name="translator" form="short"><single>vert.</single><multiple>vert.</multiple></term><term name="editortranslator" form="short"><single>red. &amp; vert.</single><multiple>red. &amp; vert.</multiple></term><term name="container-author" form="verb">door</term><term name="director" form="verb">geregisseerd door</term><term name="editor" form="verb">bewerkt door</term><term name="editorial-director" form="verb">bewerkt door</term><term name="illustrator" form="verb">ge\xEFllustreerd door</term><term name="interviewer" form="verb">ge\xEFnterviewd door</term><term name="recipient" form="verb">ontvangen door</term><term name="reviewed-author" form="verb">door</term><term name="translator" form="verb">vertaald door</term><term name="editortranslator" form="verb">bewerkt &amp; vertaald door</term><term name="director" form="verb-short">geregisseerd door</term><term name="editor" form="verb-short">bewerkt door</term><term name="editorial-director" form="verb-short">bewerkt door</term><term name="illustrator" form="verb-short">ge\xEFllustreerd door</term><term name="translator" form="verb-short">vertaald door</term><term name="editortranslator" form="verb-short">bewerkt &amp; vertaald door</term>\n<term name="month-01">januari</term><term name="month-02">februari</term><term name="month-03">maart</term><term name="month-04">april</term><term name="month-05">mei</term><term name="month-06">juni</term><term name="month-07">juli</term><term name="month-08">augustus</term><term name="month-09">september</term><term name="month-10">oktober</term><term name="month-11">november</term><term name="month-12">december</term><term name="month-01" form="short">jan.</term><term name="month-02" form="short">feb.</term><term name="month-03" form="short">mrt.</term><term name="month-04" form="short">apr.</term><term name="month-05" form="short">mei</term><term name="month-06" form="short">jun.</term><term name="month-07" form="short">jul.</term><term name="month-08" form="short">aug.</term><term name="month-09" form="short">sep.</term><term name="month-10" form="short">okt.</term><term name="month-11" form="short">nov.</term><term name="month-12" form="short">dec.</term><term name="season-01">lente</term><term name="season-02">zomer</term><term name="season-03">herst</term><term name="season-04">winter</term></terms></locale>',
+
+  'fr-FR': '<?xml version="1.0" encoding="utf-8"?><locale xmlns="http://purl.org/net/xbiblio/csl" version="1.0" xml:lang="fr-FR"><info><translator><name>Gr\xE9goire Colly</name></translator><rights license="http://creativecommons.org/licenses/by-sa/3.0/">This work is licensed under a Creative Commons Attribution-ShareAlike 3.0 License</rights><updated>2012-07-04T23:31:02+00:00</updated></info><style-options punctuation-in-quote="false" limit-day-ordinals-to-day-1="true"/><date form="text"><date-part name="day" suffix=" "/><date-part name="month" suffix=" "/><date-part name="year"/></date><date form="numeric"><date-part name="day" form="numeric-leading-zeros" suffix="/"/><date-part name="month" form="numeric-leading-zeros" suffix="/"/><date-part name="year"/></date><terms><term name="accessed">consult\xE9 le</term><term name="and">et</term><term name="and others">et autres</term><term name="anonymous">anonyme</term><term name="anonymous" form="short">anon.</term><term name="at">sur</term><term name="available at">disponible sur</term><term name="by">par</term><term name="circa">vers</term><term name="circa" form="short">v.</term><term name="cited">cit\xE9</term><term name="edition" gender="feminine"><single>\xE9dition</single><multiple>\xE9ditions</multiple></term><term name="edition" form="short">\xE9d.</term><term name="et-al">et al.</term><term name="forthcoming">\xE0 para\xEEtre</term><term name="from">\xE0 l\'adresse</term><term name="ibid">ibid.</term><term name="in">in</term><term name="in press">sous presse</term><term name="internet">Internet</term><term name="interview">entretien</term><term name="letter">lettre</term><term name="no date">sans date</term><term name="no date" form="short">s.&#160;d.</term><term name="online">en ligne</term><term name="presented at">pr\xE9sent\xE9 \xE0</term><term name="reference"><single>r\xE9f\xE9rence</single><multiple>r\xE9f\xE9rences</multiple></term><term name="reference" form="short"><single>r\xE9f.</single><multiple>r\xE9f.</multiple></term><term name="retrieved">consult\xE9</term><term name="scale">\xE9chelle</term><term name="version">version</term><term name="ad">apr. J.-C.</term><term name="bc">av. J.-C.</term><term name="open-quote">\xAB&#160;</term><term name="close-quote">&#160;\xBB</term><term name="open-inner-quote">\u201C</term><term name="close-inner-quote">\u201D</term><term name="page-range-delimiter">&#8209;</term><term name="ordinal">\u1D49</term><term name="ordinal-01" gender-form="feminine" match="whole-number">\u02B3\u1D49</term><term name="ordinal-01" gender-form="masculine" match="whole-number">\u1D49\u02B3</term><term name="long-ordinal-01">premier</term><term name="long-ordinal-02">deuxi\xE8me</term><term name="long-ordinal-03">troisi\xE8me</term><term name="long-ordinal-04">quatri\xE8me</term><term name="long-ordinal-05">cinqui\xE8me</term><term name="long-ordinal-06">sixi\xE8me</term><term name="long-ordinal-07">septi\xE8me</term><term name="long-ordinal-08">huiti\xE8me</term><term name="long-ordinal-09">neuvi\xE8me</term><term name="long-ordinal-10">dixi\xE8me</term><term name="book"><single>livre</single><multiple>livres</multiple></term><term name="chapter"><single>chapitre</single><multiple>chapitres</multiple></term><term name="column"><single>colonne</single><multiple>colonnes</multiple></term><term name="figure"><single>figure</single><multiple>figures</multiple></term><term name="folio"><single>folio</single><multiple>folios</multiple></term><term name="issue" gender="masculine"><single>num\xE9ro</single><multiple>num\xE9ros</multiple></term><term name="line"><single>ligne</single><multiple>lignes</multiple></term><term name="note"><single>note</single><multiple>notes</multiple></term><term name="opus"><single>opus</single><multiple>opus</multiple></term><term name="page"><single>page</single><multiple>pages</multiple></term><term name="number-of-pages"><single>page</single><multiple>pages</multiple></term><term name="paragraph"><single>paragraphe</single><multiple>paragraphes</multiple></term><term name="part"><single>partie</single><multiple>parties</multiple></term><term name="section"><single>section</single><multiple>sections</multiple>\n</term><term name="sub verbo"><single>sub verbo</single><multiple>sub verbis</multiple></term><term name="verse"><single>verset</single><multiple>versets</multiple></term><term name="volume" gender="masculine"><single>volume</single><multiple>volumes</multiple></term><term name="book" form="short">liv.</term><term name="chapter" form="short">chap.</term><term name="column" form="short">col.</term><term name="figure" form="short">fig.</term><term name="folio" form="short"><single>f\u1D52</single><multiple>f\u1D52\u02E2</multiple></term><term name="issue" form="short"><single>n\u1D52</single><multiple>n\u1D52\u02E2</multiple></term><term name="line" form="short">l.</term><term name="note" form="short">n.</term><term name="opus" form="short">op.</term><term name="page" form="short"><single>p.</single><multiple>p.</multiple></term><term name="number-of-pages" form="short"><single>p.</single><multiple>p.</multiple></term><term name="paragraph" form="short">paragr.</term><term name="part" form="short">part.</term><term name="section" form="short">sect.</term><term name="sub verbo" form="short"><single>s.&#160;v.</single><multiple>s.&#160;vv.</multiple></term><term name="verse" form="short"><single>v.</single><multiple>v.</multiple></term><term name="volume" form="short"><single>vol.</single><multiple>vol.</multiple></term><term name="paragraph" form="symbol"><single>\xA7</single><multiple>\xA7</multiple></term><term name="section" form="symbol"><single>\xA7</single><multiple>\xA7</multiple></term><term name="director"><single>r\xE9alisateur</single><multiple>r\xE9alisateurs</multiple></term><term name="editor"><single>\xE9diteur</single><multiple>\xE9diteurs</multiple></term><term name="editorial-director"><single>directeur</single><multiple>directeurs</multiple></term><term name="illustrator"><single>illustrateur</single><multiple>illustrateurs</multiple></term><term name="translator"><single>traducteur</single><multiple>traducteurs</multiple></term><term name="editortranslator"><single>\xE9diteur et traducteur</single><multiple>\xE9diteurs et traducteurs</multiple></term><term name="director" form="short"><single>r\xE9al.</single><multiple>r\xE9al.</multiple></term><term name="editor" form="short"><single>\xE9d.</single><multiple>\xE9d.</multiple></term><term name="editorial-director" form="short"><single>dir.</single><multiple>dir.</multiple></term><term name="illustrator" form="short"><single>ill.</single><multiple>ill.</multiple></term><term name="translator" form="short"><single>trad.</single><multiple>trad.</multiple></term><term name="editortranslator" form="short"><single>\xE9d. et trad.</single><multiple>\xE9d. et trad.</multiple></term><term name="container-author" form="verb">par</term><term name="director" form="verb">r\xE9alis\xE9 par</term><term name="editor" form="verb">\xE9dit\xE9 par</term><term name="editorial-director" form="verb">sous la direction de</term><term name="illustrator" form="verb">illustr\xE9 par</term><term name="interviewer" form="verb">entretien r\xE9alis\xE9 par</term><term name="recipient" form="verb">\xE0</term><term name="reviewed-author" form="verb">par</term><term name="translator" form="verb">traduit par</term><term name="editortranslator" form="verb">\xE9dit\xE9 et traduit par</term><term name="director" form="verb-short">r\xE9al. par</term><term name="editor" form="verb-short">\xE9d. par</term><term name="editorial-director" form="verb-short">ss la dir. de</term><term name="illustrator" form="verb-short">ill. par</term><term name="translator" form="verb-short">trad. par</term><term name="editortranslator" form="verb-short">\xE9d. et trad. par</term><term name="month-01" gender="masculine">janvier</term><term name="month-02" gender="masculine">f\xE9vrier</term><term name="month-03" gender="masculine">mars</term><term name="month-04" gender="masculine">avril</term><term name="month-05" gender="masculine">mai</term><term name="month-06" gender="masculine">juin</term><term name="month-07" gender="masculine">juillet</term><term name="month-08" gender="masculine">ao\xFBt</term><term name="month-09" gender="masculine">septembre</term><term name="month-10" gender="masculine">\noctobre</term><term name="month-11" gender="masculine">novembre</term><term name="month-12" gender="masculine">d\xE9cembre</term><term name="month-01" form="short">janv.</term><term name="month-02" form="short">f\xE9vr.</term><term name="month-03" form="short">mars</term><term name="month-04" form="short">avr.</term><term name="month-05" form="short">mai</term><term name="month-06" form="short">juin</term><term name="month-07" form="short">juill.</term><term name="month-08" form="short">ao\xFBt</term><term name="month-09" form="short">sept.</term><term name="month-10" form="short">oct.</term><term name="month-11" form="short">nov.</term><term name="month-12" form="short">d\xE9c.</term><term name="season-01">printemps</term><term name="season-02">\xE9t\xE9</term><term name="season-03">automne</term><term name="season-04">hiver</term></terms></locale>',
+
+  'de-DE': '<?xml version="1.0" encoding="utf-8"?><locale xmlns="http://purl.org/net/xbiblio/csl" version="1.0" xml:lang="de-DE"><info><rights license="http://creativecommons.org/licenses/by-sa/3.0/">This work is licensed under a Creative Commons Attribution-ShareAlike 3.0 License</rights><updated>2012-07-04T23:31:02+00:00</updated></info><style-options punctuation-in-quote="false"/><date form="text"><date-part name="day" form="ordinal" suffix=" "/><date-part name="month" suffix=" "/><date-part name="year"/></date><date form="numeric"><date-part name="day" form="numeric-leading-zeros" suffix="."/><date-part name="month" form="numeric-leading-zeros" suffix="."/><date-part name="year"/></date><terms><term name="accessed">zugegriffen</term><term name="and">und</term><term name="and others">und andere</term><term name="anonymous">ohne Autor</term><term name="anonymous" form="short">o.&#160;A.</term><term name="at">auf</term><term name="available at">verf\xFCgbar unter</term><term name="by">von</term><term name="circa">circa</term><term name="circa" form="short">ca.</term><term name="cited">zitiert</term><term name="edition"><single>Auflage</single><multiple>Auflagen</multiple></term><term name="edition" form="short">Aufl.</term><term name="et-al">u.&#160;a.</term><term name="forthcoming">i.&#160;E.</term><term name="from">von</term><term name="ibid">ebd.</term><term name="in">in</term><term name="in press">im Druck</term><term name="internet">Internet</term><term name="interview">Interview</term><term name="letter">Brief</term><term name="no date">ohne Datum</term><term name="no date" form="short">o.&#160;J.</term><term name="online">online</term><term name="presented at">gehalten auf der</term><term name="reference"><single>Referenz</single><multiple>Referenzen</multiple></term><term name="reference" form="short"><single>Ref.</single><multiple>Ref.</multiple></term><term name="retrieved">abgerufen</term><term name="scale">Ma\xDFstab</term><term name="version">Version</term><term name="ad">n.&#160;Chr.</term><term name="bc">v.&#160;Chr.</term><term name="open-quote">\u201E</term><term name="close-quote">\u201C</term><term name="open-inner-quote">\u201A</term><term name="close-inner-quote">\u2018</term><term name="page-range-delimiter">\u2013</term><term name="ordinal">.</term><term name="long-ordinal-01">erster</term><term name="long-ordinal-02">zweiter</term><term name="long-ordinal-03">dritter</term><term name="long-ordinal-04">vierter</term><term name="long-ordinal-05">f\xFCnfter</term><term name="long-ordinal-06">sechster</term><term name="long-ordinal-07">siebter</term><term name="long-ordinal-08">achter</term><term name="long-ordinal-09">neunter</term><term name="long-ordinal-10">zehnter</term><term name="book"><single>Buch</single><multiple>B\xFCcher</multiple></term><term name="chapter"><single>Kapitel</single><multiple>Kapitel</multiple></term><term name="column"><single>Spalte</single><multiple>Spalten</multiple></term><term name="figure"><single>Abbildung</single><multiple>Abbildungen</multiple></term><term name="folio"><single>Blatt</single><multiple>Bl\xE4tter</multiple></term><term name="issue"><single>Nummer</single><multiple>Nummern</multiple></term><term name="line"><single>Zeile</single><multiple>Zeilen</multiple></term><term name="note"><single>Note</single><multiple>Noten</multiple></term><term name="opus"><single>Opus</single><multiple>Opera</multiple></term><term name="page"><single>Seite</single><multiple>Seiten</multiple></term><term name="number-of-pages"><single>Seite</single><multiple>Seiten</multiple></term><term name="paragraph"><single>Absatz</single><multiple>Abs\xE4tze</multiple></term><term name="part"><single>Teil</single><multiple>Teile</multiple></term><term name="section"><single>Abschnitt</single><multiple>Abschnitte</multiple></term><term name="sub verbo"><single>sub verbo</single><multiple>sub verbis</multiple></term><term name="verse"><single>Vers</single><multiple>Verse</multiple></term><term name="volume"><single>Band</single><multiple>B\xE4nde</multiple></term><term name="book" form="short">B.</term>\n<term name="chapter" form="short">Kap.</term><term name="column" form="short">Sp.</term><term name="figure" form="short">Abb.</term><term name="folio" form="short">Fol.</term><term name="issue" form="short">Nr.</term><term name="line" form="short">Z.</term><term name="note" form="short">N.</term><term name="opus" form="short">op.</term><term name="page" form="short"><single>S.</single><multiple>S.</multiple></term><term name="number-of-pages" form="short"><single>S.</single><multiple>S.</multiple></term><term name="paragraph" form="short">Abs.</term><term name="part" form="short">Teil</term><term name="section" form="short">Abschn.</term><term name="sub verbo" form="short"><single>s.&#160;v.</single><multiple>s.&#160;vv.</multiple></term><term name="verse" form="short"><single>V.</single><multiple>V.</multiple></term><term name="volume" form="short"><single>Bd.</single><multiple>Bde.</multiple></term><term name="paragraph" form="symbol"><single>\xB6</single><multiple>\xB6\xB6</multiple></term><term name="section" form="symbol"><single>\xA7</single><multiple>\xA7\xA7</multiple></term><term name="director"><single>Regisseur</single><multiple>Regisseure</multiple></term><term name="editor"><single>Herausgeber</single><multiple>Herausgeber</multiple></term><term name="collection-editor"><single>Reihenherausgeber</single><multiple>Reihenherausgeber</multiple></term><term name="editorial-director"><single>Herausgeber</single><multiple>Herausgeber</multiple></term><term name="illustrator"><single>Illustrator</single><multiple>Illustratoren</multiple></term><term name="translator"><single>\xDCbersetzer</single><multiple>\xDCbersetzer</multiple></term><term name="editortranslator"><single>Herausgeber&#160;&amp; \xDCbersetzer</single><multiple>Herausgeber&#160;&amp; \xDCbersetzer</multiple></term><term name="director" form="short"><single>Reg.</single><multiple>Reg.</multiple></term><term name="editor" form="short"><single>Hrsg.</single><multiple>Hrsg.</multiple></term><term name="collection-editor" form="short"><single>Hrsg.</single><multiple>Hrsg.</multiple></term><term name="editorial-director" form="short"><single>Hrsg.</single><multiple>Hrsg.</multiple></term><term name="illustrator" form="short"><single>Ill.</single><multiple>Ill.</multiple></term><term name="translator" form="short"><single>\xDCbers.</single><multiple>\xDCbers.</multiple></term><term name="editortranslator" form="short"><single>Hrsg.&#160;&amp; \xDCbers.</single><multiple>Hrsg.&#160;&amp; \xDCbers</multiple></term><term name="container-author" form="verb">von</term><term name="director" form="verb">Regie von</term><term name="editor" form="verb">herausgegeben von</term><term name="collection-editor" form="verb">herausgegeben von</term><term name="editorial-director" form="verb">herausgegeben von</term><term name="illustrator" form="verb">illustriert von</term><term name="interviewer" form="verb">interviewt von</term><term name="recipient" form="verb">an</term><term name="reviewed-author" form="verb">von</term><term name="translator" form="verb">\xFCbersetzt von</term><term name="editortranslator" form="verb">herausgegeben und \xFCbersetzt von</term><term name="director" form="verb-short">Reg.</term><term name="editor" form="verb-short">hg. von</term><term name="collection-editor" form="verb-short">hg. von</term><term name="editorial-director" form="verb-short">hg. von</term><term name="illustrator" form="verb-short">illus. von</term><term name="translator" form="verb-short">\xFCbers. von</term><term name="editortranslator" form="verb-short">hg.&#160;&amp; \xFCbers. von</term><term name="month-01">Januar</term><term name="month-02">Februar</term><term name="month-03">M\xE4rz</term><term name="month-04">April</term><term name="month-05">Mai</term><term name="month-06">Juni</term><term name="month-07">Juli</term><term name="month-08">August</term><term name="month-09">September</term><term name="month-10">Oktober</term><term name="month-11">November</term><term name="month-12">Dezember</term><term name="month-01" form="short">Jan.</term><term name="month-02" form="short">Feb.</term>\n<term name="month-03" form="short">M\xE4rz</term><term name="month-04" form="short">Apr.</term><term name="month-05" form="short">Mai</term><term name="month-06" form="short">Juni</term><term name="month-07" form="short">Juli</term><term name="month-08" form="short">Aug.</term><term name="month-09" form="short">Sep.</term><term name="month-10" form="short">Okt.</term><term name="month-11" form="short">Nov.</term><term name="month-12" form="short">Dez.</term><term name="season-01">Fr\xFChjahr</term><term name="season-02">Sommer</term><term name="season-03">Herbst</term><term name="season-04">Winter</term></terms></locale>',
+
+  'es-ES': '<?xml version="1.0" encoding="utf-8"?><locale xmlns="http://purl.org/net/xbiblio/csl" version="1.0" xml:lang="es-ES"><info><rights license="http://creativecommons.org/licenses/by-sa/3.0/">This work is licensed under a Creative Commons Attribution-ShareAlike 3.0 License</rights><updated>2012-07-04T23:31:02+00:00</updated></info><style-options punctuation-in-quote="false"/><date form="text"><date-part name="day" suffix=" de "/><date-part name="month" suffix=" de "/><date-part name="year"/></date><date form="numeric"><date-part name="day" form="numeric-leading-zeros" suffix="/"/><date-part name="month" form="numeric-leading-zeros" suffix="/"/><date-part name="year"/></date><terms><term name="accessed">accedido</term><term name="and">y</term><term name="and others">y otros</term><term name="anonymous">an\xF3nimo</term><term name="anonymous" form="short">an\xF3n.</term><term name="at">en</term><term name="available at">disponible en</term><term name="by">de</term><term name="circa">circa</term><term name="circa" form="short">c.</term><term name="cited">citado</term><term name="edition"><single>edici\xF3n</single><multiple>ediciones</multiple></term><term name="edition" form="short">ed.</term><term name="et-al">et&#160;al.</term><term name="forthcoming">previsto</term><term name="from">a partir de</term><term name="ibid">ibid.</term><term name="in">en</term><term name="in press">en imprenta</term><term name="internet">internet</term><term name="interview">entrevista</term><term name="letter">carta</term><term name="no date">sin fecha</term><term name="no date" form="short">s.&#160;f.</term><term name="online">en l\xEDnea</term><term name="presented at">presentado en</term><term name="reference"><single>referencia</single><multiple>referencias</multiple></term><term name="reference" form="short"><single>ref.</single><multiple>refs.</multiple></term><term name="retrieved">recuperado</term><term name="scale">escala</term><term name="version">versi\xF3n</term><term name="ad">d.&#160;C.</term><term name="bc">a.&#160;C.</term><term name="open-quote">\xAB</term><term name="close-quote">\xBB</term><term name="open-inner-quote">\u201C</term><term name="close-inner-quote">\u201D</term><term name="page-range-delimiter">-</term><term name="ordinal">.\xAA</term><term name="long-ordinal-01">primera</term><term name="long-ordinal-02">segunda</term><term name="long-ordinal-03">tercera</term><term name="long-ordinal-04">cuarta</term><term name="long-ordinal-05">quinta</term><term name="long-ordinal-06">sexta</term><term name="long-ordinal-07">s\xE9ptima</term><term name="long-ordinal-08">octava</term><term name="long-ordinal-09">novena</term><term name="long-ordinal-10">d\xE9cima</term><term name="book"><single>libro</single><multiple>libros</multiple></term><term name="chapter"><single>cap\xEDtulo</single><multiple>cap\xEDtulos</multiple></term><term name="column"><single>columna</single><multiple>columnas</multiple></term><term name="figure"><single>figura</single><multiple>figuras</multiple></term><term name="folio"><single>folio</single><multiple>folios</multiple></term><term name="issue"><single>n\xFAmero</single><multiple>n\xFAmeros</multiple></term><term name="line"><single>l\xEDnea</single><multiple>l\xEDneas</multiple></term><term name="note"><single>nota</single><multiple>notas</multiple></term><term name="opus"><single>opus</single><multiple>opera</multiple></term><term name="page"><single>p\xE1gina</single><multiple>p\xE1ginas</multiple></term><term name="number-of-pages"><single>p\xE1gina</single><multiple>p\xE1ginas</multiple></term><term name="paragraph"><single>p\xE1rrafo</single><multiple>p\xE1rrafos</multiple></term><term name="part"><single>parte</single><multiple>partes</multiple></term><term name="section"><single>secci\xF3n</single><multiple>secciones</multiple></term><term name="sub verbo"><single>sub voce</single><multiple>sub vocibus</multiple></term><term name="verse"><single>verso</single><multiple>versos</multiple></term><term name="volume"><single>volumen</single><multiple>vol\xFAmenes</multiple></term><term name="book" form="short">lib.</term>\n<term name="chapter" form="short">cap.</term><term name="column" form="short">col.</term><term name="figure" form="short">fig.</term><term name="folio" form="short">f.</term><term name="issue" form="short">n.\xBA</term><term name="line" form="short">l.</term><term name="note" form="short">n.</term><term name="opus" form="short">op.</term><term name="page" form="short"><single>p.</single><multiple>pp.</multiple></term><term name="number-of-pages" form="short"><single>p.</single><multiple>pp.</multiple></term><term name="paragraph" form="short">p\xE1rr.</term><term name="part" form="short">pt.</term><term name="section" form="short">sec.</term><term name="sub verbo" form="short"><single>s.&#160;v.</single><multiple>s.&#160;vv.</multiple></term><term name="verse" form="short"><single>v.</single><multiple>vv.</multiple></term><term name="volume" form="short"><single>vol.</single><multiple>vols.</multiple></term><term name="paragraph" form="symbol"><single>\xA7</single><multiple>\xA7</multiple></term><term name="section" form="symbol"><single>\xA7</single><multiple>\xA7</multiple></term><term name="director"><single>director</single><multiple>directores</multiple></term><term name="editor"><single>editor</single><multiple>editores</multiple></term><term name="editorial-director"><single>editor</single><multiple>editores</multiple></term><term name="illustrator"><single>ilustrador</single><multiple>ilustradores</multiple></term><term name="translator"><single>traductor</single><multiple>traductores</multiple></term><term name="editortranslator"><single>editor y traductor</single><multiple>editores y traductores</multiple></term><term name="director" form="short"><single>dir.</single><multiple>dirs.</multiple></term><term name="editor" form="short"><single>ed.</single><multiple>eds.</multiple></term><term name="editorial-director" form="short"><single>ed.</single><multiple>eds.</multiple></term><term name="illustrator" form="short"><single>ilust.</single><multiple>ilusts.</multiple></term><term name="translator" form="short"><single>trad.</single><multiple>trads.</multiple></term><term name="editortranslator" form="short"><single>ed. y trad.</single><multiple>eds. y trads.</multiple></term><term name="container-author" form="verb">de</term><term name="director" form="verb">dirigido por</term><term name="editor" form="verb">editado por</term><term name="editorial-director" form="verb">editado por</term><term name="illustrator" form="verb">ilustrado por</term><term name="interviewer" form="verb">entrevistado por</term><term name="recipient" form="verb">a</term><term name="reviewed-author" form="verb">por</term><term name="translator" form="verb">traducido por</term><term name="editortranslator" form="verb">editado y traducido por</term><term name="director" form="verb-short">dir.</term><term name="editor" form="verb-short">ed.</term><term name="editorial-director" form="verb-short">ed.</term><term name="illustrator" form="verb-short">ilust.</term><term name="translator" form="verb-short">trad.</term><term name="editortranslator" form="verb-short">ed. y trad.</term><term name="month-01">enero</term><term name="month-02">febrero</term><term name="month-03">marzo</term><term name="month-04">abril</term><term name="month-05">mayo</term><term name="month-06">junio</term><term name="month-07">julio</term><term name="month-08">agosto</term><term name="month-09">septiembre</term><term name="month-10">octubre</term><term name="month-11">noviembre</term><term name="month-12">diciembre</term><term name="month-01" form="short">ene.</term><term name="month-02" form="short">feb.</term><term name="month-03" form="short">mar.</term><term name="month-04" form="short">abr.</term><term name="month-05" form="short">may</term><term name="month-06" form="short">jun.</term><term name="month-07" form="short">jul.</term><term name="month-08" form="short">ago.</term><term name="month-09" form="short">sep.</term><term name="month-10" form="short">oct.</term><term name="month-11" form="short">nov.</term><term name="month-12" form="short">\ndic.</term><term name="season-01">primavera</term><term name="season-02">verano</term><term name="season-03">oto\xF1o</term><term name="season-04">invierno</term></terms></locale>'
 };
 
 /**
  * Retrieve CSL locale
- * 
+ *
  * @access private
  * @method fetchCSLLocale
- * 
+ *
  * @param {String} lang - lang code
- * 
+ *
  * @return {String} CSL locale
  */
 var fetchCSLLocale = function fetchCSLLocale(lang) {
@@ -170,30 +171,30 @@ Object.defineProperty(exports, "__esModule", {
 });
 /**
  * Object containing CSL templates
- * 
- * Templates from the [CSL Project](http://citationstyles.org/)  
+ *
+ * Templates from the [CSL Project](http://citationstyles.org/)<br>
  * [REPO](https://github.com/citation-style-language/styles), [LICENSE](https://creativecommons.org/licenses/by-sa/3.0/)
- * 
+ *
  * Accesed 10/22/2016
- * 
+ *
  * @access private
  * @constant varCSLStyles
  * @default
  */
 var varCSLStyles = {
-  apa: '<?xml version="1.0" encoding="utf-8"?><style xmlns="http://purl.org/net/xbiblio/csl" class="in-text" version="1.0" demote-non-dropping-particle="never"><info><title>American Psychological Association 6th edition</title><title-short>APA</title-short><id>http://www.zotero.org/styles/apa</id><link href="http://www.zotero.org/styles/apa" rel="self"/><link href="http://owl.english.purdue.edu/owl/resource/560/01/" rel="documentation"/><author><name>Simon Kornblith</name><email>simon@simonster.com</email></author><contributor><name>Bruce D\'Arcus</name></contributor><contributor><name>Curtis M. Humphrey</name></contributor><contributor><name>Richard Karnesky</name><email>karnesky+zotero@gmail.com</email><uri>http://arc.nucapt.northwestern.edu/Richard_Karnesky</uri></contributor><contributor><name>Sebastian Karcher</name></contributor><contributor><name> Brenton M. Wiernik</name><email>zotero@wiernik.org</email></contributor><category citation-format="author-date"/><category field="psychology"/><category field="generic-base"/><updated>2016-05-25T09:01:49+00:00</updated><rights license="http://creativecommons.org/licenses/by-sa/3.0/">This work is licensed under a Creative Commons Attribution-ShareAlike 3.0 License</rights></info><locale xml:lang="en"><terms><term name="editortranslator" form="short"><single>ed. &amp; trans.</single><multiple>eds. &amp; trans.</multiple></term><term name="translator" form="short"><single>trans.</single><multiple>trans.</multiple></term></terms></locale><macro name="container-contributors"><choose><if type="chapter paper-conference entry-dictionary entry-encyclopedia" match="any"><group delimiter=", "><names variable="container-author" delimiter=", "><name and="symbol" initialize-with=". " delimiter=", "/><label form="short" prefix=" (" text-case="title" suffix=")"/></names><names variable="editor translator" delimiter=", "><name and="symbol" initialize-with=". " delimiter=", "/><label form="short" prefix=" (" text-case="title" suffix=")"/></names></group></if></choose></macro><macro name="secondary-contributors"><choose><if type="article-journal chapter paper-conference entry-dictionary entry-encyclopedia" match="none"><group delimiter=", " prefix=" (" suffix=")"><names variable="container-author" delimiter=", "><name and="symbol" initialize-with=". " delimiter=", "/><label form="short" prefix=", " text-case="title"/></names><names variable="editor translator" delimiter=", "><name and="symbol" initialize-with=". " delimiter=", "/><label form="short" prefix=", " text-case="title"/></names></group></if></choose></macro><macro name="author"><names variable="author"><name name-as-sort-order="all" and="symbol" sort-separator=", " initialize-with=". " delimiter=", " delimiter-precedes-last="always"/><label form="short" prefix=" (" suffix=")" text-case="capitalize-first"/><substitute><names variable="editor"/><names variable="translator"/><choose><if type="report"><text variable="publisher"/><text macro="title"/></if><else><text macro="title"/></else></choose></substitute></names></macro><macro name="author-short"><names variable="author"><name form="short" and="symbol" delimiter=", " initialize-with=". "/><substitute><names variable="editor"/><names variable="translator"/><choose><if type="report"><text variable="publisher"/><text variable="title" form="short" font-style="italic"/></if><else-if type="legal_case"><text variable="title" font-style="italic"/></else-if><else-if type="bill book graphic legislation motion_picture song" match="any"><text variable="title" form="short" font-style="italic"/></else-if><else-if variable="reviewed-author"><choose><if variable="reviewed-title" match="none"><text variable="title" form="short" font-style="italic" prefix="Review of "/></if><else><text variable="title" form="short" quotes="true"/></else></choose></else-if><else><text variable="title" form="short" quotes="true"/></else></choose></substitute></names></macro><macro name="access"><choose><if type="thesis report" match="any"><choose><if variable="DOI" match="any">' + '<text variable="DOI" prefix="https://doi.org/"/></if><else-if variable="archive" match="any"><group><text term="retrieved" text-case="capitalize-first" suffix=" "/><text term="from" suffix=" "/><text variable="archive" suffix="."/><text variable="archive_location" prefix=" (" suffix=")"/></group></else-if><else><group><text term="retrieved" text-case="capitalize-first" suffix=" "/><text term="from" suffix=" "/><text variable="URL"/></group></else></choose></if><else><choose><if variable="DOI"><text variable="DOI" prefix="https://doi.org/"/></if><else><choose><if type="webpage"><group delimiter=" "><text term="retrieved" text-case="capitalize-first" suffix=" "/><group><date variable="accessed" form="text" suffix=", "/></group><text term="from"/><text variable="URL"/></group></if><else><group><text term="retrieved" text-case="capitalize-first" suffix=" "/><text term="from" suffix=" "/><text variable="URL"/></group></else></choose></else></choose></else></choose></macro><macro name="title"><choose><if type="book graphic manuscript motion_picture report song speech thesis" match="any"><choose><if variable="version" type="book" match="all"><text variable="title"/></if><else><text variable="title" font-style="italic"/></else></choose></if><else-if variable="reviewed-author"><choose><if variable="reviewed-title"><group delimiter=" "><text variable="title"/><group delimiter=", " prefix="[" suffix="]"><text variable="reviewed-title" font-style="italic" prefix="Review of "/><names variable="reviewed-author" delimiter=", "><label form="verb-short" suffix=" "/><name and="symbol" initialize-with=". " delimiter=", "/></names></group></group></if><else><group delimiter=", " prefix="[" suffix="]"><text variable="title" font-style="italic" prefix="Review of "/><names variable="reviewed-author" delimiter=", "><label form="verb-short" suffix=" "/><name and="symbol" initialize-with=". " delimiter=", "/></names></group></else></choose></else-if><else><text variable="title"/></else></choose></macro><macro name="title-plus-extra"><text macro="title"/><choose><if type="report thesis" match="any"><group prefix=" (" suffix=")" delimiter=", "><group delimiter=" "><choose><if variable="genre" match="any"><text variable="genre"/></if><else><text variable="collection-title"/></else></choose><text variable="number" prefix="No. "/></group><group delimiter=" "><text term="version" text-case="capitalize-first"/><text variable="version"/></group><text macro="edition"/></group></if><else-if type="post-weblog webpage" match="any"><text variable="genre" prefix=" [" suffix="]"/></else-if><else-if variable="version"><group delimiter=" " prefix=" (" suffix=")"><text term="version" text-case="capitalize-first"/><text variable="version"/></group></else-if></choose><text macro="format" prefix=" [" suffix="]"/></macro><macro name="format"><choose><if match="any" variable="medium"><text variable="medium" text-case="capitalize-first"/></if><else-if type="dataset" match="any"><text value="Data set"/></else-if></choose></macro><macro name="publisher"><choose><if type="report" match="any"><group delimiter=": "><text variable="publisher-place"/><text variable="publisher"/></group></if><else-if type="thesis" match="any"><group delimiter=", "><text variable="publisher"/><text variable="publisher-place"/></group></else-if><else-if type="post-weblog webpage" match="none"><group delimiter=", "><choose><if variable="event version" type="speech motion_picture" match="none"><text variable="genre"/></if></choose><choose><if type="article-journal article-magazine" match="none"><group delimiter=": "><choose><if variable="publisher-place"><text variable="publisher-place"/></if><else><text variable="event-place"/></else></choose><text variable="publisher"/></group></if></choose></group></else-if></choose></macro><macro name="event"><choose><if variable="container-title" match="none"><choose><if variable="event"><choose><if variable="genre" match="none"><text term="presented at" text-case="capitalize-first" suffix=" "/><text variable="event"/></if><else>' + '<group delimiter=" "><text variable="genre" text-case="capitalize-first"/><text term="presented at"/><text variable="event"/></group></else></choose></if><else-if type="speech"><text variable="genre" text-case="capitalize-first"/></else-if></choose></if></choose></macro><macro name="issued"><choose><if type="bill legal_case legislation" match="none"><choose><if variable="issued"><group prefix=" (" suffix=")"><date variable="issued"><date-part name="year"/></date><text variable="year-suffix"/><choose><if type="speech" match="any"><date variable="issued"><date-part prefix=", " name="month"/></date></if><else-if type="article-journal bill book chapter graphic legal_case legislation motion_picture paper-conference report song dataset" match="none"><date variable="issued"><date-part prefix=", " name="month"/><date-part prefix=" " name="day"/></date></else-if></choose></group></if><else-if variable="status"><group prefix=" (" suffix=")"><text variable="status"/><text variable="year-suffix" prefix="-"/></group></else-if><else><group prefix=" (" suffix=")"><text term="no date" form="short"/><text variable="year-suffix" prefix="-"/></group></else></choose></if></choose></macro><macro name="issued-sort"><choose><if type="article-journal bill book chapter graphic legal_case legislation motion_picture paper-conference report song dataset" match="none"><date variable="issued"><date-part name="year"/><date-part name="month"/><date-part name="day"/></date></if><else><date variable="issued"><date-part name="year"/></date></else></choose></macro><macro name="issued-year"><choose><if variable="issued"><group delimiter="/"><date variable="original-date" form="text"/><group><date variable="issued"><date-part name="year"/></date><text variable="year-suffix"/></group></group></if><else-if variable="status"><text variable="status"/><text variable="year-suffix" prefix="-"/></else-if><else><text term="no date" form="short"/><text variable="year-suffix" prefix="-"/></else></choose></macro><macro name="edition"><choose><if is-numeric="edition"><group delimiter=" "><number variable="edition" form="ordinal"/><text term="edition" form="short"/></group></if><else><text variable="edition"/></else></choose></macro><macro name="locators"><choose><if type="article-journal article-magazine" match="any"><group prefix=", " delimiter=", "><group><text variable="volume" font-style="italic"/><text variable="issue" prefix="(" suffix=")"/></group><text variable="page"/></group><choose><if variable="issued"><choose><if variable="page issue" match="none"><text variable="status" prefix=". "/></if></choose></if></choose></if><else-if type="article-newspaper"><group delimiter=" " prefix=", "><label variable="page" form="short"/><text variable="page"/></group></else-if><else-if type="book graphic motion_picture report song chapter paper-conference entry-encyclopedia entry-dictionary" match="any"><group prefix=" (" suffix=")" delimiter=", "><choose><if type="report" match="none"><text macro="edition"/></if></choose><choose><if variable="volume" match="any"><group><text term="volume" form="short" text-case="capitalize-first" suffix=" "/><number variable="volume" form="numeric"/></group></if><else><group><text term="volume" form="short" plural="true" text-case="capitalize-first" suffix=" "/><number variable="number-of-volumes" form="numeric" prefix="1&#8211;"/></group></else></choose><group><label variable="page" form="short" suffix=" "/><text variable="page"/></group></group></else-if><else-if type="legal_case"><group prefix=" (" suffix=")" delimiter=" "><text variable="authority"/><date variable="issued" form="text"/></group></else-if><else-if type="bill legislation" match="any"><date variable="issued" prefix=" (" suffix=")"><date-part name="year"/></date></else-if></choose></macro><macro name="citation-locator"><group><choose><if locator="chapter"><label variable="locator" form="long" text-case="capitalize-first"/></if><else><label variable="locator" form="short"/></else></choose><text variable="locator" prefix=" "/></group></macro>' + '<macro name="container"><choose><if type="post-weblog webpage" match="none"><group><choose><if type="chapter paper-conference entry-encyclopedia" match="any"><text term="in" text-case="capitalize-first" suffix=" "/></if></choose><group delimiter=", "><text macro="container-contributors"/><text macro="secondary-contributors"/><text macro="container-title"/></group></group></if></choose></macro><macro name="container-title"><choose><if type="article article-journal article-magazine article-newspaper" match="any"><text variable="container-title" font-style="italic" text-case="title"/></if><else-if type="bill legal_case legislation" match="none"><text variable="container-title" font-style="italic"/></else-if></choose></macro><macro name="legal-cites"><choose><if type="bill legal_case legislation" match="any"><group delimiter=" " prefix=", "><choose><if variable="container-title"><text variable="volume"/><text variable="container-title"/><group delimiter=" "><text term="section" form="symbol"/><text variable="section"/></group><text variable="page"/></if><else><choose><if type="legal_case"><text variable="number" prefix="No. "/></if><else><text variable="number" prefix="Pub. L. No. "/><group delimiter=" "><text term="section" form="symbol"/><text variable="section"/></group></else></choose></else></choose></group></if></choose></macro><macro name="original-date"><choose><if variable="original-date"><group prefix="(" suffix=")" delimiter=" "><text value="Original work published"/><date variable="original-date" form="text"/></group></if></choose></macro><citation et-al-min="6" et-al-use-first="1" et-al-subsequent-min="3" et-al-subsequent-use-first="1" disambiguate-add-year-suffix="true" disambiguate-add-names="true" disambiguate-add-givenname="true" collapse="year" givenname-disambiguation-rule="primary-name"><sort><key macro="author"/><key macro="issued-sort"/></sort><layout prefix="(" suffix=")" delimiter="; "><group delimiter=", "><text macro="author-short"/><text macro="issued-year"/><text macro="citation-locator"/></group></layout></citation><bibliography hanging-indent="true" et-al-min="8" et-al-use-first="6" et-al-use-last="true" entry-spacing="0" line-spacing="2"><sort><key macro="author"/><key macro="issued-sort" sort="ascending"/><key macro="title"/></sort><layout><group suffix="."><group delimiter=". "><text macro="author"/><text macro="issued"/><text macro="title-plus-extra"/><text macro="container"/></group><text macro="legal-cites"/><text macro="locators"/><group delimiter=", " prefix=". "><text macro="event"/><text macro="publisher"/></group></group><text macro="access" prefix=" "/><text macro="original-date" prefix=" "/></layout></bibliography></style>',
-  vancouver: '<?xml version="1.0" encoding="utf-8"?><style xmlns="http://purl.org/net/xbiblio/csl" class="in-text" version="1.0" demote-non-dropping-particle="sort-only" page-range-format="minimal"><info><title>Vancouver</title><id>http://www.zotero.org/styles/vancouver</id><link href="http://www.zotero.org/styles/vancouver" rel="self"/><link href="http://www.nlm.nih.gov/bsd/uniform_requirements.html" rel="documentation"/><author><name>Michael Berkowitz</name><email>mberkowi@gmu.edu</email></author><contributor><name>Sean Takats</name><email>stakats@gmu.edu</email></contributor><contributor><name>Sebastian Karcher</name></contributor><category citation-format="numeric"/><category field="medicine"/><summary>Vancouver style as outlined by International Committee of Medical Journal Editors Uniform Requirements for Manuscripts Submitted to Biomedical Journals: Sample References</summary><updated>2014-09-06T16:03:01+00:00</updated><rights license="http://creativecommons.org/licenses/by-sa/3.0/">This work is licensed under a Creative Commons Attribution-ShareAlike 3.0 License</rights></info><locale xml:lang="en"><date form="text" delimiter=" "><date-part name="year"/><date-part name="month" form="short" strip-periods="true"/><date-part name="day"/></date><terms><term name="collection-editor" form="long"><single>editor</single><multiple>editors</multiple></term><term name="presented at">presented at</term><term name="available at">available from</term><term name="section" form="short">sect.</term></terms></locale><locale xml:lang="fr"><date form="text" delimiter=" "><date-part name="day"/><date-part name="month" form="short" strip-periods="true"/><date-part name="year"/></date></locale><macro name="author"><names variable="author"><name sort-separator=" " initialize-with="" name-as-sort-order="all" delimiter=", " delimiter-precedes-last="always"/><label form="long" prefix=", "/><substitute><names variable="editor"/></substitute></names></macro><macro name="editor"><names variable="editor" suffix="."><name sort-separator=" " initialize-with="" name-as-sort-order="all" delimiter=", " delimiter-precedes-last="always"/><label form="long" prefix=", "/></names></macro><macro name="chapter-marker"><choose><if type="chapter paper-conference entry-dictionary entry-encyclopedia" match="any"><text term="in" text-case="capitalize-first"/></if></choose></macro><macro name="publisher"><choose><if type="article-journal article-magazine article-newspaper" match="none"><group delimiter=": " suffix=";"><choose><if type="thesis"><text variable="publisher-place" prefix="[" suffix="]"/></if><else-if type="speech"/><else><text variable="publisher-place"/></else></choose><text variable="publisher"/></group></if></choose></macro><macro name="access"><choose><if variable="URL"><group delimiter=": "><text term="available at" text-case="capitalize-first"/><text variable="URL"/></group></if></choose></macro><macro name="accessed-date"><choose><if variable="URL"><group prefix="[" suffix="]" delimiter=" "><text term="cited" text-case="lowercase"/><date variable="accessed" form="text"/></group></if></choose></macro><macro name="container-title"><choose><if type="article-journal article-magazine chapter paper-conference article-newspaper review review-book entry-dictionary entry-encyclopedia" match="any"><group suffix="." delimiter=" "><choose><if type="article-journal review review-book" match="any"><text variable="container-title" form="short" strip-periods="true"/></if><else><text variable="container-title" strip-periods="true"/></else></choose><choose><if variable="URL"><text term="internet" prefix="[" suffix="]" text-case="capitalize-first"/></if></choose></group><text macro="edition" prefix=" "/></if><else-if type="bill legislation" match="any"><group delimiter=", "><group delimiter=". "><text variable="container-title"/><group delimiter=" "><text term="section" form="short" text-case="capitalize-first"/><text variable="section"/></group></group><text variable="number"/></group></else-if><else-if type="speech">' + '<group delimiter=": " suffix=";"><group delimiter=" "><text variable="genre" text-case="capitalize-first"/><text term="presented at"/></group><text variable="event"/></group></else-if><else><group delimiter=", " suffix="."><choose><if variable="collection-title" match="none"><group delimiter=" "><label variable="volume" form="short" text-case="capitalize-first"/><text variable="volume"/></group></if></choose><text variable="container-title"/></group></else></choose></macro><macro name="title"><text variable="title"/><choose><if type="article-journal article-magazine chapter paper-conference article-newspaper review review-book entry-dictionary entry-encyclopedia" match="none"><choose><if variable="URL"><text term="internet" prefix=" [" suffix="]" text-case="capitalize-first"/></if></choose><text macro="edition" prefix=". "/></if></choose><choose><if type="thesis"><text variable="genre" prefix=" [" suffix="]"/></if></choose></macro><macro name="edition"><choose><if is-numeric="edition"><group delimiter=" "><number variable="edition" form="ordinal"/><text term="edition" form="short"/></group></if><else><text variable="edition" suffix="."/></else></choose></macro><macro name="date"><choose><if type="article-journal article-magazine article-newspaper review review-book" match="any"><group suffix=";" delimiter=" "><date variable="issued" form="text"/><text macro="accessed-date"/></group></if><else-if type="bill legislation" match="any"><group delimiter=", "><date variable="issued" delimiter=" "><date-part name="month" form="short" strip-periods="true"/><date-part name="day"/></date><date variable="issued"><date-part name="year"/></date></group></else-if><else-if type="report"><date variable="issued" delimiter=" "><date-part name="year"/><date-part name="month" form="short" strip-periods="true"/></date><text macro="accessed-date" prefix=" "/></else-if><else-if type="patent"><group suffix="."><group delimiter=", "><text variable="number"/><date variable="issued"><date-part name="year"/></date></group><text macro="accessed-date" prefix=" "/></group></else-if><else-if type="speech"><group delimiter="; "><group delimiter=" "><date variable="issued" delimiter=" "><date-part name="year"/><date-part name="month" form="short" strip-periods="true"/><date-part name="day"/></date><text macro="accessed-date"/></group><text variable="event-place"/></group></else-if><else><group suffix="."><date variable="issued"><date-part name="year"/></date><text macro="accessed-date" prefix=" "/></group></else></choose></macro><macro name="pages"><choose><if type="article-journal article-magazine article-newspaper review review-book" match="any"><text variable="page" prefix=":"/></if><else-if type="book" match="any"><text variable="number-of-pages" prefix=" "/><choose><if is-numeric="number-of-pages"><label variable="number-of-pages" form="short" prefix=" " plural="never"/></if></choose></else-if><else><group prefix=" " delimiter=" "><label variable="page" form="short" plural="never"/><text variable="page"/></group></else></choose></macro><macro name="journal-location"><choose><if type="article-journal article-magazine review review-book" match="any"><text variable="volume"/><text variable="issue" prefix="(" suffix=")"/></if></choose></macro><macro name="collection-details"><choose><if type="article-journal article-magazine article-newspaper review review-book" match="none"><choose><if variable="collection-title"><group delimiter=" " prefix="(" suffix=")"><names variable="collection-editor" suffix="."><name sort-separator=" " initialize-with="" name-as-sort-order="all" delimiter=", " delimiter-precedes-last="always"/><label form="long" prefix=", "/></names><group delimiter="; "><text variable="collection-title"/><group delimiter=" "><label variable="volume" form="short"/><text variable="volume"/></group></group></group></if></choose></if></choose></macro><macro name="report-details"><choose><if type="report"><text variable="number" prefix="Report No.: "/></if></choose></macro><citation collapse="citation-number">' + '<sort><key variable="citation-number"/></sort><layout prefix="(" suffix=")" delimiter=","><text variable="citation-number"/></layout></citation><bibliography et-al-min="7" et-al-use-first="6" second-field-align="flush"><layout><text variable="citation-number" suffix=". "/><group delimiter=". " suffix=". "><text macro="author"/><text macro="title"/></group><group delimiter=" " suffix=". "><group delimiter=": "><text macro="chapter-marker"/><group delimiter=" "><text macro="editor"/><text macro="container-title"/></group></group><text macro="publisher"/><group><text macro="date"/><text macro="journal-location"/><text macro="pages"/></group></group><text macro="collection-details" suffix=". "/><text macro="report-details" suffix=". "/><text macro="access"/></layout></bibliography></style>',
-  harvard1: '<?xml version="1.0" encoding="utf-8"?><style xmlns="http://purl.org/net/xbiblio/csl" class="in-text" version="1.0" demote-non-dropping-particle="sort-only"><info><title>Harvard Reference format 1 (author-date)</title><id>http://www.zotero.org/styles/harvard1</id><link href="http://www.zotero.org/styles/harvard1" rel="self"/><link href="http://libweb.anglia.ac.uk/referencing/harvard.htm" rel="documentation"/><author><name>Julian Onions</name><email>julian.onions@gmail.com</email></author><category citation-format="author-date"/><category field="generic-base"/><summary>The Harvard author-date style</summary><updated>2012-09-27T22:06:38+00:00</updated><rights license="http://creativecommons.org/licenses/by-sa/3.0/">This work is licensed under a Creative Commons Attribution-ShareAlike 3.0 License</rights></info><macro name="editor"><names variable="editor" delimiter=", "><name and="symbol" initialize-with=". " delimiter=", "/><label form="short" prefix=", " text-case="lowercase"/></names></macro><macro name="anon"><text term="anonymous" form="short" text-case="capitalize-first" strip-periods="true"/></macro><macro name="author"><names variable="author"><name name-as-sort-order="all" and="symbol" sort-separator=", " initialize-with="." delimiter-precedes-last="never" delimiter=", "/><label form="short" prefix=" " text-case="lowercase"/><substitute><names variable="editor"/><text macro="anon"/></substitute></names></macro><macro name="author-short"><names variable="author"><name form="short" and="symbol" delimiter=", " delimiter-precedes-last="never" initialize-with=". "/><substitute><names variable="editor"/><names variable="translator"/><text macro="anon"/></substitute></names></macro><macro name="access"><choose><if variable="URL"><text value="Available at:" suffix=" "/><text variable="URL"/><group prefix=" [" suffix="]"><text term="accessed" text-case="capitalize-first" suffix=" "/><date variable="accessed"><date-part name="month" suffix=" "/><date-part name="day" suffix=", "/><date-part name="year"/></date></group></if></choose></macro><macro name="title"><choose><if type="bill book graphic legal_case legislation motion_picture report song thesis" match="any"><text variable="title" font-style="italic"/></if><else><text variable="title"/></else></choose></macro><macro name="publisher"><group delimiter=": "><text variable="publisher-place"/><text variable="publisher"/></group></macro><macro name="year-date"><choose><if variable="issued"><date variable="issued"><date-part name="year"/></date></if><else><text term="no date" form="short"/></else></choose></macro><macro name="edition"><choose><if is-numeric="edition"><group delimiter=" "><number variable="edition" form="ordinal"/><text term="edition" form="short"/></group></if><else><text variable="edition" suffix="."/></else></choose></macro><macro name="pages"><group><label variable="page" form="short" suffix=" "/><text variable="page"/></group></macro><citation et-al-min="3" et-al-use-first="1" disambiguate-add-year-suffix="true" disambiguate-add-names="true" disambiguate-add-givenname="true"><layout prefix="(" suffix=")" delimiter="; "><group delimiter=", "><group delimiter=" "><text macro="author-short"/><text macro="year-date"/></group><group><label variable="locator" form="short"/><text variable="locator"/></group></group></layout></citation><bibliography hanging-indent="true" et-al-min="4" et-al-use-first="1"><sort><key macro="author"/><key variable="title"/></sort><layout><text macro="author" suffix=","/><date variable="issued" prefix=" " suffix="."><date-part name="year"/></date><choose><if type="bill book graphic legal_case legislation motion_picture report song" match="any"><group prefix=" " delimiter=" " suffix=","><text macro="title"/><text macro="edition"/><text macro="editor"/></group><text prefix=" " suffix="." macro="publisher"/></if><else-if type="chapter paper-conference" match="any"><text macro="title" prefix=" " suffix="."/><group prefix=" " delimiter=" "><text term="in" text-case="capitalize-first"/>' + '<text macro="editor"/><text variable="container-title" font-style="italic" suffix="."/><text variable="collection-title" suffix="."/><text variable="event" suffix="."/><group suffix="." delimiter=", "><text macro="publisher" prefix=" "/><text macro="pages"/></group></group></else-if><else-if type="thesis"><group prefix=" " suffix="." delimiter=". "><text macro="title"/><text variable="genre"/><text macro="publisher"/></group></else-if><else><group suffix="."><text macro="title" prefix=" "/><text macro="editor" prefix=" "/></group><group prefix=" " suffix="."><text variable="container-title" font-style="italic"/><group prefix=", "><text variable="volume"/><text variable="issue" prefix="(" suffix=")"/></group><group prefix=", "><label variable="page" form="short"/><text variable="page"/></group></group></else></choose><text prefix=" " macro="access" suffix="."/></layout></bibliography></style>'
+  apa: '<?xml version="1.0" encoding="utf-8"?><style xmlns="http://purl.org/net/xbiblio/csl" class="in-text" version="1.0" demote-non-dropping-particle="never"><info><title>American Psychological Association 6th edition</title><title-short>APA</title-short><id>http://www.zotero.org/styles/apa</id><link href="http://www.zotero.org/styles/apa" rel="self"/><link href="http://owl.english.purdue.edu/owl/resource/560/01/" rel="documentation"/><author><name>Simon Kornblith</name><email>simon@simonster.com</email></author><contributor><name>Bruce D\'Arcus</name></contributor><contributor><name>Curtis M. Humphrey</name></contributor><contributor><name>Richard Karnesky</name><email>karnesky+zotero@gmail.com</email><uri>http://arc.nucapt.northwestern.edu/Richard_Karnesky</uri></contributor><contributor><name>Sebastian Karcher</name></contributor><contributor><name> Brenton M. Wiernik</name><email>zotero@wiernik.org</email></contributor><category citation-format="author-date"/><category field="psychology"/><category field="generic-base"/><updated>2016-05-25T09:01:49+00:00</updated><rights license="http://creativecommons.org/licenses/by-sa/3.0/">This work is licensed under a Creative Commons Attribution-ShareAlike 3.0 License</rights></info><locale xml:lang="en"><terms><term name="editortranslator" form="short"><single>ed. &amp; trans.</single><multiple>eds. &amp; trans.</multiple></term><term name="translator" form="short"><single>trans.</single><multiple>trans.</multiple></term></terms></locale><macro name="container-contributors"><choose><if type="chapter paper-conference entry-dictionary entry-encyclopedia" match="any"><group delimiter=", "><names variable="container-author" delimiter=", "><name and="symbol" initialize-with=". " delimiter=", "/><label form="short" prefix=" (" text-case="title" suffix=")"/></names><names variable="editor translator" delimiter=", "><name and="symbol" initialize-with=". " delimiter=", "/><label form="short" prefix=" (" text-case="title" suffix=")"/></names></group></if></choose></macro><macro name="secondary-contributors"><choose><if type="article-journal chapter paper-conference entry-dictionary entry-encyclopedia" match="none"><group delimiter=", " prefix=" (" suffix=")"><names variable="container-author" delimiter=", "><name and="symbol" initialize-with=". " delimiter=", "/><label form="short" prefix=", " text-case="title"/></names><names variable="editor translator" delimiter=", "><name and="symbol" initialize-with=". " delimiter=", "/><label form="short" prefix=", " text-case="title"/></names></group></if></choose></macro><macro name="author"><names variable="author"><name name-as-sort-order="all" and="symbol" sort-separator=", " initialize-with=". " delimiter=", " delimiter-precedes-last="always"/><label form="short" prefix=" (" suffix=")" text-case="capitalize-first"/><substitute><names variable="editor"/><names variable="translator"/><choose><if type="report"><text variable="publisher"/><text macro="title"/></if><else><text macro="title"/></else></choose></substitute></names></macro><macro name="author-short"><names variable="author"><name form="short" and="symbol" delimiter=", " initialize-with=". "/><substitute><names variable="editor"/><names variable="translator"/><choose><if type="report"><text variable="publisher"/><text variable="title" form="short" font-style="italic"/></if><else-if type="legal_case"><text variable="title" font-style="italic"/></else-if><else-if type="bill book graphic legislation motion_picture song" match="any"><text variable="title" form="short" font-style="italic"/></else-if><else-if variable="reviewed-author"><choose><if variable="reviewed-title" match="none"><text variable="title" form="short" font-style="italic" prefix="Review of "/></if><else><text variable="title" form="short" quotes="true"/></else></choose></else-if><else><text variable="title" form="short" quotes="true"/></else></choose></substitute></names></macro><macro name="access"><choose><if type="thesis report" match="any"><choose><if variable="DOI" match="any">\n<text variable="DOI" prefix="https://doi.org/"/></if><else-if variable="archive" match="any"><group><text term="retrieved" text-case="capitalize-first" suffix=" "/><text term="from" suffix=" "/><text variable="archive" suffix="."/><text variable="archive_location" prefix=" (" suffix=")"/></group></else-if><else><group><text term="retrieved" text-case="capitalize-first" suffix=" "/><text term="from" suffix=" "/><text variable="URL"/></group></else></choose></if><else><choose><if variable="DOI"><text variable="DOI" prefix="https://doi.org/"/></if><else><choose><if type="webpage"><group delimiter=" "><text term="retrieved" text-case="capitalize-first" suffix=" "/><group><date variable="accessed" form="text" suffix=", "/></group><text term="from"/><text variable="URL"/></group></if><else><group><text term="retrieved" text-case="capitalize-first" suffix=" "/><text term="from" suffix=" "/><text variable="URL"/></group></else></choose></else></choose></else></choose></macro><macro name="title"><choose><if type="book graphic manuscript motion_picture report song speech thesis" match="any"><choose><if variable="version" type="book" match="all"><text variable="title"/></if><else><text variable="title" font-style="italic"/></else></choose></if><else-if variable="reviewed-author"><choose><if variable="reviewed-title"><group delimiter=" "><text variable="title"/><group delimiter=", " prefix="[" suffix="]"><text variable="reviewed-title" font-style="italic" prefix="Review of "/><names variable="reviewed-author" delimiter=", "><label form="verb-short" suffix=" "/><name and="symbol" initialize-with=". " delimiter=", "/></names></group></group></if><else><group delimiter=", " prefix="[" suffix="]"><text variable="title" font-style="italic" prefix="Review of "/><names variable="reviewed-author" delimiter=", "><label form="verb-short" suffix=" "/><name and="symbol" initialize-with=". " delimiter=", "/></names></group></else></choose></else-if><else><text variable="title"/></else></choose></macro><macro name="title-plus-extra"><text macro="title"/><choose><if type="report thesis" match="any"><group prefix=" (" suffix=")" delimiter=", "><group delimiter=" "><choose><if variable="genre" match="any"><text variable="genre"/></if><else><text variable="collection-title"/></else></choose><text variable="number" prefix="No. "/></group><group delimiter=" "><text term="version" text-case="capitalize-first"/><text variable="version"/></group><text macro="edition"/></group></if><else-if type="post-weblog webpage" match="any"><text variable="genre" prefix=" [" suffix="]"/></else-if><else-if variable="version"><group delimiter=" " prefix=" (" suffix=")"><text term="version" text-case="capitalize-first"/><text variable="version"/></group></else-if></choose><text macro="format" prefix=" [" suffix="]"/></macro><macro name="format"><choose><if match="any" variable="medium"><text variable="medium" text-case="capitalize-first"/></if><else-if type="dataset" match="any"><text value="Data set"/></else-if></choose></macro><macro name="publisher"><choose><if type="report" match="any"><group delimiter=": "><text variable="publisher-place"/><text variable="publisher"/></group></if><else-if type="thesis" match="any"><group delimiter=", "><text variable="publisher"/><text variable="publisher-place"/></group></else-if><else-if type="post-weblog webpage" match="none"><group delimiter=", "><choose><if variable="event version" type="speech motion_picture" match="none"><text variable="genre"/></if></choose><choose><if type="article-journal article-magazine" match="none"><group delimiter=": "><choose><if variable="publisher-place"><text variable="publisher-place"/></if><else><text variable="event-place"/></else></choose><text variable="publisher"/></group></if></choose></group></else-if></choose></macro><macro name="event"><choose><if variable="container-title" match="none"><choose><if variable="event"><choose><if variable="genre" match="none"><text term="presented at" text-case="capitalize-first" suffix=" "/><text variable="event"/></if><else>\n<group delimiter=" "><text variable="genre" text-case="capitalize-first"/><text term="presented at"/><text variable="event"/></group></else></choose></if><else-if type="speech"><text variable="genre" text-case="capitalize-first"/></else-if></choose></if></choose></macro><macro name="issued"><choose><if type="bill legal_case legislation" match="none"><choose><if variable="issued"><group prefix=" (" suffix=")"><date variable="issued"><date-part name="year"/></date><text variable="year-suffix"/><choose><if type="speech" match="any"><date variable="issued"><date-part prefix=", " name="month"/></date></if><else-if type="article-journal bill book chapter graphic legal_case legislation motion_picture paper-conference report song dataset" match="none"><date variable="issued"><date-part prefix=", " name="month"/><date-part prefix=" " name="day"/></date></else-if></choose></group></if><else-if variable="status"><group prefix=" (" suffix=")"><text variable="status"/><text variable="year-suffix" prefix="-"/></group></else-if><else><group prefix=" (" suffix=")"><text term="no date" form="short"/><text variable="year-suffix" prefix="-"/></group></else></choose></if></choose></macro><macro name="issued-sort"><choose><if type="article-journal bill book chapter graphic legal_case legislation motion_picture paper-conference report song dataset" match="none"><date variable="issued"><date-part name="year"/><date-part name="month"/><date-part name="day"/></date></if><else><date variable="issued"><date-part name="year"/></date></else></choose></macro><macro name="issued-year"><choose><if variable="issued"><group delimiter="/"><date variable="original-date" form="text"/><group><date variable="issued"><date-part name="year"/></date><text variable="year-suffix"/></group></group></if><else-if variable="status"><text variable="status"/><text variable="year-suffix" prefix="-"/></else-if><else><text term="no date" form="short"/><text variable="year-suffix" prefix="-"/></else></choose></macro><macro name="edition"><choose><if is-numeric="edition"><group delimiter=" "><number variable="edition" form="ordinal"/><text term="edition" form="short"/></group></if><else><text variable="edition"/></else></choose></macro><macro name="locators"><choose><if type="article-journal article-magazine" match="any"><group prefix=", " delimiter=", "><group><text variable="volume" font-style="italic"/><text variable="issue" prefix="(" suffix=")"/></group><text variable="page"/></group><choose><if variable="issued"><choose><if variable="page issue" match="none"><text variable="status" prefix=". "/></if></choose></if></choose></if><else-if type="article-newspaper"><group delimiter=" " prefix=", "><label variable="page" form="short"/><text variable="page"/></group></else-if><else-if type="book graphic motion_picture report song chapter paper-conference entry-encyclopedia entry-dictionary" match="any"><group prefix=" (" suffix=")" delimiter=", "><choose><if type="report" match="none"><text macro="edition"/></if></choose><choose><if variable="volume" match="any"><group><text term="volume" form="short" text-case="capitalize-first" suffix=" "/><number variable="volume" form="numeric"/></group></if><else><group><text term="volume" form="short" plural="true" text-case="capitalize-first" suffix=" "/><number variable="number-of-volumes" form="numeric" prefix="1&#8211;"/></group></else></choose><group><label variable="page" form="short" suffix=" "/><text variable="page"/></group></group></else-if><else-if type="legal_case"><group prefix=" (" suffix=")" delimiter=" "><text variable="authority"/><date variable="issued" form="text"/></group></else-if><else-if type="bill legislation" match="any"><date variable="issued" prefix=" (" suffix=")"><date-part name="year"/></date></else-if></choose></macro><macro name="citation-locator"><group><choose><if locator="chapter"><label variable="locator" form="long" text-case="capitalize-first"/></if><else><label variable="locator" form="short"/></else></choose><text variable="locator" prefix=" "/></group></macro>\n<macro name="container"><choose><if type="post-weblog webpage" match="none"><group><choose><if type="chapter paper-conference entry-encyclopedia" match="any"><text term="in" text-case="capitalize-first" suffix=" "/></if></choose><group delimiter=", "><text macro="container-contributors"/><text macro="secondary-contributors"/><text macro="container-title"/></group></group></if></choose></macro><macro name="container-title"><choose><if type="article article-journal article-magazine article-newspaper" match="any"><text variable="container-title" font-style="italic" text-case="title"/></if><else-if type="bill legal_case legislation" match="none"><text variable="container-title" font-style="italic"/></else-if></choose></macro><macro name="legal-cites"><choose><if type="bill legal_case legislation" match="any"><group delimiter=" " prefix=", "><choose><if variable="container-title"><text variable="volume"/><text variable="container-title"/><group delimiter=" "><text term="section" form="symbol"/><text variable="section"/></group><text variable="page"/></if><else><choose><if type="legal_case"><text variable="number" prefix="No. "/></if><else><text variable="number" prefix="Pub. L. No. "/><group delimiter=" "><text term="section" form="symbol"/><text variable="section"/></group></else></choose></else></choose></group></if></choose></macro><macro name="original-date"><choose><if variable="original-date"><group prefix="(" suffix=")" delimiter=" "><text value="Original work published"/><date variable="original-date" form="text"/></group></if></choose></macro><citation et-al-min="6" et-al-use-first="1" et-al-subsequent-min="3" et-al-subsequent-use-first="1" disambiguate-add-year-suffix="true" disambiguate-add-names="true" disambiguate-add-givenname="true" collapse="year" givenname-disambiguation-rule="primary-name"><sort><key macro="author"/><key macro="issued-sort"/></sort><layout prefix="(" suffix=")" delimiter="; "><group delimiter=", "><text macro="author-short"/><text macro="issued-year"/><text macro="citation-locator"/></group></layout></citation><bibliography hanging-indent="true" et-al-min="8" et-al-use-first="6" et-al-use-last="true" entry-spacing="0" line-spacing="2"><sort><key macro="author"/><key macro="issued-sort" sort="ascending"/><key macro="title"/></sort><layout><group suffix="."><group delimiter=". "><text macro="author"/><text macro="issued"/><text macro="title-plus-extra"/><text macro="container"/></group><text macro="legal-cites"/><text macro="locators"/><group delimiter=", " prefix=". "><text macro="event"/><text macro="publisher"/></group></group><text macro="access" prefix=" "/><text macro="original-date" prefix=" "/></layout></bibliography></style>',
+  vancouver: '<?xml version="1.0" encoding="utf-8"?><style xmlns="http://purl.org/net/xbiblio/csl" class="in-text" version="1.0" demote-non-dropping-particle="sort-only" page-range-format="minimal"><info><title>Vancouver</title><id>http://www.zotero.org/styles/vancouver</id><link href="http://www.zotero.org/styles/vancouver" rel="self"/><link href="http://www.nlm.nih.gov/bsd/uniform_requirements.html" rel="documentation"/><author><name>Michael Berkowitz</name><email>mberkowi@gmu.edu</email></author><contributor><name>Sean Takats</name><email>stakats@gmu.edu</email></contributor><contributor><name>Sebastian Karcher</name></contributor><category citation-format="numeric"/><category field="medicine"/><summary>Vancouver style as outlined by International Committee of Medical Journal Editors Uniform Requirements for Manuscripts Submitted to Biomedical Journals: Sample References</summary><updated>2014-09-06T16:03:01+00:00</updated><rights license="http://creativecommons.org/licenses/by-sa/3.0/">This work is licensed under a Creative Commons Attribution-ShareAlike 3.0 License</rights></info><locale xml:lang="en"><date form="text" delimiter=" "><date-part name="year"/><date-part name="month" form="short" strip-periods="true"/><date-part name="day"/></date><terms><term name="collection-editor" form="long"><single>editor</single><multiple>editors</multiple></term><term name="presented at">presented at</term><term name="available at">available from</term><term name="section" form="short">sect.</term></terms></locale><locale xml:lang="fr"><date form="text" delimiter=" "><date-part name="day"/><date-part name="month" form="short" strip-periods="true"/><date-part name="year"/></date></locale><macro name="author"><names variable="author"><name sort-separator=" " initialize-with="" name-as-sort-order="all" delimiter=", " delimiter-precedes-last="always"/><label form="long" prefix=", "/><substitute><names variable="editor"/></substitute></names></macro><macro name="editor"><names variable="editor" suffix="."><name sort-separator=" " initialize-with="" name-as-sort-order="all" delimiter=", " delimiter-precedes-last="always"/><label form="long" prefix=", "/></names></macro><macro name="chapter-marker"><choose><if type="chapter paper-conference entry-dictionary entry-encyclopedia" match="any"><text term="in" text-case="capitalize-first"/></if></choose></macro><macro name="publisher"><choose><if type="article-journal article-magazine article-newspaper" match="none"><group delimiter=": " suffix=";"><choose><if type="thesis"><text variable="publisher-place" prefix="[" suffix="]"/></if><else-if type="speech"/><else><text variable="publisher-place"/></else></choose><text variable="publisher"/></group></if></choose></macro><macro name="access"><choose><if variable="URL"><group delimiter=": "><text term="available at" text-case="capitalize-first"/><text variable="URL"/></group></if></choose></macro><macro name="accessed-date"><choose><if variable="URL"><group prefix="[" suffix="]" delimiter=" "><text term="cited" text-case="lowercase"/><date variable="accessed" form="text"/></group></if></choose></macro><macro name="container-title"><choose><if type="article-journal article-magazine chapter paper-conference article-newspaper review review-book entry-dictionary entry-encyclopedia" match="any"><group suffix="." delimiter=" "><choose><if type="article-journal review review-book" match="any"><text variable="container-title" form="short" strip-periods="true"/></if><else><text variable="container-title" strip-periods="true"/></else></choose><choose><if variable="URL"><text term="internet" prefix="[" suffix="]" text-case="capitalize-first"/></if></choose></group><text macro="edition" prefix=" "/></if><else-if type="bill legislation" match="any"><group delimiter=", "><group delimiter=". "><text variable="container-title"/><group delimiter=" "><text term="section" form="short" text-case="capitalize-first"/><text variable="section"/></group></group><text variable="number"/></group></else-if><else-if type="speech">\n<group delimiter=": " suffix=";"><group delimiter=" "><text variable="genre" text-case="capitalize-first"/><text term="presented at"/></group><text variable="event"/></group></else-if><else><group delimiter=", " suffix="."><choose><if variable="collection-title" match="none"><group delimiter=" "><label variable="volume" form="short" text-case="capitalize-first"/><text variable="volume"/></group></if></choose><text variable="container-title"/></group></else></choose></macro><macro name="title"><text variable="title"/><choose><if type="article-journal article-magazine chapter paper-conference article-newspaper review review-book entry-dictionary entry-encyclopedia" match="none"><choose><if variable="URL"><text term="internet" prefix=" [" suffix="]" text-case="capitalize-first"/></if></choose><text macro="edition" prefix=". "/></if></choose><choose><if type="thesis"><text variable="genre" prefix=" [" suffix="]"/></if></choose></macro><macro name="edition"><choose><if is-numeric="edition"><group delimiter=" "><number variable="edition" form="ordinal"/><text term="edition" form="short"/></group></if><else><text variable="edition" suffix="."/></else></choose></macro><macro name="date"><choose><if type="article-journal article-magazine article-newspaper review review-book" match="any"><group suffix=";" delimiter=" "><date variable="issued" form="text"/><text macro="accessed-date"/></group></if><else-if type="bill legislation" match="any"><group delimiter=", "><date variable="issued" delimiter=" "><date-part name="month" form="short" strip-periods="true"/><date-part name="day"/></date><date variable="issued"><date-part name="year"/></date></group></else-if><else-if type="report"><date variable="issued" delimiter=" "><date-part name="year"/><date-part name="month" form="short" strip-periods="true"/></date><text macro="accessed-date" prefix=" "/></else-if><else-if type="patent"><group suffix="."><group delimiter=", "><text variable="number"/><date variable="issued"><date-part name="year"/></date></group><text macro="accessed-date" prefix=" "/></group></else-if><else-if type="speech"><group delimiter="; "><group delimiter=" "><date variable="issued" delimiter=" "><date-part name="year"/><date-part name="month" form="short" strip-periods="true"/><date-part name="day"/></date><text macro="accessed-date"/></group><text variable="event-place"/></group></else-if><else><group suffix="."><date variable="issued"><date-part name="year"/></date><text macro="accessed-date" prefix=" "/></group></else></choose></macro><macro name="pages"><choose><if type="article-journal article-magazine article-newspaper review review-book" match="any"><text variable="page" prefix=":"/></if><else-if type="book" match="any"><text variable="number-of-pages" prefix=" "/><choose><if is-numeric="number-of-pages"><label variable="number-of-pages" form="short" prefix=" " plural="never"/></if></choose></else-if><else><group prefix=" " delimiter=" "><label variable="page" form="short" plural="never"/><text variable="page"/></group></else></choose></macro><macro name="journal-location"><choose><if type="article-journal article-magazine review review-book" match="any"><text variable="volume"/><text variable="issue" prefix="(" suffix=")"/></if></choose></macro><macro name="collection-details"><choose><if type="article-journal article-magazine article-newspaper review review-book" match="none"><choose><if variable="collection-title"><group delimiter=" " prefix="(" suffix=")"><names variable="collection-editor" suffix="."><name sort-separator=" " initialize-with="" name-as-sort-order="all" delimiter=", " delimiter-precedes-last="always"/><label form="long" prefix=", "/></names><group delimiter="; "><text variable="collection-title"/><group delimiter=" "><label variable="volume" form="short"/><text variable="volume"/></group></group></group></if></choose></if></choose></macro><macro name="report-details"><choose><if type="report"><text variable="number" prefix="Report No.: "/></if></choose></macro><citation collapse="citation-number">\n<sort><key variable="citation-number"/></sort><layout prefix="(" suffix=")" delimiter=","><text variable="citation-number"/></layout></citation><bibliography et-al-min="7" et-al-use-first="6" second-field-align="flush"><layout><text variable="citation-number" suffix=". "/><group delimiter=". " suffix=". "><text macro="author"/><text macro="title"/></group><group delimiter=" " suffix=". "><group delimiter=": "><text macro="chapter-marker"/><group delimiter=" "><text macro="editor"/><text macro="container-title"/></group></group><text macro="publisher"/><group><text macro="date"/><text macro="journal-location"/><text macro="pages"/></group></group><text macro="collection-details" suffix=". "/><text macro="report-details" suffix=". "/><text macro="access"/></layout></bibliography></style>',
+  harvard1: '<?xml version="1.0" encoding="utf-8"?><style xmlns="http://purl.org/net/xbiblio/csl" class="in-text" version="1.0" demote-non-dropping-particle="sort-only"><info><title>Harvard Reference format 1 (author-date)</title><id>http://www.zotero.org/styles/harvard1</id><link href="http://www.zotero.org/styles/harvard1" rel="self"/><link href="http://libweb.anglia.ac.uk/referencing/harvard.htm" rel="documentation"/><author><name>Julian Onions</name><email>julian.onions@gmail.com</email></author><category citation-format="author-date"/><category field="generic-base"/><summary>The Harvard author-date style</summary><updated>2012-09-27T22:06:38+00:00</updated><rights license="http://creativecommons.org/licenses/by-sa/3.0/">This work is licensed under a Creative Commons Attribution-ShareAlike 3.0 License</rights></info><macro name="editor"><names variable="editor" delimiter=", "><name and="symbol" initialize-with=". " delimiter=", "/><label form="short" prefix=", " text-case="lowercase"/></names></macro><macro name="anon"><text term="anonymous" form="short" text-case="capitalize-first" strip-periods="true"/></macro><macro name="author"><names variable="author"><name name-as-sort-order="all" and="symbol" sort-separator=", " initialize-with="." delimiter-precedes-last="never" delimiter=", "/><label form="short" prefix=" " text-case="lowercase"/><substitute><names variable="editor"/><text macro="anon"/></substitute></names></macro><macro name="author-short"><names variable="author"><name form="short" and="symbol" delimiter=", " delimiter-precedes-last="never" initialize-with=". "/><substitute><names variable="editor"/><names variable="translator"/><text macro="anon"/></substitute></names></macro><macro name="access"><choose><if variable="URL"><text value="Available at:" suffix=" "/><text variable="URL"/><group prefix=" [" suffix="]"><text term="accessed" text-case="capitalize-first" suffix=" "/><date variable="accessed"><date-part name="month" suffix=" "/><date-part name="day" suffix=", "/><date-part name="year"/></date></group></if></choose></macro><macro name="title"><choose><if type="bill book graphic legal_case legislation motion_picture report song thesis" match="any"><text variable="title" font-style="italic"/></if><else><text variable="title"/></else></choose></macro><macro name="publisher"><group delimiter=": "><text variable="publisher-place"/><text variable="publisher"/></group></macro><macro name="year-date"><choose><if variable="issued"><date variable="issued"><date-part name="year"/></date></if><else><text term="no date" form="short"/></else></choose></macro><macro name="edition"><choose><if is-numeric="edition"><group delimiter=" "><number variable="edition" form="ordinal"/><text term="edition" form="short"/></group></if><else><text variable="edition" suffix="."/></else></choose></macro><macro name="pages"><group><label variable="page" form="short" suffix=" "/><text variable="page"/></group></macro><citation et-al-min="3" et-al-use-first="1" disambiguate-add-year-suffix="true" disambiguate-add-names="true" disambiguate-add-givenname="true"><layout prefix="(" suffix=")" delimiter="; "><group delimiter=", "><group delimiter=" "><text macro="author-short"/><text macro="year-date"/></group><group><label variable="locator" form="short"/><text variable="locator"/></group></group></layout></citation><bibliography hanging-indent="true" et-al-min="4" et-al-use-first="1"><sort><key macro="author"/><key variable="title"/></sort><layout><text macro="author" suffix=","/><date variable="issued" prefix=" " suffix="."><date-part name="year"/></date><choose><if type="bill book graphic legal_case legislation motion_picture report song" match="any"><group prefix=" " delimiter=" " suffix=","><text macro="title"/><text macro="edition"/><text macro="editor"/></group><text prefix=" " suffix="." macro="publisher"/></if><else-if type="chapter paper-conference" match="any"><text macro="title" prefix=" " suffix="."/><group prefix=" " delimiter=" "><text term="in" text-case="capitalize-first"/>\n<text macro="editor"/><text variable="container-title" font-style="italic" suffix="."/><text variable="collection-title" suffix="."/><text variable="event" suffix="."/><group suffix="." delimiter=", "><text macro="publisher" prefix=" "/><text macro="pages"/></group></group></else-if><else-if type="thesis"><group prefix=" " suffix="." delimiter=". "><text macro="title"/><text variable="genre"/><text macro="publisher"/></group></else-if><else><group suffix="."><text macro="title" prefix=" "/><text macro="editor" prefix=" "/></group><group prefix=" " suffix="."><text variable="container-title" font-style="italic"/><group prefix=", "><text variable="volume"/><text variable="issue" prefix="(" suffix=")"/></group><group prefix=", "><label variable="page" form="short"/><text variable="page"/></group></group></else></choose><text prefix=" " macro="access" suffix="."/></layout></bibliography></style>'
 };
 
 /**
  * Retrieve CSL style
- * 
+ *
  * @access private
  * @method fetchCSLStyle
- * 
+ *
  * @param {String} [style="apa"] - style name
- * 
+ *
  * @return {String} CSL style
  */
 var fetchCSLStyle = function fetchCSLStyle(style) {
@@ -209,11 +210,17 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.get = exports.getIds = undefined;
 
+var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; }();
+
 var _striptags = require('striptags');
 
 var _striptags2 = _interopRequireDefault(_striptags);
 
 var _attr = require('../util/attr.js');
+
+var _deepCopy = require('../util/deepCopy');
+
+var _deepCopy2 = _interopRequireDefault(_deepCopy);
 
 var _json = require('../get/bibtex/json');
 
@@ -223,7 +230,7 @@ var _text = require('../get/bibtex/text');
 
 var _text2 = _interopRequireDefault(_text);
 
-var _json3 = require('../get/html/json');
+var _json3 = require('../get/json');
 
 var _json4 = _interopRequireDefault(_json3);
 
@@ -247,134 +254,132 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 /**
  * Get a list of the data entry IDs, in the order of that list
- * 
+ *
  * @method getIds
  * @memberof Cite
  * @this Cite
- * 
+ *
  * @param {Boolean} nolog - Hide this call from the log (i.e. when used internally)
- * 
+ *
  * @return {String[]} List of IDs
  */
 var getIds = function getIds(nolog) {
-  if (!nolog) this._log.push({ name: 'getIds' });
+  if (!nolog) {
+    this._log.push({ name: 'getIds' });
+  }
 
-  var list = [];
-
-  for (var entryIndex = 0; entryIndex < this.data.length; entryIndex++) {
-    list.push(this.data[entryIndex].id);
-  }return list;
+  return this.data.map(function (entry) {
+    return entry.id;
+  });
 };
 
 /**
  * Get formatted data from your object. For more info, see [Output](../#output).
- * 
+ *
  * @method get
  * @memberof Cite
  * @this Cite
- * 
+ *
  * @param {Object} options - The options for the output
- * @param {String} [options.format="real"] - The outputted datatype. Real representation (`"real"`, e.g. DOM Object for HTML, JavaScript Object for JSON) or String representation ( `"string"` )
+ * @param {String} [options.format="real"] - The outputted datatype. Real representation (`"real"`, e.g. DOM Object for HTML, JavaScript Object for JSON) or String representation (`"string"`)
  * @param {String} [options.type="json"] - The format of the output. `"string"`, `"html"` or `"json"`
  * @param {String} [options.style="csl"] - The style of the output. See [Output](../#output)
  * @param {String} [options.lang="en-US"] - The language of the output. [RFC 5646](https://tools.ietf.org/html/rfc5646) codes
  * @param {String} [options.locale] - Custom CSL locale for citeproc
  * @param {String} [options.template] - Custom CSL style template for citeproc
  * @param {Boolean} nolog - Hide this call from the log (i.e. when used internally)
- * 
+ *
  * @return {String|Object[]} The formatted data
  */
 var get = function get(options, nolog) {
-  if (!nolog) this._log.push({ name: 'get', arguments: [options] });
+  if (!nolog) {
+    this._log.push({ name: 'get', arguments: [options] });
+  }
 
-  var _data = JSON.parse(JSON.stringify(this.data)),
-      result,
-      options = Object.assign({ format: 'real', type: 'json', style: 'csl', lang: 'en-US' }, this._options, { locale: '', template: '' }, options),
-      type = options.type.toLowerCase(),
-      styleParts = options.style.toLowerCase().split('-'),
-      style = styleParts[0],
-      styleFormat = styleParts.slice(1).join('-');
+  var _data = (0, _deepCopy2.default)(this.data);
 
-  switch (type) {
-    case 'html':
+  var result = void 0;
 
-      switch (style) {
+  var _Object$assign = Object.assign({ format: 'real', type: 'json', style: 'csl', lang: 'en-US' }, this._options, { locale: '', template: '' }, options),
+      format = _Object$assign.format,
+      type = _Object$assign.type,
+      style = _Object$assign.style,
+      lang = _Object$assign.lang,
+      locale = _Object$assign.locale,
+      template = _Object$assign.template;
 
-        case 'citation':
-          var cb_locale = !options.locale ? _locales2.default : function () {
-            return options.locale;
-          },
-              cb_item = (0, _items2.default)(_data),
-              template = options.template ? options.template : (0, _styles2.default)(styleFormat),
-              lang = (0, _locales2.default)(options.lang) ? options.lang : 'en-US',
-              citeproc = (0, _engines2.default)(styleFormat, lang, template, cb_item, cb_locale),
-              sortIds = citeproc.updateItems(this.getIds(true)),
-              bib = citeproc.makeBibliography(),
-              start = bib[0].bibstart,
-              body = bib[1],
-              end = bib[0].bibend;
+  var _style$match = style.match(/^([^-]+)(?:-(.+))?$/),
+      _style$match2 = _slicedToArray(_style$match, 3),
+      styleType = _style$match2[1],
+      styleFormat = _style$match2[2];
 
-          for (var i = 0; i < body.length; i++) {
-            body[i] = (0, _attr.getPrefixedEntry)(body[i], i, sortIds);
-          }
+  switch ([type, styleType].join()) {
+    case 'html,citation':
+      var cbLocale = locale ? function () {
+        return locale;
+      } : _locales2.default;
+      var cbItem = (0, _items2.default)(_data);
+      var useTemplate = template || (0, _styles2.default)(styleFormat);
+      var useLang = (0, _locales2.default)(lang) ? lang : 'en-US';
 
-          result = start + body.join('<br />') + end;
-          break;
+      var citeproc = (0, _engines2.default)(styleFormat, useLang, useTemplate, cbItem, cbLocale);
+      var sortedIds = citeproc.updateItems(this.getIds(true));
 
-        case 'csl':
-          result = (0, _json4.default)(_data);
-          break;
+      var _citeproc$makeBibliog = citeproc.makeBibliography(),
+          _citeproc$makeBibliog2 = _slicedToArray(_citeproc$makeBibliog, 2),
+          _citeproc$makeBibliog3 = _citeproc$makeBibliog2[0],
+          bibStart = _citeproc$makeBibliog3.bibstart,
+          bibEnd = _citeproc$makeBibliog3.bibend,
+          bibBody = _citeproc$makeBibliog2[1];
 
-        case 'bibtex':
-          result = (0, _text2.default)(_data, true);
-          break;
-      }
+      bibBody = bibBody.map(function (element, index) {
+        return (0, _attr.getPrefixedEntry)(element, index, sortedIds);
+      });
 
+      result = '' + bibStart + bibBody.join('<br />') + bibEnd;
       break;
 
-    case 'string':
-
-      switch (style) {
-
-        case 'bibtex':
-          result = (0, _text2.default)(_data, false);
-          break;
-
-        case 'citation':
-          var options = Object.assign({}, options, { type: 'html' });
-          result = (0, _striptags2.default)(this.get(options, true));
-          break;
-
-        case 'csl':
-          result = JSON.stringify(_data);
-          break;
-      }
-
+    case 'html,csl':
+      result = (0, _json4.default)(_data);
       break;
 
-    case 'json':
+    case 'html,bibtex':
+      result = (0, _text2.default)(_data, true);
+      break;
 
-      switch (style) {
+    case 'string,bibtex':
+      result = (0, _text2.default)(_data, false);
+      break;
 
-        case 'csl':
-          result = JSON.stringify(_data);
-          break;
+    case 'string,citation':
+      result = (0, _striptags2.default)(this.get(Object.assign({}, options, { type: 'html' }), true));
+      break;
 
-        case 'bibtex':
-          result = JSON.stringify(_data.map(_json2.default));
-          break;
+    case 'string,csl':
+      result = JSON.stringify(_data);
+      break;
 
-        case 'citation':
-          console.error('[get]', 'Combination type/style of json/citation-* is not valid:', options.type + '/' + options.style);
-          result = undefined;
-          break;
-      }
+    case 'json,csl':
+      result = JSON.stringify(_data);
+      break;
 
+    case 'json,bibtex':
+      result = JSON.stringify(_data.map(_json2.default));
+      break;
+
+    case 'json,citation':
+      console.error('[get]', 'Combination type/style of json/citation-* is not valid: ' + type + '/' + style); //
+      break;
+
+    default:
+      console.error('[get]', 'Invalid options');
       break;
   }
 
-  if (options.format === 'real') {
-    if (options.type === 'json') result = JSON.parse(result);else if (browserMode && options.type === 'html') {
+  if (format === 'real') {
+    if (type === 'json') {
+      result = JSON.parse(result);
+    } else if (document && document.createElement && type === 'html') {
       var tmp = document.createElement('div');
       tmp.innerHTML = result;
       result = result.childNodes;
@@ -386,7 +391,7 @@ var get = function get(options, nolog) {
 
 exports.getIds = getIds;
 exports.get = get;
-},{"../CSL/engines":1,"../CSL/items":3,"../CSL/locales":4,"../CSL/styles":5,"../get/bibtex/json":13,"../get/bibtex/text":15,"../get/html/json":20,"../util/attr.js":45,"striptags":358}],7:[function(require,module,exports){
+},{"../CSL/engines":1,"../CSL/items":3,"../CSL/locales":4,"../CSL/styles":5,"../get/bibtex/json":13,"../get/bibtex/text":15,"../get/json":20,"../util/attr.js":45,"../util/deepCopy":46,"striptags":360}],7:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -424,33 +429,10 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
 /**
- * @author Lars Willighagen
- * @version 0.2
- * @license
- * Copyright (c) 2015-2016 Lars Willighagen  
- * 
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:  
- * 
- * The above copyright notice and this permission notice shall be included in all
- * copies or substantial portions of the Software.  
- * 
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
- * SOFTWARE.
- * 
  * @constructor Cite
- * 
+ *
  * @description Create a `Cite` object with almost any kind of data, and manipulate it with its default methods.
- * 
+ *
  * @param {String|CSL|Object|String[]|CSL[]|Object[]} data - Input data. If no data is passed, an empty object is returned
  * @param {Object} options - The options for the output
  * @param {String} [options.format="real"] - The outputted datatype. Real representation (`"real"`, e.g. DOM Object for HTML, JavaScript Object for JSON) or String representation ( `"string"` )
@@ -460,16 +442,18 @@ function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj;
  */
 function Cite(data, options) {
   // Making it Scope-Safe
-  if (!(this instanceof Cite)) return new Cite(data, options);
+  if (!(this instanceof Cite)) {
+    return new Cite(data, options);
+  }
 
   /**
    * The default options for the output
-   * 
+   *
    * @property format {String} The outputted datatype. Real representation (`"real"`, e.g. DOM Object for HTML, JavaScript Object for JSON) or String representation ( `"string"` )
    * @property type {String} The format of the output. `"string"`, `"html"` or `"json"`
    * @property style {String} The style of the output. See [Output](../#output)
    * @property lang {String} The language of the output. [RFC 5646](https://tools.ietf.org/html/rfc5646) codes
-   * 
+   *
    * @type Object
    * @default {}
    */
@@ -481,7 +465,7 @@ function Cite(data, options) {
    * @property data The inputted data
    * @property type {String} The datatype of the input
    * @property format {String} The format of the input
-   *  
+   *
    * @type Object
    */
   this._input = {
@@ -500,25 +484,27 @@ function Cite(data, options) {
 
   /**
    * The log, containing all logged data.
-   * 
+   *
    * These are the names of each called function, together with it's input. If the `Cite` object is changed, the version number gets updated as well.
-   * 
+   *
    * The `.reset()` function **does not** have any influence on the log. This way, you can still undo all changes.
-   * 
+   *
    * <br /><br />
    * `.currentVersion()` and similar function **are not** logged, because this would be influenced by function using other functions.
    *
    * @type Object[]
-   * 
+   *
    * @property {Object} 0 - The first version, indicated with version 0, containing the object as it was when it was made. The following properties are used for the following properties too.
    * @property {String} 0.name - The name of the called function. In case of the initial version, this is `"init"`.
    * @property {String} 0.version - The version of the object. Undefined when a function that doesn't change the object is called.
    * @property {Array} 0.arguments - The arguments passed in the called function.
    */
-  this._log = [{ name: 'init', version: '0', arguments: [this._input.data, this._options] }];
+  this._log = [{ name: 'init', version: 0, arguments: [this._input.data, this._options] }];
 
   this.set(data, true);
   this.options(options, true);
+
+  return this;
 }
 
 Object.assign(Cite.prototype, log, options, set, sort, get);
@@ -539,67 +525,66 @@ var _index2 = _interopRequireDefault(_index);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 /**
-  * 
-  * @method currentVersion
-  * @memberof Cite
-  * @this Cite
-  * 
-  * @return {Number} The latest version of the object
-  */
+ *
+ * @method currentVersion
+ * @memberof Cite
+ * @this Cite
+ *
+ * @return {Number} The latest version of the object
+ */
 var currentVersion = function currentVersion() {
-  var version = 0;
+  return this._log.filter(function (entry) {
+    return entry.hasOwnProperty('version');
+  }).pop().version;
+};
 
-  for (var i = 0; i < this._log.length; i++) {
-    if (this._log[i].version > version) version = this._log[i].version;
+/**
+ * Does not change the current object.
+ *
+ * @method retrieveVersion
+ * @memberof Cite
+ * @this Cite
+ *
+ * @param {Number} versnum - The number of the version you want to retrieve. Illegel numbers: numbers under zero, floats, numbers above the current version of the object.
+ * @param {Boolean} nolog - Hide this call from the log (i.e. when used internally)
+ *
+ * @return {Cite} The version of the object with the version number passed. `undefined` if an illegal number is passed.
+ */
+var retrieveVersion = function retrieveVersion(versnum, nolog) {
+  if (!nolog) {
+    this._log.push({ name: 'retrieveVersion', arguments: [versnum] });
   }
 
-  return version;
+  if (versnum < 0 || versnum > this.currentVersion()) {
+    return undefined;
+  }
+
+  var obj = new _index2.default(this._log[0].arguments[0], this._log[0].arguments[1]);
+
+  this._log.filter(function (entry) {
+    return entry.hasOwnProperty('version');
+  }).slice(1, versnum).forEach(function (entry) {
+    return _index2.default.prototype[entry.name].apply(obj, entry.arguments || []);
+  });
+
+  return obj;
 };
 
 /**
-  * Does not change the current object.
-  * 
-  * @method retrieveVersion
-  * @memberof Cite
-  * @this Cite
-  * 
-  * @param {Number} versnum - The number of the version you want to retrieve. Illegel numbers: numbers under zero, floats, numbers above the current version of the object.
-  * @param {Boolean} nolog - Hide this call from the log (i.e. when used internally)
-  * 
-  * @return {Cite} The version of the object with the version number passed. `undefined` if an illegal number is passed.
-  */
-var retrieveVersion = function retrieveVersion(versnum, nolog) {
-  if (!nolog) this._log.push({ name: 'retrieveVersion', arguments: [versnum] });
-
-  if (versnum >= 0 && versnum <= this.currentVersion()) {
-    var obj = new _index2.default(this._log[0].arguments[0], this._log[0].arguments[1]),
-        arr = [];
-
-    for (var i = 0; i < this._log.length; i++) {
-      if (this._log[i].version) arr.push(this._log[i]);
-    }
-
-    for (var k = 1; k <= versnum; k++) {
-      obj[arr[k].name].apply(obj, arr[k].arguments || []);
-    }
-
-    return obj;
-  } else return undefined;
-};
-
-/**
-  * Does not change the current object. Undoes the last edit made.
-  * 
-  * @method undo
-  * @memberof Cite
-  * @this Cite
-  * 
-  * @param {Boolean} nolog - Hide this call from the log (i.e. when used internally)
-  * 
-  * @return {Cite} The last version of the object. `undefined` if used on first version.
-  */
+ * Does not change the current object. Undoes the last edit made.
+ *
+ * @method undo
+ * @memberof Cite
+ * @this Cite
+ *
+ * @param {Boolean} nolog - Hide this call from the log (i.e. when used internally)
+ *
+ * @return {Cite} The last version of the object. `undefined` if used on first version.
+ */
 var undo = function undo(nolog) {
-  if (!nolog) this._log.push({ name: 'undo' });
+  if (!nolog) {
+    this._log.push({ name: 'undo' });
+  }
 
   return this.retrieveVersion(this.currentVersion() - 1, true);
 };
@@ -614,23 +599,25 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 /**
-  * Change the default options of a `Cite` object.
-  * 
-  * @method options
-  * @memberof Cite
-  * @this Cite
-  * 
-  * @param {Object} options - The options for the output
-  * @param {String} [options.format="real"] - The outputted datatype. Real representation (`"real"`, e.g. DOM Object for HTML, JavaScript Object for JSON) or String representation ( `"string"` )
-  * @param {String} [options.type="json"] - The format of the output. `"string"`, `"html"` or `"json"`
-  * @param {String} [options.style="csl"] - The style of the output. See [Output](./#output)
-  * @param {String} [options.lang="en-US"] - The language of the output. [RFC 5646](https://tools.ietf.org/html/rfc5646) codes
-  * @param {Boolean} nolog - Hide this call from the log (i.e. when used internally)
-  * 
-  * @return {Cite} The updated parent object
-  */
+ * Change the default options of a `Cite` object.
+ *
+ * @method options
+ * @memberof Cite
+ * @this Cite
+ *
+ * @param {Object} options - The options for the output
+ * @param {String} [options.format="real"] - The outputted datatype. Real representation (`"real"`, e.g. DOM Object for HTML, JavaScript Object for JSON) or String representation ( `"string"` )
+ * @param {String} [options.type="json"] - The format of the output. `"string"`, `"html"` or `"json"`
+ * @param {String} [options.style="csl"] - The style of the output. See [Output](./#output)
+ * @param {String} [options.lang="en-US"] - The language of the output. [RFC 5646](https://tools.ietf.org/html/rfc5646) codes
+ * @param {Boolean} nolog - Hide this call from the log (i.e. when used internally)
+ *
+ * @return {Cite} The updated parent object
+ */
 var options = function options(_options, nolog) {
-  if (!nolog) this._log.push({ name: 'options', version: this.currentVersion() + 1, arguments: [_options] });
+  if (!nolog) {
+    this._log.push({ name: 'options', version: this.currentVersion() + 1, arguments: [_options] });
+  }
 
   Object.assign(this._options, _options);
 
@@ -657,45 +644,51 @@ var _fetchId2 = _interopRequireDefault(_fetchId);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 /**
-  * Add an object to the array of objects
-  * 
-  * @method add
-  * @memberof Cite
-  * @this Cite
-  * 
-  * @param {String|CSL|Object|String[]|CSL[]|Object[]} data - The data to add to your object
-  * @param {Boolean} nolog - Hide this call from the log (i.e. when used internally)
-  * 
-  * @return {Cite} The updated parent object
-  */
+ * Add an object to the array of objects
+ *
+ * @method add
+ * @memberof Cite
+ * @this Cite
+ *
+ * @param {String|CSL|Object|String[]|CSL[]|Object[]} data - The data to add to your object
+ * @param {Boolean} nolog - Hide this call from the log (i.e. when used internally)
+ *
+ * @return {Cite} The updated parent object
+ */
 var add = function add(data, nolog) {
-  if (!nolog) this._log.push({ name: 'add', version: this.currentVersion() + 1, arguments: [data, nolog] });
+  var _this = this;
 
-  var input = (0, _chain2.default)(data);
-  this.data = this.data.concat(input);
-
-  var itemIds = this.getIds(true);
-  for (var entryIndex = 0; entryIndex < this.data.length; entryIndex++) {
-    if (!this.data[entryIndex].hasOwnProperty('id')) this.data[entryIndex].id = (0, _fetchId2.default)(itemIds, entryIndex, 'temp_id_');
+  if (!nolog) {
+    this._log.push({ name: 'add', version: this.currentVersion() + 1, arguments: [data, nolog] });
   }
+
+  this.data = this.data.concat((0, _chain2.default)(data));
+
+  this.data.filter(function (entry) {
+    return !entry.hasOwnProperty('id');
+  }).forEach(function (entry) {
+    entry.id = (0, _fetchId2.default)(_this.getIds(true), 'temp_id_');
+  });
 
   return this;
 };
 
 /**
-  * Recreate a `Cite` object with almost any kind of data, and manipulate it with its default methods.
-  * 
-  * @method set
-  * @memberof Cite
-  * @this Cite
-  * 
-  * @param {String|CSL|Object|String[]|CSL[]|Object[]} data - The data to replace the data in your object
-  * @param {Boolean} nolog - Hide this call from the log (i.e. when used internally)
-  * 
-  * @return {Cite} The updated parent object
-  */
+ * Recreate a `Cite` object with almost any kind of data, and manipulate it with its default methods.
+ *
+ * @method set
+ * @memberof Cite
+ * @this Cite
+ *
+ * @param {String|CSL|Object|String[]|CSL[]|Object[]} data - The data to replace the data in your object
+ * @param {Boolean} nolog - Hide this call from the log (i.e. when used internally)
+ *
+ * @return {Cite} The updated parent object
+ */
 var set = function set(data, nolog) {
-  if (!nolog) this._log.push({ name: 'set', version: this.currentVersion() + 1, arguments: [data, nolog] });
+  if (!nolog) {
+    this._log.push({ name: 'set', version: this.currentVersion() + 1, arguments: [data, nolog] });
+  }
 
   this.data = [];
   this.add(data, true);
@@ -704,16 +697,20 @@ var set = function set(data, nolog) {
 };
 
 /**
-  * Reset a `Cite` object.
-  * 
-  * @method reset
-  * @memberof Cite
-  * @this Cite
-  * 
-  * @return {Cite} The updated, empty parent object (except the log, the log lives)
-  */
-var reset = function reset() {
-  this._log.push({ name: 'reset', version: this.currentVersion() + 1, arguments: [] });
+ * Reset a `Cite` object.
+ *
+ * @method reset
+ * @memberof Cite
+ * @this Cite
+ *
+ * @param {Boolean} nolog - Hide this call from the log (i.e. when used internally)
+ *
+ * @return {Cite} The updated, empty parent object (except the log, the log lives)
+ */
+var reset = function reset(nolog) {
+  if (!nolog) {
+    this._log.push({ name: 'reset', version: this.currentVersion() + 1, arguments: [] });
+  }
 
   this.data = [];
   this._options = {};
@@ -739,31 +736,33 @@ var _label2 = _interopRequireDefault(_label);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 /**
-  * Sort the datasets alphabetically, on basis of it's BibTeX label
-  * 
-  * @method sort
-  * @memberof Cite
-  * @this Cite
-  * 
-  * @param {Boolean} nolog - Hide this call from the log (i.e. when used internally)
-  * 
-  * @return {Cite} The updated parent object
-  */
+ * Sort the datasets alphabetically, on basis of it's BibTeX label
+ *
+ * @method sort
+ * @memberof Cite
+ * @this Cite
+ *
+ * @param {Boolean} nolog - Hide this call from the log (i.e. when used internally)
+ *
+ * @return {Cite} The updated parent object
+ */
 var sort = function sort(nolog) {
-  if (!nolog) this._log.push({ name: 'sort', version: this.currentVersion() + 1, arguments: [] });
+  if (!nolog) {
+    this._log.push({ name: 'sort', version: this.currentVersion() + 1, arguments: [] });
+  }
 
-  this.data = this.data.sort(function (a, b) {
-    var labela = (0, _label2.default)(a),
-        labelb = (0, _label2.default)(b);
+  this.data.sort(function (a, b) {
+    var labelA = (0, _label2.default)(a);
+    var labelB = (0, _label2.default)(b);
 
-    return labela != labelb ? labela > labelb ? 1 : -1 : 0;
+    return labelA !== labelB ? labelA > labelB ? 1 : -1 : 0;
   });
 
   return this;
 };
 
 exports.sort = sort;
-},{"../get/label":22}],12:[function(require,module,exports){
+},{"../get/label":21}],12:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -812,43 +811,80 @@ var _name = require('../name');
 
 var _name2 = _interopRequireDefault(_name);
 
+var _date = require('../date');
+
+var _date2 = _interopRequireDefault(_date);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 /**
  * Get BibTeX-JSON from CSL(-JSON)
- * 
+ *
  * @access private
  * @method getBibTeXJSON
- * 
+ *
  * @param {CSL} src - Input CSL
- * 
+ *
  * @return {Object} Output BibTeX-JSON
  */
 var getBibTeXJSON = function getBibTeXJSON(src) {
-  var src = JSON.parse(JSON.stringify(src)),
-      res = {},
-      props = {};
+  var res = {
+    label: src.label || (0, _label2.default)(src),
+    type: (0, _type2.default)(src.type)
+  };
+  var props = {};
 
-  res.label = src.label || (0, _label2.default)(src);
-  res.type = (0, _type2.default)(src.type);
-
-  if (src.hasOwnProperty('author')) props.author = src.author.slice().map(_name2.default).join(' and ');
-  if (src.hasOwnProperty('event')) props.organization = src.event;
-  if (src.hasOwnProperty('accessed')) props.note = '[Online; accesed ' + getDate(src.accessed) + ']';
-  if (src.hasOwnProperty('DOI')) props.doi = src.DOI;
-  if (src.hasOwnProperty('editor')) props.editor = src.editor.slice().map(_name2.default).join(' and ');
-  if (src.hasOwnProperty('ISBN')) props.isbn = src.ISBN;
-  if (src.hasOwnProperty('ISSN')) props.issn = src.ISSN;
-  if (src.hasOwnProperty('container-title')) props.journal = src['container-title'];
-  if (src.hasOwnProperty('issue')) props.issue = src.issue.toString();
-  if (src.hasOwnProperty('page')) props.pages = src.page.replace('-', '--');
-  if (src.hasOwnProperty('publisher-place')) props.address = src['publisher-place'];
-  if (src.hasOwnProperty('edition')) props.edition = src.edition.toString();
-  if (src.hasOwnProperty('publisher')) props.publisher = src.publisher;
-  if (src.hasOwnProperty('title')) props.title = src['title'];
-  if (src.hasOwnProperty('url')) props.url = src.url;
-  if (src.hasOwnProperty('volume')) props.volume = src.volume.toString();
-  if (src.hasOwnProperty('issued') && Array.isArray(src.issued) && src.issued[0]['date-parts'].length === 3) props.year = src.issued[0]['date-parts'][0].toString();
+  if (src.hasOwnProperty('author')) {
+    props.author = src.author.map(_name2.default).join(' and ');
+  }
+  if (src.hasOwnProperty('event')) {
+    props.organization = src.event;
+  }
+  if (src.hasOwnProperty('accessed')) {
+    props.note = '[Online; accesed ' + (0, _date2.default)(src.accessed) + ']';
+  }
+  if (src.hasOwnProperty('DOI')) {
+    props.doi = src.DOI;
+  }
+  if (src.hasOwnProperty('editor')) {
+    props.editor = src.editor.map(_name2.default).join(' and ');
+  }
+  if (src.hasOwnProperty('ISBN')) {
+    props.isbn = src.ISBN;
+  }
+  if (src.hasOwnProperty('ISSN')) {
+    props.issn = src.ISSN;
+  }
+  if (src.hasOwnProperty('container-title')) {
+    props.journal = src['container-title'];
+  }
+  if (src.hasOwnProperty('issue')) {
+    props.issue = src.issue.toString();
+  }
+  if (src.hasOwnProperty('page')) {
+    props.pages = src.page.replace('-', '--');
+  }
+  if (src.hasOwnProperty('publisher-place')) {
+    props.address = src['publisher-place'];
+  }
+  if (src.hasOwnProperty('edition')) {
+    props.edition = src.edition.toString();
+  }
+  if (src.hasOwnProperty('publisher')) {
+    props.publisher = src.publisher;
+  }
+  if (src.hasOwnProperty('title')) {
+    props.title = src['title'];
+  }
+  if (src.hasOwnProperty('url')) {
+    props.url = src.url;
+  }
+  if (src.hasOwnProperty('volume')) {
+    props.volume = src.volume.toString();
+  }
+  if (src.hasOwnProperty('issued') && Array.isArray(src.issued) && src.issued[0]['date-parts'].length === 3) {
+    props.year = src.issued[0]['date-parts'][0].toString();
+  }
 
   res.properties = props;
 
@@ -856,7 +892,7 @@ var getBibTeXJSON = function getBibTeXJSON(src) {
 };
 
 exports.default = getBibTeXJSON;
-},{"../name":23,"./label":14,"./type":16}],14:[function(require,module,exports){
+},{"../date":17,"../name":22,"./label":14,"./type":16}],14:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -864,22 +900,38 @@ Object.defineProperty(exports, "__esModule", {
 });
 /**
  * Get a BibTeX label from CSL data
- * 
+ *
  * @access private
  * @method getBibTeXLabel
- * 
+ *
  * @param {CSL} src - Input CSL
- * 
+ *
  * @return {String} The label
  */
-var getBibTeXLabel = function getBibTeXLabel(src) {
+var getBibTeXLabel = function getBibTeXLabel() {
+  var _ref = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
+      _ref$author = _ref.author,
+      author = _ref$author === undefined ? [] : _ref$author,
+      year = _ref.year,
+      _ref$issued = _ref.issued,
+      issued = _ref$issued === undefined ? [] : _ref$issued,
+      title = _ref.title;
+
   var res = '';
 
-  if (src.hasOwnProperty('author') && Array.isArray(src.author) && src.author.length > 0) res += src.author[0].family || src.author[0].literal;
+  if (author.length > 0) {
+    res += author[0].family || author[0].literal;
+  }
 
-  if (src.hasOwnProperty('year')) res += src.year;else if (src.issued && src.issued[0] && src.issued[0]['date-parts']) res += src.issued[0]['date-parts'][0];
+  if (year) {
+    res += year;
+  } else if (issued.length > 0 && issued[0]['date-parts']) {
+    res += issued[0]['date-parts'][0];
+  }
 
-  if (src.hasOwnProperty('title')) res += src.title.replace(/^(the|a|an) /i, '').split(' ')[0];
+  if (title) {
+    res += title.match(/^(?:(?:the|a|an)\s+)?(\S+)/i)[1];
+  }
 
   return res;
 };
@@ -896,82 +948,69 @@ var _json = require('./json');
 
 var _json2 = _interopRequireDefault(_json);
 
-var _dict = require('../html/dict');
-
-var _dict2 = _interopRequireDefault(_dict);
+var _dict = require('../dict');
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 /**
+ * Mapping of BibTeX syntax chars to BibTeX Escaped Chars.
+ *
+ * From [Zotero's alwaysMap object](https://github.com/zotero/translators/blob/master/BibTeX.js#L225)
+ * [REPO](https://github.com/zotero/translators)
+ *
+ * Accesed 11/20/2016
+ *
+ * @access private
+ * @constant varBibTeXSyntaxTokens
+ * @default
+ */
+var varBibTeXSyntaxTokens = {
+  '|': '{\\textbar}',
+  '<': '{\\textless}',
+  '>': '{\\textgreater}',
+  '~': '{\\textasciitilde}',
+  '^': '{\\textasciicircum}',
+  '\\': '{\\textbackslash}',
+  // See http://tex.stackexchange.com/questions/230750/open-brace-in-bibtex-fields/230754
+  '{': '\\{\\vphantom{\\}}',
+  '}': '\\vphantom{\\{}\\}'
+};
+
+/**
  * Get a BibTeX (HTML) string from CSL
- * 
+ *
  * @access private
  * @method getBibTeX
- * 
+ *
  * @param {CSL[]} src - Input CSL
  * @param {Boolean} html - Output as HTML string (instead of plain text)
- * 
+ *
  * @return {String} BibTeX (HTML) string
  */
 var getBibTeX = function getBibTeX(src, html) {
-  var res = '',
-      dict = _dict2.default;
+  var dict = html ? _dict.htmlDict : _dict.textDict;
+  var caseSensitive = ['title'];
 
-  if (html) res += dict.wr_start;
-
-  for (var i = 0; i < src.length; i++) {
-    var entry = src[i],
-        bib = (0, _json2.default)(entry);
-
-    if (html) res += dict.en_start;
-
-    res += '@' + bib.type + '{' + bib.label + ',';
-
-    if (html) res += dict.ul_start, res += dict.li_start;else res += '\n';
-
-    var props = Object.keys(bib.properties);
-
-    for (var propIndex = 0; propIndex < props.length; propIndex++) {
-      var prop = props[propIndex],
-          value = bib.properties[prop].replace(/[|<>~^\\{}]/g, function (match) {
+  var entries = src.map(function (entry) {
+    var bib = (0, _json2.default)(entry);
+    var properties = Object.keys(bib.properties).map(function (prop) {
+      var value = bib.properties[prop].replace(/[|<>~^\\{}]/g, function (match) {
         return varBibTeXSyntaxTokens[match];
-      }),
-          del_start =
+      });
+      var delStart = value === parseInt(value).toString() ? '' : caseSensitive.includes(prop) ? '{{' : '{';
+      var delEnd = delStart.replace(/{/g, '}').split('').reverse().join('');
 
-      // Number
-      value == parseInt(value).toString() ? '' :
-      // Title or other capital-related fields
-      prop === 'title' ? '{{' :
-      // Default
-      '{',
-          del_end = del_start.replace(/{/g, '}').split('').reverse().join('');
+      return '' + dict.li_start + prop + '=' + delStart + value + delEnd + ',' + dict.li_end;
+    }).join('');
 
-      if (!html) res += '\t';
+    return dict.en_start + '@' + bib.type + '{' + bib.label + ',' + dict.ul_start + properties + dict.ul_end + '}' + dict.en_end;
+  }).join('');
 
-      res += prop + '=' + del_start + value + del_end + ',';
-
-      if (propIndex + 1 < props.length) {
-
-        if (html) res += dict.li_end, res += dict.li_start;
-      }
-
-      if (!html) res += '\n';
-    }
-
-    if (html) res += dict.li_end, res += dict.ul_end;
-
-    res += '}';
-
-    if (html) res += dict.en_end;
-  }
-
-  if (html) res += dict.wr_end;else res += '\n';
-
-  return res;
+  return '' + dict.wr_start + entries + dict.wr_end;
 };
 
 exports.default = getBibTeX;
-},{"../html/dict":18,"./json":13}],16:[function(require,module,exports){
+},{"../dict":18,"./json":13}],16:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -979,51 +1018,42 @@ Object.defineProperty(exports, "__esModule", {
 });
 /**
  * CSL pub type to BibTeX pub type
- * 
+ *
  * @access private
  * @method fetchBibTeXType
- * 
+ *
  * @param {String} pubType - CSL type
- * 
+ *
  * @return {String} BibTeX type
  */
 var fetchBibTeXType = function fetchBibTeXType(pubType) {
-
   switch (pubType) {
     case 'article':
     case 'article-journal':
     case 'article-magazine':
     case 'article-newspaper':
       return 'article';
-      break;
 
     case 'book':
       return 'book';
-      break;
 
     case 'chapter':
       return 'incollection';
-      break;
 
     case 'manuscript':
       return 'unpublished';
-      break;
 
     case 'paper-conference':
       return 'inproceedings';
-      break;
 
     case 'patent':
       return 'patent';
-      break;
 
     case 'report':
       return 'techreport';
-      break;
 
     case 'thesis':
       return 'phdthesis';
-      break;
 
     case 'graphic':
     case 'interview':
@@ -1031,12 +1061,10 @@ var fetchBibTeXType = function fetchBibTeXType(pubType) {
     case 'personal_communication':
     case 'webpage':
       return 'misc';
-      break;
 
     default:
-      console.warn('CSL publication type not recognized: ' + pubType + '. Interpreting as "misc".');
+      console.warn('CSL publication type not recognized: ' + pubType + '}. Interpreting as "misc".');
       return 'misc';
-      break;
   }
 };
 
@@ -1047,23 +1075,28 @@ exports.default = fetchBibTeXType;
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
+
+var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; }();
+
 /**
  * Convert a CSL date into human-readable format
- * 
+ *
  * @access private
  * @function getDate
- * 
+ *
  * @param {String[]} date - A date in CSL format
- * 
+ *
  * @return {String} The string
  */
-var getDate = function getDate(date) {
-  var res = '',
-      date = date[0]['date-parts'];
+var getDate = function getDate(_ref) {
+  var _ref2 = _slicedToArray(_ref, 1),
+      date = _ref2[0]['date-parts'];
 
-  if (date.length === 3) res += [('000' + date[0]).slice(-4), ('0' + date[1]).slice(-2), ('0' + date[2]).slice(-2)].join('-');
-
-  return res;
+  if (date.length === 3) {
+    return date[0].padStart(4, '0') + '-' + date[1].padStart(2, '0') + '-' + date[2].padStart(2, '0');
+  } else {
+    return '';
+  }
 };
 
 exports.default = getDate;
@@ -1075,12 +1108,12 @@ Object.defineProperty(exports, "__esModule", {
 });
 /**
  * Object containing HTML strings for building JSON and BibTeX. Made to match citeproc, for compatability.
- * 
+ *
  * @access private
  * @constant varHTMLDict
  * @default
  */
-var varHTMLDict = {
+var htmlDict = {
   wr_start: '<div class="csl-bib-body">',
   wr_end: '</div>',
   en_start: '<div class="csl-entry">',
@@ -1091,178 +1124,45 @@ var varHTMLDict = {
   li_end: '</li>'
 };
 
-exports.default = varHTMLDict;
+/**
+ * Object containing text strings for building JSON and BibTeX. Made to match citeproc, for compatability.
+ *
+ * @access private
+ * @constant varHTMLDict
+ * @default
+ */
+var textDict = {
+  wr_start: '',
+  wr_end: '\n',
+  en_start: '',
+  en_end: '\n',
+  ul_start: '\n',
+  ul_end: '',
+  li_start: '\t',
+  li_end: '\n'
+};
+
+exports.htmlDict = htmlDict;
+exports.textDict = textDict;
 },{}],19:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.dict = exports.json = undefined;
+exports.label = exports.name = exports.date = exports.json = exports.dict = exports.bibtex = undefined;
+
+var _index = require('./bibtex/index');
+
+var bibtex = _interopRequireWildcard(_index);
+
+var _dict = require('./dict');
+
+var dict = _interopRequireWildcard(_dict);
 
 var _json = require('./json');
 
 var _json2 = _interopRequireDefault(_json);
-
-var _dict = require('./dict');
-
-var _dict2 = _interopRequireDefault(_dict);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-exports.json = _json2.default;
-exports.dict = _dict2.default;
-},{"./dict":18,"./json":20}],20:[function(require,module,exports){
-'use strict';
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
-
-var _dict = require('./dict');
-
-var _dict2 = _interopRequireDefault(_dict);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-/**
- * Convert a JSON array or object to HTML.
- * 
- * @access private
- * @function getJSONObjectHTML
- * 
- * @param {Object|Object[]|String[]|Number[]} src - The data
- * 
- * @return {String} The html (in string form)
- */
-
-var getJSONObjectHTML = function getJSONObjectHTML(src) {
-  var res = '';
-
-  if (Array.isArray(src)) {
-
-    res += '[<ul style="list-style-type:none">';
-
-    for (var entryIndex = 0; entryIndex < src.length; entryIndex++) {
-      var entry = src[entryIndex];
-
-      res += '<li>';
-      res += getJSONValueHTML(entry);
-      res += ',</li>';
-    }
-
-    res += '</ul>]';
-  } else if (src !== null) {
-
-    res += '{<ul style="list-style-type:none">';
-
-    for (var prop in src) {
-
-      var entry = src[prop];
-
-      res += '<li><span class="key">' + prop + '</span><span class="delimiter">:</span>';
-      res += getJSONValueHTML(entry);
-      res += ',</li>';
-    }
-
-    res += '</ul>}';
-  }
-
-  return res;
-};
-
-/**
- * Convert JSON to HTML.
- * 
- * @access private
- * @function getJSONValueHTML
- * 
- * @param {Object|String|Number|Object[]|String[]|Number[]} src - The data
- * 
- * @return {String} The html (in string form)
- */
-var getJSONValueHTML = function getJSONValueHTML(src) {
-  var res = '';
-
-  if ((typeof src === 'undefined' ? 'undefined' : _typeof(src)) === 'object' && src !== null) {
-
-    if (src.length === 0) res += '[]';else if (Object.keys(src).length === 0) res += '{}';else res += getJSONObjectHTML(src);
-  } else res += '<span class="string">' + JSON.stringify(src) + '</span>';
-
-  return res;
-};
-
-/**
- * Get a JSON HTML string from CSL
- * 
- * @access private
- * @method getJSON
- * 
- * @param {CSL[]} src - Input CSL
- * 
- * @return {String} JSON HTML string
- */
-var getJSON = function getJSON(src) {
-  var res = '',
-      dict = varHTMLDict;
-
-  res += dict.wr_start;
-  res += '[';
-
-  for (var i = 0; i < src.length; i++) {
-    var entry = src[i];
-
-    res += dict.en_start;
-    res += '{';
-
-    res += dict.ul_start;
-    res += dict.li_start;
-
-    var props = Object.keys(entry);
-
-    for (var propIndex = 0; propIndex < props.length; propIndex++) {
-      var prop = props[propIndex],
-          value = entry[prop];
-
-      res += prop + ':' + getJSONValueHTML(value);
-
-      if (propIndex + 1 < props.length) res += ',', res += dict.li_end, res += dict.li_start;
-    }
-
-    res += dict.li_end;
-    res += dict.ul_end;
-
-    res += '}';
-
-    if (i + 1 < src.length) res += ',';
-
-    res += dict.en_end;
-  }
-
-  res += dict.wr_end;
-  res += ']';
-
-  return res;
-};
-
-exports.default = getJSON;
-},{"./dict":18}],21:[function(require,module,exports){
-'use strict';
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.label = exports.name = exports.date = exports.bibtex = exports.html = undefined;
-
-var _index = require('./html/index');
-
-var html = _interopRequireWildcard(_index);
-
-var _index2 = require('./bibtex/index');
-
-var bibtex = _interopRequireWildcard(_index2);
 
 var _date = require('./date');
 
@@ -1280,12 +1180,97 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
-exports.html = html;
 exports.bibtex = bibtex;
+exports.dict = dict;
+exports.json = _json2.default;
 exports.date = _date2.default;
 exports.name = _name2.default;
 exports.label = _label2.default;
-},{"./bibtex/index":12,"./date":17,"./html/index":19,"./label":22,"./name":23}],22:[function(require,module,exports){
+},{"./bibtex/index":12,"./date":17,"./dict":18,"./json":20,"./label":21,"./name":22}],20:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
+var _dict = require('./dict');
+
+/**
+ * Convert a JSON array or object to HTML.
+ *
+ * @access private
+ * @function getJSONObjectHTML
+ *
+ * @param {Object|Object[]|String[]|Number[]} src - The data
+ *
+ * @return {String} The html (in string form)
+ */
+var getJSONObjectHTML = function getJSONObjectHTML(src) {
+  if (Array.isArray(src)) {
+    var entries = src.map(function (entry) {
+      return '' + _dict.htmlDict.li_start + getJSONValueHTML(entry) + ',' + _dict.htmlDict.li_end;
+    });
+    return '[' + _dict.htmlDict.ul_start + entries + _dict.htmlDict.ul_end + ']';
+  } else {
+    var props = Object.keys(src).map(function (prop) {
+      return '' + _dict.htmlDict.li_start + prop + ': ' + getJSONValueHTML(src[prop]) + ',{dict.li_end}';
+    });
+    return '{' + _dict.htmlDict.ul_start + props + _dict.htmlDict.ul_end + '}';
+  }
+};
+
+/**
+ * Convert JSON to HTML.
+ *
+ * @access private
+ * @function getJSONValueHTML
+ *
+ * @param {Object|String|Number|Object[]|String[]|Number[]} src - The data
+ *
+ * @return {String} The html (in string form)
+ */
+var getJSONValueHTML = function getJSONValueHTML(src) {
+  if ((typeof src === 'undefined' ? 'undefined' : _typeof(src)) === 'object' && src !== null) {
+    if (src.length === 0) {
+      return '[]';
+    } else if (Object.keys(src).length === 0) {
+      return '{}';
+    } else {
+      return getJSONObjectHTML(src);
+    }
+  } else {
+    return '<span class="string">' + JSON.stringify(src) + '}</span>';
+  }
+};
+
+/**
+ * Get a JSON HTML string from CSL
+ *
+ * @access private
+ * @method getJSON
+ *
+ * @param {CSL[]} src - Input CSL
+ *
+ * @return {String} JSON HTML string
+ */
+var getJSON = function getJSON(src) {
+  var entries = src.map(function (entry, index, array) {
+    var comma = index < array.length - 1 ? ',' : '';
+    var props = Object.keys(entry).map(function (prop, index, array) {
+      var comma = index < array.length - 1 ? ',' : '';
+      return '' + _dict.htmlDict.li_start + prop + ': ' + getJSONValueHTML(entry[prop]) + comma + '{dict.li_end}';
+    }).join('');
+
+    return _dict.htmlDict.en_start + '{' + _dict.htmlDict.ul_start + props + _dict.htmlDict.ul_end + '}' + comma + _dict.htmlDict.en_end;
+  });
+
+  return _dict.htmlDict.wr_start + '[' + entries + ']' + _dict.htmlDict.wr_end;
+};
+
+exports.default = getJSON;
+},{"./dict":18}],21:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -1300,12 +1285,12 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 /**
  * Get a label from CSL data
- * 
+ *
  * @access private
  * @method getLabel
- * 
+ *
  * @param {CSL} src - Input CSL
- * 
+ *
  * @return {String} The label
  */
 var getLabel = function getLabel(src) {
@@ -1313,7 +1298,7 @@ var getLabel = function getLabel(src) {
 };
 
 exports.default = getLabel;
-},{"./bibtex/label":14}],23:[function(require,module,exports){
+},{"./bibtex/label":14}],22:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -1321,29 +1306,25 @@ Object.defineProperty(exports, "__esModule", {
 });
 /**
  * Get name from CSL
- * 
+ *
  * @access private
  * @method getName
- * 
+ *
  * @param {Object} obj - CSL input
- * 
+ *
  * @return {String} Full name
  */
 var getName = function getName(obj) {
-  var arr = ['dropping-particle', 'given', 'suffix', 'non-dropping-particle', 'family'],
-      res = '';
-
-  for (var i = 0; i < arr.length; i++) {
-    if (obj.hasOwnProperty(arr[i])) res += obj[arr[i]] + ' ';
-  }
-
-  if (res.length) res = res.slice(0, -1);else if (res.hasOwnProperty('literal')) res = obj.literal;
-
-  return res;
+  var arr = ['dropping-particle', 'given', 'suffix', 'non-dropping-particle', 'family'];
+  return obj.literal || arr.map(function (entry) {
+    return obj[entry] || '';
+  }).filter(function (v) {
+    return !!v;
+  }).join(' ');
 };
 
 exports.default = getName;
-},{}],24:[function(require,module,exports){
+},{}],23:[function(require,module,exports){
 'use strict';
 
 require('babel-polyfill');
@@ -1382,29 +1363,29 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 /**
  * [CSL](https://citeproc-js.readthedocs.io/en/latest/csl-json/markup.html#csl-json-items) object
- * 
+ *
  * @class CSL
  */
 
-/** 
+/**
  * @file Citation-0.2.js
- * 
+ *
  * @projectname Citationjs
- * 
+ *
  * @author Lars Willighagen
- * @version 0.2
+ * @version 0.3.0-4
  * @license
- * Copyright (c) 2015-2016 Lars Willighagen  
+ * Copyright (c) 2015-2017 Lars Willighagen
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:  
+ * furnished to do so, subject to the following conditions:
  *
  * The above copyright notice and this permission notice shall be included in all
- * copies or substantial portions of the Software.  
+ * copies or substantial portions of the Software.
  *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
@@ -1419,7 +1400,7 @@ Object.assign(_index6.default, { parse: parse, get: get, CSL: CSL, util: util, v
 (0, _deepFreeze2.default)(_index6.default);
 
 module.exports = _index6.default;
-},{"./CSL/index":2,"./Cite/index":7,"./get/index":21,"./parse/index":31,"./util/index":49,"./version":50,"babel-polyfill":51,"deep-freeze":347}],25:[function(require,module,exports){
+},{"./CSL/index":2,"./Cite/index":7,"./get/index":19,"./parse/index":31,"./util/index":49,"./version":50,"babel-polyfill":51,"deep-freeze":347}],24:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -1437,37 +1418,45 @@ var _name2 = _interopRequireDefault(_name);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 /**
- * Format ContentMine data
- * 
+ * Forat ContentMine data
+ *
  * @access private
  * @method parseContentMine
- * 
+ *
  * @param {Object} data - The input data
- * 
+ *
  * @return {CSL[]} The formatted input data
  */
 var parseContentMine = function parseContentMine(data) {
-  var res = {},
-      dataKeys = Object.keys(data);
+  var res = {
+    type: 'article-journal'
+  };
 
-  for (var dataKeyIndex = 0; dataKeyIndex < dataKeys.length; dataKeyIndex++) {
-    var prop = dataKeys[dataKeyIndex];
+  Object.keys(data).forEach(function (prop) {
     res[prop] = data[prop].value[0];
+  });
+
+  if (res.hasOwnProperty('authors')) {
+    res.author = data.authors.value.map(_name2.default);
   }
-
-  res.type = 'article-journal';
-
-  if (res.hasOwnProperty('authors')) res.author = data.authors.value.map(_name2.default);
-  if (res.hasOwnProperty('firstpage')) res['page-first'] = res.firstpage, res.page = res.firstpage;
-  if (res.hasOwnProperty('date')) res.issued = (0, _date2.default)(res.date);
-  if (res.hasOwnProperty('journal')) res['container-title'] = res.journal;
-  if (res.hasOwnProperty('doi')) res.id = res.doi, res.DOI = res.doi;
+  if (res.hasOwnProperty('firstpage')) {
+    res.page = res['page-first'] = res.firstpage;
+  }
+  if (res.hasOwnProperty('date')) {
+    res.issued = (0, _date2.default)(res.date);
+  }
+  if (res.hasOwnProperty('journal')) {
+    res['container-title'] = res.journal;
+  }
+  if (res.hasOwnProperty('doi')) {
+    res.id = res.DOI = res.doi;
+  }
 
   return res;
 };
 
 exports.default = parseContentMine;
-},{"../date":30,"../name":38}],26:[function(require,module,exports){
+},{"../date":30,"../name":38}],25:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -1486,40 +1475,36 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 /**
  * Format BibTeX JSON data
- * 
+ *
  * @access private
  * @method parseBibTeXJSON
- * 
+ *
  * @param {Object[]} data - The input data
- * 
+ *
  * @return {CSL[]} The formatted input data
  */
 var parseBibTeXJSON = function parseBibTeXJSON(data) {
-  var output = [];
-
-  for (var entryIndex = 0; entryIndex < data.length; entryIndex++) {
-    var entry = data[entryIndex];
+  return data.map(function (entry) {
+    var newEntry = {};
 
     for (var prop in entry.properties) {
-      var val = (0, _prop2.default)(prop, entry.properties[prop]);
+      var oldValue = entry.properties[prop];
+      var newValue = (0, _prop2.default)(prop, oldValue);
 
-      if (val !== undefined) entry[val[0]] = val[1];
+      if (newValue) {
+        newEntry[newValue[0]] = newValue[1];
+      }
     }
 
-    entry.type = (0, _type2.default)(entry.type);
-    entry.id = entry.label;
+    newEntry.type = (0, _type2.default)(entry.type);
+    newEntry.id = entry.label;
 
-    delete entry.label;
-    delete entry.properties;
-
-    output[entryIndex] = entry;
-  }
-
-  return output;
+    return newEntry;
+  });
 };
 
 exports.default = parseBibTeXJSON;
-},{"./prop":27,"./type":29}],27:[function(require,module,exports){
+},{"./prop":26,"./type":29}],26:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -1538,22 +1523,20 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 /**
  * Transform property and value from BibTeX-JSON format to CSL-JSON
- * 
+ *
  * @access private
  * @method parseBibTeXProp
- * 
+ *
  * @param {String} prop - Property
  * @param {String|Number} value - Value
- * 
+ *
  * @return {String[]} Array with new prop and value
  */
 var parseBibTeXProp = function parseBibTeXProp(prop, value) {
-
-  var rProp = prop,
-      rValue = value;
+  var rProp = prop;
+  var rValue = value;
 
   switch (prop) {
-
     // Address
     case 'address':
       rProp = 'publisher-place';
@@ -1576,7 +1559,7 @@ var parseBibTeXProp = function parseBibTeXProp(prop, value) {
 
     // Edition/print
     case 'edition':
-      //rValue = parseOrdinal( value )
+      // rValue = parseOrdinal(value)
       break;
 
     // Editor
@@ -1625,12 +1608,12 @@ var parseBibTeXProp = function parseBibTeXProp(prop, value) {
 
     case 'year':
       // Ignore for now
-      //rProp = 'issued-year'
+      // rProp = 'issued-year'
       break;
 
     case 'month':
       // Ignore for now
-      //rProp = 'issued-month'
+      // rProp = 'issued-month'
       break;
 
     // Publisher
@@ -1671,193 +1654,48 @@ var parseBibTeXProp = function parseBibTeXProp(prop, value) {
       break;
 
     default:
-      console.info('[set]', 'Unknown property:', prop);
+      console.info('[set]', 'Unknown property: ' + prop);
       rProp = rValue = undefined;
       break;
   }
 
-  if (rProp !== undefined && rValue !== undefined) return [rProp, rValue];else return undefined;
+  if (rProp !== undefined && rValue !== undefined) {
+    return [rProp, rValue];
+  } else {
+    return undefined;
+  }
 };
 
 exports.default = parseBibTeXProp;
-},{"../date":30,"../name":38}],28:[function(require,module,exports){
-"use strict";
+},{"../date":30,"../name":38}],27:[function(require,module,exports){
+'use strict';
 
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _regex = require("../regex");
+var _regex = require('../regex');
 
 var _regex2 = _interopRequireDefault(_regex);
+
+var _tokens = require('./tokens.json');
+
+var _tokens2 = _interopRequireDefault(_tokens);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 /**
- * Mapping of BibTeX syntax chars to BibTeX Escaped Chars.
- * 
- * From [Zotero's alwaysMap object](https://github.com/zotero/translators/blob/master/BibTeX.js#L225)
- * [REPO](https://github.com/zotero/translators)
- * 
- * Accesed 11/20/2016
- * 
- * @access private
- * @constant varBibTeXSyntaxTokens
- * @default
- */
-var varBibTeXSyntaxTokens = {
-  "|": "{\\textbar}",
-  "<": "{\\textless}",
-  ">": "{\\textgreater}",
-  "~": "{\\textasciitilde}",
-  "^": "{\\textasciicircum}",
-  "\\": "{\\textbackslash}",
-  // See http://tex.stackexchange.com/questions/230750/open-brace-in-bibtex-fields/230754
-  "{": "\\{\\vphantom{\\}}",
-  "}": "\\vphantom{\\{}\\}"
-};
-
-/**
- * Mapping of BibTeX Escaped Chars to Unicode.
- * 
- * From [Zotero's reversed mapping table](https://github.com/zotero/translators/blob/master/BibTeX.js#L2353)
- * [REPO](https://github.com/zotero/translators)
- * 
- * Accesed 11/09/2016
- * 
- * @access private
- * @constant varBibTeXTokens
- * @default
- */
-var varBibTeXTokens = {
-  "\\url": "", "\\href": "", "{\\textexclamdown}": "\xA1", "{\\textcent}": "\xA2",
-  "{\\textsterling}": "\xA3", "{\\textyen}": "\xA5", "{\\textbrokenbar}": "\xA6", "{\\textsection}": "\xA7",
-  "{\\textasciidieresis}": "\xA8", "{\\textcopyright}": "\xA9", "{\\textordfeminine}": "\xAA", "{\\guillemotleft}": "\xAB",
-  "{\\textlnot}": "\xAC", "{\\textregistered}": "\xAE", "{\\textasciimacron}": "\xAF", "{\\textdegree}": "\xB0",
-  "{\\textpm}": "\xB1", "{\\texttwosuperior}": "\xB2", "{\\textthreesuperior}": "\xB3", "{\\textasciiacute}": "\xB4",
-  "{\\textmu}": "\xB5", "{\\textparagraph}": "\xB6", "{\\textperiodcentered}": "\xB7", "{\\c\\ }": "\xB8",
-  "{\\textonesuperior}": "\xB9", "{\\textordmasculine}": "\xBA", "{\\guillemotright}": "\xBB", "{\\textonequarter}": "\xBC",
-  "{\\textonehalf}": "\xBD", "{\\textthreequarters}": "\xBE", "{\\textquestiondown}": "\xBF", "{\\AE}": "\xC6",
-  "{\\DH}": "\xD0", "{\\texttimes}": "\xD7", "{\\O}": "\xD8", "{\\TH}": "\xDE",
-  "{\\ss}": "\xDF", "{\\ae}": "\xE6", "{\\dh}": "\xF0", "{\\textdiv}": "\xF7",
-  "{\\o}": "\xF8", "{\\th}": "\xFE", "{\\i}": "\u0131", "{\\NG}": "\u014A",
-  "{\\ng}": "\u014B", "{\\OE}": "\u0152", "{\\oe}": "\u0153", "{\\textasciicircum}": "\u02C6",
-  "{\\textacutedbl}": "\u02DD", "$\\Gamma$": "\u0393", "$\\Delta$": "\u0394", "$\\Theta$": "\u0398",
-  "$\\Lambda$": "\u039B", "$\\Xi$": "\u039E", "$\\Pi$": "\u03A0", "$\\Sigma$": "\u03A3",
-  "$\\Phi$": "\u03A6", "$\\Psi$": "\u03A8", "$\\Omega$": "\u03A9", "$\\alpha$": "\u03B1",
-  "$\\beta$": "\u03B2", "$\\gamma$": "\u03B3", "$\\delta$": "\u03B4", "$\\varepsilon$": "\u03B5",
-  "$\\zeta$": "\u03B6", "$\\eta$": "\u03B7", "$\\theta$": "\u03B8", "$\\iota$": "\u03B9",
-  "$\\kappa$": "\u03BA", "$\\lambda$": "\u03BB", "$\\mu$": "\u03BC", "$\\nu$": "\u03BD",
-  "$\\xi$": "\u03BE", "$\\pi$": "\u03C0", "$\\rho$": "\u03C1", "$\\varsigma$": "\u03C2",
-  "$\\sigma$": "\u03C3", "$\\tau$": "\u03C4", "$\\upsilon$": "\u03C5", "$\\varphi$": "\u03C6",
-  "$\\chi$": "\u03C7", "$\\psi$": "\u03C8", "$\\omega$": "\u03C9", "$\\vartheta$": "\u03D1",
-  "$\\Upsilon$": "\u03D2", "$\\phi$": "\u03D5", "$\\varpi$": "\u03D6", "$\\varrho$": "\u03F1",
-  "$\\epsilon$": "\u03F5", "{\\textendash}": "\u2013", "{\\textemdash}": "\u2014", "---": "\u2014",
-  "--": "\u2013", "{\\textbardbl}": "\u2016", "{\\textunderscore}": "\u2017", "{\\textquoteleft}": "\u2018",
-  "{\\textquoteright}": "\u2019", "{\\quotesinglbase}": "\u201A", "{\\textquotedblleft}": "\u201C", "{\\textquotedblright}": "\u201D",
-  "{\\quotedblbase}": "\u201E", "{\\textdagger}": "\u2020", "{\\textdaggerdbl}": "\u2021", "{\\textbullet}": "\u2022",
-  "{\\textellipsis}": "\u2026", "{\\textperthousand}": "\u2030", "'''": "\u2034", "''": "\u201D",
-  "``": "\u201C", "```": "\u2037", "{\\guilsinglleft}": "\u2039", "{\\guilsinglright}": "\u203A",
-  "!!": "\u203C", "{\\textfractionsolidus}": "\u2044", "?!": "\u2048", "!?": "\u2049",
-  "$^{0}$": "\u2070", "$^{4}$": "\u2074", "$^{5}$": "\u2075", "$^{6}$": "\u2076",
-  "$^{7}$": "\u2077", "$^{8}$": "\u2078", "$^{9}$": "\u2079", "$^{+}$": "\u207A",
-  "$^{-}$": "\u207B", "$^{=}$": "\u207C", "$^{(}$": "\u207D", "$^{)}$": "\u207E",
-  "$^{n}$": "\u207F", "$_{0}$": "\u2080", "$_{1}$": "\u2081", "$_{2}$": "\u2082",
-  "$_{3}$": "\u2083", "$_{4}$": "\u2084", "$_{5}$": "\u2085", "$_{6}$": "\u2086",
-  "$_{7}$": "\u2087", "$_{8}$": "\u2088", "$_{9}$": "\u2089", "$_{+}$": "\u208A",
-  "$_{-}$": "\u208B", "$_{=}$": "\u208C", "$_{(}$": "\u208D", "$_{)}$": "\u208E",
-  "{\\texteuro}": "\u20AC", "{\\textcelsius}": "\u2103", "{\\textnumero}": "\u2116", "{\\textcircledP}": "\u2117",
-  "{\\textservicemark}": "\u2120", "{TEL}": "\u2121", "{\\texttrademark}": "\u2122", "{\\textohm}": "\u2126",
-  "{\\textestimated}": "\u212E", "{\\`A}": "\xC0", "{\\'A}": "\xC1", "{\\^A}": "\xC2",
-  "{\\~A}": "\xC3", "{\\\"A}": "\xC4", "{\\r A}": "\xC5", "{\\c C}": "\xC7",
-  "{\\`E}": "\xC8", "{\\'E}": "\xC9", "{\\^E}": "\xCA", "{\\\"E}": "\xCB",
-  "{\\`I}": "\xCC", "{\\'I}": "\xCD", "{\\^I}": "\xCE", "{\\\"I}": "\xCF",
-  "{\\~N}": "\xD1", "{\\`O}": "\xD2", "{\\'O}": "\xD3", "{\\^O}": "\xD4",
-  "{\\~O}": "\xD5", "{\\\"O}": "\xD6", "{\\`U}": "\xD9", "{\\'U}": "\xDA",
-  "{\\^U}": "\xDB", "{\\\"U}": "\xDC", "{\\'Y}": "\xDD", "{\\`a}": "\xE0",
-  "{\\'a}": "\xE1", "{\\^a}": "\xE2", "{\\~a}": "\xE3", "{\\\"a}": "\xE4",
-  "{\\r a}": "\xE5", "{\\c c}": "\xE7", "{\\`e}": "\xE8", "{\\'e}": "\xE9",
-  "{\\^e}": "\xEA", "{\\\"e}": "\xEB", "{\\`i}": "\xEC", "{\\'i}": "\xED",
-  "{\\^i}": "\xEE", "{\\\"i}": "\xEF", "{\\~n}": "\xF1", "{\\`o}": "\xF2",
-  "{\\'o}": "\xF3", "{\\^o}": "\xF4", "{\\~o}": "\xF5", "{\\\"o}": "\xF6",
-  "{\\`u}": "\xF9", "{\\'u}": "\xFA", "{\\^u}": "\xFB", "{\\\"u}": "\xFC",
-  "{\\'y}": "\xFD", "{\\\"y}": "\xFF", "{\\=A}": "\u0100", "{\\=a}": "\u0101",
-  "{\\u A}": "\u0102", "{\\u a}": "\u0103", "{\\k A}": "\u0104", "{\\k a}": "\u0105",
-  "{\\'C}": "\u0106", "{\\'c}": "\u0107", "{\\^C}": "\u0108", "{\\^c}": "\u0109",
-  "{\\.C}": "\u010A", "{\\.c}": "\u010B", "{\\v C}": "\u010C", "{\\v c}": "\u010D",
-  "{\\v D}": "\u010E", "{\\v d}": "\u010F", "{\\=E}": "\u0112", "{\\=e}": "\u0113",
-  "{\\u E}": "\u0114", "{\\u e}": "\u0115", "{\\.E}": "\u0116", "{\\.e}": "\u0117",
-  "{\\k E}": "\u0118", "{\\k e}": "\u0119", "{\\v E}": "\u011A", "{\\v e}": "\u011B",
-  "{\\^G}": "\u011C", "{\\^g}": "\u011D", "{\\u G}": "\u011E", "{\\u g}": "\u011F",
-  "{\\.G}": "\u0120", "{\\.g}": "\u0121", "{\\c G}": "\u0122", "{\\c g}": "\u0123",
-  "{\\^H}": "\u0124", "{\\^h}": "\u0125", "{\\~I}": "\u0128", "{\\~i}": "\u0129",
-  "{\\=I}": "\u012A", "{\\=i}": "\u012B", "{\\=\\i}": "\u012B", "{\\u I}": "\u012C",
-  "{\\u i}": "\u012D", "{\\k I}": "\u012E", "{\\k i}": "\u012F", "{\\.I}": "\u0130",
-  "{\\^J}": "\u0134", "{\\^j}": "\u0135", "{\\c K}": "\u0136", "{\\c k}": "\u0137",
-  "{\\'L}": "\u0139", "{\\'l}": "\u013A", "{\\c L}": "\u013B", "{\\c l}": "\u013C",
-  "{\\v L}": "\u013D", "{\\v l}": "\u013E", "{\\L }": "\u0141", "{\\l }": "\u0142",
-  "{\\'N}": "\u0143", "{\\'n}": "\u0144", "{\\c N}": "\u0145", "{\\c n}": "\u0146",
-  "{\\v N}": "\u0147", "{\\v n}": "\u0148", "{\\=O}": "\u014C", "{\\=o}": "\u014D",
-  "{\\u O}": "\u014E", "{\\u o}": "\u014F", "{\\H O}": "\u0150", "{\\H o}": "\u0151",
-  "{\\'R}": "\u0154", "{\\'r}": "\u0155", "{\\c R}": "\u0156", "{\\c r}": "\u0157",
-  "{\\v R}": "\u0158", "{\\v r}": "\u0159", "{\\'S}": "\u015A", "{\\'s}": "\u015B",
-  "{\\^S}": "\u015C", "{\\^s}": "\u015D", "{\\c S}": "\u015E", "{\\c s}": "\u015F",
-  "{\\v S}": "\u0160", "{\\v s}": "\u0161", "{\\c T}": "\u0162", "{\\c t}": "\u0163",
-  "{\\v T}": "\u0164", "{\\v t}": "\u0165", "{\\~U}": "\u0168", "{\\~u}": "\u0169",
-  "{\\=U}": "\u016A", "{\\=u}": "\u016B", "{\\u U}": "\u016C", "{\\u u}": "\u016D",
-  "{\\r U}": "\u016E", "{\\r u}": "\u016F", "{\\H U}": "\u0170", "{\\H u}": "\u0171",
-  "{\\k U}": "\u0172", "{\\k u}": "\u0173", "{\\^W}": "\u0174", "{\\^w}": "\u0175",
-  "{\\^Y}": "\u0176", "{\\^y}": "\u0177", "{\\\"Y}": "\u0178", "{\\'Z}": "\u0179",
-  "{\\'z}": "\u017A", "{\\.Z}": "\u017B", "{\\.z}": "\u017C", "{\\v Z}": "\u017D",
-  "{\\v z}": "\u017E", "{\\v A}": "\u01CD", "{\\v a}": "\u01CE", "{\\v I}": "\u01CF",
-  "{\\v i}": "\u01D0", "{\\v O}": "\u01D1", "{\\v o}": "\u01D2", "{\\v U}": "\u01D3",
-  "{\\v u}": "\u01D4", "{\\v G}": "\u01E6", "{\\v g}": "\u01E7", "{\\v K}": "\u01E8",
-  "{\\v k}": "\u01E9", "{\\k O}": "\u01EA", "{\\k o}": "\u01EB", "{\\v j}": "\u01F0",
-  "{\\'G}": "\u01F4", "{\\'g}": "\u01F5", "{\\.B}": "\u1E02", "{\\.b}": "\u1E03",
-  "{\\d B}": "\u1E04", "{\\d b}": "\u1E05", "{\\b B}": "\u1E06", "{\\b b}": "\u1E07",
-  "{\\.D}": "\u1E0A", "{\\.d}": "\u1E0B", "{\\d D}": "\u1E0C", "{\\d d}": "\u1E0D",
-  "{\\b D}": "\u1E0E", "{\\b d}": "\u1E0F", "{\\c D}": "\u1E10", "{\\c d}": "\u1E11",
-  "{\\.F}": "\u1E1E", "{\\.f}": "\u1E1F", "{\\=G}": "\u1E20", "{\\=g}": "\u1E21",
-  "{\\.H}": "\u1E22", "{\\.h}": "\u1E23", "{\\d H}": "\u1E24", "{\\d h}": "\u1E25",
-  "{\\\"H}": "\u1E26", "{\\\"h}": "\u1E27", "{\\c H}": "\u1E28", "{\\c h}": "\u1E29",
-  "{\\'K}": "\u1E30", "{\\'k}": "\u1E31", "{\\d K}": "\u1E32", "{\\d k}": "\u1E33",
-  "{\\b K}": "\u1E34", "{\\b k}": "\u1E35", "{\\d L}": "\u1E36", "{\\d l}": "\u1E37",
-  "{\\b L}": "\u1E3A", "{\\b l}": "\u1E3B", "{\\'M}": "\u1E3E", "{\\'m}": "\u1E3F",
-  "{\\.M}": "\u1E40", "{\\.m}": "\u1E41", "{\\d M}": "\u1E42", "{\\d m}": "\u1E43",
-  "{\\.N}": "\u1E44", "{\\.n}": "\u1E45", "{\\d N}": "\u1E46", "{\\d n}": "\u1E47",
-  "{\\b N}": "\u1E48", "{\\b n}": "\u1E49", "{\\'P}": "\u1E54", "{\\'p}": "\u1E55",
-  "{\\.P}": "\u1E56", "{\\.p}": "\u1E57", "{\\.R}": "\u1E58", "{\\.r}": "\u1E59",
-  "{\\d R}": "\u1E5A", "{\\d r}": "\u1E5B", "{\\b R}": "\u1E5E", "{\\b r}": "\u1E5F",
-  "{\\.S}": "\u1E60", "{\\.s}": "\u1E61", "{\\d S}": "\u1E62", "{\\d s}": "\u1E63",
-  "{\\.T}": "\u1E6A", "{\\.t}": "\u1E6B", "{\\d T}": "\u1E6C", "{\\d t}": "\u1E6D",
-  "{\\b T}": "\u1E6E", "{\\b t}": "\u1E6F", "{\\~V}": "\u1E7C", "{\\~v}": "\u1E7D",
-  "{\\d V}": "\u1E7E", "{\\d v}": "\u1E7F", "{\\`W}": "\u1E80", "{\\`w}": "\u1E81",
-  "{\\'W}": "\u1E82", "{\\'w}": "\u1E83", "{\\\"W}": "\u1E84", "{\\\"w}": "\u1E85",
-  "{\\.W}": "\u1E86", "{\\.w}": "\u1E87", "{\\d W}": "\u1E88", "{\\d w}": "\u1E89",
-  "{\\.X}": "\u1E8A", "{\\.x}": "\u1E8B", "{\\\"X}": "\u1E8C", "{\\\"x}": "\u1E8D",
-  "{\\.Y}": "\u1E8E", "{\\.y}": "\u1E8F", "{\\^Z}": "\u1E90", "{\\^z}": "\u1E91",
-  "{\\d Z}": "\u1E92", "{\\d z}": "\u1E93", "{\\b Z}": "\u1E94", "{\\b z}": "\u1E95",
-  "{\\b h}": "\u1E96", "{\\\"t}": "\u1E97", "{\\r w}": "\u1E98", "{\\r y}": "\u1E99",
-  "{\\d A}": "\u1EA0", "{\\d a}": "\u1EA1", "{\\d E}": "\u1EB8", "{\\d e}": "\u1EB9",
-  "{\\~E}": "\u1EBC", "{\\~e}": "\u1EBD", "{\\d I}": "\u1ECA", "{\\d i}": "\u1ECB",
-  "{\\d O}": "\u1ECC", "{\\d o}": "\u1ECD", "{\\d U}": "\u1EE4", "{\\d u}": "\u1EE5",
-  "{\\`Y}": "\u1EF2", "{\\`y}": "\u1EF3", "{\\d Y}": "\u1EF4", "{\\d y}": "\u1EF5",
-  "{\\~Y}": "\u1EF8", "{\\~y}": "\u1EF9", "{\\~}": "\u223C", "~": "\xA0"
-};
-
-/**
  * Format BibTeX data
- * 
+ *
  * @access private
  * @method parseBibTeX
- * 
+ *
  * @param {String} str - The input data
- * 
+ *
  * @return {CSL[]} The formatted input data
  */
 var parseBibTeX = function parseBibTeX(str) {
-
-  var entries;
+  var entries = void 0;
 
   try {
     entries = [];
@@ -1891,7 +1729,7 @@ var parseBibTeX = function parseBibTeX(str) {
     // Commands
     '\\w+' + ')\\}|' +
     // Greek letters and other symbols
-    '\$\\\\(?:[A-Z]?[a-z]+|\\#|%<)\\\\$|' +
+    '\\$\\\\(?:[A-Z]?[a-z]+|\\#|%<)\\\\$|' +
     // Subscript and superscript
     '\\$[^_]\\{[0-9+-=()n]\\}\\$|' +
     // --, ---, '', ''', ``, ```
@@ -1901,85 +1739,140 @@ var parseBibTeX = function parseBibTeX(str) {
     // \url and \href
     '\\\\(?:url|href)|' + '[\\s\\S]' + ')', 'g')).filter(function (v) {
       return !!v;
-    }),
-        whitespace = _regex2.default.bibtex[1],
-        syntax = _regex2.default.bibtex[2],
-        dels = {
+    });
+
+    var whitespace = _regex2.default.bibtex[1];
+    var syntax = _regex2.default.bibtex[2];
+    var dels = {
       '"': '"',
       '{': '}',
       '"{': '}"',
       '{{': '}}',
       '': ''
-    },
-        index = 0,
-        curs = stack[index],
-        obj;
+    };
+
+    var index = 0;
+    var curs = stack[index];
 
     while (curs) {
+      var obj = void 0;
 
       while (whitespace.test(curs)) {
         curs = stack[++index];
-      }if (!curs) break;
+      }
+
+      if (!curs) {
+        break;
+      }
 
       entries.push({ type: '', label: '', properties: {} });
       obj = entries[entries.length - 1];
 
-      if (curs === '@') curs = stack[++index];else throw new SyntaxError("Unexpected token at index " + index + ". Expected \"@\", got \"" + curs + "\".");
+      if (curs === '@') {
+        curs = stack[++index];
+      } else {
+        throw new SyntaxError('Unexpected token at index ' + index + '. Expected "@", got "' + curs + '".');
+      }
 
       while (whitespace.test(curs)) {
         curs = stack[++index];
-      }while (!whitespace.test(curs) && !syntax.test(curs) || curs.length > 1) {
-        obj.type += curs, curs = stack[++index];
-      }obj.type = obj.type.toLowerCase();
+      }
+
+      while (!whitespace.test(curs) && !syntax.test(curs) || curs.length > 1) {
+        obj.type += curs;
+        curs = stack[++index];
+      }
+
+      obj.type = obj.type.toLowerCase();
 
       while (whitespace.test(curs)) {
         curs = stack[++index];
-      }if (curs === '{') curs = stack[++index];else throw new SyntaxError("Unexpected token at index " + index + ". Expected \"{\", got \"" + curs + "\".");
+      }
+
+      if (curs === '{') {
+        curs = stack[++index];
+      } else {
+        throw new SyntaxError('Unexpected token at index ' + index + '. Expected "{", got "' + curs + '".');
+      }
 
       while (whitespace.test(curs)) {
         curs = stack[++index];
-      }while (!whitespace.test(curs) && !syntax.test(curs) || curs.length > 1) {
+      }
+
+      while (!whitespace.test(curs) && !syntax.test(curs) || curs.length > 1) {
         obj.label += curs;
         curs = stack[++index];
       }
 
       while (whitespace.test(curs)) {
         curs = stack[++index];
-      }if (curs === ',') curs = stack[++index];else throw new SyntaxError("Unexpected token at index " + index + ". Expected \",\", got \"" + curs + "\".");
+      }
+
+      if (curs === ',') {
+        curs = stack[++index];
+      } else {
+        throw new SyntaxError('Unexpected token at index ' + index + '. Expected ",", got "' + curs + '".');
+      }
 
       while (whitespace.test(curs)) {
         curs = stack[++index];
-      }var key, val, start_del, end_del, nexs;
+      }
+
+      var key, val, startDel, endDel, nexs;
 
       while (curs !== '}') {
-
-        key = '', val = '', start_del = '';
+        key = '';
+        val = '';
+        startDel = '';
 
         while (curs && !whitespace.test(curs) && curs !== '=') {
-          key += curs, curs = stack[++index];
-        }while (whitespace.test(curs)) {
+          key += curs;
           curs = stack[++index];
-        }if (curs === '=') curs = stack[++index];else throw new SyntaxError("Unexpected token at index " + index + ". Expected \"=\", got \"" + curs + "\".");
+        }
 
         while (whitespace.test(curs)) {
           curs = stack[++index];
-        }while (syntax.test(curs)) {
-          start_del += curs, curs = stack[++index];
-        }if (!dels.hasOwnProperty(start_del)) throw new SyntaxError("Unexpected field delimiter at index " + index + ". Expected " + (Object.keys(dels).map(function (v) {
-          return "\"" + v + "\"";
-        }).join(', ') + ", got \"" + start_del + "\"."));
+        }
 
-        end_del = dels[start_del], nexs = stack.slice(index + 1, index + (end_del.length ? end_del.length : 1)).reverse().join('');
+        if (curs === '=') {
+          curs = stack[++index];
+        } else {
+          throw new SyntaxError('Unexpected token at index ' + index + '. Expected "=", got "' + curs + '".');
+        }
 
-        while (curs && (end_del === '' ? curs !== ',' : curs + nexs !== end_del)) {
+        while (whitespace.test(curs)) {
+          curs = stack[++index];
+        }
 
-          if (varBibTeXTokens.hasOwnProperty(curs)) val += varBibTeXTokens[curs];else if (curs.match(/^\\([#$%&~_^\\{}])$/)) val += curs.slice(1);else if (curs.length > 1)
+        while (syntax.test(curs)) {
+          startDel += curs;
+          curs = stack[++index];
+        }
+
+        if (!dels.hasOwnProperty(startDel)) {
+          throw new SyntaxError('Unexpected field delimiter at index ' + index + '. Expected ' + (Object.keys(dels).map(function (v) {
+            return '"' + v + '"';
+          }).join(', ') + ', got "' + startDel + '".'));
+        }
+
+        endDel = dels[startDel];
+        nexs = stack.slice(index + 1, index + (endDel.length ? endDel.length : 1)).reverse().join('');
+
+        while (curs && (endDel === '' ? curs !== ',' : curs + nexs !== endDel)) {
+          if (_tokens2.default.hasOwnProperty(curs)) {
+            val += _tokens2.default[curs];
+          } else if (curs.match(/^\\([#$%&~_^\\{}])$/)) {
+            val += curs.slice(1);
+          } else if (curs.length > 1) {
             // "Soft", non-breaking error for now
-            //throw new SyntaxError( 'Escape sequence not recognized: ' + curs )
-            console.error('Escape sequence not recognized: ' + curs);else val += curs;
+            // throw new SyntaxError( 'Escape sequence not recognized: ' + curs )
+            console.error('Escape sequence not recognized: ' + curs);
+          } else {
+            val += curs;
+          }
 
           curs = stack[++index];
-          nexs = stack.slice(index + 1, index + (end_del.length ? end_del.length : 1)).reverse().join('');
+          nexs = stack.slice(index + 1, index + (endDel.length ? endDel.length : 1)).reverse().join('');
         }
 
         key = key.trim().replace(/\s+/g, ' ').toLowerCase();
@@ -1988,25 +1881,39 @@ var parseBibTeX = function parseBibTeX(str) {
 
         obj.properties[key] = val;
 
-        end_del = end_del.split('');
+        endDel = endDel.split('');
 
-        while (end_del.pop()) {
+        while (endDel.pop()) {
           curs = stack[++index];
-        }while (whitespace.test(curs)) {
+        }
+
+        while (whitespace.test(curs)) {
           curs = stack[++index];
-        }if (curs === '}') break;else if (curs === ',') curs = stack[++index];else throw new SyntaxError("Unexpected token at index " + index + ". Expected \",\", \"}\", got \"" + curs + "\".");
+        }
+
+        if (curs === '}') {
+          break;
+        } else if (curs === ',') {
+          curs = stack[++index];
+        } else {
+          throw new SyntaxError('Unexpected token at index ' + index + '. Expected ",", "}", got "' + curs + '".');
+        }
 
         while (whitespace.test(curs)) {
           curs = stack[++index];
         }
       }
 
-      if (curs === '}') curs = stack[++index];else throw new SyntaxError("Unexpected token at index " + index + ". Expected \"}\", got \"" + curs + "\".");
+      if (curs === '}') {
+        curs = stack[++index];
+      } else {
+        throw new SyntaxError('Unexpected token at index ' + index + '. Expected "}", got "' + curs + '".');
+      }
     }
 
     return entries;
   } catch (e) {
-    console.error("Uncaught SyntaxError: " + e.message + " Returning completed entries.");
+    console.error('Uncaught SyntaxError: ' + e.message + ' Returning completed entries.');
 
     // Remove last, incomplete entry
     entries.pop();
@@ -2015,8 +1922,136 @@ var parseBibTeX = function parseBibTeX(str) {
   }
 };
 
+/**
+ * Mapping of BibTeX Escaped Chars to Unicode.
+ *
+ * From [Zotero's reversed mapping table](https://github.com/zotero/translators/blob/master/BibTeX.js#L2353)
+ * [REPO](https://github.com/zotero/translators)
+ *
+ * Accesed 11/09/2016
+ *
+ * @access private
+ * @constant varBibTeXTokens
+ * @default
+ */
 exports.default = parseBibTeX;
-},{"../regex":39}],29:[function(require,module,exports){
+},{"../regex":39,"./tokens.json":28}],28:[function(require,module,exports){
+module.exports={
+  "\\url":"",                           "\\href":"",                            "{\\textexclamdown}":"\u00A1",          "{\\textcent}":"\u00A2",
+  "{\\textsterling}":"\u00A3",          "{\\textyen}":"\u00A5",                 "{\\textbrokenbar}":"\u00A6",           "{\\textsection}":"\u00A7",
+  "{\\textasciidieresis}":"\u00A8",     "{\\textcopyright}":"\u00A9",           "{\\textordfeminine}":"\u00AA",         "{\\guillemotleft}":"\u00AB",
+  "{\\textlnot}":"\u00AC",              "{\\textregistered}":"\u00AE",          "{\\textasciimacron}":"\u00AF",         "{\\textdegree}":"\u00B0",
+  "{\\textpm}":"\u00B1",                "{\\texttwosuperior}":"\u00B2",         "{\\textthreesuperior}":"\u00B3",       "{\\textasciiacute}":"\u00B4",
+  "{\\textmu}":"\u00B5",                "{\\textparagraph}":"\u00B6",           "{\\textperiodcentered}":"\u00B7",      "{\\c\\ }":"\u00B8",
+  "{\\textonesuperior}":"\u00B9",       "{\\textordmasculine}":"\u00BA",        "{\\guillemotright}":"\u00BB",          "{\\textonequarter}":"\u00BC",
+  "{\\textonehalf}":"\u00BD",           "{\\textthreequarters}":"\u00BE",       "{\\textquestiondown}":"\u00BF",        "{\\AE}":"\u00C6",
+  "{\\DH}":"\u00D0",                    "{\\texttimes}":"\u00D7",               "{\\O}":"\u00D8",                       "{\\TH}":"\u00DE",
+  "{\\ss}":"\u00DF",                    "{\\ae}":"\u00E6",                      "{\\dh}":"\u00F0",                      "{\\textdiv}":"\u00F7",
+  "{\\o}":"\u00F8",                     "{\\th}":"\u00FE",                      "{\\i}":"\u0131",                       "{\\NG}":"\u014A",
+  "{\\ng}":"\u014B",                    "{\\OE}":"\u0152",                      "{\\oe}":"\u0153",                      "{\\textasciicircum}":"\u02C6",
+  "{\\textacutedbl}":"\u02DD",          "$\\Gamma$":"\u0393",                   "$\\Delta$":"\u0394",                   "$\\Theta$":"\u0398",
+  "$\\Lambda$":"\u039B",                "$\\Xi$":"\u039E",                      "$\\Pi$":"\u03A0",                      "$\\Sigma$":"\u03A3",
+  "$\\Phi$":"\u03A6",                   "$\\Psi$":"\u03A8",                     "$\\Omega$":"\u03A9",                   "$\\alpha$":"\u03B1",
+  "$\\beta$":"\u03B2",                  "$\\gamma$":"\u03B3",                   "$\\delta$":"\u03B4",                   "$\\varepsilon$":"\u03B5",
+  "$\\zeta$":"\u03B6",                  "$\\eta$":"\u03B7",                     "$\\theta$":"\u03B8",                   "$\\iota$":"\u03B9",
+  "$\\kappa$":"\u03BA",                 "$\\lambda$":"\u03BB",                  "$\\mu$":"\u03BC",                      "$\\nu$":"\u03BD",
+  "$\\xi$":"\u03BE",                    "$\\pi$":"\u03C0",                      "$\\rho$":"\u03C1",                     "$\\varsigma$":"\u03C2",
+  "$\\sigma$":"\u03C3",                 "$\\tau$":"\u03C4",                     "$\\upsilon$":"\u03C5",                 "$\\varphi$":"\u03C6",
+  "$\\chi$":"\u03C7",                   "$\\psi$":"\u03C8",                     "$\\omega$":"\u03C9",                   "$\\vartheta$":"\u03D1",
+  "$\\Upsilon$":"\u03D2",               "$\\phi$":"\u03D5",                     "$\\varpi$":"\u03D6",                   "$\\varrho$":"\u03F1",
+  "$\\epsilon$":"\u03F5",               "{\\textendash}":"\u2013",              "{\\textemdash}":"\u2014",              "---":"\u2014",
+  "--":"\u2013",                        "{\\textbardbl}":"\u2016",              "{\\textunderscore}":"\u2017",          "{\\textquoteleft}":"\u2018",
+  "{\\textquoteright}":"\u2019",        "{\\quotesinglbase}":"\u201A",          "{\\textquotedblleft}":"\u201C",        "{\\textquotedblright}":"\u201D",
+  "{\\quotedblbase}":"\u201E",          "{\\textdagger}":"\u2020",              "{\\textdaggerdbl}":"\u2021",           "{\\textbullet}":"\u2022",
+  "{\\textellipsis}":"\u2026",          "{\\textperthousand}":"\u2030",         "'''":"\u2034",                         "''":"\u201D",
+  "``":"\u201C",                        "```":"\u2037",                         "{\\guilsinglleft}":"\u2039",           "{\\guilsinglright}":"\u203A",
+  "!!":"\u203C",                        "{\\textfractionsolidus}":"\u2044",     "?!":"\u2048",                          "!?":"\u2049",
+  "$^{0}$":"\u2070",                    "$^{4}$":"\u2074",                      "$^{5}$":"\u2075",                      "$^{6}$":"\u2076",
+  "$^{7}$":"\u2077",                    "$^{8}$":"\u2078",                      "$^{9}$":"\u2079",                      "$^{+}$":"\u207A",
+  "$^{-}$":"\u207B",                    "$^{=}$":"\u207C",                      "$^{(}$":"\u207D",                      "$^{)}$":"\u207E",
+  "$^{n}$":"\u207F",                    "$_{0}$":"\u2080",                      "$_{1}$":"\u2081",                      "$_{2}$":"\u2082",
+  "$_{3}$":"\u2083",                    "$_{4}$":"\u2084",                      "$_{5}$":"\u2085",                      "$_{6}$":"\u2086",
+  "$_{7}$":"\u2087",                    "$_{8}$":"\u2088",                      "$_{9}$":"\u2089",                      "$_{+}$":"\u208A",
+  "$_{-}$":"\u208B",                    "$_{=}$":"\u208C",                      "$_{(}$":"\u208D",                      "$_{)}$":"\u208E",
+  "{\\texteuro}":"\u20AC",              "{\\textcelsius}":"\u2103",             "{\\textnumero}":"\u2116",              "{\\textcircledP}":"\u2117",
+  "{\\textservicemark}":"\u2120",       "{TEL}":"\u2121",                       "{\\texttrademark}":"\u2122",           "{\\textohm}":"\u2126",
+  "{\\textestimated}":"\u212E",         "{\\`A}":"\u00C0",                      "{\\'A}":"\u00C1",                      "{\\^A}":"\u00C2",
+  "{\\~A}":"\u00C3",                    "{\\\"A}":"\u00C4",                     "{\\r A}":"\u00C5",                     "{\\c C}":"\u00C7",
+  "{\\`E}":"\u00C8",                    "{\\'E}":"\u00C9",                      "{\\^E}":"\u00CA",                      "{\\\"E}":"\u00CB",
+  "{\\`I}":"\u00CC",                    "{\\'I}":"\u00CD",                      "{\\^I}":"\u00CE",                      "{\\\"I}":"\u00CF",
+  "{\\~N}":"\u00D1",                    "{\\`O}":"\u00D2",                      "{\\'O}":"\u00D3",                      "{\\^O}":"\u00D4",
+  "{\\~O}":"\u00D5",                    "{\\\"O}":"\u00D6",                     "{\\`U}":"\u00D9",                      "{\\'U}":"\u00DA",
+  "{\\^U}":"\u00DB",                    "{\\\"U}":"\u00DC",                     "{\\'Y}":"\u00DD",                      "{\\`a}":"\u00E0",
+  "{\\'a}":"\u00E1",                    "{\\^a}":"\u00E2",                      "{\\~a}":"\u00E3",                      "{\\\"a}":"\u00E4",
+  "{\\r a}":"\u00E5",                   "{\\c c}":"\u00E7",                     "{\\`e}":"\u00E8",                      "{\\'e}":"\u00E9",
+  "{\\^e}":"\u00EA",                    "{\\\"e}":"\u00EB",                     "{\\`i}":"\u00EC",                      "{\\'i}":"\u00ED",
+  "{\\^i}":"\u00EE",                    "{\\\"i}":"\u00EF",                     "{\\~n}":"\u00F1",                      "{\\`o}":"\u00F2",
+  "{\\'o}":"\u00F3",                    "{\\^o}":"\u00F4",                      "{\\~o}":"\u00F5",                      "{\\\"o}":"\u00F6",
+  "{\\`u}":"\u00F9",                    "{\\'u}":"\u00FA",                      "{\\^u}":"\u00FB",                      "{\\\"u}":"\u00FC",
+  "{\\'y}":"\u00FD",                    "{\\\"y}":"\u00FF",                     "{\\=A}":"\u0100",                      "{\\=a}":"\u0101",
+  "{\\u A}":"\u0102",                   "{\\u a}":"\u0103",                     "{\\k A}":"\u0104",                     "{\\k a}":"\u0105",
+  "{\\'C}":"\u0106",                    "{\\'c}":"\u0107",                      "{\\^C}":"\u0108",                      "{\\^c}":"\u0109",
+  "{\\.C}":"\u010A",                    "{\\.c}":"\u010B",                      "{\\v C}":"\u010C",                     "{\\v c}":"\u010D",
+  "{\\v D}":"\u010E",                   "{\\v d}":"\u010F",                     "{\\=E}":"\u0112",                      "{\\=e}":"\u0113",
+  "{\\u E}":"\u0114",                   "{\\u e}":"\u0115",                     "{\\.E}":"\u0116",                      "{\\.e}":"\u0117",
+  "{\\k E}":"\u0118",                   "{\\k e}":"\u0119",                     "{\\v E}":"\u011A",                     "{\\v e}":"\u011B",
+  "{\\^G}":"\u011C",                    "{\\^g}":"\u011D",                      "{\\u G}":"\u011E",                     "{\\u g}":"\u011F",
+  "{\\.G}":"\u0120",                    "{\\.g}":"\u0121",                      "{\\c G}":"\u0122",                     "{\\c g}":"\u0123",
+  "{\\^H}":"\u0124",                    "{\\^h}":"\u0125",                      "{\\~I}":"\u0128",                      "{\\~i}":"\u0129",
+  "{\\=I}":"\u012A",                    "{\\=i}":"\u012B",                      "{\\=\\i}":"\u012B",                    "{\\u I}":"\u012C",
+  "{\\u i}":"\u012D",                   "{\\k I}":"\u012E",                     "{\\k i}":"\u012F",                     "{\\.I}":"\u0130",
+  "{\\^J}":"\u0134",                    "{\\^j}":"\u0135",                      "{\\c K}":"\u0136",                     "{\\c k}":"\u0137",
+  "{\\'L}":"\u0139",                    "{\\'l}":"\u013A",                      "{\\c L}":"\u013B",                     "{\\c l}":"\u013C",
+  "{\\v L}":"\u013D",                   "{\\v l}":"\u013E",                     "{\\L }":"\u0141",                      "{\\l }":"\u0142",
+  "{\\'N}":"\u0143",                    "{\\'n}":"\u0144",                      "{\\c N}":"\u0145",                     "{\\c n}":"\u0146",
+  "{\\v N}":"\u0147",                   "{\\v n}":"\u0148",                     "{\\=O}":"\u014C",                      "{\\=o}":"\u014D",
+  "{\\u O}":"\u014E",                   "{\\u o}":"\u014F",                     "{\\H O}":"\u0150",                     "{\\H o}":"\u0151",
+  "{\\'R}":"\u0154",                    "{\\'r}":"\u0155",                      "{\\c R}":"\u0156",                     "{\\c r}":"\u0157",
+  "{\\v R}":"\u0158",                   "{\\v r}":"\u0159",                     "{\\'S}":"\u015A",                      "{\\'s}":"\u015B",
+  "{\\^S}":"\u015C",                    "{\\^s}":"\u015D",                      "{\\c S}":"\u015E",                     "{\\c s}":"\u015F",
+  "{\\v S}":"\u0160",                   "{\\v s}":"\u0161",                     "{\\c T}":"\u0162",                     "{\\c t}":"\u0163",
+  "{\\v T}":"\u0164",                   "{\\v t}":"\u0165",                     "{\\~U}":"\u0168",                      "{\\~u}":"\u0169",
+  "{\\=U}":"\u016A",                    "{\\=u}":"\u016B",                      "{\\u U}":"\u016C",                     "{\\u u}":"\u016D",
+  "{\\r U}":"\u016E",                   "{\\r u}":"\u016F",                     "{\\H U}":"\u0170",                     "{\\H u}":"\u0171",
+  "{\\k U}":"\u0172",                   "{\\k u}":"\u0173",                     "{\\^W}":"\u0174",                      "{\\^w}":"\u0175",
+  "{\\^Y}":"\u0176",                    "{\\^y}":"\u0177",                      "{\\\"Y}":"\u0178",                     "{\\'Z}":"\u0179",
+  "{\\'z}":"\u017A",                    "{\\.Z}":"\u017B",                      "{\\.z}":"\u017C",                      "{\\v Z}":"\u017D",
+  "{\\v z}":"\u017E",                   "{\\v A}":"\u01CD",                     "{\\v a}":"\u01CE",                     "{\\v I}":"\u01CF",
+  "{\\v i}":"\u01D0",                   "{\\v O}":"\u01D1",                     "{\\v o}":"\u01D2",                     "{\\v U}":"\u01D3",
+  "{\\v u}":"\u01D4",                   "{\\v G}":"\u01E6",                     "{\\v g}":"\u01E7",                     "{\\v K}":"\u01E8",
+  "{\\v k}":"\u01E9",                   "{\\k O}":"\u01EA",                     "{\\k o}":"\u01EB",                     "{\\v j}":"\u01F0",
+  "{\\'G}":"\u01F4",                    "{\\'g}":"\u01F5",                      "{\\.B}":"\u1E02",                      "{\\.b}":"\u1E03",
+  "{\\d B}":"\u1E04",                   "{\\d b}":"\u1E05",                     "{\\b B}":"\u1E06",                     "{\\b b}":"\u1E07",
+  "{\\.D}":"\u1E0A",                    "{\\.d}":"\u1E0B",                      "{\\d D}":"\u1E0C",                     "{\\d d}":"\u1E0D",
+  "{\\b D}":"\u1E0E",                   "{\\b d}":"\u1E0F",                     "{\\c D}":"\u1E10",                     "{\\c d}":"\u1E11",
+  "{\\.F}":"\u1E1E",                    "{\\.f}":"\u1E1F",                      "{\\=G}":"\u1E20",                      "{\\=g}":"\u1E21",
+  "{\\.H}":"\u1E22",                    "{\\.h}":"\u1E23",                      "{\\d H}":"\u1E24",                     "{\\d h}":"\u1E25",
+  "{\\\"H}":"\u1E26",                   "{\\\"h}":"\u1E27",                     "{\\c H}":"\u1E28",                     "{\\c h}":"\u1E29",
+  "{\\'K}":"\u1E30",                    "{\\'k}":"\u1E31",                      "{\\d K}":"\u1E32",                     "{\\d k}":"\u1E33",
+  "{\\b K}":"\u1E34",                   "{\\b k}":"\u1E35",                     "{\\d L}":"\u1E36",                     "{\\d l}":"\u1E37",
+  "{\\b L}":"\u1E3A",                   "{\\b l}":"\u1E3B",                     "{\\'M}":"\u1E3E",                      "{\\'m}":"\u1E3F",
+  "{\\.M}":"\u1E40",                    "{\\.m}":"\u1E41",                      "{\\d M}":"\u1E42",                     "{\\d m}":"\u1E43",
+  "{\\.N}":"\u1E44",                    "{\\.n}":"\u1E45",                      "{\\d N}":"\u1E46",                     "{\\d n}":"\u1E47",
+  "{\\b N}":"\u1E48",                   "{\\b n}":"\u1E49",                     "{\\'P}":"\u1E54",                      "{\\'p}":"\u1E55",
+  "{\\.P}":"\u1E56",                    "{\\.p}":"\u1E57",                      "{\\.R}":"\u1E58",                      "{\\.r}":"\u1E59",
+  "{\\d R}":"\u1E5A",                   "{\\d r}":"\u1E5B",                     "{\\b R}":"\u1E5E",                     "{\\b r}":"\u1E5F",
+  "{\\.S}":"\u1E60",                    "{\\.s}":"\u1E61",                      "{\\d S}":"\u1E62",                     "{\\d s}":"\u1E63",
+  "{\\.T}":"\u1E6A",                    "{\\.t}":"\u1E6B",                      "{\\d T}":"\u1E6C",                     "{\\d t}":"\u1E6D",
+  "{\\b T}":"\u1E6E",                   "{\\b t}":"\u1E6F",                     "{\\~V}":"\u1E7C",                      "{\\~v}":"\u1E7D",
+  "{\\d V}":"\u1E7E",                   "{\\d v}":"\u1E7F",                     "{\\`W}":"\u1E80",                      "{\\`w}":"\u1E81",
+  "{\\'W}":"\u1E82",                    "{\\'w}":"\u1E83",                      "{\\\"W}":"\u1E84",                     "{\\\"w}":"\u1E85",
+  "{\\.W}":"\u1E86",                    "{\\.w}":"\u1E87",                      "{\\d W}":"\u1E88",                     "{\\d w}":"\u1E89",
+  "{\\.X}":"\u1E8A",                    "{\\.x}":"\u1E8B",                      "{\\\"X}":"\u1E8C",                     "{\\\"x}":"\u1E8D",
+  "{\\.Y}":"\u1E8E",                    "{\\.y}":"\u1E8F",                      "{\\^Z}":"\u1E90",                      "{\\^z}":"\u1E91",
+  "{\\d Z}":"\u1E92",                   "{\\d z}":"\u1E93",                     "{\\b Z}":"\u1E94",                     "{\\b z}":"\u1E95",
+  "{\\b h}":"\u1E96",                   "{\\\"t}":"\u1E97",                     "{\\r w}":"\u1E98",                     "{\\r y}":"\u1e99",
+  "{\\d A}":"\u1EA0",                   "{\\d a}":"\u1EA1",                     "{\\d E}":"\u1EB8",                     "{\\d e}":"\u1EB9",
+  "{\\~E}":"\u1EBC",                    "{\\~e}":"\u1EBD",                      "{\\d I}":"\u1ECA",                     "{\\d i}":"\u1ECB",
+  "{\\d O}":"\u1ECC",                   "{\\d o}":"\u1ECD",                     "{\\d U}":"\u1EE4",                     "{\\d u}":"\u1EE5",
+  "{\\`Y}":"\u1EF2",                    "{\\`y}":"\u1EF3",                      "{\\d Y}":"\u1EF4",                     "{\\d y}":"\u1EF5",
+  "{\\~Y}":"\u1EF8",                    "{\\~y}":"\u1EF9",                      "{\\~}":"\u223C",                       "~":"\u00A0" 
+}
+},{}],29:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -2024,20 +2059,18 @@ Object.defineProperty(exports, "__esModule", {
 });
 /**
  * BibTeX pub type to CSL pub type
- * 
+ *
  * @access private
  * @method parseBibTeXType
- * 
+ *
  * @param {String} pubType - BibTeX type
- * 
+ *
  * @return {String} CSL type
  */
 var parseBibTeXType = function parseBibTeXType(pubType) {
   switch (pubType) {
-
     case 'article':
       return 'article-journal';
-      break;
 
     case 'book':
     case 'booklet':
@@ -2045,43 +2078,34 @@ var parseBibTeXType = function parseBibTeXType(pubType) {
     case 'misc':
     case 'proceedings':
       return 'book';
-      break;
 
     case 'inbook':
     case 'incollection':
       return 'chapter';
-      break;
 
     case 'conference':
     case 'inproceedings':
       return 'paper-conference';
-      break;
 
     case 'online':
       return 'webpage';
-      break;
 
     case 'patent':
       return 'patent';
-      break;
 
     case 'phdthesis':
     case 'mastersthesis':
       return 'thesis';
-      break;
 
     case 'techreport':
       return 'report';
-      break;
 
     case 'unpublished':
       return 'manuscript';
-      break;
 
     default:
-      console.warn('BibTeX publication type not recognized: ' + pubType + '. Interpreting as "book".');
+      console.warn('[set]', 'BibTeX publication type not recognized: ' + pubType + '. Interpreting as "book".');
       return 'book';
-      break;
   }
 };
 
@@ -2094,21 +2118,19 @@ Object.defineProperty(exports, "__esModule", {
 });
 /**
  * Convert epoch to CSL date
- * 
+ *
  * @access private
  * @function parseDate
- * 
+ *
  * @param {Number|String} value - Epoch time or string in format "YYYY-MM-DD"
- * 
+ *
  * @return {Object[]} Array of an object, containing the property "date-parts" with the value [ YYYY, MM, DD ]
  */
 var parseDate = function parseDate(value) {
-  var rValue,
-      date = new Date(value);
-
-  rValue = [date.getFullYear(), date.getMonth() + 1, date.getDate()];
-
-  return [{ 'date-parts': rValue }];
+  var date = new Date(value);
+  return [{
+    'date-parts': [date.getFullYear(), date.getMonth() + 1, date.getDate()]
+  }];
 };
 
 exports.default = parseDate;
@@ -2154,7 +2176,7 @@ exports.bibjson = _index4.default;
 exports.date = _date2.default;
 exports.name = _name2.default;
 exports.json = _json2.default;
-},{"./bibjson/index":25,"./date":30,"./input/index":35,"./json":37,"./name":38,"./wikidata/index":40}],32:[function(require,module,exports){
+},{"./bibjson/index":24,"./date":30,"./input/index":35,"./json":37,"./name":38,"./wikidata/index":40}],32:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -2177,19 +2199,21 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 /**
  * Parse input until success.
- * 
+ *
  * @access private
  * @method parseInput
- * 
+ *
  * @param {String|String[]|Object|Object[]} input - The input data
- * 
+ *
  * @return {CSL[]} The parsed input
  */
 var parseInput = function parseInput(input) {
-  var output = input,
-      type = (0, _type2.default)(output);
+  var output = input;
+  var type = (0, _type2.default)(output);
 
-  if (type.match(/^(array|object)\//)) output = (0, _deepCopy2.default)(output);
+  if (type.match(/^(array|object)\//)) {
+    output = (0, _deepCopy2.default)(output);
+  }
 
   // TODO max recursion level
   while (type !== 'array/csl') {
@@ -2224,20 +2248,23 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 /**
  * Parse input once.
- * 
+ *
  * @access private
  * @method parseInputChainLink
- * 
+ *
  * @param {String|String[]|Object|Object[]} input - The input data
- * 
+ *
  * @return {CSL[]} The parsed input
  */
 var parseInputChainLink = function parseInputChainLink(input) {
+  var output = input;
   var type = (0, _type2.default)(input);
 
-  if (type.match(/^(array|object)\//)) input = (0, _deepCopy2.default)(input);
+  if (type.match(/^(array|object)\//)) {
+    output = (0, _deepCopy2.default)(output);
+  }
 
-  return (0, _data2.default)(input, type);
+  return (0, _data2.default)(output, type);
 };
 
 exports.default = parseInputChainLink;
@@ -2288,98 +2315,77 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 /**
  * Standardise input (internal use)
- * 
+ *
  * @access private
  * @method parseInputData
- * 
+ *
  * @param {String|String[]|Object|Object[]} input - The input data
  * @param {String} type - The input type
- * 
+ *
  * @return {CSL[]} The parsed input
  */
 var parseInputData = function parseInputData(input, type) {
-  var output;
-
   switch (type) {
-
     case 'string/wikidata':
-      output = (0, _list2.default)(input.match(_regex2.default.wikidata[0])[1]);
-      break;
+      return (0, _list2.default)(input.match(_regex2.default.wikidata[0])[1]);
 
     case 'list/wikidata':
-      output = (0, _list2.default)(input.match(_regex2.default.wikidata[1])[1]);
-      break;
+      return (0, _list2.default)(input.match(_regex2.default.wikidata[1])[1]);
 
     case 'api/wikidata':
-      output = (0, _fetchFile2.default)(input);
-      break;
+      return (0, _fetchFile2.default)(input);
 
     case 'url/wikidata':
-      output = (0, _list2.default)(input.match(_regex2.default.wikidata[3])[1]);
-      break;
+      return (0, _list2.default)(input.match(_regex2.default.wikidata[3])[1]);
 
     case 'array/wikidata':
-      output = (0, _list2.default)(input.join(','));
-      break;
+      return (0, _list2.default)(input.join(','));
 
     case 'url/else':
-      output = (0, _fetchFile2.default)(input);
-      break;
+      return (0, _fetchFile2.default)(input);
 
     case 'jquery/else':
-      output = data.val() || data.text() || data.html();
-      break;
+      return input.val() || input.text() || input.html();
 
     case 'html/else':
-      output = data.value || data.textContent;
-      break;
+      return input.value || input.textContent;
 
     case 'string/json':
-      output = (0, _json6.default)(input);
-      break;
+      return (0, _json6.default)(input);
 
     case 'string/bibtex':
-      output = (0, _json4.default)((0, _text2.default)(input));
-      break;
+      return (0, _json4.default)((0, _text2.default)(input));
 
     case 'object/wikidata':
-      output = (0, _json2.default)(input);
-      break;
+      return (0, _json2.default)(input);
 
     case 'object/contentmine':
-      output = (0, _index2.default)(input);
-      break;
+      return (0, _index2.default)(input);
 
     case 'array/else':
-      output = [];
+      var output = [];
       input.forEach(function (value) {
         output = output.concat((0, _chain2.default)(value));
       });
-      break;
+      return output;
 
     case 'object/csl':
-      output = [input];
-      break;
+      return [input];
 
     case 'array/csl':
-      output = input;
-      break;
+      return input;
 
     case 'string/empty':
     case 'string/whitespace':
     case 'empty':
     case 'invalid':
     default:
-      output = [];
-      break;
-
+      return [];
   }
-
-  return output;
 };
 
 exports.default = parseInputData;
-},{"../../util/fetchFile":47,"../bibjson/index":25,"../bibtex/json":26,"../bibtex/text":28,"../json":37,"../regex":39,"../wikidata/json":41,"../wikidata/list":42,"./chain":32}],35:[function(require,module,exports){
+},{"../../util/fetchFile":47,"../bibjson/index":24,"../bibtex/json":25,"../bibtex/text":27,"../json":37,"../regex":39,"../wikidata/json":41,"../wikidata/list":42,"./chain":32}],35:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -2416,7 +2422,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; /* global jQuery, HTMLElement */
 
 var _regex = require('../regex');
 
@@ -2426,107 +2432,98 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 /**
  * Determine input type (internal use)
- * 
+ *
  * @access private
  * @method parseInputType
- * 
+ *
  * @param {String|String[]|Object|Object[]} input - The input data
- * 
+ *
  * @return {String} The input type
  */
 var parseInputType = function parseInputType(input) {
-
   switch (typeof input === 'undefined' ? 'undefined' : _typeof(input)) {
-
     case 'string':
-
       // Empty
-      if (input.length === 0) return 'string/empty';else if (/^\s+$/.test(input)) return 'string/whitespace';
-
-      // Wikidata ID
-      else if (_regex2.default.wikidata[0].test(input)) return 'string/wikidata';
-
+      if (input.length === 0) {
+        return 'string/empty';
+      } else if (/^\s+$/.test(input)) {
+        return 'string/whitespace';
+        // Wikidata ID
+      } else if (_regex2.default.wikidata[0].test(input)) {
+        return 'string/wikidata';
         // Wikidata entity list
-        else if (_regex2.default.wikidata[1].test(input)) return 'list/wikidata';
-
-          // Wikidata API URL
-          else if (_regex2.default.wikidata[2].test(input)) return 'api/wikidata';
-
-            // Wikidata URL
-            else if (_regex2.default.wikidata[3].test(input)) return 'url/wikidata';
-
-              // BibTeX
-              else if (_regex2.default.bibtex[0].test(input)) return 'string/bibtex';
-
-                // JSON
-                else if (/^\s*(\{|\[)/.test(input)) return 'string/json';
-
-                  // Else URL
-                  else if (_regex2.default.url.test(input)) return 'url/else';
-
-                    // Else
-                    else return console.warn('[set]', 'This format is not supported or recognised') || 'invalid';
-
-      break;
+      } else if (_regex2.default.wikidata[1].test(input)) {
+        return 'list/wikidata';
+        // Wikidata API URL
+      } else if (_regex2.default.wikidata[2].test(input)) {
+        return 'api/wikidata';
+        // Wikidata URL
+      } else if (_regex2.default.wikidata[3].test(input)) {
+        return 'url/wikidata';
+        // BibTeX
+      } else if (_regex2.default.bibtex[0].test(input)) {
+        return 'string/bibtex';
+        // JSON
+      } else if (/^\s*(\{|\[)/.test(input)) {
+        return 'string/json';
+        // Else URL
+      } else if (_regex2.default.url.test(input)) {
+        return 'url/} else';
+        // Else
+      } else {
+        return console.warn('[set]', 'This format is not supported or recognised') || 'invalid';
+      }
 
     case 'object':
-
       // Empty
-      if (input === null) return 'empty';
-
-      // jQuery
-      else if (typeof jQuery !== 'undefined' && input instanceof jQuery) return 'jquery/else';
-
+      if (input === null) {
+        return 'empty';
+        // jQuery
+      } else if (typeof jQuery !== 'undefined' && input instanceof jQuery) {
+        return 'jquery/else';
         // HTML
-        else if (typeof HMTLElement !== 'undefined' && input instanceof HMTLElement) return 'html/else';
-
-          // Array
-          else if (Array.isArray(input)) {
-
-              // Empty array (counts as csl for parsing purposes)
-              if (input.length === 0) return 'array/csl';
-
-              // Array of Wikidata IDs
-              else if (input.filter(function (v) {
-                  return parseInputType(v) === 'string/wikidata';
-                }).length === input.length) return 'array/wikidata';
-
-                // Array of CSL-JSON
-                else if (input.filter(function (v) {
-                    return parseInputType(v) === 'object/csl';
-                  }).length === input.length) return 'array/csl';
-
-                  // Array of misc or multiple types
-                  else return 'array/else';
-            }
-
-            // Object
-            else {
-
-                // Wikidata
-                if (input.hasOwnProperty('entities')) return 'object/wikidata';
-
-                // ContentMine
-                else if (input.fulltext_html && Array.isArray(input.fulltext_html.value) || input.fulltext_xml && Array.isArray(input.fulltext_xml.value) || input.fulltext_pdf && Array.isArray(input.fulltext_pdf.value)) return 'object/contentmine';
-
-                  // CSL-JSON
-                  else return 'object/csl';
-              }
-
-      break;
+      } else if (typeof HTMLElement !== 'undefined' && input instanceof HTMLElement) {
+        return 'html/else';
+        // Array
+      } else if (Array.isArray(input)) {
+        // Empty array (counts as csl for parsing purposes)
+        if (input.length === 0) {
+          return 'array/csl';
+          // Array of Wikidata IDs
+        } else if (input.filter(function (v) {
+          return parseInputType(v) === 'string/wikidata';
+        }).length === input.length) {
+          return 'array/wikidata';
+          // Array of CSL-JSON
+        } else if (input.filter(function (v) {
+          return parseInputType(v) === 'object/csl';
+        }).length === input.length) {
+          return 'array/csl';
+          // Array of misc or multiple types
+        } else {
+          return 'array/else';
+        }
+        // Object
+      } else {
+        // Wikidata
+        if (input.hasOwnProperty('entities')) {
+          return 'object/wikidata';
+          // ContentMine
+        } else if (input.fulltext_html && Array.isArray(input.fulltext_html.value) || input.fulltext_xml && Array.isArray(input.fulltext_xml.value) || input.fulltext_pdf && Array.isArray(input.fulltext_pdf.value)) {
+          return 'object/contentmine';
+          // CSL-JSON
+        } else {
+          return 'object/csl';
+        }
+      }
 
     case 'undefined':
-
       // Empty
       return 'empty';
 
-      break;
-
     default:
-
-      return console.warn('[set]', 'This format is not supported or recognised') || 'invalid';
-
-      break;
+      console.warn('[set]', 'This format is not supported or recognised');
+      return 'invalid';
   }
 };
 
@@ -2538,6 +2535,8 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
+var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; }();
+
 var _regex = require('./regex');
 
 var _regex2 = _interopRequireDefault(_regex);
@@ -2546,27 +2545,33 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 /**
  * Parse (in)valid JSON
- * 
+ *
  * @access private
  * @method parseJSON
- * 
+ *
  * @param {String} str - The input string
- * 
+ *
  * @return {Object|Object[]|String[]} The parsed object
  */
 var parseJSON = function parseJSON(str) {
-  var object;
   try {
-    object = JSON.parse(str);
+    return JSON.parse(str);
   } catch (e) {
     console.info('[set]', 'Input was not valid JSON, switching to experimental parser for invalid JSON');
     try {
-      object = JSON.parse(str.replace(_regex2.default.json[0][0], _regex2.default.json[0][1]).replace(_regex2.default.json[1][0], _regex2.default.json[1][1]));
+      _regex2.default.json.forEach(function (_ref) {
+        var _ref2 = _slicedToArray(_ref, 2),
+            regex = _ref2[0],
+            subst = _ref2[1];
+
+        str = str.replace(regex, subst);
+      });
+      return JSON.parse(str);
     } catch (e) {
       console.error('[set]', 'Experimental parser failed. Please improve the JSON. If this is not JSON, please re-read the supported formats.');
+      return undefined;
     }
   }
-  return object;
 };
 
 exports.default = parseJSON;
@@ -2577,6 +2582,8 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
+var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; }();
+
 var _regex = require('./regex');
 
 var _regex2 = _interopRequireDefault(_regex);
@@ -2585,24 +2592,24 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 /**
  * Get CSL from name
- * 
+ *
  * @access private
  * @method parseName
- * 
- * @param {String} str - string 
- * 
+ *
+ * @param {String} name - string
+ *
  * @return {Object} The CSL object
  */
-var parseName = function parseName(str) {
+var parseName = function parseName(name) {
+  var _ref = name.includes(', ') ? name.split(', ').reverse() : name.split(_regex2.default.name),
+      _ref2 = _slicedToArray(_ref, 2),
+      given = _ref2[0],
+      family = _ref2[1];
 
-  if (str.indexOf(', ') > -1) var arr = str.split(', ').reverse();else var arr = str.split(_regex2.default.name);
-
-  var obj = {
-    given: arr[0],
-    family: arr[1]
+  return {
+    given: given,
+    family: family
   };
-
-  return obj;
 };
 
 exports.default = parseName;
@@ -2614,20 +2621,20 @@ Object.defineProperty(exports, "__esModule", {
 });
 /**
  * Object containing several RegExp patterns, mostly used for parsing (*full of shame*) and recognizing data types
- * 
+ *
  * @access private
  * @constant varRegex
  * @default
  */
-var varRegex = {
-  url: /^(https?:\/\/)?((([a-z\d]([a-z\d-]*[a-z\d])*)\.)+[a-z]{2,}|((\d{1,3}\.){3}\d{1,3})|localhost)(\:\d+)?(\/[-a-z\d%_.~+:]*)*(\?[;&a-z\d%_.~+=-]*)?(\#[-a-z\d_]*)?$/i,
+var regex = {
+  url: /^(https?:\/\/)?((([a-z\d]([a-z\d-]*[a-z\d])*)\.)+[a-z]{2,}|((\d{1,3}\.){3}\d{1,3})|localhost)(:\d+)?(\/[-a-z\d%_.~+:]*)*(\?[;&a-z\d%_.~+=-]*)?(#[-a-z\d_]*)?$/i,
   bibtex: [/^(?:\s*@\s*[^@]+?\s*\{\s*[^@]+?\s*,\s*[^@]+\})+\s*$/, /^\s$/, /^[@{}"=,\\]$/],
-  wikidata: [/^\s*(Q\d+)\s*$/, /^\s*((?:Q\d+(?:\s+|,|))*Q\d+)\s*$/, /^(https?:\/\/(?:www\.)wikidata.org\/w\/api\.php(?:\?.*)?)$/, /\/(Q\d+)(?:[#?\/]|\s*$)/],
+  wikidata: [/^\s*(Q\d+)\s*$/, /^\s*((?:Q\d+(?:\s+|,|))*Q\d+)\s*$/, /^(https?:\/\/(?:www\.)wikidata.org\/w\/api\.php(?:\?.*)?)$/, /\/(Q\d+)(?:[#?/]|\s*$)/],
   json: [[/((?:\[|:|,)\s*)'((?:\\'|[^'])*?[^\\])?'(?=\s*(?:\]|}|,))/g, '$1"$2"'], [/((?:(?:"|]|}|\/[gmi]|\.|(?:\d|\.|-)*\d)\s*,|{)\s*)(?:"([^":\n]+?)"|'([^":\n]+?)'|([^":\n]+?))(\s*):/g, '$1"$2$3$4"$5:']],
   name: / (?=(?:[a-z]+ )*(?:[A-Z][a-z]*[-])*(?:[A-Z][a-z]*)$)/
 };
 
-exports.default = varRegex;
+exports.default = regex;
 },{}],40:[function(require,module,exports){
 'use strict';
 
@@ -2665,6 +2672,8 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
+var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; }();
+
 var _wikidataSdk = require('wikidata-sdk');
 
 var _wikidataSdk2 = _interopRequireDefault(_wikidataSdk);
@@ -2677,42 +2686,43 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 /**
  * Format Wikidata data
- * 
+ *
  * @access private
  * @method parseWikidataJSON
- * 
+ *
  * @param {Object} data - The input data
- * 
+ *
  * @return {CSL[]} The formatted input data
  */
 var parseWikidataJSON = function parseWikidataJSON(data) {
-  var output = [],
-      entities = data.entities,
-      entKeys = Object.keys(entities);
+  return Object.keys(data.entities).map(function (entityKey) {
+    var _data$entities$entity = data.entities[entityKey],
+        labels = _data$entities$entity.labels,
+        claims = _data$entities$entity.claims;
 
-  for (var entIndex = 0; entIndex < entKeys.length; entIndex++) {
-    var entKey = entKeys[entIndex],
-        labels = entities[entKey].labels,
-        entity = _wikidataSdk2.default.simplifyClaims(entities[entKey].claims, null, null, true);
+    var entity = _wikidataSdk2.default.simplifyClaims(claims, null, null, true);
+    var json = {
+      wikiId: entityKey,
+      id: entityKey
+    };
 
-    var json = { wikiID: entKey, id: entKey },
-        props = Object.keys(entity);
+    Object.keys(entity).forEach(function (prop) {
+      var value = entity[prop];
 
-    for (var propIndex = 0; propIndex < props.length; propIndex++) {
-      var prop = props[propIndex],
-          value = entity[prop];
+      var _parseWikidataProp = (0, _prop2.default)(prop, value, 'en'),
+          _parseWikidataProp2 = _slicedToArray(_parseWikidataProp, 2),
+          resProp = _parseWikidataProp2[0],
+          resValue = _parseWikidataProp2[1];
 
-      var resp = (0, _prop2.default)(prop, value, 'en');
-
-      if (resp[0].length > 0) json[resp[0]] = resp[1];
-    }
+      if (resProp.length > 0) {
+        json[resProp] = resValue;
+      }
+    });
 
     // It still has to combine authors from string value and numeric-id value :(
     if (json.hasOwnProperty('authorQ') || json.hasOwnProperty('authorS')) {
-
       if (json.hasOwnProperty('authorQ') && json.hasOwnProperty('authorS')) {
         json.author = json.authorQ.concat(json.authorS);
-
         delete json.authorQ;
         delete json.authorS;
       } else if (json.hasOwnProperty('authorQ')) {
@@ -2722,24 +2732,23 @@ var parseWikidataJSON = function parseWikidataJSON(data) {
         json.author = json.authorS;
         delete json.authorS;
       }
-
-      json.author = json.author.sort(function sortNames(a, b) {
+      json.author = json.author.sort(function (a, b) {
         return a[1] - b[1];
-      }).map(function mapNames(v) {
+      }).map(function (v) {
         return v[0];
       });
     }
 
-    if (!(json.hasOwnProperty('title') && json.title)) json.title = labels['en'].value;
+    if (!json.title) {
+      json.title = labels['en'].value;
+    }
 
-    output.push(json);
-  }
-
-  return output;
+    return json;
+  });
 };
 
 exports.default = parseWikidataJSON;
-},{"./prop":43,"wikidata-sdk":368}],42:[function(require,module,exports){
+},{"./prop":43,"wikidata-sdk":370}],42:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -2754,22 +2763,20 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 /**
  * Get Wikidata JSON from Wikidata IDs
- * 
+ *
  * @access private
  * @method parseWikidata
- * 
+ *
  * @param {String} data - Wikidata IDs
- * 
+ *
  * @return {Object} Wikidata JSON
  */
 var parseWikidata = function parseWikidata(data) {
-  var data = data.split(/(?:\s+|,\s*)/g);
-
-  return [].concat(_wikidataSdk2.default.getEntities(data, ['en']));
+  return [].concat(_wikidataSdk2.default.getEntities(data.split(/(?:\s+|,\s*)/g), ['en']));
 };
 
 exports.default = parseWikidata;
-},{"wikidata-sdk":368}],43:[function(require,module,exports){
+},{"wikidata-sdk":370}],43:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -2800,65 +2807,52 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 /**
  * Get the names of objects from Wikidata IDs
- * 
+ *
  * @access private
  * @method fetchWikidataLabel
- * 
+ *
  * @param {String|String[]} q - Wikidata IDs
  * @param {String} lang - Language
- * 
+ *
  * @return {String[]} Array with labels of each prop
  */
 var fetchWikidataLabel = function fetchWikidataLabel(q, lang) {
-  var ids;
-
-  if (Array.isArray(q)) ids = q;else if (typeof q === 'string') ids = q.split('|');else ids = '';
-
+  var ids = Array.isArray(q) ? q : typeof q === 'string' ? q.split('|') : '';
   var url = _wikidataSdk2.default.getEntities(ids, [lang], 'labels');
+  var entities = JSON.parse((0, _fetchFile2.default)(url)).entities || {};
 
-  var data = (0, _fetchFile2.default)(url),
-      entities = JSON.parse(data).entities || {},
-      entKeys = Object.keys(entities),
-      labels = [];
-
-  for (var entIndex = 0; entIndex < entKeys.length; entIndex++) {
-    var entKey = entKeys[entIndex],
-        entity = entities[entKey];
-
-    labels.push(entity.labels[lang].value);
-  }
-
-  return labels;
+  return Object.keys(entities).map(function (entityKey) {
+    return (entities[entityKey].labels[lang] || {}).value;
+  });
 };
 
 /**
  * Get series ordinal from qualifiers object
- * 
+ *
  * @access private
  * @method parseWikidataProp
- * 
+ *
  * @param {Object} qualifiers - qualifiers object
- * 
+ *
  * @return {Number} series ordinal or -1
  */
 var parseWikidataP1545 = function parseWikidataP1545(qualifiers) {
-  if (qualifiers.P1545) return parseInt(qualifiers.P1545[0]);else return -1;
+  return qualifiers.P1545 ? parseInt(qualifiers.P1545[0]) : -1;
 };
 
 /**
  * Transform property and value from Wikidata format to CSL
- * 
+ *
  * @access private
  * @method parseWikidataProp
- * 
+ *
  * @param {String} prop - Property
  * @param {String|Number} value - Value
  * @param {String} lang - Language
- * 
+ *
  * @return {String[]} Array with new prop and value
  */
 var parseWikidataProp = function parseWikidataProp(prop, value, lang) {
-
   switch (prop) {
     case 'P50':
     case 'P2093':
@@ -2870,24 +2864,27 @@ var parseWikidataProp = function parseWikidataProp(prop, value, lang) {
       break;
   }
 
-  var rProp = '',
-      rValue = value;
+  var rProp = '';
+  var rValue = value;
 
   switch (prop) {
-
     // Author ( q )
     case 'P50':
       rProp = 'authorQ';
-      rValue = value.map(function (v) {
-        return [(0, _name2.default)(fetchWikidataLabel(v.value, lang)[0]), parseWikidataP1545(v.qualifiers)];
+      rValue = value.map(function (_ref) {
+        var value = _ref.value,
+            qualifiers = _ref.qualifiers;
+        return [(0, _name2.default)(fetchWikidataLabel(value, lang)[0]), parseWikidataP1545(qualifiers)];
       });
       break;
 
     // Author ( s )
     case 'P2093':
       rProp = 'authorS';
-      rValue = value.map(function (v) {
-        return [(0, _name2.default)(v.value), parseWikidataP1545(v.qualifiers)];
+      rValue = value.map(function (_ref2) {
+        var value = _ref2.value,
+            qualifiers = _ref2.qualifiers;
+        return [(0, _name2.default)(value), parseWikidataP1545(qualifiers)];
       });
       break;
 
@@ -2908,7 +2905,10 @@ var parseWikidataProp = function parseWikidataProp(prop, value, lang) {
       rProp = 'type';
       rValue = (0, _type2.default)(value);
 
-      if (rValue === undefined) console.warn('[set]', 'This entry type is not recognized and therefore interpreted as \'article-journal\':', value), rValue = 'article-journal';
+      if (rValue === undefined) {
+        console.warn('[set]', 'This entry type is not recognized and therefore interpreted as \'article-journal\': ' + value);
+        rValue = 'article-journal';
+      }
       break;
 
     // ISBN 13 & 10
@@ -2972,7 +2972,7 @@ var parseWikidataProp = function parseWikidataProp(prop, value, lang) {
       break;
 
     default:
-      console.info('[set]', 'Unknown property:', prop);
+      console.info('[set]', 'Unknown property: ' + prop);
       break;
   }
 
@@ -2980,7 +2980,7 @@ var parseWikidataProp = function parseWikidataProp(prop, value, lang) {
 };
 
 exports.default = parseWikidataProp;
-},{"../../util/fetchFile":47,"../date":30,"../name":38,"./type":44,"wikidata-sdk":368}],44:[function(require,module,exports){
+},{"../../util/fetchFile":47,"../date":30,"../name":38,"./type":44,"wikidata-sdk":370}],44:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -2988,12 +2988,11 @@ Object.defineProperty(exports, "__esModule", {
 });
 /**
  * Object containing a list of Wikidata Instances and it's corresponding name as specified by the docs
- * 
+ *
  * @access private
  * @constant varWikidataTypes
  * @default
  */
-
 var varWikidataTypes = {
   Q13442814: 'article-journal',
   Q18918145: 'article-journal',
@@ -3004,12 +3003,12 @@ var varWikidataTypes = {
 
 /**
  * Get CSL type from Wikidata type (P31)
- * 
+ *
  * @access private
  * @method fetchWikidataType
- * 
+ *
  * @param {String} value - Input P31 Wikidata ID
- * 
+ *
  * @return {String} Output CSL type
  */
 var fetchWikidataType = function fetchWikidataType(value) {
@@ -3025,14 +3024,14 @@ Object.defineProperty(exports, "__esModule", {
 });
 /**
  * Add data-* attribute to a HTML string
- * 
+ *
  * @access private
  * @method getAttributedEntry
- * 
+ *
  * @param {String} string - HTML string
  * @param {String} name - attribute name
  * @param {String} value - attribute value
- * 
+ *
  * @return {String} HTML string with attribute
  */
 var getAttributedEntry = function getAttributedEntry(string, name, value) {
@@ -3043,19 +3042,18 @@ var getAttributedEntry = function getAttributedEntry(string, name, value) {
 
 /**
  * Add CSL identifiers to entry
- * 
+ *
  * @access private
  * @method getPrefixedEntry
- * 
+ *
  * @param {String} value - HTML string
  * @param {Number} index - ID index
  * @param {String[]} list - ID list
- * 
+ *
  * @return {String} HTML string with CSL ID
  */
 var getPrefixedEntry = function getPrefixedEntry(value, index, list) {
-  var id = list[index];
-  return getAttributedEntry(value, 'csl-entry-id', id);
+  return getAttributedEntry(value, 'csl-entry-id', list[index]);
 };
 
 exports.getAttributedEntry = getAttributedEntry;
@@ -3068,12 +3066,12 @@ Object.defineProperty(exports, "__esModule", {
 });
 /**
  * Duplicate objects to prevent Cite changing values outside of own scope
- * 
+ *
  * @access private
  * @method deepCopy
- * 
+ *
  * @param {Object} obj - Input object
- * 
+ *
  * @return {Object} Duplicated object
  */
 var deepCopy = function deepCopy(obj) {
@@ -3096,54 +3094,46 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 /**
  * Fetch file
- * 
+ *
  * @access private
  * @method fetchFile
- * 
+ *
  * @param {String} url - The input url
- * 
+ *
  * @return {String} The fetched string
  */
 var fetchFile = function fetchFile(url) {
-  var result;
-
   try {
-    result = (0, _syncRequest2.default)('GET', url, { uri: url }).getBody('utf8');
+    return (0, _syncRequest2.default)('GET', url, { uri: url }).getBody('utf8');
   } catch (e) {
     console.error('[set]', 'File could not be fetched');
+    return undefined;
   }
-
-  return result;
 };
 
 exports.default = fetchFile;
-},{"sync-request":359}],48:[function(require,module,exports){
-'use strict';
+},{"sync-request":361}],48:[function(require,module,exports){
+"use strict";
 
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
 /**
  * Generate ID
- * 
+ *
  * @access private
  * @method fetchId
- * 
+ *
  * @param {String[]} list - old ID list
- * @param {Number} index - current ID index
  * @param {String} prefix - ID prefix
- * 
+ *
  * @return {String} CSL ID
  */
-var fetchId = function fetchId(list, index, prefix) {
-  var arr = list.slice(),
-      id = arr[index],
-      del = ',';
+var fetchId = function fetchId(list, prefix) {
+  var id = void 0;
 
-  while (true) {
-    arr[index] = id = prefix + Math.random().toString().slice(2);
-
-    if (typeof id === 'string' && (arr.join(del).match('(?:^|' + del + ')' + id + '(?:$|' + del + ')') || []).length === 1) break;
+  while (list.includes(id)) {
+    id = "" + prefix + Math.random().toString().slice(2);
   }
 
   return id;
@@ -3202,7 +3192,7 @@ var citeproc = _citeproc2.default.PROCESSOR_VERSION;
 
 exports.cite = _package.version;
 exports.citeproc = citeproc;
-},{"../package.json":379,"citeproc":52}],51:[function(require,module,exports){
+},{"../package.json":381,"citeproc":52}],51:[function(require,module,exports){
 (function (global){
 "use strict";
 
@@ -3233,7 +3223,7 @@ define(String.prototype, "padRight", "".padEnd);
   [][key] && define(Array, key, Function.call.bind([][key]));
 });
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"core-js/fn/regexp/escape":53,"core-js/shim":346,"regenerator-runtime/runtime":357}],52:[function(require,module,exports){
+},{"core-js/fn/regexp/escape":53,"core-js/shim":346,"regenerator-runtime/runtime":359}],52:[function(require,module,exports){
 /*
  * Copyright (c) 2009-2016 Frank Bennett
  * 
@@ -26109,6 +26099,416 @@ Response.prototype.getBody = function (encoding) {
 };
 
 },{}],349:[function(require,module,exports){
+(function (process){
+// Copyright Joyent, Inc. and other Node contributors.
+//
+// Permission is hereby granted, free of charge, to any person obtaining a
+// copy of this software and associated documentation files (the
+// "Software"), to deal in the Software without restriction, including
+// without limitation the rights to use, copy, modify, merge, publish,
+// distribute, sublicense, and/or sell copies of the Software, and to permit
+// persons to whom the Software is furnished to do so, subject to the
+// following conditions:
+//
+// The above copyright notice and this permission notice shall be included
+// in all copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
+// OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+// MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN
+// NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
+// DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
+// OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE
+// USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+// resolves . and .. elements in a path array with directory names there
+// must be no slashes, empty elements, or device names (c:\) in the array
+// (so also no leading and trailing slashes - it does not distinguish
+// relative and absolute paths)
+function normalizeArray(parts, allowAboveRoot) {
+  // if the path tries to go above the root, `up` ends up > 0
+  var up = 0;
+  for (var i = parts.length - 1; i >= 0; i--) {
+    var last = parts[i];
+    if (last === '.') {
+      parts.splice(i, 1);
+    } else if (last === '..') {
+      parts.splice(i, 1);
+      up++;
+    } else if (up) {
+      parts.splice(i, 1);
+      up--;
+    }
+  }
+
+  // if the path is allowed to go above the root, restore leading ..s
+  if (allowAboveRoot) {
+    for (; up--; up) {
+      parts.unshift('..');
+    }
+  }
+
+  return parts;
+}
+
+// Split a filename into [root, dir, basename, ext], unix version
+// 'root' is just a slash, or nothing.
+var splitPathRe =
+    /^(\/?|)([\s\S]*?)((?:\.{1,2}|[^\/]+?|)(\.[^.\/]*|))(?:[\/]*)$/;
+var splitPath = function(filename) {
+  return splitPathRe.exec(filename).slice(1);
+};
+
+// path.resolve([from ...], to)
+// posix version
+exports.resolve = function() {
+  var resolvedPath = '',
+      resolvedAbsolute = false;
+
+  for (var i = arguments.length - 1; i >= -1 && !resolvedAbsolute; i--) {
+    var path = (i >= 0) ? arguments[i] : process.cwd();
+
+    // Skip empty and invalid entries
+    if (typeof path !== 'string') {
+      throw new TypeError('Arguments to path.resolve must be strings');
+    } else if (!path) {
+      continue;
+    }
+
+    resolvedPath = path + '/' + resolvedPath;
+    resolvedAbsolute = path.charAt(0) === '/';
+  }
+
+  // At this point the path should be resolved to a full absolute path, but
+  // handle relative paths to be safe (might happen when process.cwd() fails)
+
+  // Normalize the path
+  resolvedPath = normalizeArray(filter(resolvedPath.split('/'), function(p) {
+    return !!p;
+  }), !resolvedAbsolute).join('/');
+
+  return ((resolvedAbsolute ? '/' : '') + resolvedPath) || '.';
+};
+
+// path.normalize(path)
+// posix version
+exports.normalize = function(path) {
+  var isAbsolute = exports.isAbsolute(path),
+      trailingSlash = substr(path, -1) === '/';
+
+  // Normalize the path
+  path = normalizeArray(filter(path.split('/'), function(p) {
+    return !!p;
+  }), !isAbsolute).join('/');
+
+  if (!path && !isAbsolute) {
+    path = '.';
+  }
+  if (path && trailingSlash) {
+    path += '/';
+  }
+
+  return (isAbsolute ? '/' : '') + path;
+};
+
+// posix version
+exports.isAbsolute = function(path) {
+  return path.charAt(0) === '/';
+};
+
+// posix version
+exports.join = function() {
+  var paths = Array.prototype.slice.call(arguments, 0);
+  return exports.normalize(filter(paths, function(p, index) {
+    if (typeof p !== 'string') {
+      throw new TypeError('Arguments to path.join must be strings');
+    }
+    return p;
+  }).join('/'));
+};
+
+
+// path.relative(from, to)
+// posix version
+exports.relative = function(from, to) {
+  from = exports.resolve(from).substr(1);
+  to = exports.resolve(to).substr(1);
+
+  function trim(arr) {
+    var start = 0;
+    for (; start < arr.length; start++) {
+      if (arr[start] !== '') break;
+    }
+
+    var end = arr.length - 1;
+    for (; end >= 0; end--) {
+      if (arr[end] !== '') break;
+    }
+
+    if (start > end) return [];
+    return arr.slice(start, end - start + 1);
+  }
+
+  var fromParts = trim(from.split('/'));
+  var toParts = trim(to.split('/'));
+
+  var length = Math.min(fromParts.length, toParts.length);
+  var samePartsLength = length;
+  for (var i = 0; i < length; i++) {
+    if (fromParts[i] !== toParts[i]) {
+      samePartsLength = i;
+      break;
+    }
+  }
+
+  var outputParts = [];
+  for (var i = samePartsLength; i < fromParts.length; i++) {
+    outputParts.push('..');
+  }
+
+  outputParts = outputParts.concat(toParts.slice(samePartsLength));
+
+  return outputParts.join('/');
+};
+
+exports.sep = '/';
+exports.delimiter = ':';
+
+exports.dirname = function(path) {
+  var result = splitPath(path),
+      root = result[0],
+      dir = result[1];
+
+  if (!root && !dir) {
+    // No dirname whatsoever
+    return '.';
+  }
+
+  if (dir) {
+    // It has a dirname, strip trailing slash
+    dir = dir.substr(0, dir.length - 1);
+  }
+
+  return root + dir;
+};
+
+
+exports.basename = function(path, ext) {
+  var f = splitPath(path)[2];
+  // TODO: make this comparison case-insensitive on windows?
+  if (ext && f.substr(-1 * ext.length) === ext) {
+    f = f.substr(0, f.length - ext.length);
+  }
+  return f;
+};
+
+
+exports.extname = function(path) {
+  return splitPath(path)[3];
+};
+
+function filter (xs, f) {
+    if (xs.filter) return xs.filter(f);
+    var res = [];
+    for (var i = 0; i < xs.length; i++) {
+        if (f(xs[i], i, xs)) res.push(xs[i]);
+    }
+    return res;
+}
+
+// String.prototype.substr - negative index don't work in IE8
+var substr = 'ab'.substr(-1) === 'b'
+    ? function (str, start, len) { return str.substr(start, len) }
+    : function (str, start, len) {
+        if (start < 0) start = str.length + start;
+        return str.substr(start, len);
+    }
+;
+
+}).call(this,require('_process'))
+},{"_process":350}],350:[function(require,module,exports){
+// shim for using process in browser
+var process = module.exports = {};
+
+// cached from whatever global is present so that test runners that stub it
+// don't break things.  But we need to wrap it in a try catch in case it is
+// wrapped in strict mode code which doesn't define any globals.  It's inside a
+// function because try/catches deoptimize in certain engines.
+
+var cachedSetTimeout;
+var cachedClearTimeout;
+
+function defaultSetTimout() {
+    throw new Error('setTimeout has not been defined');
+}
+function defaultClearTimeout () {
+    throw new Error('clearTimeout has not been defined');
+}
+(function () {
+    try {
+        if (typeof setTimeout === 'function') {
+            cachedSetTimeout = setTimeout;
+        } else {
+            cachedSetTimeout = defaultSetTimout;
+        }
+    } catch (e) {
+        cachedSetTimeout = defaultSetTimout;
+    }
+    try {
+        if (typeof clearTimeout === 'function') {
+            cachedClearTimeout = clearTimeout;
+        } else {
+            cachedClearTimeout = defaultClearTimeout;
+        }
+    } catch (e) {
+        cachedClearTimeout = defaultClearTimeout;
+    }
+} ())
+function runTimeout(fun) {
+    if (cachedSetTimeout === setTimeout) {
+        //normal enviroments in sane situations
+        return setTimeout(fun, 0);
+    }
+    // if setTimeout wasn't available but was latter defined
+    if ((cachedSetTimeout === defaultSetTimout || !cachedSetTimeout) && setTimeout) {
+        cachedSetTimeout = setTimeout;
+        return setTimeout(fun, 0);
+    }
+    try {
+        // when when somebody has screwed with setTimeout but no I.E. maddness
+        return cachedSetTimeout(fun, 0);
+    } catch(e){
+        try {
+            // When we are in I.E. but the script has been evaled so I.E. doesn't trust the global object when called normally
+            return cachedSetTimeout.call(null, fun, 0);
+        } catch(e){
+            // same as above but when it's a version of I.E. that must have the global object for 'this', hopfully our context correct otherwise it will throw a global error
+            return cachedSetTimeout.call(this, fun, 0);
+        }
+    }
+
+
+}
+function runClearTimeout(marker) {
+    if (cachedClearTimeout === clearTimeout) {
+        //normal enviroments in sane situations
+        return clearTimeout(marker);
+    }
+    // if clearTimeout wasn't available but was latter defined
+    if ((cachedClearTimeout === defaultClearTimeout || !cachedClearTimeout) && clearTimeout) {
+        cachedClearTimeout = clearTimeout;
+        return clearTimeout(marker);
+    }
+    try {
+        // when when somebody has screwed with setTimeout but no I.E. maddness
+        return cachedClearTimeout(marker);
+    } catch (e){
+        try {
+            // When we are in I.E. but the script has been evaled so I.E. doesn't  trust the global object when called normally
+            return cachedClearTimeout.call(null, marker);
+        } catch (e){
+            // same as above but when it's a version of I.E. that must have the global object for 'this', hopfully our context correct otherwise it will throw a global error.
+            // Some versions of I.E. have different rules for clearTimeout vs setTimeout
+            return cachedClearTimeout.call(this, marker);
+        }
+    }
+
+
+
+}
+var queue = [];
+var draining = false;
+var currentQueue;
+var queueIndex = -1;
+
+function cleanUpNextTick() {
+    if (!draining || !currentQueue) {
+        return;
+    }
+    draining = false;
+    if (currentQueue.length) {
+        queue = currentQueue.concat(queue);
+    } else {
+        queueIndex = -1;
+    }
+    if (queue.length) {
+        drainQueue();
+    }
+}
+
+function drainQueue() {
+    if (draining) {
+        return;
+    }
+    var timeout = runTimeout(cleanUpNextTick);
+    draining = true;
+
+    var len = queue.length;
+    while(len) {
+        currentQueue = queue;
+        queue = [];
+        while (++queueIndex < len) {
+            if (currentQueue) {
+                currentQueue[queueIndex].run();
+            }
+        }
+        queueIndex = -1;
+        len = queue.length;
+    }
+    currentQueue = null;
+    draining = false;
+    runClearTimeout(timeout);
+}
+
+process.nextTick = function (fun) {
+    var args = new Array(arguments.length - 1);
+    if (arguments.length > 1) {
+        for (var i = 1; i < arguments.length; i++) {
+            args[i - 1] = arguments[i];
+        }
+    }
+    queue.push(new Item(fun, args));
+    if (queue.length === 1 && !draining) {
+        runTimeout(drainQueue);
+    }
+};
+
+// v8 likes predictible objects
+function Item(fun, array) {
+    this.fun = fun;
+    this.array = array;
+}
+Item.prototype.run = function () {
+    this.fun.apply(null, this.array);
+};
+process.title = 'browser';
+process.browser = true;
+process.env = {};
+process.argv = [];
+process.version = ''; // empty string to avoid regexp issues
+process.versions = {};
+
+function noop() {}
+
+process.on = noop;
+process.addListener = noop;
+process.once = noop;
+process.off = noop;
+process.removeListener = noop;
+process.removeAllListeners = noop;
+process.emit = noop;
+
+process.binding = function (name) {
+    throw new Error('process.binding is not supported');
+};
+
+process.cwd = function () { return '/' };
+process.chdir = function (dir) {
+    throw new Error('process.chdir is not supported');
+};
+process.umask = function() { return 0; };
+
+},{}],351:[function(require,module,exports){
 'use strict';
 
 var replace = String.prototype.replace;
@@ -26128,7 +26528,7 @@ module.exports = {
     RFC3986: 'RFC3986'
 };
 
-},{}],350:[function(require,module,exports){
+},{}],352:[function(require,module,exports){
 'use strict';
 
 var stringify = require('./stringify');
@@ -26141,7 +26541,7 @@ module.exports = {
     stringify: stringify
 };
 
-},{"./formats":349,"./parse":351,"./stringify":352}],351:[function(require,module,exports){
+},{"./formats":351,"./parse":353,"./stringify":354}],353:[function(require,module,exports){
 'use strict';
 
 var utils = require('./utils');
@@ -26310,7 +26710,7 @@ module.exports = function (str, opts) {
     return utils.compact(obj);
 };
 
-},{"./utils":353}],352:[function(require,module,exports){
+},{"./utils":355}],354:[function(require,module,exports){
 'use strict';
 
 var utils = require('./utils');
@@ -26519,7 +26919,7 @@ module.exports = function (object, opts) {
     return keys.join(delimiter);
 };
 
-},{"./formats":349,"./utils":353}],353:[function(require,module,exports){
+},{"./formats":351,"./utils":355}],355:[function(require,module,exports){
 'use strict';
 
 var has = Object.prototype.hasOwnProperty;
@@ -26703,7 +27103,7 @@ exports.isBuffer = function (obj) {
     return !!(obj.constructor && obj.constructor.isBuffer && obj.constructor.isBuffer(obj));
 };
 
-},{}],354:[function(require,module,exports){
+},{}],356:[function(require,module,exports){
 // Copyright Joyent, Inc. and other Node contributors.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a
@@ -26789,7 +27189,7 @@ var isArray = Array.isArray || function (xs) {
   return Object.prototype.toString.call(xs) === '[object Array]';
 };
 
-},{}],355:[function(require,module,exports){
+},{}],357:[function(require,module,exports){
 // Copyright Joyent, Inc. and other Node contributors.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a
@@ -26876,13 +27276,13 @@ var objectKeys = Object.keys || function (obj) {
   return res;
 };
 
-},{}],356:[function(require,module,exports){
+},{}],358:[function(require,module,exports){
 'use strict';
 
 exports.decode = exports.parse = require('./decode');
 exports.encode = exports.stringify = require('./encode');
 
-},{"./decode":354,"./encode":355}],357:[function(require,module,exports){
+},{"./decode":356,"./encode":357}],359:[function(require,module,exports){
 (function (global){
 /**
  * Copyright (c) 2014, Facebook, Inc.
@@ -27622,7 +28022,7 @@ exports.encode = exports.stringify = require('./encode');
 );
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{}],358:[function(require,module,exports){
+},{}],360:[function(require,module,exports){
 'use strict';
 
 (function (root, factory) {
@@ -27879,7 +28279,7 @@ exports.encode = exports.stringify = require('./encode');
     return striptags;
 }));
 
-},{}],359:[function(require,module,exports){
+},{}],361:[function(require,module,exports){
 'use strict';
 
 var Response = require('http-response-object');
@@ -27945,7 +28345,7 @@ function doRequest(method, url, options) {
   return new Response(xhr.status, headers, xhr.responseText);
 }
 
-},{"http-response-object":348,"then-request/lib/handle-qs.js":360}],360:[function(require,module,exports){
+},{"http-response-object":348,"then-request/lib/handle-qs.js":362}],362:[function(require,module,exports){
 'use strict';
 
 var parse = require('qs').parse;
@@ -27969,7 +28369,7 @@ function handleQs(url, query) {
   return start + qs + end;
 }
 
-},{"qs":350}],361:[function(require,module,exports){
+},{"qs":352}],363:[function(require,module,exports){
 const toDateObject = require('./wikidata_time_to_date_object')
 
 const helpers = {}
@@ -28002,7 +28402,7 @@ helpers.wikidataTimeToISOString = bestEffort(toISOString)
 
 module.exports = helpers
 
-},{"./wikidata_time_to_date_object":367}],362:[function(require,module,exports){
+},{"./wikidata_time_to_date_object":369}],364:[function(require,module,exports){
 const { wikidataTimeToISOString, wikidataTimeToEpochTime } = require('./helpers')
 
 const simple = (datavalue) => datavalue.value
@@ -28049,7 +28449,7 @@ module.exports = (datatype, datavalue, options) => {
   return claimParsers[datatype](datavalue, options)
 }
 
-},{"./helpers":361}],363:[function(require,module,exports){
+},{"./helpers":363}],365:[function(require,module,exports){
 const simplifyEntity = require('./simplify_entity')
 
 module.exports = {
@@ -28065,7 +28465,7 @@ module.exports = {
   }
 }
 
-},{"./simplify_entity":365}],364:[function(require,module,exports){
+},{"./simplify_entity":367}],366:[function(require,module,exports){
 const parseClaim = require('./parse_claim')
 
 // Expects an entity 'claims' object
@@ -28139,7 +28539,7 @@ const parseOptions = function (options) {
 
 module.exports = { simplifyClaims, simplifyPropertyClaims, simplifyClaim }
 
-},{"./parse_claim":362}],365:[function(require,module,exports){
+},{"./parse_claim":364}],367:[function(require,module,exports){
 const { simplifyClaims } = require('./simplify_claims')
 const simplify = require('./simplify_text_attributes')
 
@@ -28156,7 +28556,7 @@ module.exports = (entity) => {
   }
 }
 
-},{"./simplify_claims":364,"./simplify_text_attributes":366}],366:[function(require,module,exports){
+},{"./simplify_claims":366,"./simplify_text_attributes":368}],368:[function(require,module,exports){
 const simplifyTextAttributes = (multivalue, attribute) => data => {
   const simplifiedData = {}
   Object.keys(data).forEach(lang => {
@@ -28177,7 +28577,7 @@ module.exports = {
   sitelinks: simplifyTextAttributes(false, 'title')
 }
 
-},{}],367:[function(require,module,exports){
+},{}],369:[function(require,module,exports){
 module.exports = function (wikidataTime) {
   const sign = wikidataTime[0]
   const rest = wikidataTime.slice(1)
@@ -28209,7 +28609,7 @@ const parseInvalideDate = function (sign, rest) {
   return fullDateData(sign, year)
 }
 
-},{}],368:[function(require,module,exports){
+},{}],370:[function(require,module,exports){
 const wdk = module.exports = {}
 
 wdk.searchEntities = require('./queries/search_entities')
@@ -28239,7 +28639,7 @@ wdk.getWikidataIdsFromWikipediaTitles = wdk.getWikidataIdsFromSitelinks
 
 Object.assign(wdk, require('./helpers/helpers'))
 
-},{"../lib/helpers/simplify_entity":365,"../lib/helpers/simplify_text_attributes":366,"./helpers/helpers":361,"./helpers/parse_responses":363,"./helpers/simplify_claims":364,"./queries/get_entities":369,"./queries/get_many_entities":370,"./queries/get_reverse_claims":371,"./queries/get_wikidata_ids_from_sitelinks":372,"./queries/search_entities":373,"./queries/simplify_sparql_results":374,"./queries/sparql_query":375}],369:[function(require,module,exports){
+},{"../lib/helpers/simplify_entity":367,"../lib/helpers/simplify_text_attributes":368,"./helpers/helpers":363,"./helpers/parse_responses":365,"./helpers/simplify_claims":366,"./queries/get_entities":371,"./queries/get_many_entities":372,"./queries/get_reverse_claims":373,"./queries/get_wikidata_ids_from_sitelinks":374,"./queries/search_entities":375,"./queries/simplify_sparql_results":376,"./queries/sparql_query":377}],371:[function(require,module,exports){
 const buildUrl = require('../utils/build_url')
 const { isPlainObject, forceArray, shortLang } = require('../utils/utils')
 
@@ -28284,7 +28684,7 @@ module.exports = function (ids, languages, props, format) {
   return buildUrl(query)
 }
 
-},{"../utils/build_url":376,"../utils/utils":378}],370:[function(require,module,exports){
+},{"../utils/build_url":378,"../utils/utils":380}],372:[function(require,module,exports){
 const getEntities = require('./get_entities')
 const { isPlainObject } = require('../utils/utils')
 
@@ -28315,7 +28715,7 @@ const getIdsGroups = function (ids) {
   return groups
 }
 
-},{"../utils/utils":378,"./get_entities":369}],371:[function(require,module,exports){
+},{"../utils/utils":380,"./get_entities":371}],373:[function(require,module,exports){
 const helpers = require('../helpers/helpers')
 const sparqlQuery = require('./sparql_query')
 
@@ -28354,7 +28754,7 @@ function caseInsensitiveValueQuery (property, value, limit) {
   LIMIT ${limit}`
 }
 
-},{"../helpers/helpers":361,"./sparql_query":375}],372:[function(require,module,exports){
+},{"../helpers/helpers":363,"./sparql_query":377}],374:[function(require,module,exports){
 const buildUrl = require('../utils/build_url')
 const { isPlainObject, forceArray, shortLang } = require('../utils/utils')
 
@@ -28404,7 +28804,7 @@ module.exports = function (titles, sites, languages, props, format) {
 // convert 2 letters language code to Wikipedia sitelinks code
 const parseSite = (site) => site.length === 2 ? `${site}wiki` : site
 
-},{"../utils/build_url":376,"../utils/utils":378}],373:[function(require,module,exports){
+},{"../utils/build_url":378,"../utils/utils":380}],375:[function(require,module,exports){
 const buildUrl = require('../utils/build_url')
 const { isPlainObject } = require('../utils/utils')
 
@@ -28437,7 +28837,7 @@ module.exports = function (search, language, limit, format, uselang) {
   })
 }
 
-},{"../utils/build_url":376,"../utils/utils":378}],374:[function(require,module,exports){
+},{"../utils/build_url":378,"../utils/utils":380}],376:[function(require,module,exports){
 module.exports = function (input) {
   if (typeof input === 'string') input = JSON.parse(input)
 
@@ -28524,7 +28924,7 @@ const getSimplifiedResult = function (varsWithLabel, varsWithout) {
   }
 }
 
-},{}],375:[function(require,module,exports){
+},{}],377:[function(require,module,exports){
 const { fixedEncodeURIComponent } = require('../utils/utils')
 
 module.exports = function (sparql) {
@@ -28532,7 +28932,7 @@ module.exports = function (sparql) {
   return `https://query.wikidata.org/sparql?format=json&query=${query}`
 }
 
-},{"../utils/utils":378}],376:[function(require,module,exports){
+},{"../utils/utils":380}],378:[function(require,module,exports){
 const wikidataApiRoot = 'https://www.wikidata.org/w/api.php'
 const isBrowser = typeof location !== 'undefined' && typeof document !== 'undefined'
 const qs = isBrowser ? require('./querystring_lite') : require('querystring')
@@ -28544,7 +28944,7 @@ module.exports = function (queryObj) {
   return wikidataApiRoot + '?' + qs.stringify(queryObj)
 }
 
-},{"./querystring_lite":377,"querystring":356}],377:[function(require,module,exports){
+},{"./querystring_lite":379,"querystring":358}],379:[function(require,module,exports){
 module.exports = {
   stringify: function (queryObj) {
     var qstring = ''
@@ -28563,7 +28963,7 @@ module.exports = {
   }
 }
 
-},{}],378:[function(require,module,exports){
+},{}],380:[function(require,module,exports){
 module.exports = {
   // Ex: keep only 'fr' in 'fr_FR'
   shortLang: (language) => language.toLowerCase().split(/[^a-z]/)[0],
@@ -28590,7 +28990,7 @@ module.exports = {
 
 const encodeCharacter = (c) => '%' + c.charCodeAt(0).toString(16)
 
-},{}],379:[function(require,module,exports){
+},{}],381:[function(require,module,exports){
 module.exports={
   "name": "citation-js",
   "version": "0.3.0-4",
@@ -28632,7 +29032,8 @@ module.exports={
     "brfs": "^1.4.3",
     "browserify": "^13.3.0",
     "jasmine-node": "^1.14.5",
-    "jsdoc": "^3.4.2"
+    "jsdoc": "^3.4.2",
+    "standard": "^10.0.2"
   },
   "babel": {
     "presets": [
@@ -28641,8 +29042,9 @@ module.exports={
     ]
   },
   "scripts": {
+    "lint": "standard \"src/**/*.js\" \"test/**/*.js\"",
     "test": "node_modules/jasmine-node/bin/jasmine-node test/citation-0.2.spec.js",
-    "babel": "babel src -d lib",
+    "babel": "babel src -d lib --copy-files",
     "dev:test": "npm run babel && npm run test",
     "dev:test-browser": "npm run babel && npm run test && npm run build && npm run build-test",
     "build": "browserify -r ./lib/index.js:citation-js -o build/citation.js && cp build/citation.js docs/src/citation.js",
@@ -28662,56 +29064,63 @@ module.exports={
   "homepage": "https://github.com/larsgw/citation.js#readme"
 }
 
-},{}],380:[function(require,module,exports){
-var Cite = require('../lib/index.js');
+},{}],382:[function(require,module,exports){
+/* global describe, require, it, expect */
 
-const file_1 = "{\"entities\":{\"Q21972834\":{\"pageid\":24004990,\"ns\":0,\"title\":\"Q21972834\",\"lastrevid\":468197350,\"modified\":\"2017-03-19T14:57:48Z\",\"type\":\"item\",\"id\":\"Q21972834\",\"labels\":{\"en\":{\"language\":\"en\",\"value\":\"Assembling the 20 Gb white spruce (Picea glauca) genome from whole-genome shotgun sequencing data\"},\"nl\":{\"language\":\"nl\",\"value\":\"Assembling the 20 Gb white spruce (Picea glauca) genome from whole-genome shotgun sequencing data\"}},\"descriptions\":{\"en\":{\"language\":\"en\",\"value\":\"scientific article\"},\"nl\":{\"language\":\"nl\",\"value\":\"wetenschappelijk artikel (gepubliceerd op 2013/06/15)\"},\"cs\":{\"language\":\"cs\",\"value\":\"v\\u011bdeck\\u00fd \\u010dl\\u00e1nek publikovan\\u00fd v roce 2013\"},\"fr\":{\"language\":\"fr\",\"value\":\"article scientifique (publi\\u00e9 2013/06/15)\"},\"it\":{\"language\":\"it\",\"value\":\"articolo scientifico (pubblicato il 2013/06/15)\"},\"da\":{\"language\":\"da\",\"value\":\"videnskabelig artikel (udgivet  2013/06/15)\"},\"sk\":{\"language\":\"sk\",\"value\":\"vedeck\\u00fd \\u010dl\\u00e1nok (publikovan\\u00fd 2013/06/15)\"},\"pt\":{\"language\":\"pt\",\"value\":\"artigo cient\\u00edfico (publicado na 2013/06/15)\"},\"hy\":{\"language\":\"hy\",\"value\":\"\\u0563\\u056b\\u057f\\u0561\\u056f\\u0561\\u0576 \\u0570\\u0578\\u0564\\u057e\\u0561\\u056e\"}},\"aliases\":[],\"claims\":{\"P698\":[{\"mainsnak\":{\"snaktype\":\"value\",\"property\":\"P698\",\"datavalue\":{\"value\":\"23698863\",\"type\":\"string\"},\"datatype\":\"external-id\"},\"type\":\"statement\",\"id\":\"Q21972834$D435A2F3-E2A8-45A7-922A-A6BB72F9A79C\",\"rank\":\"normal\"}],\"P932\":[{\"mainsnak\":{\"snaktype\":\"value\",\"property\":\"P932\",\"datavalue\":{\"value\":\"3673215\",\"type\":\"string\"},\"datatype\":\"external-id\"},\"type\":\"statement\",\"id\":\"Q21972834$F4959183-FB89-410E-BF33-DF9B1AF81ECE\",\"rank\":\"normal\"}],\"P31\":[{\"mainsnak\":{\"snaktype\":\"value\",\"property\":\"P31\",\"datavalue\":{\"value\":{\"entity-type\":\"item\",\"numeric-id\":13442814,\"id\":\"Q13442814\"},\"type\":\"wikibase-entityid\"},\"datatype\":\"wikibase-item\"},\"type\":\"statement\",\"id\":\"Q21972834$E4DCC072-BD1A-4FDF-BFED-E1D981E5E81F\",\"rank\":\"normal\"}],\"P1476\":[{\"mainsnak\":{\"snaktype\":\"value\",\"property\":\"P1476\",\"datavalue\":{\"value\":{\"text\":\"Assembling the 20 Gb white spruce (Picea glauca) genome from whole-genome shotgun sequencing data\",\"language\":\"en\"},\"type\":\"monolingualtext\"},\"datatype\":\"monolingualtext\"},\"type\":\"statement\",\"id\":\"Q21972834$D8C2FFB6-2710-4AFA-92A3-A859ABAA1FED\",\"rank\":\"normal\"}],\"P364\":[{\"mainsnak\":{\"snaktype\":\"value\",\"property\":\"P364\",\"datavalue\":{\"value\":{\"entity-type\":\"item\",\"numeric-id\":1860,\"id\":\"Q1860\"},\"type\":\"wikibase-entityid\"},\"datatype\":\"wikibase-item\"},\"type\":\"statement\",\"id\":\"Q21972834$D55F7830-D04D-48B0-B739-9E4CC9B2F275\",\"rank\":\"normal\"}],\"P478\":[{\"mainsnak\":{\"snaktype\":\"value\",\"property\":\"P478\",\"datavalue\":{\"value\":\"29\",\"type\":\"string\"},\"datatype\":\"string\"},\"type\":\"statement\",\"id\":\"Q21972834$963935D7-041A-4E92-9D9B-F254A5426BAD\",\"rank\":\"normal\"}],\"P433\":[{\"mainsnak\":{\"snaktype\":\"value\",\"property\":\"P433\",\"datavalue\":{\"value\":\"12\",\"type\":\"string\"},\"datatype\":\"string\"},\"type\":\"statement\",\"id\":\"Q21972834$47B925A9-A53F-43A3-888D-BEA79E399D4D\",\"rank\":\"normal\"}],\"P577\":[{\"mainsnak\":{\"snaktype\":\"value\",\"property\":\"P577\",\"datavalue\":{\"value\":{\"time\":\"+2013-06-15T00:00:00Z\",\"timezone\":0,\"before\":0,\"after\":0,\"precision\":11,\"calendarmodel\":\"http://www.wikidata.org/entity/Q1985727\"},\"type\":\"time\"},\"datatype\":\"time\"},\"type\":\"statement\",\"id\":\"Q21972834$9EDE475C-7403-4A66-A6A5-0458E7782689\",\"rank\":\"normal\"}],\"P304\":[{\"mainsnak\":{\"snaktype\":\"value\",\"property\":\"P304\",\"datavalue\":{\"value\":\"1492-7\",\"type\":\"string\"},\"datatype\":\"string\"},\"type\":\"statement\",\"id\":\"Q21972834$92D5DD57-B5F0-42B6-9508-6D5CEB82FF3C\",\"rank\":\"normal\"}],\"P2093\":[{\"mainsnak\":{\"snaktype\":\"value\",\"property\":\"P2093\",\"datavalue\":{\"value\":\"Inanc Birol\",\"type\":\"string\"},\"datatype\":\"string\"},\"type\":\"statement\",\"qualifiers\":{\"P1545\":[{\"snaktype\":\"value\",\"property\":\"P1545\",\"hash\":\"862c83ca2949d7eb8f41b4bf1a4521ed18cdebb8\",\"datavalue\":{\"value\":\"1\",\"type\":\"string\"},\"datatype\":\"string\"}]},\"qualifiers-order\":[\"P1545\"],\"id\":\"Q21972834$CCE7BCBB-5804-4CCA-B762-83EEA827F32D\",\"rank\":\"normal\"},{\"mainsnak\":{\"snaktype\":\"value\",\"property\":\"P2093\",\"datavalue\":{\"value\":\"Anthony Raymond\",\"type\":\"string\"},\"datatype\":\"string\"},\"type\":\"statement\",\"qualifiers\":{\"P1545\":[{\"snaktype\":\"value\",\"property\":\"P1545\",\"hash\":\"af1310a34ec80620d4fdd7bb8ca76e492fe6630e\",\"datavalue\":{\"value\":\"2\",\"type\":\"string\"},\"datatype\":\"string\"}]},\"qualifiers-order\":[\"P1545\"],\"id\":\"Q21972834$BC54A9F8-68FF-4F6E-8111-A449A15BDB57\",\"rank\":\"normal\"},{\"mainsnak\":{\"snaktype\":\"value\",\"property\":\"P2093\",\"datavalue\":{\"value\":\"Shaun D Jackman\",\"type\":\"string\"},\"datatype\":\"string\"},\"type\":\"statement\",\"qualifiers\":{\"P1545\":[{\"snaktype\":\"value\",\"property\":\"P1545\",\"hash\":\"3c1e388cba3487113121af5bfa59a2f657bf21bd\",\"datavalue\":{\"value\":\"3\",\"type\":\"string\"},\"datatype\":\"string\"}]},\"qualifiers-order\":[\"P1545\"],\"id\":\"Q21972834$CB76DCFD-DA2A-4673-ACDB-B8CA71D1069C\",\"rank\":\"normal\"},{\"mainsnak\":{\"snaktype\":\"value\",\"property\":\"P2093\",\"datavalue\":{\"value\":\"Stephen Pleasance\",\"type\":\"string\"},\"datatype\":\"string\"},\"type\":\"statement\",\"qualifiers\":{\"P1545\":[{\"snaktype\":\"value\",\"property\":\"P1545\",\"hash\":\"a82b0aa3ccf1a266e15473824b4391f6d9da4be0\",\"datavalue\":{\"value\":\"4\",\"type\":\"string\"},\"datatype\":\"string\"}]},\"qualifiers-order\":[\"P1545\"],\"id\":\"Q21972834$CC360BCE-0D0D-4E92-8F68-1780D1106620\",\"rank\":\"normal\"},{\"mainsnak\":{\"snaktype\":\"value\",\"property\":\"P2093\",\"datavalue\":{\"value\":\"Robin Coope\",\"type\":\"string\"},\"datatype\":\"string\"},\"type\":\"statement\",\"qualifiers\":{\"P1545\":[{\"snaktype\":\"value\",\"property\":\"P1545\",\"hash\":\"c8e1b85012703eb0f44ff876ec773596f3794872\",\"datavalue\":{\"value\":\"5\",\"type\":\"string\"},\"datatype\":\"string\"}]},\"qualifiers-order\":[\"P1545\"],\"id\":\"Q21972834$EC1B7589-BE7F-450C-B4AE-978EF4440682\",\"rank\":\"normal\"},{\"mainsnak\":{\"snaktype\":\"value\",\"property\":\"P2093\",\"datavalue\":{\"value\":\"Greg A Taylor\",\"type\":\"string\"},\"datatype\":\"string\"},\"type\":\"statement\",\"qualifiers\":{\"P1545\":[{\"snaktype\":\"value\",\"property\":\"P1545\",\"hash\":\"5d30572c5a5693878a66231c29c9bb3e4a870527\",\"datavalue\":{\"value\":\"6\",\"type\":\"string\"},\"datatype\":\"string\"}]},\"qualifiers-order\":[\"P1545\"],\"id\":\"Q21972834$AA1A005B-0985-4CCB-AB13-782A3385EB54\",\"rank\":\"normal\"},{\"mainsnak\":{\"snaktype\":\"value\",\"property\":\"P2093\",\"datavalue\":{\"value\":\"Macaire Man Saint Yuen\",\"type\":\"string\"},\"datatype\":\"string\"},\"type\":\"statement\",\"qualifiers\":{\"P1545\":[{\"snaktype\":\"value\",\"property\":\"P1545\",\"hash\":\"ecdcd65e6c9f103dedc06d856ce957af15050f7b\",\"datavalue\":{\"value\":\"7\",\"type\":\"string\"},\"datatype\":\"string\"}]},\"qualifiers-order\":[\"P1545\"],\"id\":\"Q21972834$A0812623-AA81-48CB-AA51-1E04CCC21FE9\",\"rank\":\"normal\"},{\"mainsnak\":{\"snaktype\":\"value\",\"property\":\"P2093\",\"datavalue\":{\"value\":\"Christopher I Keeling\",\"type\":\"string\"},\"datatype\":\"string\"},\"type\":\"statement\",\"qualifiers\":{\"P1545\":[{\"snaktype\":\"value\",\"property\":\"P1545\",\"hash\":\"c6a0d2bbafefdc6d21b25af4357c9887085c2f89\",\"datavalue\":{\"value\":\"8\",\"type\":\"string\"},\"datatype\":\"string\"}]},\"qualifiers-order\":[\"P1545\"],\"id\":\"Q21972834$10084000-8CC4-466F-8FCC-E391C12D9C27\",\"rank\":\"normal\"},{\"mainsnak\":{\"snaktype\":\"value\",\"property\":\"P2093\",\"datavalue\":{\"value\":\"Dana Brand\",\"type\":\"string\"},\"datatype\":\"string\"},\"type\":\"statement\",\"qualifiers\":{\"P1545\":[{\"snaktype\":\"value\",\"property\":\"P1545\",\"hash\":\"ebbb7b4bd5f12eaa0eb9415b51fd725fd993a644\",\"datavalue\":{\"value\":\"9\",\"type\":\"string\"},\"datatype\":\"string\"}]},\"qualifiers-order\":[\"P1545\"],\"id\":\"Q21972834$6A62350D-4505-43DF-A8D4-719B8282ED8E\",\"rank\":\"normal\"},{\"mainsnak\":{\"snaktype\":\"value\",\"property\":\"P2093\",\"datavalue\":{\"value\":\"Benjamin P Vandervalk\",\"type\":\"string\"},\"datatype\":\"string\"},\"type\":\"statement\",\"qualifiers\":{\"P1545\":[{\"snaktype\":\"value\",\"property\":\"P1545\",\"hash\":\"6d824c4548dc9c84054b9e446b8ea72e50efebba\",\"datavalue\":{\"value\":\"10\",\"type\":\"string\"},\"datatype\":\"string\"}]},\"qualifiers-order\":[\"P1545\"],\"id\":\"Q21972834$B78884CC-1F88-45B1-B1B3-DD9DDF2B2FBE\",\"rank\":\"normal\"},{\"mainsnak\":{\"snaktype\":\"value\",\"property\":\"P2093\",\"datavalue\":{\"value\":\"Heather Kirk\",\"type\":\"string\"},\"datatype\":\"string\"},\"type\":\"statement\",\"qualifiers\":{\"P1545\":[{\"snaktype\":\"value\",\"property\":\"P1545\",\"hash\":\"938c75f8b1bafb9e19a4c1a079b8b8e5d997c7fa\",\"datavalue\":{\"value\":\"11\",\"type\":\"string\"},\"datatype\":\"string\"}]},\"qualifiers-order\":[\"P1545\"],\"id\":\"Q21972834$C9117C71-EAEB-4DC0-909B-9876C53A3802\",\"rank\":\"normal\"},{\"mainsnak\":{\"snaktype\":\"value\",\"property\":\"P2093\",\"datavalue\":{\"value\":\"Pawan Pandoh\",\"type\":\"string\"},\"datatype\":\"string\"},\"type\":\"statement\",\"qualifiers\":{\"P1545\":[{\"snaktype\":\"value\",\"property\":\"P1545\",\"hash\":\"472f0889b6914293dcbc4d0f62bb3e3ce6d37ce0\",\"datavalue\":{\"value\":\"12\",\"type\":\"string\"},\"datatype\":\"string\"}]},\"qualifiers-order\":[\"P1545\"],\"id\":\"Q21972834$22C57E2F-6C2C-46DC-B184-0CA7F529B6C3\",\"rank\":\"normal\"},{\"mainsnak\":{\"snaktype\":\"value\",\"property\":\"P2093\",\"datavalue\":{\"value\":\"Richard A Moore\",\"type\":\"string\"},\"datatype\":\"string\"},\"type\":\"statement\",\"qualifiers\":{\"P1545\":[{\"snaktype\":\"value\",\"property\":\"P1545\",\"hash\":\"a0d6d71b9401a527331dc2a8a59c54448b5ad98c\",\"datavalue\":{\"value\":\"13\",\"type\":\"string\"},\"datatype\":\"string\"}]},\"qualifiers-order\":[\"P1545\"],\"id\":\"Q21972834$C86DCED7-41A0-4653-9E9F-AEDD1BB5392C\",\"rank\":\"normal\"},{\"mainsnak\":{\"snaktype\":\"value\",\"property\":\"P2093\",\"datavalue\":{\"value\":\"Yongjun Zhao\",\"type\":\"string\"},\"datatype\":\"string\"},\"type\":\"statement\",\"qualifiers\":{\"P1545\":[{\"snaktype\":\"value\",\"property\":\"P1545\",\"hash\":\"89d1857be00646d34838dc372e42882e3e20dca2\",\"datavalue\":{\"value\":\"14\",\"type\":\"string\"},\"datatype\":\"string\"}]},\"qualifiers-order\":[\"P1545\"],\"id\":\"Q21972834$507B8D2B-1EA4-492D-93E8-3D9236BDECB7\",\"rank\":\"normal\"},{\"mainsnak\":{\"snaktype\":\"value\",\"property\":\"P2093\",\"datavalue\":{\"value\":\"Andrew J Mungall\",\"type\":\"string\"},\"datatype\":\"string\"},\"type\":\"statement\",\"qualifiers\":{\"P1545\":[{\"snaktype\":\"value\",\"property\":\"P1545\",\"hash\":\"502af995394385a6c11fd2f00b65598853ceedc5\",\"datavalue\":{\"value\":\"15\",\"type\":\"string\"},\"datatype\":\"string\"}]},\"qualifiers-order\":[\"P1545\"],\"id\":\"Q21972834$99499BC4-F219-4E8E-B79C-0FFC4AF1919F\",\"rank\":\"normal\"},{\"mainsnak\":{\"snaktype\":\"value\",\"property\":\"P2093\",\"datavalue\":{\"value\":\"Barry Jaquish\",\"type\":\"string\"},\"datatype\":\"string\"},\"type\":\"statement\",\"qualifiers\":{\"P1545\":[{\"snaktype\":\"value\",\"property\":\"P1545\",\"hash\":\"f83c26be8edcec43a735fc3c85792c85d186a3c0\",\"datavalue\":{\"value\":\"16\",\"type\":\"string\"},\"datatype\":\"string\"}]},\"qualifiers-order\":[\"P1545\"],\"id\":\"Q21972834$2A452CB5-1392-48A3-8BDF-C3859ECD2CD7\",\"rank\":\"normal\"},{\"mainsnak\":{\"snaktype\":\"value\",\"property\":\"P2093\",\"datavalue\":{\"value\":\"Alvin Yanchuk\",\"type\":\"string\"},\"datatype\":\"string\"},\"type\":\"statement\",\"qualifiers\":{\"P1545\":[{\"snaktype\":\"value\",\"property\":\"P1545\",\"hash\":\"a89a718f20b227073f3b4f3aa4ad0e99ba77b542\",\"datavalue\":{\"value\":\"17\",\"type\":\"string\"},\"datatype\":\"string\"}]},\"qualifiers-order\":[\"P1545\"],\"id\":\"Q21972834$ED126A91-2089-4B3C-8BB6-D7FE81E05C63\",\"rank\":\"normal\"},{\"mainsnak\":{\"snaktype\":\"value\",\"property\":\"P2093\",\"datavalue\":{\"value\":\"Carol Ritland\",\"type\":\"string\"},\"datatype\":\"string\"},\"type\":\"statement\",\"qualifiers\":{\"P1545\":[{\"snaktype\":\"value\",\"property\":\"P1545\",\"hash\":\"c5201cb20b41dc2f0e2cf1361e16829d4cfbeac8\",\"datavalue\":{\"value\":\"18\",\"type\":\"string\"},\"datatype\":\"string\"}]},\"qualifiers-order\":[\"P1545\"],\"id\":\"Q21972834$F64D5FE6-92D9-4818-9BB6-D162DBA85A97\",\"rank\":\"normal\"},{\"mainsnak\":{\"snaktype\":\"value\",\"property\":\"P2093\",\"datavalue\":{\"value\":\"Brian Boyle\",\"type\":\"string\"},\"datatype\":\"string\"},\"type\":\"statement\",\"qualifiers\":{\"P1545\":[{\"snaktype\":\"value\",\"property\":\"P1545\",\"hash\":\"5ffccd25ee75ecddecb8ccbb1a59226cc3ba535a\",\"datavalue\":{\"value\":\"19\",\"type\":\"string\"},\"datatype\":\"string\"}]},\"qualifiers-order\":[\"P1545\"],\"id\":\"Q21972834$9D020847-DAD2-4573-8896-C6826BEBB4DD\",\"rank\":\"normal\"},{\"mainsnak\":{\"snaktype\":\"value\",\"property\":\"P2093\",\"datavalue\":{\"value\":\"Jean Bousquet\",\"type\":\"string\"},\"datatype\":\"string\"},\"type\":\"statement\",\"qualifiers\":{\"P1545\":[{\"snaktype\":\"value\",\"property\":\"P1545\",\"hash\":\"481220fb9e6317d9e822186cb47365497d25e036\",\"datavalue\":{\"value\":\"20\",\"type\":\"string\"},\"datatype\":\"string\"}]},\"qualifiers-order\":[\"P1545\"],\"id\":\"Q21972834$76CDF015-D56A-4539-9A29-ED6328566BA9\",\"rank\":\"normal\"},{\"mainsnak\":{\"snaktype\":\"value\",\"property\":\"P2093\",\"datavalue\":{\"value\":\"Kermit Ritland\",\"type\":\"string\"},\"datatype\":\"string\"},\"type\":\"statement\",\"qualifiers\":{\"P1545\":[{\"snaktype\":\"value\",\"property\":\"P1545\",\"hash\":\"a39223fc722bb1c9ca54fe188d9596d0c68f055e\",\"datavalue\":{\"value\":\"21\",\"type\":\"string\"},\"datatype\":\"string\"}]},\"qualifiers-order\":[\"P1545\"],\"id\":\"Q21972834$72D5B3B1-FBCD-4290-BEEE-7685B6721AA1\",\"rank\":\"normal\"},{\"mainsnak\":{\"snaktype\":\"value\",\"property\":\"P2093\",\"datavalue\":{\"value\":\"John Mackay\",\"type\":\"string\"},\"datatype\":\"string\"},\"type\":\"statement\",\"qualifiers\":{\"P1545\":[{\"snaktype\":\"value\",\"property\":\"P1545\",\"hash\":\"9cbb98590835f35bfb66ed07cbb2eb8d11df44f6\",\"datavalue\":{\"value\":\"22\",\"type\":\"string\"},\"datatype\":\"string\"}]},\"qualifiers-order\":[\"P1545\"],\"id\":\"Q21972834$382410E5-912A-4D08-BEA6-238379D5BA61\",\"rank\":\"normal\"},{\"mainsnak\":{\"snaktype\":\"value\",\"property\":\"P2093\",\"datavalue\":{\"value\":\"J\\u00f6rg Bohlmann\",\"type\":\"string\"},\"datatype\":\"string\"},\"type\":\"statement\",\"qualifiers\":{\"P1545\":[{\"snaktype\":\"value\",\"property\":\"P1545\",\"hash\":\"4f1ac2caf70d43bd788bfc3a341e0bb0bbfd1d74\",\"datavalue\":{\"value\":\"23\",\"type\":\"string\"},\"datatype\":\"string\"}]},\"qualifiers-order\":[\"P1545\"],\"id\":\"Q21972834$AB1BF467-D7E4-484F-A9EE-C132AA0DADA3\",\"rank\":\"normal\"},{\"mainsnak\":{\"snaktype\":\"value\",\"property\":\"P2093\",\"datavalue\":{\"value\":\"Steven J M Jones\",\"type\":\"string\"},\"datatype\":\"string\"},\"type\":\"statement\",\"qualifiers\":{\"P1545\":[{\"snaktype\":\"value\",\"property\":\"P1545\",\"hash\":\"94cf58b8db10ca17aedd1fafdf9f40a82b8bdc91\",\"datavalue\":{\"value\":\"24\",\"type\":\"string\"},\"datatype\":\"string\"}]},\"qualifiers-order\":[\"P1545\"],\"id\":\"Q21972834$E584D000-D3FA-48EB-B0B6-18A64D489469\",\"rank\":\"normal\"}],\"P2860\":[{\"mainsnak\":{\"snaktype\":\"value\",\"property\":\"P2860\",\"datavalue\":{\"value\":{\"entity-type\":\"item\",\"numeric-id\":21183990,\"id\":\"Q21183990\"},\"type\":\"wikibase-entityid\"},\"datatype\":\"wikibase-item\"},\"type\":\"statement\",\"id\":\"Q21972834$067675E1-BE45-48EC-9927-9B505DCD2C38\",\"rank\":\"normal\",\"references\":[{\"hash\":\"8500b2f44393a196a3228b76ca7bc69e1f3f5cc1\",\"snaks\":{\"P248\":[{\"snaktype\":\"value\",\"property\":\"P248\",\"datavalue\":{\"value\":{\"entity-type\":\"item\",\"numeric-id\":229883,\"id\":\"Q229883\"},\"type\":\"wikibase-entityid\"},\"datatype\":\"wikibase-item\"}],\"P854\":[{\"snaktype\":\"value\",\"property\":\"P854\",\"datavalue\":{\"value\":\"https://eutils.ncbi.nlm.nih.gov/entrez/eutils/elink.fcgi?dbfrom=pmc&linkname=pmc_refs_pubmed&retmode=json&id=3673215\",\"type\":\"string\"},\"datatype\":\"url\"}],\"P813\":[{\"snaktype\":\"value\",\"property\":\"P813\",\"datavalue\":{\"value\":{\"time\":\"+2017-03-19T00:00:00Z\",\"timezone\":0,\"before\":0,\"after\":0,\"precision\":11,\"calendarmodel\":\"http://www.wikidata.org/entity/Q1985727\"},\"type\":\"time\"},\"datatype\":\"time\"}]},\"snaks-order\":[\"P248\",\"P854\",\"P813\"]}]},{\"mainsnak\":{\"snaktype\":\"value\",\"property\":\"P2860\",\"datavalue\":{\"value\":{\"entity-type\":\"item\",\"numeric-id\":22065964,\"id\":\"Q22065964\"},\"type\":\"wikibase-entityid\"},\"datatype\":\"wikibase-item\"},\"type\":\"statement\",\"id\":\"Q21972834$B272C2D7-F0C1-4B7E-B5F0-ADBD60D235EB\",\"rank\":\"normal\",\"references\":[{\"hash\":\"8500b2f44393a196a3228b76ca7bc69e1f3f5cc1\",\"snaks\":{\"P248\":[{\"snaktype\":\"value\",\"property\":\"P248\",\"datavalue\":{\"value\":{\"entity-type\":\"item\",\"numeric-id\":229883,\"id\":\"Q229883\"},\"type\":\"wikibase-entityid\"},\"datatype\":\"wikibase-item\"}],\"P854\":[{\"snaktype\":\"value\",\"property\":\"P854\",\"datavalue\":{\"value\":\"https://eutils.ncbi.nlm.nih.gov/entrez/eutils/elink.fcgi?dbfrom=pmc&linkname=pmc_refs_pubmed&retmode=json&id=3673215\",\"type\":\"string\"},\"datatype\":\"url\"}],\"P813\":[{\"snaktype\":\"value\",\"property\":\"P813\",\"datavalue\":{\"value\":{\"time\":\"+2017-03-19T00:00:00Z\",\"timezone\":0,\"before\":0,\"after\":0,\"precision\":11,\"calendarmodel\":\"http://www.wikidata.org/entity/Q1985727\"},\"type\":\"time\"},\"datatype\":\"time\"}]},\"snaks-order\":[\"P248\",\"P854\",\"P813\"]}]},{\"mainsnak\":{\"snaktype\":\"value\",\"property\":\"P2860\",\"datavalue\":{\"value\":{\"entity-type\":\"item\",\"numeric-id\":24629733,\"id\":\"Q24629733\"},\"type\":\"wikibase-entityid\"},\"datatype\":\"wikibase-item\"},\"type\":\"statement\",\"id\":\"Q21972834$85D12800-291A-4885-8DDE-42657DE6E026\",\"rank\":\"normal\",\"references\":[{\"hash\":\"8500b2f44393a196a3228b76ca7bc69e1f3f5cc1\",\"snaks\":{\"P248\":[{\"snaktype\":\"value\",\"property\":\"P248\",\"datavalue\":{\"value\":{\"entity-type\":\"item\",\"numeric-id\":229883,\"id\":\"Q229883\"},\"type\":\"wikibase-entityid\"},\"datatype\":\"wikibase-item\"}],\"P854\":[{\"snaktype\":\"value\",\"property\":\"P854\",\"datavalue\":{\"value\":\"https://eutils.ncbi.nlm.nih.gov/entrez/eutils/elink.fcgi?dbfrom=pmc&linkname=pmc_refs_pubmed&retmode=json&id=3673215\",\"type\":\"string\"},\"datatype\":\"url\"}],\"P813\":[{\"snaktype\":\"value\",\"property\":\"P813\",\"datavalue\":{\"value\":{\"time\":\"+2017-03-19T00:00:00Z\",\"timezone\":0,\"before\":0,\"after\":0,\"precision\":11,\"calendarmodel\":\"http://www.wikidata.org/entity/Q1985727\"},\"type\":\"time\"},\"datatype\":\"time\"}]},\"snaks-order\":[\"P248\",\"P854\",\"P813\"]}]},{\"mainsnak\":{\"snaktype\":\"value\",\"property\":\"P2860\",\"datavalue\":{\"value\":{\"entity-type\":\"item\",\"numeric-id\":24625559,\"id\":\"Q24625559\"},\"type\":\"wikibase-entityid\"},\"datatype\":\"wikibase-item\"},\"type\":\"statement\",\"id\":\"Q21972834$EA35C15C-3F08-41DE-A369-06B084B6BAA3\",\"rank\":\"normal\",\"references\":[{\"hash\":\"8500b2f44393a196a3228b76ca7bc69e1f3f5cc1\",\"snaks\":{\"P248\":[{\"snaktype\":\"value\",\"property\":\"P248\",\"datavalue\":{\"value\":{\"entity-type\":\"item\",\"numeric-id\":229883,\"id\":\"Q229883\"},\"type\":\"wikibase-entityid\"},\"datatype\":\"wikibase-item\"}],\"P854\":[{\"snaktype\":\"value\",\"property\":\"P854\",\"datavalue\":{\"value\":\"https://eutils.ncbi.nlm.nih.gov/entrez/eutils/elink.fcgi?dbfrom=pmc&linkname=pmc_refs_pubmed&retmode=json&id=3673215\",\"type\":\"string\"},\"datatype\":\"url\"}],\"P813\":[{\"snaktype\":\"value\",\"property\":\"P813\",\"datavalue\":{\"value\":{\"time\":\"+2017-03-19T00:00:00Z\",\"timezone\":0,\"before\":0,\"after\":0,\"precision\":11,\"calendarmodel\":\"http://www.wikidata.org/entity/Q1985727\"},\"type\":\"time\"},\"datatype\":\"time\"}]},\"snaks-order\":[\"P248\",\"P854\",\"P813\"]}]},{\"mainsnak\":{\"snaktype\":\"value\",\"property\":\"P2860\",\"datavalue\":{\"value\":{\"entity-type\":\"item\",\"numeric-id\":22122211,\"id\":\"Q22122211\"},\"type\":\"wikibase-entityid\"},\"datatype\":\"wikibase-item\"},\"type\":\"statement\",\"id\":\"Q21972834$9F920256-4000-405C-AACB-E96C6D992603\",\"rank\":\"normal\",\"references\":[{\"hash\":\"8500b2f44393a196a3228b76ca7bc69e1f3f5cc1\",\"snaks\":{\"P248\":[{\"snaktype\":\"value\",\"property\":\"P248\",\"datavalue\":{\"value\":{\"entity-type\":\"item\",\"numeric-id\":229883,\"id\":\"Q229883\"},\"type\":\"wikibase-entityid\"},\"datatype\":\"wikibase-item\"}],\"P854\":[{\"snaktype\":\"value\",\"property\":\"P854\",\"datavalue\":{\"value\":\"https://eutils.ncbi.nlm.nih.gov/entrez/eutils/elink.fcgi?dbfrom=pmc&linkname=pmc_refs_pubmed&retmode=json&id=3673215\",\"type\":\"string\"},\"datatype\":\"url\"}],\"P813\":[{\"snaktype\":\"value\",\"property\":\"P813\",\"datavalue\":{\"value\":{\"time\":\"+2017-03-19T00:00:00Z\",\"timezone\":0,\"before\":0,\"after\":0,\"precision\":11,\"calendarmodel\":\"http://www.wikidata.org/entity/Q1985727\"},\"type\":\"time\"},\"datatype\":\"time\"}]},\"snaks-order\":[\"P248\",\"P854\",\"P813\"]}]},{\"mainsnak\":{\"snaktype\":\"value\",\"property\":\"P2860\",\"datavalue\":{\"value\":{\"entity-type\":\"item\",\"numeric-id\":21183889,\"id\":\"Q21183889\"},\"type\":\"wikibase-entityid\"},\"datatype\":\"wikibase-item\"},\"type\":\"statement\",\"id\":\"Q21972834$8F12AA50-1D1B-42C6-B6AD-E9A9587F53EB\",\"rank\":\"normal\",\"references\":[{\"hash\":\"8500b2f44393a196a3228b76ca7bc69e1f3f5cc1\",\"snaks\":{\"P248\":[{\"snaktype\":\"value\",\"property\":\"P248\",\"datavalue\":{\"value\":{\"entity-type\":\"item\",\"numeric-id\":229883,\"id\":\"Q229883\"},\"type\":\"wikibase-entityid\"},\"datatype\":\"wikibase-item\"}],\"P854\":[{\"snaktype\":\"value\",\"property\":\"P854\",\"datavalue\":{\"value\":\"https://eutils.ncbi.nlm.nih.gov/entrez/eutils/elink.fcgi?dbfrom=pmc&linkname=pmc_refs_pubmed&retmode=json&id=3673215\",\"type\":\"string\"},\"datatype\":\"url\"}],\"P813\":[{\"snaktype\":\"value\",\"property\":\"P813\",\"datavalue\":{\"value\":{\"time\":\"+2017-03-19T00:00:00Z\",\"timezone\":0,\"before\":0,\"after\":0,\"precision\":11,\"calendarmodel\":\"http://www.wikidata.org/entity/Q1985727\"},\"type\":\"time\"},\"datatype\":\"time\"}]},\"snaks-order\":[\"P248\",\"P854\",\"P813\"]}]},{\"mainsnak\":{\"snaktype\":\"value\",\"property\":\"P2860\",\"datavalue\":{\"value\":{\"entity-type\":\"item\",\"numeric-id\":21261967,\"id\":\"Q21261967\"},\"type\":\"wikibase-entityid\"},\"datatype\":\"wikibase-item\"},\"type\":\"statement\",\"id\":\"Q21972834$A4899485-8489-4D70-82E7-82C216106962\",\"rank\":\"normal\",\"references\":[{\"hash\":\"8500b2f44393a196a3228b76ca7bc69e1f3f5cc1\",\"snaks\":{\"P248\":[{\"snaktype\":\"value\",\"property\":\"P248\",\"datavalue\":{\"value\":{\"entity-type\":\"item\",\"numeric-id\":229883,\"id\":\"Q229883\"},\"type\":\"wikibase-entityid\"},\"datatype\":\"wikibase-item\"}],\"P854\":[{\"snaktype\":\"value\",\"property\":\"P854\",\"datavalue\":{\"value\":\"https://eutils.ncbi.nlm.nih.gov/entrez/eutils/elink.fcgi?dbfrom=pmc&linkname=pmc_refs_pubmed&retmode=json&id=3673215\",\"type\":\"string\"},\"datatype\":\"url\"}],\"P813\":[{\"snaktype\":\"value\",\"property\":\"P813\",\"datavalue\":{\"value\":{\"time\":\"+2017-03-19T00:00:00Z\",\"timezone\":0,\"before\":0,\"after\":0,\"precision\":11,\"calendarmodel\":\"http://www.wikidata.org/entity/Q1985727\"},\"type\":\"time\"},\"datatype\":\"time\"}]},\"snaks-order\":[\"P248\",\"P854\",\"P813\"]}]},{\"mainsnak\":{\"snaktype\":\"value\",\"property\":\"P2860\",\"datavalue\":{\"value\":{\"entity-type\":\"item\",\"numeric-id\":24807126,\"id\":\"Q24807126\"},\"type\":\"wikibase-entityid\"},\"datatype\":\"wikibase-item\"},\"type\":\"statement\",\"id\":\"Q21972834$FD2F304E-61D2-41EE-8AB5-B5CA1267B7CB\",\"rank\":\"normal\",\"references\":[{\"hash\":\"8500b2f44393a196a3228b76ca7bc69e1f3f5cc1\",\"snaks\":{\"P248\":[{\"snaktype\":\"value\",\"property\":\"P248\",\"datavalue\":{\"value\":{\"entity-type\":\"item\",\"numeric-id\":229883,\"id\":\"Q229883\"},\"type\":\"wikibase-entityid\"},\"datatype\":\"wikibase-item\"}],\"P854\":[{\"snaktype\":\"value\",\"property\":\"P854\",\"datavalue\":{\"value\":\"https://eutils.ncbi.nlm.nih.gov/entrez/eutils/elink.fcgi?dbfrom=pmc&linkname=pmc_refs_pubmed&retmode=json&id=3673215\",\"type\":\"string\"},\"datatype\":\"url\"}],\"P813\":[{\"snaktype\":\"value\",\"property\":\"P813\",\"datavalue\":{\"value\":{\"time\":\"+2017-03-19T00:00:00Z\",\"timezone\":0,\"before\":0,\"after\":0,\"precision\":11,\"calendarmodel\":\"http://www.wikidata.org/entity/Q1985727\"},\"type\":\"time\"},\"datatype\":\"time\"}]},\"snaks-order\":[\"P248\",\"P854\",\"P813\"]}]},{\"mainsnak\":{\"snaktype\":\"value\",\"property\":\"P2860\",\"datavalue\":{\"value\":{\"entity-type\":\"item\",\"numeric-id\":21045365,\"id\":\"Q21045365\"},\"type\":\"wikibase-entityid\"},\"datatype\":\"wikibase-item\"},\"type\":\"statement\",\"id\":\"Q21972834$113AD736-4A2B-479D-BA9D-0615FEA01A84\",\"rank\":\"normal\",\"references\":[{\"hash\":\"8500b2f44393a196a3228b76ca7bc69e1f3f5cc1\",\"snaks\":{\"P248\":[{\"snaktype\":\"value\",\"property\":\"P248\",\"datavalue\":{\"value\":{\"entity-type\":\"item\",\"numeric-id\":229883,\"id\":\"Q229883\"},\"type\":\"wikibase-entityid\"},\"datatype\":\"wikibase-item\"}],\"P854\":[{\"snaktype\":\"value\",\"property\":\"P854\",\"datavalue\":{\"value\":\"https://eutils.ncbi.nlm.nih.gov/entrez/eutils/elink.fcgi?dbfrom=pmc&linkname=pmc_refs_pubmed&retmode=json&id=3673215\",\"type\":\"string\"},\"datatype\":\"url\"}],\"P813\":[{\"snaktype\":\"value\",\"property\":\"P813\",\"datavalue\":{\"value\":{\"time\":\"+2017-03-19T00:00:00Z\",\"timezone\":0,\"before\":0,\"after\":0,\"precision\":11,\"calendarmodel\":\"http://www.wikidata.org/entity/Q1985727\"},\"type\":\"time\"},\"datatype\":\"time\"}]},\"snaks-order\":[\"P248\",\"P854\",\"P813\"]}]},{\"mainsnak\":{\"snaktype\":\"value\",\"property\":\"P2860\",\"datavalue\":{\"value\":{\"entity-type\":\"item\",\"numeric-id\":22122143,\"id\":\"Q22122143\"},\"type\":\"wikibase-entityid\"},\"datatype\":\"wikibase-item\"},\"type\":\"statement\",\"id\":\"Q21972834$16FE34E1-5AAC-4D98-898A-7CC4699861F0\",\"rank\":\"normal\",\"references\":[{\"hash\":\"8500b2f44393a196a3228b76ca7bc69e1f3f5cc1\",\"snaks\":{\"P248\":[{\"snaktype\":\"value\",\"property\":\"P248\",\"datavalue\":{\"value\":{\"entity-type\":\"item\",\"numeric-id\":229883,\"id\":\"Q229883\"},\"type\":\"wikibase-entityid\"},\"datatype\":\"wikibase-item\"}],\"P854\":[{\"snaktype\":\"value\",\"property\":\"P854\",\"datavalue\":{\"value\":\"https://eutils.ncbi.nlm.nih.gov/entrez/eutils/elink.fcgi?dbfrom=pmc&linkname=pmc_refs_pubmed&retmode=json&id=3673215\",\"type\":\"string\"},\"datatype\":\"url\"}],\"P813\":[{\"snaktype\":\"value\",\"property\":\"P813\",\"datavalue\":{\"value\":{\"time\":\"+2017-03-19T00:00:00Z\",\"timezone\":0,\"before\":0,\"after\":0,\"precision\":11,\"calendarmodel\":\"http://www.wikidata.org/entity/Q1985727\"},\"type\":\"time\"},\"datatype\":\"time\"}]},\"snaks-order\":[\"P248\",\"P854\",\"P813\"]}]},{\"mainsnak\":{\"snaktype\":\"value\",\"property\":\"P2860\",\"datavalue\":{\"value\":{\"entity-type\":\"item\",\"numeric-id\":22065842,\"id\":\"Q22065842\"},\"type\":\"wikibase-entityid\"},\"datatype\":\"wikibase-item\"},\"type\":\"statement\",\"id\":\"Q21972834$A0BF94ED-B679-4A17-B68A-2FE7AF6858AA\",\"rank\":\"normal\",\"references\":[{\"hash\":\"8500b2f44393a196a3228b76ca7bc69e1f3f5cc1\",\"snaks\":{\"P248\":[{\"snaktype\":\"value\",\"property\":\"P248\",\"datavalue\":{\"value\":{\"entity-type\":\"item\",\"numeric-id\":229883,\"id\":\"Q229883\"},\"type\":\"wikibase-entityid\"},\"datatype\":\"wikibase-item\"}],\"P854\":[{\"snaktype\":\"value\",\"property\":\"P854\",\"datavalue\":{\"value\":\"https://eutils.ncbi.nlm.nih.gov/entrez/eutils/elink.fcgi?dbfrom=pmc&linkname=pmc_refs_pubmed&retmode=json&id=3673215\",\"type\":\"string\"},\"datatype\":\"url\"}],\"P813\":[{\"snaktype\":\"value\",\"property\":\"P813\",\"datavalue\":{\"value\":{\"time\":\"+2017-03-19T00:00:00Z\",\"timezone\":0,\"before\":0,\"after\":0,\"precision\":11,\"calendarmodel\":\"http://www.wikidata.org/entity/Q1985727\"},\"type\":\"time\"},\"datatype\":\"time\"}]},\"snaks-order\":[\"P248\",\"P854\",\"P813\"]}]},{\"mainsnak\":{\"snaktype\":\"value\",\"property\":\"P2860\",\"datavalue\":{\"value\":{\"entity-type\":\"item\",\"numeric-id\":25938991,\"id\":\"Q25938991\"},\"type\":\"wikibase-entityid\"},\"datatype\":\"wikibase-item\"},\"type\":\"statement\",\"id\":\"Q21972834$513BAA39-8D82-4485-A25D-DB222C90B284\",\"rank\":\"normal\",\"references\":[{\"hash\":\"8500b2f44393a196a3228b76ca7bc69e1f3f5cc1\",\"snaks\":{\"P248\":[{\"snaktype\":\"value\",\"property\":\"P248\",\"datavalue\":{\"value\":{\"entity-type\":\"item\",\"numeric-id\":229883,\"id\":\"Q229883\"},\"type\":\"wikibase-entityid\"},\"datatype\":\"wikibase-item\"}],\"P854\":[{\"snaktype\":\"value\",\"property\":\"P854\",\"datavalue\":{\"value\":\"https://eutils.ncbi.nlm.nih.gov/entrez/eutils/elink.fcgi?dbfrom=pmc&linkname=pmc_refs_pubmed&retmode=json&id=3673215\",\"type\":\"string\"},\"datatype\":\"url\"}],\"P813\":[{\"snaktype\":\"value\",\"property\":\"P813\",\"datavalue\":{\"value\":{\"time\":\"+2017-03-19T00:00:00Z\",\"timezone\":0,\"before\":0,\"after\":0,\"precision\":11,\"calendarmodel\":\"http://www.wikidata.org/entity/Q1985727\"},\"type\":\"time\"},\"datatype\":\"time\"}]},\"snaks-order\":[\"P248\",\"P854\",\"P813\"]}]},{\"mainsnak\":{\"snaktype\":\"value\",\"property\":\"P2860\",\"datavalue\":{\"value\":{\"entity-type\":\"item\",\"numeric-id\":27860816,\"id\":\"Q27860816\"},\"type\":\"wikibase-entityid\"},\"datatype\":\"wikibase-item\"},\"type\":\"statement\",\"id\":\"Q21972834$DD899F96-5D71-4BBC-A87E-B710B870C6C3\",\"rank\":\"normal\",\"references\":[{\"hash\":\"8500b2f44393a196a3228b76ca7bc69e1f3f5cc1\",\"snaks\":{\"P248\":[{\"snaktype\":\"value\",\"property\":\"P248\",\"datavalue\":{\"value\":{\"entity-type\":\"item\",\"numeric-id\":229883,\"id\":\"Q229883\"},\"type\":\"wikibase-entityid\"},\"datatype\":\"wikibase-item\"}],\"P854\":[{\"snaktype\":\"value\",\"property\":\"P854\",\"datavalue\":{\"value\":\"https://eutils.ncbi.nlm.nih.gov/entrez/eutils/elink.fcgi?dbfrom=pmc&linkname=pmc_refs_pubmed&retmode=json&id=3673215\",\"type\":\"string\"},\"datatype\":\"url\"}],\"P813\":[{\"snaktype\":\"value\",\"property\":\"P813\",\"datavalue\":{\"value\":{\"time\":\"+2017-03-19T00:00:00Z\",\"timezone\":0,\"before\":0,\"after\":0,\"precision\":11,\"calendarmodel\":\"http://www.wikidata.org/entity/Q1985727\"},\"type\":\"time\"},\"datatype\":\"time\"}]},\"snaks-order\":[\"P248\",\"P854\",\"P813\"]}]}],\"P1433\":[{\"mainsnak\":{\"snaktype\":\"value\",\"property\":\"P1433\",\"datavalue\":{\"value\":{\"entity-type\":\"item\",\"numeric-id\":4914910,\"id\":\"Q4914910\"},\"type\":\"wikibase-entityid\"},\"datatype\":\"wikibase-item\"},\"type\":\"statement\",\"id\":\"Q21972834$72BB933D-4685-4F38-AE7C-1FBB71952A69\",\"rank\":\"normal\",\"references\":[{\"hash\":\"b28161529c0364292a8cfa0d6bba43b07f20a220\",\"snaks\":{\"P248\":[{\"snaktype\":\"value\",\"property\":\"P248\",\"datavalue\":{\"value\":{\"entity-type\":\"item\",\"numeric-id\":180686,\"id\":\"Q180686\"},\"type\":\"wikibase-entityid\"},\"datatype\":\"wikibase-item\"}]},\"snaks-order\":[\"P248\"]}]}],\"P3181\":[{\"mainsnak\":{\"snaktype\":\"value\",\"property\":\"P3181\",\"datavalue\":{\"value\":\"475928\",\"type\":\"string\"},\"datatype\":\"external-id\"},\"type\":\"statement\",\"id\":\"Q21972834$FDDF4A83-6970-4A50-8A59-26DFA5C2621C\",\"rank\":\"normal\",\"references\":[{\"hash\":\"dddcd22da5416e1b89c60d679e3171626efce131\",\"snaks\":{\"P248\":[{\"snaktype\":\"value\",\"property\":\"P248\",\"datavalue\":{\"value\":{\"entity-type\":\"item\",\"numeric-id\":26382154,\"id\":\"Q26382154\"},\"type\":\"wikibase-entityid\"},\"datatype\":\"wikibase-item\"}]},\"snaks-order\":[\"P248\"]}]}],\"P921\":[{\"mainsnak\":{\"snaktype\":\"value\",\"property\":\"P921\",\"datavalue\":{\"value\":{\"entity-type\":\"item\",\"numeric-id\":128116,\"id\":\"Q128116\"},\"type\":\"wikibase-entityid\"},\"datatype\":\"wikibase-item\"},\"type\":\"statement\",\"id\":\"Q21972834$e8eae0f3-4581-47f5-9528-04c967854423\",\"rank\":\"normal\"},{\"mainsnak\":{\"snaktype\":\"value\",\"property\":\"P921\",\"datavalue\":{\"value\":{\"entity-type\":\"item\",\"numeric-id\":1073526,\"id\":\"Q1073526\"},\"type\":\"wikibase-entityid\"},\"datatype\":\"wikibase-item\"},\"type\":\"statement\",\"id\":\"Q21972834$64a4a2b9-4d01-0532-bfd4-605bd9484f3c\",\"rank\":\"normal\"}],\"P356\":[{\"mainsnak\":{\"snaktype\":\"value\",\"property\":\"P356\",\"datavalue\":{\"value\":\"10.1093/BIOINFORMATICS/BTT178\",\"type\":\"string\"},\"datatype\":\"external-id\"},\"type\":\"statement\",\"id\":\"Q21972834$2FB0F783-8FE0-4E40-9080-7CD9DBD6906B\",\"rank\":\"normal\"}]},\"sitelinks\":[]}}}",
-      file_2 = "{\"entities\":{\"Q27795847\":{\"pageid\":29511090,\"ns\":0,\"title\":\"Q27795847\",\"lastrevid\":453265099,\"modified\":\"2017-02-20T20:13:32Z\",\"type\":\"item\",\"id\":\"Q27795847\",\"labels\":{\"en\":{\"language\":\"en\",\"value\":\"SPLASH, a hashed identifier for mass spectra\"},\"nl\":{\"language\":\"nl\",\"value\":\"SPLASH, a hashed identifier for mass spectra\"}},\"descriptions\":{\"fr\":{\"language\":\"fr\",\"value\":\"article scientifique (publi\\u00e9 2016/11/08)\"},\"cs\":{\"language\":\"cs\",\"value\":\"v\\u011bdeck\\u00fd \\u010dl\\u00e1nek publikovan\\u00fd v roce 2016\"},\"nl\":{\"language\":\"nl\",\"value\":\"wetenschappelijk artikel (gepubliceerd op 2016/11/08)\"},\"it\":{\"language\":\"it\",\"value\":\"articolo scientifico (pubblicato il 2016/11/08)\"},\"sk\":{\"language\":\"sk\",\"value\":\"vedeck\\u00fd \\u010dl\\u00e1nok (publikovan\\u00fd 2016/11/08)\"},\"da\":{\"language\":\"da\",\"value\":\"videnskabelig artikel (udgivet  2016/11/08)\"},\"pt\":{\"language\":\"pt\",\"value\":\"artigo cient\\u00edfico (publicado na 2016/11/08)\"},\"en\":{\"language\":\"en\",\"value\":\"scientific article\"},\"hy\":{\"language\":\"hy\",\"value\":\"\\u0563\\u056b\\u057f\\u0561\\u056f\\u0561\\u0576 \\u0570\\u0578\\u0564\\u057e\\u0561\\u056e\"}},\"aliases\":[],\"claims\":{\"P31\":[{\"mainsnak\":{\"snaktype\":\"value\",\"property\":\"P31\",\"datavalue\":{\"value\":{\"entity-type\":\"item\",\"numeric-id\":13442814,\"id\":\"Q13442814\"},\"type\":\"wikibase-entityid\"},\"datatype\":\"wikibase-item\"},\"type\":\"statement\",\"id\":\"Q27795847$FE0E533D-7E2D-4FC1-AB73-22196E9D9455\",\"rank\":\"normal\"}],\"P577\":[{\"mainsnak\":{\"snaktype\":\"value\",\"property\":\"P577\",\"datavalue\":{\"value\":{\"time\":\"+2016-11-08T00:00:00Z\",\"timezone\":0,\"before\":0,\"after\":0,\"precision\":11,\"calendarmodel\":\"http://www.wikidata.org/entity/Q1985727\"},\"type\":\"time\"},\"datatype\":\"time\"},\"type\":\"statement\",\"id\":\"Q27795847$7695c7e8-4988-843f-d638-1a765f6bd0f1\",\"rank\":\"normal\"}],\"P1476\":[{\"mainsnak\":{\"snaktype\":\"value\",\"property\":\"P1476\",\"datavalue\":{\"value\":{\"text\":\"SPLASH, a hashed identifier for mass spectra\",\"language\":\"en\"},\"type\":\"monolingualtext\"},\"datatype\":\"monolingualtext\"},\"type\":\"statement\",\"id\":\"Q27795847$c12e8199-4e9b-8d86-1f89-c53255e1b89f\",\"rank\":\"normal\"}],\"P2093\":[{\"mainsnak\":{\"snaktype\":\"value\",\"property\":\"P2093\",\"datavalue\":{\"value\":\"Gert Wohlgemuth\",\"type\":\"string\"},\"datatype\":\"string\"},\"type\":\"statement\",\"qualifiers\":{\"P1545\":[{\"snaktype\":\"value\",\"property\":\"P1545\",\"hash\":\"862c83ca2949d7eb8f41b4bf1a4521ed18cdebb8\",\"datavalue\":{\"value\":\"1\",\"type\":\"string\"},\"datatype\":\"string\"}],\"P1416\":[{\"snaktype\":\"value\",\"property\":\"P1416\",\"hash\":\"17f7c88944bcd21a5b1de89be8babd7895377505\",\"datavalue\":{\"value\":{\"entity-type\":\"item\",\"numeric-id\":129421,\"id\":\"Q129421\"},\"type\":\"wikibase-entityid\"},\"datatype\":\"wikibase-item\"}]},\"qualifiers-order\":[\"P1545\",\"P1416\"],\"id\":\"Q27795847$5a37a217-4790-7488-341c-3f40aac679d5\",\"rank\":\"normal\"},{\"mainsnak\":{\"snaktype\":\"value\",\"property\":\"P2093\",\"datavalue\":{\"value\":\"Sajjan S Mehta\",\"type\":\"string\"},\"datatype\":\"string\"},\"type\":\"statement\",\"qualifiers\":{\"P1545\":[{\"snaktype\":\"value\",\"property\":\"P1545\",\"hash\":\"af1310a34ec80620d4fdd7bb8ca76e492fe6630e\",\"datavalue\":{\"value\":\"2\",\"type\":\"string\"},\"datatype\":\"string\"}]},\"qualifiers-order\":[\"P1545\"],\"id\":\"Q27795847$e029413e-465a-6e7f-bbc4-7bf7d095bdf5\",\"rank\":\"normal\"},{\"mainsnak\":{\"snaktype\":\"value\",\"property\":\"P2093\",\"datavalue\":{\"value\":\"Ramon F Mejia\",\"type\":\"string\"},\"datatype\":\"string\"},\"type\":\"statement\",\"qualifiers\":{\"P1545\":[{\"snaktype\":\"value\",\"property\":\"P1545\",\"hash\":\"3c1e388cba3487113121af5bfa59a2f657bf21bd\",\"datavalue\":{\"value\":\"3\",\"type\":\"string\"},\"datatype\":\"string\"}]},\"qualifiers-order\":[\"P1545\"],\"id\":\"Q27795847$459a6034-4de2-d02c-71b3-de0d009d3ca0\",\"rank\":\"normal\"},{\"mainsnak\":{\"snaktype\":\"value\",\"property\":\"P2093\",\"datavalue\":{\"value\":\"Diego Pedrosa\",\"type\":\"string\"},\"datatype\":\"string\"},\"type\":\"statement\",\"qualifiers\":{\"P1545\":[{\"snaktype\":\"value\",\"property\":\"P1545\",\"hash\":\"c8e1b85012703eb0f44ff876ec773596f3794872\",\"datavalue\":{\"value\":\"5\",\"type\":\"string\"},\"datatype\":\"string\"}]},\"qualifiers-order\":[\"P1545\"],\"id\":\"Q27795847$27938ccf-4c1f-0fdc-5250-8c9b7ab1ab0c\",\"rank\":\"normal\"},{\"mainsnak\":{\"snaktype\":\"value\",\"property\":\"P2093\",\"datavalue\":{\"value\":\"Tom\\u00e1\\u0161 Pluskal\",\"type\":\"string\"},\"datatype\":\"string\"},\"type\":\"statement\",\"qualifiers\":{\"P1545\":[{\"snaktype\":\"value\",\"property\":\"P1545\",\"hash\":\"5d30572c5a5693878a66231c29c9bb3e4a870527\",\"datavalue\":{\"value\":\"6\",\"type\":\"string\"},\"datatype\":\"string\"}],\"P1416\":[{\"snaktype\":\"value\",\"property\":\"P1416\",\"hash\":\"a47de0d3aa3e3d2844ebf22e9624c4efb47ccbdd\",\"datavalue\":{\"value\":{\"entity-type\":\"item\",\"numeric-id\":825987,\"id\":\"Q825987\"},\"type\":\"wikibase-entityid\"},\"datatype\":\"wikibase-item\"}]},\"qualifiers-order\":[\"P1545\",\"P1416\"],\"id\":\"Q27795847$4414bb01-4540-a5d2-bb41-78cee294f865\",\"rank\":\"normal\"},{\"mainsnak\":{\"snaktype\":\"value\",\"property\":\"P2093\",\"datavalue\":{\"value\":\"Michael Wilson\",\"type\":\"string\"},\"datatype\":\"string\"},\"type\":\"statement\",\"qualifiers\":{\"P1545\":[{\"snaktype\":\"value\",\"property\":\"P1545\",\"hash\":\"ebbb7b4bd5f12eaa0eb9415b51fd725fd993a644\",\"datavalue\":{\"value\":\"9\",\"type\":\"string\"},\"datatype\":\"string\"}]},\"qualifiers-order\":[\"P1545\"],\"id\":\"Q27795847$b76ba909-4412-7b4b-1b29-acc6b19a31c3\",\"rank\":\"normal\"},{\"mainsnak\":{\"snaktype\":\"value\",\"property\":\"P2093\",\"datavalue\":{\"value\":\"Masanori Arita\",\"type\":\"string\"},\"datatype\":\"string\"},\"type\":\"statement\",\"qualifiers\":{\"P1545\":[{\"snaktype\":\"value\",\"property\":\"P1545\",\"hash\":\"938c75f8b1bafb9e19a4c1a079b8b8e5d997c7fa\",\"datavalue\":{\"value\":\"11\",\"type\":\"string\"},\"datatype\":\"string\"}],\"P1416\":[{\"snaktype\":\"value\",\"property\":\"P1416\",\"hash\":\"6f8ef5a2bbb33916e6b5870a7274e8730efa1f21\",\"datavalue\":{\"value\":{\"entity-type\":\"item\",\"numeric-id\":1153275,\"id\":\"Q1153275\"},\"type\":\"wikibase-entityid\"},\"datatype\":\"wikibase-item\"}]},\"qualifiers-order\":[\"P1545\",\"P1416\"],\"id\":\"Q27795847$f55f9709-47c0-879a-80ee-468a59ee7993\",\"rank\":\"normal\"},{\"mainsnak\":{\"snaktype\":\"value\",\"property\":\"P2093\",\"datavalue\":{\"value\":\"Pieter C Dorrestein\",\"type\":\"string\"},\"datatype\":\"string\"},\"type\":\"statement\",\"qualifiers\":{\"P1545\":[{\"snaktype\":\"value\",\"property\":\"P1545\",\"hash\":\"472f0889b6914293dcbc4d0f62bb3e3ce6d37ce0\",\"datavalue\":{\"value\":\"12\",\"type\":\"string\"},\"datatype\":\"string\"}]},\"qualifiers-order\":[\"P1545\"],\"id\":\"Q27795847$8c511a6b-4213-8d9d-ed2c-61261d710ca9\",\"rank\":\"normal\"},{\"mainsnak\":{\"snaktype\":\"value\",\"property\":\"P2093\",\"datavalue\":{\"value\":\"Nuno Bandeira\",\"type\":\"string\"},\"datatype\":\"string\"},\"type\":\"statement\",\"qualifiers\":{\"P1545\":[{\"snaktype\":\"value\",\"property\":\"P1545\",\"hash\":\"a0d6d71b9401a527331dc2a8a59c54448b5ad98c\",\"datavalue\":{\"value\":\"13\",\"type\":\"string\"},\"datatype\":\"string\"}]},\"qualifiers-order\":[\"P1545\"],\"id\":\"Q27795847$84869301-4041-a4b4-3496-f0f724c03ac5\",\"rank\":\"normal\"},{\"mainsnak\":{\"snaktype\":\"value\",\"property\":\"P2093\",\"datavalue\":{\"value\":\"Mingxun Wang\",\"type\":\"string\"},\"datatype\":\"string\"},\"type\":\"statement\",\"qualifiers\":{\"P1545\":[{\"snaktype\":\"value\",\"property\":\"P1545\",\"hash\":\"89d1857be00646d34838dc372e42882e3e20dca2\",\"datavalue\":{\"value\":\"14\",\"type\":\"string\"},\"datatype\":\"string\"}],\"P1416\":[{\"snaktype\":\"value\",\"property\":\"P1416\",\"hash\":\"777bee7b0612da6cfca8a663b6c60ffdbed72f98\",\"datavalue\":{\"value\":{\"entity-type\":\"item\",\"numeric-id\":622664,\"id\":\"Q622664\"},\"type\":\"wikibase-entityid\"},\"datatype\":\"wikibase-item\"}]},\"qualifiers-order\":[\"P1545\",\"P1416\"],\"id\":\"Q27795847$d1287f99-4e2f-c26a-2257-1fa71a5f9b67\",\"rank\":\"normal\"},{\"mainsnak\":{\"snaktype\":\"value\",\"property\":\"P2093\",\"datavalue\":{\"value\":\"Tobias Schulze\",\"type\":\"string\"},\"datatype\":\"string\"},\"type\":\"statement\",\"qualifiers\":{\"P1545\":[{\"snaktype\":\"value\",\"property\":\"P1545\",\"hash\":\"502af995394385a6c11fd2f00b65598853ceedc5\",\"datavalue\":{\"value\":\"15\",\"type\":\"string\"},\"datatype\":\"string\"}]},\"qualifiers-order\":[\"P1545\"],\"id\":\"Q27795847$05d35d06-4164-b410-d163-7228c8a6bacf\",\"rank\":\"normal\"},{\"mainsnak\":{\"snaktype\":\"value\",\"property\":\"P2093\",\"datavalue\":{\"value\":\"Reza M Salek\",\"type\":\"string\"},\"datatype\":\"string\"},\"type\":\"statement\",\"qualifiers\":{\"P1545\":[{\"snaktype\":\"value\",\"property\":\"P1545\",\"hash\":\"f83c26be8edcec43a735fc3c85792c85d186a3c0\",\"datavalue\":{\"value\":\"16\",\"type\":\"string\"},\"datatype\":\"string\"}]},\"qualifiers-order\":[\"P1545\"],\"id\":\"Q27795847$975616fd-41c1-5797-f792-16d317d4e17c\",\"rank\":\"normal\"},{\"mainsnak\":{\"snaktype\":\"value\",\"property\":\"P2093\",\"datavalue\":{\"value\":\"Venkata Chandrasekhar Nainala\",\"type\":\"string\"},\"datatype\":\"string\"},\"type\":\"statement\",\"qualifiers\":{\"P1545\":[{\"snaktype\":\"value\",\"property\":\"P1545\",\"hash\":\"c5201cb20b41dc2f0e2cf1361e16829d4cfbeac8\",\"datavalue\":{\"value\":\"18\",\"type\":\"string\"},\"datatype\":\"string\"}]},\"qualifiers-order\":[\"P1545\"],\"id\":\"Q27795847$68c00f70-40f7-52ac-6b51-27340aee5757\",\"rank\":\"normal\"},{\"mainsnak\":{\"snaktype\":\"value\",\"property\":\"P2093\",\"datavalue\":{\"value\":\"Robert Mistrik\",\"type\":\"string\"},\"datatype\":\"string\"},\"type\":\"statement\",\"qualifiers\":{\"P1545\":[{\"snaktype\":\"value\",\"property\":\"P1545\",\"hash\":\"5ffccd25ee75ecddecb8ccbb1a59226cc3ba535a\",\"datavalue\":{\"value\":\"19\",\"type\":\"string\"},\"datatype\":\"string\"}]},\"qualifiers-order\":[\"P1545\"],\"id\":\"Q27795847$7e774c4a-41f4-c0c9-b0ee-391e74a772dd\",\"rank\":\"normal\"},{\"mainsnak\":{\"snaktype\":\"value\",\"property\":\"P2093\",\"datavalue\":{\"value\":\"Takaaki Nishioka\",\"type\":\"string\"},\"datatype\":\"string\"},\"type\":\"statement\",\"qualifiers\":{\"P1545\":[{\"snaktype\":\"value\",\"property\":\"P1545\",\"hash\":\"481220fb9e6317d9e822186cb47365497d25e036\",\"datavalue\":{\"value\":\"20\",\"type\":\"string\"},\"datatype\":\"string\"}]},\"qualifiers-order\":[\"P1545\"],\"id\":\"Q27795847$8d8845f3-44c5-b259-8aea-b55827411fdc\",\"rank\":\"normal\"}],\"P478\":[{\"mainsnak\":{\"snaktype\":\"value\",\"property\":\"P478\",\"datavalue\":{\"value\":\"34\",\"type\":\"string\"},\"datatype\":\"string\"},\"type\":\"statement\",\"id\":\"Q27795847$a090a3aa-4a02-fbe5-9aca-df819f80e84c\",\"rank\":\"normal\"}],\"P304\":[{\"mainsnak\":{\"snaktype\":\"value\",\"property\":\"P304\",\"datavalue\":{\"value\":\"1099\\u20131101\",\"type\":\"string\"},\"datatype\":\"string\"},\"type\":\"statement\",\"id\":\"Q27795847$9ec79308-4361-58b7-2219-df398124c52e\",\"rank\":\"normal\"}],\"P1433\":[{\"mainsnak\":{\"snaktype\":\"value\",\"property\":\"P1433\",\"datavalue\":{\"value\":{\"entity-type\":\"item\",\"numeric-id\":1893837,\"id\":\"Q1893837\"},\"type\":\"wikibase-entityid\"},\"datatype\":\"wikibase-item\"},\"type\":\"statement\",\"id\":\"Q27795847$b771b8e8-4ccd-82d8-02e0-df734ad9b35b\",\"rank\":\"normal\"}],\"P921\":[{\"mainsnak\":{\"snaktype\":\"value\",\"property\":\"P921\",\"datavalue\":{\"value\":{\"entity-type\":\"item\",\"numeric-id\":12149006,\"id\":\"Q12149006\"},\"type\":\"wikibase-entityid\"},\"datatype\":\"wikibase-item\"},\"type\":\"statement\",\"id\":\"Q27795847$b4edba31-4e22-d1d0-60fd-8e7a4258a3a4\",\"rank\":\"normal\"}],\"P50\":[{\"mainsnak\":{\"snaktype\":\"value\",\"property\":\"P50\",\"datavalue\":{\"value\":{\"entity-type\":\"item\",\"numeric-id\":5111731,\"id\":\"Q5111731\"},\"type\":\"wikibase-entityid\"},\"datatype\":\"wikibase-item\"},\"type\":\"statement\",\"qualifiers\":{\"P1545\":[{\"snaktype\":\"value\",\"property\":\"P1545\",\"hash\":\"a89a718f20b227073f3b4f3aa4ad0e99ba77b542\",\"datavalue\":{\"value\":\"17\",\"type\":\"string\"},\"datatype\":\"string\"}],\"P1416\":[{\"snaktype\":\"value\",\"property\":\"P1416\",\"hash\":\"3c814103e8488af45c5f9ddb4f3a83548284f46a\",\"datavalue\":{\"value\":{\"entity-type\":\"item\",\"numeric-id\":1341845,\"id\":\"Q1341845\"},\"type\":\"wikibase-entityid\"},\"datatype\":\"wikibase-item\"}]},\"qualifiers-order\":[\"P1545\",\"P1416\"],\"id\":\"Q27795847$cfda0f9e-40ab-fe07-d2c1-a646a2588c34\",\"rank\":\"normal\"},{\"mainsnak\":{\"snaktype\":\"value\",\"property\":\"P50\",\"datavalue\":{\"value\":{\"entity-type\":\"item\",\"numeric-id\":20895241,\"id\":\"Q20895241\"},\"type\":\"wikibase-entityid\"},\"datatype\":\"wikibase-item\"},\"type\":\"statement\",\"qualifiers\":{\"P1545\":[{\"snaktype\":\"value\",\"property\":\"P1545\",\"hash\":\"c6a0d2bbafefdc6d21b25af4357c9887085c2f89\",\"datavalue\":{\"value\":\"8\",\"type\":\"string\"},\"datatype\":\"string\"}],\"P1416\":[{\"snaktype\":\"value\",\"property\":\"P1416\",\"hash\":\"f3f4b1106be9c9432af1675a98182889725faf11\",\"datavalue\":{\"value\":{\"entity-type\":\"item\",\"numeric-id\":19845644,\"id\":\"Q19845644\"},\"type\":\"wikibase-entityid\"},\"datatype\":\"wikibase-item\"}],\"P1932\":[{\"snaktype\":\"value\",\"property\":\"P1932\",\"hash\":\"f897727ae72d779987cc1cbb9f667d3e7c74a0c2\",\"datavalue\":{\"value\":\"Egon L Willighagen\",\"type\":\"string\"},\"datatype\":\"string\"}]},\"qualifiers-order\":[\"P1545\",\"P1416\",\"P1932\"],\"id\":\"Q27795847$4a94239d-4f1b-77a8-41b6-2c04e1f5a079\",\"rank\":\"normal\"},{\"mainsnak\":{\"snaktype\":\"value\",\"property\":\"P50\",\"datavalue\":{\"value\":{\"entity-type\":\"item\",\"numeric-id\":27863244,\"id\":\"Q27863244\"},\"type\":\"wikibase-entityid\"},\"datatype\":\"wikibase-item\"},\"type\":\"statement\",\"qualifiers\":{\"P1545\":[{\"snaktype\":\"value\",\"property\":\"P1545\",\"hash\":\"ecdcd65e6c9f103dedc06d856ce957af15050f7b\",\"datavalue\":{\"value\":\"7\",\"type\":\"string\"},\"datatype\":\"string\"}],\"P1416\":[{\"snaktype\":\"value\",\"property\":\"P1416\",\"hash\":\"2af45dffb1e796266913f5fecff0b01fb42a2142\",\"datavalue\":{\"value\":{\"entity-type\":\"item\",\"numeric-id\":678765,\"id\":\"Q678765\"},\"type\":\"wikibase-entityid\"},\"datatype\":\"wikibase-item\"}]},\"qualifiers-order\":[\"P1545\",\"P1416\"],\"id\":\"Q27795847$85eb14b2-4d1e-fbaa-ce18-7b92398da5d5\",\"rank\":\"normal\"},{\"mainsnak\":{\"snaktype\":\"value\",\"property\":\"P50\",\"datavalue\":{\"value\":{\"entity-type\":\"item\",\"numeric-id\":27887604,\"id\":\"Q27887604\"},\"type\":\"wikibase-entityid\"},\"datatype\":\"wikibase-item\"},\"type\":\"statement\",\"qualifiers\":{\"P1545\":[{\"snaktype\":\"value\",\"property\":\"P1545\",\"hash\":\"6d824c4548dc9c84054b9e446b8ea72e50efebba\",\"datavalue\":{\"value\":\"10\",\"type\":\"string\"},\"datatype\":\"string\"}],\"P1416\":[{\"snaktype\":\"value\",\"property\":\"P1416\",\"hash\":\"072d0bc1ba7876a9edfe9766e4dd2c83d759f3e6\",\"datavalue\":{\"value\":{\"entity-type\":\"item\",\"numeric-id\":640694,\"id\":\"Q640694\"},\"type\":\"wikibase-entityid\"},\"datatype\":\"wikibase-item\"}]},\"qualifiers-order\":[\"P1545\",\"P1416\"],\"id\":\"Q27795847$34c7ffad-48b7-582d-aee0-04e6694250fb\",\"rank\":\"normal\"},{\"mainsnak\":{\"snaktype\":\"value\",\"property\":\"P50\",\"datavalue\":{\"value\":{\"entity-type\":\"item\",\"numeric-id\":28540892,\"id\":\"Q28540892\"},\"type\":\"wikibase-entityid\"},\"datatype\":\"wikibase-item\"},\"type\":\"statement\",\"qualifiers\":{\"P1545\":[{\"snaktype\":\"value\",\"property\":\"P1545\",\"hash\":\"a39223fc722bb1c9ca54fe188d9596d0c68f055e\",\"datavalue\":{\"value\":\"21\",\"type\":\"string\"},\"datatype\":\"string\"}],\"P1416\":[{\"snaktype\":\"value\",\"property\":\"P1416\",\"hash\":\"17f7c88944bcd21a5b1de89be8babd7895377505\",\"datavalue\":{\"value\":{\"entity-type\":\"item\",\"numeric-id\":129421,\"id\":\"Q129421\"},\"type\":\"wikibase-entityid\"},\"datatype\":\"wikibase-item\"}]},\"qualifiers-order\":[\"P1545\",\"P1416\"],\"id\":\"Q27795847$990b9ecd-4746-5ebc-2209-510172d627f2\",\"rank\":\"normal\"},{\"mainsnak\":{\"snaktype\":\"value\",\"property\":\"P50\",\"datavalue\":{\"value\":{\"entity-type\":\"item\",\"numeric-id\":28541023,\"id\":\"Q28541023\"},\"type\":\"wikibase-entityid\"},\"datatype\":\"wikibase-item\"},\"type\":\"statement\",\"qualifiers\":{\"P1545\":[{\"snaktype\":\"value\",\"property\":\"P1545\",\"hash\":\"a82b0aa3ccf1a266e15473824b4391f6d9da4be0\",\"datavalue\":{\"value\":\"4\",\"type\":\"string\"},\"datatype\":\"string\"}]},\"qualifiers-order\":[\"P1545\"],\"id\":\"Q27795847$a9af48e3-4afb-4281-1b0b-7c8405afd325\",\"rank\":\"normal\"}],\"P2860\":[{\"mainsnak\":{\"snaktype\":\"value\",\"property\":\"P2860\",\"datavalue\":{\"value\":{\"entity-type\":\"item\",\"numeric-id\":21093640,\"id\":\"Q21093640\"},\"type\":\"wikibase-entityid\"},\"datatype\":\"wikibase-item\"},\"type\":\"statement\",\"id\":\"Q27795847$51189732-4cae-29ac-9c3d-5f52e4076684\",\"rank\":\"normal\"},{\"mainsnak\":{\"snaktype\":\"value\",\"property\":\"P2860\",\"datavalue\":{\"value\":{\"entity-type\":\"item\",\"numeric-id\":27807487,\"id\":\"Q27807487\"},\"type\":\"wikibase-entityid\"},\"datatype\":\"wikibase-item\"},\"type\":\"statement\",\"id\":\"Q27795847$b3a68adf-4629-432a-a2fe-c5afb5d478a0\",\"rank\":\"normal\"},{\"mainsnak\":{\"snaktype\":\"value\",\"property\":\"P2860\",\"datavalue\":{\"value\":{\"entity-type\":\"item\",\"numeric-id\":27807488,\"id\":\"Q27807488\"},\"type\":\"wikibase-entityid\"},\"datatype\":\"wikibase-item\"},\"type\":\"statement\",\"id\":\"Q27795847$25db773a-4265-1451-58ff-d9a8d0fc2c90\",\"rank\":\"normal\"},{\"mainsnak\":{\"snaktype\":\"value\",\"property\":\"P2860\",\"datavalue\":{\"value\":{\"entity-type\":\"item\",\"numeric-id\":27136473,\"id\":\"Q27136473\"},\"type\":\"wikibase-entityid\"},\"datatype\":\"wikibase-item\"},\"type\":\"statement\",\"id\":\"Q27795847$906aa8f9-4163-5c7c-c17e-7a83329babee\",\"rank\":\"normal\"},{\"mainsnak\":{\"snaktype\":\"value\",\"property\":\"P2860\",\"datavalue\":{\"value\":{\"entity-type\":\"item\",\"numeric-id\":27807490,\"id\":\"Q27807490\"},\"type\":\"wikibase-entityid\"},\"datatype\":\"wikibase-item\"},\"type\":\"statement\",\"id\":\"Q27795847$6a239bbf-4e74-5eb1-dd40-1bd734e00dad\",\"rank\":\"normal\"},{\"mainsnak\":{\"snaktype\":\"value\",\"property\":\"P2860\",\"datavalue\":{\"value\":{\"entity-type\":\"item\",\"numeric-id\":27807493,\"id\":\"Q27807493\"},\"type\":\"wikibase-entityid\"},\"datatype\":\"wikibase-item\"},\"type\":\"statement\",\"id\":\"Q27795847$a6aaa6b6-4fab-6667-4347-08af84b83958\",\"rank\":\"normal\"},{\"mainsnak\":{\"snaktype\":\"value\",\"property\":\"P2860\",\"datavalue\":{\"value\":{\"entity-type\":\"item\",\"numeric-id\":27807494,\"id\":\"Q27807494\"},\"type\":\"wikibase-entityid\"},\"datatype\":\"wikibase-item\"},\"type\":\"statement\",\"id\":\"Q27795847$6e77205b-4fea-719e-237e-323ffdc5de53\",\"rank\":\"normal\"},{\"mainsnak\":{\"snaktype\":\"value\",\"property\":\"P2860\",\"datavalue\":{\"value\":{\"entity-type\":\"item\",\"numeric-id\":27807496,\"id\":\"Q27807496\"},\"type\":\"wikibase-entityid\"},\"datatype\":\"wikibase-item\"},\"type\":\"statement\",\"id\":\"Q27795847$fd046765-4ec1-4773-dbc4-adb5a2d43490\",\"rank\":\"normal\"},{\"mainsnak\":{\"snaktype\":\"value\",\"property\":\"P2860\",\"datavalue\":{\"value\":{\"entity-type\":\"item\",\"numeric-id\":27809667,\"id\":\"Q27809667\"},\"type\":\"wikibase-entityid\"},\"datatype\":\"wikibase-item\"},\"type\":\"statement\",\"id\":\"Q27795847$13ecb48e-49bf-5c2c-81a7-dcbc953f46fc\",\"rank\":\"normal\"},{\"mainsnak\":{\"snaktype\":\"value\",\"property\":\"P2860\",\"datavalue\":{\"value\":{\"entity-type\":\"item\",\"numeric-id\":27818844,\"id\":\"Q27818844\"},\"type\":\"wikibase-entityid\"},\"datatype\":\"wikibase-item\"},\"type\":\"statement\",\"id\":\"Q27795847$9569723d-4d9b-05ad-dfaa-f0be798cc8e4\",\"rank\":\"normal\"},{\"mainsnak\":{\"snaktype\":\"value\",\"property\":\"P2860\",\"datavalue\":{\"value\":{\"entity-type\":\"item\",\"numeric-id\":24595162,\"id\":\"Q24595162\"},\"type\":\"wikibase-entityid\"},\"datatype\":\"wikibase-item\"},\"type\":\"statement\",\"id\":\"Q27795847$8a414bd4-4676-dfa6-70bf-2cc8ffdfdb9c\",\"rank\":\"normal\"},{\"mainsnak\":{\"snaktype\":\"value\",\"property\":\"P2860\",\"datavalue\":{\"value\":{\"entity-type\":\"item\",\"numeric-id\":27818909,\"id\":\"Q27818909\"},\"type\":\"wikibase-entityid\"},\"datatype\":\"wikibase-item\"},\"type\":\"statement\",\"id\":\"Q27795847$ef170bc8-4a44-e40b-209c-9fad35846433\",\"rank\":\"normal\"},{\"mainsnak\":{\"snaktype\":\"value\",\"property\":\"P2860\",\"datavalue\":{\"value\":{\"entity-type\":\"item\",\"numeric-id\":27818910,\"id\":\"Q27818910\"},\"type\":\"wikibase-entityid\"},\"datatype\":\"wikibase-item\"},\"type\":\"statement\",\"id\":\"Q27795847$e101201a-4092-253b-ea90-80b52d65e153\",\"rank\":\"normal\"},{\"mainsnak\":{\"snaktype\":\"value\",\"property\":\"P2860\",\"datavalue\":{\"value\":{\"entity-type\":\"item\",\"numeric-id\":21030547,\"id\":\"Q21030547\"},\"type\":\"wikibase-entityid\"},\"datatype\":\"wikibase-item\"},\"type\":\"statement\",\"id\":\"Q27795847$39288916-4bcc-bb5d-6165-a3e7d8557230\",\"rank\":\"normal\"},{\"mainsnak\":{\"snaktype\":\"value\",\"property\":\"P2860\",\"datavalue\":{\"value\":{\"entity-type\":\"item\",\"numeric-id\":21146620,\"id\":\"Q21146620\"},\"type\":\"wikibase-entityid\"},\"datatype\":\"wikibase-item\"},\"type\":\"statement\",\"id\":\"Q27795847$1e9ee22e-4181-0f42-3bac-8b6bf7325ddc\",\"rank\":\"normal\"},{\"mainsnak\":{\"snaktype\":\"value\",\"property\":\"P2860\",\"datavalue\":{\"value\":{\"entity-type\":\"item\",\"numeric-id\":27818912,\"id\":\"Q27818912\"},\"type\":\"wikibase-entityid\"},\"datatype\":\"wikibase-item\"},\"type\":\"statement\",\"id\":\"Q27795847$15ec6ec7-4db2-3bbb-bfaf-a924b6482e51\",\"rank\":\"normal\"}],\"P1104\":[{\"mainsnak\":{\"snaktype\":\"value\",\"property\":\"P1104\",\"datavalue\":{\"value\":{\"amount\":\"+3\",\"unit\":\"1\",\"upperBound\":\"+4\",\"lowerBound\":\"+2\"},\"type\":\"quantity\"},\"datatype\":\"quantity\"},\"type\":\"statement\",\"id\":\"Q27795847$be33113d-4b0c-7756-ecf1-ec78c0605209\",\"rank\":\"normal\"}],\"P953\":[{\"mainsnak\":{\"snaktype\":\"value\",\"property\":\"P953\",\"datavalue\":{\"value\":\"http://rdcu.be/msZj\",\"type\":\"string\"},\"datatype\":\"url\"},\"type\":\"statement\",\"id\":\"Q27795847$9ae54b43-42bd-2c08-9347-eecb6838ae00\",\"rank\":\"normal\"}],\"P698\":[{\"mainsnak\":{\"snaktype\":\"value\",\"property\":\"P698\",\"datavalue\":{\"value\":\"27824832\",\"type\":\"string\"},\"datatype\":\"external-id\"},\"type\":\"statement\",\"id\":\"Q27795847$7CCFB068-30E5-4A85-A1AA-85981F7752E8\",\"rank\":\"normal\"}],\"P356\":[{\"mainsnak\":{\"snaktype\":\"value\",\"property\":\"P356\",\"datavalue\":{\"value\":\"10.1038/NBT.3689\",\"type\":\"string\"},\"datatype\":\"external-id\"},\"type\":\"statement\",\"id\":\"Q27795847$BDC0D3CE-51FB-4058-B1AE-BD9CF1DCB5DE\",\"rank\":\"normal\"}]},\"sitelinks\":[]}}}"
+
+const path = require('path')
+const Cite = require('../lib/index.js')
+
+const file1 = "{\"entities\":{\"Q21972834\":{\"pageid\":24004990,\"ns\":0,\"title\":\"Q21972834\",\"lastrevid\":468197350,\"modified\":\"2017-03-19T14:57:48Z\",\"type\":\"item\",\"id\":\"Q21972834\",\"labels\":{\"en\":{\"language\":\"en\",\"value\":\"Assembling the 20 Gb white spruce (Picea glauca) genome from whole-genome shotgun sequencing data\"},\"nl\":{\"language\":\"nl\",\"value\":\"Assembling the 20 Gb white spruce (Picea glauca) genome from whole-genome shotgun sequencing data\"}},\"descriptions\":{\"en\":{\"language\":\"en\",\"value\":\"scientific article\"},\"nl\":{\"language\":\"nl\",\"value\":\"wetenschappelijk artikel (gepubliceerd op 2013/06/15)\"},\"cs\":{\"language\":\"cs\",\"value\":\"v\\u011bdeck\\u00fd \\u010dl\\u00e1nek publikovan\\u00fd v roce 2013\"},\"fr\":{\"language\":\"fr\",\"value\":\"article scientifique (publi\\u00e9 2013/06/15)\"},\"it\":{\"language\":\"it\",\"value\":\"articolo scientifico (pubblicato il 2013/06/15)\"},\"da\":{\"language\":\"da\",\"value\":\"videnskabelig artikel (udgivet  2013/06/15)\"},\"sk\":{\"language\":\"sk\",\"value\":\"vedeck\\u00fd \\u010dl\\u00e1nok (publikovan\\u00fd 2013/06/15)\"},\"pt\":{\"language\":\"pt\",\"value\":\"artigo cient\\u00edfico (publicado na 2013/06/15)\"},\"hy\":{\"language\":\"hy\",\"value\":\"\\u0563\\u056b\\u057f\\u0561\\u056f\\u0561\\u0576 \\u0570\\u0578\\u0564\\u057e\\u0561\\u056e\"}},\"aliases\":[],\"claims\":{\"P698\":[{\"mainsnak\":{\"snaktype\":\"value\",\"property\":\"P698\",\"datavalue\":{\"value\":\"23698863\",\"type\":\"string\"},\"datatype\":\"external-id\"},\"type\":\"statement\",\"id\":\"Q21972834$D435A2F3-E2A8-45A7-922A-A6BB72F9A79C\",\"rank\":\"normal\"}],\"P932\":[{\"mainsnak\":{\"snaktype\":\"value\",\"property\":\"P932\",\"datavalue\":{\"value\":\"3673215\",\"type\":\"string\"},\"datatype\":\"external-id\"},\"type\":\"statement\",\"id\":\"Q21972834$F4959183-FB89-410E-BF33-DF9B1AF81ECE\",\"rank\":\"normal\"}],\"P31\":[{\"mainsnak\":{\"snaktype\":\"value\",\"property\":\"P31\",\"datavalue\":{\"value\":{\"entity-type\":\"item\",\"numeric-id\":13442814,\"id\":\"Q13442814\"},\"type\":\"wikibase-entityid\"},\"datatype\":\"wikibase-item\"},\"type\":\"statement\",\"id\":\"Q21972834$E4DCC072-BD1A-4FDF-BFED-E1D981E5E81F\",\"rank\":\"normal\"}],\"P1476\":[{\"mainsnak\":{\"snaktype\":\"value\",\"property\":\"P1476\",\"datavalue\":{\"value\":{\"text\":\"Assembling the 20 Gb white spruce (Picea glauca) genome from whole-genome shotgun sequencing data\",\"language\":\"en\"},\"type\":\"monolingualtext\"},\"datatype\":\"monolingualtext\"},\"type\":\"statement\",\"id\":\"Q21972834$D8C2FFB6-2710-4AFA-92A3-A859ABAA1FED\",\"rank\":\"normal\"}],\"P364\":[{\"mainsnak\":{\"snaktype\":\"value\",\"property\":\"P364\",\"datavalue\":{\"value\":{\"entity-type\":\"item\",\"numeric-id\":1860,\"id\":\"Q1860\"},\"type\":\"wikibase-entityid\"},\"datatype\":\"wikibase-item\"},\"type\":\"statement\",\"id\":\"Q21972834$D55F7830-D04D-48B0-B739-9E4CC9B2F275\",\"rank\":\"normal\"}],\"P478\":[{\"mainsnak\":{\"snaktype\":\"value\",\"property\":\"P478\",\"datavalue\":{\"value\":\"29\",\"type\":\"string\"},\"datatype\":\"string\"},\"type\":\"statement\",\"id\":\"Q21972834$963935D7-041A-4E92-9D9B-F254A5426BAD\",\"rank\":\"normal\"}],\"P433\":[{\"mainsnak\":{\"snaktype\":\"value\",\"property\":\"P433\",\"datavalue\":{\"value\":\"12\",\"type\":\"string\"},\"datatype\":\"string\"},\"type\":\"statement\",\"id\":\"Q21972834$47B925A9-A53F-43A3-888D-BEA79E399D4D\",\"rank\":\"normal\"}],\"P577\":[{\"mainsnak\":{\"snaktype\":\"value\",\"property\":\"P577\",\"datavalue\":{\"value\":{\"time\":\"+2013-06-15T00:00:00Z\",\"timezone\":0,\"before\":0,\"after\":0,\"precision\":11,\"calendarmodel\":\"http://www.wikidata.org/entity/Q1985727\"},\"type\":\"time\"},\"datatype\":\"time\"},\"type\":\"statement\",\"id\":\"Q21972834$9EDE475C-7403-4A66-A6A5-0458E7782689\",\"rank\":\"normal\"}],\"P304\":[{\"mainsnak\":{\"snaktype\":\"value\",\"property\":\"P304\",\"datavalue\":{\"value\":\"1492-7\",\"type\":\"string\"},\"datatype\":\"string\"},\"type\":\"statement\",\"id\":\"Q21972834$92D5DD57-B5F0-42B6-9508-6D5CEB82FF3C\",\"rank\":\"normal\"}],\"P2093\":[{\"mainsnak\":{\"snaktype\":\"value\",\"property\":\"P2093\",\"datavalue\":{\"value\":\"Inanc Birol\",\"type\":\"string\"},\"datatype\":\"string\"},\"type\":\"statement\",\"qualifiers\":{\"P1545\":[{\"snaktype\":\"value\",\"property\":\"P1545\",\"hash\":\"862c83ca2949d7eb8f41b4bf1a4521ed18cdebb8\",\"datavalue\":{\"value\":\"1\",\"type\":\"string\"},\"datatype\":\"string\"}]},\"qualifiers-order\":[\"P1545\"],\"id\":\"Q21972834$CCE7BCBB-5804-4CCA-B762-83EEA827F32D\",\"rank\":\"normal\"},{\"mainsnak\":{\"snaktype\":\"value\",\"property\":\"P2093\",\"datavalue\":{\"value\":\"Anthony Raymond\",\"type\":\"string\"},\"datatype\":\"string\"},\"type\":\"statement\",\"qualifiers\":{\"P1545\":[{\"snaktype\":\"value\",\"property\":\"P1545\",\"hash\":\"af1310a34ec80620d4fdd7bb8ca76e492fe6630e\",\"datavalue\":{\"value\":\"2\",\"type\":\"string\"},\"datatype\":\"string\"}]},\"qualifiers-order\":[\"P1545\"],\"id\":\"Q21972834$BC54A9F8-68FF-4F6E-8111-A449A15BDB57\",\"rank\":\"normal\"},{\"mainsnak\":{\"snaktype\":\"value\",\"property\":\"P2093\",\"datavalue\":{\"value\":\"Shaun D Jackman\",\"type\":\"string\"},\"datatype\":\"string\"},\"type\":\"statement\",\"qualifiers\":{\"P1545\":[{\"snaktype\":\"value\",\"property\":\"P1545\",\"hash\":\"3c1e388cba3487113121af5bfa59a2f657bf21bd\",\"datavalue\":{\"value\":\"3\",\"type\":\"string\"},\"datatype\":\"string\"}]},\"qualifiers-order\":[\"P1545\"],\"id\":\"Q21972834$CB76DCFD-DA2A-4673-ACDB-B8CA71D1069C\",\"rank\":\"normal\"},{\"mainsnak\":{\"snaktype\":\"value\",\"property\":\"P2093\",\"datavalue\":{\"value\":\"Stephen Pleasance\",\"type\":\"string\"},\"datatype\":\"string\"},\"type\":\"statement\",\"qualifiers\":{\"P1545\":[{\"snaktype\":\"value\",\"property\":\"P1545\",\"hash\":\"a82b0aa3ccf1a266e15473824b4391f6d9da4be0\",\"datavalue\":{\"value\":\"4\",\"type\":\"string\"},\"datatype\":\"string\"}]},\"qualifiers-order\":[\"P1545\"],\"id\":\"Q21972834$CC360BCE-0D0D-4E92-8F68-1780D1106620\",\"rank\":\"normal\"},{\"mainsnak\":{\"snaktype\":\"value\",\"property\":\"P2093\",\"datavalue\":{\"value\":\"Robin Coope\",\"type\":\"string\"},\"datatype\":\"string\"},\"type\":\"statement\",\"qualifiers\":{\"P1545\":[{\"snaktype\":\"value\",\"property\":\"P1545\",\"hash\":\"c8e1b85012703eb0f44ff876ec773596f3794872\",\"datavalue\":{\"value\":\"5\",\"type\":\"string\"},\"datatype\":\"string\"}]},\"qualifiers-order\":[\"P1545\"],\"id\":\"Q21972834$EC1B7589-BE7F-450C-B4AE-978EF4440682\",\"rank\":\"normal\"},{\"mainsnak\":{\"snaktype\":\"value\",\"property\":\"P2093\",\"datavalue\":{\"value\":\"Greg A Taylor\",\"type\":\"string\"},\"datatype\":\"string\"},\"type\":\"statement\",\"qualifiers\":{\"P1545\":[{\"snaktype\":\"value\",\"property\":\"P1545\",\"hash\":\"5d30572c5a5693878a66231c29c9bb3e4a870527\",\"datavalue\":{\"value\":\"6\",\"type\":\"string\"},\"datatype\":\"string\"}]},\"qualifiers-order\":[\"P1545\"],\"id\":\"Q21972834$AA1A005B-0985-4CCB-AB13-782A3385EB54\",\"rank\":\"normal\"},{\"mainsnak\":{\"snaktype\":\"value\",\"property\":\"P2093\",\"datavalue\":{\"value\":\"Macaire Man Saint Yuen\",\"type\":\"string\"},\"datatype\":\"string\"},\"type\":\"statement\",\"qualifiers\":{\"P1545\":[{\"snaktype\":\"value\",\"property\":\"P1545\",\"hash\":\"ecdcd65e6c9f103dedc06d856ce957af15050f7b\",\"datavalue\":{\"value\":\"7\",\"type\":\"string\"},\"datatype\":\"string\"}]},\"qualifiers-order\":[\"P1545\"],\"id\":\"Q21972834$A0812623-AA81-48CB-AA51-1E04CCC21FE9\",\"rank\":\"normal\"},{\"mainsnak\":{\"snaktype\":\"value\",\"property\":\"P2093\",\"datavalue\":{\"value\":\"Christopher I Keeling\",\"type\":\"string\"},\"datatype\":\"string\"},\"type\":\"statement\",\"qualifiers\":{\"P1545\":[{\"snaktype\":\"value\",\"property\":\"P1545\",\"hash\":\"c6a0d2bbafefdc6d21b25af4357c9887085c2f89\",\"datavalue\":{\"value\":\"8\",\"type\":\"string\"},\"datatype\":\"string\"}]},\"qualifiers-order\":[\"P1545\"],\"id\":\"Q21972834$10084000-8CC4-466F-8FCC-E391C12D9C27\",\"rank\":\"normal\"},{\"mainsnak\":{\"snaktype\":\"value\",\"property\":\"P2093\",\"datavalue\":{\"value\":\"Dana Brand\",\"type\":\"string\"},\"datatype\":\"string\"},\"type\":\"statement\",\"qualifiers\":{\"P1545\":[{\"snaktype\":\"value\",\"property\":\"P1545\",\"hash\":\"ebbb7b4bd5f12eaa0eb9415b51fd725fd993a644\",\"datavalue\":{\"value\":\"9\",\"type\":\"string\"},\"datatype\":\"string\"}]},\"qualifiers-order\":[\"P1545\"],\"id\":\"Q21972834$6A62350D-4505-43DF-A8D4-719B8282ED8E\",\"rank\":\"normal\"},{\"mainsnak\":{\"snaktype\":\"value\",\"property\":\"P2093\",\"datavalue\":{\"value\":\"Benjamin P Vandervalk\",\"type\":\"string\"},\"datatype\":\"string\"},\"type\":\"statement\",\"qualifiers\":{\"P1545\":[{\"snaktype\":\"value\",\"property\":\"P1545\",\"hash\":\"6d824c4548dc9c84054b9e446b8ea72e50efebba\",\"datavalue\":{\"value\":\"10\",\"type\":\"string\"},\"datatype\":\"string\"}]},\"qualifiers-order\":[\"P1545\"],\"id\":\"Q21972834$B78884CC-1F88-45B1-B1B3-DD9DDF2B2FBE\",\"rank\":\"normal\"},{\"mainsnak\":{\"snaktype\":\"value\",\"property\":\"P2093\",\"datavalue\":{\"value\":\"Heather Kirk\",\"type\":\"string\"},\"datatype\":\"string\"},\"type\":\"statement\",\"qualifiers\":{\"P1545\":[{\"snaktype\":\"value\",\"property\":\"P1545\",\"hash\":\"938c75f8b1bafb9e19a4c1a079b8b8e5d997c7fa\",\"datavalue\":{\"value\":\"11\",\"type\":\"string\"},\"datatype\":\"string\"}]},\"qualifiers-order\":[\"P1545\"],\"id\":\"Q21972834$C9117C71-EAEB-4DC0-909B-9876C53A3802\",\"rank\":\"normal\"},{\"mainsnak\":{\"snaktype\":\"value\",\"property\":\"P2093\",\"datavalue\":{\"value\":\"Pawan Pandoh\",\"type\":\"string\"},\"datatype\":\"string\"},\"type\":\"statement\",\"qualifiers\":{\"P1545\":[{\"snaktype\":\"value\",\"property\":\"P1545\",\"hash\":\"472f0889b6914293dcbc4d0f62bb3e3ce6d37ce0\",\"datavalue\":{\"value\":\"12\",\"type\":\"string\"},\"datatype\":\"string\"}]},\"qualifiers-order\":[\"P1545\"],\"id\":\"Q21972834$22C57E2F-6C2C-46DC-B184-0CA7F529B6C3\",\"rank\":\"normal\"},{\"mainsnak\":{\"snaktype\":\"value\",\"property\":\"P2093\",\"datavalue\":{\"value\":\"Richard A Moore\",\"type\":\"string\"},\"datatype\":\"string\"},\"type\":\"statement\",\"qualifiers\":{\"P1545\":[{\"snaktype\":\"value\",\"property\":\"P1545\",\"hash\":\"a0d6d71b9401a527331dc2a8a59c54448b5ad98c\",\"datavalue\":{\"value\":\"13\",\"type\":\"string\"},\"datatype\":\"string\"}]},\"qualifiers-order\":[\"P1545\"],\"id\":\"Q21972834$C86DCED7-41A0-4653-9E9F-AEDD1BB5392C\",\"rank\":\"normal\"},{\"mainsnak\":{\"snaktype\":\"value\",\"property\":\"P2093\",\"datavalue\":{\"value\":\"Yongjun Zhao\",\"type\":\"string\"},\"datatype\":\"string\"},\"type\":\"statement\",\"qualifiers\":{\"P1545\":[{\"snaktype\":\"value\",\"property\":\"P1545\",\"hash\":\"89d1857be00646d34838dc372e42882e3e20dca2\",\"datavalue\":{\"value\":\"14\",\"type\":\"string\"},\"datatype\":\"string\"}]},\"qualifiers-order\":[\"P1545\"],\"id\":\"Q21972834$507B8D2B-1EA4-492D-93E8-3D9236BDECB7\",\"rank\":\"normal\"},{\"mainsnak\":{\"snaktype\":\"value\",\"property\":\"P2093\",\"datavalue\":{\"value\":\"Andrew J Mungall\",\"type\":\"string\"},\"datatype\":\"string\"},\"type\":\"statement\",\"qualifiers\":{\"P1545\":[{\"snaktype\":\"value\",\"property\":\"P1545\",\"hash\":\"502af995394385a6c11fd2f00b65598853ceedc5\",\"datavalue\":{\"value\":\"15\",\"type\":\"string\"},\"datatype\":\"string\"}]},\"qualifiers-order\":[\"P1545\"],\"id\":\"Q21972834$99499BC4-F219-4E8E-B79C-0FFC4AF1919F\",\"rank\":\"normal\"},{\"mainsnak\":{\"snaktype\":\"value\",\"property\":\"P2093\",\"datavalue\":{\"value\":\"Barry Jaquish\",\"type\":\"string\"},\"datatype\":\"string\"},\"type\":\"statement\",\"qualifiers\":{\"P1545\":[{\"snaktype\":\"value\",\"property\":\"P1545\",\"hash\":\"f83c26be8edcec43a735fc3c85792c85d186a3c0\",\"datavalue\":{\"value\":\"16\",\"type\":\"string\"},\"datatype\":\"string\"}]},\"qualifiers-order\":[\"P1545\"],\"id\":\"Q21972834$2A452CB5-1392-48A3-8BDF-C3859ECD2CD7\",\"rank\":\"normal\"},{\"mainsnak\":{\"snaktype\":\"value\",\"property\":\"P2093\",\"datavalue\":{\"value\":\"Alvin Yanchuk\",\"type\":\"string\"},\"datatype\":\"string\"},\"type\":\"statement\",\"qualifiers\":{\"P1545\":[{\"snaktype\":\"value\",\"property\":\"P1545\",\"hash\":\"a89a718f20b227073f3b4f3aa4ad0e99ba77b542\",\"datavalue\":{\"value\":\"17\",\"type\":\"string\"},\"datatype\":\"string\"}]},\"qualifiers-order\":[\"P1545\"],\"id\":\"Q21972834$ED126A91-2089-4B3C-8BB6-D7FE81E05C63\",\"rank\":\"normal\"},{\"mainsnak\":{\"snaktype\":\"value\",\"property\":\"P2093\",\"datavalue\":{\"value\":\"Carol Ritland\",\"type\":\"string\"},\"datatype\":\"string\"},\"type\":\"statement\",\"qualifiers\":{\"P1545\":[{\"snaktype\":\"value\",\"property\":\"P1545\",\"hash\":\"c5201cb20b41dc2f0e2cf1361e16829d4cfbeac8\",\"datavalue\":{\"value\":\"18\",\"type\":\"string\"},\"datatype\":\"string\"}]},\"qualifiers-order\":[\"P1545\"],\"id\":\"Q21972834$F64D5FE6-92D9-4818-9BB6-D162DBA85A97\",\"rank\":\"normal\"},{\"mainsnak\":{\"snaktype\":\"value\",\"property\":\"P2093\",\"datavalue\":{\"value\":\"Brian Boyle\",\"type\":\"string\"},\"datatype\":\"string\"},\"type\":\"statement\",\"qualifiers\":{\"P1545\":[{\"snaktype\":\"value\",\"property\":\"P1545\",\"hash\":\"5ffccd25ee75ecddecb8ccbb1a59226cc3ba535a\",\"datavalue\":{\"value\":\"19\",\"type\":\"string\"},\"datatype\":\"string\"}]},\"qualifiers-order\":[\"P1545\"],\"id\":\"Q21972834$9D020847-DAD2-4573-8896-C6826BEBB4DD\",\"rank\":\"normal\"},{\"mainsnak\":{\"snaktype\":\"value\",\"property\":\"P2093\",\"datavalue\":{\"value\":\"Jean Bousquet\",\"type\":\"string\"},\"datatype\":\"string\"},\"type\":\"statement\",\"qualifiers\":{\"P1545\":[{\"snaktype\":\"value\",\"property\":\"P1545\",\"hash\":\"481220fb9e6317d9e822186cb47365497d25e036\",\"datavalue\":{\"value\":\"20\",\"type\":\"string\"},\"datatype\":\"string\"}]},\"qualifiers-order\":[\"P1545\"],\"id\":\"Q21972834$76CDF015-D56A-4539-9A29-ED6328566BA9\",\"rank\":\"normal\"},{\"mainsnak\":{\"snaktype\":\"value\",\"property\":\"P2093\",\"datavalue\":{\"value\":\"Kermit Ritland\",\"type\":\"string\"},\"datatype\":\"string\"},\"type\":\"statement\",\"qualifiers\":{\"P1545\":[{\"snaktype\":\"value\",\"property\":\"P1545\",\"hash\":\"a39223fc722bb1c9ca54fe188d9596d0c68f055e\",\"datavalue\":{\"value\":\"21\",\"type\":\"string\"},\"datatype\":\"string\"}]},\"qualifiers-order\":[\"P1545\"],\"id\":\"Q21972834$72D5B3B1-FBCD-4290-BEEE-7685B6721AA1\",\"rank\":\"normal\"},{\"mainsnak\":{\"snaktype\":\"value\",\"property\":\"P2093\",\"datavalue\":{\"value\":\"John Mackay\",\"type\":\"string\"},\"datatype\":\"string\"},\"type\":\"statement\",\"qualifiers\":{\"P1545\":[{\"snaktype\":\"value\",\"property\":\"P1545\",\"hash\":\"9cbb98590835f35bfb66ed07cbb2eb8d11df44f6\",\"datavalue\":{\"value\":\"22\",\"type\":\"string\"},\"datatype\":\"string\"}]},\"qualifiers-order\":[\"P1545\"],\"id\":\"Q21972834$382410E5-912A-4D08-BEA6-238379D5BA61\",\"rank\":\"normal\"},{\"mainsnak\":{\"snaktype\":\"value\",\"property\":\"P2093\",\"datavalue\":{\"value\":\"J\\u00f6rg Bohlmann\",\"type\":\"string\"},\"datatype\":\"string\"},\"type\":\"statement\",\"qualifiers\":{\"P1545\":[{\"snaktype\":\"value\",\"property\":\"P1545\",\"hash\":\"4f1ac2caf70d43bd788bfc3a341e0bb0bbfd1d74\",\"datavalue\":{\"value\":\"23\",\"type\":\"string\"},\"datatype\":\"string\"}]},\"qualifiers-order\":[\"P1545\"],\"id\":\"Q21972834$AB1BF467-D7E4-484F-A9EE-C132AA0DADA3\",\"rank\":\"normal\"},{\"mainsnak\":{\"snaktype\":\"value\",\"property\":\"P2093\",\"datavalue\":{\"value\":\"Steven J M Jones\",\"type\":\"string\"},\"datatype\":\"string\"},\"type\":\"statement\",\"qualifiers\":{\"P1545\":[{\"snaktype\":\"value\",\"property\":\"P1545\",\"hash\":\"94cf58b8db10ca17aedd1fafdf9f40a82b8bdc91\",\"datavalue\":{\"value\":\"24\",\"type\":\"string\"},\"datatype\":\"string\"}]},\"qualifiers-order\":[\"P1545\"],\"id\":\"Q21972834$E584D000-D3FA-48EB-B0B6-18A64D489469\",\"rank\":\"normal\"}],\"P2860\":[{\"mainsnak\":{\"snaktype\":\"value\",\"property\":\"P2860\",\"datavalue\":{\"value\":{\"entity-type\":\"item\",\"numeric-id\":21183990,\"id\":\"Q21183990\"},\"type\":\"wikibase-entityid\"},\"datatype\":\"wikibase-item\"},\"type\":\"statement\",\"id\":\"Q21972834$067675E1-BE45-48EC-9927-9B505DCD2C38\",\"rank\":\"normal\",\"references\":[{\"hash\":\"8500b2f44393a196a3228b76ca7bc69e1f3f5cc1\",\"snaks\":{\"P248\":[{\"snaktype\":\"value\",\"property\":\"P248\",\"datavalue\":{\"value\":{\"entity-type\":\"item\",\"numeric-id\":229883,\"id\":\"Q229883\"},\"type\":\"wikibase-entityid\"},\"datatype\":\"wikibase-item\"}],\"P854\":[{\"snaktype\":\"value\",\"property\":\"P854\",\"datavalue\":{\"value\":\"https://eutils.ncbi.nlm.nih.gov/entrez/eutils/elink.fcgi?dbfrom=pmc&linkname=pmc_refs_pubmed&retmode=json&id=3673215\",\"type\":\"string\"},\"datatype\":\"url\"}],\"P813\":[{\"snaktype\":\"value\",\"property\":\"P813\",\"datavalue\":{\"value\":{\"time\":\"+2017-03-19T00:00:00Z\",\"timezone\":0,\"before\":0,\"after\":0,\"precision\":11,\"calendarmodel\":\"http://www.wikidata.org/entity/Q1985727\"},\"type\":\"time\"},\"datatype\":\"time\"}]},\"snaks-order\":[\"P248\",\"P854\",\"P813\"]}]},{\"mainsnak\":{\"snaktype\":\"value\",\"property\":\"P2860\",\"datavalue\":{\"value\":{\"entity-type\":\"item\",\"numeric-id\":22065964,\"id\":\"Q22065964\"},\"type\":\"wikibase-entityid\"},\"datatype\":\"wikibase-item\"},\"type\":\"statement\",\"id\":\"Q21972834$B272C2D7-F0C1-4B7E-B5F0-ADBD60D235EB\",\"rank\":\"normal\",\"references\":[{\"hash\":\"8500b2f44393a196a3228b76ca7bc69e1f3f5cc1\",\"snaks\":{\"P248\":[{\"snaktype\":\"value\",\"property\":\"P248\",\"datavalue\":{\"value\":{\"entity-type\":\"item\",\"numeric-id\":229883,\"id\":\"Q229883\"},\"type\":\"wikibase-entityid\"},\"datatype\":\"wikibase-item\"}],\"P854\":[{\"snaktype\":\"value\",\"property\":\"P854\",\"datavalue\":{\"value\":\"https://eutils.ncbi.nlm.nih.gov/entrez/eutils/elink.fcgi?dbfrom=pmc&linkname=pmc_refs_pubmed&retmode=json&id=3673215\",\"type\":\"string\"},\"datatype\":\"url\"}],\"P813\":[{\"snaktype\":\"value\",\"property\":\"P813\",\"datavalue\":{\"value\":{\"time\":\"+2017-03-19T00:00:00Z\",\"timezone\":0,\"before\":0,\"after\":0,\"precision\":11,\"calendarmodel\":\"http://www.wikidata.org/entity/Q1985727\"},\"type\":\"time\"},\"datatype\":\"time\"}]},\"snaks-order\":[\"P248\",\"P854\",\"P813\"]}]},{\"mainsnak\":{\"snaktype\":\"value\",\"property\":\"P2860\",\"datavalue\":{\"value\":{\"entity-type\":\"item\",\"numeric-id\":24629733,\"id\":\"Q24629733\"},\"type\":\"wikibase-entityid\"},\"datatype\":\"wikibase-item\"},\"type\":\"statement\",\"id\":\"Q21972834$85D12800-291A-4885-8DDE-42657DE6E026\",\"rank\":\"normal\",\"references\":[{\"hash\":\"8500b2f44393a196a3228b76ca7bc69e1f3f5cc1\",\"snaks\":{\"P248\":[{\"snaktype\":\"value\",\"property\":\"P248\",\"datavalue\":{\"value\":{\"entity-type\":\"item\",\"numeric-id\":229883,\"id\":\"Q229883\"},\"type\":\"wikibase-entityid\"},\"datatype\":\"wikibase-item\"}],\"P854\":[{\"snaktype\":\"value\",\"property\":\"P854\",\"datavalue\":{\"value\":\"https://eutils.ncbi.nlm.nih.gov/entrez/eutils/elink.fcgi?dbfrom=pmc&linkname=pmc_refs_pubmed&retmode=json&id=3673215\",\"type\":\"string\"},\"datatype\":\"url\"}],\"P813\":[{\"snaktype\":\"value\",\"property\":\"P813\",\"datavalue\":{\"value\":{\"time\":\"+2017-03-19T00:00:00Z\",\"timezone\":0,\"before\":0,\"after\":0,\"precision\":11,\"calendarmodel\":\"http://www.wikidata.org/entity/Q1985727\"},\"type\":\"time\"},\"datatype\":\"time\"}]},\"snaks-order\":[\"P248\",\"P854\",\"P813\"]}]},{\"mainsnak\":{\"snaktype\":\"value\",\"property\":\"P2860\",\"datavalue\":{\"value\":{\"entity-type\":\"item\",\"numeric-id\":24625559,\"id\":\"Q24625559\"},\"type\":\"wikibase-entityid\"},\"datatype\":\"wikibase-item\"},\"type\":\"statement\",\"id\":\"Q21972834$EA35C15C-3F08-41DE-A369-06B084B6BAA3\",\"rank\":\"normal\",\"references\":[{\"hash\":\"8500b2f44393a196a3228b76ca7bc69e1f3f5cc1\",\"snaks\":{\"P248\":[{\"snaktype\":\"value\",\"property\":\"P248\",\"datavalue\":{\"value\":{\"entity-type\":\"item\",\"numeric-id\":229883,\"id\":\"Q229883\"},\"type\":\"wikibase-entityid\"},\"datatype\":\"wikibase-item\"}],\"P854\":[{\"snaktype\":\"value\",\"property\":\"P854\",\"datavalue\":{\"value\":\"https://eutils.ncbi.nlm.nih.gov/entrez/eutils/elink.fcgi?dbfrom=pmc&linkname=pmc_refs_pubmed&retmode=json&id=3673215\",\"type\":\"string\"},\"datatype\":\"url\"}],\"P813\":[{\"snaktype\":\"value\",\"property\":\"P813\",\"datavalue\":{\"value\":{\"time\":\"+2017-03-19T00:00:00Z\",\"timezone\":0,\"before\":0,\"after\":0,\"precision\":11,\"calendarmodel\":\"http://www.wikidata.org/entity/Q1985727\"},\"type\":\"time\"},\"datatype\":\"time\"}]},\"snaks-order\":[\"P248\",\"P854\",\"P813\"]}]},{\"mainsnak\":{\"snaktype\":\"value\",\"property\":\"P2860\",\"datavalue\":{\"value\":{\"entity-type\":\"item\",\"numeric-id\":22122211,\"id\":\"Q22122211\"},\"type\":\"wikibase-entityid\"},\"datatype\":\"wikibase-item\"},\"type\":\"statement\",\"id\":\"Q21972834$9F920256-4000-405C-AACB-E96C6D992603\",\"rank\":\"normal\",\"references\":[{\"hash\":\"8500b2f44393a196a3228b76ca7bc69e1f3f5cc1\",\"snaks\":{\"P248\":[{\"snaktype\":\"value\",\"property\":\"P248\",\"datavalue\":{\"value\":{\"entity-type\":\"item\",\"numeric-id\":229883,\"id\":\"Q229883\"},\"type\":\"wikibase-entityid\"},\"datatype\":\"wikibase-item\"}],\"P854\":[{\"snaktype\":\"value\",\"property\":\"P854\",\"datavalue\":{\"value\":\"https://eutils.ncbi.nlm.nih.gov/entrez/eutils/elink.fcgi?dbfrom=pmc&linkname=pmc_refs_pubmed&retmode=json&id=3673215\",\"type\":\"string\"},\"datatype\":\"url\"}],\"P813\":[{\"snaktype\":\"value\",\"property\":\"P813\",\"datavalue\":{\"value\":{\"time\":\"+2017-03-19T00:00:00Z\",\"timezone\":0,\"before\":0,\"after\":0,\"precision\":11,\"calendarmodel\":\"http://www.wikidata.org/entity/Q1985727\"},\"type\":\"time\"},\"datatype\":\"time\"}]},\"snaks-order\":[\"P248\",\"P854\",\"P813\"]}]},{\"mainsnak\":{\"snaktype\":\"value\",\"property\":\"P2860\",\"datavalue\":{\"value\":{\"entity-type\":\"item\",\"numeric-id\":21183889,\"id\":\"Q21183889\"},\"type\":\"wikibase-entityid\"},\"datatype\":\"wikibase-item\"},\"type\":\"statement\",\"id\":\"Q21972834$8F12AA50-1D1B-42C6-B6AD-E9A9587F53EB\",\"rank\":\"normal\",\"references\":[{\"hash\":\"8500b2f44393a196a3228b76ca7bc69e1f3f5cc1\",\"snaks\":{\"P248\":[{\"snaktype\":\"value\",\"property\":\"P248\",\"datavalue\":{\"value\":{\"entity-type\":\"item\",\"numeric-id\":229883,\"id\":\"Q229883\"},\"type\":\"wikibase-entityid\"},\"datatype\":\"wikibase-item\"}],\"P854\":[{\"snaktype\":\"value\",\"property\":\"P854\",\"datavalue\":{\"value\":\"https://eutils.ncbi.nlm.nih.gov/entrez/eutils/elink.fcgi?dbfrom=pmc&linkname=pmc_refs_pubmed&retmode=json&id=3673215\",\"type\":\"string\"},\"datatype\":\"url\"}],\"P813\":[{\"snaktype\":\"value\",\"property\":\"P813\",\"datavalue\":{\"value\":{\"time\":\"+2017-03-19T00:00:00Z\",\"timezone\":0,\"before\":0,\"after\":0,\"precision\":11,\"calendarmodel\":\"http://www.wikidata.org/entity/Q1985727\"},\"type\":\"time\"},\"datatype\":\"time\"}]},\"snaks-order\":[\"P248\",\"P854\",\"P813\"]}]},{\"mainsnak\":{\"snaktype\":\"value\",\"property\":\"P2860\",\"datavalue\":{\"value\":{\"entity-type\":\"item\",\"numeric-id\":21261967,\"id\":\"Q21261967\"},\"type\":\"wikibase-entityid\"},\"datatype\":\"wikibase-item\"},\"type\":\"statement\",\"id\":\"Q21972834$A4899485-8489-4D70-82E7-82C216106962\",\"rank\":\"normal\",\"references\":[{\"hash\":\"8500b2f44393a196a3228b76ca7bc69e1f3f5cc1\",\"snaks\":{\"P248\":[{\"snaktype\":\"value\",\"property\":\"P248\",\"datavalue\":{\"value\":{\"entity-type\":\"item\",\"numeric-id\":229883,\"id\":\"Q229883\"},\"type\":\"wikibase-entityid\"},\"datatype\":\"wikibase-item\"}],\"P854\":[{\"snaktype\":\"value\",\"property\":\"P854\",\"datavalue\":{\"value\":\"https://eutils.ncbi.nlm.nih.gov/entrez/eutils/elink.fcgi?dbfrom=pmc&linkname=pmc_refs_pubmed&retmode=json&id=3673215\",\"type\":\"string\"},\"datatype\":\"url\"}],\"P813\":[{\"snaktype\":\"value\",\"property\":\"P813\",\"datavalue\":{\"value\":{\"time\":\"+2017-03-19T00:00:00Z\",\"timezone\":0,\"before\":0,\"after\":0,\"precision\":11,\"calendarmodel\":\"http://www.wikidata.org/entity/Q1985727\"},\"type\":\"time\"},\"datatype\":\"time\"}]},\"snaks-order\":[\"P248\",\"P854\",\"P813\"]}]},{\"mainsnak\":{\"snaktype\":\"value\",\"property\":\"P2860\",\"datavalue\":{\"value\":{\"entity-type\":\"item\",\"numeric-id\":24807126,\"id\":\"Q24807126\"},\"type\":\"wikibase-entityid\"},\"datatype\":\"wikibase-item\"},\"type\":\"statement\",\"id\":\"Q21972834$FD2F304E-61D2-41EE-8AB5-B5CA1267B7CB\",\"rank\":\"normal\",\"references\":[{\"hash\":\"8500b2f44393a196a3228b76ca7bc69e1f3f5cc1\",\"snaks\":{\"P248\":[{\"snaktype\":\"value\",\"property\":\"P248\",\"datavalue\":{\"value\":{\"entity-type\":\"item\",\"numeric-id\":229883,\"id\":\"Q229883\"},\"type\":\"wikibase-entityid\"},\"datatype\":\"wikibase-item\"}],\"P854\":[{\"snaktype\":\"value\",\"property\":\"P854\",\"datavalue\":{\"value\":\"https://eutils.ncbi.nlm.nih.gov/entrez/eutils/elink.fcgi?dbfrom=pmc&linkname=pmc_refs_pubmed&retmode=json&id=3673215\",\"type\":\"string\"},\"datatype\":\"url\"}],\"P813\":[{\"snaktype\":\"value\",\"property\":\"P813\",\"datavalue\":{\"value\":{\"time\":\"+2017-03-19T00:00:00Z\",\"timezone\":0,\"before\":0,\"after\":0,\"precision\":11,\"calendarmodel\":\"http://www.wikidata.org/entity/Q1985727\"},\"type\":\"time\"},\"datatype\":\"time\"}]},\"snaks-order\":[\"P248\",\"P854\",\"P813\"]}]},{\"mainsnak\":{\"snaktype\":\"value\",\"property\":\"P2860\",\"datavalue\":{\"value\":{\"entity-type\":\"item\",\"numeric-id\":21045365,\"id\":\"Q21045365\"},\"type\":\"wikibase-entityid\"},\"datatype\":\"wikibase-item\"},\"type\":\"statement\",\"id\":\"Q21972834$113AD736-4A2B-479D-BA9D-0615FEA01A84\",\"rank\":\"normal\",\"references\":[{\"hash\":\"8500b2f44393a196a3228b76ca7bc69e1f3f5cc1\",\"snaks\":{\"P248\":[{\"snaktype\":\"value\",\"property\":\"P248\",\"datavalue\":{\"value\":{\"entity-type\":\"item\",\"numeric-id\":229883,\"id\":\"Q229883\"},\"type\":\"wikibase-entityid\"},\"datatype\":\"wikibase-item\"}],\"P854\":[{\"snaktype\":\"value\",\"property\":\"P854\",\"datavalue\":{\"value\":\"https://eutils.ncbi.nlm.nih.gov/entrez/eutils/elink.fcgi?dbfrom=pmc&linkname=pmc_refs_pubmed&retmode=json&id=3673215\",\"type\":\"string\"},\"datatype\":\"url\"}],\"P813\":[{\"snaktype\":\"value\",\"property\":\"P813\",\"datavalue\":{\"value\":{\"time\":\"+2017-03-19T00:00:00Z\",\"timezone\":0,\"before\":0,\"after\":0,\"precision\":11,\"calendarmodel\":\"http://www.wikidata.org/entity/Q1985727\"},\"type\":\"time\"},\"datatype\":\"time\"}]},\"snaks-order\":[\"P248\",\"P854\",\"P813\"]}]},{\"mainsnak\":{\"snaktype\":\"value\",\"property\":\"P2860\",\"datavalue\":{\"value\":{\"entity-type\":\"item\",\"numeric-id\":22122143,\"id\":\"Q22122143\"},\"type\":\"wikibase-entityid\"},\"datatype\":\"wikibase-item\"},\"type\":\"statement\",\"id\":\"Q21972834$16FE34E1-5AAC-4D98-898A-7CC4699861F0\",\"rank\":\"normal\",\"references\":[{\"hash\":\"8500b2f44393a196a3228b76ca7bc69e1f3f5cc1\",\"snaks\":{\"P248\":[{\"snaktype\":\"value\",\"property\":\"P248\",\"datavalue\":{\"value\":{\"entity-type\":\"item\",\"numeric-id\":229883,\"id\":\"Q229883\"},\"type\":\"wikibase-entityid\"},\"datatype\":\"wikibase-item\"}],\"P854\":[{\"snaktype\":\"value\",\"property\":\"P854\",\"datavalue\":{\"value\":\"https://eutils.ncbi.nlm.nih.gov/entrez/eutils/elink.fcgi?dbfrom=pmc&linkname=pmc_refs_pubmed&retmode=json&id=3673215\",\"type\":\"string\"},\"datatype\":\"url\"}],\"P813\":[{\"snaktype\":\"value\",\"property\":\"P813\",\"datavalue\":{\"value\":{\"time\":\"+2017-03-19T00:00:00Z\",\"timezone\":0,\"before\":0,\"after\":0,\"precision\":11,\"calendarmodel\":\"http://www.wikidata.org/entity/Q1985727\"},\"type\":\"time\"},\"datatype\":\"time\"}]},\"snaks-order\":[\"P248\",\"P854\",\"P813\"]}]},{\"mainsnak\":{\"snaktype\":\"value\",\"property\":\"P2860\",\"datavalue\":{\"value\":{\"entity-type\":\"item\",\"numeric-id\":22065842,\"id\":\"Q22065842\"},\"type\":\"wikibase-entityid\"},\"datatype\":\"wikibase-item\"},\"type\":\"statement\",\"id\":\"Q21972834$A0BF94ED-B679-4A17-B68A-2FE7AF6858AA\",\"rank\":\"normal\",\"references\":[{\"hash\":\"8500b2f44393a196a3228b76ca7bc69e1f3f5cc1\",\"snaks\":{\"P248\":[{\"snaktype\":\"value\",\"property\":\"P248\",\"datavalue\":{\"value\":{\"entity-type\":\"item\",\"numeric-id\":229883,\"id\":\"Q229883\"},\"type\":\"wikibase-entityid\"},\"datatype\":\"wikibase-item\"}],\"P854\":[{\"snaktype\":\"value\",\"property\":\"P854\",\"datavalue\":{\"value\":\"https://eutils.ncbi.nlm.nih.gov/entrez/eutils/elink.fcgi?dbfrom=pmc&linkname=pmc_refs_pubmed&retmode=json&id=3673215\",\"type\":\"string\"},\"datatype\":\"url\"}],\"P813\":[{\"snaktype\":\"value\",\"property\":\"P813\",\"datavalue\":{\"value\":{\"time\":\"+2017-03-19T00:00:00Z\",\"timezone\":0,\"before\":0,\"after\":0,\"precision\":11,\"calendarmodel\":\"http://www.wikidata.org/entity/Q1985727\"},\"type\":\"time\"},\"datatype\":\"time\"}]},\"snaks-order\":[\"P248\",\"P854\",\"P813\"]}]},{\"mainsnak\":{\"snaktype\":\"value\",\"property\":\"P2860\",\"datavalue\":{\"value\":{\"entity-type\":\"item\",\"numeric-id\":25938991,\"id\":\"Q25938991\"},\"type\":\"wikibase-entityid\"},\"datatype\":\"wikibase-item\"},\"type\":\"statement\",\"id\":\"Q21972834$513BAA39-8D82-4485-A25D-DB222C90B284\",\"rank\":\"normal\",\"references\":[{\"hash\":\"8500b2f44393a196a3228b76ca7bc69e1f3f5cc1\",\"snaks\":{\"P248\":[{\"snaktype\":\"value\",\"property\":\"P248\",\"datavalue\":{\"value\":{\"entity-type\":\"item\",\"numeric-id\":229883,\"id\":\"Q229883\"},\"type\":\"wikibase-entityid\"},\"datatype\":\"wikibase-item\"}],\"P854\":[{\"snaktype\":\"value\",\"property\":\"P854\",\"datavalue\":{\"value\":\"https://eutils.ncbi.nlm.nih.gov/entrez/eutils/elink.fcgi?dbfrom=pmc&linkname=pmc_refs_pubmed&retmode=json&id=3673215\",\"type\":\"string\"},\"datatype\":\"url\"}],\"P813\":[{\"snaktype\":\"value\",\"property\":\"P813\",\"datavalue\":{\"value\":{\"time\":\"+2017-03-19T00:00:00Z\",\"timezone\":0,\"before\":0,\"after\":0,\"precision\":11,\"calendarmodel\":\"http://www.wikidata.org/entity/Q1985727\"},\"type\":\"time\"},\"datatype\":\"time\"}]},\"snaks-order\":[\"P248\",\"P854\",\"P813\"]}]},{\"mainsnak\":{\"snaktype\":\"value\",\"property\":\"P2860\",\"datavalue\":{\"value\":{\"entity-type\":\"item\",\"numeric-id\":27860816,\"id\":\"Q27860816\"},\"type\":\"wikibase-entityid\"},\"datatype\":\"wikibase-item\"},\"type\":\"statement\",\"id\":\"Q21972834$DD899F96-5D71-4BBC-A87E-B710B870C6C3\",\"rank\":\"normal\",\"references\":[{\"hash\":\"8500b2f44393a196a3228b76ca7bc69e1f3f5cc1\",\"snaks\":{\"P248\":[{\"snaktype\":\"value\",\"property\":\"P248\",\"datavalue\":{\"value\":{\"entity-type\":\"item\",\"numeric-id\":229883,\"id\":\"Q229883\"},\"type\":\"wikibase-entityid\"},\"datatype\":\"wikibase-item\"}],\"P854\":[{\"snaktype\":\"value\",\"property\":\"P854\",\"datavalue\":{\"value\":\"https://eutils.ncbi.nlm.nih.gov/entrez/eutils/elink.fcgi?dbfrom=pmc&linkname=pmc_refs_pubmed&retmode=json&id=3673215\",\"type\":\"string\"},\"datatype\":\"url\"}],\"P813\":[{\"snaktype\":\"value\",\"property\":\"P813\",\"datavalue\":{\"value\":{\"time\":\"+2017-03-19T00:00:00Z\",\"timezone\":0,\"before\":0,\"after\":0,\"precision\":11,\"calendarmodel\":\"http://www.wikidata.org/entity/Q1985727\"},\"type\":\"time\"},\"datatype\":\"time\"}]},\"snaks-order\":[\"P248\",\"P854\",\"P813\"]}]}],\"P1433\":[{\"mainsnak\":{\"snaktype\":\"value\",\"property\":\"P1433\",\"datavalue\":{\"value\":{\"entity-type\":\"item\",\"numeric-id\":4914910,\"id\":\"Q4914910\"},\"type\":\"wikibase-entityid\"},\"datatype\":\"wikibase-item\"},\"type\":\"statement\",\"id\":\"Q21972834$72BB933D-4685-4F38-AE7C-1FBB71952A69\",\"rank\":\"normal\",\"references\":[{\"hash\":\"b28161529c0364292a8cfa0d6bba43b07f20a220\",\"snaks\":{\"P248\":[{\"snaktype\":\"value\",\"property\":\"P248\",\"datavalue\":{\"value\":{\"entity-type\":\"item\",\"numeric-id\":180686,\"id\":\"Q180686\"},\"type\":\"wikibase-entityid\"},\"datatype\":\"wikibase-item\"}]},\"snaks-order\":[\"P248\"]}]}],\"P3181\":[{\"mainsnak\":{\"snaktype\":\"value\",\"property\":\"P3181\",\"datavalue\":{\"value\":\"475928\",\"type\":\"string\"},\"datatype\":\"external-id\"},\"type\":\"statement\",\"id\":\"Q21972834$FDDF4A83-6970-4A50-8A59-26DFA5C2621C\",\"rank\":\"normal\",\"references\":[{\"hash\":\"dddcd22da5416e1b89c60d679e3171626efce131\",\"snaks\":{\"P248\":[{\"snaktype\":\"value\",\"property\":\"P248\",\"datavalue\":{\"value\":{\"entity-type\":\"item\",\"numeric-id\":26382154,\"id\":\"Q26382154\"},\"type\":\"wikibase-entityid\"},\"datatype\":\"wikibase-item\"}]},\"snaks-order\":[\"P248\"]}]}],\"P921\":[{\"mainsnak\":{\"snaktype\":\"value\",\"property\":\"P921\",\"datavalue\":{\"value\":{\"entity-type\":\"item\",\"numeric-id\":128116,\"id\":\"Q128116\"},\"type\":\"wikibase-entityid\"},\"datatype\":\"wikibase-item\"},\"type\":\"statement\",\"id\":\"Q21972834$e8eae0f3-4581-47f5-9528-04c967854423\",\"rank\":\"normal\"},{\"mainsnak\":{\"snaktype\":\"value\",\"property\":\"P921\",\"datavalue\":{\"value\":{\"entity-type\":\"item\",\"numeric-id\":1073526,\"id\":\"Q1073526\"},\"type\":\"wikibase-entityid\"},\"datatype\":\"wikibase-item\"},\"type\":\"statement\",\"id\":\"Q21972834$64a4a2b9-4d01-0532-bfd4-605bd9484f3c\",\"rank\":\"normal\"}],\"P356\":[{\"mainsnak\":{\"snaktype\":\"value\",\"property\":\"P356\",\"datavalue\":{\"value\":\"10.1093/BIOINFORMATICS/BTT178\",\"type\":\"string\"},\"datatype\":\"external-id\"},\"type\":\"statement\",\"id\":\"Q21972834$2FB0F783-8FE0-4E40-9080-7CD9DBD6906B\",\"rank\":\"normal\"}]},\"sitelinks\":[]}}}"
+const file2 = "{\"entities\":{\"Q27795847\":{\"pageid\":29511090,\"ns\":0,\"title\":\"Q27795847\",\"lastrevid\":453265099,\"modified\":\"2017-02-20T20:13:32Z\",\"type\":\"item\",\"id\":\"Q27795847\",\"labels\":{\"en\":{\"language\":\"en\",\"value\":\"SPLASH, a hashed identifier for mass spectra\"},\"nl\":{\"language\":\"nl\",\"value\":\"SPLASH, a hashed identifier for mass spectra\"}},\"descriptions\":{\"fr\":{\"language\":\"fr\",\"value\":\"article scientifique (publi\\u00e9 2016/11/08)\"},\"cs\":{\"language\":\"cs\",\"value\":\"v\\u011bdeck\\u00fd \\u010dl\\u00e1nek publikovan\\u00fd v roce 2016\"},\"nl\":{\"language\":\"nl\",\"value\":\"wetenschappelijk artikel (gepubliceerd op 2016/11/08)\"},\"it\":{\"language\":\"it\",\"value\":\"articolo scientifico (pubblicato il 2016/11/08)\"},\"sk\":{\"language\":\"sk\",\"value\":\"vedeck\\u00fd \\u010dl\\u00e1nok (publikovan\\u00fd 2016/11/08)\"},\"da\":{\"language\":\"da\",\"value\":\"videnskabelig artikel (udgivet  2016/11/08)\"},\"pt\":{\"language\":\"pt\",\"value\":\"artigo cient\\u00edfico (publicado na 2016/11/08)\"},\"en\":{\"language\":\"en\",\"value\":\"scientific article\"},\"hy\":{\"language\":\"hy\",\"value\":\"\\u0563\\u056b\\u057f\\u0561\\u056f\\u0561\\u0576 \\u0570\\u0578\\u0564\\u057e\\u0561\\u056e\"}},\"aliases\":[],\"claims\":{\"P31\":[{\"mainsnak\":{\"snaktype\":\"value\",\"property\":\"P31\",\"datavalue\":{\"value\":{\"entity-type\":\"item\",\"numeric-id\":13442814,\"id\":\"Q13442814\"},\"type\":\"wikibase-entityid\"},\"datatype\":\"wikibase-item\"},\"type\":\"statement\",\"id\":\"Q27795847$FE0E533D-7E2D-4FC1-AB73-22196E9D9455\",\"rank\":\"normal\"}],\"P577\":[{\"mainsnak\":{\"snaktype\":\"value\",\"property\":\"P577\",\"datavalue\":{\"value\":{\"time\":\"+2016-11-08T00:00:00Z\",\"timezone\":0,\"before\":0,\"after\":0,\"precision\":11,\"calendarmodel\":\"http://www.wikidata.org/entity/Q1985727\"},\"type\":\"time\"},\"datatype\":\"time\"},\"type\":\"statement\",\"id\":\"Q27795847$7695c7e8-4988-843f-d638-1a765f6bd0f1\",\"rank\":\"normal\"}],\"P1476\":[{\"mainsnak\":{\"snaktype\":\"value\",\"property\":\"P1476\",\"datavalue\":{\"value\":{\"text\":\"SPLASH, a hashed identifier for mass spectra\",\"language\":\"en\"},\"type\":\"monolingualtext\"},\"datatype\":\"monolingualtext\"},\"type\":\"statement\",\"id\":\"Q27795847$c12e8199-4e9b-8d86-1f89-c53255e1b89f\",\"rank\":\"normal\"}],\"P2093\":[{\"mainsnak\":{\"snaktype\":\"value\",\"property\":\"P2093\",\"datavalue\":{\"value\":\"Gert Wohlgemuth\",\"type\":\"string\"},\"datatype\":\"string\"},\"type\":\"statement\",\"qualifiers\":{\"P1545\":[{\"snaktype\":\"value\",\"property\":\"P1545\",\"hash\":\"862c83ca2949d7eb8f41b4bf1a4521ed18cdebb8\",\"datavalue\":{\"value\":\"1\",\"type\":\"string\"},\"datatype\":\"string\"}],\"P1416\":[{\"snaktype\":\"value\",\"property\":\"P1416\",\"hash\":\"17f7c88944bcd21a5b1de89be8babd7895377505\",\"datavalue\":{\"value\":{\"entity-type\":\"item\",\"numeric-id\":129421,\"id\":\"Q129421\"},\"type\":\"wikibase-entityid\"},\"datatype\":\"wikibase-item\"}]},\"qualifiers-order\":[\"P1545\",\"P1416\"],\"id\":\"Q27795847$5a37a217-4790-7488-341c-3f40aac679d5\",\"rank\":\"normal\"},{\"mainsnak\":{\"snaktype\":\"value\",\"property\":\"P2093\",\"datavalue\":{\"value\":\"Sajjan S Mehta\",\"type\":\"string\"},\"datatype\":\"string\"},\"type\":\"statement\",\"qualifiers\":{\"P1545\":[{\"snaktype\":\"value\",\"property\":\"P1545\",\"hash\":\"af1310a34ec80620d4fdd7bb8ca76e492fe6630e\",\"datavalue\":{\"value\":\"2\",\"type\":\"string\"},\"datatype\":\"string\"}]},\"qualifiers-order\":[\"P1545\"],\"id\":\"Q27795847$e029413e-465a-6e7f-bbc4-7bf7d095bdf5\",\"rank\":\"normal\"},{\"mainsnak\":{\"snaktype\":\"value\",\"property\":\"P2093\",\"datavalue\":{\"value\":\"Ramon F Mejia\",\"type\":\"string\"},\"datatype\":\"string\"},\"type\":\"statement\",\"qualifiers\":{\"P1545\":[{\"snaktype\":\"value\",\"property\":\"P1545\",\"hash\":\"3c1e388cba3487113121af5bfa59a2f657bf21bd\",\"datavalue\":{\"value\":\"3\",\"type\":\"string\"},\"datatype\":\"string\"}]},\"qualifiers-order\":[\"P1545\"],\"id\":\"Q27795847$459a6034-4de2-d02c-71b3-de0d009d3ca0\",\"rank\":\"normal\"},{\"mainsnak\":{\"snaktype\":\"value\",\"property\":\"P2093\",\"datavalue\":{\"value\":\"Diego Pedrosa\",\"type\":\"string\"},\"datatype\":\"string\"},\"type\":\"statement\",\"qualifiers\":{\"P1545\":[{\"snaktype\":\"value\",\"property\":\"P1545\",\"hash\":\"c8e1b85012703eb0f44ff876ec773596f3794872\",\"datavalue\":{\"value\":\"5\",\"type\":\"string\"},\"datatype\":\"string\"}]},\"qualifiers-order\":[\"P1545\"],\"id\":\"Q27795847$27938ccf-4c1f-0fdc-5250-8c9b7ab1ab0c\",\"rank\":\"normal\"},{\"mainsnak\":{\"snaktype\":\"value\",\"property\":\"P2093\",\"datavalue\":{\"value\":\"Tom\\u00e1\\u0161 Pluskal\",\"type\":\"string\"},\"datatype\":\"string\"},\"type\":\"statement\",\"qualifiers\":{\"P1545\":[{\"snaktype\":\"value\",\"property\":\"P1545\",\"hash\":\"5d30572c5a5693878a66231c29c9bb3e4a870527\",\"datavalue\":{\"value\":\"6\",\"type\":\"string\"},\"datatype\":\"string\"}],\"P1416\":[{\"snaktype\":\"value\",\"property\":\"P1416\",\"hash\":\"a47de0d3aa3e3d2844ebf22e9624c4efb47ccbdd\",\"datavalue\":{\"value\":{\"entity-type\":\"item\",\"numeric-id\":825987,\"id\":\"Q825987\"},\"type\":\"wikibase-entityid\"},\"datatype\":\"wikibase-item\"}]},\"qualifiers-order\":[\"P1545\",\"P1416\"],\"id\":\"Q27795847$4414bb01-4540-a5d2-bb41-78cee294f865\",\"rank\":\"normal\"},{\"mainsnak\":{\"snaktype\":\"value\",\"property\":\"P2093\",\"datavalue\":{\"value\":\"Michael Wilson\",\"type\":\"string\"},\"datatype\":\"string\"},\"type\":\"statement\",\"qualifiers\":{\"P1545\":[{\"snaktype\":\"value\",\"property\":\"P1545\",\"hash\":\"ebbb7b4bd5f12eaa0eb9415b51fd725fd993a644\",\"datavalue\":{\"value\":\"9\",\"type\":\"string\"},\"datatype\":\"string\"}]},\"qualifiers-order\":[\"P1545\"],\"id\":\"Q27795847$b76ba909-4412-7b4b-1b29-acc6b19a31c3\",\"rank\":\"normal\"},{\"mainsnak\":{\"snaktype\":\"value\",\"property\":\"P2093\",\"datavalue\":{\"value\":\"Masanori Arita\",\"type\":\"string\"},\"datatype\":\"string\"},\"type\":\"statement\",\"qualifiers\":{\"P1545\":[{\"snaktype\":\"value\",\"property\":\"P1545\",\"hash\":\"938c75f8b1bafb9e19a4c1a079b8b8e5d997c7fa\",\"datavalue\":{\"value\":\"11\",\"type\":\"string\"},\"datatype\":\"string\"}],\"P1416\":[{\"snaktype\":\"value\",\"property\":\"P1416\",\"hash\":\"6f8ef5a2bbb33916e6b5870a7274e8730efa1f21\",\"datavalue\":{\"value\":{\"entity-type\":\"item\",\"numeric-id\":1153275,\"id\":\"Q1153275\"},\"type\":\"wikibase-entityid\"},\"datatype\":\"wikibase-item\"}]},\"qualifiers-order\":[\"P1545\",\"P1416\"],\"id\":\"Q27795847$f55f9709-47c0-879a-80ee-468a59ee7993\",\"rank\":\"normal\"},{\"mainsnak\":{\"snaktype\":\"value\",\"property\":\"P2093\",\"datavalue\":{\"value\":\"Pieter C Dorrestein\",\"type\":\"string\"},\"datatype\":\"string\"},\"type\":\"statement\",\"qualifiers\":{\"P1545\":[{\"snaktype\":\"value\",\"property\":\"P1545\",\"hash\":\"472f0889b6914293dcbc4d0f62bb3e3ce6d37ce0\",\"datavalue\":{\"value\":\"12\",\"type\":\"string\"},\"datatype\":\"string\"}]},\"qualifiers-order\":[\"P1545\"],\"id\":\"Q27795847$8c511a6b-4213-8d9d-ed2c-61261d710ca9\",\"rank\":\"normal\"},{\"mainsnak\":{\"snaktype\":\"value\",\"property\":\"P2093\",\"datavalue\":{\"value\":\"Nuno Bandeira\",\"type\":\"string\"},\"datatype\":\"string\"},\"type\":\"statement\",\"qualifiers\":{\"P1545\":[{\"snaktype\":\"value\",\"property\":\"P1545\",\"hash\":\"a0d6d71b9401a527331dc2a8a59c54448b5ad98c\",\"datavalue\":{\"value\":\"13\",\"type\":\"string\"},\"datatype\":\"string\"}]},\"qualifiers-order\":[\"P1545\"],\"id\":\"Q27795847$84869301-4041-a4b4-3496-f0f724c03ac5\",\"rank\":\"normal\"},{\"mainsnak\":{\"snaktype\":\"value\",\"property\":\"P2093\",\"datavalue\":{\"value\":\"Mingxun Wang\",\"type\":\"string\"},\"datatype\":\"string\"},\"type\":\"statement\",\"qualifiers\":{\"P1545\":[{\"snaktype\":\"value\",\"property\":\"P1545\",\"hash\":\"89d1857be00646d34838dc372e42882e3e20dca2\",\"datavalue\":{\"value\":\"14\",\"type\":\"string\"},\"datatype\":\"string\"}],\"P1416\":[{\"snaktype\":\"value\",\"property\":\"P1416\",\"hash\":\"777bee7b0612da6cfca8a663b6c60ffdbed72f98\",\"datavalue\":{\"value\":{\"entity-type\":\"item\",\"numeric-id\":622664,\"id\":\"Q622664\"},\"type\":\"wikibase-entityid\"},\"datatype\":\"wikibase-item\"}]},\"qualifiers-order\":[\"P1545\",\"P1416\"],\"id\":\"Q27795847$d1287f99-4e2f-c26a-2257-1fa71a5f9b67\",\"rank\":\"normal\"},{\"mainsnak\":{\"snaktype\":\"value\",\"property\":\"P2093\",\"datavalue\":{\"value\":\"Tobias Schulze\",\"type\":\"string\"},\"datatype\":\"string\"},\"type\":\"statement\",\"qualifiers\":{\"P1545\":[{\"snaktype\":\"value\",\"property\":\"P1545\",\"hash\":\"502af995394385a6c11fd2f00b65598853ceedc5\",\"datavalue\":{\"value\":\"15\",\"type\":\"string\"},\"datatype\":\"string\"}]},\"qualifiers-order\":[\"P1545\"],\"id\":\"Q27795847$05d35d06-4164-b410-d163-7228c8a6bacf\",\"rank\":\"normal\"},{\"mainsnak\":{\"snaktype\":\"value\",\"property\":\"P2093\",\"datavalue\":{\"value\":\"Reza M Salek\",\"type\":\"string\"},\"datatype\":\"string\"},\"type\":\"statement\",\"qualifiers\":{\"P1545\":[{\"snaktype\":\"value\",\"property\":\"P1545\",\"hash\":\"f83c26be8edcec43a735fc3c85792c85d186a3c0\",\"datavalue\":{\"value\":\"16\",\"type\":\"string\"},\"datatype\":\"string\"}]},\"qualifiers-order\":[\"P1545\"],\"id\":\"Q27795847$975616fd-41c1-5797-f792-16d317d4e17c\",\"rank\":\"normal\"},{\"mainsnak\":{\"snaktype\":\"value\",\"property\":\"P2093\",\"datavalue\":{\"value\":\"Venkata Chandrasekhar Nainala\",\"type\":\"string\"},\"datatype\":\"string\"},\"type\":\"statement\",\"qualifiers\":{\"P1545\":[{\"snaktype\":\"value\",\"property\":\"P1545\",\"hash\":\"c5201cb20b41dc2f0e2cf1361e16829d4cfbeac8\",\"datavalue\":{\"value\":\"18\",\"type\":\"string\"},\"datatype\":\"string\"}]},\"qualifiers-order\":[\"P1545\"],\"id\":\"Q27795847$68c00f70-40f7-52ac-6b51-27340aee5757\",\"rank\":\"normal\"},{\"mainsnak\":{\"snaktype\":\"value\",\"property\":\"P2093\",\"datavalue\":{\"value\":\"Robert Mistrik\",\"type\":\"string\"},\"datatype\":\"string\"},\"type\":\"statement\",\"qualifiers\":{\"P1545\":[{\"snaktype\":\"value\",\"property\":\"P1545\",\"hash\":\"5ffccd25ee75ecddecb8ccbb1a59226cc3ba535a\",\"datavalue\":{\"value\":\"19\",\"type\":\"string\"},\"datatype\":\"string\"}]},\"qualifiers-order\":[\"P1545\"],\"id\":\"Q27795847$7e774c4a-41f4-c0c9-b0ee-391e74a772dd\",\"rank\":\"normal\"},{\"mainsnak\":{\"snaktype\":\"value\",\"property\":\"P2093\",\"datavalue\":{\"value\":\"Takaaki Nishioka\",\"type\":\"string\"},\"datatype\":\"string\"},\"type\":\"statement\",\"qualifiers\":{\"P1545\":[{\"snaktype\":\"value\",\"property\":\"P1545\",\"hash\":\"481220fb9e6317d9e822186cb47365497d25e036\",\"datavalue\":{\"value\":\"20\",\"type\":\"string\"},\"datatype\":\"string\"}]},\"qualifiers-order\":[\"P1545\"],\"id\":\"Q27795847$8d8845f3-44c5-b259-8aea-b55827411fdc\",\"rank\":\"normal\"}],\"P478\":[{\"mainsnak\":{\"snaktype\":\"value\",\"property\":\"P478\",\"datavalue\":{\"value\":\"34\",\"type\":\"string\"},\"datatype\":\"string\"},\"type\":\"statement\",\"id\":\"Q27795847$a090a3aa-4a02-fbe5-9aca-df819f80e84c\",\"rank\":\"normal\"}],\"P304\":[{\"mainsnak\":{\"snaktype\":\"value\",\"property\":\"P304\",\"datavalue\":{\"value\":\"1099\\u20131101\",\"type\":\"string\"},\"datatype\":\"string\"},\"type\":\"statement\",\"id\":\"Q27795847$9ec79308-4361-58b7-2219-df398124c52e\",\"rank\":\"normal\"}],\"P1433\":[{\"mainsnak\":{\"snaktype\":\"value\",\"property\":\"P1433\",\"datavalue\":{\"value\":{\"entity-type\":\"item\",\"numeric-id\":1893837,\"id\":\"Q1893837\"},\"type\":\"wikibase-entityid\"},\"datatype\":\"wikibase-item\"},\"type\":\"statement\",\"id\":\"Q27795847$b771b8e8-4ccd-82d8-02e0-df734ad9b35b\",\"rank\":\"normal\"}],\"P921\":[{\"mainsnak\":{\"snaktype\":\"value\",\"property\":\"P921\",\"datavalue\":{\"value\":{\"entity-type\":\"item\",\"numeric-id\":12149006,\"id\":\"Q12149006\"},\"type\":\"wikibase-entityid\"},\"datatype\":\"wikibase-item\"},\"type\":\"statement\",\"id\":\"Q27795847$b4edba31-4e22-d1d0-60fd-8e7a4258a3a4\",\"rank\":\"normal\"}],\"P50\":[{\"mainsnak\":{\"snaktype\":\"value\",\"property\":\"P50\",\"datavalue\":{\"value\":{\"entity-type\":\"item\",\"numeric-id\":5111731,\"id\":\"Q5111731\"},\"type\":\"wikibase-entityid\"},\"datatype\":\"wikibase-item\"},\"type\":\"statement\",\"qualifiers\":{\"P1545\":[{\"snaktype\":\"value\",\"property\":\"P1545\",\"hash\":\"a89a718f20b227073f3b4f3aa4ad0e99ba77b542\",\"datavalue\":{\"value\":\"17\",\"type\":\"string\"},\"datatype\":\"string\"}],\"P1416\":[{\"snaktype\":\"value\",\"property\":\"P1416\",\"hash\":\"3c814103e8488af45c5f9ddb4f3a83548284f46a\",\"datavalue\":{\"value\":{\"entity-type\":\"item\",\"numeric-id\":1341845,\"id\":\"Q1341845\"},\"type\":\"wikibase-entityid\"},\"datatype\":\"wikibase-item\"}]},\"qualifiers-order\":[\"P1545\",\"P1416\"],\"id\":\"Q27795847$cfda0f9e-40ab-fe07-d2c1-a646a2588c34\",\"rank\":\"normal\"},{\"mainsnak\":{\"snaktype\":\"value\",\"property\":\"P50\",\"datavalue\":{\"value\":{\"entity-type\":\"item\",\"numeric-id\":20895241,\"id\":\"Q20895241\"},\"type\":\"wikibase-entityid\"},\"datatype\":\"wikibase-item\"},\"type\":\"statement\",\"qualifiers\":{\"P1545\":[{\"snaktype\":\"value\",\"property\":\"P1545\",\"hash\":\"c6a0d2bbafefdc6d21b25af4357c9887085c2f89\",\"datavalue\":{\"value\":\"8\",\"type\":\"string\"},\"datatype\":\"string\"}],\"P1416\":[{\"snaktype\":\"value\",\"property\":\"P1416\",\"hash\":\"f3f4b1106be9c9432af1675a98182889725faf11\",\"datavalue\":{\"value\":{\"entity-type\":\"item\",\"numeric-id\":19845644,\"id\":\"Q19845644\"},\"type\":\"wikibase-entityid\"},\"datatype\":\"wikibase-item\"}],\"P1932\":[{\"snaktype\":\"value\",\"property\":\"P1932\",\"hash\":\"f897727ae72d779987cc1cbb9f667d3e7c74a0c2\",\"datavalue\":{\"value\":\"Egon L Willighagen\",\"type\":\"string\"},\"datatype\":\"string\"}]},\"qualifiers-order\":[\"P1545\",\"P1416\",\"P1932\"],\"id\":\"Q27795847$4a94239d-4f1b-77a8-41b6-2c04e1f5a079\",\"rank\":\"normal\"},{\"mainsnak\":{\"snaktype\":\"value\",\"property\":\"P50\",\"datavalue\":{\"value\":{\"entity-type\":\"item\",\"numeric-id\":27863244,\"id\":\"Q27863244\"},\"type\":\"wikibase-entityid\"},\"datatype\":\"wikibase-item\"},\"type\":\"statement\",\"qualifiers\":{\"P1545\":[{\"snaktype\":\"value\",\"property\":\"P1545\",\"hash\":\"ecdcd65e6c9f103dedc06d856ce957af15050f7b\",\"datavalue\":{\"value\":\"7\",\"type\":\"string\"},\"datatype\":\"string\"}],\"P1416\":[{\"snaktype\":\"value\",\"property\":\"P1416\",\"hash\":\"2af45dffb1e796266913f5fecff0b01fb42a2142\",\"datavalue\":{\"value\":{\"entity-type\":\"item\",\"numeric-id\":678765,\"id\":\"Q678765\"},\"type\":\"wikibase-entityid\"},\"datatype\":\"wikibase-item\"}]},\"qualifiers-order\":[\"P1545\",\"P1416\"],\"id\":\"Q27795847$85eb14b2-4d1e-fbaa-ce18-7b92398da5d5\",\"rank\":\"normal\"},{\"mainsnak\":{\"snaktype\":\"value\",\"property\":\"P50\",\"datavalue\":{\"value\":{\"entity-type\":\"item\",\"numeric-id\":27887604,\"id\":\"Q27887604\"},\"type\":\"wikibase-entityid\"},\"datatype\":\"wikibase-item\"},\"type\":\"statement\",\"qualifiers\":{\"P1545\":[{\"snaktype\":\"value\",\"property\":\"P1545\",\"hash\":\"6d824c4548dc9c84054b9e446b8ea72e50efebba\",\"datavalue\":{\"value\":\"10\",\"type\":\"string\"},\"datatype\":\"string\"}],\"P1416\":[{\"snaktype\":\"value\",\"property\":\"P1416\",\"hash\":\"072d0bc1ba7876a9edfe9766e4dd2c83d759f3e6\",\"datavalue\":{\"value\":{\"entity-type\":\"item\",\"numeric-id\":640694,\"id\":\"Q640694\"},\"type\":\"wikibase-entityid\"},\"datatype\":\"wikibase-item\"}]},\"qualifiers-order\":[\"P1545\",\"P1416\"],\"id\":\"Q27795847$34c7ffad-48b7-582d-aee0-04e6694250fb\",\"rank\":\"normal\"},{\"mainsnak\":{\"snaktype\":\"value\",\"property\":\"P50\",\"datavalue\":{\"value\":{\"entity-type\":\"item\",\"numeric-id\":28540892,\"id\":\"Q28540892\"},\"type\":\"wikibase-entityid\"},\"datatype\":\"wikibase-item\"},\"type\":\"statement\",\"qualifiers\":{\"P1545\":[{\"snaktype\":\"value\",\"property\":\"P1545\",\"hash\":\"a39223fc722bb1c9ca54fe188d9596d0c68f055e\",\"datavalue\":{\"value\":\"21\",\"type\":\"string\"},\"datatype\":\"string\"}],\"P1416\":[{\"snaktype\":\"value\",\"property\":\"P1416\",\"hash\":\"17f7c88944bcd21a5b1de89be8babd7895377505\",\"datavalue\":{\"value\":{\"entity-type\":\"item\",\"numeric-id\":129421,\"id\":\"Q129421\"},\"type\":\"wikibase-entityid\"},\"datatype\":\"wikibase-item\"}]},\"qualifiers-order\":[\"P1545\",\"P1416\"],\"id\":\"Q27795847$990b9ecd-4746-5ebc-2209-510172d627f2\",\"rank\":\"normal\"},{\"mainsnak\":{\"snaktype\":\"value\",\"property\":\"P50\",\"datavalue\":{\"value\":{\"entity-type\":\"item\",\"numeric-id\":28541023,\"id\":\"Q28541023\"},\"type\":\"wikibase-entityid\"},\"datatype\":\"wikibase-item\"},\"type\":\"statement\",\"qualifiers\":{\"P1545\":[{\"snaktype\":\"value\",\"property\":\"P1545\",\"hash\":\"a82b0aa3ccf1a266e15473824b4391f6d9da4be0\",\"datavalue\":{\"value\":\"4\",\"type\":\"string\"},\"datatype\":\"string\"}]},\"qualifiers-order\":[\"P1545\"],\"id\":\"Q27795847$a9af48e3-4afb-4281-1b0b-7c8405afd325\",\"rank\":\"normal\"}],\"P2860\":[{\"mainsnak\":{\"snaktype\":\"value\",\"property\":\"P2860\",\"datavalue\":{\"value\":{\"entity-type\":\"item\",\"numeric-id\":21093640,\"id\":\"Q21093640\"},\"type\":\"wikibase-entityid\"},\"datatype\":\"wikibase-item\"},\"type\":\"statement\",\"id\":\"Q27795847$51189732-4cae-29ac-9c3d-5f52e4076684\",\"rank\":\"normal\"},{\"mainsnak\":{\"snaktype\":\"value\",\"property\":\"P2860\",\"datavalue\":{\"value\":{\"entity-type\":\"item\",\"numeric-id\":27807487,\"id\":\"Q27807487\"},\"type\":\"wikibase-entityid\"},\"datatype\":\"wikibase-item\"},\"type\":\"statement\",\"id\":\"Q27795847$b3a68adf-4629-432a-a2fe-c5afb5d478a0\",\"rank\":\"normal\"},{\"mainsnak\":{\"snaktype\":\"value\",\"property\":\"P2860\",\"datavalue\":{\"value\":{\"entity-type\":\"item\",\"numeric-id\":27807488,\"id\":\"Q27807488\"},\"type\":\"wikibase-entityid\"},\"datatype\":\"wikibase-item\"},\"type\":\"statement\",\"id\":\"Q27795847$25db773a-4265-1451-58ff-d9a8d0fc2c90\",\"rank\":\"normal\"},{\"mainsnak\":{\"snaktype\":\"value\",\"property\":\"P2860\",\"datavalue\":{\"value\":{\"entity-type\":\"item\",\"numeric-id\":27136473,\"id\":\"Q27136473\"},\"type\":\"wikibase-entityid\"},\"datatype\":\"wikibase-item\"},\"type\":\"statement\",\"id\":\"Q27795847$906aa8f9-4163-5c7c-c17e-7a83329babee\",\"rank\":\"normal\"},{\"mainsnak\":{\"snaktype\":\"value\",\"property\":\"P2860\",\"datavalue\":{\"value\":{\"entity-type\":\"item\",\"numeric-id\":27807490,\"id\":\"Q27807490\"},\"type\":\"wikibase-entityid\"},\"datatype\":\"wikibase-item\"},\"type\":\"statement\",\"id\":\"Q27795847$6a239bbf-4e74-5eb1-dd40-1bd734e00dad\",\"rank\":\"normal\"},{\"mainsnak\":{\"snaktype\":\"value\",\"property\":\"P2860\",\"datavalue\":{\"value\":{\"entity-type\":\"item\",\"numeric-id\":27807493,\"id\":\"Q27807493\"},\"type\":\"wikibase-entityid\"},\"datatype\":\"wikibase-item\"},\"type\":\"statement\",\"id\":\"Q27795847$a6aaa6b6-4fab-6667-4347-08af84b83958\",\"rank\":\"normal\"},{\"mainsnak\":{\"snaktype\":\"value\",\"property\":\"P2860\",\"datavalue\":{\"value\":{\"entity-type\":\"item\",\"numeric-id\":27807494,\"id\":\"Q27807494\"},\"type\":\"wikibase-entityid\"},\"datatype\":\"wikibase-item\"},\"type\":\"statement\",\"id\":\"Q27795847$6e77205b-4fea-719e-237e-323ffdc5de53\",\"rank\":\"normal\"},{\"mainsnak\":{\"snaktype\":\"value\",\"property\":\"P2860\",\"datavalue\":{\"value\":{\"entity-type\":\"item\",\"numeric-id\":27807496,\"id\":\"Q27807496\"},\"type\":\"wikibase-entityid\"},\"datatype\":\"wikibase-item\"},\"type\":\"statement\",\"id\":\"Q27795847$fd046765-4ec1-4773-dbc4-adb5a2d43490\",\"rank\":\"normal\"},{\"mainsnak\":{\"snaktype\":\"value\",\"property\":\"P2860\",\"datavalue\":{\"value\":{\"entity-type\":\"item\",\"numeric-id\":27809667,\"id\":\"Q27809667\"},\"type\":\"wikibase-entityid\"},\"datatype\":\"wikibase-item\"},\"type\":\"statement\",\"id\":\"Q27795847$13ecb48e-49bf-5c2c-81a7-dcbc953f46fc\",\"rank\":\"normal\"},{\"mainsnak\":{\"snaktype\":\"value\",\"property\":\"P2860\",\"datavalue\":{\"value\":{\"entity-type\":\"item\",\"numeric-id\":27818844,\"id\":\"Q27818844\"},\"type\":\"wikibase-entityid\"},\"datatype\":\"wikibase-item\"},\"type\":\"statement\",\"id\":\"Q27795847$9569723d-4d9b-05ad-dfaa-f0be798cc8e4\",\"rank\":\"normal\"},{\"mainsnak\":{\"snaktype\":\"value\",\"property\":\"P2860\",\"datavalue\":{\"value\":{\"entity-type\":\"item\",\"numeric-id\":24595162,\"id\":\"Q24595162\"},\"type\":\"wikibase-entityid\"},\"datatype\":\"wikibase-item\"},\"type\":\"statement\",\"id\":\"Q27795847$8a414bd4-4676-dfa6-70bf-2cc8ffdfdb9c\",\"rank\":\"normal\"},{\"mainsnak\":{\"snaktype\":\"value\",\"property\":\"P2860\",\"datavalue\":{\"value\":{\"entity-type\":\"item\",\"numeric-id\":27818909,\"id\":\"Q27818909\"},\"type\":\"wikibase-entityid\"},\"datatype\":\"wikibase-item\"},\"type\":\"statement\",\"id\":\"Q27795847$ef170bc8-4a44-e40b-209c-9fad35846433\",\"rank\":\"normal\"},{\"mainsnak\":{\"snaktype\":\"value\",\"property\":\"P2860\",\"datavalue\":{\"value\":{\"entity-type\":\"item\",\"numeric-id\":27818910,\"id\":\"Q27818910\"},\"type\":\"wikibase-entityid\"},\"datatype\":\"wikibase-item\"},\"type\":\"statement\",\"id\":\"Q27795847$e101201a-4092-253b-ea90-80b52d65e153\",\"rank\":\"normal\"},{\"mainsnak\":{\"snaktype\":\"value\",\"property\":\"P2860\",\"datavalue\":{\"value\":{\"entity-type\":\"item\",\"numeric-id\":21030547,\"id\":\"Q21030547\"},\"type\":\"wikibase-entityid\"},\"datatype\":\"wikibase-item\"},\"type\":\"statement\",\"id\":\"Q27795847$39288916-4bcc-bb5d-6165-a3e7d8557230\",\"rank\":\"normal\"},{\"mainsnak\":{\"snaktype\":\"value\",\"property\":\"P2860\",\"datavalue\":{\"value\":{\"entity-type\":\"item\",\"numeric-id\":21146620,\"id\":\"Q21146620\"},\"type\":\"wikibase-entityid\"},\"datatype\":\"wikibase-item\"},\"type\":\"statement\",\"id\":\"Q27795847$1e9ee22e-4181-0f42-3bac-8b6bf7325ddc\",\"rank\":\"normal\"},{\"mainsnak\":{\"snaktype\":\"value\",\"property\":\"P2860\",\"datavalue\":{\"value\":{\"entity-type\":\"item\",\"numeric-id\":27818912,\"id\":\"Q27818912\"},\"type\":\"wikibase-entityid\"},\"datatype\":\"wikibase-item\"},\"type\":\"statement\",\"id\":\"Q27795847$15ec6ec7-4db2-3bbb-bfaf-a924b6482e51\",\"rank\":\"normal\"}],\"P1104\":[{\"mainsnak\":{\"snaktype\":\"value\",\"property\":\"P1104\",\"datavalue\":{\"value\":{\"amount\":\"+3\",\"unit\":\"1\",\"upperBound\":\"+4\",\"lowerBound\":\"+2\"},\"type\":\"quantity\"},\"datatype\":\"quantity\"},\"type\":\"statement\",\"id\":\"Q27795847$be33113d-4b0c-7756-ecf1-ec78c0605209\",\"rank\":\"normal\"}],\"P953\":[{\"mainsnak\":{\"snaktype\":\"value\",\"property\":\"P953\",\"datavalue\":{\"value\":\"http://rdcu.be/msZj\",\"type\":\"string\"},\"datatype\":\"url\"},\"type\":\"statement\",\"id\":\"Q27795847$9ae54b43-42bd-2c08-9347-eecb6838ae00\",\"rank\":\"normal\"}],\"P698\":[{\"mainsnak\":{\"snaktype\":\"value\",\"property\":\"P698\",\"datavalue\":{\"value\":\"27824832\",\"type\":\"string\"},\"datatype\":\"external-id\"},\"type\":\"statement\",\"id\":\"Q27795847$7CCFB068-30E5-4A85-A1AA-85981F7752E8\",\"rank\":\"normal\"}],\"P356\":[{\"mainsnak\":{\"snaktype\":\"value\",\"property\":\"P356\",\"datavalue\":{\"value\":\"10.1038/NBT.3689\",\"type\":\"string\"},\"datatype\":\"external-id\"},\"type\":\"statement\",\"id\":\"Q27795847$BDC0D3CE-51FB-4058-B1AE-BD9CF1DCB5DE\",\"rank\":\"normal\"}]},\"sitelinks\":[]}}}"
 
 const testOutput = {
   wd: {
     id: 'Q21972834',
-    simple: [{"wikiID":"Q21972834","id":"Q21972834","type":"article-journal","title":"Assembling the 20 Gb white spruce (Picea glauca) genome from whole-genome shotgun sequencing data","volume":"29","issue":"12","issued":[{"date-parts":[2013,6,15]}],"page":"1492-7","container-title":"Bioinformatics","DOI":"10.1093/BIOINFORMATICS/BTT178","author":[{"given":"Inanc","family":"Birol"},{"given":"Anthony","family":"Raymond"},{"given":"Shaun D","family":"Jackman"},{"given":"Stephen","family":"Pleasance"},{"given":"Robin","family":"Coope"},{"given":"Greg A","family":"Taylor"},{"given":"Macaire Man Saint","family":"Yuen"},{"given":"Christopher I","family":"Keeling"},{"given":"Dana","family":"Brand"},{"given":"Benjamin P","family":"Vandervalk"},{"given":"Heather","family":"Kirk"},{"given":"Pawan","family":"Pandoh"},{"given":"Richard A","family":"Moore"},{"given":"Yongjun","family":"Zhao"},{"given":"Andrew J","family":"Mungall"},{"given":"Barry","family":"Jaquish"},{"given":"Alvin","family":"Yanchuk"},{"given":"Carol","family":"Ritland"},{"given":"Brian","family":"Boyle"},{"given":"Jean","family":"Bousquet"},{"given":"Kermit","family":"Ritland"},{"given":"John","family":"Mackay"},{"given":"Jörg","family":"Bohlmann"},{"given":"Steven J M","family":"Jones"}]}],
-    author: [{"wikiID":"Q27795847","id":"Q27795847","type":"article-journal","issued":[{"date-parts":[2016,11,8]}],"title":"SPLASH, a hashed identifier for mass spectra","volume":"34","page":"1099–1101","container-title":"Nature Biotechnology","URL":"http://rdcu.be/msZj","DOI":"10.1038/NBT.3689","author":[{"given":"Gert","family":"Wohlgemuth"},{"given":"Sajjan S","family":"Mehta"},{"given":"Ramon F","family":"Mejia"},{"given":"Steffen","family":"Neumann"},{"given":"Diego","family":"Pedrosa"},{"given":"Tomáš","family":"Pluskal"},{"given":"Emma","family":"Schymanski"},{"given":"Egon","family":"Willighagen"},{"given":"Michael","family":"Wilson"},{"given":"David S","family":"Wishart"},{"given":"Masanori","family":"Arita"},{"given":"Pieter C","family":"Dorrestein"},{"given":"Nuno","family":"Bandeira"},{"given":"Mingxun","family":"Wang"},{"given":"Tobias","family":"Schulze"},{"given":"Reza M","family":"Salek"},{"given":"Christoph","family":"Steinbeck"},{"given":"Venkata Chandrasekhar","family":"Nainala"},{"given":"Robert","family":"Mistrik"},{"given":"Takaaki","family":"Nishioka"},{"given":"Oliver","family":"Fiehn"}]}],
+    simple: [{'wikiId': 'Q21972834', 'id': 'Q21972834', 'type': 'article-journal', 'title': 'Assembling the 20 Gb white spruce (Picea glauca) genome from whole-genome shotgun sequencing data', 'volume': '29', 'issue': '12', 'issued': [{'date-parts': [2013, 6, 15]}], 'page': '1492-7', 'container-title': 'Bioinformatics', 'DOI': '10.1093/BIOINFORMATICS/BTT178', 'author': [{'given': 'Inanc', 'family': 'Birol'}, {'given': 'Anthony', 'family': 'Raymond'}, {'given': 'Shaun D', 'family': 'Jackman'}, {'given': 'Stephen', 'family': 'Pleasance'}, {'given': 'Robin', 'family': 'Coope'}, {'given': 'Greg A', 'family': 'Taylor'}, {'given': 'Macaire Man Saint', 'family': 'Yuen'}, {'given': 'Christopher I', 'family': 'Keeling'}, {'given': 'Dana', 'family': 'Brand'}, {'given': 'Benjamin P', 'family': 'Vandervalk'}, {'given': 'Heather', 'family': 'Kirk'}, {'given': 'Pawan', 'family': 'Pandoh'}, {'given': 'Richard A', 'family': 'Moore'}, {'given': 'Yongjun', 'family': 'Zhao'}, {'given': 'Andrew J', 'family': 'Mungall'}, {'given': 'Barry', 'family': 'Jaquish'}, {'given': 'Alvin', 'family': 'Yanchuk'}, {'given': 'Carol', 'family': 'Ritland'}, {'given': 'Brian', 'family': 'Boyle'}, {'given': 'Jean', 'family': 'Bousquet'}, {'given': 'Kermit', 'family': 'Ritland'}, {'given': 'John', 'family': 'Mackay'}, {'given': 'Jörg', 'family': 'Bohlmann'}, {'given': 'Steven J M', 'family': 'Jones'}]}],
+    author: [{'wikiId': 'Q27795847', 'id': 'Q27795847', 'type': 'article-journal', 'issued': [{'date-parts': [2016, 11, 8]}], 'title': 'SPLASH, a hashed identifier for mass spectra', 'volume': '34', 'page': '1099–1101', 'container-title': 'Nature Biotechnology', 'URL': 'http://rdcu.be/msZj', 'DOI': '10.1038/NBT.3689', 'author': [{'given': 'Gert', 'family': 'Wohlgemuth'}, {'given': 'Sajjan S', 'family': 'Mehta'}, {'given': 'Ramon F', 'family': 'Mejia'}, {'given': 'Steffen', 'family': 'Neumann'}, {'given': 'Diego', 'family': 'Pedrosa'}, {'given': 'Tomáš', 'family': 'Pluskal'}, {'given': 'Emma', 'family': 'Schymanski'}, {'given': 'Egon', 'family': 'Willighagen'}, {'given': 'Michael', 'family': 'Wilson'}, {'given': 'David S', 'family': 'Wishart'}, {'given': 'Masanori', 'family': 'Arita'}, {'given': 'Pieter C', 'family': 'Dorrestein'}, {'given': 'Nuno', 'family': 'Bandeira'}, {'given': 'Mingxun', 'family': 'Wang'}, {'given': 'Tobias', 'family': 'Schulze'}, {'given': 'Reza M', 'family': 'Salek'}, {'given': 'Christoph', 'family': 'Steinbeck'}, {'given': 'Venkata Chandrasekhar', 'family': 'Nainala'}, {'given': 'Robert', 'family': 'Mistrik'}, {'given': 'Takaaki', 'family': 'Nishioka'}, {'given': 'Oliver', 'family': 'Fiehn'}]}],
     api: [
       'https://www.wikidata.org/w/api.php?action=wbgetentities&ids=Q21972834&format=json&languages=en',
       'https://www.wikidata.org/w/api.php?action=wbgetentities&ids=Q21972834%7CQ27795847&format=json&languages=en'
     ]
   },
   bibtex: {
-    simple: [{"type":"article-journal","author":[{"given":"Christoph","family":"Steinbeck"},{"given":"Yongquan","family":"Han"},{"given":"Stefan","family":"Kuhn"},{"given":"Oliver","family":"Horlacher"},{"given":"Edgar","family":"Luttmann"},{"given":"Egon","family":"Willighagen"}],"year":"2003","title":"The Chemistry Development Kit (CDK): an open-source Java library for Chemo- and Bioinformatics","container-title":"Journal of chemical information and computer sciences","volume":"43","issue":"2","page":"493-500","DOI":"10.1021/ci025584y","ISBN":"2214707786","ISSN":"0095-2338","URL":"http://www.ncbi.nlm.nih.gov/pubmed/12653513","id":"Steinbeck2003"}],
-    whitespace: [{"type":"paper-conference","author":[{"given":"Michael D.","family":"Ekstrand"},{"given":"John T.","family":"Riedl"}],"title":"rv you\'re dumb: Identifying Discarded Work in Wiki Article History","container-title":"Proceedings of the 5th International Symposium on Wikis and Open Collaboration","collection-title":"WikiSym \'09","year":"2009","ISBN":"978-1-60558-730-1","publisher-place":"New York, NY, USA","page":"4:1-4:10","URL":"https://dx.doi.org/10.1145/1641309.1641317","DOI":"10.1145/1641309.1641317","publisher":"ACM","id":"Ekstrand:2009:RYD"}],
-    
+    simple: [{'type': 'article-journal', 'author': [{'given': 'Christoph', 'family': 'Steinbeck'}, {'given': 'Yongquan', 'family': 'Han'}, {'given': 'Stefan', 'family': 'Kuhn'}, {'given': 'Oliver', 'family': 'Horlacher'}, {'given': 'Edgar', 'family': 'Luttmann'}, {'given': 'Egon', 'family': 'Willighagen'}], 'year': '2003', 'title': 'The Chemistry Development Kit (CDK): an open-source Java library for Chemo- and Bioinformatics', 'container-title': 'Journal of chemical information and computer sciences', 'volume': '43', 'issue': '2', 'page': '493-500', 'DOI': '10.1021/ci025584y', 'ISBN': '2214707786', 'ISSN': '0095-2338', 'URL': 'http://www.ncbi.nlm.nih.gov/pubmed/12653513', 'id': 'Steinbeck2003'}],
+    whitespace: [{'type': 'paper-conference', 'author': [{'given': 'Michael D.', 'family': 'Ekstrand'}, {'given': 'John T.', 'family': 'Riedl'}], 'title': 'rv you\'re dumb: Identifying Discarded Work in Wiki Article History', 'container-title': 'Proceedings of the 5th International Symposium on Wikis and Open Collaboration', 'collection-title': 'WikiSym \'09', 'year': '2009', 'ISBN': '978-1-60558-730-1', 'publisher-place': 'New York, NY, USA', 'page': '4:1-4:10', 'URL': 'https://dx.doi.org/10.1145/1641309.1641317', 'DOI': '10.1145/1641309.1641317', 'publisher': 'ACM', 'id': 'Ekstrand:2009:RYD'}],
+
     plain: '@article{Hall1957Correlation, author={H. K. Hall}, doi={10.1021/ja01577a030}, journal={Journal of the American Chemical Society}, issue=20, pages={5441--5444}, title={{Correlation of the Base Strengths of Amines 1}}, volume=79, year=1957, }',
-    json: [{"label":"Hall1957Correlation","type":"article","properties":{"author":"H. K. Hall","doi":"10.1021/ja01577a030","journal":"Journal of the American Chemical Society","issue":"20","pages":"5441--5444","title":"Correlation of the Base Strengths of Amines 1","volume":"79","year":"1957"}}]
+    json: [{'label': 'Hall1957Correlation', 'type': 'article', 'properties': {'author': 'H. K. Hall', 'doi': '10.1021/ja01577a030', 'journal': 'Journal of the American Chemical Society', 'issue': '20', 'pages': '5441--5444', 'title': 'Correlation of the Base Strengths of Amines 1', 'volume': '79', 'year': '1957'}}]
   },
   bibjson: {
-    simple: [{"publisher":"BioMed Central","journal":"Journal of Ethnobiology and Ethnomedicine","title":"Gitksan medicinal plants-cultural choice and efficacy","authors":"Leslie Main Johnson","date":"2006-06-21","doi":"10.1186/1746-4269-2-29","volume":"2","issue":"1","firstpage":"1","fulltext_html":"http://ethnobiomed.biomedcentral.com/articles/10.1186/1746-4269-2-29","fulltext_pdf":"http://ethnobiomed.biomedcentral.com/track/pdf/10.1186/1746-4269-2-29?site=http://ethnobiomed.biomedcentral.com","license":"This article is published under license to BioMed Central Ltd. This is an Open Access article distributed under the terms of the Creative Commons Attribution License (http://creativecommons.org/licenses/by/2.0), which permits unrestricted use, distribution, and reproduction in any medium, provided the original work is properly cited.","copyright":"2006 Johnson; licensee BioMed Central Ltd.","type":"article-journal","author":[{"given":"Leslie Main","family":"Johnson"}],"page-first":"1","page":"1","issued":[{"date-parts":[2006,6,21]}],"container-title":"Journal of Ethnobiology and Ethnomedicine","id":"10.1186/1746-4269-2-29","DOI":"10.1186/1746-4269-2-29"}]
+    simple: [{'publisher': 'BioMed Central', 'journal': 'Journal of Ethnobiology and Ethnomedicine', 'title': 'Gitksan medicinal plants-cultural choice and efficacy', 'authors': 'Leslie Main Johnson', 'date': '2006-06-21', 'doi': '10.1186/1746-4269-2-29', 'volume': '2', 'issue': '1', 'firstpage': '1', 'fulltext_html': 'http://ethnobiomed.biomedcentral.com/articles/10.1186/1746-4269-2-29', 'fulltext_pdf': 'http://ethnobiomed.biomedcentral.com/track/pdf/10.1186/1746-4269-2-29?site=http://ethnobiomed.biomedcentral.com', 'license': 'This article is published under license to BioMed Central Ltd. This is an Open Access article distributed under the terms of the Creative Commons Attribution License (http://creativecommons.org/licenses/by/2.0), which permits unrestricted use, distribution, and reproduction in any medium, provided the original work is properly cited.', 'copyright': '2006 Johnson; licensee BioMed Central Ltd.', 'type': 'article-journal', 'author': [{'given': 'Leslie Main', 'family': 'Johnson'}], 'page-first': '1', 'page': '1', 'issued': [{'date-parts': [2006, 6, 21]}], 'container-title': 'Journal of Ethnobiology and Ethnomedicine', 'id': '10.1186/1746-4269-2-29', 'DOI': '10.1186/1746-4269-2-29'}]
   },
   csl: {
     apa: 'Hall, H. K. Correlation of the Base Strengths of Amines 1. Journal of the American Chemical Society, 79(20), 5441–5444. https://doi.org/10.1021/ja01577a030',
     vancouver: '1. Hall HK. Correlation of the Base Strengths of Amines 1. Journal of the American Chemical Society. 79(20):5441–4.',
     title: 'Correlation of the Base Strengths of Amines 1',
     html: {
-      apa: '<div class="csl-bib-body">\n\
-  <div data-csl-entry-id="Q23571040" class="csl-entry">Hall, H. K. Correlation of the Base Strengths of Amines 1. <i>Journal of the American Chemical Society</i>, <i>79</i>(20), 5441–5444. https://doi.org/10.1021/ja01577a030</div>\n\
-</div>',
-      vancouver: '<div class="csl-bib-body">\n\
-  <div data-csl-entry-id="Q23571040" class="csl-entry">\n\
-    <div class="csl-left-margin">1. </div><div class="csl-right-inline">Hall HK. Correlation of the Base Strengths of Amines 1. Journal of the American Chemical Society. 79(20):5441–4.</div>\n\
-   </div>\n\
-</div>',
-      title: '<div class="csl-bib-body">\n\
-  <div data-csl-entry-id="Q23571040" class="csl-entry">Correlation of the Base Strengths of Amines 1</div>\n\
-</div>'
+      apa:
+'<div class="csl-bib-body">\n' +
+'  <div data-csl-entry-id="Q23571040" class="csl-entry">Hall, H. K. Correlation of the Base Strengths of Amines 1. <i>Journal of the American Chemical Society</i>, <i>79</i>(20), 5441–5444. https://doi.org/10.1021/ja01577a030</div>\n' +
+'</div>',
+      vancouver:
+'<div class="csl-bib-body">\n' +
+'  <div data-csl-entry-id="Q23571040" class="csl-entry">\n' +
+'    <div class="csl-left-margin">1. </div><div class="csl-right-inline">Hall HK. Correlation of the Base Strengths of Amines 1. Journal of the American Chemical Society. 79(20):5441–4.</div>\n' +
+'   </div>\n' +
+'</div>',
+      title:
+'<div class="csl-bib-body">\n' +
+'  <div data-csl-entry-id="Q23571040" class="csl-entry">Correlation of the Base Strengths of Amines 1</div>\n' +
+'</div>'
     }
   }
 }
 
 const testInput = {
   wd: {
-    simple: JSON.parse(file_1),
-    author: JSON.parse(file_2),
+    simple: JSON.parse(file1),
+    author: JSON.parse(file2),
     url: 'https://www.wikidata.org/wiki/Q21972834',
     list: {
       space: 'Q21972834 Q27795847',
@@ -28724,7 +29133,7 @@ const testInput = {
     whitespace: '@inproceedings{Ekstrand:2009:RYD,\n author = {Michael D. Ekstrand and John T. Riedl},\n title = {rv you\'re dumb: Identifying Discarded Work in Wiki Article History},\n booktitle = {Proceedings of the 5th International Symposium on Wikis and Open Collaboration},\n series = {WikiSym \'09},\n year = {2009},\n isbn = {978-1-60558-730-1},\n location = {Orlando, Florida},\n pages = {4:1--4:10},\n articleno = {4},\n numpages = {10},\n url = {https://dx.doi.org/10.1145/1641309.1641317},\n doi = {10.1145/1641309.1641317},\n acmid = {1641317},\n publisher = {ACM},\n address = {New York, NY, USA},\n keywords = {Wiki, Wikipedia, article history, visualization},\n}\n'
   },
   bibjson: {
-    simple: { "publisher": { "value": [ "BioMed Central" ] }, "journal": { "value": [ "Journal of Ethnobiology and Ethnomedicine" ] }, "title": { "value": [ "Gitksan medicinal plants-cultural choice and efficacy" ] }, "authors": { "value": [ "Leslie Main Johnson" ] }, "date": { "value": [ "2006-06-21" ] }, "doi": { "value": [ "10.1186/1746-4269-2-29" ] }, "volume": { "value": [ "2" ] }, "issue": { "value": [ "1" ] }, "firstpage": { "value": [ "1" ] }, "fulltext_html": { "value": [ "http://ethnobiomed.biomedcentral.com/articles/10.1186/1746-4269-2-29" ] }, "fulltext_pdf": { "value": [ "http://ethnobiomed.biomedcentral.com/track/pdf/10.1186/1746-4269-2-29?site=http://ethnobiomed.biomedcentral.com" ] }, "license": { "value": [ "This article is published under license to BioMed Central Ltd. This is an Open Access article distributed under the terms of the Creative Commons Attribution License (http://creativecommons.org/licenses/by/2.0), which permits unrestricted use, distribution, and reproduction in any medium, provided the original work is properly cited." ] }, "copyright": { "value": [ "2006 Johnson; licensee BioMed Central Ltd." ] } }
+    simple: { 'publisher': { 'value': [ 'BioMed Central' ] }, 'journal': { 'value': [ 'Journal of Ethnobiology and Ethnomedicine' ] }, 'title': { 'value': [ 'Gitksan medicinal plants-cultural choice and efficacy' ] }, 'authors': { 'value': [ 'Leslie Main Johnson' ] }, 'date': { 'value': [ '2006-06-21' ] }, 'doi': { 'value': [ '10.1186/1746-4269-2-29' ] }, 'volume': { 'value': [ '2' ] }, 'issue': { 'value': [ '1' ] }, 'firstpage': { 'value': [ '1' ] }, 'fulltext_html': { 'value': [ 'http://ethnobiomed.biomedcentral.com/articles/10.1186/1746-4269-2-29' ] }, 'fulltext_pdf': { 'value': [ 'http://ethnobiomed.biomedcentral.com/track/pdf/10.1186/1746-4269-2-29?site=http://ethnobiomed.biomedcentral.com' ] }, 'license': { 'value': [ 'This article is published under license to BioMed Central Ltd. This is an Open Access article distributed under the terms of the Creative Commons Attribution License (http://creativecommons.org/licenses/by/2.0), which permits unrestricted use, distribution, and reproduction in any medium, provided the original work is properly cited.' ] }, 'copyright': { 'value': [ '2006 Johnson; licensee BioMed Central Ltd.' ] } }
   },
   csl: {
     empty: {},
@@ -28738,26 +29147,26 @@ const testInput = {
     ],
     simple: [
       {
-        "id": "Q23571040",
-        "type": "article-journal",
-        "title": "Correlation of the Base Strengths of Amines 1",
-        "DOI": "10.1021/ja01577a030",
-        "author": [
-          {"given": "H. K.", "family": "Hall"}
+        'id': 'Q23571040',
+        'type': 'article-journal',
+        'title': 'Correlation of the Base Strengths of Amines 1',
+        'DOI': '10.1021/ja01577a030',
+        'author': [
+          {'given': 'H. K.', 'family': 'Hall'}
         ],
-        "issued": [
-          {"date-parts": ["1957", "1", "1"]}
+        'issued': [
+          {'date-parts': ['1957', '1', '1']}
         ],
-        "container-title": "Journal of the American Chemical Society",
-        "volume": "79",
-        "issue": "20",
-        "page": "5441-5444"
+        'container-title': 'Journal of the American Chemical Society',
+        'volume': '79',
+        'issue': '20',
+        'page': '5441-5444'
       }
     ]
   }
 }
 
-const customTemplate = 
+const customTemplate =
   '<?xml version="1.0" encoding="utf-8"?>' +
     '<style xmlns="http://purl.org/net/xbiblio/csl" class="in-text" version="1.0" demote-non-dropping-particle="sort-only" page-range-format="minimal">' +
       '<bibliography>' +
@@ -28768,257 +29177,244 @@ const customTemplate =
   '</style>'
 
 describe('Cite object', function () {
-  
-  describe('init', function () {
-    
-    it('can be executed', function () {
-      const spy = jasmine.createSpy('Cite'),
-            tst = new spy()
-      
-      expect(spy).toHaveBeenCalled()
-    })
-    
+  describe('initialisation', function () {
     it('returns a Cite object', function () {
-      const tst = new Cite()
-      expect(tst instanceof Cite).toBe(true)
+      const test = new Cite()
+      expect(test instanceof Cite).toBe(true)
     })
-  
   })
-  
+
   describe('function', function () {
     describe('add()', function () {
       const test = new Cite(testInput.csl.empty)
-      
       test.add(testInput.csl.empty)
-      
+
       it('works', function () {
         expect(test.data.length).toBe(2)
         expect(test._log.length).toBe(2)
       })
     })
-    
+
     describe('set()', function () {
       const test = new Cite(testInput.csl.empty)
-      
       test.set(testInput.csl.empty)
-      
+
       it('works', function () {
         expect(test.data.length).toBe(1)
         expect(test._log.length).toBe(2)
       })
     })
-    
+
     describe('reset()', function () {
       const test = new Cite(testInput.csl.empty)
-      
+
       test.reset()
-      
+
       it('works', function () {
         expect(test.data.length).toBe(0)
         expect(test._log.length).toBe(2)
       })
     })
-    
+
     describe('options()', function () {
       const test = new Cite()
-      
+
       test.options({format: 'string'})
-      
+
       it('works', function () {
         expect(test._options.format).toBe('string')
         expect(test._log.length).toBe(2)
       })
     })
-    
+
     describe('currentVersion()', function () {
       const test = new Cite(testInput.csl.empty)
-      
+
       it('works', function () {
         expect(test.currentVersion()).toBe(0)
         test.add(testInput.csl.empty)
         expect(test.currentVersion()).toBe(1)
       })
     })
-    
+
     describe('retrieveVersion()', function () {
       const test = new Cite(testInput.csl.empty)
-      
+
       it('works', function () {
         expect(test._log.length).toBe(1)
         expect(test.data.length).toBe(1)
-        
+
         test.add(testInput.csl.empty)
-        
+
         expect(test._log.length).toBe(2)
         expect(test.data.length).toBe(2)
-        
-        const test_2 = test.retrieveVersion(0)
-        
-        expect(test_2._log.length).toBe(1)
-        expect(test_2.data.length).toBe(1)
+
+        const test2 = test.retrieveVersion(0)
+
+        expect(test2._log.length).toBe(1)
+        expect(test2.data.length).toBe(1)
       })
-      
+
       it('doesn\'t change parent data', function () {
         expect(test._log.length).toBe(3)
         expect(test._log[2].name).toBe('retrieveVersion')
-        
+
         expect(test.data.length).toBe(2)
       })
     })
-    
+
     describe('undo()', function () {
       const test = new Cite(testInput.csl.empty)
-      
+
       it('works', function () {
         expect(test._log.length).toBe(1)
         expect(test.data.length).toBe(1)
-        
+
         test.add(testInput.csl.empty)
-        
+
         expect(test._log.length).toBe(2)
         expect(test.data.length).toBe(2)
-        
-        const test_2 = test.undo()
-        
-        expect(test_2._log.length).toBe(1)
-        expect(test_2.data.length).toBe(1)
+
+        const test2 = test.undo()
+
+        expect(test2._log.length).toBe(1)
+        expect(test2.data.length).toBe(1)
       })
-      
+
       it('doesn\'t change parent data', function () {
         expect(test._log.length).toBe(3)
         expect(test._log[2].name).toBe('undo')
-        
+
         expect(test.data.length).toBe(2)
       })
     })
-    
+
     describe('sort()', function () {
       const test = new Cite(testInput.csl.sort)
-      
+
       it('works', function () {
         expect(test.data[ 0 ].author[ 0 ].family).toBe('b')
         expect(test.data[ 1 ].author[ 0 ].family).toBe('a')
-        
+
         test.sort()
-        
+
         expect(test.data[ 0 ].author[ 0 ].family).toBe('a')
         expect(test.data[ 1 ].author[ 0 ].family).toBe('b')
       })
     })
-    
+
     describe('getIds()', function () {
       const test = new Cite(testInput.csl.ids)
-      
+
       it('works', function () {
         expect(test.data[ 0 ].id).toBe('b')
         expect(test.data[ 1 ].id).toBe('a')
-        
+
         const out = test.getIds()
-        
+
         expect(out[0]).toBe('b')
         expect(out[1]).toBe('a')
       })
-      
+
       it('doesn\'t change parent data', function () {
         expect(test._log.length).toBe(2)
         expect(test._log[1].name).toBe('getIds')
-        
+
         expect(test.data.length).toBe(2)
       })
     })
   })
-  
+
   describe('input', function () {
-    
     describe('Wikidata URL', function () {
       it('handles input type', function () {
         expect(Cite.parse.input.type(testInput.wd.url)).toBe('url/wikidata')
       })
-      
+
       it('parses input correctly', function () {
         const test = Cite.parse.input.chainLink(testInput.wd.url)
-        expect(test[0].replace(/[&?]origin=\*/,'')).toBe(testOutput.wd.api[0])
+        expect(test[0].replace(/[&?]origin=\*/, '')).toBe(testOutput.wd.api[0])
       })
     })
-    
+
     describe('Wikidata ID list', function () {
       describe('separated by spaces', function () {
         it('handles input type', function () {
           expect(Cite.parse.input.type(testInput.wd.list.space)).toBe('list/wikidata')
         })
-        
+
         it('parses input correctly', function () {
           const test = Cite.parse.input.chainLink(testInput.wd.list.space)
-          expect(test[0].replace(/[&?]origin=\*/,'')).toBe(testOutput.wd.api[1])
+          expect(test[0].replace(/[&?]origin=\*/, '')).toBe(testOutput.wd.api[1])
         })
       })
-      
+
       describe('separated by newlines', function () {
         it('handles input type', function () {
           expect(Cite.parse.input.type(testInput.wd.list.newline)).toBe('list/wikidata')
         })
-        
+
         it('parses input correctly', function () {
           const test = Cite.parse.input.chainLink(testInput.wd.list.newline)
-          expect(test[0].replace(/[&?]origin=\*/,'')).toBe(testOutput.wd.api[1])
+          expect(test[0].replace(/[&?]origin=\*/, '')).toBe(testOutput.wd.api[1])
         })
       })
-      
+
       describe('separated by commas', function () {
         it('handles input type', function () {
           expect(Cite.parse.input.type(testInput.wd.list.comma)).toBe('list/wikidata')
         })
-        
+
         it('parses input correctly', function () {
           const test = Cite.parse.input.chainLink(testInput.wd.list.comma)
-          expect(test[0].replace(/[&?]origin=\*/,'')).toBe(testOutput.wd.api[1])
+          expect(test[0].replace(/[&?]origin=\*/, '')).toBe(testOutput.wd.api[1])
         })
       })
     })
-    
+
     describe('Wikidata JSON', function () {
-      const test_1 = new Cite(testInput.wd.simple),
-            test_2 = new Cite(testInput.wd.author)
-      
+      const test1 = new Cite(testInput.wd.simple)
+      const test2 = new Cite(testInput.wd.author)
+
       it('handles input type', function () {
-        expect(test_1._input.format).toBe('object/wikidata')
-        expect(test_2._input.format).toBe('object/wikidata')
+        expect(test1._input.format).toBe('object/wikidata')
+        expect(test2._input.format).toBe('object/wikidata')
       })
-      
+
       it('parses input correctly', function () {
-        expect(test_1.data).toEqual(testOutput.wd.simple)
+        expect(test1.data).toEqual(testOutput.wd.simple)
       })
-      
+
       describe('with linked authors', function () {
         it('parses input correctly', function () {
-          expect(test_2.data).toEqual(testOutput.wd.author)
+          expect(test2.data).toEqual(testOutput.wd.author)
         })
       })
     })
-    
+
     describe('BibTeX string', function () {
-      const test_1 = new Cite(testInput.bibtex.simple),
-            test_2 = new Cite(testInput.bibtex.whitespace)
-      
+      const test1 = new Cite(testInput.bibtex.simple)
+      const test2 = new Cite(testInput.bibtex.whitespace)
+
       it('handles input type', function () {
-        expect(test_1._input.format).toBe('string/bibtex')
-        expect(test_2._input.format).toBe('string/bibtex')
+        expect(test1._input.format).toBe('string/bibtex')
+        expect(test2._input.format).toBe('string/bibtex')
       })
-      
+
       it('parses input correctly', function () {
-        expect(test_1.data).toEqual(testOutput.bibtex.simple)
+        expect(test1.data).toEqual(testOutput.bibtex.simple)
       })
-      
+
       describe('with whitespace and unknown fields', function () {
         it('parses input correctly', function () {
-          expect(test_2.data).toEqual(testOutput.bibtex.whitespace)
+          expect(test2.data).toEqual(testOutput.bibtex.whitespace)
         })
       })
     })
-    
+
     describe('CSL-JSON', function () {
       const test = new Cite(testInput.csl.simple[0])
-      
+
       it('handles input type', function () {
         expect(test._input.format).toBe('object/csl')
       })
@@ -29026,10 +29422,10 @@ describe('Cite object', function () {
         expect(test.data).toEqual(testInput.csl.simple)
       })
     })
-    
+
     describe('ContentMine JSON', function () {
       const test = new Cite(testInput.bibjson.simple)
-      
+
       it('handles input type', function () {
         expect(test._input.format).toBe('object/contentmine')
       })
@@ -29037,11 +29433,11 @@ describe('Cite object', function () {
         expect(test.data).toEqual(testOutput.bibjson.simple)
       })
     })
-    
+
     describe('Array', function () {
-      const data = [{id: 'a'}, {id: 'b'}],
-            test = new Cite(data)
-      
+      const data = [{id: 'a'}, {id: 'b'}]
+      const test = new Cite(data)
+
       it('handles input type', function () {
         expect(test._input.format).toBe('array/csl')
       })
@@ -29051,30 +29447,30 @@ describe('Cite object', function () {
       it('duplicates objects', function () {
         expect(test.data).not.toBe(data)
       })
-      
+
       describe('nested', function () {
-        const obj_1 = {id: 'a'},
-              obj_2 = {id: 'b'},
-              test = new Cite([[obj_1], obj_2])
-        
+        const obj1 = {id: 'a'}
+        const obj2 = {id: 'b'}
+        const test = new Cite([[obj1], obj2])
+
         it('handles input type', function () {
           expect(test._input.format).toBe('array/else')
         })
         it('parses input correctly', function () {
-          expect(test.data).toEqual([obj_1, obj_2])
+          expect(test.data).toEqual([obj1, obj2])
         })
         it('duplicates objects', function () {
-          expect(test.data[0]).not.toBe(obj_1)
-          expect(test.data[1]).not.toBe(obj_2)
+          expect(test.data[0]).not.toBe(obj1)
+          expect(test.data[1]).not.toBe(obj2)
         })
       })
     })
-    
+
     describe('Empty', function () {
       describe('string', function () {
         describe('empty', function () {
           const test = new Cite('')
-          
+
           it('handles input type', function () {
             expect(test._input.format).toBe('string/empty')
           })
@@ -29084,7 +29480,7 @@ describe('Cite object', function () {
         })
         describe('whitespace', function () {
           const test = new Cite('   \t\n \r  ')
-          
+
           it('handles input type', function () {
             expect(test._input.format).toBe('string/whitespace')
           })
@@ -29093,10 +29489,10 @@ describe('Cite object', function () {
           })
         })
       })
-      
+
       describe('null', function () {
         const test = new Cite(null)
-        
+
         it('handles input type', function () {
           expect(test._input.format).toBe('empty')
         })
@@ -29104,10 +29500,10 @@ describe('Cite object', function () {
           expect(test.data).toEqual([])
         })
       })
-      
+
       describe('undefined', function () {
         const test = new Cite(undefined)
-        
+
         it('handles input type', function () {
           expect(test._input.format).toBe('empty')
         })
@@ -29117,10 +29513,10 @@ describe('Cite object', function () {
       })
     })
   })
-  
+
   describe('output', function () {
     const test = new Cite(testInput.csl.simple)
-    
+
     describe('Formatted CSL', function () {
       describe('html', function () {
         describe('default built-in template (APA)', function () {
@@ -29129,24 +29525,24 @@ describe('Cite object', function () {
             type: 'html',
             style: 'citation-apa'
           }).trim()
-          
+
           it('outputs correctly', function () {
             expect(out).toBe(testOutput.csl.html.apa)
           })
         })
-        
+
         describe('non-default built-in template (Vancouver)', function () {
           const out = test.get({
             format: 'string',
             type: 'html',
             style: 'citation-vancouver'
           }).trim()
-          
+
           it('outputs correctly', function () {
             expect(out).toBe(testOutput.csl.html.vancouver)
           })
         })
-        
+
         describe('custom template', function () {
           it('outputs correctly', function () {
             const out = test.get({
@@ -29155,22 +29551,22 @@ describe('Cite object', function () {
               style: 'citation-custom',
               template: customTemplate
             }).trim()
-            
+
             expect(out).toBe(testOutput.csl.html.title)
           })
-          
+
           it('registers for subsequent calls', function () {
             const out = test.get({
               format: 'string',
               type: 'html',
               style: 'citation-custom'
             }).trim()
-            
+
             expect(out).toBe(testOutput.csl.html.title)
           })
         })
       })
-      
+
       describe('plain text', function () {
         describe('default built-in template (APA)', function () {
           const out = test.get({
@@ -29178,24 +29574,24 @@ describe('Cite object', function () {
             type: 'string',
             style: 'citation-apa'
           }).trim()
-          
+
           it('outputs correctly', function () {
             expect(out).toBe(testOutput.csl.apa)
           })
         })
-        
+
         describe('non-default built-in template (Vancouver)', function () {
           const out = test.get({
             format: 'string',
             type: 'string',
             style: 'citation-vancouver'
           }).trim()
-          
+
           it('outputs correctly', function () {
             expect(out).toBe(testOutput.csl.vancouver)
           })
         })
-        
+
         describe('custom template', function () {
           it('outputs correctly', function () {
             const out = test.get({
@@ -29204,41 +29600,41 @@ describe('Cite object', function () {
               style: 'citation-custom',
               template: customTemplate
             }).trim()
-            
+
             expect(out).toBe(testOutput.csl.title)
           })
-          
+
           it('registers for subsequent calls', function () {
             const out = test.get({
               format: 'string',
               type: 'string',
               style: 'citation-custom'
             }).trim()
-            
+
             expect(out).toBe(testOutput.csl.title)
           })
         })
       })
     })
-    
+
     describe('CSL-JSON', function () {
       describe('plain text', function () {
         const out = test.get({format: 'string'})
-        
+
         it('outputs correctly', function () {
           expect(JSON.parse(out)).toEqual(testInput.csl.simple)
         })
       })
-      
+
       describe('object', function () {
         const out = test.get()
-        
+
         it('outputs correctly', function () {
           expect(out).toEqual(testInput.csl.simple)
         })
       })
     })
-    
+
     describe('BibTeX', function () {
       describe('plain text', function () {
         const out = test.get({
@@ -29246,17 +29642,17 @@ describe('Cite object', function () {
           type: 'string',
           style: 'bibtex'
         }).trim().replace(/\s+/g, ' ')
-        
+
         it('outputs correctly', function () {
           expect(out).toBe(testOutput.bibtex.plain)
         })
       })
-      
+
       describe('JSON', function () {
         const out = test.get({
           style: 'bibtex'
         })
-        
+
         it('outputs correctly', function () {
           expect(out).toEqual(testOutput.bibtex.json)
         })
@@ -29264,4 +29660,5 @@ describe('Cite object', function () {
     })
   })
 })
-},{"../lib/index.js":24}]},{},[380]);
+
+},{"../lib/index.js":23,"path":349}]},{},[382]);

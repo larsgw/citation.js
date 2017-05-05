@@ -1,63 +1,52 @@
 /**
  * CSL pub type to BibTeX pub type
- * 
+ *
  * @access private
  * @method fetchBibTeXType
- * 
+ *
  * @param {String} pubType - CSL type
- * 
+ *
  * @return {String} BibTeX type
  */
-var fetchBibTeXType = function ( pubType ) {
-  
-  switch ( pubType ) {
+const fetchBibTeXType = function (pubType) {
+  switch (pubType) {
     case 'article':
     case 'article-journal':
     case 'article-magazine':
     case 'article-newspaper':
-      return 'article';
-      break;
-    
+      return 'article'
+
     case 'book':
-      return 'book';
-      break;
-    
+      return 'book'
+
     case 'chapter':
-      return 'incollection';
-      break;
-    
+      return 'incollection'
+
     case 'manuscript':
-      return 'unpublished';
-      break;
-    
+      return 'unpublished'
+
     case 'paper-conference':
-      return 'inproceedings';
-      break;
-    
+      return 'inproceedings'
+
     case 'patent':
-      return 'patent';
-      break;
-    
+      return 'patent'
+
     case 'report':
-      return 'techreport';
-      break;
-    
+      return 'techreport'
+
     case 'thesis':
       return 'phdthesis'
-      break;
-    
+
     case 'graphic':
     case 'interview':
     case 'motion_picture':
     case 'personal_communication':
     case 'webpage':
-      return 'misc';
-      break;
-    
+      return 'misc'
+
     default:
-      console.warn( 'CSL publication type not recognized: ' + pubType + '. Interpreting as "misc".' )
-      return 'misc';
-      break;
+      console.warn(`CSL publication type not recognized: ${pubType}}. Interpreting as "misc".`)
+      return 'misc'
   }
 }
 

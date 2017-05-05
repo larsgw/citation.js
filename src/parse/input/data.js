@@ -11,94 +11,73 @@ import parseJSON from '../json'
 
 /**
  * Standardise input (internal use)
- * 
+ *
  * @access private
  * @method parseInputData
- * 
+ *
  * @param {String|String[]|Object|Object[]} input - The input data
  * @param {String} type - The input type
- * 
+ *
  * @return {CSL[]} The parsed input
  */
-var parseInputData = function ( input, type ) {
-  var output
-  
-  switch ( type ) {
-    
+const parseInputData = function (input, type) {
+  switch (type) {
     case 'string/wikidata':
-      output = parseWikidata( input.match( varRegex.wikidata[ 0 ] )[ 1 ] )
-      break;
-    
+      return parseWikidata(input.match(varRegex.wikidata[0])[1])
+
     case 'list/wikidata':
-      output = parseWikidata( input.match( varRegex.wikidata[ 1 ] )[ 1 ] )
-      break;
-    
+      return parseWikidata(input.match(varRegex.wikidata[1])[1])
+
     case 'api/wikidata':
-      output = fetchFile( input )
-      break;
-    
+      return fetchFile(input)
+
     case 'url/wikidata':
-      output = parseWikidata( input.match( varRegex.wikidata[ 3 ] )[ 1 ] )
-      break;
-    
+      return parseWikidata(input.match(varRegex.wikidata[3])[1])
+
     case 'array/wikidata':
-      output = parseWikidata( input.join(',') )
-      break;
-    
+      return parseWikidata(input.join(','))
+
     case 'url/else':
-      output = fetchFile( input )
-      break;
-    
+      return fetchFile(input)
+
     case 'jquery/else':
-      output = data.val() || data.text() || data.html()
-      break;
-    
+      return input.val() || input.text() || input.html()
+
     case 'html/else':
-      output = data.value || data.textContent
-      break;
-    
+      return input.value || input.textContent
+
     case 'string/json':
-      output = parseJSON( input )
-      break;
-    
+      return parseJSON(input)
+
     case 'string/bibtex':
-      output = parseBibTeXJSON( parseBibTeX( input ) )
-      break;
-    
+      return parseBibTeXJSON(parseBibTeX(input))
+
     case 'object/wikidata':
-      output = parseWikidataJSON( input )
-      break;
-    
+      return parseWikidataJSON(input)
+
     case 'object/contentmine':
-      output = parseContentMine( input )
-      break;
-    
+      return parseContentMine(input)
+
     case 'array/else':
-      output = []
-      input.forEach( function ( value ) {
-        output = output.concat( parseInput( value ) )
-      } )
-      break;
-    
+      let output = []
+      input.forEach(function (value) {
+        output = output.concat(parseInput(value))
+      })
+      return output
+
     case 'object/csl':
-      output = [ input ]
-      break;
-    
+      return [input]
+
     case 'array/csl':
-      output = input
-      break;
-    
+      return input
+
     case 'string/empty':
     case 'string/whitespace':
-    case 'empty'  :
+    case 'empty':
     case 'invalid':
-    default       :
-      output = []
-      break;
-    
+    default:
+      return []
   }
-  
-  return output
 }
 
 export default parseInputData

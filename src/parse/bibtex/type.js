@@ -1,63 +1,52 @@
 /**
  * BibTeX pub type to CSL pub type
- * 
+ *
  * @access private
  * @method parseBibTeXType
- * 
+ *
  * @param {String} pubType - BibTeX type
- * 
+ *
  * @return {String} CSL type
  */
-var parseBibTeXType = function ( pubType ) {
-  switch ( pubType ) {
-    
+const parseBibTeXType = function (pubType) {
+  switch (pubType) {
     case 'article':
-      return 'article-journal';
-      break;
-    
+      return 'article-journal'
+
     case 'book':
     case 'booklet':
     case 'manual':
     case 'misc':
     case 'proceedings':
-      return 'book';
-      break;
-    
+      return 'book'
+
     case 'inbook':
     case 'incollection':
-      return 'chapter';
-      break;
-    
+      return 'chapter'
+
     case 'conference':
     case 'inproceedings':
-      return 'paper-conference';
-      break;
-    
+      return 'paper-conference'
+
     case 'online':
       return 'webpage'
-      break;
-    
+
     case 'patent':
-      return 'patent';
-      break;
-    
+      return 'patent'
+
     case 'phdthesis':
     case 'mastersthesis':
-      return 'thesis';
-      break;
-    
+      return 'thesis'
+
     case 'techreport':
-      return 'report';
-      break;
-    
+      return 'report'
+
     case 'unpublished':
-      return 'manuscript';
-      break;
-    
+      return 'manuscript'
+
     default:
-      console.warn( 'BibTeX publication type not recognized: ' + pubType + '. Interpreting as "book".' )
-      return 'book';
-      break;
+      console.warn('[set]', `BibTeX publication type not recognized: ${pubType}. Interpreting as "book".`)
+      return 'book'
   }
 }
 

@@ -5,27 +5,28 @@ import parseInputData from './data'
 
 /**
  * Parse input until success.
- * 
+ *
  * @access private
  * @method parseInput
- * 
+ *
  * @param {String|String[]|Object|Object[]} input - The input data
- * 
+ *
  * @return {CSL[]} The parsed input
  */
-var parseInput = function ( input ) {
-  var output = input,
-      type = parseInputType( output )
-  
-  if ( type.match(/^(array|object)\//) )
-    output = deepCopy( output )
-  
-  // TODO max recursion level
-  while ( type !== 'array/csl' ) {
-    output = parseInputData( output, type )
-    type = parseInputType( output )
+const parseInput = function (input) {
+  let output = input
+  let type = parseInputType(output)
+
+  if (type.match(/^(array|object)\//)) {
+    output = deepCopy(output)
   }
-  
+
+  // TODO max recursion level
+  while (type !== 'array/csl') {
+    output = parseInputData(output, type)
+    type = parseInputType(output)
+  }
+
   return output
 }
 

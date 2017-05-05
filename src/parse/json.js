@@ -2,31 +2,27 @@ import varRegex from './regex'
 
 /**
  * Parse (in)valid JSON
- * 
+ *
  * @access private
  * @method parseJSON
- * 
+ *
  * @param {String} str - The input string
- * 
+ *
  * @return {Object|Object[]|String[]} The parsed object
  */
-var parseJSON = function ( str ) {
-  var object
+const parseJSON = function (str) {
   try {
-    object = JSON.parse( str )
+    return JSON.parse(str)
   } catch (e) {
-    console.info( '[set]', 'Input was not valid JSON, switching to experimental parser for invalid JSON')
+    console.info('[set]', 'Input was not valid JSON, switching to experimental parser for invalid JSON')
     try {
-      object = JSON.parse(
-        str
-          .replace( varRegex.json[ 0 ][ 0 ], varRegex.json[ 0 ][ 1 ] )
-          .replace( varRegex.json[ 1 ][ 0 ], varRegex.json[ 1 ][ 1 ] )
-      )
+      varRegex.json.forEach(([regex, subst]) => { str = str.replace(regex, subst) })
+      return JSON.parse(str)
     } catch (e) {
-      console.error( '[set]', 'Experimental parser failed. Please improve the JSON. If this is not JSON, please re-read the supported formats.')
+      console.error('[set]', 'Experimental parser failed. Please improve the JSON. If this is not JSON, please re-read the supported formats.')
+      return undefined
     }
   }
-  return object
 }
 
 export default parseJSON

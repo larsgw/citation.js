@@ -1,27 +1,30 @@
 /**
  * Get a BibTeX label from CSL data
- * 
+ *
  * @access private
  * @method getBibTeXLabel
- * 
+ *
  * @param {CSL} src - Input CSL
- * 
+ *
  * @return {String} The label
  */
-var getBibTeXLabel = function ( src ) {
-  var res = ''
-  
-  if ( src.hasOwnProperty( 'author' ) && Array.isArray( src.author ) && src.author.length > 0 )
-    res += src.author[ 0 ].family || src.author[ 0 ].literal
-  
-  if ( src.hasOwnProperty( 'year' ) )
-    res += src.year
-  else if ( src.issued && src.issued[ 0 ] && src.issued[ 0 ][ 'date-parts' ] )
-    res += src.issued[ 0 ][ 'date-parts' ][ 0 ]
-  
-  if ( src.hasOwnProperty( 'title' ) )
-    res += src.title.replace(/^(the|a|an) /i,'').split(' ')[ 0 ]
-  
+const getBibTeXLabel = function ({author = [], year, issued = [], title} = {}) {
+  let res = ''
+
+  if (author.length > 0) {
+    res += author[0].family || author[0].literal
+  }
+
+  if (year) {
+    res += year
+  } else if (issued.length > 0 && issued[0]['date-parts']) {
+    res += issued[0]['date-parts'][0]
+  }
+
+  if (title) {
+    res += title.match(/^(?:(?:the|a|an)\s+)?(\S+)/i)[1]
+  }
+
   return res
 }
 

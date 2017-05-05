@@ -2,34 +2,30 @@ import parseDate from '../date'
 import parseName from '../name'
 
 /**
- * Format ContentMine data
- * 
+ * Forat ContentMine data
+ *
  * @access private
  * @method parseContentMine
- * 
+ *
  * @param {Object} data - The input data
- * 
+ *
  * @return {CSL[]} The formatted input data
  */
-var parseContentMine = function ( data ) {
-  var res = {}
-    
-    , dataKeys = Object.keys( data )
-  
-  for ( var dataKeyIndex = 0; dataKeyIndex < dataKeys.length; dataKeyIndex++ ) {
-    var prop = dataKeys[ dataKeyIndex ]
-    res[ prop ] = data[ prop ].value[ 0 ]
+const parseContentMine = function (data) {
+  const res = {
+    type: 'article-journal'
   }
-  
-  res.type  = 'article-journal';
-  
-  if ( res.hasOwnProperty( 'authors'   ) ) res.author = data.authors.value.map( parseName )
-  if ( res.hasOwnProperty( 'firstpage' ) ) res['page-first'] = res.firstpage,
-                                           res.page   = res.firstpage
-  if ( res.hasOwnProperty( 'date'      ) ) res.issued = parseDate( res.date )
-  if ( res.hasOwnProperty( 'journal'   ) ) res['container-title'] = res.journal
-  if ( res.hasOwnProperty( 'doi'       ) ) res.id     = res.doi, res.DOI = res.doi
-  
+
+  Object.keys(data).forEach((prop) => { res[prop] = data[prop].value[0] })
+
+  if (res.hasOwnProperty('authors')) { res.author = data.authors.value.map(parseName) }
+  if (res.hasOwnProperty('firstpage')) {
+    res.page = res['page-first'] = res.firstpage
+  }
+  if (res.hasOwnProperty('date')) { res.issued = parseDate(res.date) }
+  if (res.hasOwnProperty('journal')) { res['container-title'] = res.journal }
+  if (res.hasOwnProperty('doi')) { res.id = res.DOI = res.doi }
+
   return res
 }
 
