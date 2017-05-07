@@ -387,8 +387,6 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
-
 var _log = require('./log');
 
 var log = _interopRequireWildcard(_log);
@@ -408,12 +406,6 @@ var sort = _interopRequireWildcard(_sort);
 var _get = require('./get');
 
 var get = _interopRequireWildcard(_get);
-
-var _type = require('../parse/input/type');
-
-var _type2 = _interopRequireDefault(_type);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
@@ -449,29 +441,6 @@ function Cite(data, options) {
   this._options = options || {};
 
   /**
-   * Information about the input data
-   *
-   * @property data The inputted data
-   * @property type {String} The datatype of the input
-   * @property format {String} The format of the input
-   *
-   * @type Object
-   */
-  this._input = {
-    data: data,
-    type: typeof data === 'undefined' ? 'undefined' : _typeof(data),
-    format: (0, _type2.default)(data)
-  };
-
-  /**
-   * The data formatted to JSON
-   *
-   * @type Object
-   * @default []
-   */
-  this.data = [];
-
-  /**
    * The log, containing all logged data, consisting of copies of the Cite object at different moments in time.
    *
    * The `.reset()` function **does not** reset on the log. This way, you can still undo all changes.
@@ -485,6 +454,14 @@ function Cite(data, options) {
    */
   this.log = [];
 
+  /**
+   * The data formatted to JSON
+   *
+   * @type Object
+   * @default []
+   */
+  this.data = [];
+
   this.set(data);
   this.options(options);
   this.save();
@@ -495,7 +472,7 @@ function Cite(data, options) {
 Object.assign(Cite.prototype, log, options, set, sort, get);
 
 exports.default = Cite;
-},{"../parse/input/type":36,"./get":6,"./log":8,"./options":9,"./set":10,"./sort":11}],8:[function(require,module,exports){
+},{"./get":6,"./log":8,"./options":9,"./set":10,"./sort":11}],8:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -29034,7 +29011,6 @@ module.exports={
   "devDependencies": {
     "babel-cli": "^6.24.1",
     "babel-core": "^6.24.1",
-    "babel-polyfill": "^6.23.0",
     "babel-preset-es2015": "^6.24.1",
     "babel-preset-stage-0": "^6.24.1",
     "brfs": "^1.4.3",
@@ -29425,8 +29401,8 @@ describe('Cite object', function () {
       const test2 = new Cite(testInput.wd.author)
 
       it('handles input type', function () {
-        expect(test1._input.format).toBe('object/wikidata')
-        expect(test2._input.format).toBe('object/wikidata')
+        expect(Cite.parse.input.type(testInput.wd.simple)).toBe('object/wikidata')
+        expect(Cite.parse.input.type(testInput.wd.author)).toBe('object/wikidata')
       })
 
       it('parses input correctly', function () {
@@ -29445,8 +29421,8 @@ describe('Cite object', function () {
       const test2 = new Cite(testInput.bibtex.whitespace)
 
       it('handles input type', function () {
-        expect(test1._input.format).toBe('string/bibtex')
-        expect(test2._input.format).toBe('string/bibtex')
+        expect(Cite.parse.input.type(testInput.bibtex.simple)).toBe('string/bibtex')
+        expect(Cite.parse.input.type(testInput.bibtex.whitespace)).toBe('string/bibtex')
       })
 
       it('parses input correctly', function () {
@@ -29464,7 +29440,7 @@ describe('Cite object', function () {
       const test = new Cite(testInput.csl.simple[0])
 
       it('handles input type', function () {
-        expect(test._input.format).toBe('object/csl')
+        expect(Cite.parse.input.type(testInput.csl.simple[0])).toBe('object/csl')
       })
       it('parses input correctly', function () {
         expect(test.data).toEqual(testInput.csl.simple)
@@ -29475,7 +29451,7 @@ describe('Cite object', function () {
       const test = new Cite(testInput.bibjson.simple)
 
       it('handles input type', function () {
-        expect(test._input.format).toBe('object/contentmine')
+        expect(Cite.parse.input.type(testInput.bibjson.simple)).toBe('object/contentmine')
       })
       it('parses input correctly', function () {
         expect(test.data).toEqual(testOutput.bibjson.simple)
@@ -29487,7 +29463,7 @@ describe('Cite object', function () {
       const test = new Cite(data)
 
       it('handles input type', function () {
-        expect(test._input.format).toBe('array/csl')
+        expect(Cite.parse.input.type(data)).toBe('array/csl')
       })
       it('parses input correctly', function () {
         expect(test.data).toEqual(data)
@@ -29502,7 +29478,7 @@ describe('Cite object', function () {
         const test = new Cite([[obj1], obj2])
 
         it('handles input type', function () {
-          expect(test._input.format).toBe('array/else')
+          expect(Cite.parse.input.type([[obj1], obj2])).toBe('array/else')
         })
         it('parses input correctly', function () {
           expect(test.data).toEqual([obj1, obj2])
@@ -29520,7 +29496,7 @@ describe('Cite object', function () {
           const test = new Cite('')
 
           it('handles input type', function () {
-            expect(test._input.format).toBe('string/empty')
+            expect(Cite.parse.input.type('')).toBe('string/empty')
           })
           it('parses input correctly', function () {
             expect(test.data).toEqual([])
@@ -29530,7 +29506,7 @@ describe('Cite object', function () {
           const test = new Cite('   \t\n \r  ')
 
           it('handles input type', function () {
-            expect(test._input.format).toBe('string/whitespace')
+            expect(Cite.parse.input.type('   \t\n \r  ')).toBe('string/whitespace')
           })
           it('parses input correctly', function () {
             expect(test.data).toEqual([])
@@ -29542,7 +29518,7 @@ describe('Cite object', function () {
         const test = new Cite(null)
 
         it('handles input type', function () {
-          expect(test._input.format).toBe('empty')
+          expect(Cite.parse.input.type(null)).toBe('empty')
         })
         it('parses input correctly', function () {
           expect(test.data).toEqual([])
@@ -29553,7 +29529,7 @@ describe('Cite object', function () {
         const test = new Cite(undefined)
 
         it('handles input type', function () {
-          expect(test._input.format).toBe('empty')
+          expect(Cite.parse.input.type(undefined)).toBe('empty')
         })
         it('parses input correctly', function () {
           expect(test.data).toEqual([])

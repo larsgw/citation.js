@@ -4,8 +4,6 @@ import * as set from './set'
 import * as sort from './sort'
 import * as get from './get'
 
-import parseInputType from '../parse/input/type'
-
 /**
  * @constructor Cite
  *
@@ -38,29 +36,6 @@ function Cite (data, options) {
   this._options = options || {}
 
   /**
-   * Information about the input data
-   *
-   * @property data The inputted data
-   * @property type {String} The datatype of the input
-   * @property format {String} The format of the input
-   *
-   * @type Object
-   */
-  this._input = {
-    data: data,
-    type: typeof data,
-    format: parseInputType(data)
-  }
-
-  /**
-   * The data formatted to JSON
-   *
-   * @type Object
-   * @default []
-   */
-  this.data = []
-
-  /**
    * The log, containing all logged data, consisting of copies of the Cite object at different moments in time.
    *
    * The `.reset()` function **does not** reset on the log. This way, you can still undo all changes.
@@ -73,6 +48,14 @@ function Cite (data, options) {
    * @property {Cite} 0 - The first image.
    */
   this.log = []
+
+  /**
+   * The data formatted to JSON
+   *
+   * @type Object
+   * @default []
+   */
+  this.data = []
 
   this.set(data)
   this.options(options)

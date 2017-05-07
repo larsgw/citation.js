@@ -387,8 +387,6 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
-
 var _log = require('./log');
 
 var log = _interopRequireWildcard(_log);
@@ -408,12 +406,6 @@ var sort = _interopRequireWildcard(_sort);
 var _get = require('./get');
 
 var get = _interopRequireWildcard(_get);
-
-var _type = require('../parse/input/type');
-
-var _type2 = _interopRequireDefault(_type);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
@@ -449,29 +441,6 @@ function Cite(data, options) {
   this._options = options || {};
 
   /**
-   * Information about the input data
-   *
-   * @property data The inputted data
-   * @property type {String} The datatype of the input
-   * @property format {String} The format of the input
-   *
-   * @type Object
-   */
-  this._input = {
-    data: data,
-    type: typeof data === 'undefined' ? 'undefined' : _typeof(data),
-    format: (0, _type2.default)(data)
-  };
-
-  /**
-   * The data formatted to JSON
-   *
-   * @type Object
-   * @default []
-   */
-  this.data = [];
-
-  /**
    * The log, containing all logged data, consisting of copies of the Cite object at different moments in time.
    *
    * The `.reset()` function **does not** reset on the log. This way, you can still undo all changes.
@@ -485,6 +454,14 @@ function Cite(data, options) {
    */
   this.log = [];
 
+  /**
+   * The data formatted to JSON
+   *
+   * @type Object
+   * @default []
+   */
+  this.data = [];
+
   this.set(data);
   this.options(options);
   this.save();
@@ -495,7 +472,7 @@ function Cite(data, options) {
 Object.assign(Cite.prototype, log, options, set, sort, get);
 
 exports.default = Cite;
-},{"../parse/input/type":35,"./get":6,"./log":8,"./options":9,"./set":10,"./sort":11}],8:[function(require,module,exports){
+},{"./get":6,"./log":8,"./options":9,"./set":10,"./sort":11}],8:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -28548,7 +28525,6 @@ module.exports={
   "devDependencies": {
     "babel-cli": "^6.24.1",
     "babel-core": "^6.24.1",
-    "babel-polyfill": "^6.23.0",
     "babel-preset-es2015": "^6.24.1",
     "babel-preset-stage-0": "^6.24.1",
     "brfs": "^1.4.3",

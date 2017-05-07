@@ -350,8 +350,8 @@ describe('Cite object', function () {
       const test2 = new Cite(testInput.wd.author)
 
       it('handles input type', function () {
-        expect(test1._input.format).toBe('object/wikidata')
-        expect(test2._input.format).toBe('object/wikidata')
+        expect(Cite.parse.input.type(testInput.wd.simple)).toBe('object/wikidata')
+        expect(Cite.parse.input.type(testInput.wd.author)).toBe('object/wikidata')
       })
 
       it('parses input correctly', function () {
@@ -370,8 +370,8 @@ describe('Cite object', function () {
       const test2 = new Cite(testInput.bibtex.whitespace)
 
       it('handles input type', function () {
-        expect(test1._input.format).toBe('string/bibtex')
-        expect(test2._input.format).toBe('string/bibtex')
+        expect(Cite.parse.input.type(testInput.bibtex.simple)).toBe('string/bibtex')
+        expect(Cite.parse.input.type(testInput.bibtex.whitespace)).toBe('string/bibtex')
       })
 
       it('parses input correctly', function () {
@@ -389,7 +389,7 @@ describe('Cite object', function () {
       const test = new Cite(testInput.csl.simple[0])
 
       it('handles input type', function () {
-        expect(test._input.format).toBe('object/csl')
+        expect(Cite.parse.input.type(testInput.csl.simple[0])).toBe('object/csl')
       })
       it('parses input correctly', function () {
         expect(test.data).toEqual(testInput.csl.simple)
@@ -400,7 +400,7 @@ describe('Cite object', function () {
       const test = new Cite(testInput.bibjson.simple)
 
       it('handles input type', function () {
-        expect(test._input.format).toBe('object/contentmine')
+        expect(Cite.parse.input.type(testInput.bibjson.simple)).toBe('object/contentmine')
       })
       it('parses input correctly', function () {
         expect(test.data).toEqual(testOutput.bibjson.simple)
@@ -412,7 +412,7 @@ describe('Cite object', function () {
       const test = new Cite(data)
 
       it('handles input type', function () {
-        expect(test._input.format).toBe('array/csl')
+        expect(Cite.parse.input.type(data)).toBe('array/csl')
       })
       it('parses input correctly', function () {
         expect(test.data).toEqual(data)
@@ -427,7 +427,7 @@ describe('Cite object', function () {
         const test = new Cite([[obj1], obj2])
 
         it('handles input type', function () {
-          expect(test._input.format).toBe('array/else')
+          expect(Cite.parse.input.type([[obj1], obj2])).toBe('array/else')
         })
         it('parses input correctly', function () {
           expect(test.data).toEqual([obj1, obj2])
@@ -445,7 +445,7 @@ describe('Cite object', function () {
           const test = new Cite('')
 
           it('handles input type', function () {
-            expect(test._input.format).toBe('string/empty')
+            expect(Cite.parse.input.type('')).toBe('string/empty')
           })
           it('parses input correctly', function () {
             expect(test.data).toEqual([])
@@ -455,7 +455,7 @@ describe('Cite object', function () {
           const test = new Cite('   \t\n \r  ')
 
           it('handles input type', function () {
-            expect(test._input.format).toBe('string/whitespace')
+            expect(Cite.parse.input.type('   \t\n \r  ')).toBe('string/whitespace')
           })
           it('parses input correctly', function () {
             expect(test.data).toEqual([])
@@ -467,7 +467,7 @@ describe('Cite object', function () {
         const test = new Cite(null)
 
         it('handles input type', function () {
-          expect(test._input.format).toBe('empty')
+          expect(Cite.parse.input.type(null)).toBe('empty')
         })
         it('parses input correctly', function () {
           expect(test.data).toEqual([])
@@ -478,7 +478,7 @@ describe('Cite object', function () {
         const test = new Cite(undefined)
 
         it('handles input type', function () {
-          expect(test._input.format).toBe('empty')
+          expect(Cite.parse.input.type(undefined)).toBe('empty')
         })
         it('parses input correctly', function () {
           expect(test.data).toEqual([])
