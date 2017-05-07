@@ -9,13 +9,13 @@ import fetchId from '../util/fetchId'
  * @this Cite
  *
  * @param {String|CSL|Object|String[]|CSL[]|Object[]} data - The data to add to your object
- * @param {Boolean} nolog - Hide this call from the log (i.e. when used internally)
+ * @param {Boolean} log - Show this call in the log
  *
  * @return {Cite} The updated parent object
  */
-const add = function (data, nolog) {
-  if (!nolog) {
-    this._log.push({name: 'add', version: this.currentVersion() + 1, arguments: [data, nolog]})
+const add = function (data, log) {
+  if (log) {
+    this.save()
   }
 
   this.data = this.data
@@ -23,7 +23,7 @@ const add = function (data, nolog) {
 
   this.data
     .filter(entry => !entry.hasOwnProperty('id'))
-    .forEach(entry => { entry.id = fetchId(this.getIds(true), 'temp_id_') })
+    .forEach(entry => { entry.id = fetchId(this.getIds(), 'temp_id_') })
 
   return this
 }
@@ -36,17 +36,17 @@ const add = function (data, nolog) {
  * @this Cite
  *
  * @param {String|CSL|Object|String[]|CSL[]|Object[]} data - The data to replace the data in your object
- * @param {Boolean} nolog - Hide this call from the log (i.e. when used internally)
+ * @param {Boolean} log - Show this call in the log
  *
  * @return {Cite} The updated parent object
  */
-const set = function (data, nolog) {
-  if (!nolog) {
-    this._log.push({name: 'set', version: this.currentVersion() + 1, arguments: [data, nolog]})
+const set = function (data, log) {
+  if (log) {
+    this.save()
   }
 
   this.data = []
-  this.add(data, true)
+  this.add(data)
 
   return this
 }
@@ -58,13 +58,13 @@ const set = function (data, nolog) {
  * @memberof Cite
  * @this Cite
  *
- * @param {Boolean} nolog - Hide this call from the log (i.e. when used internally)
+ * @param {Boolean} log - Show this call in the log
  *
  * @return {Cite} The updated, empty parent object (except the log, the log lives)
  */
-const reset = function (nolog) {
-  if (!nolog) {
-    this._log.push({name: 'reset', version: this.currentVersion() + 1, arguments: []})
+const reset = function (log) {
+  if (log) {
+    this.save()
   }
 
   this.data = []

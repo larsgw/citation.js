@@ -9,56 +9,74 @@ import Cite from './index'
  * @return {Number} The latest version of the object
  */
 const currentVersion = function () {
-  return this._log.filter(entry => entry.hasOwnProperty('version')).pop().version
+  return this.log.length
 }
 
 /**
- * Does not change the current object.
+ * Returns an image of the object in the version specified.
  *
  * @method retrieveVersion
  * @memberof Cite
  * @this Cite
  *
  * @param {Number} versnum - The number of the version you want to retrieve. Illegel numbers: numbers under zero, floats, numbers above the current version of the object.
- * @param {Boolean} nolog - Hide this call from the log (i.e. when used internally)
  *
  * @return {Cite} The version of the object with the version number passed. `undefined` if an illegal number is passed.
  */
-const retrieveVersion = function (versnum, nolog) {
-  if (!nolog) {
-    this._log.push({name: 'retrieveVersion', arguments: [versnum]})
+const retrieveVersion = function (versnum) {
+  versnum = versnum <= 0 ? 1 : versnum
+
+  if (versnum > this.currentVersion()) {
+    return null
+  } else {
+    const [data, options] = this.log[versnum - 1]
+    const image = new Cite(JSON.parse(data), JSON.parse(options))
+    image.log = this.log.slice(0, versnum)
+    return image
   }
-
-  if (versnum < 0 || versnum > this.currentVersion()) {
-    return undefined
-  }
-
-  const obj = new Cite(this._log[0].arguments[0], this._log[0].arguments[1])
-
-  this._log.filter(entry => entry.hasOwnProperty('version')).slice(1, versnum).forEach(entry =>
-    Cite.prototype[entry.name].apply(obj, entry.arguments || [])
-  )
-
-  return obj
 }
 
 /**
- * Does not change the current object. Undoes the last edit made.
+ * Returns the second to last saved image of the object.
  *
  * @method undo
  * @memberof Cite
  * @this Cite
  *
- * @param {Boolean} nolog - Hide this call from the log (i.e. when used internally)
+ * @param {Number} [number=1] - number of versions to go back.
+ *
+ * @return {Cite} The second to last version of the object. `undefined` if used on first version.
+ */
+const undo = function (number = 1) {
+  return this.retrieveVersion(this.currentVersion() - number)
+}
+
+/**
+ * Returns the last saved image of the object.
+ *
+ * @method undo
+ * @memberof Cite
+ * @this Cite
  *
  * @return {Cite} The last version of the object. `undefined` if used on first version.
  */
-var undo = function (nolog) {
-  if (!nolog) {
-    this._log.push({name: 'undo'})
-  }
-
-  return this.retrieveVersion(this.currentVersion() - 1, true)
+const retrieveLastVersion = function () {
+  return this.retrieveVersion(this.currentVersion())
 }
 
-export { currentVersion, retrieveVersion, undo }
+/**
+ * Save an image of the current version of the object.
+ *
+ * @method save
+ * @memberof Cite
+ * @this Cite
+ *
+ * @return {Cite} The current version of the object.
+ */
+const save = function () {
+  this.log.push([JSON.stringify(this.data), JSON.stringify(this._options)])
+
+  return this
+}
+
+export { currentVersion, retrieveVersion, retrieveLastVersion, undo, save }

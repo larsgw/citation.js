@@ -61,28 +61,22 @@ function Cite (data, options) {
   this.data = []
 
   /**
-   * The log, containing all logged data.
+   * The log, containing all logged data, consisting of copies of the Cite object at different moments in time.
    *
-   * These are the names of each called function, together with it's input. If the `Cite` object is changed, the version number gets updated as well.
-   *
-   * The `.reset()` function **does not** have any influence on the log. This way, you can still undo all changes.
+   * The `.reset()` function **does not** reset on the log. This way, you can still undo all changes.
    *
    * <br /><br />
    * `.currentVersion()` and similar function **are not** logged, because this would be influenced by function using other functions.
    *
    * @type Object[]
    *
-   * @property {Object} 0 - The first version, indicated with version 0, containing the object as it was when it was made. The following properties are used for the following properties too.
-   * @property {String} 0.name - The name of the called function. In case of the initial version, this is `"init"`.
-   * @property {String} 0.version - The version of the object. Undefined when a function that doesn't change the object is called.
-   * @property {Array} 0.arguments - The arguments passed in the called function.
+   * @property {Cite} 0 - The first image.
    */
-  this._log = [
-    {name: 'init', version: 0, arguments: [this._input.data, this._options]}
-  ]
+  this.log = []
 
-  this.set(data, true)
-  this.options(options, true)
+  this.set(data)
+  this.options(options)
+  this.save()
 
   return this
 }

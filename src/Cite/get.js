@@ -19,15 +19,9 @@ import fetchCSLItemCallback from '../CSL/items'
  * @memberof Cite
  * @this Cite
  *
- * @param {Boolean} nolog - Hide this call from the log (i.e. when used internally)
- *
  * @return {String[]} List of IDs
  */
-const getIds = function (nolog) {
-  if (!nolog) {
-    this._log.push({name: 'getIds'})
-  }
-
+const getIds = function () {
   return this.data.map(entry => entry.id)
 }
 
@@ -45,15 +39,10 @@ const getIds = function (nolog) {
  * @param {String} [options.lang="en-US"] - The language of the output. [RFC 5646](https://tools.ietf.org/html/rfc5646) codes
  * @param {String} [options.locale] - Custom CSL locale for citeproc
  * @param {String} [options.template] - Custom CSL style template for citeproc
- * @param {Boolean} nolog - Hide this call from the log (i.e. when used internally)
  *
  * @return {String|Object[]} The formatted data
  */
-const get = function (options, nolog) {
-  if (!nolog) {
-    this._log.push({name: 'get', arguments: [options]})
-  }
-
+const get = function (options) {
   const _data = deepCopy(this.data)
 
   let result
@@ -75,7 +64,7 @@ const get = function (options, nolog) {
       const useLang = fetchCSLLocale(lang) ? lang : 'en-US'
 
       const citeproc = fetchCSLEngine(styleFormat, useLang, useTemplate, cbItem, cbLocale)
-      const sortedIds = citeproc.updateItems(this.getIds(true))
+      const sortedIds = citeproc.updateItems(this.getIds())
 
       let [{bibstart: bibStart, bibend: bibEnd}, bibBody] = citeproc.makeBibliography()
       bibBody = bibBody.map((element, index) => getPrefixedEntry(element, index, sortedIds))
@@ -96,10 +85,7 @@ const get = function (options, nolog) {
       break
 
     case 'string,citation':
-      result = striptags(this.get(
-        Object.assign({}, options, {type: 'html'}),
-        true
-      ))
+      result = striptags(this.get(Object.assign({}, options, {type: 'html'})))
       break
 
     case 'string,csl':

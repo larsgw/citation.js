@@ -259,15 +259,9 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
  * @memberof Cite
  * @this Cite
  *
- * @param {Boolean} nolog - Hide this call from the log (i.e. when used internally)
- *
  * @return {String[]} List of IDs
  */
-var getIds = function getIds(nolog) {
-  if (!nolog) {
-    this._log.push({ name: 'getIds' });
-  }
-
+var getIds = function getIds() {
   return this.data.map(function (entry) {
     return entry.id;
   });
@@ -287,15 +281,10 @@ var getIds = function getIds(nolog) {
  * @param {String} [options.lang="en-US"] - The language of the output. [RFC 5646](https://tools.ietf.org/html/rfc5646) codes
  * @param {String} [options.locale] - Custom CSL locale for citeproc
  * @param {String} [options.template] - Custom CSL style template for citeproc
- * @param {Boolean} nolog - Hide this call from the log (i.e. when used internally)
  *
  * @return {String|Object[]} The formatted data
  */
-var get = function get(options, nolog) {
-  if (!nolog) {
-    this._log.push({ name: 'get', arguments: [options] });
-  }
-
+var get = function get(options) {
   var _data = (0, _deepCopy2.default)(this.data);
 
   var result = void 0;
@@ -323,7 +312,7 @@ var get = function get(options, nolog) {
       var useLang = (0, _locales2.default)(lang) ? lang : 'en-US';
 
       var citeproc = (0, _engines2.default)(styleFormat, useLang, useTemplate, cbItem, cbLocale);
-      var sortedIds = citeproc.updateItems(this.getIds(true));
+      var sortedIds = citeproc.updateItems(this.getIds());
 
       var _citeproc$makeBibliog = citeproc.makeBibliography(),
           _citeproc$makeBibliog2 = _slicedToArray(_citeproc$makeBibliog, 2),
@@ -352,7 +341,7 @@ var get = function get(options, nolog) {
       break;
 
     case 'string,citation':
-      result = (0, _striptags2.default)(this.get(Object.assign({}, options, { type: 'html' }), true));
+      result = (0, _striptags2.default)(this.get(Object.assign({}, options, { type: 'html' })));
       break;
 
     case 'string,csl':
@@ -483,26 +472,22 @@ function Cite(data, options) {
   this.data = [];
 
   /**
-   * The log, containing all logged data.
+   * The log, containing all logged data, consisting of copies of the Cite object at different moments in time.
    *
-   * These are the names of each called function, together with it's input. If the `Cite` object is changed, the version number gets updated as well.
-   *
-   * The `.reset()` function **does not** have any influence on the log. This way, you can still undo all changes.
+   * The `.reset()` function **does not** reset on the log. This way, you can still undo all changes.
    *
    * <br /><br />
    * `.currentVersion()` and similar function **are not** logged, because this would be influenced by function using other functions.
    *
    * @type Object[]
    *
-   * @property {Object} 0 - The first version, indicated with version 0, containing the object as it was when it was made. The following properties are used for the following properties too.
-   * @property {String} 0.name - The name of the called function. In case of the initial version, this is `"init"`.
-   * @property {String} 0.version - The version of the object. Undefined when a function that doesn't change the object is called.
-   * @property {Array} 0.arguments - The arguments passed in the called function.
+   * @property {Cite} 0 - The first image.
    */
-  this._log = [{ name: 'init', version: 0, arguments: [this._input.data, this._options] }];
+  this.log = [];
 
-  this.set(data, true);
-  this.options(options, true);
+  this.set(data);
+  this.options(options);
+  this.save();
 
   return this;
 }
@@ -516,7 +501,9 @@ exports.default = Cite;
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.undo = exports.retrieveVersion = exports.currentVersion = undefined;
+exports.save = exports.undo = exports.retrieveLastVersion = exports.retrieveVersion = exports.currentVersion = undefined;
+
+var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; }();
 
 var _index = require('./index');
 
@@ -533,67 +520,88 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
  * @return {Number} The latest version of the object
  */
 var currentVersion = function currentVersion() {
-  return this._log.filter(function (entry) {
-    return entry.hasOwnProperty('version');
-  }).pop().version;
+  return this.log.length;
 };
 
 /**
- * Does not change the current object.
+ * Returns an image of the object in the version specified.
  *
  * @method retrieveVersion
  * @memberof Cite
  * @this Cite
  *
  * @param {Number} versnum - The number of the version you want to retrieve. Illegel numbers: numbers under zero, floats, numbers above the current version of the object.
- * @param {Boolean} nolog - Hide this call from the log (i.e. when used internally)
  *
  * @return {Cite} The version of the object with the version number passed. `undefined` if an illegal number is passed.
  */
-var retrieveVersion = function retrieveVersion(versnum, nolog) {
-  if (!nolog) {
-    this._log.push({ name: 'retrieveVersion', arguments: [versnum] });
+var retrieveVersion = function retrieveVersion(versnum) {
+  versnum = versnum <= 0 ? 1 : versnum;
+
+  if (versnum > this.currentVersion()) {
+    return null;
+  } else {
+    var _log = _slicedToArray(this.log[versnum - 1], 2),
+        data = _log[0],
+        options = _log[1];
+
+    var image = new _index2.default(JSON.parse(data), JSON.parse(options));
+    image.log = this.log.slice(0, versnum);
+    return image;
   }
-
-  if (versnum < 0 || versnum > this.currentVersion()) {
-    return undefined;
-  }
-
-  var obj = new _index2.default(this._log[0].arguments[0], this._log[0].arguments[1]);
-
-  this._log.filter(function (entry) {
-    return entry.hasOwnProperty('version');
-  }).slice(1, versnum).forEach(function (entry) {
-    return _index2.default.prototype[entry.name].apply(obj, entry.arguments || []);
-  });
-
-  return obj;
 };
 
 /**
- * Does not change the current object. Undoes the last edit made.
+ * Returns the second to last saved image of the object.
  *
  * @method undo
  * @memberof Cite
  * @this Cite
  *
- * @param {Boolean} nolog - Hide this call from the log (i.e. when used internally)
+ * @param {Number} [number=1] - number of versions to go back.
+ *
+ * @return {Cite} The second to last version of the object. `undefined` if used on first version.
+ */
+var undo = function undo() {
+  var number = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 1;
+
+  return this.retrieveVersion(this.currentVersion() - number);
+};
+
+/**
+ * Returns the last saved image of the object.
+ *
+ * @method undo
+ * @memberof Cite
+ * @this Cite
  *
  * @return {Cite} The last version of the object. `undefined` if used on first version.
  */
-var undo = function undo(nolog) {
-  if (!nolog) {
-    this._log.push({ name: 'undo' });
-  }
+var retrieveLastVersion = function retrieveLastVersion() {
+  return this.retrieveVersion(this.currentVersion());
+};
 
-  return this.retrieveVersion(this.currentVersion() - 1, true);
+/**
+ * Save an image of the current version of the object.
+ *
+ * @method save
+ * @memberof Cite
+ * @this Cite
+ *
+ * @return {Cite} The current version of the object.
+ */
+var save = function save() {
+  this.log.push([JSON.stringify(this.data), JSON.stringify(this._options)]);
+
+  return this;
 };
 
 exports.currentVersion = currentVersion;
 exports.retrieveVersion = retrieveVersion;
+exports.retrieveLastVersion = retrieveLastVersion;
 exports.undo = undo;
+exports.save = save;
 },{"./index":7}],9:[function(require,module,exports){
-'use strict';
+"use strict";
 
 Object.defineProperty(exports, "__esModule", {
   value: true
@@ -610,13 +618,13 @@ Object.defineProperty(exports, "__esModule", {
  * @param {String} [options.type="json"] - The format of the output. `"string"`, `"html"` or `"json"`
  * @param {String} [options.style="csl"] - The style of the output. See [Output](./#output)
  * @param {String} [options.lang="en-US"] - The language of the output. [RFC 5646](https://tools.ietf.org/html/rfc5646) codes
- * @param {Boolean} nolog - Hide this call from the log (i.e. when used internally)
+ * @param {Boolean} log - Show this call in the log
  *
  * @return {Cite} The updated parent object
  */
-var options = function options(_options, nolog) {
-  if (!nolog) {
-    this._log.push({ name: 'options', version: this.currentVersion() + 1, arguments: [_options] });
+var options = function options(_options, log) {
+  if (log) {
+    this.save();
   }
 
   Object.assign(this._options, _options);
@@ -651,15 +659,15 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
  * @this Cite
  *
  * @param {String|CSL|Object|String[]|CSL[]|Object[]} data - The data to add to your object
- * @param {Boolean} nolog - Hide this call from the log (i.e. when used internally)
+ * @param {Boolean} log - Show this call in the log
  *
  * @return {Cite} The updated parent object
  */
-var add = function add(data, nolog) {
+var add = function add(data, log) {
   var _this = this;
 
-  if (!nolog) {
-    this._log.push({ name: 'add', version: this.currentVersion() + 1, arguments: [data, nolog] });
+  if (log) {
+    this.save();
   }
 
   this.data = this.data.concat((0, _chain2.default)(data));
@@ -667,7 +675,7 @@ var add = function add(data, nolog) {
   this.data.filter(function (entry) {
     return !entry.hasOwnProperty('id');
   }).forEach(function (entry) {
-    entry.id = (0, _fetchId2.default)(_this.getIds(true), 'temp_id_');
+    entry.id = (0, _fetchId2.default)(_this.getIds(), 'temp_id_');
   });
 
   return this;
@@ -681,17 +689,17 @@ var add = function add(data, nolog) {
  * @this Cite
  *
  * @param {String|CSL|Object|String[]|CSL[]|Object[]} data - The data to replace the data in your object
- * @param {Boolean} nolog - Hide this call from the log (i.e. when used internally)
+ * @param {Boolean} log - Show this call in the log
  *
  * @return {Cite} The updated parent object
  */
-var set = function set(data, nolog) {
-  if (!nolog) {
-    this._log.push({ name: 'set', version: this.currentVersion() + 1, arguments: [data, nolog] });
+var set = function set(data, log) {
+  if (log) {
+    this.save();
   }
 
   this.data = [];
-  this.add(data, true);
+  this.add(data);
 
   return this;
 };
@@ -703,13 +711,13 @@ var set = function set(data, nolog) {
  * @memberof Cite
  * @this Cite
  *
- * @param {Boolean} nolog - Hide this call from the log (i.e. when used internally)
+ * @param {Boolean} log - Show this call in the log
  *
  * @return {Cite} The updated, empty parent object (except the log, the log lives)
  */
-var reset = function reset(nolog) {
-  if (!nolog) {
-    this._log.push({ name: 'reset', version: this.currentVersion() + 1, arguments: [] });
+var reset = function reset(log) {
+  if (log) {
+    this.save();
   }
 
   this.data = [];
@@ -742,13 +750,13 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
  * @memberof Cite
  * @this Cite
  *
- * @param {Boolean} nolog - Hide this call from the log (i.e. when used internally)
+ * @param {Boolean} log - Show this call in the log
  *
  * @return {Cite} The updated parent object
  */
-var sort = function sort(nolog) {
-  if (!nolog) {
-    this._log.push({ name: 'sort', version: this.currentVersion() + 1, arguments: [] });
+var sort = function sort(log) {
+  if (log) {
+    this.save();
   }
 
   this.data.sort(function (a, b) {
@@ -28557,12 +28565,12 @@ module.exports={
   },
   "scripts": {
     "lint": "standard \"src/**/*.js\" \"test/**/*.js\"",
-    "test": "node_modules/jasmine-node/bin/jasmine-node test/citation-0.2.spec.js",
+    "test": "node_modules/jasmine-node/bin/jasmine-node test/citation.spec.js",
     "babel": "babel src -d lib --copy-files",
     "dev:test": "npm run babel && npm run test",
     "dev:test-browser": "npm run babel && npm run test && npm run build && npm run build-test",
     "build": "browserify -r ./lib/index.js:citation-js -o build/citation.js && cp build/citation.js docs/src/citation.js",
-    "build-test": "browserify -t brfs -e test/citation-0.2.spec.js -o build/test.citation.js && cp build/test.citation.js docs/src/test.citation.js",
+    "build-test": "browserify -t brfs -e test/citation.spec.js -o build/test.citation.js && cp build/test.citation.js docs/src/test.citation.js",
     "build-docs": "jsdoc ./src README.md -c docs/conf.json"
   },
   "author": "Lars Willighagen (https://larsgw.github.io)",

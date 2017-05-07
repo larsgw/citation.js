@@ -10,13 +10,13 @@
  * @param {String} [options.type="json"] - The format of the output. `"string"`, `"html"` or `"json"`
  * @param {String} [options.style="csl"] - The style of the output. See [Output](./#output)
  * @param {String} [options.lang="en-US"] - The language of the output. [RFC 5646](https://tools.ietf.org/html/rfc5646) codes
- * @param {Boolean} nolog - Hide this call from the log (i.e. when used internally)
+ * @param {Boolean} log - Show this call in the log
  *
  * @return {Cite} The updated parent object
  */
-const options = function (options, nolog) {
-  if (!nolog) {
-    this._log.push({name: 'options', version: this.currentVersion() + 1, arguments: [options]})
+const options = function (options, log) {
+  if (log) {
+    this.save()
   }
 
   Object.assign(this._options, options)

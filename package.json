@@ -50,12 +50,12 @@
   },
   "scripts": {
     "lint": "standard \"src/**/*.js\" \"test/**/*.js\"",
-    "test": "node_modules/jasmine-node/bin/jasmine-node test/citation-0.2.spec.js",
+    "test": "node_modules/jasmine-node/bin/jasmine-node test/citation.spec.js",
     "babel": "babel src -d lib --copy-files",
     "dev:test": "npm run babel && npm run test",
     "dev:test-browser": "npm run babel && npm run test && npm run build && npm run build-test",
     "build": "browserify -r ./lib/index.js:citation-js -o build/citation.js && cp build/citation.js docs/src/citation.js",
-    "build-test": "browserify -t brfs -e test/citation-0.2.spec.js -o build/test.citation.js && cp build/test.citation.js docs/src/test.citation.js",
+    "build-test": "browserify -t brfs -e test/citation.spec.js -o build/test.citation.js && cp build/test.citation.js docs/src/test.citation.js",
     "build-docs": "jsdoc ./src README.md -c docs/conf.json"
   },
   "author": "Lars Willighagen (https://larsgw.github.io)",

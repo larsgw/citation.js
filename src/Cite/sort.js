@@ -7,13 +7,13 @@ import getLabel from '../get/label'
  * @memberof Cite
  * @this Cite
  *
- * @param {Boolean} nolog - Hide this call from the log (i.e. when used internally)
+ * @param {Boolean} log - Show this call in the log
  *
  * @return {Cite} The updated parent object
  */
-const sort = function (nolog) {
-  if (!nolog) {
-    this._log.push({name: 'sort', version: this.currentVersion() + 1, arguments: []})
+const sort = function (log) {
+  if (log) {
+    this.save()
   }
 
   this.data.sort((a, b) => {
