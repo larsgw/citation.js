@@ -6,7 +6,7 @@ import parseInputData from './data'
 /**
  * Parse input once.
  *
- * @access private
+ * @access protected
  * @method parseInputChainLink
  *
  * @param {String|String[]|Object|Object[]} input - The input data

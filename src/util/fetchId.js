@@ -1,7 +1,7 @@
 /**
  * Generate ID
  *
- * @access private
+ * @access protected
  * @method fetchId
  *
  * @param {String[]} list - old ID list

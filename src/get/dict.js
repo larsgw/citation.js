@@ -1,7 +1,7 @@
 /**
  * Object containing HTML strings for building JSON and BibTeX. Made to match citeproc, for compatability.
  *
- * @access private
+ * @access protected
  * @constant varHTMLDict
  * @default
  */
@@ -19,7 +19,7 @@ const htmlDict = {
 /**
  * Object containing text strings for building JSON and BibTeX. Made to match citeproc, for compatability.
  *
- * @access private
+ * @access protected
  * @constant varHTMLDict
  * @default
  */

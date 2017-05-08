@@ -10,11 +10,7 @@ import * as get from './get'
  * @description Create a `Cite` object with almost any kind of data, and manipulate it with its default methods.
  *
  * @param {String|CSL|Object|String[]|CSL[]|Object[]} data - Input data. If no data is passed, an empty object is returned
- * @param {Object} options - The options for the output
- * @param {String} [options.format="real"] - The outputted datatype. Real representation (`"real"`, e.g. DOM Object for HTML, JavaScript Object for JSON) or String representation ( `"string"` )
- * @param {String} [options.type="json"] - The format of the output. `"string"`, `"html"` or `"json"`
- * @param {String} [options.style="csl"] - The style of the output. See [Output](./#output)
- * @param {String} [options.lang="en-US"] - The language of the output. [RFC 5646](https://tools.ietf.org/html/rfc5646) codes
+ * @param {Object} options - The options for the output. See [input options](../#citation.cite.in.options).
  */
 function Cite (data, options) {
   // Making it Scope-Safe
@@ -23,13 +19,10 @@ function Cite (data, options) {
   }
 
   /**
-   * The default options for the output
+   * The default options for the output. See [input options](../#citation.cite.in.options)
    *
-   * @property format {String} The outputted datatype. Real representation (`"real"`, e.g. DOM Object for HTML, JavaScript Object for JSON) or String representation ( `"string"` )
-   * @property type {String} The format of the output. `"string"`, `"html"` or `"json"`
-   * @property style {String} The style of the output. See [Output](../#output)
-   * @property lang {String} The language of the output. [RFC 5646](https://tools.ietf.org/html/rfc5646) codes
-   *
+   * @memberof Cite
+   * @access protected
    * @type Object
    * @default {}
    */
@@ -43,6 +36,8 @@ function Cite (data, options) {
    * <br /><br />
    * `.currentVersion()` and similar function **are not** logged, because this would be influenced by function using other functions.
    *
+   * @memberof Cite
+   * @access protected
    * @type Object[]
    *
    * @property {Cite} 0 - The first image.
@@ -52,6 +47,8 @@ function Cite (data, options) {
   /**
    * The data formatted to JSON
    *
+   * @memberof Cite
+   * @access protected
    * @type Object
    * @default []
    */

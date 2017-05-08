@@ -1,7 +1,7 @@
 /**
  * Object containing several RegExp patterns, mostly used for parsing (*full of shame*) and recognizing data types
  *
- * @access private
+ * @access protected
  * @constant varRegex
  * @default
  */

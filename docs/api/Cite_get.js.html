@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Source: Cite/get.js - Docs - Citation.js</title>
+    
+    <meta name="theme-color" content="#FFC107">
+    <link rel="shortcut icon" type="image/png" href="../favicon.png"/>
+    <link rel="icon" type="image/png" href="../favicon.png"/>
+    
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+    <link type="text/css" rel="stylesheet" href="../static/css/api.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: Cite/get.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import striptags from 'striptags'
+
+import { getPrefixedEntry } from '../util/attr.js'
+import deepCopy from '../util/deepCopy'
+
+import getBibTeXJSON from '../get/bibtex/json'
+import getBibTeX from '../get/bibtex/text'
+import getJSON from '../get/json'
+
+import fetchCSLEngine from '../CSL/engines'
+import fetchCSLStyle from '../CSL/styles'
+import fetchCSLLocale from '../CSL/locales'
+import fetchCSLItemCallback from '../CSL/items'
+
+/**
+ * Get a list of the data entry IDs, in the order of that list
+ *
+ * @method getIds
+ * @memberof Cite
+ * @this Cite
+ *
+ * @return {String[]} List of IDs
+ */
+const getIds = function () {
+  return this.data.map(entry => entry.id)
+}
+
+/**
+ * Get formatted data from your object. For more info, see [Output](../#output).
+ *
+ * @method get
+ * @memberof Cite
+ * @this Cite
+ *
+ * @param {Object} options - The options for the output. See [input options](../#citation.cite.in.options)
+ * @param {String} [options.locale] - Custom CSL locale for citeproc
+ * @param {String} [options.template] - Custom CSL style template for citeproc
+ *
+ * @return {String|Object[]} The formatted data
+ */
+const get = function (options) {
+  const _data = deepCopy(this.data)
+
+  let result
+
+  const {format, type, style, lang, locale, template} = Object.assign(
+    {format: 'real', type: 'json', style: 'csl', lang: 'en-US'},
+    this._options,
+    {locale: '', template: ''},
+    options
+  )
+
+  const [, styleType, styleFormat] = style.match(/^([^-]+)(?:-(.+))?$/)
+
+  switch ([type, styleType].join()) {
+    case 'html,citation':
+      const cbLocale = locale ? () => locale : fetchCSLLocale
+      const cbItem = fetchCSLItemCallback(_data)
+      const useTemplate = template || fetchCSLStyle(styleFormat)
+      const useLang = fetchCSLLocale(lang) ? lang : 'en-US'
+
+      const citeproc = fetchCSLEngine(styleFormat, useLang, useTemplate, cbItem, cbLocale)
+      const sortedIds = citeproc.updateItems(this.getIds())
+
+      let [{bibstart: bibStart, bibend: bibEnd}, bibBody] = citeproc.makeBibliography()
+      bibBody = bibBody.map((element, index) => getPrefixedEntry(element, index, sortedIds))
+
+      result = `${bibStart}${bibBody.join('&lt;br />')}${bibEnd}`
+      break
+
+    case 'html,csl':
+      result = getJSON(_data)
+      break
+
+    case 'html,bibtex':
+      result = getBibTeX(_data, true)
+      break
+
+    case 'string,bibtex':
+      result = getBibTeX(_data, false)
+      break
+
+    case 'string,citation':
+      result = striptags(this.get(Object.assign({}, options, {type: 'html'})))
+      break
+
+    case 'string,csl':
+      result = JSON.stringify(_data)
+      break
+
+    case 'json,csl':
+      result = JSON.stringify(_data)
+      break
+
+    case 'json,bibtex':
+      result = JSON.stringify(_data.map(getBibTeXJSON))
+      break
+
+    case 'json,citation':
+      console.error('[get]', `Combination type/style of json/citation-* is not valid: ${type}/${style}`)//
+      break
+
+    default:
+      console.error('[get]', 'Invalid options')
+      break
+  }
+
+  if (format === 'real') {
+    if (type === 'json') {
+      result = JSON.parse(result)
+    } else if (document &amp;&amp; document.createElement &amp;&amp; type === 'html') {
+      var tmp = document.createElement('div')
+      tmp.innerHTML = result
+      result = result.childNodes
+    }
+  }
+
+  return result
+}
+
+export { getIds, get }
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Cite.html">Cite</a></li><li><a href="CSL.html">CSL</a></li></ul><h3>Global</h3><ul><li><a href="global.html#deepCopy">deepCopy</a></li><li><a href="global.html#fetchBibTeXType">fetchBibTeXType</a></li><li><a href="global.html#fetchCSLEngine">fetchCSLEngine</a></li><li><a href="global.html#fetchCSLItemCallback">fetchCSLItemCallback</a></li><li><a href="global.html#fetchCSLLocale">fetchCSLLocale</a></li><li><a href="global.html#fetchCSLStyle">fetchCSLStyle</a></li><li><a href="global.html#fetchFile">fetchFile</a></li><li><a href="global.html#fetchId">fetchId</a></li><li><a href="global.html#fetchWikidataLabel">fetchWikidataLabel</a></li><li><a href="global.html#fetchWikidataType">fetchWikidataType</a></li><li><a href="global.html#getAttributedEntry">getAttributedEntry</a></li><li><a href="global.html#getBibTeX">getBibTeX</a></li><li><a href="global.html#getBibTeXJSON">getBibTeXJSON</a></li><li><a href="global.html#getBibTeXLabel">getBibTeXLabel</a></li><li><a href="global.html#getDate">getDate</a></li><li><a href="global.html#getJSON">getJSON</a></li><li><a href="global.html#getJSONObjectHTML">getJSONObjectHTML</a></li><li><a href="global.html#getJSONValueHTML">getJSONValueHTML</a></li><li><a href="global.html#getLabel">getLabel</a></li><li><a href="global.html#getName">getName</a></li><li><a href="global.html#getPrefixedEntry">getPrefixedEntry</a></li><li><a href="global.html#parseBibTeX">parseBibTeX</a></li><li><a href="global.html#parseBibTeXJSON">parseBibTeXJSON</a></li><li><a href="global.html#parseBibTeXProp">parseBibTeXProp</a></li><li><a href="global.html#parseBibTeXType">parseBibTeXType</a></li><li><a href="global.html#parseContentMine">parseContentMine</a></li><li><a href="global.html#parseDate">parseDate</a></li><li><a href="global.html#parseInput">parseInput</a></li><li><a href="global.html#parseInputChainLink">parseInputChainLink</a></li><li><a href="global.html#parseInputData">parseInputData</a></li><li><a href="global.html#parseInputType">parseInputType</a></li><li><a href="global.html#parseJSON">parseJSON</a></li><li><a href="global.html#parseName">parseName</a></li><li><a href="global.html#parseWikidata">parseWikidata</a></li><li><a href="global.html#parseWikidataJSON">parseWikidataJSON</a></li><li><a href="global.html#parseWikidataProp">parseWikidataProp</a></li><li><a href="global.html#varBibTeXSyntaxTokens">varBibTeXSyntaxTokens</a></li><li><a href="global.html#varBibTeXTokens">varBibTeXTokens</a></li><li><a href="global.html#varCSLEngines">varCSLEngines</a></li><li><a href="global.html#varCSLLocales">varCSLLocales</a></li><li><a href="global.html#varCSLStyles">varCSLStyles</a></li><li><a href="global.html#varHTMLDict">varHTMLDict</a></li><li><a href="global.html#varRegex">varRegex</a></li><li><a href="global.html#varWikidataTypes">varWikidataTypes</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a> on Mon May 08 2017 19:55:55 GMT+0200 (CEST)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

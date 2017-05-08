@@ -1,7 +1,7 @@
 /**
  * Retrieve CSL item callback function
  *
- * @access private
+ * @access protected
  * @method fetchCSLItemCallback
  *
  * @param {CSL[]} data - CSL array

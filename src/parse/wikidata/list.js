@@ -3,7 +3,7 @@ import wdk from 'wikidata-sdk'
 /**
  * Get Wikidata JSON from Wikidata IDs
  *
- * @access private
+ * @access protected
  * @method parseWikidata
  *
  * @param {String} data - Wikidata IDs

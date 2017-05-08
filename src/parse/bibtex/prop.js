@@ -4,7 +4,7 @@ import parseDate from '../date'
 /**
  * Transform property and value from BibTeX-JSON format to CSL-JSON
  *
- * @access private
+ * @access protected
  * @method parseBibTeXProp
  *
  * @param {String} prop - Property

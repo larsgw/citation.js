@@ -1,7 +1,7 @@
 /**
  * Convert epoch to CSL date
  *
- * @access private
+ * @access protected
  * @function parseDate
  *
  * @param {Number|String} value - Epoch time or string in format "YYYY-MM-DD"

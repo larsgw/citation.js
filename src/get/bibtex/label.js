@@ -1,7 +1,7 @@
 /**
  * Get a BibTeX label from CSL data
  *
- * @access private
+ * @access protected
  * @method getBibTeXLabel
  *
  * @param {CSL} src - Input CSL

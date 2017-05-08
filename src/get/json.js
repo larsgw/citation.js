@@ -3,7 +3,7 @@ import { htmlDict as dict } from './dict'
 /**
  * Convert a JSON array or object to HTML.
  *
- * @access private
+ * @access protected
  * @function getJSONObjectHTML
  *
  * @param {Object|Object[]|String[]|Number[]} src - The data
@@ -23,7 +23,7 @@ const getJSONObjectHTML = function (src) {
 /**
  * Convert JSON to HTML.
  *
- * @access private
+ * @access protected
  * @function getJSONValueHTML
  *
  * @param {Object|String|Number|Object[]|String[]|Number[]} src - The data
@@ -47,7 +47,7 @@ const getJSONValueHTML = function (src) {
 /**
  * Get a JSON HTML string from CSL
  *
- * @access private
+ * @access protected
  * @method getJSON
  *
  * @param {CSL[]} src - Input CSL

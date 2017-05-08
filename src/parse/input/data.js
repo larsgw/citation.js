@@ -12,7 +12,7 @@ import parseJSON from '../json'
 /**
  * Standardise input (internal use)
  *
- * @access private
+ * @access protected
  * @method parseInputData
  *
  * @param {String|String[]|Object|Object[]} input - The input data

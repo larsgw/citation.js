@@ -1,7 +1,7 @@
 /**
  * Convert a CSL date into human-readable format
  *
- * @access private
+ * @access protected
  * @function getDate
  *
  * @param {String[]} date - A date in CSL format

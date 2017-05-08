@@ -3,7 +3,7 @@ import varRegex from './regex'
 /**
  * Get CSL from name
  *
- * @access private
+ * @access protected
  * @method parseName
  *
  * @param {String} name - string

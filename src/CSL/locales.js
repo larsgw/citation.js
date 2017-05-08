@@ -6,7 +6,7 @@
  *
  * Accesed 10/22/2016
  *
- * @access private
+ * @access protected
  * @constant varCSLLocales
  * @default
  */
@@ -35,7 +35,7 @@ dic.</term><term name="season-01">primavera</term><term name="season-02">verano<
 /**
  * Retrieve CSL locale
  *
- * @access private
+ * @access protected
  * @method fetchCSLLocale
  *
  * @param {String} lang - lang code

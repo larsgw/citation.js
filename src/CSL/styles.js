@@ -6,7 +6,7 @@
  *
  * Accesed 10/22/2016
  *
- * @access private
+ * @access protected
  * @constant varCSLStyles
  * @default
  */
@@ -25,7 +25,7 @@ var varCSLStyles = {
 /**
  * Retrieve CSL style
  *
- * @access private
+ * @access protected
  * @method fetchCSLStyle
  *
  * @param {String} [style="apa"] - style name

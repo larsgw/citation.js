@@ -3,7 +3,7 @@ import request from 'sync-request'
 /**
  * Fetch file
  *
- * @access private
+ * @access protected
  * @method fetchFile
  *
  * @param {String} url - The input url

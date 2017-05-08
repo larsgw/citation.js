@@ -4,7 +4,7 @@ import parseName from '../name'
 /**
  * Forat ContentMine data
  *
- * @access private
+ * @access protected
  * @method parseContentMine
  *
  * @param {Object} data - The input data

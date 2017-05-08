@@ -6,7 +6,7 @@ import getDate from '../date'
 /**
  * Get BibTeX-JSON from CSL(-JSON)
  *
- * @access private
+ * @access protected
  * @method getBibTeXJSON
  *
  * @param {CSL} src - Input CSL

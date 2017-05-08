@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Source: parse/input/type.js - Docs - Citation.js</title>
+    
+    <meta name="theme-color" content="#FFC107">
+    <link rel="shortcut icon" type="image/png" href="../favicon.png"/>
+    <link rel="icon" type="image/png" href="../favicon.png"/>
+    
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+    <link type="text/css" rel="stylesheet" href="../static/css/api.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: parse/input/type.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/* global jQuery, HTMLElement */
+
+import varRegex from '../regex'
+
+/**
+ * Determine input type (internal use)
+ *
+ * @access protected
+ * @method parseInputType
+ *
+ * @param {String|String[]|Object|Object[]} input - The input data
+ *
+ * @return {String} The input type
+ */
+var parseInputType = function (input) {
+  switch (typeof input) {
+    case 'string':
+      // Empty
+      if (input.length === 0) {
+        return 'string/empty'
+      } else if (/^\s+$/.test(input)) {
+        return 'string/whitespace'
+      // Wikidata ID
+      } else if (varRegex.wikidata[0].test(input)) {
+        return 'string/wikidata'
+      // Wikidata entity list
+      } else if (varRegex.wikidata[1].test(input)) {
+        return 'list/wikidata'
+      // Wikidata API URL
+      } else if (varRegex.wikidata[2].test(input)) {
+        return 'api/wikidata'
+      // Wikidata URL
+      } else if (varRegex.wikidata[3].test(input)) {
+        return 'url/wikidata'
+      // BibTeX
+      } else if (varRegex.bibtex[0].test(input)) {
+        return 'string/bibtex'
+      // JSON
+      } else if (/^\s*(\{|\[)/.test(input)) {
+        return 'string/json'
+      // Else URL
+      } else if (varRegex.url.test(input)) {
+        return 'url/} else'
+      // Else
+      } else {
+        console.warn('[set]', 'This format is not supported or recognised')
+        return 'invalid'
+      }
+
+    case 'object':
+      // Empty
+      if (input === null) {
+        return 'empty'
+      // jQuery
+      } else if (typeof jQuery !== 'undefined' &amp;&amp; input instanceof jQuery) {
+        return 'jquery/else'
+      // HTML
+      } else if (typeof HTMLElement !== 'undefined' &amp;&amp; input instanceof HTMLElement) {
+        return 'html/else'
+      // Array
+      } else if (Array.isArray(input)) {
+        // Empty array (counts as csl for parsing purposes)
+        if (input.length === 0) {
+          return 'array/csl'
+        // Array of Wikidata IDs
+        } else if (input.filter(v => parseInputType(v) === 'string/wikidata').length === input.length) {
+          return 'array/wikidata'
+        // Array of CSL-JSON
+        } else if (input.filter(v => parseInputType(v) === 'object/csl').length === input.length) {
+          return 'array/csl'
+        // Array of misc or multiple types
+        } else {
+          return 'array/else'
+        }
+      // Object
+      } else {
+        // Wikidata
+        if (input.hasOwnProperty('entities')) {
+          return 'object/wikidata'
+        // ContentMine
+        } else if ((input.fulltext_html &amp;&amp; Array.isArray(input.fulltext_html.value)) ||
+                   (input.fulltext_xml &amp;&amp; Array.isArray(input.fulltext_xml.value)) ||
+                   (input.fulltext_pdf &amp;&amp; Array.isArray(input.fulltext_pdf.value))) {
+          return 'object/contentmine'
+        // CSL-JSON
+        } else {
+          return 'object/csl'
+        }
+      }
+
+    case 'undefined':
+      // Empty
+      return 'empty'
+
+    default:
+      console.warn('[set]', 'This format is not supported or recognised')
+      return 'invalid'
+  }
+}
+
+export default parseInputType
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Cite.html">Cite</a></li><li><a href="CSL.html">CSL</a></li></ul><h3>Global</h3><ul><li><a href="global.html#deepCopy">deepCopy</a></li><li><a href="global.html#fetchBibTeXType">fetchBibTeXType</a></li><li><a href="global.html#fetchCSLEngine">fetchCSLEngine</a></li><li><a href="global.html#fetchCSLItemCallback">fetchCSLItemCallback</a></li><li><a href="global.html#fetchCSLLocale">fetchCSLLocale</a></li><li><a href="global.html#fetchCSLStyle">fetchCSLStyle</a></li><li><a href="global.html#fetchFile">fetchFile</a></li><li><a href="global.html#fetchId">fetchId</a></li><li><a href="global.html#fetchWikidataLabel">fetchWikidataLabel</a></li><li><a href="global.html#fetchWikidataType">fetchWikidataType</a></li><li><a href="global.html#getAttributedEntry">getAttributedEntry</a></li><li><a href="global.html#getBibTeX">getBibTeX</a></li><li><a href="global.html#getBibTeXJSON">getBibTeXJSON</a></li><li><a href="global.html#getBibTeXLabel">getBibTeXLabel</a></li><li><a href="global.html#getDate">getDate</a></li><li><a href="global.html#getJSON">getJSON</a></li><li><a href="global.html#getJSONObjectHTML">getJSONObjectHTML</a></li><li><a href="global.html#getJSONValueHTML">getJSONValueHTML</a></li><li><a href="global.html#getLabel">getLabel</a></li><li><a href="global.html#getName">getName</a></li><li><a href="global.html#getPrefixedEntry">getPrefixedEntry</a></li><li><a href="global.html#parseBibTeX">parseBibTeX</a></li><li><a href="global.html#parseBibTeXJSON">parseBibTeXJSON</a></li><li><a href="global.html#parseBibTeXProp">parseBibTeXProp</a></li><li><a href="global.html#parseBibTeXType">parseBibTeXType</a></li><li><a href="global.html#parseContentMine">parseContentMine</a></li><li><a href="global.html#parseDate">parseDate</a></li><li><a href="global.html#parseInput">parseInput</a></li><li><a href="global.html#parseInputChainLink">parseInputChainLink</a></li><li><a href="global.html#parseInputData">parseInputData</a></li><li><a href="global.html#parseInputType">parseInputType</a></li><li><a href="global.html#parseJSON">parseJSON</a></li><li><a href="global.html#parseName">parseName</a></li><li><a href="global.html#parseWikidata">parseWikidata</a></li><li><a href="global.html#parseWikidataJSON">parseWikidataJSON</a></li><li><a href="global.html#parseWikidataProp">parseWikidataProp</a></li><li><a href="global.html#varBibTeXSyntaxTokens">varBibTeXSyntaxTokens</a></li><li><a href="global.html#varBibTeXTokens">varBibTeXTokens</a></li><li><a href="global.html#varCSLEngines">varCSLEngines</a></li><li><a href="global.html#varCSLLocales">varCSLLocales</a></li><li><a href="global.html#varCSLStyles">varCSLStyles</a></li><li><a href="global.html#varHTMLDict">varHTMLDict</a></li><li><a href="global.html#varRegex">varRegex</a></li><li><a href="global.html#varWikidataTypes">varWikidataTypes</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a> on Mon May 08 2017 19:55:55 GMT+0200 (CEST)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

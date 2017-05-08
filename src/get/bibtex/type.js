@@ -1,7 +1,7 @@
 /**
  * CSL pub type to BibTeX pub type
  *
- * @access private
+ * @access protected
  * @method fetchBibTeXType
  *
  * @param {String} pubType - CSL type

@@ -5,7 +5,7 @@ import varRegex from '../regex'
 /**
  * Determine input type (internal use)
  *
- * @access private
+ * @access protected
  * @method parseInputType
  *
  * @param {String|String[]|Object|Object[]} input - The input data
@@ -43,7 +43,8 @@ var parseInputType = function (input) {
         return 'url/} else'
       // Else
       } else {
-        return console.warn('[set]', 'This format is not supported or recognised') || 'invalid'
+        console.warn('[set]', 'This format is not supported or recognised')
+        return 'invalid'
       }
 
     case 'object':

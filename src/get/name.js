@@ -1,7 +1,7 @@
 /**
  * Get name from CSL
  *
- * @access private
+ * @access protected
  * @method getName
  *
  * @param {Object} obj - CSL input

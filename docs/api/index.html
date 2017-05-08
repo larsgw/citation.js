@@ -66,6 +66,7 @@
 <li><a href="#citation.cite">Cite</a><ul>
 <li><a href="#citation.cite.in">Input</a><ul>
 <li><a href="#citation.cite.in.type">Input types</a></li>
+<li><a href="#citation.cite.in.options">Options</a></li>
 </ul>
 </li>
 <li><a href="#citation.cite.out">Ouput</a><ul>
@@ -142,27 +143,41 @@ Options:
 <h4><a id="citation.cite.in" href="#citation.cite.in">Input</a></h4><p>Make a <code>Cite</code> object like this:</p>
 <pre class="prettyprint source lang-js"><code>var example = new Cite( &lt;data>, &lt;options> )</code></pre><ol>
 <li>In the first parameter you pass the input data. <a href="#citation.cite.in.type">Input types</a></li>
-<li>In the second parameter you pass the settings. It contains the following properties. These are the default options for using <code>.get()</code><ol>
+<li>In the second parameter you pass the <a href="">options</a>.</li>
+</ol>
+<h5><a id="citation.cite.in.type" href="#citation.cite.in.type">Input types</a></h5><p>Input type doesn't have to be specified. The identifiers below are used by internal functions.</p>
+<h6><a id="citation.cite.in.type.wikidata" href="#citation.cite.in.type.wikidata">Wikidata</a></h6><ul>
+<li><code>url/wikidata</code>: URL with <a href="https://www.wikidata.org/">Wikidata</a> <a href="https://www.wikidata.org/wiki/Wikidata:Glossary#Entities.2C_items.2C_properties_and_queries">Entity ID</a>. Gets and parses the entity data</li>
+<li><code>list/wikidata</code>: List of Wikidata Entity IDs, separated by spaces, newlines or commas. Gets and parses the entity data</li>
+<li><code>string/wikidata</code>: Single Wikidata Entity ID. Gets and parses the entity data</li>
+<li><code>api/wikidata</code>: Wikidata API URL. Gets and parses the entity data</li>
+<li><code>json/wikidata</code>: Wikidata Entity data. Parses the entity data</li>
+</ul>
+<h6><a id="citation.cite.in.type.bibtex" href="#citation.cite.in.type.bibtex">BibTeX</a></h6><ul>
+<li><code>string/bibtex</code>: <a href="http://www.bibtex.org/">BibTeX</a> string. Parses the data</li>
+</ul>
+<h6><a id="citation.cite.in.type.bibjson" href="#citation.cite.in.type.bibjson">BibJSON</a></h6><ul>
+<li><code>json/contentmine</code>: Actually BibJSON, all references to ContentMine will be removed when the parser is fully done. Parses the data</li>
+</ul>
+<h6><a id="citation.cite.in.type.csl" href="#citation.cite.in.type.csl">CSL-JSON</a></h6><ul>
+<li><code>json/csl</code>: <a href="https://github.com/citation-style-language/schema#csl-json-schema">CSL-JSON</a>. Adds the data</li>
+<li><code>array/csl</code>: Array of CSL-JSON. Adds the data</li>
+</ul>
+<h6><a id="citation.cite.in.type.inter" href="#citation.cite.in.type.inter">Intermediary formats</a></h6><p>These formats are not input-ready, but are rather parsed and re-evaluated, e.g. <code>html/else</code> (DOM element) to <code>string/json</code> to <code>json/csl</code>.</p>
+<ul>
+<li><code>string/json</code>: JSON or JavaScript Object string. Parses and re-evaluates the data</li>
+<li><code>jquery/else</code>: jQuery element. Fetches and re-evaluates the contents</li>
+<li><code>html/else</code>: HTML DOM element. Fetches and re-evaluates the contents</li>
+<li><code>url/else</code>: URL. Fetches and re-evaluates the file</li>
+<li><code>array/else</code>: JavaScript array. Re-evaluates every element in the array</li>
+</ul>
+<h5><a id="citation.cite.in.options" href="#citation.cite.in.options">Options</a></h5><p>These are the default options for using <code>.get()</code>. More options will follow.</p>
+<ol>
 <li><code>format</code>: The output format: <code>&quot;real&quot;</code> (default) or <code>&quot;string&quot;</code></li>
 <li><code>type</code>: The output type: <code>&quot;html&quot;</code>, <code>&quot;string&quot;</code> or <code>&quot;json&quot;</code> (default).</li>
 <li><code>style</code>: The output style. See <a href="#citation.cite.out">Output</a>. <code>&quot;csl&quot;</code> is default</li>
 <li><code>lang</code>: The language of the output. <a href="https://tools.ietf.org/html/rfc5646">RFC 5646</a> codes. Currently supported: <code>&quot;en-US&quot;</code> (default), <code>&quot;fr-FR&quot;</code>, <code>&quot;es-ES&quot;</code> ,<code>&quot;de-DE&quot;</code> and <code>&quot;nl-NL&quot;</code></li>
 </ol>
-</li>
-</ol>
-<h5><a id="citation.cite.in.type" href="#citation.cite.in.type">Input types</a></h5><ul>
-<li><code>url/wikidata</code>: URL with <a href="https://www.wikidata.org/">Wikidata</a> <a href="https://www.wikidata.org/wiki/Wikidata:Glossary#Entities.2C_items.2C_properties_and_queries">Entity ID</a>. Gets and parses the entity data</li>
-<li><code>list/wikidata</code>: List of Wikidata Entity IDs, separated by spaces, newlines or commas. Gets and parses the entity data</li>
-<li><code>json/wikidata</code>: Wikidata Entity data. Parses the data</li>
-<li><code>json/contentmine</code>: <a href="http://contentmine.org/">ContentMine</a> data, as outputted by <a href="https://github.com/ContentMine/quickscrape">quickscrape</a>. Parses the data</li>
-<li><code>json/csl</code>: <a href="https://github.com/citation-style-language/schema#csl-json-schema">CSL-JSON</a>. Adds the data</li>
-<li><code>string/json</code>: JSON or JavaScript Object string. Parses and re-evaluates the data</li>
-<li><code>string/bibtex</code>: <a href="http://www.bibtex.org/">BibTeX</a> string. Parses the data</li>
-<li><code>jquery/else</code>: jQuery element. Fetches and re-evaluates the contents</li>
-<li><code>html/else</code>: HTML DOM element. Fetches and re-evaluates the contents</li>
-<li><code>url/else</code>: URL. Fetches and re-evaluates the file</li>
-<li><code>list/else</code>: JavaScript array. Re-evaluates every element in the array</li>
-</ul>
 <h4><a id="citation.cite.out" href="#citation.cite.out">Ouput</a></h4><p>When using the <code>.get()</code> function, your output depends on the options you pass. If you don't pass any options, the values you passed as default are used. When you didn't pass default options, standard options are passed.</p>
 <h5><a id="citation.cite.out.type" href="#citation.cite.out.type">Type</a></h5><ul>
 <li><code>json</code>: Output as JSON. Not possible together with <code>style:&quot;citation-*&quot;</code></li>
@@ -186,11 +201,11 @@ Options:
 data.get({
   format: 'string',
   type: 'html',
-  style: 'citation',
+  style: 'citation-&lt;TEMPLATE NAME>',
   lang: 'en-US',
 
   template: '...' // XML String
-})</code></pre><p>Currently, you need to pass <code>&quot;citation&quot;</code> to the <code>style</code> option for this to work.</p>
+})</code></pre><p>Replace <code>&lt;TEMPLATE NAME&gt;</code> with the template name you want to use. After calling <code>.get()</code> with these options once, you can omit the template property, if you use the same locale.</p>
 <h5><a id="citation.cite.out.locales" href="#citation.cite.out.locales">CSL Locales</a></h5><p>If you want different languages than the standard, you can pass a <a href="https://github.com/citation-style-language/locales">CSL Locale</a> as an XML string to <code>.get()</code> with the option <code>locale:&lt;string&gt;</code>. E.g.</p>
 <pre class="prettyprint source lang-js"><code>var data = new Cite(...)
 
@@ -200,18 +215,60 @@ data.get({
   style: 'citation-apa',
 
   locale: '...' // XML String
-})</code></pre><h4><a id="citation.cite.misc" href="#citation.cite.misc">Misc</a></h4><p><code>Cite</code> has some more functions:</p>
+})</code></pre><h4><a id="citation.cite.misc" href="#citation.cite.misc">Misc</a></h4><p><code>Cite</code> instances have some more functions:</p>
 <ul>
 <li><code>.options(&lt;options&gt;)</code>: Change default options</li>
 <li><code>.set(&lt;data&gt;)</code>: Replace all data with new data</li>
 <li><code>.add(&lt;data&gt;)</code>: Add data</li>
-<li><code>.reset()</code>: Remove all data</li>
+<li><code>.reset()</code>: Remove all data and options</li>
 <li><code>.currentVersion()</code>: Get current version number</li>
-<li><code>.undo()</code>: Restore previous version</li>
 <li><code>.retrieveVersion(&lt;version number&gt;)</code>: Retrieve a certain version of the object</li>
+<li><code>.retrieveLastVersion()</code>: Retrieve the last saved version of the object</li>
+<li><code>.undo(&lt;number&gt;)</code>: Restore the n to last version (default: <code>1</code>)</li>
+<li><code>.save()</code>: Save the current object</li>
 <li><code>.sort()</code>: Sort all entries on basis of their BibTeX label</li>
 </ul>
-<h1><a id="jquery" href="#jquery">jquery.Citation.js</a></h1><p>This plugin builds a form for input for the <code>Cite</code> object.</p>
+<p><code>Cite</code> holds all internal functions, too. These are documentated <a href="https://larsgw.github.io/citation.js/api/global.html">here</a> and can be accessed like this:</p>
+<pre class="prettyprint source lang-js"><code>{ [Function: Cite]
+  parse: 
+   { input: 
+      { type: [Function: parseInputType],
+        data: [Function: parseInputData],
+        chain: [Function: parseInput],
+        chainLink: [Function: parseInputChainLink] },
+     wikidata: 
+      { list: [Function: parseWikidata],
+        json: [Function: parseWikidataJSON],
+        prop: [Function: parseWikidataProp],
+        type: [Function: fetchWikidataType] },
+     bibjson: [Function: parseContentMine],
+     date: [Function: parseDate],
+     name: [Function: parseName],
+     json: [Function: parseJSON] },
+  get: 
+   { bibtex: 
+      { json: [Function: getBibTeXJSON],
+        text: [Function: getBibTeX],
+        label: [Function: getBibTeXLabel],
+        type: [Function: fetchBibTeXType] },
+     dict: { htmlDict: [Object], textDict: [Object] },
+     json: [Function: getJSON],
+     date: [Function: getDate],
+     name: [Function: getName],
+     label: [Function: getLabel] },
+  CSL: 
+   { style: [Function: fetchCSLStyle],
+     locale: [Function: fetchCSLLocale],
+     engine: [Function: fetchCSLEngine],
+     item: [Function: fetchCSLItemCallback] },
+  util: 
+   { attr: 
+      { getAttributedEntry: [Function: getAttributedEntry],
+        getPrefixedEntry: [Function: getPrefixedEntry] },
+     deepCopy: [Function: deepCopy],
+     fetchFile: [Function: fetchFile],
+     fetchId: [Function: fetchId] },
+  version: { cite: '0.3.0-4', citeproc: '1.1.161' } }</code></pre><h1><a id="jquery" href="#jquery">jquery.Citation.js</a></h1><p>This plugin builds a form for input for the <code>Cite</code> object.</p>
 <h2><a id="jquery.use" href="#jquery.use">Use</a></h2><p>After including the necessary files like below,
 you can make a new <code>jQueryCite</code> object.</p>
 <pre class="prettyprint source lang-html"><code>&lt;script type=&quot;text/javascript&quot; src=&quot;path/to/jquery.js&quot;>&lt;/script>
@@ -289,14 +346,14 @@ you can make a new <code>jQueryCite</code> object.</p>
 </ul>
 <h1><a id="more" href="#more">More</a></h1><h2><a id="more.docs" href="#more.docs">More Docs</a></h2><p>Further explanation can be found <a href="https://larsgw.github.io/citation.js/api/">here</a>. The explanation of the jQuery plugin can be found there too.</p>
 <h2><a id="more.demo" href="#more.demo">Demo</a></h2><h3><a id="more.demo.npm" href="#more.demo.npm">NPM Demo</a></h3><p><a href="https://runkit.com/npm/citation-js">NPM Demo</a>. Example code:</p>
-<pre class="prettyprint source lang-js"><code>var Cite = require( 'citation-js' )
+<pre class="prettyprint source lang-js"><code>var Cite = require('citation-js')
 
-var data = new Cite( 'Q21972834', {
+var data = new Cite('Q21972834', {
   format: 'string',
   type: 'html',
   style: 'citation-apa',
   lang: 'en-US'
-} )
+})
 
 data.get() // Should implicitly display</code></pre><h3><a id="more.demo.browser" href="#more.demo.browser">Browser Demos</a></h3><ul>
 <li><a href="https://larsgw.github.io/citation.js/demo/demo.html">Normal demo</a></li>
@@ -316,7 +373,7 @@ data.get() // Should implicitly display</code></pre><h3><a id="more.demo.browser
 
 <header>
     
-        <h2>citation-0.2.js</h2>
+        <h2>index.js</h2>
         
     
 </header>
@@ -335,7 +392,7 @@ data.get() // Should implicitly display</code></pre><h3><a id="more.demo.browser
 
     
     <dt class="tag-version">Version:</dt>
-    <dd class="tag-version"><ul class="dummy"><li>0.2</li></ul></dd>
+    <dd class="tag-version"><ul class="dummy"><li>0.3.0-4</li></ul></dd>
     
 
     
@@ -365,129 +422,7 @@ data.get() // Should implicitly display</code></pre><h3><a id="more.demo.browser
 
     
     <dt class="tag-license">License:</dt>
-    <dd class="tag-license"><ul class="dummy"><li>Copyright (c) 2015-2016 Lars Willighagen  
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:  
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.  
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.</li></ul></dd>
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="citation-0.2.js.html">citation-0.2.js</a>, <a href="citation-0.2.js.html#line1">line 1</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-        
-    
-    </div>
-
-    
-
-    
-
-    
-
-     
-
-    
-
-    
-
-    
-
-    
-
-    
-</article>
-
-</section>
-
-
-
-
-
-
-
-<section>
-
-<header>
-    
-        <h2>jquery.citation-0.2.js</h2>
-        
-    
-</header>
-
-<article>
-    <div class="container-overview">
-    
-        
-            <div class="description"><p>jquery.Citation-0.2.js</p></div>
-        
-
-        
-
-
-<dl class="details">
-
-    
-    <dt class="tag-version">Version:</dt>
-    <dd class="tag-version"><ul class="dummy"><li>0.2</li></ul></dd>
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-author">Author:</dt>
-    <dd class="tag-author">
-        <ul>
-            <li>Lars Willighagen</li>
-        </ul>
-    </dd>
-    
-
-    
-
-    
-    <dt class="tag-license">License:</dt>
-    <dd class="tag-license"><ul class="dummy"><li>Copyright (c) 2015-2016 Lars Willighagen
+    <dd class="tag-license"><ul class="dummy"><li>Copyright (c) 2015-2017 Lars Willighagen
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -513,7 +448,7 @@ SOFTWARE.</li></ul></dd>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="jquery.citation-0.2.js.html">jquery.citation-0.2.js</a>, <a href="jquery.citation-0.2.js.html#line1">line 1</a>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line1">line 1</a>
     </li></ul></dd>
     
 
@@ -556,13 +491,13 @@ SOFTWARE.</li></ul></dd>
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Cite.html">Cite</a></li><li><a href="CSL.html">CSL</a></li><li><a href="jQuery.html">jQuery</a></li><li><a href="jQueryCite.html">jQueryCite</a></li></ul><h3><a href="global.html">Global</a></h3>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Cite.html">Cite</a></li><li><a href="CSL.html">CSL</a></li></ul><h3>Global</h3><ul><li><a href="global.html#deepCopy">deepCopy</a></li><li><a href="global.html#fetchBibTeXType">fetchBibTeXType</a></li><li><a href="global.html#fetchCSLEngine">fetchCSLEngine</a></li><li><a href="global.html#fetchCSLItemCallback">fetchCSLItemCallback</a></li><li><a href="global.html#fetchCSLLocale">fetchCSLLocale</a></li><li><a href="global.html#fetchCSLStyle">fetchCSLStyle</a></li><li><a href="global.html#fetchFile">fetchFile</a></li><li><a href="global.html#fetchId">fetchId</a></li><li><a href="global.html#fetchWikidataLabel">fetchWikidataLabel</a></li><li><a href="global.html#fetchWikidataType">fetchWikidataType</a></li><li><a href="global.html#getAttributedEntry">getAttributedEntry</a></li><li><a href="global.html#getBibTeX">getBibTeX</a></li><li><a href="global.html#getBibTeXJSON">getBibTeXJSON</a></li><li><a href="global.html#getBibTeXLabel">getBibTeXLabel</a></li><li><a href="global.html#getDate">getDate</a></li><li><a href="global.html#getJSON">getJSON</a></li><li><a href="global.html#getJSONObjectHTML">getJSONObjectHTML</a></li><li><a href="global.html#getJSONValueHTML">getJSONValueHTML</a></li><li><a href="global.html#getLabel">getLabel</a></li><li><a href="global.html#getName">getName</a></li><li><a href="global.html#getPrefixedEntry">getPrefixedEntry</a></li><li><a href="global.html#parseBibTeX">parseBibTeX</a></li><li><a href="global.html#parseBibTeXJSON">parseBibTeXJSON</a></li><li><a href="global.html#parseBibTeXProp">parseBibTeXProp</a></li><li><a href="global.html#parseBibTeXType">parseBibTeXType</a></li><li><a href="global.html#parseContentMine">parseContentMine</a></li><li><a href="global.html#parseDate">parseDate</a></li><li><a href="global.html#parseInput">parseInput</a></li><li><a href="global.html#parseInputChainLink">parseInputChainLink</a></li><li><a href="global.html#parseInputData">parseInputData</a></li><li><a href="global.html#parseInputType">parseInputType</a></li><li><a href="global.html#parseJSON">parseJSON</a></li><li><a href="global.html#parseName">parseName</a></li><li><a href="global.html#parseWikidata">parseWikidata</a></li><li><a href="global.html#parseWikidataJSON">parseWikidataJSON</a></li><li><a href="global.html#parseWikidataProp">parseWikidataProp</a></li><li><a href="global.html#varBibTeXSyntaxTokens">varBibTeXSyntaxTokens</a></li><li><a href="global.html#varBibTeXTokens">varBibTeXTokens</a></li><li><a href="global.html#varCSLEngines">varCSLEngines</a></li><li><a href="global.html#varCSLLocales">varCSLLocales</a></li><li><a href="global.html#varCSLStyles">varCSLStyles</a></li><li><a href="global.html#varHTMLDict">varHTMLDict</a></li><li><a href="global.html#varRegex">varRegex</a></li><li><a href="global.html#varWikidataTypes">varWikidataTypes</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a> on Sun Apr 09 2017 13:04:01 GMT+0200 (CEST)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a> on Mon May 08 2017 19:55:55 GMT+0200 (CEST)
 </footer>
 
 <script> prettyPrint(); </script>

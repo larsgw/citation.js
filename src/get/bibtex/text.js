@@ -9,7 +9,7 @@ import { htmlDict, textDict } from '../dict'
  *
  * Accesed 11/20/2016
  *
- * @access private
+ * @access protected
  * @constant varBibTeXSyntaxTokens
  * @default
  */
@@ -28,7 +28,7 @@ const varBibTeXSyntaxTokens = {
 /**
  * Get a BibTeX (HTML) string from CSL
  *
- * @access private
+ * @access protected
  * @method getBibTeX
  *
  * @param {CSL[]} src - Input CSL

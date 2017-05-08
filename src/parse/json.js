@@ -3,7 +3,7 @@ import varRegex from './regex'
 /**
  * Parse (in)valid JSON
  *
- * @access private
+ * @access protected
  * @method parseJSON
  *
  * @param {String} str - The input string

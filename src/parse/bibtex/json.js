@@ -4,7 +4,7 @@ import parseBibTeXType from './type'
 /**
  * Format BibTeX JSON data
  *
- * @access private
+ * @access protected
  * @method parseBibTeXJSON
  *
  * @param {Object[]} data - The input data

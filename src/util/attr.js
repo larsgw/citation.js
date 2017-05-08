@@ -1,7 +1,7 @@
 /**
  * Add data-* attribute to a HTML string
  *
- * @access private
+ * @access protected
  * @method getAttributedEntry
  *
  * @param {String} string - HTML string
@@ -15,7 +15,7 @@ const getAttributedEntry = (string, name, value) => string.replace(/^\s*<[a-z]+/
 /**
  * Add CSL identifiers to entry
  *
- * @access private
+ * @access protected
  * @method getPrefixedEntry
  *
  * @param {String} value - HTML string

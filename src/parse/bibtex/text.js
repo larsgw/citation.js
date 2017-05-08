@@ -8,7 +8,7 @@ import varRegex from '../regex'
  *
  * Accesed 11/09/2016
  *
- * @access private
+ * @access protected
  * @constant varBibTeXTokens
  * @default
  */
@@ -17,7 +17,7 @@ import varBibTeXTokens from './tokens.json'
 /**
  * Format BibTeX data
  *
- * @access private
+ * @access protected
  * @method parseBibTeX
  *
  * @param {String} str - The input data

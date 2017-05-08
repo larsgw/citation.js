@@ -14,7 +14,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 /**
  * Object containing CSL Engines
  *
- * @access private
+ * @access protected
  * @constant varCSLEngines
  * @default
  */
@@ -35,7 +35,7 @@ var varCSLEngines = {};
 /**
  * Retrieve CSL parsing engine
  *
- * @access private
+ * @access protected
  * @method fetchCSLEngine
  *
  * @param {String} style - CSL style id
@@ -100,7 +100,7 @@ Object.defineProperty(exports, "__esModule", {
 /**
  * Retrieve CSL item callback function
  *
- * @access private
+ * @access protected
  * @method fetchCSLItemCallback
  *
  * @param {CSL[]} data - CSL array
@@ -132,7 +132,7 @@ Object.defineProperty(exports, "__esModule", {
  *
  * Accesed 10/22/2016
  *
- * @access private
+ * @access protected
  * @constant varCSLLocales
  * @default
  */
@@ -151,7 +151,7 @@ var varCSLLocales = {
 /**
  * Retrieve CSL locale
  *
- * @access private
+ * @access protected
  * @method fetchCSLLocale
  *
  * @param {String} lang - lang code
@@ -177,7 +177,7 @@ Object.defineProperty(exports, "__esModule", {
  *
  * Accesed 10/22/2016
  *
- * @access private
+ * @access protected
  * @constant varCSLStyles
  * @default
  */
@@ -190,7 +190,7 @@ var varCSLStyles = {
 /**
  * Retrieve CSL style
  *
- * @access private
+ * @access protected
  * @method fetchCSLStyle
  *
  * @param {String} [style="apa"] - style name
@@ -435,6 +435,7 @@ function Cite(data, options) {
    * @property style {String} The style of the output. See [Output](../#output)
    * @property lang {String} The language of the output. [RFC 5646](https://tools.ietf.org/html/rfc5646) codes
    *
+   * @access protected
    * @type Object
    * @default {}
    */
@@ -448,6 +449,7 @@ function Cite(data, options) {
    * <br /><br />
    * `.currentVersion()` and similar function **are not** logged, because this would be influenced by function using other functions.
    *
+   * @access protected
    * @type Object[]
    *
    * @property {Cite} 0 - The first image.
@@ -457,6 +459,7 @@ function Cite(data, options) {
   /**
    * The data formatted to JSON
    *
+   * @access protected
    * @type Object
    * @default []
    */
@@ -805,7 +808,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 /**
  * Get BibTeX-JSON from CSL(-JSON)
  *
- * @access private
+ * @access protected
  * @method getBibTeXJSON
  *
  * @param {CSL} src - Input CSL
@@ -886,7 +889,7 @@ Object.defineProperty(exports, "__esModule", {
 /**
  * Get a BibTeX label from CSL data
  *
- * @access private
+ * @access protected
  * @method getBibTeXLabel
  *
  * @param {CSL} src - Input CSL
@@ -945,7 +948,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
  *
  * Accesed 11/20/2016
  *
- * @access private
+ * @access protected
  * @constant varBibTeXSyntaxTokens
  * @default
  */
@@ -964,7 +967,7 @@ var varBibTeXSyntaxTokens = {
 /**
  * Get a BibTeX (HTML) string from CSL
  *
- * @access private
+ * @access protected
  * @method getBibTeX
  *
  * @param {CSL[]} src - Input CSL
@@ -1004,7 +1007,7 @@ Object.defineProperty(exports, "__esModule", {
 /**
  * CSL pub type to BibTeX pub type
  *
- * @access private
+ * @access protected
  * @method fetchBibTeXType
  *
  * @param {String} pubType - CSL type
@@ -1066,7 +1069,7 @@ var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = [
 /**
  * Convert a CSL date into human-readable format
  *
- * @access private
+ * @access protected
  * @function getDate
  *
  * @param {String[]} date - A date in CSL format
@@ -1094,7 +1097,7 @@ Object.defineProperty(exports, "__esModule", {
 /**
  * Object containing HTML strings for building JSON and BibTeX. Made to match citeproc, for compatability.
  *
- * @access private
+ * @access protected
  * @constant varHTMLDict
  * @default
  */
@@ -1112,7 +1115,7 @@ var htmlDict = {
 /**
  * Object containing text strings for building JSON and BibTeX. Made to match citeproc, for compatability.
  *
- * @access private
+ * @access protected
  * @constant varHTMLDict
  * @default
  */
@@ -1185,7 +1188,7 @@ var _dict = require('./dict');
 /**
  * Convert a JSON array or object to HTML.
  *
- * @access private
+ * @access protected
  * @function getJSONObjectHTML
  *
  * @param {Object|Object[]|String[]|Number[]} src - The data
@@ -1209,7 +1212,7 @@ var getJSONObjectHTML = function getJSONObjectHTML(src) {
 /**
  * Convert JSON to HTML.
  *
- * @access private
+ * @access protected
  * @function getJSONValueHTML
  *
  * @param {Object|String|Number|Object[]|String[]|Number[]} src - The data
@@ -1233,7 +1236,7 @@ var getJSONValueHTML = function getJSONValueHTML(src) {
 /**
  * Get a JSON HTML string from CSL
  *
- * @access private
+ * @access protected
  * @method getJSON
  *
  * @param {CSL[]} src - Input CSL
@@ -1271,7 +1274,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 /**
  * Get a label from CSL data
  *
- * @access private
+ * @access protected
  * @method getLabel
  *
  * @param {CSL} src - Input CSL
@@ -1292,7 +1295,7 @@ Object.defineProperty(exports, "__esModule", {
 /**
  * Get name from CSL
  *
- * @access private
+ * @access protected
  * @method getName
  *
  * @param {Object} obj - CSL input
@@ -1405,7 +1408,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 /**
  * Forat ContentMine data
  *
- * @access private
+ * @access protected
  * @method parseContentMine
  *
  * @param {Object} data - The input data
@@ -1461,7 +1464,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 /**
  * Format BibTeX JSON data
  *
- * @access private
+ * @access protected
  * @method parseBibTeXJSON
  *
  * @param {Object[]} data - The input data
@@ -1509,7 +1512,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 /**
  * Transform property and value from BibTeX-JSON format to CSL-JSON
  *
- * @access private
+ * @access protected
  * @method parseBibTeXProp
  *
  * @param {String} prop - Property
@@ -1672,7 +1675,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 /**
  * Format BibTeX data
  *
- * @access private
+ * @access protected
  * @method parseBibTeX
  *
  * @param {String} str - The input data
@@ -1915,7 +1918,7 @@ var parseBibTeX = function parseBibTeX(str) {
  *
  * Accesed 11/09/2016
  *
- * @access private
+ * @access protected
  * @constant varBibTeXTokens
  * @default
  */
@@ -2045,7 +2048,7 @@ Object.defineProperty(exports, "__esModule", {
 /**
  * BibTeX pub type to CSL pub type
  *
- * @access private
+ * @access protected
  * @method parseBibTeXType
  *
  * @param {String} pubType - BibTeX type
@@ -2104,7 +2107,7 @@ Object.defineProperty(exports, "__esModule", {
 /**
  * Convert epoch to CSL date
  *
- * @access private
+ * @access protected
  * @function parseDate
  *
  * @param {Number|String} value - Epoch time or string in format "YYYY-MM-DD"
@@ -2185,7 +2188,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 /**
  * Parse input until success.
  *
- * @access private
+ * @access protected
  * @method parseInput
  *
  * @param {String|String[]|Object|Object[]} input - The input data
@@ -2234,7 +2237,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 /**
  * Parse input once.
  *
- * @access private
+ * @access protected
  * @method parseInputChainLink
  *
  * @param {String|String[]|Object|Object[]} input - The input data
@@ -2301,7 +2304,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 /**
  * Standardise input (internal use)
  *
- * @access private
+ * @access protected
  * @method parseInputData
  *
  * @param {String|String[]|Object|Object[]} input - The input data
@@ -2418,7 +2421,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 /**
  * Determine input type (internal use)
  *
- * @access private
+ * @access protected
  * @method parseInputType
  *
  * @param {String|String[]|Object|Object[]} input - The input data
@@ -2531,7 +2534,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 /**
  * Parse (in)valid JSON
  *
- * @access private
+ * @access protected
  * @method parseJSON
  *
  * @param {String} str - The input string
@@ -2578,7 +2581,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 /**
  * Get CSL from name
  *
- * @access private
+ * @access protected
  * @method parseName
  *
  * @param {String} name - string
@@ -2607,7 +2610,7 @@ Object.defineProperty(exports, "__esModule", {
 /**
  * Object containing several RegExp patterns, mostly used for parsing (*full of shame*) and recognizing data types
  *
- * @access private
+ * @access protected
  * @constant varRegex
  * @default
  */
@@ -2672,7 +2675,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 /**
  * Format Wikidata data
  *
- * @access private
+ * @access protected
  * @method parseWikidataJSON
  *
  * @param {Object} data - The input data
@@ -2749,7 +2752,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 /**
  * Get Wikidata JSON from Wikidata IDs
  *
- * @access private
+ * @access protected
  * @method parseWikidata
  *
  * @param {String} data - Wikidata IDs
@@ -2793,7 +2796,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 /**
  * Get the names of objects from Wikidata IDs
  *
- * @access private
+ * @access protected
  * @method fetchWikidataLabel
  *
  * @param {String|String[]} q - Wikidata IDs
@@ -2814,7 +2817,7 @@ var fetchWikidataLabel = function fetchWikidataLabel(q, lang) {
 /**
  * Get series ordinal from qualifiers object
  *
- * @access private
+ * @access protected
  * @method parseWikidataProp
  *
  * @param {Object} qualifiers - qualifiers object
@@ -2828,7 +2831,7 @@ var parseWikidataP1545 = function parseWikidataP1545(qualifiers) {
 /**
  * Transform property and value from Wikidata format to CSL
  *
- * @access private
+ * @access protected
  * @method parseWikidataProp
  *
  * @param {String} prop - Property
@@ -2974,7 +2977,7 @@ Object.defineProperty(exports, "__esModule", {
 /**
  * Object containing a list of Wikidata Instances and it's corresponding name as specified by the docs
  *
- * @access private
+ * @access protected
  * @constant varWikidataTypes
  * @default
  */
@@ -2989,7 +2992,7 @@ var varWikidataTypes = {
 /**
  * Get CSL type from Wikidata type (P31)
  *
- * @access private
+ * @access protected
  * @method fetchWikidataType
  *
  * @param {String} value - Input P31 Wikidata ID
@@ -3010,7 +3013,7 @@ Object.defineProperty(exports, "__esModule", {
 /**
  * Add data-* attribute to a HTML string
  *
- * @access private
+ * @access protected
  * @method getAttributedEntry
  *
  * @param {String} string - HTML string
@@ -3028,7 +3031,7 @@ var getAttributedEntry = function getAttributedEntry(string, name, value) {
 /**
  * Add CSL identifiers to entry
  *
- * @access private
+ * @access protected
  * @method getPrefixedEntry
  *
  * @param {String} value - HTML string
@@ -3052,7 +3055,7 @@ Object.defineProperty(exports, "__esModule", {
 /**
  * Duplicate objects to prevent Cite changing values outside of own scope
  *
- * @access private
+ * @access protected
  * @method deepCopy
  *
  * @param {Object} obj - Input object
@@ -3080,7 +3083,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 /**
  * Fetch file
  *
- * @access private
+ * @access protected
  * @method fetchFile
  *
  * @param {String} url - The input url
@@ -3106,7 +3109,7 @@ Object.defineProperty(exports, "__esModule", {
 /**
  * Generate ID
  *
- * @access private
+ * @access protected
  * @method fetchId
  *
  * @param {String[]} list - old ID list
@@ -29015,9 +29018,14 @@ module.exports={
     "babel-preset-stage-0": "^6.24.1",
     "brfs": "^1.4.3",
     "browserify": "^13.3.0",
+    "eslint-config-standard-jsdoc": "^0.3.2",
     "jasmine-node": "^1.14.5",
     "jsdoc": "^3.4.2",
     "standard": "^10.0.2"
+  },
+  "eslintConfig": {
+    "parser": "standard",
+    "extends": ["standard", "standard-jsdoc"]
   },
   "babel": {
     "presets": [
@@ -29033,7 +29041,8 @@ module.exports={
     "dev:test-browser": "npm run babel && npm run test && npm run build && npm run build-test",
     "build": "browserify -r ./lib/index.js:citation-js -o build/citation.js && cp build/citation.js docs/src/citation.js",
     "build-test": "browserify -t brfs -e test/citation.spec.js -o build/test.citation.js && cp build/test.citation.js docs/src/test.citation.js",
-    "build-docs": "jsdoc ./src README.md -c docs/conf.json"
+    "build-docs": "jsdoc ./src README.md -c docs/conf.json",
+    "build-docs-dev": "jsdoc ./src README.md -c docs/dev.conf.json -p"
   },
   "author": "Lars Willighagen (https://larsgw.github.io)",
   "license": "MIT",
@@ -29045,7 +29054,7 @@ module.exports={
   "engines": {
     "node": ">=6.0.0"
   },
-  "homepage": "https://github.com/larsgw/citation.js#readme"
+  "homepage": "https://larsgw.github.com/citation.js/"
 }
 
 },{}],382:[function(require,module,exports){

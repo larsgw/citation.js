@@ -15,6 +15,7 @@ Citation.js converts formats like BibTeX, Wikidata JSON and ContentMine JSON to 
     * [Cite](#citation.cite)
       * [Input](#citation.cite.in)
         * [Input types](#citation.cite.in.type)
+        * [Options](#citation.cite.in.options)
       * [Ouput](#citation.cite.out)
         * [Type](#citation.cite.out.type)
         * [Style](#citation.cite.out.style)
@@ -104,25 +105,44 @@ var example = new Cite( <data>, <options> )
 ```
 
 1. In the first parameter you pass the input data. [Input types](#citation.cite.in.type)
-2. In the second parameter you pass the settings. It contains the following properties. These are the default options for using `.get()`
+2. In the second parameter you pass the [options]().
+
+##### <a id="citation.cite.in.type" href="#citation.cite.in.type">Input types</a>
+Input type doesn't have to be specified. The identifiers below are used by internal functions.
+
+###### <a id="citation.cite.in.type.wikidata" href="#citation.cite.in.type.wikidata">Wikidata</a>
+* `url/wikidata`: URL with [Wikidata](https://www.wikidata.org/) [Entity ID](https://www.wikidata.org/wiki/Wikidata:Glossary#Entities.2C_items.2C_properties_and_queries). Gets and parses the entity data
+* `list/wikidata`: List of Wikidata Entity IDs, separated by spaces, newlines or commas. Gets and parses the entity data
+* `string/wikidata`: Single Wikidata Entity ID. Gets and parses the entity data
+* `api/wikidata`: Wikidata API URL. Gets and parses the entity data
+* `json/wikidata`: Wikidata Entity data. Parses the entity data
+
+###### <a id="citation.cite.in.type.bibtex" href="#citation.cite.in.type.bibtex">BibTeX</a>
+* `string/bibtex`: [BibTeX](http://www.bibtex.org/) string. Parses the data
+
+###### <a id="citation.cite.in.type.bibjson" href="#citation.cite.in.type.bibjson">BibJSON</a>
+* `json/contentmine`: Actually BibJSON, all references to ContentMine will be removed when the parser is fully done. Parses the data
+
+###### <a id="citation.cite.in.type.csl" href="#citation.cite.in.type.csl">CSL-JSON</a>
+* `json/csl`: [CSL-JSON](https://github.com/citation-style-language/schema#csl-json-schema). Adds the data
+* `array/csl`: Array of CSL-JSON. Adds the data
+
+###### <a id="citation.cite.in.type.inter" href="#citation.cite.in.type.inter">Intermediary formats</a>
+These formats are not input-ready, but are rather parsed and re-evaluated, e.g. `html/else` (DOM element) to `string/json` to `json/csl`.
+
+* `string/json`: JSON or JavaScript Object string. Parses and re-evaluates the data
+* `jquery/else`: jQuery element. Fetches and re-evaluates the contents
+* `html/else`: HTML DOM element. Fetches and re-evaluates the contents
+* `url/else`: URL. Fetches and re-evaluates the file
+* `array/else`: JavaScript array. Re-evaluates every element in the array
+
+##### <a id="citation.cite.in.options" href="#citation.cite.in.options">Options</a>
+These are the default options for using `.get()`. More options will follow.
+
   1. `format`: The output format: `"real"` (default) or `"string"`
   2. `type`: The output type: `"html"`, `"string"` or `"json"` (default).
   3. `style`: The output style. See [Output](#citation.cite.out). `"csl"` is default
   4. `lang`: The language of the output. [RFC 5646](https://tools.ietf.org/html/rfc5646) codes. Currently supported: `"en-US"` (default), `"fr-FR"`, `"es-ES"` ,`"de-DE"` and `"nl-NL"`
-
-##### <a id="citation.cite.in.type" href="#citation.cite.in.type">Input types</a>
-
-* `url/wikidata`: URL with [Wikidata](https://www.wikidata.org/) [Entity ID](https://www.wikidata.org/wiki/Wikidata:Glossary#Entities.2C_items.2C_properties_and_queries). Gets and parses the entity data
-* `list/wikidata`: List of Wikidata Entity IDs, separated by spaces, newlines or commas. Gets and parses the entity data
-* `json/wikidata`: Wikidata Entity data. Parses the data
-* `json/contentmine`: [ContentMine](http://contentmine.org/) data, as outputted by [quickscrape](https://github.com/ContentMine/quickscrape). Parses the data
-* `json/csl`: [CSL-JSON](https://github.com/citation-style-language/schema#csl-json-schema). Adds the data
-* `string/json`: JSON or JavaScript Object string. Parses and re-evaluates the data
-* `string/bibtex`: [BibTeX](http://www.bibtex.org/) string. Parses the data
-* `jquery/else`: jQuery element. Fetches and re-evaluates the contents
-* `html/else`: HTML DOM element. Fetches and re-evaluates the contents
-* `url/else`: URL. Fetches and re-evaluates the file
-* `list/else`: JavaScript array. Re-evaluates every element in the array
 
 #### <a id="citation.cite.out" href="#citation.cite.out">Ouput</a>
 
@@ -156,14 +176,14 @@ var data = new Cite(...)
 data.get({
   format: 'string',
   type: 'html',
-  style: 'citation',
+  style: 'citation-<TEMPLATE NAME>',
   lang: 'en-US',
   
   template: '...' // XML String
 })
 ```
 
-Currently, you need to pass `"citation"` to the `style` option for this to work.
+Replace `<TEMPLATE NAME>` with the template name you want to use. After calling `.get()` with these options once, you can omit the template property, if you use the same locale.
 
 ##### <a id="citation.cite.out.locales" href="#citation.cite.out.locales">CSL Locales</a>
 
@@ -182,16 +202,63 @@ data.get({
 ```
 #### <a id="citation.cite.misc" href="#citation.cite.misc">Misc</a>
 
-`Cite` has some more functions:
+`Cite` instances have some more functions:
 
 * `.options(<options>)`: Change default options
 * `.set(<data>)`: Replace all data with new data
 * `.add(<data>)`: Add data
-* `.reset()`: Remove all data
+* `.reset()`: Remove all data and options
 * `.currentVersion()`: Get current version number
-* `.undo()`: Restore previous version
 * `.retrieveVersion(<version number>)`: Retrieve a certain version of the object
+* `.retrieveLastVersion()`: Retrieve the last saved version of the object
+* `.undo(<number>)`: Restore the n to last version (default: `1`)
+* `.save()`: Save the current object
 * `.sort()`: Sort all entries on basis of their BibTeX label
+
+`Cite` holds all internal functions, too. These are documentated [here](https://larsgw.github.io/citation.js/api/global.html) and can be accessed like this:
+
+```js
+{ [Function: Cite]
+  parse: 
+   { input: 
+      { type: [Function: parseInputType],
+        data: [Function: parseInputData],
+        chain: [Function: parseInput],
+        chainLink: [Function: parseInputChainLink] },
+     wikidata: 
+      { list: [Function: parseWikidata],
+        json: [Function: parseWikidataJSON],
+        prop: [Function: parseWikidataProp],
+        type: [Function: fetchWikidataType] },
+     bibjson: [Function: parseContentMine],
+     date: [Function: parseDate],
+     name: [Function: parseName],
+     json: [Function: parseJSON] },
+  get: 
+   { bibtex: 
+      { json: [Function: getBibTeXJSON],
+        text: [Function: getBibTeX],
+        label: [Function: getBibTeXLabel],
+        type: [Function: fetchBibTeXType] },
+     dict: { htmlDict: [Object], textDict: [Object] },
+     json: [Function: getJSON],
+     date: [Function: getDate],
+     name: [Function: getName],
+     label: [Function: getLabel] },
+  CSL: 
+   { style: [Function: fetchCSLStyle],
+     locale: [Function: fetchCSLLocale],
+     engine: [Function: fetchCSLEngine],
+     item: [Function: fetchCSLItemCallback] },
+  util: 
+   { attr: 
+      { getAttributedEntry: [Function: getAttributedEntry],
+        getPrefixedEntry: [Function: getPrefixedEntry] },
+     deepCopy: [Function: deepCopy],
+     fetchFile: [Function: fetchFile],
+     fetchId: [Function: fetchId] },
+  version: { cite: '0.3.0-4', citeproc: '1.1.161' } }
+```
 
 # <a id="jquery" href="#jquery">jquery.Citation.js</a>
 
@@ -314,14 +381,14 @@ Further explanation can be found [here](https://larsgw.github.io/citation.js/api
 [NPM Demo](https://runkit.com/npm/citation-js). Example code:
 
 ```js
-var Cite = require( 'citation-js' )
+var Cite = require('citation-js')
 
-var data = new Cite( 'Q21972834', {
+var data = new Cite('Q21972834', {
   format: 'string',
   type: 'html',
   style: 'citation-apa',
   lang: 'en-US'
-} )
+})
 
 data.get() // Should implicitly display
 ```

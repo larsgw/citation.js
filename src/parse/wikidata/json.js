@@ -4,7 +4,7 @@ import parseWikidataProp from './prop'
 /**
  * Format Wikidata data
  *
- * @access private
+ * @access protected
  * @method parseWikidataJSON
  *
  * @param {Object} data - The input data

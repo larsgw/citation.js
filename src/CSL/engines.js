@@ -3,7 +3,7 @@ import CSL from 'citeproc'
 /**
  * Object containing CSL Engines
  *
- * @access private
+ * @access protected
  * @constant varCSLEngines
  * @default
  */
@@ -24,7 +24,7 @@ const varCSLEngines = {}
 /**
  * Retrieve CSL parsing engine
  *
- * @access private
+ * @access protected
  * @method fetchCSLEngine
  *
  * @param {String} style - CSL style id

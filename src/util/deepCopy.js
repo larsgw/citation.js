@@ -1,7 +1,7 @@
 /**
  * Duplicate objects to prevent Cite changing values outside of own scope
  *
- * @access private
+ * @access protected
  * @method deepCopy
  *
  * @param {Object} obj - Input object
