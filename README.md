@@ -3,6 +3,7 @@ Citation.js converts formats like BibTeX, Wikidata JSON and ContentMine JSON to 
 [![NPM version](https://img.shields.io/npm/v/citation-js.svg)](https://www.npmjs.org/citation-js)
 [![NPM total downloads](https://img.shields.io/npm/dt/citation-js.svg)](https://npmjs.org/citation-js)
 [![Build Status](https://travis-ci.org/larsgw/citation.js.svg?branch=master)](https://travis-ci.org/larsgw/citation.js)
+[![Dependency Status](https://david-dm.org/larsgw/citation.js/status.svg)](https://david-dm.org/larsgw/citation.js)
 
 ##### Table of Contents
 
@@ -74,11 +75,13 @@ var Cite = require('citation-js')
 
 #### <a id="citation.use.node.dependencies" href="#citation.use.node.dependencies">Dependencies</a>
 
+* [babel-polyfill](https://www.npmjs.com/package/babel-polyfill)
+* [citeproc](https://www.npmjs.com/package/citeproc)
 * [commander](https://www.npmjs.com/package/commander)
+* [deep-freeze](https://www.npmjs.com/package/deep-freeze)
 * [striptags](https://www.npmjs.com/package/striptags)
 * [sync-request](https://www.npmjs.com/package/sync-request)
 * [wikidata-sdk](https://www.npmjs.com/package/wikidata-sdk)
-* [citeproc-js](https://citeproc-js.readthedocs.io) (no NPM module, is included)
 
 ### <a id="citation.use.browser" href="#citation.use.browser">Browser</a>
 
@@ -90,7 +93,7 @@ With the following code, you can `require('citation-js')` to get the [`Cite`](#c
 
 #### <a id="citation.use.browser.dependencies" href="#citation.use.browser.dependencies">Dependencies</a>
 
-Dependencies are the same as the ones above, with the exception of `commander`. They are all included in `browser.js`.
+Dependencies are the same as the ones above, with the exception of `commander`. They are all included in `citation.js`.
 
 ### <a id="citation.cite" href="#citation.cite">Cite</a>
 
