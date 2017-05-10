@@ -1,3110 +1,4 @@
 require=(function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
-'use strict';
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _citeproc = require('citeproc');
-
-var _citeproc2 = _interopRequireDefault(_citeproc);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-/**
- * Object containing CSL Engines
- *
- * @access protected
- * @constant varCSLEngines
- * @default
- */
-var varCSLEngines = {};
-
-/**
- * @callback Cite~retrieveItem
- * @param {String} id - Citation id
- * @return {CSL} CSL Citation object
- */
-
-/**
- * @callback Cite~retrieveLocale
- * @param {String} lang - Language code
- * @return {String} CSL Locale
- */
-
-/**
- * Retrieve CSL parsing engine
- *
- * @access protected
- * @method fetchCSLEngine
- *
- * @param {String} style - CSL style id
- * @param {String} lang - Language code
- * @param {String} template - CSL XML template
- * @param {Cite~retrieveItem} retrieveItem - Code to retreive item
- * @param {Cite~retrieveLocale} retrieveLocale - Code to retreive locale
- *
- * @return {Object} CSL Engine
- */
-var fetchCSLEngine = function fetchCSLEngine(style, lang, template, retrieveItem, retrieveLocale) {
-  var prop = style + '|' + lang;
-  var engine = void 0;
-
-  if (varCSLEngines.hasOwnProperty(prop)) {
-    engine = varCSLEngines[prop];
-    engine.sys.retrieveItem = retrieveItem;
-  } else {
-    engine = varCSLEngines[prop] = new _citeproc2.default.Engine({ retrieveLocale: retrieveLocale, retrieveItem: retrieveItem }, template, lang, true);
-  }
-
-  return engine;
-};
-
-exports.default = fetchCSLEngine;
-},{"citeproc":51}],2:[function(require,module,exports){
-'use strict';
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.item = exports.engine = exports.locale = exports.style = undefined;
-
-var _styles = require('./styles');
-
-var _styles2 = _interopRequireDefault(_styles);
-
-var _locales = require('./locales');
-
-var _locales2 = _interopRequireDefault(_locales);
-
-var _engines = require('./engines');
-
-var _engines2 = _interopRequireDefault(_engines);
-
-var _items = require('./items');
-
-var _items2 = _interopRequireDefault(_items);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-exports.style = _styles2.default;
-exports.locale = _locales2.default;
-exports.engine = _engines2.default;
-exports.item = _items2.default;
-},{"./engines":1,"./items":3,"./locales":4,"./styles":5}],3:[function(require,module,exports){
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-/**
- * Retrieve CSL item callback function
- *
- * @access protected
- * @method fetchCSLItemCallback
- *
- * @param {CSL[]} data - CSL array
- *
- * @return {Cite~retrieveItem} Code to retreive item
- */
-var fetchCSLItemCallback = function fetchCSLItemCallback(data) {
-  var _data = data;
-
-  return function (id) {
-    return _data.find(function (entry) {
-      return entry.id === id;
-    });
-  };
-};
-
-exports.default = fetchCSLItemCallback;
-},{}],4:[function(require,module,exports){
-'use strict';
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-/**
- * Object containing CSL locales
- *
- * Locales from the [CSL Project](http://citationstyles.org/)<br>
- * [REPO](https://github.com/citation-style-language/locales)
- *
- * Accesed 10/22/2016
- *
- * @access protected
- * @constant varCSLLocales
- * @default
- */
-var varCSLLocales = {
-  'en-US': '<?xml version="1.0" encoding="utf-8"?><locale xmlns="http://purl.org/net/xbiblio/csl" version="1.0" xml:lang="en-US"><info><rights license="http://creativecommons.org/licenses/by-sa/3.0/">This work is licensed under a Creative Commons Attribution-ShareAlike 3.0 License</rights><updated>2015-10-10T23:31:02+00:00</updated></info><style-options punctuation-in-quote="true"/><date form="text"><date-part name="month" suffix=" "/><date-part name="day" suffix=", "/><date-part name="year"/></date><date form="numeric"><date-part name="month" form="numeric-leading-zeros" suffix="/"/><date-part name="day" form="numeric-leading-zeros" suffix="/"/><date-part name="year"/></date><terms><term name="accessed">accessed</term><term name="and">and</term><term name="and others">and others</term><term name="anonymous">anonymous</term><term name="anonymous" form="short">anon.</term><term name="at">at</term><term name="available at">available at</term><term name="by">by</term><term name="circa">circa</term><term name="circa" form="short">c.</term><term name="cited">cited</term><term name="edition"><single>edition</single><multiple>editions</multiple></term><term name="edition" form="short">ed.</term><term name="et-al">et al.</term><term name="forthcoming">forthcoming</term><term name="from">from</term><term name="ibid">ibid.</term><term name="in">in</term><term name="in press">in press</term><term name="internet">internet</term><term name="interview">interview</term><term name="letter">letter</term><term name="no date">no date</term><term name="no date" form="short">n.d.</term><term name="online">online</term><term name="presented at">presented at the</term><term name="reference"><single>reference</single><multiple>references</multiple></term><term name="reference" form="short"><single>ref.</single><multiple>refs.</multiple></term><term name="retrieved">retrieved</term><term name="scale">scale</term><term name="version">version</term><term name="ad">AD</term><term name="bc">BC</term><term name="open-quote">\u201C</term><term name="close-quote">\u201D</term><term name="open-inner-quote">\u2018</term><term name="close-inner-quote">\u2019</term><term name="page-range-delimiter">\u2013</term><term name="ordinal">th</term><term name="ordinal-01">st</term><term name="ordinal-02">nd</term><term name="ordinal-03">rd</term><term name="ordinal-11">th</term><term name="ordinal-12">th</term><term name="ordinal-13">th</term><term name="long-ordinal-01">first</term><term name="long-ordinal-02">second</term><term name="long-ordinal-03">third</term><term name="long-ordinal-04">fourth</term><term name="long-ordinal-05">fifth</term><term name="long-ordinal-06">sixth</term><term name="long-ordinal-07">seventh</term><term name="long-ordinal-08">eighth</term><term name="long-ordinal-09">ninth</term><term name="long-ordinal-10">tenth</term><term name="book"><single>book</single><multiple>books</multiple></term><term name="chapter"><single>chapter</single><multiple>chapters</multiple></term><term name="column"><single>column</single><multiple>columns</multiple></term><term name="figure"><single>figure</single><multiple>figures</multiple></term><term name="folio"><single>folio</single><multiple>folios</multiple></term><term name="issue"><single>number</single><multiple>numbers</multiple></term><term name="line"><single>line</single><multiple>lines</multiple></term><term name="note"><single>note</single><multiple>notes</multiple></term><term name="opus"><single>opus</single><multiple>opera</multiple></term><term name="page"><single>page</single><multiple>pages</multiple></term><term name="number-of-pages"><single>page</single><multiple>pages</multiple></term><term name="paragraph"><single>paragraph</single><multiple>paragraphs</multiple></term><term name="part"><single>part</single><multiple>parts</multiple></term><term name="section"><single>section</single><multiple>sections</multiple></term><term name="sub verbo"><single>sub verbo</single><multiple>sub verbis</multiple></term><term name="verse"><single>verse</single><multiple>verses</multiple>\n</term><term name="volume"><single>volume</single><multiple>volumes</multiple></term><term name="book" form="short"><single>bk.</single><multiple>bks.</multiple></term><term name="chapter" form="short"><single>chap.</single><multiple>chaps.</multiple></term><term name="column" form="short"><single>col.</single><multiple>cols.</multiple></term><term name="figure" form="short"><single>fig.</single><multiple>figs.</multiple></term><term name="folio" form="short"><single>fol.</single><multiple>fols.</multiple></term><term name="issue" form="short"><single>no.</single><multiple>nos.</multiple></term><term name="line" form="short"><single>l.</single><multiple>ll.</multiple></term><term name="note" form="short"><single>n.</single><multiple>nn.</multiple></term><term name="opus" form="short"><single>op.</single><multiple>opp.</multiple></term><term name="page" form="short"><single>p.</single><multiple>pp.</multiple></term><term name="number-of-pages" form="short"><single>p.</single><multiple>pp.</multiple></term><term name="paragraph" form="short"><single>para.</single><multiple>paras.</multiple></term><term name="part" form="short"><single>pt.</single><multiple>pts.</multiple></term><term name="section" form="short"><single>sec.</single><multiple>secs.</multiple></term><term name="sub verbo" form="short"><single>s.v.</single><multiple>s.vv.</multiple></term><term name="verse" form="short"><single>v.</single><multiple>vv.</multiple></term><term name="volume" form="short"><single>vol.</single><multiple>vols.</multiple></term><term name="paragraph" form="symbol"><single>\xB6</single><multiple>\xB6\xB6</multiple></term><term name="section" form="symbol"><single>\xA7</single><multiple>\xA7\xA7</multiple></term><term name="director"><single>director</single><multiple>directors</multiple></term><term name="editor"><single>editor</single><multiple>editors</multiple></term><term name="editorial-director"><single>editor</single><multiple>editors</multiple></term><term name="illustrator"><single>illustrator</single><multiple>illustrators</multiple></term><term name="translator"><single>translator</single><multiple>translators</multiple></term><term name="editortranslator"><single>editor &amp; translator</single><multiple>editors &amp; translators</multiple></term><term name="director" form="short"><single>dir.</single><multiple>dirs.</multiple></term><term name="editor" form="short"><single>ed.</single><multiple>eds.</multiple></term><term name="editorial-director" form="short"><single>ed.</single><multiple>eds.</multiple></term><term name="illustrator" form="short"><single>ill.</single><multiple>ills.</multiple></term><term name="translator" form="short"><single>tran.</single><multiple>trans.</multiple></term><term name="editortranslator" form="short"><single>ed. &amp; tran.</single><multiple>eds. &amp; trans.</multiple></term><term name="container-author" form="verb">by</term><term name="director" form="verb">directed by</term><term name="editor" form="verb">edited by</term><term name="editorial-director" form="verb">edited by</term><term name="illustrator" form="verb">illustrated by</term><term name="interviewer" form="verb">interview by</term><term name="recipient" form="verb">to</term><term name="reviewed-author" form="verb">by</term><term name="translator" form="verb">translated by</term><term name="editortranslator" form="verb">edited &amp; translated by</term><term name="director" form="verb-short">dir. by</term><term name="editor" form="verb-short">ed. by</term><term name="editorial-director" form="verb-short">ed. by</term><term name="illustrator" form="verb-short">illus. by</term><term name="translator" form="verb-short">trans. by</term><term name="editortranslator" form="verb-short">ed. &amp; trans. by</term><term name="month-01">January</term><term name="month-02">February</term><term name="month-03">March</term><term name="month-04">April</term><term name="month-05">May</term><term name="month-06">June</term><term name="month-07">July</term><term name="month-08">August</term><term name="month-09">September</term>\n<term name="month-10">October</term><term name="month-11">November</term><term name="month-12">December</term><term name="month-01" form="short">Jan.</term><term name="month-02" form="short">Feb.</term><term name="month-03" form="short">Mar.</term><term name="month-04" form="short">Apr.</term><term name="month-05" form="short">May</term><term name="month-06" form="short">Jun.</term><term name="month-07" form="short">Jul.</term><term name="month-08" form="short">Aug.</term><term name="month-09" form="short">Sep.</term><term name="month-10" form="short">Oct.</term><term name="month-11" form="short">Nov.</term><term name="month-12" form="short">Dec.</term><term name="season-01">Spring</term><term name="season-02">Summer</term><term name="season-03">Autumn</term><term name="season-04">Winter</term></terms></locale>',
-
-  'nl-NL': '<?xml version="1.0" encoding="utf-8"?><locale xmlns="http://purl.org/net/xbiblio/csl" version="1.0" xml:lang="nl-NL"><info><translator><name>Rintze Zelle</name><uri>http://twitter.com/rintzezelle</uri></translator><rights license="http://creativecommons.org/licenses/by-sa/3.0/">This work is licensed under a Creative Commons Attribution-ShareAlike 3.0 License</rights><updated>2012-07-04T23:31:02+00:00</updated></info><style-options punctuation-in-quote="false"/><date form="text"><date-part name="day" suffix=" "/><date-part name="month" suffix=" "/><date-part name="year"/></date><date form="numeric"><date-part name="day" suffix="-" range-delimiter="/"/><date-part name="month" form="numeric" suffix="-" range-delimiter="/"/><date-part name="year"/></date><terms><term name="accessed">geraadpleegd</term><term name="and">en</term><term name="and others">en anderen</term><term name="anonymous">anoniem</term><term name="anonymous" form="short">anon.</term><term name="at">bij</term><term name="available at">beschikbaar op</term><term name="by">door</term><term name="circa">circa</term><term name="circa" form="short">c.</term><term name="cited">geciteerd</term><term name="edition"><single>editie</single><multiple>edities</multiple></term><term name="edition" form="short">ed.</term><term name="et-al">e.a.</term><term name="forthcoming">in voorbereiding</term><term name="from">van</term><term name="ibid">ibid.</term><term name="in">in</term><term name="in press">in druk</term><term name="internet">internet</term><term name="interview">interview</term><term name="letter">brief</term><term name="no date">zonder datum</term><term name="no date" form="short">z.d.</term><term name="online">online</term><term name="presented at">gepresenteerd bij</term><term name="reference"><single>referentie</single><multiple>referenties</multiple></term><term name="reference" form="short"><single>ref.</single><multiple>refs.</multiple></term><term name="retrieved">geraadpleegd</term><term name="scale">schaal</term><term name="version">versie</term><term name="ad">AD</term><term name="bc">BC</term><term name="open-quote">\u201C</term><term name="close-quote">\u201D</term><term name="open-inner-quote">\u2018</term><term name="close-inner-quote">\u2019</term><term name="page-range-delimiter">\u2013</term><term name="ordinal">ste</term><term name="ordinal-00" match="whole-number">de</term><term name="ordinal-02" match="last-two-digits">de</term><term name="ordinal-03" match="last-two-digits">de</term><term name="ordinal-04" match="last-two-digits">de</term><term name="ordinal-05" match="last-two-digits">de</term><term name="ordinal-06" match="last-two-digits">de</term><term name="ordinal-07" match="last-two-digits">de</term><term name="ordinal-09" match="last-two-digits">de</term><term name="ordinal-10">de</term><term name="ordinal-11">de</term><term name="ordinal-12">de</term><term name="ordinal-13">de</term><term name="ordinal-14">de</term><term name="ordinal-15">de</term><term name="ordinal-16">de</term><term name="ordinal-17">de</term><term name="ordinal-18">de</term><term name="ordinal-19">de</term><term name="long-ordinal-01">eerste</term><term name="long-ordinal-02">tweede</term><term name="long-ordinal-03">derde</term><term name="long-ordinal-04">vierde</term><term name="long-ordinal-05">vijfde</term><term name="long-ordinal-06">zesde</term><term name="long-ordinal-07">zevende</term><term name="long-ordinal-08">achtste</term><term name="long-ordinal-09">negende</term><term name="long-ordinal-10">tiende</term><term name="book"><single>boek</single><multiple>boeken</multiple></term><term name="chapter"><single>hoofdstuk</single><multiple>hoofdstukken</multiple></term><term name="column"><single>column</single><multiple>columns</multiple></term><term name="figure"><single>figuur</single><multiple>figuren</multiple></term><term name="folio"><single>folio</single><multiple>folio\'s</multiple></term><term name="issue"><single>nummer</single><multiple>nummers</multiple></term><term name="line"><single>regel</single><multiple>regels</multiple>\n</term><term name="note"><single>aantekening</single><multiple>aantekeningen</multiple></term><term name="opus"><single>opus</single><multiple>opera</multiple></term><term name="page"><single>pagina</single><multiple>pagina\'s</multiple></term><term name="number-of-pages"><single>pagina</single><multiple>pagina\'s</multiple></term><term name="paragraph"><single>paragraaf</single><multiple>paragrafen</multiple></term><term name="part"><single>deel</single><multiple>delen</multiple></term><term name="section"><single>sectie</single><multiple>secties</multiple></term><term name="sub verbo"><single>sub verbo</single><multiple>sub verbis</multiple></term><term name="verse"><single>vers</single><multiple>versen</multiple></term><term name="volume"><single>volume</single><multiple>volumes</multiple></term><term name="book" form="short">bk.</term><term name="chapter" form="short">hfdst.</term><term name="column" form="short">col.</term><term name="figure" form="short">fig.</term><term name="folio" form="short">f.</term><term name="issue" form="short">nr.</term><term name="line" form="short">l.</term><term name="note" form="short">n.</term><term name="opus" form="short">op.</term><term name="page" form="short"><single>p.</single><multiple>pp.</multiple></term><term name="number-of-pages" form="short"><single>p.</single><multiple>pp.</multiple></term><term name="paragraph" form="short">par.</term><term name="part" form="short">deel</term><term name="section" form="short">sec.</term><term name="sub verbo" form="short"><single>s.v.</single><multiple>s.vv.</multiple></term><term name="verse" form="short"><single>v.</single><multiple>vv.</multiple></term><term name="volume" form="short"><single>vol.</single><multiple>vols.</multiple></term><term name="paragraph" form="symbol"><single>\xB6</single><multiple>\xB6\xB6</multiple></term><term name="section" form="symbol"><single>\xA7</single><multiple>\xA7\xA7</multiple></term><term name="director"><single>regisseur</single><multiple>regisseurs</multiple></term><term name="editor"><single>redacteur</single><multiple>redacteuren</multiple></term><term name="editorial-director"><single>redacteur</single><multiple>redacteuren</multiple></term><term name="illustrator"><single>illustrator</single><multiple>illustrators</multiple></term><term name="translator"><single>vertaler</single><multiple>vertalers</multiple></term><term name="editortranslator"><single>redacteur &amp; vertaler</single><multiple>redacteuren &amp; vertalers</multiple></term><term name="director" form="short"><single>reg.</single><multiple>reg.</multiple></term><term name="editor" form="short"><single>red.</single><multiple>red.</multiple></term><term name="editorial-director" form="short"><single>red.</single><multiple>red.</multiple></term><term name="illustrator" form="short"><single>ill.</single><multiple>ill.</multiple></term><term name="translator" form="short"><single>vert.</single><multiple>vert.</multiple></term><term name="editortranslator" form="short"><single>red. &amp; vert.</single><multiple>red. &amp; vert.</multiple></term><term name="container-author" form="verb">door</term><term name="director" form="verb">geregisseerd door</term><term name="editor" form="verb">bewerkt door</term><term name="editorial-director" form="verb">bewerkt door</term><term name="illustrator" form="verb">ge\xEFllustreerd door</term><term name="interviewer" form="verb">ge\xEFnterviewd door</term><term name="recipient" form="verb">ontvangen door</term><term name="reviewed-author" form="verb">door</term><term name="translator" form="verb">vertaald door</term><term name="editortranslator" form="verb">bewerkt &amp; vertaald door</term><term name="director" form="verb-short">geregisseerd door</term><term name="editor" form="verb-short">bewerkt door</term><term name="editorial-director" form="verb-short">bewerkt door</term><term name="illustrator" form="verb-short">ge\xEFllustreerd door</term><term name="translator" form="verb-short">vertaald door</term><term name="editortranslator" form="verb-short">bewerkt &amp; vertaald door</term>\n<term name="month-01">januari</term><term name="month-02">februari</term><term name="month-03">maart</term><term name="month-04">april</term><term name="month-05">mei</term><term name="month-06">juni</term><term name="month-07">juli</term><term name="month-08">augustus</term><term name="month-09">september</term><term name="month-10">oktober</term><term name="month-11">november</term><term name="month-12">december</term><term name="month-01" form="short">jan.</term><term name="month-02" form="short">feb.</term><term name="month-03" form="short">mrt.</term><term name="month-04" form="short">apr.</term><term name="month-05" form="short">mei</term><term name="month-06" form="short">jun.</term><term name="month-07" form="short">jul.</term><term name="month-08" form="short">aug.</term><term name="month-09" form="short">sep.</term><term name="month-10" form="short">okt.</term><term name="month-11" form="short">nov.</term><term name="month-12" form="short">dec.</term><term name="season-01">lente</term><term name="season-02">zomer</term><term name="season-03">herst</term><term name="season-04">winter</term></terms></locale>',
-
-  'fr-FR': '<?xml version="1.0" encoding="utf-8"?><locale xmlns="http://purl.org/net/xbiblio/csl" version="1.0" xml:lang="fr-FR"><info><translator><name>Gr\xE9goire Colly</name></translator><rights license="http://creativecommons.org/licenses/by-sa/3.0/">This work is licensed under a Creative Commons Attribution-ShareAlike 3.0 License</rights><updated>2012-07-04T23:31:02+00:00</updated></info><style-options punctuation-in-quote="false" limit-day-ordinals-to-day-1="true"/><date form="text"><date-part name="day" suffix=" "/><date-part name="month" suffix=" "/><date-part name="year"/></date><date form="numeric"><date-part name="day" form="numeric-leading-zeros" suffix="/"/><date-part name="month" form="numeric-leading-zeros" suffix="/"/><date-part name="year"/></date><terms><term name="accessed">consult\xE9 le</term><term name="and">et</term><term name="and others">et autres</term><term name="anonymous">anonyme</term><term name="anonymous" form="short">anon.</term><term name="at">sur</term><term name="available at">disponible sur</term><term name="by">par</term><term name="circa">vers</term><term name="circa" form="short">v.</term><term name="cited">cit\xE9</term><term name="edition" gender="feminine"><single>\xE9dition</single><multiple>\xE9ditions</multiple></term><term name="edition" form="short">\xE9d.</term><term name="et-al">et al.</term><term name="forthcoming">\xE0 para\xEEtre</term><term name="from">\xE0 l\'adresse</term><term name="ibid">ibid.</term><term name="in">in</term><term name="in press">sous presse</term><term name="internet">Internet</term><term name="interview">entretien</term><term name="letter">lettre</term><term name="no date">sans date</term><term name="no date" form="short">s.&#160;d.</term><term name="online">en ligne</term><term name="presented at">pr\xE9sent\xE9 \xE0</term><term name="reference"><single>r\xE9f\xE9rence</single><multiple>r\xE9f\xE9rences</multiple></term><term name="reference" form="short"><single>r\xE9f.</single><multiple>r\xE9f.</multiple></term><term name="retrieved">consult\xE9</term><term name="scale">\xE9chelle</term><term name="version">version</term><term name="ad">apr. J.-C.</term><term name="bc">av. J.-C.</term><term name="open-quote">\xAB&#160;</term><term name="close-quote">&#160;\xBB</term><term name="open-inner-quote">\u201C</term><term name="close-inner-quote">\u201D</term><term name="page-range-delimiter">&#8209;</term><term name="ordinal">\u1D49</term><term name="ordinal-01" gender-form="feminine" match="whole-number">\u02B3\u1D49</term><term name="ordinal-01" gender-form="masculine" match="whole-number">\u1D49\u02B3</term><term name="long-ordinal-01">premier</term><term name="long-ordinal-02">deuxi\xE8me</term><term name="long-ordinal-03">troisi\xE8me</term><term name="long-ordinal-04">quatri\xE8me</term><term name="long-ordinal-05">cinqui\xE8me</term><term name="long-ordinal-06">sixi\xE8me</term><term name="long-ordinal-07">septi\xE8me</term><term name="long-ordinal-08">huiti\xE8me</term><term name="long-ordinal-09">neuvi\xE8me</term><term name="long-ordinal-10">dixi\xE8me</term><term name="book"><single>livre</single><multiple>livres</multiple></term><term name="chapter"><single>chapitre</single><multiple>chapitres</multiple></term><term name="column"><single>colonne</single><multiple>colonnes</multiple></term><term name="figure"><single>figure</single><multiple>figures</multiple></term><term name="folio"><single>folio</single><multiple>folios</multiple></term><term name="issue" gender="masculine"><single>num\xE9ro</single><multiple>num\xE9ros</multiple></term><term name="line"><single>ligne</single><multiple>lignes</multiple></term><term name="note"><single>note</single><multiple>notes</multiple></term><term name="opus"><single>opus</single><multiple>opus</multiple></term><term name="page"><single>page</single><multiple>pages</multiple></term><term name="number-of-pages"><single>page</single><multiple>pages</multiple></term><term name="paragraph"><single>paragraphe</single><multiple>paragraphes</multiple></term><term name="part"><single>partie</single><multiple>parties</multiple></term><term name="section"><single>section</single><multiple>sections</multiple>\n</term><term name="sub verbo"><single>sub verbo</single><multiple>sub verbis</multiple></term><term name="verse"><single>verset</single><multiple>versets</multiple></term><term name="volume" gender="masculine"><single>volume</single><multiple>volumes</multiple></term><term name="book" form="short">liv.</term><term name="chapter" form="short">chap.</term><term name="column" form="short">col.</term><term name="figure" form="short">fig.</term><term name="folio" form="short"><single>f\u1D52</single><multiple>f\u1D52\u02E2</multiple></term><term name="issue" form="short"><single>n\u1D52</single><multiple>n\u1D52\u02E2</multiple></term><term name="line" form="short">l.</term><term name="note" form="short">n.</term><term name="opus" form="short">op.</term><term name="page" form="short"><single>p.</single><multiple>p.</multiple></term><term name="number-of-pages" form="short"><single>p.</single><multiple>p.</multiple></term><term name="paragraph" form="short">paragr.</term><term name="part" form="short">part.</term><term name="section" form="short">sect.</term><term name="sub verbo" form="short"><single>s.&#160;v.</single><multiple>s.&#160;vv.</multiple></term><term name="verse" form="short"><single>v.</single><multiple>v.</multiple></term><term name="volume" form="short"><single>vol.</single><multiple>vol.</multiple></term><term name="paragraph" form="symbol"><single>\xA7</single><multiple>\xA7</multiple></term><term name="section" form="symbol"><single>\xA7</single><multiple>\xA7</multiple></term><term name="director"><single>r\xE9alisateur</single><multiple>r\xE9alisateurs</multiple></term><term name="editor"><single>\xE9diteur</single><multiple>\xE9diteurs</multiple></term><term name="editorial-director"><single>directeur</single><multiple>directeurs</multiple></term><term name="illustrator"><single>illustrateur</single><multiple>illustrateurs</multiple></term><term name="translator"><single>traducteur</single><multiple>traducteurs</multiple></term><term name="editortranslator"><single>\xE9diteur et traducteur</single><multiple>\xE9diteurs et traducteurs</multiple></term><term name="director" form="short"><single>r\xE9al.</single><multiple>r\xE9al.</multiple></term><term name="editor" form="short"><single>\xE9d.</single><multiple>\xE9d.</multiple></term><term name="editorial-director" form="short"><single>dir.</single><multiple>dir.</multiple></term><term name="illustrator" form="short"><single>ill.</single><multiple>ill.</multiple></term><term name="translator" form="short"><single>trad.</single><multiple>trad.</multiple></term><term name="editortranslator" form="short"><single>\xE9d. et trad.</single><multiple>\xE9d. et trad.</multiple></term><term name="container-author" form="verb">par</term><term name="director" form="verb">r\xE9alis\xE9 par</term><term name="editor" form="verb">\xE9dit\xE9 par</term><term name="editorial-director" form="verb">sous la direction de</term><term name="illustrator" form="verb">illustr\xE9 par</term><term name="interviewer" form="verb">entretien r\xE9alis\xE9 par</term><term name="recipient" form="verb">\xE0</term><term name="reviewed-author" form="verb">par</term><term name="translator" form="verb">traduit par</term><term name="editortranslator" form="verb">\xE9dit\xE9 et traduit par</term><term name="director" form="verb-short">r\xE9al. par</term><term name="editor" form="verb-short">\xE9d. par</term><term name="editorial-director" form="verb-short">ss la dir. de</term><term name="illustrator" form="verb-short">ill. par</term><term name="translator" form="verb-short">trad. par</term><term name="editortranslator" form="verb-short">\xE9d. et trad. par</term><term name="month-01" gender="masculine">janvier</term><term name="month-02" gender="masculine">f\xE9vrier</term><term name="month-03" gender="masculine">mars</term><term name="month-04" gender="masculine">avril</term><term name="month-05" gender="masculine">mai</term><term name="month-06" gender="masculine">juin</term><term name="month-07" gender="masculine">juillet</term><term name="month-08" gender="masculine">ao\xFBt</term><term name="month-09" gender="masculine">septembre</term><term name="month-10" gender="masculine">\noctobre</term><term name="month-11" gender="masculine">novembre</term><term name="month-12" gender="masculine">d\xE9cembre</term><term name="month-01" form="short">janv.</term><term name="month-02" form="short">f\xE9vr.</term><term name="month-03" form="short">mars</term><term name="month-04" form="short">avr.</term><term name="month-05" form="short">mai</term><term name="month-06" form="short">juin</term><term name="month-07" form="short">juill.</term><term name="month-08" form="short">ao\xFBt</term><term name="month-09" form="short">sept.</term><term name="month-10" form="short">oct.</term><term name="month-11" form="short">nov.</term><term name="month-12" form="short">d\xE9c.</term><term name="season-01">printemps</term><term name="season-02">\xE9t\xE9</term><term name="season-03">automne</term><term name="season-04">hiver</term></terms></locale>',
-
-  'de-DE': '<?xml version="1.0" encoding="utf-8"?><locale xmlns="http://purl.org/net/xbiblio/csl" version="1.0" xml:lang="de-DE"><info><rights license="http://creativecommons.org/licenses/by-sa/3.0/">This work is licensed under a Creative Commons Attribution-ShareAlike 3.0 License</rights><updated>2012-07-04T23:31:02+00:00</updated></info><style-options punctuation-in-quote="false"/><date form="text"><date-part name="day" form="ordinal" suffix=" "/><date-part name="month" suffix=" "/><date-part name="year"/></date><date form="numeric"><date-part name="day" form="numeric-leading-zeros" suffix="."/><date-part name="month" form="numeric-leading-zeros" suffix="."/><date-part name="year"/></date><terms><term name="accessed">zugegriffen</term><term name="and">und</term><term name="and others">und andere</term><term name="anonymous">ohne Autor</term><term name="anonymous" form="short">o.&#160;A.</term><term name="at">auf</term><term name="available at">verf\xFCgbar unter</term><term name="by">von</term><term name="circa">circa</term><term name="circa" form="short">ca.</term><term name="cited">zitiert</term><term name="edition"><single>Auflage</single><multiple>Auflagen</multiple></term><term name="edition" form="short">Aufl.</term><term name="et-al">u.&#160;a.</term><term name="forthcoming">i.&#160;E.</term><term name="from">von</term><term name="ibid">ebd.</term><term name="in">in</term><term name="in press">im Druck</term><term name="internet">Internet</term><term name="interview">Interview</term><term name="letter">Brief</term><term name="no date">ohne Datum</term><term name="no date" form="short">o.&#160;J.</term><term name="online">online</term><term name="presented at">gehalten auf der</term><term name="reference"><single>Referenz</single><multiple>Referenzen</multiple></term><term name="reference" form="short"><single>Ref.</single><multiple>Ref.</multiple></term><term name="retrieved">abgerufen</term><term name="scale">Ma\xDFstab</term><term name="version">Version</term><term name="ad">n.&#160;Chr.</term><term name="bc">v.&#160;Chr.</term><term name="open-quote">\u201E</term><term name="close-quote">\u201C</term><term name="open-inner-quote">\u201A</term><term name="close-inner-quote">\u2018</term><term name="page-range-delimiter">\u2013</term><term name="ordinal">.</term><term name="long-ordinal-01">erster</term><term name="long-ordinal-02">zweiter</term><term name="long-ordinal-03">dritter</term><term name="long-ordinal-04">vierter</term><term name="long-ordinal-05">f\xFCnfter</term><term name="long-ordinal-06">sechster</term><term name="long-ordinal-07">siebter</term><term name="long-ordinal-08">achter</term><term name="long-ordinal-09">neunter</term><term name="long-ordinal-10">zehnter</term><term name="book"><single>Buch</single><multiple>B\xFCcher</multiple></term><term name="chapter"><single>Kapitel</single><multiple>Kapitel</multiple></term><term name="column"><single>Spalte</single><multiple>Spalten</multiple></term><term name="figure"><single>Abbildung</single><multiple>Abbildungen</multiple></term><term name="folio"><single>Blatt</single><multiple>Bl\xE4tter</multiple></term><term name="issue"><single>Nummer</single><multiple>Nummern</multiple></term><term name="line"><single>Zeile</single><multiple>Zeilen</multiple></term><term name="note"><single>Note</single><multiple>Noten</multiple></term><term name="opus"><single>Opus</single><multiple>Opera</multiple></term><term name="page"><single>Seite</single><multiple>Seiten</multiple></term><term name="number-of-pages"><single>Seite</single><multiple>Seiten</multiple></term><term name="paragraph"><single>Absatz</single><multiple>Abs\xE4tze</multiple></term><term name="part"><single>Teil</single><multiple>Teile</multiple></term><term name="section"><single>Abschnitt</single><multiple>Abschnitte</multiple></term><term name="sub verbo"><single>sub verbo</single><multiple>sub verbis</multiple></term><term name="verse"><single>Vers</single><multiple>Verse</multiple></term><term name="volume"><single>Band</single><multiple>B\xE4nde</multiple></term><term name="book" form="short">B.</term>\n<term name="chapter" form="short">Kap.</term><term name="column" form="short">Sp.</term><term name="figure" form="short">Abb.</term><term name="folio" form="short">Fol.</term><term name="issue" form="short">Nr.</term><term name="line" form="short">Z.</term><term name="note" form="short">N.</term><term name="opus" form="short">op.</term><term name="page" form="short"><single>S.</single><multiple>S.</multiple></term><term name="number-of-pages" form="short"><single>S.</single><multiple>S.</multiple></term><term name="paragraph" form="short">Abs.</term><term name="part" form="short">Teil</term><term name="section" form="short">Abschn.</term><term name="sub verbo" form="short"><single>s.&#160;v.</single><multiple>s.&#160;vv.</multiple></term><term name="verse" form="short"><single>V.</single><multiple>V.</multiple></term><term name="volume" form="short"><single>Bd.</single><multiple>Bde.</multiple></term><term name="paragraph" form="symbol"><single>\xB6</single><multiple>\xB6\xB6</multiple></term><term name="section" form="symbol"><single>\xA7</single><multiple>\xA7\xA7</multiple></term><term name="director"><single>Regisseur</single><multiple>Regisseure</multiple></term><term name="editor"><single>Herausgeber</single><multiple>Herausgeber</multiple></term><term name="collection-editor"><single>Reihenherausgeber</single><multiple>Reihenherausgeber</multiple></term><term name="editorial-director"><single>Herausgeber</single><multiple>Herausgeber</multiple></term><term name="illustrator"><single>Illustrator</single><multiple>Illustratoren</multiple></term><term name="translator"><single>\xDCbersetzer</single><multiple>\xDCbersetzer</multiple></term><term name="editortranslator"><single>Herausgeber&#160;&amp; \xDCbersetzer</single><multiple>Herausgeber&#160;&amp; \xDCbersetzer</multiple></term><term name="director" form="short"><single>Reg.</single><multiple>Reg.</multiple></term><term name="editor" form="short"><single>Hrsg.</single><multiple>Hrsg.</multiple></term><term name="collection-editor" form="short"><single>Hrsg.</single><multiple>Hrsg.</multiple></term><term name="editorial-director" form="short"><single>Hrsg.</single><multiple>Hrsg.</multiple></term><term name="illustrator" form="short"><single>Ill.</single><multiple>Ill.</multiple></term><term name="translator" form="short"><single>\xDCbers.</single><multiple>\xDCbers.</multiple></term><term name="editortranslator" form="short"><single>Hrsg.&#160;&amp; \xDCbers.</single><multiple>Hrsg.&#160;&amp; \xDCbers</multiple></term><term name="container-author" form="verb">von</term><term name="director" form="verb">Regie von</term><term name="editor" form="verb">herausgegeben von</term><term name="collection-editor" form="verb">herausgegeben von</term><term name="editorial-director" form="verb">herausgegeben von</term><term name="illustrator" form="verb">illustriert von</term><term name="interviewer" form="verb">interviewt von</term><term name="recipient" form="verb">an</term><term name="reviewed-author" form="verb">von</term><term name="translator" form="verb">\xFCbersetzt von</term><term name="editortranslator" form="verb">herausgegeben und \xFCbersetzt von</term><term name="director" form="verb-short">Reg.</term><term name="editor" form="verb-short">hg. von</term><term name="collection-editor" form="verb-short">hg. von</term><term name="editorial-director" form="verb-short">hg. von</term><term name="illustrator" form="verb-short">illus. von</term><term name="translator" form="verb-short">\xFCbers. von</term><term name="editortranslator" form="verb-short">hg.&#160;&amp; \xFCbers. von</term><term name="month-01">Januar</term><term name="month-02">Februar</term><term name="month-03">M\xE4rz</term><term name="month-04">April</term><term name="month-05">Mai</term><term name="month-06">Juni</term><term name="month-07">Juli</term><term name="month-08">August</term><term name="month-09">September</term><term name="month-10">Oktober</term><term name="month-11">November</term><term name="month-12">Dezember</term><term name="month-01" form="short">Jan.</term><term name="month-02" form="short">Feb.</term>\n<term name="month-03" form="short">M\xE4rz</term><term name="month-04" form="short">Apr.</term><term name="month-05" form="short">Mai</term><term name="month-06" form="short">Juni</term><term name="month-07" form="short">Juli</term><term name="month-08" form="short">Aug.</term><term name="month-09" form="short">Sep.</term><term name="month-10" form="short">Okt.</term><term name="month-11" form="short">Nov.</term><term name="month-12" form="short">Dez.</term><term name="season-01">Fr\xFChjahr</term><term name="season-02">Sommer</term><term name="season-03">Herbst</term><term name="season-04">Winter</term></terms></locale>',
-
-  'es-ES': '<?xml version="1.0" encoding="utf-8"?><locale xmlns="http://purl.org/net/xbiblio/csl" version="1.0" xml:lang="es-ES"><info><rights license="http://creativecommons.org/licenses/by-sa/3.0/">This work is licensed under a Creative Commons Attribution-ShareAlike 3.0 License</rights><updated>2012-07-04T23:31:02+00:00</updated></info><style-options punctuation-in-quote="false"/><date form="text"><date-part name="day" suffix=" de "/><date-part name="month" suffix=" de "/><date-part name="year"/></date><date form="numeric"><date-part name="day" form="numeric-leading-zeros" suffix="/"/><date-part name="month" form="numeric-leading-zeros" suffix="/"/><date-part name="year"/></date><terms><term name="accessed">accedido</term><term name="and">y</term><term name="and others">y otros</term><term name="anonymous">an\xF3nimo</term><term name="anonymous" form="short">an\xF3n.</term><term name="at">en</term><term name="available at">disponible en</term><term name="by">de</term><term name="circa">circa</term><term name="circa" form="short">c.</term><term name="cited">citado</term><term name="edition"><single>edici\xF3n</single><multiple>ediciones</multiple></term><term name="edition" form="short">ed.</term><term name="et-al">et&#160;al.</term><term name="forthcoming">previsto</term><term name="from">a partir de</term><term name="ibid">ibid.</term><term name="in">en</term><term name="in press">en imprenta</term><term name="internet">internet</term><term name="interview">entrevista</term><term name="letter">carta</term><term name="no date">sin fecha</term><term name="no date" form="short">s.&#160;f.</term><term name="online">en l\xEDnea</term><term name="presented at">presentado en</term><term name="reference"><single>referencia</single><multiple>referencias</multiple></term><term name="reference" form="short"><single>ref.</single><multiple>refs.</multiple></term><term name="retrieved">recuperado</term><term name="scale">escala</term><term name="version">versi\xF3n</term><term name="ad">d.&#160;C.</term><term name="bc">a.&#160;C.</term><term name="open-quote">\xAB</term><term name="close-quote">\xBB</term><term name="open-inner-quote">\u201C</term><term name="close-inner-quote">\u201D</term><term name="page-range-delimiter">-</term><term name="ordinal">.\xAA</term><term name="long-ordinal-01">primera</term><term name="long-ordinal-02">segunda</term><term name="long-ordinal-03">tercera</term><term name="long-ordinal-04">cuarta</term><term name="long-ordinal-05">quinta</term><term name="long-ordinal-06">sexta</term><term name="long-ordinal-07">s\xE9ptima</term><term name="long-ordinal-08">octava</term><term name="long-ordinal-09">novena</term><term name="long-ordinal-10">d\xE9cima</term><term name="book"><single>libro</single><multiple>libros</multiple></term><term name="chapter"><single>cap\xEDtulo</single><multiple>cap\xEDtulos</multiple></term><term name="column"><single>columna</single><multiple>columnas</multiple></term><term name="figure"><single>figura</single><multiple>figuras</multiple></term><term name="folio"><single>folio</single><multiple>folios</multiple></term><term name="issue"><single>n\xFAmero</single><multiple>n\xFAmeros</multiple></term><term name="line"><single>l\xEDnea</single><multiple>l\xEDneas</multiple></term><term name="note"><single>nota</single><multiple>notas</multiple></term><term name="opus"><single>opus</single><multiple>opera</multiple></term><term name="page"><single>p\xE1gina</single><multiple>p\xE1ginas</multiple></term><term name="number-of-pages"><single>p\xE1gina</single><multiple>p\xE1ginas</multiple></term><term name="paragraph"><single>p\xE1rrafo</single><multiple>p\xE1rrafos</multiple></term><term name="part"><single>parte</single><multiple>partes</multiple></term><term name="section"><single>secci\xF3n</single><multiple>secciones</multiple></term><term name="sub verbo"><single>sub voce</single><multiple>sub vocibus</multiple></term><term name="verse"><single>verso</single><multiple>versos</multiple></term><term name="volume"><single>volumen</single><multiple>vol\xFAmenes</multiple></term><term name="book" form="short">lib.</term>\n<term name="chapter" form="short">cap.</term><term name="column" form="short">col.</term><term name="figure" form="short">fig.</term><term name="folio" form="short">f.</term><term name="issue" form="short">n.\xBA</term><term name="line" form="short">l.</term><term name="note" form="short">n.</term><term name="opus" form="short">op.</term><term name="page" form="short"><single>p.</single><multiple>pp.</multiple></term><term name="number-of-pages" form="short"><single>p.</single><multiple>pp.</multiple></term><term name="paragraph" form="short">p\xE1rr.</term><term name="part" form="short">pt.</term><term name="section" form="short">sec.</term><term name="sub verbo" form="short"><single>s.&#160;v.</single><multiple>s.&#160;vv.</multiple></term><term name="verse" form="short"><single>v.</single><multiple>vv.</multiple></term><term name="volume" form="short"><single>vol.</single><multiple>vols.</multiple></term><term name="paragraph" form="symbol"><single>\xA7</single><multiple>\xA7</multiple></term><term name="section" form="symbol"><single>\xA7</single><multiple>\xA7</multiple></term><term name="director"><single>director</single><multiple>directores</multiple></term><term name="editor"><single>editor</single><multiple>editores</multiple></term><term name="editorial-director"><single>editor</single><multiple>editores</multiple></term><term name="illustrator"><single>ilustrador</single><multiple>ilustradores</multiple></term><term name="translator"><single>traductor</single><multiple>traductores</multiple></term><term name="editortranslator"><single>editor y traductor</single><multiple>editores y traductores</multiple></term><term name="director" form="short"><single>dir.</single><multiple>dirs.</multiple></term><term name="editor" form="short"><single>ed.</single><multiple>eds.</multiple></term><term name="editorial-director" form="short"><single>ed.</single><multiple>eds.</multiple></term><term name="illustrator" form="short"><single>ilust.</single><multiple>ilusts.</multiple></term><term name="translator" form="short"><single>trad.</single><multiple>trads.</multiple></term><term name="editortranslator" form="short"><single>ed. y trad.</single><multiple>eds. y trads.</multiple></term><term name="container-author" form="verb">de</term><term name="director" form="verb">dirigido por</term><term name="editor" form="verb">editado por</term><term name="editorial-director" form="verb">editado por</term><term name="illustrator" form="verb">ilustrado por</term><term name="interviewer" form="verb">entrevistado por</term><term name="recipient" form="verb">a</term><term name="reviewed-author" form="verb">por</term><term name="translator" form="verb">traducido por</term><term name="editortranslator" form="verb">editado y traducido por</term><term name="director" form="verb-short">dir.</term><term name="editor" form="verb-short">ed.</term><term name="editorial-director" form="verb-short">ed.</term><term name="illustrator" form="verb-short">ilust.</term><term name="translator" form="verb-short">trad.</term><term name="editortranslator" form="verb-short">ed. y trad.</term><term name="month-01">enero</term><term name="month-02">febrero</term><term name="month-03">marzo</term><term name="month-04">abril</term><term name="month-05">mayo</term><term name="month-06">junio</term><term name="month-07">julio</term><term name="month-08">agosto</term><term name="month-09">septiembre</term><term name="month-10">octubre</term><term name="month-11">noviembre</term><term name="month-12">diciembre</term><term name="month-01" form="short">ene.</term><term name="month-02" form="short">feb.</term><term name="month-03" form="short">mar.</term><term name="month-04" form="short">abr.</term><term name="month-05" form="short">may</term><term name="month-06" form="short">jun.</term><term name="month-07" form="short">jul.</term><term name="month-08" form="short">ago.</term><term name="month-09" form="short">sep.</term><term name="month-10" form="short">oct.</term><term name="month-11" form="short">nov.</term><term name="month-12" form="short">\ndic.</term><term name="season-01">primavera</term><term name="season-02">verano</term><term name="season-03">oto\xF1o</term><term name="season-04">invierno</term></terms></locale>'
-};
-
-/**
- * Retrieve CSL locale
- *
- * @access protected
- * @method fetchCSLLocale
- *
- * @param {String} lang - lang code
- *
- * @return {String} CSL locale
- */
-var fetchCSLLocale = function fetchCSLLocale(lang) {
-  return varCSLLocales[lang];
-};
-
-exports.default = fetchCSLLocale;
-},{}],5:[function(require,module,exports){
-'use strict';
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-/**
- * Object containing CSL templates
- *
- * Templates from the [CSL Project](http://citationstyles.org/)<br>
- * [REPO](https://github.com/citation-style-language/styles), [LICENSE](https://creativecommons.org/licenses/by-sa/3.0/)
- *
- * Accesed 10/22/2016
- *
- * @access protected
- * @constant varCSLStyles
- * @default
- */
-var varCSLStyles = {
-  apa: '<?xml version="1.0" encoding="utf-8"?><style xmlns="http://purl.org/net/xbiblio/csl" class="in-text" version="1.0" demote-non-dropping-particle="never"><info><title>American Psychological Association 6th edition</title><title-short>APA</title-short><id>http://www.zotero.org/styles/apa</id><link href="http://www.zotero.org/styles/apa" rel="self"/><link href="http://owl.english.purdue.edu/owl/resource/560/01/" rel="documentation"/><author><name>Simon Kornblith</name><email>simon@simonster.com</email></author><contributor><name>Bruce D\'Arcus</name></contributor><contributor><name>Curtis M. Humphrey</name></contributor><contributor><name>Richard Karnesky</name><email>karnesky+zotero@gmail.com</email><uri>http://arc.nucapt.northwestern.edu/Richard_Karnesky</uri></contributor><contributor><name>Sebastian Karcher</name></contributor><contributor><name> Brenton M. Wiernik</name><email>zotero@wiernik.org</email></contributor><category citation-format="author-date"/><category field="psychology"/><category field="generic-base"/><updated>2016-05-25T09:01:49+00:00</updated><rights license="http://creativecommons.org/licenses/by-sa/3.0/">This work is licensed under a Creative Commons Attribution-ShareAlike 3.0 License</rights></info><locale xml:lang="en"><terms><term name="editortranslator" form="short"><single>ed. &amp; trans.</single><multiple>eds. &amp; trans.</multiple></term><term name="translator" form="short"><single>trans.</single><multiple>trans.</multiple></term></terms></locale><macro name="container-contributors"><choose><if type="chapter paper-conference entry-dictionary entry-encyclopedia" match="any"><group delimiter=", "><names variable="container-author" delimiter=", "><name and="symbol" initialize-with=". " delimiter=", "/><label form="short" prefix=" (" text-case="title" suffix=")"/></names><names variable="editor translator" delimiter=", "><name and="symbol" initialize-with=". " delimiter=", "/><label form="short" prefix=" (" text-case="title" suffix=")"/></names></group></if></choose></macro><macro name="secondary-contributors"><choose><if type="article-journal chapter paper-conference entry-dictionary entry-encyclopedia" match="none"><group delimiter=", " prefix=" (" suffix=")"><names variable="container-author" delimiter=", "><name and="symbol" initialize-with=". " delimiter=", "/><label form="short" prefix=", " text-case="title"/></names><names variable="editor translator" delimiter=", "><name and="symbol" initialize-with=". " delimiter=", "/><label form="short" prefix=", " text-case="title"/></names></group></if></choose></macro><macro name="author"><names variable="author"><name name-as-sort-order="all" and="symbol" sort-separator=", " initialize-with=". " delimiter=", " delimiter-precedes-last="always"/><label form="short" prefix=" (" suffix=")" text-case="capitalize-first"/><substitute><names variable="editor"/><names variable="translator"/><choose><if type="report"><text variable="publisher"/><text macro="title"/></if><else><text macro="title"/></else></choose></substitute></names></macro><macro name="author-short"><names variable="author"><name form="short" and="symbol" delimiter=", " initialize-with=". "/><substitute><names variable="editor"/><names variable="translator"/><choose><if type="report"><text variable="publisher"/><text variable="title" form="short" font-style="italic"/></if><else-if type="legal_case"><text variable="title" font-style="italic"/></else-if><else-if type="bill book graphic legislation motion_picture song" match="any"><text variable="title" form="short" font-style="italic"/></else-if><else-if variable="reviewed-author"><choose><if variable="reviewed-title" match="none"><text variable="title" form="short" font-style="italic" prefix="Review of "/></if><else><text variable="title" form="short" quotes="true"/></else></choose></else-if><else><text variable="title" form="short" quotes="true"/></else></choose></substitute></names></macro><macro name="access"><choose><if type="thesis report" match="any"><choose><if variable="DOI" match="any">\n<text variable="DOI" prefix="https://doi.org/"/></if><else-if variable="archive" match="any"><group><text term="retrieved" text-case="capitalize-first" suffix=" "/><text term="from" suffix=" "/><text variable="archive" suffix="."/><text variable="archive_location" prefix=" (" suffix=")"/></group></else-if><else><group><text term="retrieved" text-case="capitalize-first" suffix=" "/><text term="from" suffix=" "/><text variable="URL"/></group></else></choose></if><else><choose><if variable="DOI"><text variable="DOI" prefix="https://doi.org/"/></if><else><choose><if type="webpage"><group delimiter=" "><text term="retrieved" text-case="capitalize-first" suffix=" "/><group><date variable="accessed" form="text" suffix=", "/></group><text term="from"/><text variable="URL"/></group></if><else><group><text term="retrieved" text-case="capitalize-first" suffix=" "/><text term="from" suffix=" "/><text variable="URL"/></group></else></choose></else></choose></else></choose></macro><macro name="title"><choose><if type="book graphic manuscript motion_picture report song speech thesis" match="any"><choose><if variable="version" type="book" match="all"><text variable="title"/></if><else><text variable="title" font-style="italic"/></else></choose></if><else-if variable="reviewed-author"><choose><if variable="reviewed-title"><group delimiter=" "><text variable="title"/><group delimiter=", " prefix="[" suffix="]"><text variable="reviewed-title" font-style="italic" prefix="Review of "/><names variable="reviewed-author" delimiter=", "><label form="verb-short" suffix=" "/><name and="symbol" initialize-with=". " delimiter=", "/></names></group></group></if><else><group delimiter=", " prefix="[" suffix="]"><text variable="title" font-style="italic" prefix="Review of "/><names variable="reviewed-author" delimiter=", "><label form="verb-short" suffix=" "/><name and="symbol" initialize-with=". " delimiter=", "/></names></group></else></choose></else-if><else><text variable="title"/></else></choose></macro><macro name="title-plus-extra"><text macro="title"/><choose><if type="report thesis" match="any"><group prefix=" (" suffix=")" delimiter=", "><group delimiter=" "><choose><if variable="genre" match="any"><text variable="genre"/></if><else><text variable="collection-title"/></else></choose><text variable="number" prefix="No. "/></group><group delimiter=" "><text term="version" text-case="capitalize-first"/><text variable="version"/></group><text macro="edition"/></group></if><else-if type="post-weblog webpage" match="any"><text variable="genre" prefix=" [" suffix="]"/></else-if><else-if variable="version"><group delimiter=" " prefix=" (" suffix=")"><text term="version" text-case="capitalize-first"/><text variable="version"/></group></else-if></choose><text macro="format" prefix=" [" suffix="]"/></macro><macro name="format"><choose><if match="any" variable="medium"><text variable="medium" text-case="capitalize-first"/></if><else-if type="dataset" match="any"><text value="Data set"/></else-if></choose></macro><macro name="publisher"><choose><if type="report" match="any"><group delimiter=": "><text variable="publisher-place"/><text variable="publisher"/></group></if><else-if type="thesis" match="any"><group delimiter=", "><text variable="publisher"/><text variable="publisher-place"/></group></else-if><else-if type="post-weblog webpage" match="none"><group delimiter=", "><choose><if variable="event version" type="speech motion_picture" match="none"><text variable="genre"/></if></choose><choose><if type="article-journal article-magazine" match="none"><group delimiter=": "><choose><if variable="publisher-place"><text variable="publisher-place"/></if><else><text variable="event-place"/></else></choose><text variable="publisher"/></group></if></choose></group></else-if></choose></macro><macro name="event"><choose><if variable="container-title" match="none"><choose><if variable="event"><choose><if variable="genre" match="none"><text term="presented at" text-case="capitalize-first" suffix=" "/><text variable="event"/></if><else>\n<group delimiter=" "><text variable="genre" text-case="capitalize-first"/><text term="presented at"/><text variable="event"/></group></else></choose></if><else-if type="speech"><text variable="genre" text-case="capitalize-first"/></else-if></choose></if></choose></macro><macro name="issued"><choose><if type="bill legal_case legislation" match="none"><choose><if variable="issued"><group prefix=" (" suffix=")"><date variable="issued"><date-part name="year"/></date><text variable="year-suffix"/><choose><if type="speech" match="any"><date variable="issued"><date-part prefix=", " name="month"/></date></if><else-if type="article-journal bill book chapter graphic legal_case legislation motion_picture paper-conference report song dataset" match="none"><date variable="issued"><date-part prefix=", " name="month"/><date-part prefix=" " name="day"/></date></else-if></choose></group></if><else-if variable="status"><group prefix=" (" suffix=")"><text variable="status"/><text variable="year-suffix" prefix="-"/></group></else-if><else><group prefix=" (" suffix=")"><text term="no date" form="short"/><text variable="year-suffix" prefix="-"/></group></else></choose></if></choose></macro><macro name="issued-sort"><choose><if type="article-journal bill book chapter graphic legal_case legislation motion_picture paper-conference report song dataset" match="none"><date variable="issued"><date-part name="year"/><date-part name="month"/><date-part name="day"/></date></if><else><date variable="issued"><date-part name="year"/></date></else></choose></macro><macro name="issued-year"><choose><if variable="issued"><group delimiter="/"><date variable="original-date" form="text"/><group><date variable="issued"><date-part name="year"/></date><text variable="year-suffix"/></group></group></if><else-if variable="status"><text variable="status"/><text variable="year-suffix" prefix="-"/></else-if><else><text term="no date" form="short"/><text variable="year-suffix" prefix="-"/></else></choose></macro><macro name="edition"><choose><if is-numeric="edition"><group delimiter=" "><number variable="edition" form="ordinal"/><text term="edition" form="short"/></group></if><else><text variable="edition"/></else></choose></macro><macro name="locators"><choose><if type="article-journal article-magazine" match="any"><group prefix=", " delimiter=", "><group><text variable="volume" font-style="italic"/><text variable="issue" prefix="(" suffix=")"/></group><text variable="page"/></group><choose><if variable="issued"><choose><if variable="page issue" match="none"><text variable="status" prefix=". "/></if></choose></if></choose></if><else-if type="article-newspaper"><group delimiter=" " prefix=", "><label variable="page" form="short"/><text variable="page"/></group></else-if><else-if type="book graphic motion_picture report song chapter paper-conference entry-encyclopedia entry-dictionary" match="any"><group prefix=" (" suffix=")" delimiter=", "><choose><if type="report" match="none"><text macro="edition"/></if></choose><choose><if variable="volume" match="any"><group><text term="volume" form="short" text-case="capitalize-first" suffix=" "/><number variable="volume" form="numeric"/></group></if><else><group><text term="volume" form="short" plural="true" text-case="capitalize-first" suffix=" "/><number variable="number-of-volumes" form="numeric" prefix="1&#8211;"/></group></else></choose><group><label variable="page" form="short" suffix=" "/><text variable="page"/></group></group></else-if><else-if type="legal_case"><group prefix=" (" suffix=")" delimiter=" "><text variable="authority"/><date variable="issued" form="text"/></group></else-if><else-if type="bill legislation" match="any"><date variable="issued" prefix=" (" suffix=")"><date-part name="year"/></date></else-if></choose></macro><macro name="citation-locator"><group><choose><if locator="chapter"><label variable="locator" form="long" text-case="capitalize-first"/></if><else><label variable="locator" form="short"/></else></choose><text variable="locator" prefix=" "/></group></macro>\n<macro name="container"><choose><if type="post-weblog webpage" match="none"><group><choose><if type="chapter paper-conference entry-encyclopedia" match="any"><text term="in" text-case="capitalize-first" suffix=" "/></if></choose><group delimiter=", "><text macro="container-contributors"/><text macro="secondary-contributors"/><text macro="container-title"/></group></group></if></choose></macro><macro name="container-title"><choose><if type="article article-journal article-magazine article-newspaper" match="any"><text variable="container-title" font-style="italic" text-case="title"/></if><else-if type="bill legal_case legislation" match="none"><text variable="container-title" font-style="italic"/></else-if></choose></macro><macro name="legal-cites"><choose><if type="bill legal_case legislation" match="any"><group delimiter=" " prefix=", "><choose><if variable="container-title"><text variable="volume"/><text variable="container-title"/><group delimiter=" "><text term="section" form="symbol"/><text variable="section"/></group><text variable="page"/></if><else><choose><if type="legal_case"><text variable="number" prefix="No. "/></if><else><text variable="number" prefix="Pub. L. No. "/><group delimiter=" "><text term="section" form="symbol"/><text variable="section"/></group></else></choose></else></choose></group></if></choose></macro><macro name="original-date"><choose><if variable="original-date"><group prefix="(" suffix=")" delimiter=" "><text value="Original work published"/><date variable="original-date" form="text"/></group></if></choose></macro><citation et-al-min="6" et-al-use-first="1" et-al-subsequent-min="3" et-al-subsequent-use-first="1" disambiguate-add-year-suffix="true" disambiguate-add-names="true" disambiguate-add-givenname="true" collapse="year" givenname-disambiguation-rule="primary-name"><sort><key macro="author"/><key macro="issued-sort"/></sort><layout prefix="(" suffix=")" delimiter="; "><group delimiter=", "><text macro="author-short"/><text macro="issued-year"/><text macro="citation-locator"/></group></layout></citation><bibliography hanging-indent="true" et-al-min="8" et-al-use-first="6" et-al-use-last="true" entry-spacing="0" line-spacing="2"><sort><key macro="author"/><key macro="issued-sort" sort="ascending"/><key macro="title"/></sort><layout><group suffix="."><group delimiter=". "><text macro="author"/><text macro="issued"/><text macro="title-plus-extra"/><text macro="container"/></group><text macro="legal-cites"/><text macro="locators"/><group delimiter=", " prefix=". "><text macro="event"/><text macro="publisher"/></group></group><text macro="access" prefix=" "/><text macro="original-date" prefix=" "/></layout></bibliography></style>',
-  vancouver: '<?xml version="1.0" encoding="utf-8"?><style xmlns="http://purl.org/net/xbiblio/csl" class="in-text" version="1.0" demote-non-dropping-particle="sort-only" page-range-format="minimal"><info><title>Vancouver</title><id>http://www.zotero.org/styles/vancouver</id><link href="http://www.zotero.org/styles/vancouver" rel="self"/><link href="http://www.nlm.nih.gov/bsd/uniform_requirements.html" rel="documentation"/><author><name>Michael Berkowitz</name><email>mberkowi@gmu.edu</email></author><contributor><name>Sean Takats</name><email>stakats@gmu.edu</email></contributor><contributor><name>Sebastian Karcher</name></contributor><category citation-format="numeric"/><category field="medicine"/><summary>Vancouver style as outlined by International Committee of Medical Journal Editors Uniform Requirements for Manuscripts Submitted to Biomedical Journals: Sample References</summary><updated>2014-09-06T16:03:01+00:00</updated><rights license="http://creativecommons.org/licenses/by-sa/3.0/">This work is licensed under a Creative Commons Attribution-ShareAlike 3.0 License</rights></info><locale xml:lang="en"><date form="text" delimiter=" "><date-part name="year"/><date-part name="month" form="short" strip-periods="true"/><date-part name="day"/></date><terms><term name="collection-editor" form="long"><single>editor</single><multiple>editors</multiple></term><term name="presented at">presented at</term><term name="available at">available from</term><term name="section" form="short">sect.</term></terms></locale><locale xml:lang="fr"><date form="text" delimiter=" "><date-part name="day"/><date-part name="month" form="short" strip-periods="true"/><date-part name="year"/></date></locale><macro name="author"><names variable="author"><name sort-separator=" " initialize-with="" name-as-sort-order="all" delimiter=", " delimiter-precedes-last="always"/><label form="long" prefix=", "/><substitute><names variable="editor"/></substitute></names></macro><macro name="editor"><names variable="editor" suffix="."><name sort-separator=" " initialize-with="" name-as-sort-order="all" delimiter=", " delimiter-precedes-last="always"/><label form="long" prefix=", "/></names></macro><macro name="chapter-marker"><choose><if type="chapter paper-conference entry-dictionary entry-encyclopedia" match="any"><text term="in" text-case="capitalize-first"/></if></choose></macro><macro name="publisher"><choose><if type="article-journal article-magazine article-newspaper" match="none"><group delimiter=": " suffix=";"><choose><if type="thesis"><text variable="publisher-place" prefix="[" suffix="]"/></if><else-if type="speech"/><else><text variable="publisher-place"/></else></choose><text variable="publisher"/></group></if></choose></macro><macro name="access"><choose><if variable="URL"><group delimiter=": "><text term="available at" text-case="capitalize-first"/><text variable="URL"/></group></if></choose></macro><macro name="accessed-date"><choose><if variable="URL"><group prefix="[" suffix="]" delimiter=" "><text term="cited" text-case="lowercase"/><date variable="accessed" form="text"/></group></if></choose></macro><macro name="container-title"><choose><if type="article-journal article-magazine chapter paper-conference article-newspaper review review-book entry-dictionary entry-encyclopedia" match="any"><group suffix="." delimiter=" "><choose><if type="article-journal review review-book" match="any"><text variable="container-title" form="short" strip-periods="true"/></if><else><text variable="container-title" strip-periods="true"/></else></choose><choose><if variable="URL"><text term="internet" prefix="[" suffix="]" text-case="capitalize-first"/></if></choose></group><text macro="edition" prefix=" "/></if><else-if type="bill legislation" match="any"><group delimiter=", "><group delimiter=". "><text variable="container-title"/><group delimiter=" "><text term="section" form="short" text-case="capitalize-first"/><text variable="section"/></group></group><text variable="number"/></group></else-if><else-if type="speech">\n<group delimiter=": " suffix=";"><group delimiter=" "><text variable="genre" text-case="capitalize-first"/><text term="presented at"/></group><text variable="event"/></group></else-if><else><group delimiter=", " suffix="."><choose><if variable="collection-title" match="none"><group delimiter=" "><label variable="volume" form="short" text-case="capitalize-first"/><text variable="volume"/></group></if></choose><text variable="container-title"/></group></else></choose></macro><macro name="title"><text variable="title"/><choose><if type="article-journal article-magazine chapter paper-conference article-newspaper review review-book entry-dictionary entry-encyclopedia" match="none"><choose><if variable="URL"><text term="internet" prefix=" [" suffix="]" text-case="capitalize-first"/></if></choose><text macro="edition" prefix=". "/></if></choose><choose><if type="thesis"><text variable="genre" prefix=" [" suffix="]"/></if></choose></macro><macro name="edition"><choose><if is-numeric="edition"><group delimiter=" "><number variable="edition" form="ordinal"/><text term="edition" form="short"/></group></if><else><text variable="edition" suffix="."/></else></choose></macro><macro name="date"><choose><if type="article-journal article-magazine article-newspaper review review-book" match="any"><group suffix=";" delimiter=" "><date variable="issued" form="text"/><text macro="accessed-date"/></group></if><else-if type="bill legislation" match="any"><group delimiter=", "><date variable="issued" delimiter=" "><date-part name="month" form="short" strip-periods="true"/><date-part name="day"/></date><date variable="issued"><date-part name="year"/></date></group></else-if><else-if type="report"><date variable="issued" delimiter=" "><date-part name="year"/><date-part name="month" form="short" strip-periods="true"/></date><text macro="accessed-date" prefix=" "/></else-if><else-if type="patent"><group suffix="."><group delimiter=", "><text variable="number"/><date variable="issued"><date-part name="year"/></date></group><text macro="accessed-date" prefix=" "/></group></else-if><else-if type="speech"><group delimiter="; "><group delimiter=" "><date variable="issued" delimiter=" "><date-part name="year"/><date-part name="month" form="short" strip-periods="true"/><date-part name="day"/></date><text macro="accessed-date"/></group><text variable="event-place"/></group></else-if><else><group suffix="."><date variable="issued"><date-part name="year"/></date><text macro="accessed-date" prefix=" "/></group></else></choose></macro><macro name="pages"><choose><if type="article-journal article-magazine article-newspaper review review-book" match="any"><text variable="page" prefix=":"/></if><else-if type="book" match="any"><text variable="number-of-pages" prefix=" "/><choose><if is-numeric="number-of-pages"><label variable="number-of-pages" form="short" prefix=" " plural="never"/></if></choose></else-if><else><group prefix=" " delimiter=" "><label variable="page" form="short" plural="never"/><text variable="page"/></group></else></choose></macro><macro name="journal-location"><choose><if type="article-journal article-magazine review review-book" match="any"><text variable="volume"/><text variable="issue" prefix="(" suffix=")"/></if></choose></macro><macro name="collection-details"><choose><if type="article-journal article-magazine article-newspaper review review-book" match="none"><choose><if variable="collection-title"><group delimiter=" " prefix="(" suffix=")"><names variable="collection-editor" suffix="."><name sort-separator=" " initialize-with="" name-as-sort-order="all" delimiter=", " delimiter-precedes-last="always"/><label form="long" prefix=", "/></names><group delimiter="; "><text variable="collection-title"/><group delimiter=" "><label variable="volume" form="short"/><text variable="volume"/></group></group></group></if></choose></if></choose></macro><macro name="report-details"><choose><if type="report"><text variable="number" prefix="Report No.: "/></if></choose></macro><citation collapse="citation-number">\n<sort><key variable="citation-number"/></sort><layout prefix="(" suffix=")" delimiter=","><text variable="citation-number"/></layout></citation><bibliography et-al-min="7" et-al-use-first="6" second-field-align="flush"><layout><text variable="citation-number" suffix=". "/><group delimiter=". " suffix=". "><text macro="author"/><text macro="title"/></group><group delimiter=" " suffix=". "><group delimiter=": "><text macro="chapter-marker"/><group delimiter=" "><text macro="editor"/><text macro="container-title"/></group></group><text macro="publisher"/><group><text macro="date"/><text macro="journal-location"/><text macro="pages"/></group></group><text macro="collection-details" suffix=". "/><text macro="report-details" suffix=". "/><text macro="access"/></layout></bibliography></style>',
-  harvard1: '<?xml version="1.0" encoding="utf-8"?><style xmlns="http://purl.org/net/xbiblio/csl" class="in-text" version="1.0" demote-non-dropping-particle="sort-only"><info><title>Harvard Reference format 1 (author-date)</title><id>http://www.zotero.org/styles/harvard1</id><link href="http://www.zotero.org/styles/harvard1" rel="self"/><link href="http://libweb.anglia.ac.uk/referencing/harvard.htm" rel="documentation"/><author><name>Julian Onions</name><email>julian.onions@gmail.com</email></author><category citation-format="author-date"/><category field="generic-base"/><summary>The Harvard author-date style</summary><updated>2012-09-27T22:06:38+00:00</updated><rights license="http://creativecommons.org/licenses/by-sa/3.0/">This work is licensed under a Creative Commons Attribution-ShareAlike 3.0 License</rights></info><macro name="editor"><names variable="editor" delimiter=", "><name and="symbol" initialize-with=". " delimiter=", "/><label form="short" prefix=", " text-case="lowercase"/></names></macro><macro name="anon"><text term="anonymous" form="short" text-case="capitalize-first" strip-periods="true"/></macro><macro name="author"><names variable="author"><name name-as-sort-order="all" and="symbol" sort-separator=", " initialize-with="." delimiter-precedes-last="never" delimiter=", "/><label form="short" prefix=" " text-case="lowercase"/><substitute><names variable="editor"/><text macro="anon"/></substitute></names></macro><macro name="author-short"><names variable="author"><name form="short" and="symbol" delimiter=", " delimiter-precedes-last="never" initialize-with=". "/><substitute><names variable="editor"/><names variable="translator"/><text macro="anon"/></substitute></names></macro><macro name="access"><choose><if variable="URL"><text value="Available at:" suffix=" "/><text variable="URL"/><group prefix=" [" suffix="]"><text term="accessed" text-case="capitalize-first" suffix=" "/><date variable="accessed"><date-part name="month" suffix=" "/><date-part name="day" suffix=", "/><date-part name="year"/></date></group></if></choose></macro><macro name="title"><choose><if type="bill book graphic legal_case legislation motion_picture report song thesis" match="any"><text variable="title" font-style="italic"/></if><else><text variable="title"/></else></choose></macro><macro name="publisher"><group delimiter=": "><text variable="publisher-place"/><text variable="publisher"/></group></macro><macro name="year-date"><choose><if variable="issued"><date variable="issued"><date-part name="year"/></date></if><else><text term="no date" form="short"/></else></choose></macro><macro name="edition"><choose><if is-numeric="edition"><group delimiter=" "><number variable="edition" form="ordinal"/><text term="edition" form="short"/></group></if><else><text variable="edition" suffix="."/></else></choose></macro><macro name="pages"><group><label variable="page" form="short" suffix=" "/><text variable="page"/></group></macro><citation et-al-min="3" et-al-use-first="1" disambiguate-add-year-suffix="true" disambiguate-add-names="true" disambiguate-add-givenname="true"><layout prefix="(" suffix=")" delimiter="; "><group delimiter=", "><group delimiter=" "><text macro="author-short"/><text macro="year-date"/></group><group><label variable="locator" form="short"/><text variable="locator"/></group></group></layout></citation><bibliography hanging-indent="true" et-al-min="4" et-al-use-first="1"><sort><key macro="author"/><key variable="title"/></sort><layout><text macro="author" suffix=","/><date variable="issued" prefix=" " suffix="."><date-part name="year"/></date><choose><if type="bill book graphic legal_case legislation motion_picture report song" match="any"><group prefix=" " delimiter=" " suffix=","><text macro="title"/><text macro="edition"/><text macro="editor"/></group><text prefix=" " suffix="." macro="publisher"/></if><else-if type="chapter paper-conference" match="any"><text macro="title" prefix=" " suffix="."/><group prefix=" " delimiter=" "><text term="in" text-case="capitalize-first"/>\n<text macro="editor"/><text variable="container-title" font-style="italic" suffix="."/><text variable="collection-title" suffix="."/><text variable="event" suffix="."/><group suffix="." delimiter=", "><text macro="publisher" prefix=" "/><text macro="pages"/></group></group></else-if><else-if type="thesis"><group prefix=" " suffix="." delimiter=". "><text macro="title"/><text variable="genre"/><text macro="publisher"/></group></else-if><else><group suffix="."><text macro="title" prefix=" "/><text macro="editor" prefix=" "/></group><group prefix=" " suffix="."><text variable="container-title" font-style="italic"/><group prefix=", "><text variable="volume"/><text variable="issue" prefix="(" suffix=")"/></group><group prefix=", "><label variable="page" form="short"/><text variable="page"/></group></group></else></choose><text prefix=" " macro="access" suffix="."/></layout></bibliography></style>'
-};
-
-/**
- * Retrieve CSL style
- *
- * @access protected
- * @method fetchCSLStyle
- *
- * @param {String} [style="apa"] - style name
- *
- * @return {String} CSL style
- */
-var fetchCSLStyle = function fetchCSLStyle(style) {
-  return varCSLStyles.hasOwnProperty(style || '') ? varCSLStyles[style] : varCSLStyles['apa'];
-};
-
-exports.default = fetchCSLStyle;
-},{}],6:[function(require,module,exports){
-'use strict';
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.get = exports.getIds = undefined;
-
-var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; }();
-
-var _striptags = require('striptags');
-
-var _striptags2 = _interopRequireDefault(_striptags);
-
-var _attr = require('../util/attr.js');
-
-var _deepCopy = require('../util/deepCopy');
-
-var _deepCopy2 = _interopRequireDefault(_deepCopy);
-
-var _json = require('../get/bibtex/json');
-
-var _json2 = _interopRequireDefault(_json);
-
-var _text = require('../get/bibtex/text');
-
-var _text2 = _interopRequireDefault(_text);
-
-var _json3 = require('../get/json');
-
-var _json4 = _interopRequireDefault(_json3);
-
-var _engines = require('../CSL/engines');
-
-var _engines2 = _interopRequireDefault(_engines);
-
-var _styles = require('../CSL/styles');
-
-var _styles2 = _interopRequireDefault(_styles);
-
-var _locales = require('../CSL/locales');
-
-var _locales2 = _interopRequireDefault(_locales);
-
-var _items = require('../CSL/items');
-
-var _items2 = _interopRequireDefault(_items);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-/**
- * Get a list of the data entry IDs, in the order of that list
- *
- * @method getIds
- * @memberof Cite
- * @this Cite
- *
- * @return {String[]} List of IDs
- */
-var getIds = function getIds() {
-  return this.data.map(function (entry) {
-    return entry.id;
-  });
-};
-
-/**
- * Get formatted data from your object. For more info, see [Output](../#output).
- *
- * @method get
- * @memberof Cite
- * @this Cite
- *
- * @param {Object} options - The options for the output
- * @param {String} [options.format="real"] - The outputted datatype. Real representation (`"real"`, e.g. DOM Object for HTML, JavaScript Object for JSON) or String representation (`"string"`)
- * @param {String} [options.type="json"] - The format of the output. `"string"`, `"html"` or `"json"`
- * @param {String} [options.style="csl"] - The style of the output. See [Output](../#output)
- * @param {String} [options.lang="en-US"] - The language of the output. [RFC 5646](https://tools.ietf.org/html/rfc5646) codes
- * @param {String} [options.locale] - Custom CSL locale for citeproc
- * @param {String} [options.template] - Custom CSL style template for citeproc
- *
- * @return {String|Object[]} The formatted data
- */
-var get = function get(options) {
-  var _data = (0, _deepCopy2.default)(this.data);
-
-  var result = void 0;
-
-  var _Object$assign = Object.assign({ format: 'real', type: 'json', style: 'csl', lang: 'en-US' }, this._options, { locale: '', template: '' }, options),
-      format = _Object$assign.format,
-      type = _Object$assign.type,
-      style = _Object$assign.style,
-      lang = _Object$assign.lang,
-      locale = _Object$assign.locale,
-      template = _Object$assign.template;
-
-  var _style$match = style.match(/^([^-]+)(?:-(.+))?$/),
-      _style$match2 = _slicedToArray(_style$match, 3),
-      styleType = _style$match2[1],
-      styleFormat = _style$match2[2];
-
-  switch ([type, styleType].join()) {
-    case 'html,citation':
-      var cbLocale = locale ? function () {
-        return locale;
-      } : _locales2.default;
-      var cbItem = (0, _items2.default)(_data);
-      var useTemplate = template || (0, _styles2.default)(styleFormat);
-      var useLang = (0, _locales2.default)(lang) ? lang : 'en-US';
-
-      var citeproc = (0, _engines2.default)(styleFormat, useLang, useTemplate, cbItem, cbLocale);
-      var sortedIds = citeproc.updateItems(this.getIds());
-
-      var _citeproc$makeBibliog = citeproc.makeBibliography(),
-          _citeproc$makeBibliog2 = _slicedToArray(_citeproc$makeBibliog, 2),
-          _citeproc$makeBibliog3 = _citeproc$makeBibliog2[0],
-          bibStart = _citeproc$makeBibliog3.bibstart,
-          bibEnd = _citeproc$makeBibliog3.bibend,
-          bibBody = _citeproc$makeBibliog2[1];
-
-      bibBody = bibBody.map(function (element, index) {
-        return (0, _attr.getPrefixedEntry)(element, index, sortedIds);
-      });
-
-      result = '' + bibStart + bibBody.join('<br />') + bibEnd;
-      break;
-
-    case 'html,csl':
-      result = (0, _json4.default)(_data);
-      break;
-
-    case 'html,bibtex':
-      result = (0, _text2.default)(_data, true);
-      break;
-
-    case 'string,bibtex':
-      result = (0, _text2.default)(_data, false);
-      break;
-
-    case 'string,citation':
-      result = (0, _striptags2.default)(this.get(Object.assign({}, options, { type: 'html' })));
-      break;
-
-    case 'string,csl':
-      result = JSON.stringify(_data);
-      break;
-
-    case 'json,csl':
-      result = JSON.stringify(_data);
-      break;
-
-    case 'json,bibtex':
-      result = JSON.stringify(_data.map(_json2.default));
-      break;
-
-    case 'json,citation':
-      console.error('[get]', 'Combination type/style of json/citation-* is not valid: ' + type + '/' + style); //
-      break;
-
-    default:
-      console.error('[get]', 'Invalid options');
-      break;
-  }
-
-  if (format === 'real') {
-    if (type === 'json') {
-      result = JSON.parse(result);
-    } else if (document && document.createElement && type === 'html') {
-      var tmp = document.createElement('div');
-      tmp.innerHTML = result;
-      result = result.childNodes;
-    }
-  }
-
-  return result;
-};
-
-exports.getIds = getIds;
-exports.get = get;
-},{"../CSL/engines":1,"../CSL/items":3,"../CSL/locales":4,"../CSL/styles":5,"../get/bibtex/json":13,"../get/bibtex/text":15,"../get/json":20,"../util/attr.js":44,"../util/deepCopy":45,"striptags":357}],7:[function(require,module,exports){
-'use strict';
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _log = require('./log');
-
-var log = _interopRequireWildcard(_log);
-
-var _options = require('./options');
-
-var options = _interopRequireWildcard(_options);
-
-var _set = require('./set');
-
-var set = _interopRequireWildcard(_set);
-
-var _sort = require('./sort');
-
-var sort = _interopRequireWildcard(_sort);
-
-var _get = require('./get');
-
-var get = _interopRequireWildcard(_get);
-
-function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
-
-/**
- * @constructor Cite
- *
- * @description Create a `Cite` object with almost any kind of data, and manipulate it with its default methods.
- *
- * @param {String|CSL|Object|String[]|CSL[]|Object[]} data - Input data. If no data is passed, an empty object is returned
- * @param {Object} options - The options for the output
- * @param {String} [options.format="real"] - The outputted datatype. Real representation (`"real"`, e.g. DOM Object for HTML, JavaScript Object for JSON) or String representation ( `"string"` )
- * @param {String} [options.type="json"] - The format of the output. `"string"`, `"html"` or `"json"`
- * @param {String} [options.style="csl"] - The style of the output. See [Output](./#output)
- * @param {String} [options.lang="en-US"] - The language of the output. [RFC 5646](https://tools.ietf.org/html/rfc5646) codes
- */
-function Cite(data, options) {
-  // Making it Scope-Safe
-  if (!(this instanceof Cite)) {
-    return new Cite(data, options);
-  }
-
-  /**
-   * The default options for the output
-   *
-   * @property format {String} The outputted datatype. Real representation (`"real"`, e.g. DOM Object for HTML, JavaScript Object for JSON) or String representation ( `"string"` )
-   * @property type {String} The format of the output. `"string"`, `"html"` or `"json"`
-   * @property style {String} The style of the output. See [Output](../#output)
-   * @property lang {String} The language of the output. [RFC 5646](https://tools.ietf.org/html/rfc5646) codes
-   *
-   * @access protected
-   * @type Object
-   * @default {}
-   */
-  this._options = options || {};
-
-  /**
-   * The log, containing all logged data, consisting of copies of the Cite object at different moments in time.
-   *
-   * The `.reset()` function **does not** reset on the log. This way, you can still undo all changes.
-   *
-   * <br /><br />
-   * `.currentVersion()` and similar function **are not** logged, because this would be influenced by function using other functions.
-   *
-   * @access protected
-   * @type Object[]
-   *
-   * @property {Cite} 0 - The first image.
-   */
-  this.log = [];
-
-  /**
-   * The data formatted to JSON
-   *
-   * @access protected
-   * @type Object
-   * @default []
-   */
-  this.data = [];
-
-  this.set(data);
-  this.options(options);
-  this.save();
-
-  return this;
-}
-
-Object.assign(Cite.prototype, log, options, set, sort, get);
-
-exports.default = Cite;
-},{"./get":6,"./log":8,"./options":9,"./set":10,"./sort":11}],8:[function(require,module,exports){
-'use strict';
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.save = exports.undo = exports.retrieveLastVersion = exports.retrieveVersion = exports.currentVersion = undefined;
-
-var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; }();
-
-var _index = require('./index');
-
-var _index2 = _interopRequireDefault(_index);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-/**
- *
- * @method currentVersion
- * @memberof Cite
- * @this Cite
- *
- * @return {Number} The latest version of the object
- */
-var currentVersion = function currentVersion() {
-  return this.log.length;
-};
-
-/**
- * Returns an image of the object in the version specified.
- *
- * @method retrieveVersion
- * @memberof Cite
- * @this Cite
- *
- * @param {Number} versnum - The number of the version you want to retrieve. Illegel numbers: numbers under zero, floats, numbers above the current version of the object.
- *
- * @return {Cite} The version of the object with the version number passed. `undefined` if an illegal number is passed.
- */
-var retrieveVersion = function retrieveVersion(versnum) {
-  versnum = versnum <= 0 ? 1 : versnum;
-
-  if (versnum > this.currentVersion()) {
-    return null;
-  } else {
-    var _log = _slicedToArray(this.log[versnum - 1], 2),
-        data = _log[0],
-        options = _log[1];
-
-    var image = new _index2.default(JSON.parse(data), JSON.parse(options));
-    image.log = this.log.slice(0, versnum);
-    return image;
-  }
-};
-
-/**
- * Returns the second to last saved image of the object.
- *
- * @method undo
- * @memberof Cite
- * @this Cite
- *
- * @param {Number} [number=1] - number of versions to go back.
- *
- * @return {Cite} The second to last version of the object. `undefined` if used on first version.
- */
-var undo = function undo() {
-  var number = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 1;
-
-  return this.retrieveVersion(this.currentVersion() - number);
-};
-
-/**
- * Returns the last saved image of the object.
- *
- * @method undo
- * @memberof Cite
- * @this Cite
- *
- * @return {Cite} The last version of the object. `undefined` if used on first version.
- */
-var retrieveLastVersion = function retrieveLastVersion() {
-  return this.retrieveVersion(this.currentVersion());
-};
-
-/**
- * Save an image of the current version of the object.
- *
- * @method save
- * @memberof Cite
- * @this Cite
- *
- * @return {Cite} The current version of the object.
- */
-var save = function save() {
-  this.log.push([JSON.stringify(this.data), JSON.stringify(this._options)]);
-
-  return this;
-};
-
-exports.currentVersion = currentVersion;
-exports.retrieveVersion = retrieveVersion;
-exports.retrieveLastVersion = retrieveLastVersion;
-exports.undo = undo;
-exports.save = save;
-},{"./index":7}],9:[function(require,module,exports){
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-/**
- * Change the default options of a `Cite` object.
- *
- * @method options
- * @memberof Cite
- * @this Cite
- *
- * @param {Object} options - The options for the output
- * @param {String} [options.format="real"] - The outputted datatype. Real representation (`"real"`, e.g. DOM Object for HTML, JavaScript Object for JSON) or String representation ( `"string"` )
- * @param {String} [options.type="json"] - The format of the output. `"string"`, `"html"` or `"json"`
- * @param {String} [options.style="csl"] - The style of the output. See [Output](./#output)
- * @param {String} [options.lang="en-US"] - The language of the output. [RFC 5646](https://tools.ietf.org/html/rfc5646) codes
- * @param {Boolean} log - Show this call in the log
- *
- * @return {Cite} The updated parent object
- */
-var options = function options(_options, log) {
-  if (log) {
-    this.save();
-  }
-
-  Object.assign(this._options, _options);
-
-  return this;
-};
-
-exports.options = options;
-},{}],10:[function(require,module,exports){
-'use strict';
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.reset = exports.set = exports.add = undefined;
-
-var _chain = require('../parse/input/chain');
-
-var _chain2 = _interopRequireDefault(_chain);
-
-var _fetchId = require('../util/fetchId');
-
-var _fetchId2 = _interopRequireDefault(_fetchId);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-/**
- * Add an object to the array of objects
- *
- * @method add
- * @memberof Cite
- * @this Cite
- *
- * @param {String|CSL|Object|String[]|CSL[]|Object[]} data - The data to add to your object
- * @param {Boolean} log - Show this call in the log
- *
- * @return {Cite} The updated parent object
- */
-var add = function add(data, log) {
-  var _this = this;
-
-  if (log) {
-    this.save();
-  }
-
-  this.data = this.data.concat((0, _chain2.default)(data));
-
-  this.data.filter(function (entry) {
-    return !entry.hasOwnProperty('id');
-  }).forEach(function (entry) {
-    entry.id = (0, _fetchId2.default)(_this.getIds(), 'temp_id_');
-  });
-
-  return this;
-};
-
-/**
- * Recreate a `Cite` object with almost any kind of data, and manipulate it with its default methods.
- *
- * @method set
- * @memberof Cite
- * @this Cite
- *
- * @param {String|CSL|Object|String[]|CSL[]|Object[]} data - The data to replace the data in your object
- * @param {Boolean} log - Show this call in the log
- *
- * @return {Cite} The updated parent object
- */
-var set = function set(data, log) {
-  if (log) {
-    this.save();
-  }
-
-  this.data = [];
-  this.add(data);
-
-  return this;
-};
-
-/**
- * Reset a `Cite` object.
- *
- * @method reset
- * @memberof Cite
- * @this Cite
- *
- * @param {Boolean} log - Show this call in the log
- *
- * @return {Cite} The updated, empty parent object (except the log, the log lives)
- */
-var reset = function reset(log) {
-  if (log) {
-    this.save();
-  }
-
-  this.data = [];
-  this._options = {};
-
-  return this;
-};
-
-exports.add = add;
-exports.set = set;
-exports.reset = reset;
-},{"../parse/input/chain":31,"../util/fetchId":47}],11:[function(require,module,exports){
-'use strict';
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.sort = undefined;
-
-var _label = require('../get/label');
-
-var _label2 = _interopRequireDefault(_label);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-/**
- * Sort the datasets alphabetically, on basis of it's BibTeX label
- *
- * @method sort
- * @memberof Cite
- * @this Cite
- *
- * @param {Boolean} log - Show this call in the log
- *
- * @return {Cite} The updated parent object
- */
-var sort = function sort(log) {
-  if (log) {
-    this.save();
-  }
-
-  this.data.sort(function (a, b) {
-    var labelA = (0, _label2.default)(a);
-    var labelB = (0, _label2.default)(b);
-
-    return labelA !== labelB ? labelA > labelB ? 1 : -1 : 0;
-  });
-
-  return this;
-};
-
-exports.sort = sort;
-},{"../get/label":21}],12:[function(require,module,exports){
-'use strict';
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.type = exports.label = exports.text = exports.json = undefined;
-
-var _json = require('./json');
-
-var _json2 = _interopRequireDefault(_json);
-
-var _text = require('./text');
-
-var _text2 = _interopRequireDefault(_text);
-
-var _label = require('./label');
-
-var _label2 = _interopRequireDefault(_label);
-
-var _type = require('./type');
-
-var _type2 = _interopRequireDefault(_type);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-exports.json = _json2.default;
-exports.text = _text2.default;
-exports.label = _label2.default;
-exports.type = _type2.default;
-},{"./json":13,"./label":14,"./text":15,"./type":16}],13:[function(require,module,exports){
-'use strict';
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _type = require('./type');
-
-var _type2 = _interopRequireDefault(_type);
-
-var _label = require('./label');
-
-var _label2 = _interopRequireDefault(_label);
-
-var _name = require('../name');
-
-var _name2 = _interopRequireDefault(_name);
-
-var _date = require('../date');
-
-var _date2 = _interopRequireDefault(_date);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-/**
- * Get BibTeX-JSON from CSL(-JSON)
- *
- * @access protected
- * @method getBibTeXJSON
- *
- * @param {CSL} src - Input CSL
- *
- * @return {Object} Output BibTeX-JSON
- */
-var getBibTeXJSON = function getBibTeXJSON(src) {
-  var res = {
-    label: src.label || (0, _label2.default)(src),
-    type: (0, _type2.default)(src.type)
-  };
-  var props = {};
-
-  if (src.hasOwnProperty('author')) {
-    props.author = src.author.map(_name2.default).join(' and ');
-  }
-  if (src.hasOwnProperty('event')) {
-    props.organization = src.event;
-  }
-  if (src.hasOwnProperty('accessed')) {
-    props.note = '[Online; accesed ' + (0, _date2.default)(src.accessed) + ']';
-  }
-  if (src.hasOwnProperty('DOI')) {
-    props.doi = src.DOI;
-  }
-  if (src.hasOwnProperty('editor')) {
-    props.editor = src.editor.map(_name2.default).join(' and ');
-  }
-  if (src.hasOwnProperty('ISBN')) {
-    props.isbn = src.ISBN;
-  }
-  if (src.hasOwnProperty('ISSN')) {
-    props.issn = src.ISSN;
-  }
-  if (src.hasOwnProperty('container-title')) {
-    props.journal = src['container-title'];
-  }
-  if (src.hasOwnProperty('issue')) {
-    props.issue = src.issue.toString();
-  }
-  if (src.hasOwnProperty('page')) {
-    props.pages = src.page.replace('-', '--');
-  }
-  if (src.hasOwnProperty('publisher-place')) {
-    props.address = src['publisher-place'];
-  }
-  if (src.hasOwnProperty('edition')) {
-    props.edition = src.edition.toString();
-  }
-  if (src.hasOwnProperty('publisher')) {
-    props.publisher = src.publisher;
-  }
-  if (src.hasOwnProperty('title')) {
-    props.title = src['title'];
-  }
-  if (src.hasOwnProperty('url')) {
-    props.url = src.url;
-  }
-  if (src.hasOwnProperty('volume')) {
-    props.volume = src.volume.toString();
-  }
-  if (src.hasOwnProperty('issued') && Array.isArray(src.issued) && src.issued[0]['date-parts'].length === 3) {
-    props.year = src.issued[0]['date-parts'][0].toString();
-  }
-
-  res.properties = props;
-
-  return res;
-};
-
-exports.default = getBibTeXJSON;
-},{"../date":17,"../name":22,"./label":14,"./type":16}],14:[function(require,module,exports){
-'use strict';
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-/**
- * Get a BibTeX label from CSL data
- *
- * @access protected
- * @method getBibTeXLabel
- *
- * @param {CSL} src - Input CSL
- *
- * @return {String} The label
- */
-var getBibTeXLabel = function getBibTeXLabel() {
-  var _ref = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
-      _ref$author = _ref.author,
-      author = _ref$author === undefined ? [] : _ref$author,
-      year = _ref.year,
-      _ref$issued = _ref.issued,
-      issued = _ref$issued === undefined ? [] : _ref$issued,
-      title = _ref.title;
-
-  var res = '';
-
-  if (author.length > 0) {
-    res += author[0].family || author[0].literal;
-  }
-
-  if (year) {
-    res += year;
-  } else if (issued.length > 0 && issued[0]['date-parts']) {
-    res += issued[0]['date-parts'][0];
-  }
-
-  if (title) {
-    res += title.match(/^(?:(?:the|a|an)\s+)?(\S+)/i)[1];
-  }
-
-  return res;
-};
-
-exports.default = getBibTeXLabel;
-},{}],15:[function(require,module,exports){
-'use strict';
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _json = require('./json');
-
-var _json2 = _interopRequireDefault(_json);
-
-var _dict = require('../dict');
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-/**
- * Mapping of BibTeX syntax chars to BibTeX Escaped Chars.
- *
- * From [Zotero's alwaysMap object](https://github.com/zotero/translators/blob/master/BibTeX.js#L225)
- * [REPO](https://github.com/zotero/translators)
- *
- * Accesed 11/20/2016
- *
- * @access protected
- * @constant varBibTeXSyntaxTokens
- * @default
- */
-var varBibTeXSyntaxTokens = {
-  '|': '{\\textbar}',
-  '<': '{\\textless}',
-  '>': '{\\textgreater}',
-  '~': '{\\textasciitilde}',
-  '^': '{\\textasciicircum}',
-  '\\': '{\\textbackslash}',
-  // See http://tex.stackexchange.com/questions/230750/open-brace-in-bibtex-fields/230754
-  '{': '\\{\\vphantom{\\}}',
-  '}': '\\vphantom{\\{}\\}'
-};
-
-/**
- * Get a BibTeX (HTML) string from CSL
- *
- * @access protected
- * @method getBibTeX
- *
- * @param {CSL[]} src - Input CSL
- * @param {Boolean} html - Output as HTML string (instead of plain text)
- *
- * @return {String} BibTeX (HTML) string
- */
-var getBibTeX = function getBibTeX(src, html) {
-  var dict = html ? _dict.htmlDict : _dict.textDict;
-  var caseSensitive = ['title'];
-
-  var entries = src.map(function (entry) {
-    var bib = (0, _json2.default)(entry);
-    var properties = Object.keys(bib.properties).map(function (prop) {
-      var value = bib.properties[prop].replace(/[|<>~^\\{}]/g, function (match) {
-        return varBibTeXSyntaxTokens[match];
-      });
-      var delStart = value === parseInt(value).toString() ? '' : caseSensitive.includes(prop) ? '{{' : '{';
-      var delEnd = delStart.replace(/{/g, '}').split('').reverse().join('');
-
-      return '' + dict.li_start + prop + '=' + delStart + value + delEnd + ',' + dict.li_end;
-    }).join('');
-
-    return dict.en_start + '@' + bib.type + '{' + bib.label + ',' + dict.ul_start + properties + dict.ul_end + '}' + dict.en_end;
-  }).join('');
-
-  return '' + dict.wr_start + entries + dict.wr_end;
-};
-
-exports.default = getBibTeX;
-},{"../dict":18,"./json":13}],16:[function(require,module,exports){
-'use strict';
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-/**
- * CSL pub type to BibTeX pub type
- *
- * @access protected
- * @method fetchBibTeXType
- *
- * @param {String} pubType - CSL type
- *
- * @return {String} BibTeX type
- */
-var fetchBibTeXType = function fetchBibTeXType(pubType) {
-  switch (pubType) {
-    case 'article':
-    case 'article-journal':
-    case 'article-magazine':
-    case 'article-newspaper':
-      return 'article';
-
-    case 'book':
-      return 'book';
-
-    case 'chapter':
-      return 'incollection';
-
-    case 'manuscript':
-      return 'unpublished';
-
-    case 'paper-conference':
-      return 'inproceedings';
-
-    case 'patent':
-      return 'patent';
-
-    case 'report':
-      return 'techreport';
-
-    case 'thesis':
-      return 'phdthesis';
-
-    case 'graphic':
-    case 'interview':
-    case 'motion_picture':
-    case 'personal_communication':
-    case 'webpage':
-      return 'misc';
-
-    default:
-      console.warn('CSL publication type not recognized: ' + pubType + '}. Interpreting as "misc".');
-      return 'misc';
-  }
-};
-
-exports.default = fetchBibTeXType;
-},{}],17:[function(require,module,exports){
-'use strict';
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; }();
-
-/**
- * Convert a CSL date into human-readable format
- *
- * @access protected
- * @function getDate
- *
- * @param {String[]} date - A date in CSL format
- *
- * @return {String} The string
- */
-var getDate = function getDate(_ref) {
-  var _ref2 = _slicedToArray(_ref, 1),
-      date = _ref2[0]['date-parts'];
-
-  if (date.length === 3) {
-    return date[0].padStart(4, '0') + '-' + date[1].padStart(2, '0') + '-' + date[2].padStart(2, '0');
-  } else {
-    return '';
-  }
-};
-
-exports.default = getDate;
-},{}],18:[function(require,module,exports){
-'use strict';
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-/**
- * Object containing HTML strings for building JSON and BibTeX. Made to match citeproc, for compatability.
- *
- * @access protected
- * @constant varHTMLDict
- * @default
- */
-var htmlDict = {
-  wr_start: '<div class="csl-bib-body">',
-  wr_end: '</div>',
-  en_start: '<div class="csl-entry">',
-  en_end: '</div>',
-  ul_start: '<ul style="list-style-type:none">',
-  ul_end: '</ul>',
-  li_start: '<li>',
-  li_end: '</li>'
-};
-
-/**
- * Object containing text strings for building JSON and BibTeX. Made to match citeproc, for compatability.
- *
- * @access protected
- * @constant varHTMLDict
- * @default
- */
-var textDict = {
-  wr_start: '',
-  wr_end: '\n',
-  en_start: '',
-  en_end: '\n',
-  ul_start: '\n',
-  ul_end: '',
-  li_start: '\t',
-  li_end: '\n'
-};
-
-exports.htmlDict = htmlDict;
-exports.textDict = textDict;
-},{}],19:[function(require,module,exports){
-'use strict';
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.label = exports.name = exports.date = exports.json = exports.dict = exports.bibtex = undefined;
-
-var _index = require('./bibtex/index');
-
-var bibtex = _interopRequireWildcard(_index);
-
-var _dict = require('./dict');
-
-var dict = _interopRequireWildcard(_dict);
-
-var _json = require('./json');
-
-var _json2 = _interopRequireDefault(_json);
-
-var _date = require('./date');
-
-var _date2 = _interopRequireDefault(_date);
-
-var _name = require('./name');
-
-var _name2 = _interopRequireDefault(_name);
-
-var _label = require('./label');
-
-var _label2 = _interopRequireDefault(_label);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
-
-exports.bibtex = bibtex;
-exports.dict = dict;
-exports.json = _json2.default;
-exports.date = _date2.default;
-exports.name = _name2.default;
-exports.label = _label2.default;
-},{"./bibtex/index":12,"./date":17,"./dict":18,"./json":20,"./label":21,"./name":22}],20:[function(require,module,exports){
-'use strict';
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
-
-var _dict = require('./dict');
-
-/**
- * Convert a JSON array or object to HTML.
- *
- * @access protected
- * @function getJSONObjectHTML
- *
- * @param {Object|Object[]|String[]|Number[]} src - The data
- *
- * @return {String} The html (in string form)
- */
-var getJSONObjectHTML = function getJSONObjectHTML(src) {
-  if (Array.isArray(src)) {
-    var entries = src.map(function (entry) {
-      return '' + _dict.htmlDict.li_start + getJSONValueHTML(entry) + ',' + _dict.htmlDict.li_end;
-    });
-    return '[' + _dict.htmlDict.ul_start + entries + _dict.htmlDict.ul_end + ']';
-  } else {
-    var props = Object.keys(src).map(function (prop) {
-      return '' + _dict.htmlDict.li_start + prop + ': ' + getJSONValueHTML(src[prop]) + ',{dict.li_end}';
-    });
-    return '{' + _dict.htmlDict.ul_start + props + _dict.htmlDict.ul_end + '}';
-  }
-};
-
-/**
- * Convert JSON to HTML.
- *
- * @access protected
- * @function getJSONValueHTML
- *
- * @param {Object|String|Number|Object[]|String[]|Number[]} src - The data
- *
- * @return {String} The html (in string form)
- */
-var getJSONValueHTML = function getJSONValueHTML(src) {
-  if ((typeof src === 'undefined' ? 'undefined' : _typeof(src)) === 'object' && src !== null) {
-    if (src.length === 0) {
-      return '[]';
-    } else if (Object.keys(src).length === 0) {
-      return '{}';
-    } else {
-      return getJSONObjectHTML(src);
-    }
-  } else {
-    return '<span class="string">' + JSON.stringify(src) + '}</span>';
-  }
-};
-
-/**
- * Get a JSON HTML string from CSL
- *
- * @access protected
- * @method getJSON
- *
- * @param {CSL[]} src - Input CSL
- *
- * @return {String} JSON HTML string
- */
-var getJSON = function getJSON(src) {
-  var entries = src.map(function (entry, index, array) {
-    var comma = index < array.length - 1 ? ',' : '';
-    var props = Object.keys(entry).map(function (prop, index, array) {
-      var comma = index < array.length - 1 ? ',' : '';
-      return '' + _dict.htmlDict.li_start + prop + ': ' + getJSONValueHTML(entry[prop]) + comma + '{dict.li_end}';
-    }).join('');
-
-    return _dict.htmlDict.en_start + '{' + _dict.htmlDict.ul_start + props + _dict.htmlDict.ul_end + '}' + comma + _dict.htmlDict.en_end;
-  });
-
-  return _dict.htmlDict.wr_start + '[' + entries + ']' + _dict.htmlDict.wr_end;
-};
-
-exports.default = getJSON;
-},{"./dict":18}],21:[function(require,module,exports){
-'use strict';
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _label = require('./bibtex/label');
-
-var _label2 = _interopRequireDefault(_label);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-/**
- * Get a label from CSL data
- *
- * @access protected
- * @method getLabel
- *
- * @param {CSL} src - Input CSL
- *
- * @return {String} The label
- */
-var getLabel = function getLabel(src) {
-  return (0, _label2.default)(src);
-};
-
-exports.default = getLabel;
-},{"./bibtex/label":14}],22:[function(require,module,exports){
-'use strict';
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-/**
- * Get name from CSL
- *
- * @access protected
- * @method getName
- *
- * @param {Object} obj - CSL input
- *
- * @return {String} Full name
- */
-var getName = function getName(obj) {
-  var arr = ['dropping-particle', 'given', 'suffix', 'non-dropping-particle', 'family'];
-  return obj.literal || arr.map(function (entry) {
-    return obj[entry] || '';
-  }).filter(function (v) {
-    return !!v;
-  }).join(' ');
-};
-
-exports.default = getName;
-},{}],23:[function(require,module,exports){
-'use strict';
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _date = require('../date');
-
-var _date2 = _interopRequireDefault(_date);
-
-var _name = require('../name');
-
-var _name2 = _interopRequireDefault(_name);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-/**
- * Forat ContentMine data
- *
- * @access protected
- * @method parseContentMine
- *
- * @param {Object} data - The input data
- *
- * @return {CSL[]} The formatted input data
- */
-var parseContentMine = function parseContentMine(data) {
-  var res = {
-    type: 'article-journal'
-  };
-
-  Object.keys(data).forEach(function (prop) {
-    res[prop] = data[prop].value[0];
-  });
-
-  if (res.hasOwnProperty('authors')) {
-    res.author = data.authors.value.map(_name2.default);
-  }
-  if (res.hasOwnProperty('firstpage')) {
-    res.page = res['page-first'] = res.firstpage;
-  }
-  if (res.hasOwnProperty('date')) {
-    res.issued = (0, _date2.default)(res.date);
-  }
-  if (res.hasOwnProperty('journal')) {
-    res['container-title'] = res.journal;
-  }
-  if (res.hasOwnProperty('doi')) {
-    res.id = res.DOI = res.doi;
-  }
-
-  return res;
-};
-
-exports.default = parseContentMine;
-},{"../date":29,"../name":37}],24:[function(require,module,exports){
-'use strict';
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _prop = require('./prop');
-
-var _prop2 = _interopRequireDefault(_prop);
-
-var _type = require('./type');
-
-var _type2 = _interopRequireDefault(_type);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-/**
- * Format BibTeX JSON data
- *
- * @access protected
- * @method parseBibTeXJSON
- *
- * @param {Object[]} data - The input data
- *
- * @return {CSL[]} The formatted input data
- */
-var parseBibTeXJSON = function parseBibTeXJSON(data) {
-  return data.map(function (entry) {
-    var newEntry = {};
-
-    for (var prop in entry.properties) {
-      var oldValue = entry.properties[prop];
-      var newValue = (0, _prop2.default)(prop, oldValue);
-
-      if (newValue) {
-        newEntry[newValue[0]] = newValue[1];
-      }
-    }
-
-    newEntry.type = (0, _type2.default)(entry.type);
-    newEntry.id = entry.label;
-
-    return newEntry;
-  });
-};
-
-exports.default = parseBibTeXJSON;
-},{"./prop":25,"./type":28}],25:[function(require,module,exports){
-'use strict';
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _name = require('../name');
-
-var _name2 = _interopRequireDefault(_name);
-
-var _date = require('../date');
-
-var _date2 = _interopRequireDefault(_date);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-/**
- * Transform property and value from BibTeX-JSON format to CSL-JSON
- *
- * @access protected
- * @method parseBibTeXProp
- *
- * @param {String} prop - Property
- * @param {String|Number} value - Value
- *
- * @return {String[]} Array with new prop and value
- */
-var parseBibTeXProp = function parseBibTeXProp(prop, value) {
-  var rProp = prop;
-  var rValue = value;
-
-  switch (prop) {
-    // Address
-    case 'address':
-      rProp = 'publisher-place';
-      break;
-
-    // Author
-    case 'author':
-      rValue = value.split(' and ').map(_name2.default);
-      break;
-
-    // Book title
-    case 'booktitle':
-      rProp = 'container-title';
-      break;
-
-    // DOI
-    case 'doi':
-      rProp = 'DOI';
-      break;
-
-    // Edition/print
-    case 'edition':
-      // rValue = parseOrdinal(value)
-      break;
-
-    // Editor
-    case 'editor':
-      rValue = value.split(' and ').map(_name2.default);
-      break;
-
-    // ISBN
-    case 'isbn':
-      rProp = 'ISBN';
-      break;
-
-    // ISSN
-    case 'issn':
-      rProp = 'ISSN';
-      break;
-
-    // Issue
-    case 'issue':
-    case 'number':
-      rProp = 'issue';
-      rValue = value.toString();
-      break;
-
-    // Journal
-    case 'journal':
-      rProp = 'container-title';
-      break;
-
-    // Location
-    case 'location':
-      rProp = 'publisher-place';
-      break;
-
-    // Pages
-    case 'pages':
-      rProp = 'page';
-      rValue = value.replace(/[—–]/, '-');
-      break;
-
-    // Pubate
-    case 'date':
-      rProp = 'issued';
-      rValue = (0, _date2.default)(value);
-      break;
-
-    case 'year':
-      // Ignore for now
-      // rProp = 'issued-year'
-      break;
-
-    case 'month':
-      // Ignore for now
-      // rProp = 'issued-month'
-      break;
-
-    // Publisher
-    case 'publisher':
-      // Nothing necessary, as far as I know
-      break;
-
-    // Series
-    case 'series':
-      rProp = 'collection-title';
-      break;
-
-    // Title
-    case 'title':
-      rProp = 'title';
-      rValue = value.replace(/\.$/g, '');
-      break;
-
-    // URL
-    case 'url':
-      rProp = 'URL';
-      break;
-
-    // Volume
-    case 'volume':
-      rValue = value.toString();
-      break;
-
-    case 'crossref': // Crossref
-    case 'keywords': // Keywords
-    case 'language': // Language
-    case 'note': // Note
-    case 'pmid': // PMID
-    case 'numpages':
-      // Number of pages
-      // Property ignored
-      rProp = rValue = undefined;
-      break;
-
-    default:
-      console.info('[set]', 'Unknown property: ' + prop);
-      rProp = rValue = undefined;
-      break;
-  }
-
-  if (rProp !== undefined && rValue !== undefined) {
-    return [rProp, rValue];
-  } else {
-    return undefined;
-  }
-};
-
-exports.default = parseBibTeXProp;
-},{"../date":29,"../name":37}],26:[function(require,module,exports){
-'use strict';
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _regex = require('../regex');
-
-var _regex2 = _interopRequireDefault(_regex);
-
-var _tokens = require('./tokens.json');
-
-var _tokens2 = _interopRequireDefault(_tokens);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-/**
- * Format BibTeX data
- *
- * @access protected
- * @method parseBibTeX
- *
- * @param {String} str - The input data
- *
- * @return {CSL[]} The formatted input data
- */
-var parseBibTeX = function parseBibTeX(str) {
-  var entries = void 0;
-
-  try {
-    entries = [];
-
-    var stack = str
-    // Clean weird commands
-    .replace(/{?(\\[`"'^~=]){?\\?([A-Za-z])}/g, '{$1$2}').replace(/{?(\\[a-z]){?\\?([A-Za-z])}/g, '{$1 $2}')
-    // Tokenize, with escaped characters in mind
-    .split(new RegExp('(?!^)(' +
-    // Escaped chars
-    '\\\\([#$%&~_^\\\\{}])|' +
-    // Regular commands
-    '\\{\\\\(?:' +
-    // Accented chars
-    // Vowel regular
-    '[`\'^~"=][AEIOUYaeiouy]|' +
-    // Consonant regular
-    '(?:[cv] |[\'])[CcDdGgKkLlNnRrSs]|' +
-    // A-E
-    '(?:[dkruv] )[Aa]|(?:[db] |\\.)[Bb]|[.^][Cc]|(?:[bd] |\\.)[Dd]|(?:[dkuv] |[.])[Ee]|' +
-    // F-J
-    '\\.[Ff]|(?:u |[=.^\'])[Gg]|(?:[cd] |[.^"])[Hh]|b h|[dv] [Ii]|=\\\\i|\\.I|(?:v |\\^)[Jj]|' +
-    // K-O
-    '(?:[bd] |\')[Kk]|[bd] [Ll]|[Ll] |(?:d |[.\'])[Mm]|(?:[bd] |[~.])[Nn]|[dHkuv] [Oo]|' +
-    // P-U
-    '[.\'][Pp]|(?:[bd] |[.])[Rr]|(?:d |[.^])[Ss]|(?:[bcdv] |[.])[Tt]|" t|[dHkruv] [Uu]|' +
-    // V-Z
-    '(?:d |[~])[Vv]|(?:d |[`".\'^])[Ww]|r w|[."][Xx]|(?:d |[.])[Yy]|r y|(?:[bdv] |[\'.^])[Zz]|' +
-    // No break space
-    '~|' +
-    // Commands
-    '\\w+' + ')\\}|' +
-    // Greek letters and other symbols
-    '\\$\\\\(?:[A-Z]?[a-z]+|\\#|%<)\\\\$|' +
-    // Subscript and superscript
-    '\\$[^_]\\{[0-9+-=()n]\\}\\$|' +
-    // --, ---, '', ''', ``, ```
-    '---|--|\'\'\'|\'\'|```|``|' +
-    // ?!, !!, !?
-    '\\?!|' + '!!|' + '!\\?\'|' +
-    // \url and \href
-    '\\\\(?:url|href)|' + '[\\s\\S]' + ')', 'g')).filter(function (v) {
-      return !!v;
-    });
-
-    var whitespace = _regex2.default.bibtex[1];
-    var syntax = _regex2.default.bibtex[2];
-    var dels = {
-      '"': '"',
-      '{': '}',
-      '"{': '}"',
-      '{{': '}}',
-      '': ''
-    };
-
-    var index = 0;
-    var curs = stack[index];
-
-    while (curs) {
-      var obj = void 0;
-
-      while (whitespace.test(curs)) {
-        curs = stack[++index];
-      }
-
-      if (!curs) {
-        break;
-      }
-
-      entries.push({ type: '', label: '', properties: {} });
-      obj = entries[entries.length - 1];
-
-      if (curs === '@') {
-        curs = stack[++index];
-      } else {
-        throw new SyntaxError('Unexpected token at index ' + index + '. Expected "@", got "' + curs + '".');
-      }
-
-      while (whitespace.test(curs)) {
-        curs = stack[++index];
-      }
-
-      while (!whitespace.test(curs) && !syntax.test(curs) || curs.length > 1) {
-        obj.type += curs;
-        curs = stack[++index];
-      }
-
-      obj.type = obj.type.toLowerCase();
-
-      while (whitespace.test(curs)) {
-        curs = stack[++index];
-      }
-
-      if (curs === '{') {
-        curs = stack[++index];
-      } else {
-        throw new SyntaxError('Unexpected token at index ' + index + '. Expected "{", got "' + curs + '".');
-      }
-
-      while (whitespace.test(curs)) {
-        curs = stack[++index];
-      }
-
-      while (!whitespace.test(curs) && !syntax.test(curs) || curs.length > 1) {
-        obj.label += curs;
-        curs = stack[++index];
-      }
-
-      while (whitespace.test(curs)) {
-        curs = stack[++index];
-      }
-
-      if (curs === ',') {
-        curs = stack[++index];
-      } else {
-        throw new SyntaxError('Unexpected token at index ' + index + '. Expected ",", got "' + curs + '".');
-      }
-
-      while (whitespace.test(curs)) {
-        curs = stack[++index];
-      }
-
-      var key, val, startDel, endDel, nexs;
-
-      while (curs !== '}') {
-        key = '';
-        val = '';
-        startDel = '';
-
-        while (curs && !whitespace.test(curs) && curs !== '=') {
-          key += curs;
-          curs = stack[++index];
-        }
-
-        while (whitespace.test(curs)) {
-          curs = stack[++index];
-        }
-
-        if (curs === '=') {
-          curs = stack[++index];
-        } else {
-          throw new SyntaxError('Unexpected token at index ' + index + '. Expected "=", got "' + curs + '".');
-        }
-
-        while (whitespace.test(curs)) {
-          curs = stack[++index];
-        }
-
-        while (syntax.test(curs)) {
-          startDel += curs;
-          curs = stack[++index];
-        }
-
-        if (!dels.hasOwnProperty(startDel)) {
-          throw new SyntaxError('Unexpected field delimiter at index ' + index + '. Expected ' + (Object.keys(dels).map(function (v) {
-            return '"' + v + '"';
-          }).join(', ') + ', got "' + startDel + '".'));
-        }
-
-        endDel = dels[startDel];
-        nexs = stack.slice(index + 1, index + (endDel.length ? endDel.length : 1)).reverse().join('');
-
-        while (curs && (endDel === '' ? curs !== ',' : curs + nexs !== endDel)) {
-          if (_tokens2.default.hasOwnProperty(curs)) {
-            val += _tokens2.default[curs];
-          } else if (curs.match(/^\\([#$%&~_^\\{}])$/)) {
-            val += curs.slice(1);
-          } else if (curs.length > 1) {
-            // "Soft", non-breaking error for now
-            // throw new SyntaxError( 'Escape sequence not recognized: ' + curs )
-            console.error('Escape sequence not recognized: ' + curs);
-          } else {
-            val += curs;
-          }
-
-          curs = stack[++index];
-          nexs = stack.slice(index + 1, index + (endDel.length ? endDel.length : 1)).reverse().join('');
-        }
-
-        key = key.trim().replace(/\s+/g, ' ').toLowerCase();
-
-        val = val.replace(/[{}]/g, '').trim().replace(/\s+/g, ' ');
-
-        obj.properties[key] = val;
-
-        endDel = endDel.split('');
-
-        while (endDel.pop()) {
-          curs = stack[++index];
-        }
-
-        while (whitespace.test(curs)) {
-          curs = stack[++index];
-        }
-
-        if (curs === '}') {
-          break;
-        } else if (curs === ',') {
-          curs = stack[++index];
-        } else {
-          throw new SyntaxError('Unexpected token at index ' + index + '. Expected ",", "}", got "' + curs + '".');
-        }
-
-        while (whitespace.test(curs)) {
-          curs = stack[++index];
-        }
-      }
-
-      if (curs === '}') {
-        curs = stack[++index];
-      } else {
-        throw new SyntaxError('Unexpected token at index ' + index + '. Expected "}", got "' + curs + '".');
-      }
-    }
-
-    return entries;
-  } catch (e) {
-    console.error('Uncaught SyntaxError: ' + e.message + ' Returning completed entries.');
-
-    // Remove last, incomplete entry
-    entries.pop();
-
-    return entries;
-  }
-};
-
-/**
- * Mapping of BibTeX Escaped Chars to Unicode.
- *
- * From [Zotero's reversed mapping table](https://github.com/zotero/translators/blob/master/BibTeX.js#L2353)
- * [REPO](https://github.com/zotero/translators)
- *
- * Accesed 11/09/2016
- *
- * @access protected
- * @constant varBibTeXTokens
- * @default
- */
-exports.default = parseBibTeX;
-},{"../regex":38,"./tokens.json":27}],27:[function(require,module,exports){
-module.exports={
-  "\\url":"",                           "\\href":"",                            "{\\textexclamdown}":"\u00A1",          "{\\textcent}":"\u00A2",
-  "{\\textsterling}":"\u00A3",          "{\\textyen}":"\u00A5",                 "{\\textbrokenbar}":"\u00A6",           "{\\textsection}":"\u00A7",
-  "{\\textasciidieresis}":"\u00A8",     "{\\textcopyright}":"\u00A9",           "{\\textordfeminine}":"\u00AA",         "{\\guillemotleft}":"\u00AB",
-  "{\\textlnot}":"\u00AC",              "{\\textregistered}":"\u00AE",          "{\\textasciimacron}":"\u00AF",         "{\\textdegree}":"\u00B0",
-  "{\\textpm}":"\u00B1",                "{\\texttwosuperior}":"\u00B2",         "{\\textthreesuperior}":"\u00B3",       "{\\textasciiacute}":"\u00B4",
-  "{\\textmu}":"\u00B5",                "{\\textparagraph}":"\u00B6",           "{\\textperiodcentered}":"\u00B7",      "{\\c\\ }":"\u00B8",
-  "{\\textonesuperior}":"\u00B9",       "{\\textordmasculine}":"\u00BA",        "{\\guillemotright}":"\u00BB",          "{\\textonequarter}":"\u00BC",
-  "{\\textonehalf}":"\u00BD",           "{\\textthreequarters}":"\u00BE",       "{\\textquestiondown}":"\u00BF",        "{\\AE}":"\u00C6",
-  "{\\DH}":"\u00D0",                    "{\\texttimes}":"\u00D7",               "{\\O}":"\u00D8",                       "{\\TH}":"\u00DE",
-  "{\\ss}":"\u00DF",                    "{\\ae}":"\u00E6",                      "{\\dh}":"\u00F0",                      "{\\textdiv}":"\u00F7",
-  "{\\o}":"\u00F8",                     "{\\th}":"\u00FE",                      "{\\i}":"\u0131",                       "{\\NG}":"\u014A",
-  "{\\ng}":"\u014B",                    "{\\OE}":"\u0152",                      "{\\oe}":"\u0153",                      "{\\textasciicircum}":"\u02C6",
-  "{\\textacutedbl}":"\u02DD",          "$\\Gamma$":"\u0393",                   "$\\Delta$":"\u0394",                   "$\\Theta$":"\u0398",
-  "$\\Lambda$":"\u039B",                "$\\Xi$":"\u039E",                      "$\\Pi$":"\u03A0",                      "$\\Sigma$":"\u03A3",
-  "$\\Phi$":"\u03A6",                   "$\\Psi$":"\u03A8",                     "$\\Omega$":"\u03A9",                   "$\\alpha$":"\u03B1",
-  "$\\beta$":"\u03B2",                  "$\\gamma$":"\u03B3",                   "$\\delta$":"\u03B4",                   "$\\varepsilon$":"\u03B5",
-  "$\\zeta$":"\u03B6",                  "$\\eta$":"\u03B7",                     "$\\theta$":"\u03B8",                   "$\\iota$":"\u03B9",
-  "$\\kappa$":"\u03BA",                 "$\\lambda$":"\u03BB",                  "$\\mu$":"\u03BC",                      "$\\nu$":"\u03BD",
-  "$\\xi$":"\u03BE",                    "$\\pi$":"\u03C0",                      "$\\rho$":"\u03C1",                     "$\\varsigma$":"\u03C2",
-  "$\\sigma$":"\u03C3",                 "$\\tau$":"\u03C4",                     "$\\upsilon$":"\u03C5",                 "$\\varphi$":"\u03C6",
-  "$\\chi$":"\u03C7",                   "$\\psi$":"\u03C8",                     "$\\omega$":"\u03C9",                   "$\\vartheta$":"\u03D1",
-  "$\\Upsilon$":"\u03D2",               "$\\phi$":"\u03D5",                     "$\\varpi$":"\u03D6",                   "$\\varrho$":"\u03F1",
-  "$\\epsilon$":"\u03F5",               "{\\textendash}":"\u2013",              "{\\textemdash}":"\u2014",              "---":"\u2014",
-  "--":"\u2013",                        "{\\textbardbl}":"\u2016",              "{\\textunderscore}":"\u2017",          "{\\textquoteleft}":"\u2018",
-  "{\\textquoteright}":"\u2019",        "{\\quotesinglbase}":"\u201A",          "{\\textquotedblleft}":"\u201C",        "{\\textquotedblright}":"\u201D",
-  "{\\quotedblbase}":"\u201E",          "{\\textdagger}":"\u2020",              "{\\textdaggerdbl}":"\u2021",           "{\\textbullet}":"\u2022",
-  "{\\textellipsis}":"\u2026",          "{\\textperthousand}":"\u2030",         "'''":"\u2034",                         "''":"\u201D",
-  "``":"\u201C",                        "```":"\u2037",                         "{\\guilsinglleft}":"\u2039",           "{\\guilsinglright}":"\u203A",
-  "!!":"\u203C",                        "{\\textfractionsolidus}":"\u2044",     "?!":"\u2048",                          "!?":"\u2049",
-  "$^{0}$":"\u2070",                    "$^{4}$":"\u2074",                      "$^{5}$":"\u2075",                      "$^{6}$":"\u2076",
-  "$^{7}$":"\u2077",                    "$^{8}$":"\u2078",                      "$^{9}$":"\u2079",                      "$^{+}$":"\u207A",
-  "$^{-}$":"\u207B",                    "$^{=}$":"\u207C",                      "$^{(}$":"\u207D",                      "$^{)}$":"\u207E",
-  "$^{n}$":"\u207F",                    "$_{0}$":"\u2080",                      "$_{1}$":"\u2081",                      "$_{2}$":"\u2082",
-  "$_{3}$":"\u2083",                    "$_{4}$":"\u2084",                      "$_{5}$":"\u2085",                      "$_{6}$":"\u2086",
-  "$_{7}$":"\u2087",                    "$_{8}$":"\u2088",                      "$_{9}$":"\u2089",                      "$_{+}$":"\u208A",
-  "$_{-}$":"\u208B",                    "$_{=}$":"\u208C",                      "$_{(}$":"\u208D",                      "$_{)}$":"\u208E",
-  "{\\texteuro}":"\u20AC",              "{\\textcelsius}":"\u2103",             "{\\textnumero}":"\u2116",              "{\\textcircledP}":"\u2117",
-  "{\\textservicemark}":"\u2120",       "{TEL}":"\u2121",                       "{\\texttrademark}":"\u2122",           "{\\textohm}":"\u2126",
-  "{\\textestimated}":"\u212E",         "{\\`A}":"\u00C0",                      "{\\'A}":"\u00C1",                      "{\\^A}":"\u00C2",
-  "{\\~A}":"\u00C3",                    "{\\\"A}":"\u00C4",                     "{\\r A}":"\u00C5",                     "{\\c C}":"\u00C7",
-  "{\\`E}":"\u00C8",                    "{\\'E}":"\u00C9",                      "{\\^E}":"\u00CA",                      "{\\\"E}":"\u00CB",
-  "{\\`I}":"\u00CC",                    "{\\'I}":"\u00CD",                      "{\\^I}":"\u00CE",                      "{\\\"I}":"\u00CF",
-  "{\\~N}":"\u00D1",                    "{\\`O}":"\u00D2",                      "{\\'O}":"\u00D3",                      "{\\^O}":"\u00D4",
-  "{\\~O}":"\u00D5",                    "{\\\"O}":"\u00D6",                     "{\\`U}":"\u00D9",                      "{\\'U}":"\u00DA",
-  "{\\^U}":"\u00DB",                    "{\\\"U}":"\u00DC",                     "{\\'Y}":"\u00DD",                      "{\\`a}":"\u00E0",
-  "{\\'a}":"\u00E1",                    "{\\^a}":"\u00E2",                      "{\\~a}":"\u00E3",                      "{\\\"a}":"\u00E4",
-  "{\\r a}":"\u00E5",                   "{\\c c}":"\u00E7",                     "{\\`e}":"\u00E8",                      "{\\'e}":"\u00E9",
-  "{\\^e}":"\u00EA",                    "{\\\"e}":"\u00EB",                     "{\\`i}":"\u00EC",                      "{\\'i}":"\u00ED",
-  "{\\^i}":"\u00EE",                    "{\\\"i}":"\u00EF",                     "{\\~n}":"\u00F1",                      "{\\`o}":"\u00F2",
-  "{\\'o}":"\u00F3",                    "{\\^o}":"\u00F4",                      "{\\~o}":"\u00F5",                      "{\\\"o}":"\u00F6",
-  "{\\`u}":"\u00F9",                    "{\\'u}":"\u00FA",                      "{\\^u}":"\u00FB",                      "{\\\"u}":"\u00FC",
-  "{\\'y}":"\u00FD",                    "{\\\"y}":"\u00FF",                     "{\\=A}":"\u0100",                      "{\\=a}":"\u0101",
-  "{\\u A}":"\u0102",                   "{\\u a}":"\u0103",                     "{\\k A}":"\u0104",                     "{\\k a}":"\u0105",
-  "{\\'C}":"\u0106",                    "{\\'c}":"\u0107",                      "{\\^C}":"\u0108",                      "{\\^c}":"\u0109",
-  "{\\.C}":"\u010A",                    "{\\.c}":"\u010B",                      "{\\v C}":"\u010C",                     "{\\v c}":"\u010D",
-  "{\\v D}":"\u010E",                   "{\\v d}":"\u010F",                     "{\\=E}":"\u0112",                      "{\\=e}":"\u0113",
-  "{\\u E}":"\u0114",                   "{\\u e}":"\u0115",                     "{\\.E}":"\u0116",                      "{\\.e}":"\u0117",
-  "{\\k E}":"\u0118",                   "{\\k e}":"\u0119",                     "{\\v E}":"\u011A",                     "{\\v e}":"\u011B",
-  "{\\^G}":"\u011C",                    "{\\^g}":"\u011D",                      "{\\u G}":"\u011E",                     "{\\u g}":"\u011F",
-  "{\\.G}":"\u0120",                    "{\\.g}":"\u0121",                      "{\\c G}":"\u0122",                     "{\\c g}":"\u0123",
-  "{\\^H}":"\u0124",                    "{\\^h}":"\u0125",                      "{\\~I}":"\u0128",                      "{\\~i}":"\u0129",
-  "{\\=I}":"\u012A",                    "{\\=i}":"\u012B",                      "{\\=\\i}":"\u012B",                    "{\\u I}":"\u012C",
-  "{\\u i}":"\u012D",                   "{\\k I}":"\u012E",                     "{\\k i}":"\u012F",                     "{\\.I}":"\u0130",
-  "{\\^J}":"\u0134",                    "{\\^j}":"\u0135",                      "{\\c K}":"\u0136",                     "{\\c k}":"\u0137",
-  "{\\'L}":"\u0139",                    "{\\'l}":"\u013A",                      "{\\c L}":"\u013B",                     "{\\c l}":"\u013C",
-  "{\\v L}":"\u013D",                   "{\\v l}":"\u013E",                     "{\\L }":"\u0141",                      "{\\l }":"\u0142",
-  "{\\'N}":"\u0143",                    "{\\'n}":"\u0144",                      "{\\c N}":"\u0145",                     "{\\c n}":"\u0146",
-  "{\\v N}":"\u0147",                   "{\\v n}":"\u0148",                     "{\\=O}":"\u014C",                      "{\\=o}":"\u014D",
-  "{\\u O}":"\u014E",                   "{\\u o}":"\u014F",                     "{\\H O}":"\u0150",                     "{\\H o}":"\u0151",
-  "{\\'R}":"\u0154",                    "{\\'r}":"\u0155",                      "{\\c R}":"\u0156",                     "{\\c r}":"\u0157",
-  "{\\v R}":"\u0158",                   "{\\v r}":"\u0159",                     "{\\'S}":"\u015A",                      "{\\'s}":"\u015B",
-  "{\\^S}":"\u015C",                    "{\\^s}":"\u015D",                      "{\\c S}":"\u015E",                     "{\\c s}":"\u015F",
-  "{\\v S}":"\u0160",                   "{\\v s}":"\u0161",                     "{\\c T}":"\u0162",                     "{\\c t}":"\u0163",
-  "{\\v T}":"\u0164",                   "{\\v t}":"\u0165",                     "{\\~U}":"\u0168",                      "{\\~u}":"\u0169",
-  "{\\=U}":"\u016A",                    "{\\=u}":"\u016B",                      "{\\u U}":"\u016C",                     "{\\u u}":"\u016D",
-  "{\\r U}":"\u016E",                   "{\\r u}":"\u016F",                     "{\\H U}":"\u0170",                     "{\\H u}":"\u0171",
-  "{\\k U}":"\u0172",                   "{\\k u}":"\u0173",                     "{\\^W}":"\u0174",                      "{\\^w}":"\u0175",
-  "{\\^Y}":"\u0176",                    "{\\^y}":"\u0177",                      "{\\\"Y}":"\u0178",                     "{\\'Z}":"\u0179",
-  "{\\'z}":"\u017A",                    "{\\.Z}":"\u017B",                      "{\\.z}":"\u017C",                      "{\\v Z}":"\u017D",
-  "{\\v z}":"\u017E",                   "{\\v A}":"\u01CD",                     "{\\v a}":"\u01CE",                     "{\\v I}":"\u01CF",
-  "{\\v i}":"\u01D0",                   "{\\v O}":"\u01D1",                     "{\\v o}":"\u01D2",                     "{\\v U}":"\u01D3",
-  "{\\v u}":"\u01D4",                   "{\\v G}":"\u01E6",                     "{\\v g}":"\u01E7",                     "{\\v K}":"\u01E8",
-  "{\\v k}":"\u01E9",                   "{\\k O}":"\u01EA",                     "{\\k o}":"\u01EB",                     "{\\v j}":"\u01F0",
-  "{\\'G}":"\u01F4",                    "{\\'g}":"\u01F5",                      "{\\.B}":"\u1E02",                      "{\\.b}":"\u1E03",
-  "{\\d B}":"\u1E04",                   "{\\d b}":"\u1E05",                     "{\\b B}":"\u1E06",                     "{\\b b}":"\u1E07",
-  "{\\.D}":"\u1E0A",                    "{\\.d}":"\u1E0B",                      "{\\d D}":"\u1E0C",                     "{\\d d}":"\u1E0D",
-  "{\\b D}":"\u1E0E",                   "{\\b d}":"\u1E0F",                     "{\\c D}":"\u1E10",                     "{\\c d}":"\u1E11",
-  "{\\.F}":"\u1E1E",                    "{\\.f}":"\u1E1F",                      "{\\=G}":"\u1E20",                      "{\\=g}":"\u1E21",
-  "{\\.H}":"\u1E22",                    "{\\.h}":"\u1E23",                      "{\\d H}":"\u1E24",                     "{\\d h}":"\u1E25",
-  "{\\\"H}":"\u1E26",                   "{\\\"h}":"\u1E27",                     "{\\c H}":"\u1E28",                     "{\\c h}":"\u1E29",
-  "{\\'K}":"\u1E30",                    "{\\'k}":"\u1E31",                      "{\\d K}":"\u1E32",                     "{\\d k}":"\u1E33",
-  "{\\b K}":"\u1E34",                   "{\\b k}":"\u1E35",                     "{\\d L}":"\u1E36",                     "{\\d l}":"\u1E37",
-  "{\\b L}":"\u1E3A",                   "{\\b l}":"\u1E3B",                     "{\\'M}":"\u1E3E",                      "{\\'m}":"\u1E3F",
-  "{\\.M}":"\u1E40",                    "{\\.m}":"\u1E41",                      "{\\d M}":"\u1E42",                     "{\\d m}":"\u1E43",
-  "{\\.N}":"\u1E44",                    "{\\.n}":"\u1E45",                      "{\\d N}":"\u1E46",                     "{\\d n}":"\u1E47",
-  "{\\b N}":"\u1E48",                   "{\\b n}":"\u1E49",                     "{\\'P}":"\u1E54",                      "{\\'p}":"\u1E55",
-  "{\\.P}":"\u1E56",                    "{\\.p}":"\u1E57",                      "{\\.R}":"\u1E58",                      "{\\.r}":"\u1E59",
-  "{\\d R}":"\u1E5A",                   "{\\d r}":"\u1E5B",                     "{\\b R}":"\u1E5E",                     "{\\b r}":"\u1E5F",
-  "{\\.S}":"\u1E60",                    "{\\.s}":"\u1E61",                      "{\\d S}":"\u1E62",                     "{\\d s}":"\u1E63",
-  "{\\.T}":"\u1E6A",                    "{\\.t}":"\u1E6B",                      "{\\d T}":"\u1E6C",                     "{\\d t}":"\u1E6D",
-  "{\\b T}":"\u1E6E",                   "{\\b t}":"\u1E6F",                     "{\\~V}":"\u1E7C",                      "{\\~v}":"\u1E7D",
-  "{\\d V}":"\u1E7E",                   "{\\d v}":"\u1E7F",                     "{\\`W}":"\u1E80",                      "{\\`w}":"\u1E81",
-  "{\\'W}":"\u1E82",                    "{\\'w}":"\u1E83",                      "{\\\"W}":"\u1E84",                     "{\\\"w}":"\u1E85",
-  "{\\.W}":"\u1E86",                    "{\\.w}":"\u1E87",                      "{\\d W}":"\u1E88",                     "{\\d w}":"\u1E89",
-  "{\\.X}":"\u1E8A",                    "{\\.x}":"\u1E8B",                      "{\\\"X}":"\u1E8C",                     "{\\\"x}":"\u1E8D",
-  "{\\.Y}":"\u1E8E",                    "{\\.y}":"\u1E8F",                      "{\\^Z}":"\u1E90",                      "{\\^z}":"\u1E91",
-  "{\\d Z}":"\u1E92",                   "{\\d z}":"\u1E93",                     "{\\b Z}":"\u1E94",                     "{\\b z}":"\u1E95",
-  "{\\b h}":"\u1E96",                   "{\\\"t}":"\u1E97",                     "{\\r w}":"\u1E98",                     "{\\r y}":"\u1e99",
-  "{\\d A}":"\u1EA0",                   "{\\d a}":"\u1EA1",                     "{\\d E}":"\u1EB8",                     "{\\d e}":"\u1EB9",
-  "{\\~E}":"\u1EBC",                    "{\\~e}":"\u1EBD",                      "{\\d I}":"\u1ECA",                     "{\\d i}":"\u1ECB",
-  "{\\d O}":"\u1ECC",                   "{\\d o}":"\u1ECD",                     "{\\d U}":"\u1EE4",                     "{\\d u}":"\u1EE5",
-  "{\\`Y}":"\u1EF2",                    "{\\`y}":"\u1EF3",                      "{\\d Y}":"\u1EF4",                     "{\\d y}":"\u1EF5",
-  "{\\~Y}":"\u1EF8",                    "{\\~y}":"\u1EF9",                      "{\\~}":"\u223C",                       "~":"\u00A0" 
-}
-},{}],28:[function(require,module,exports){
-'use strict';
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-/**
- * BibTeX pub type to CSL pub type
- *
- * @access protected
- * @method parseBibTeXType
- *
- * @param {String} pubType - BibTeX type
- *
- * @return {String} CSL type
- */
-var parseBibTeXType = function parseBibTeXType(pubType) {
-  switch (pubType) {
-    case 'article':
-      return 'article-journal';
-
-    case 'book':
-    case 'booklet':
-    case 'manual':
-    case 'misc':
-    case 'proceedings':
-      return 'book';
-
-    case 'inbook':
-    case 'incollection':
-      return 'chapter';
-
-    case 'conference':
-    case 'inproceedings':
-      return 'paper-conference';
-
-    case 'online':
-      return 'webpage';
-
-    case 'patent':
-      return 'patent';
-
-    case 'phdthesis':
-    case 'mastersthesis':
-      return 'thesis';
-
-    case 'techreport':
-      return 'report';
-
-    case 'unpublished':
-      return 'manuscript';
-
-    default:
-      console.warn('[set]', 'BibTeX publication type not recognized: ' + pubType + '. Interpreting as "book".');
-      return 'book';
-  }
-};
-
-exports.default = parseBibTeXType;
-},{}],29:[function(require,module,exports){
-'use strict';
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-/**
- * Convert epoch to CSL date
- *
- * @access protected
- * @function parseDate
- *
- * @param {Number|String} value - Epoch time or string in format "YYYY-MM-DD"
- *
- * @return {Object[]} Array of an object, containing the property "date-parts" with the value [ YYYY, MM, DD ]
- */
-var parseDate = function parseDate(value) {
-  var date = new Date(value);
-  return [{
-    'date-parts': [date.getFullYear(), date.getMonth() + 1, date.getDate()]
-  }];
-};
-
-exports.default = parseDate;
-},{}],30:[function(require,module,exports){
-'use strict';
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.json = exports.name = exports.date = exports.bibjson = exports.wikidata = exports.input = undefined;
-
-var _index = require('./input/index');
-
-var input = _interopRequireWildcard(_index);
-
-var _index2 = require('./wikidata/index');
-
-var wikidata = _interopRequireWildcard(_index2);
-
-var _index3 = require('./bibjson/index');
-
-var _index4 = _interopRequireDefault(_index3);
-
-var _date = require('./date');
-
-var _date2 = _interopRequireDefault(_date);
-
-var _name = require('./name');
-
-var _name2 = _interopRequireDefault(_name);
-
-var _json = require('./json');
-
-var _json2 = _interopRequireDefault(_json);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
-
-exports.input = input;
-exports.wikidata = wikidata;
-exports.bibjson = _index4.default;
-exports.date = _date2.default;
-exports.name = _name2.default;
-exports.json = _json2.default;
-},{"./bibjson/index":23,"./date":29,"./input/index":34,"./json":36,"./name":37,"./wikidata/index":39}],31:[function(require,module,exports){
-'use strict';
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _deepCopy = require('../../util/deepCopy');
-
-var _deepCopy2 = _interopRequireDefault(_deepCopy);
-
-var _type = require('./type');
-
-var _type2 = _interopRequireDefault(_type);
-
-var _data = require('./data');
-
-var _data2 = _interopRequireDefault(_data);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-/**
- * Parse input until success.
- *
- * @access protected
- * @method parseInput
- *
- * @param {String|String[]|Object|Object[]} input - The input data
- *
- * @return {CSL[]} The parsed input
- */
-var parseInput = function parseInput(input) {
-  var output = input;
-  var type = (0, _type2.default)(output);
-
-  if (type.match(/^(array|object)\//)) {
-    output = (0, _deepCopy2.default)(output);
-  }
-
-  // TODO max recursion level
-  while (type !== 'array/csl') {
-    output = (0, _data2.default)(output, type);
-    type = (0, _type2.default)(output);
-  }
-
-  return output;
-};
-
-exports.default = parseInput;
-},{"../../util/deepCopy":45,"./data":33,"./type":35}],32:[function(require,module,exports){
-'use strict';
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _deepCopy = require('../../util/deepCopy');
-
-var _deepCopy2 = _interopRequireDefault(_deepCopy);
-
-var _type = require('./type');
-
-var _type2 = _interopRequireDefault(_type);
-
-var _data = require('./data');
-
-var _data2 = _interopRequireDefault(_data);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-/**
- * Parse input once.
- *
- * @access protected
- * @method parseInputChainLink
- *
- * @param {String|String[]|Object|Object[]} input - The input data
- *
- * @return {CSL[]} The parsed input
- */
-var parseInputChainLink = function parseInputChainLink(input) {
-  var output = input;
-  var type = (0, _type2.default)(input);
-
-  if (type.match(/^(array|object)\//)) {
-    output = (0, _deepCopy2.default)(output);
-  }
-
-  return (0, _data2.default)(output, type);
-};
-
-exports.default = parseInputChainLink;
-},{"../../util/deepCopy":45,"./data":33,"./type":35}],33:[function(require,module,exports){
-'use strict';
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _regex = require('../regex');
-
-var _regex2 = _interopRequireDefault(_regex);
-
-var _fetchFile = require('../../util/fetchFile');
-
-var _fetchFile2 = _interopRequireDefault(_fetchFile);
-
-var _chain = require('./chain');
-
-var _chain2 = _interopRequireDefault(_chain);
-
-var _list = require('../wikidata/list');
-
-var _list2 = _interopRequireDefault(_list);
-
-var _json = require('../wikidata/json');
-
-var _json2 = _interopRequireDefault(_json);
-
-var _index = require('../bibjson/index');
-
-var _index2 = _interopRequireDefault(_index);
-
-var _text = require('../bibtex/text');
-
-var _text2 = _interopRequireDefault(_text);
-
-var _json3 = require('../bibtex/json');
-
-var _json4 = _interopRequireDefault(_json3);
-
-var _json5 = require('../json');
-
-var _json6 = _interopRequireDefault(_json5);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-/**
- * Standardise input (internal use)
- *
- * @access protected
- * @method parseInputData
- *
- * @param {String|String[]|Object|Object[]} input - The input data
- * @param {String} type - The input type
- *
- * @return {CSL[]} The parsed input
- */
-var parseInputData = function parseInputData(input, type) {
-  switch (type) {
-    case 'string/wikidata':
-      return (0, _list2.default)(input.match(_regex2.default.wikidata[0])[1]);
-
-    case 'list/wikidata':
-      return (0, _list2.default)(input.match(_regex2.default.wikidata[1])[1]);
-
-    case 'api/wikidata':
-      return (0, _fetchFile2.default)(input);
-
-    case 'url/wikidata':
-      return (0, _list2.default)(input.match(_regex2.default.wikidata[3])[1]);
-
-    case 'array/wikidata':
-      return (0, _list2.default)(input.join(','));
-
-    case 'url/else':
-      return (0, _fetchFile2.default)(input);
-
-    case 'jquery/else':
-      return input.val() || input.text() || input.html();
-
-    case 'html/else':
-      return input.value || input.textContent;
-
-    case 'string/json':
-      return (0, _json6.default)(input);
-
-    case 'string/bibtex':
-      return (0, _json4.default)((0, _text2.default)(input));
-
-    case 'object/wikidata':
-      return (0, _json2.default)(input);
-
-    case 'object/contentmine':
-      return (0, _index2.default)(input);
-
-    case 'array/else':
-      var output = [];
-      input.forEach(function (value) {
-        output = output.concat((0, _chain2.default)(value));
-      });
-      return output;
-
-    case 'object/csl':
-      return [input];
-
-    case 'array/csl':
-      return input;
-
-    case 'string/empty':
-    case 'string/whitespace':
-    case 'empty':
-    case 'invalid':
-    default:
-      return [];
-  }
-};
-
-exports.default = parseInputData;
-},{"../../util/fetchFile":46,"../bibjson/index":23,"../bibtex/json":24,"../bibtex/text":26,"../json":36,"../regex":38,"../wikidata/json":40,"../wikidata/list":41,"./chain":31}],34:[function(require,module,exports){
-'use strict';
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.chainLink = exports.chain = exports.data = exports.type = undefined;
-
-var _type = require('./type');
-
-var _type2 = _interopRequireDefault(_type);
-
-var _data = require('./data');
-
-var _data2 = _interopRequireDefault(_data);
-
-var _chain = require('./chain');
-
-var _chain2 = _interopRequireDefault(_chain);
-
-var _chainLink = require('./chainLink');
-
-var _chainLink2 = _interopRequireDefault(_chainLink);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-exports.type = _type2.default;
-exports.data = _data2.default;
-exports.chain = _chain2.default;
-exports.chainLink = _chainLink2.default;
-},{"./chain":31,"./chainLink":32,"./data":33,"./type":35}],35:[function(require,module,exports){
-'use strict';
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; /* global jQuery, HTMLElement */
-
-var _regex = require('../regex');
-
-var _regex2 = _interopRequireDefault(_regex);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-/**
- * Determine input type (internal use)
- *
- * @access protected
- * @method parseInputType
- *
- * @param {String|String[]|Object|Object[]} input - The input data
- *
- * @return {String} The input type
- */
-var parseInputType = function parseInputType(input) {
-  switch (typeof input === 'undefined' ? 'undefined' : _typeof(input)) {
-    case 'string':
-      // Empty
-      if (input.length === 0) {
-        return 'string/empty';
-      } else if (/^\s+$/.test(input)) {
-        return 'string/whitespace';
-        // Wikidata ID
-      } else if (_regex2.default.wikidata[0].test(input)) {
-        return 'string/wikidata';
-        // Wikidata entity list
-      } else if (_regex2.default.wikidata[1].test(input)) {
-        return 'list/wikidata';
-        // Wikidata API URL
-      } else if (_regex2.default.wikidata[2].test(input)) {
-        return 'api/wikidata';
-        // Wikidata URL
-      } else if (_regex2.default.wikidata[3].test(input)) {
-        return 'url/wikidata';
-        // BibTeX
-      } else if (_regex2.default.bibtex[0].test(input)) {
-        return 'string/bibtex';
-        // JSON
-      } else if (/^\s*(\{|\[)/.test(input)) {
-        return 'string/json';
-        // Else URL
-      } else if (_regex2.default.url.test(input)) {
-        return 'url/} else';
-        // Else
-      } else {
-        return console.warn('[set]', 'This format is not supported or recognised') || 'invalid';
-      }
-
-    case 'object':
-      // Empty
-      if (input === null) {
-        return 'empty';
-        // jQuery
-      } else if (typeof jQuery !== 'undefined' && input instanceof jQuery) {
-        return 'jquery/else';
-        // HTML
-      } else if (typeof HTMLElement !== 'undefined' && input instanceof HTMLElement) {
-        return 'html/else';
-        // Array
-      } else if (Array.isArray(input)) {
-        // Empty array (counts as csl for parsing purposes)
-        if (input.length === 0) {
-          return 'array/csl';
-          // Array of Wikidata IDs
-        } else if (input.filter(function (v) {
-          return parseInputType(v) === 'string/wikidata';
-        }).length === input.length) {
-          return 'array/wikidata';
-          // Array of CSL-JSON
-        } else if (input.filter(function (v) {
-          return parseInputType(v) === 'object/csl';
-        }).length === input.length) {
-          return 'array/csl';
-          // Array of misc or multiple types
-        } else {
-          return 'array/else';
-        }
-        // Object
-      } else {
-        // Wikidata
-        if (input.hasOwnProperty('entities')) {
-          return 'object/wikidata';
-          // ContentMine
-        } else if (input.fulltext_html && Array.isArray(input.fulltext_html.value) || input.fulltext_xml && Array.isArray(input.fulltext_xml.value) || input.fulltext_pdf && Array.isArray(input.fulltext_pdf.value)) {
-          return 'object/contentmine';
-          // CSL-JSON
-        } else {
-          return 'object/csl';
-        }
-      }
-
-    case 'undefined':
-      // Empty
-      return 'empty';
-
-    default:
-      console.warn('[set]', 'This format is not supported or recognised');
-      return 'invalid';
-  }
-};
-
-exports.default = parseInputType;
-},{"../regex":38}],36:[function(require,module,exports){
-'use strict';
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; }();
-
-var _regex = require('./regex');
-
-var _regex2 = _interopRequireDefault(_regex);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-/**
- * Parse (in)valid JSON
- *
- * @access protected
- * @method parseJSON
- *
- * @param {String} str - The input string
- *
- * @return {Object|Object[]|String[]} The parsed object
- */
-var parseJSON = function parseJSON(str) {
-  try {
-    return JSON.parse(str);
-  } catch (e) {
-    console.info('[set]', 'Input was not valid JSON, switching to experimental parser for invalid JSON');
-    try {
-      _regex2.default.json.forEach(function (_ref) {
-        var _ref2 = _slicedToArray(_ref, 2),
-            regex = _ref2[0],
-            subst = _ref2[1];
-
-        str = str.replace(regex, subst);
-      });
-      return JSON.parse(str);
-    } catch (e) {
-      console.error('[set]', 'Experimental parser failed. Please improve the JSON. If this is not JSON, please re-read the supported formats.');
-      return undefined;
-    }
-  }
-};
-
-exports.default = parseJSON;
-},{"./regex":38}],37:[function(require,module,exports){
-'use strict';
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; }();
-
-var _regex = require('./regex');
-
-var _regex2 = _interopRequireDefault(_regex);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-/**
- * Get CSL from name
- *
- * @access protected
- * @method parseName
- *
- * @param {String} name - string
- *
- * @return {Object} The CSL object
- */
-var parseName = function parseName(name) {
-  var _ref = name.includes(', ') ? name.split(', ').reverse() : name.split(_regex2.default.name),
-      _ref2 = _slicedToArray(_ref, 2),
-      given = _ref2[0],
-      family = _ref2[1];
-
-  return {
-    given: given,
-    family: family
-  };
-};
-
-exports.default = parseName;
-},{"./regex":38}],38:[function(require,module,exports){
-'use strict';
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-/**
- * Object containing several RegExp patterns, mostly used for parsing (*full of shame*) and recognizing data types
- *
- * @access protected
- * @constant varRegex
- * @default
- */
-var regex = {
-  url: /^(https?:\/\/)?((([a-z\d]([a-z\d-]*[a-z\d])*)\.)+[a-z]{2,}|((\d{1,3}\.){3}\d{1,3})|localhost)(:\d+)?(\/[-a-z\d%_.~+:]*)*(\?[;&a-z\d%_.~+=-]*)?(#[-a-z\d_]*)?$/i,
-  bibtex: [/^(?:\s*@\s*[^@]+?\s*\{\s*[^@]+?\s*,\s*[^@]+\})+\s*$/, /^\s$/, /^[@{}"=,\\]$/],
-  wikidata: [/^\s*(Q\d+)\s*$/, /^\s*((?:Q\d+(?:\s+|,|))*Q\d+)\s*$/, /^(https?:\/\/(?:www\.)wikidata.org\/w\/api\.php(?:\?.*)?)$/, /\/(Q\d+)(?:[#?/]|\s*$)/],
-  json: [[/((?:\[|:|,)\s*)'((?:\\'|[^'])*?[^\\])?'(?=\s*(?:\]|}|,))/g, '$1"$2"'], [/((?:(?:"|]|}|\/[gmi]|\.|(?:\d|\.|-)*\d)\s*,|{)\s*)(?:"([^":\n]+?)"|'([^":\n]+?)'|([^":\n]+?))(\s*):/g, '$1"$2$3$4"$5:']],
-  name: / (?=(?:[a-z]+ )*(?:[A-Z][a-z]*[-])*(?:[A-Z][a-z]*)$)/
-};
-
-exports.default = regex;
-},{}],39:[function(require,module,exports){
-'use strict';
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.type = exports.prop = exports.json = exports.list = undefined;
-
-var _list = require('./list');
-
-var _list2 = _interopRequireDefault(_list);
-
-var _json = require('./json');
-
-var _json2 = _interopRequireDefault(_json);
-
-var _prop = require('./prop');
-
-var _prop2 = _interopRequireDefault(_prop);
-
-var _type = require('./type');
-
-var _type2 = _interopRequireDefault(_type);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-exports.list = _list2.default;
-exports.json = _json2.default;
-exports.prop = _prop2.default;
-exports.type = _type2.default;
-},{"./json":40,"./list":41,"./prop":42,"./type":43}],40:[function(require,module,exports){
-'use strict';
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; }();
-
-var _wikidataSdk = require('wikidata-sdk');
-
-var _wikidataSdk2 = _interopRequireDefault(_wikidataSdk);
-
-var _prop = require('./prop');
-
-var _prop2 = _interopRequireDefault(_prop);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-/**
- * Format Wikidata data
- *
- * @access protected
- * @method parseWikidataJSON
- *
- * @param {Object} data - The input data
- *
- * @return {CSL[]} The formatted input data
- */
-var parseWikidataJSON = function parseWikidataJSON(data) {
-  return Object.keys(data.entities).map(function (entityKey) {
-    var _data$entities$entity = data.entities[entityKey],
-        labels = _data$entities$entity.labels,
-        claims = _data$entities$entity.claims;
-
-    var entity = _wikidataSdk2.default.simplifyClaims(claims, null, null, true);
-    var json = {
-      wikiId: entityKey,
-      id: entityKey
-    };
-
-    Object.keys(entity).forEach(function (prop) {
-      var value = entity[prop];
-
-      var _parseWikidataProp = (0, _prop2.default)(prop, value, 'en'),
-          _parseWikidataProp2 = _slicedToArray(_parseWikidataProp, 2),
-          resProp = _parseWikidataProp2[0],
-          resValue = _parseWikidataProp2[1];
-
-      if (resProp.length > 0) {
-        json[resProp] = resValue;
-      }
-    });
-
-    // It still has to combine authors from string value and numeric-id value :(
-    if (json.hasOwnProperty('authorQ') || json.hasOwnProperty('authorS')) {
-      if (json.hasOwnProperty('authorQ') && json.hasOwnProperty('authorS')) {
-        json.author = json.authorQ.concat(json.authorS);
-        delete json.authorQ;
-        delete json.authorS;
-      } else if (json.hasOwnProperty('authorQ')) {
-        json.author = json.authorQ;
-        delete json.authorQ;
-      } else if (json.hasOwnProperty('authorS')) {
-        json.author = json.authorS;
-        delete json.authorS;
-      }
-      json.author = json.author.sort(function (a, b) {
-        return a[1] - b[1];
-      }).map(function (v) {
-        return v[0];
-      });
-    }
-
-    if (!json.title) {
-      json.title = labels['en'].value;
-    }
-
-    return json;
-  });
-};
-
-exports.default = parseWikidataJSON;
-},{"./prop":42,"wikidata-sdk":367}],41:[function(require,module,exports){
-'use strict';
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _wikidataSdk = require('wikidata-sdk');
-
-var _wikidataSdk2 = _interopRequireDefault(_wikidataSdk);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-/**
- * Get Wikidata JSON from Wikidata IDs
- *
- * @access protected
- * @method parseWikidata
- *
- * @param {String} data - Wikidata IDs
- *
- * @return {Object} Wikidata JSON
- */
-var parseWikidata = function parseWikidata(data) {
-  return [].concat(_wikidataSdk2.default.getEntities(data.split(/(?:\s+|,\s*)/g), ['en']));
-};
-
-exports.default = parseWikidata;
-},{"wikidata-sdk":367}],42:[function(require,module,exports){
-'use strict';
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _wikidataSdk = require('wikidata-sdk');
-
-var _wikidataSdk2 = _interopRequireDefault(_wikidataSdk);
-
-var _fetchFile = require('../../util/fetchFile');
-
-var _fetchFile2 = _interopRequireDefault(_fetchFile);
-
-var _type = require('./type');
-
-var _type2 = _interopRequireDefault(_type);
-
-var _date = require('../date');
-
-var _date2 = _interopRequireDefault(_date);
-
-var _name = require('../name');
-
-var _name2 = _interopRequireDefault(_name);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-/**
- * Get the names of objects from Wikidata IDs
- *
- * @access protected
- * @method fetchWikidataLabel
- *
- * @param {String|String[]} q - Wikidata IDs
- * @param {String} lang - Language
- *
- * @return {String[]} Array with labels of each prop
- */
-var fetchWikidataLabel = function fetchWikidataLabel(q, lang) {
-  var ids = Array.isArray(q) ? q : typeof q === 'string' ? q.split('|') : '';
-  var url = _wikidataSdk2.default.getEntities(ids, [lang], 'labels');
-  var entities = JSON.parse((0, _fetchFile2.default)(url)).entities || {};
-
-  return Object.keys(entities).map(function (entityKey) {
-    return (entities[entityKey].labels[lang] || {}).value;
-  });
-};
-
-/**
- * Get series ordinal from qualifiers object
- *
- * @access protected
- * @method parseWikidataProp
- *
- * @param {Object} qualifiers - qualifiers object
- *
- * @return {Number} series ordinal or -1
- */
-var parseWikidataP1545 = function parseWikidataP1545(qualifiers) {
-  return qualifiers.P1545 ? parseInt(qualifiers.P1545[0]) : -1;
-};
-
-/**
- * Transform property and value from Wikidata format to CSL
- *
- * @access protected
- * @method parseWikidataProp
- *
- * @param {String} prop - Property
- * @param {String|Number} value - Value
- * @param {String} lang - Language
- *
- * @return {String[]} Array with new prop and value
- */
-var parseWikidataProp = function parseWikidataProp(prop, value, lang) {
-  switch (prop) {
-    case 'P50':
-    case 'P2093':
-      value = value.slice();
-      break;
-
-    default:
-      value = value[0].value;
-      break;
-  }
-
-  var rProp = '';
-  var rValue = value;
-
-  switch (prop) {
-    // Author ( q )
-    case 'P50':
-      rProp = 'authorQ';
-      rValue = value.map(function (_ref) {
-        var value = _ref.value,
-            qualifiers = _ref.qualifiers;
-        return [(0, _name2.default)(fetchWikidataLabel(value, lang)[0]), parseWikidataP1545(qualifiers)];
-      });
-      break;
-
-    // Author ( s )
-    case 'P2093':
-      rProp = 'authorS';
-      rValue = value.map(function (_ref2) {
-        var value = _ref2.value,
-            qualifiers = _ref2.qualifiers;
-        return [(0, _name2.default)(value), parseWikidataP1545(qualifiers)];
-      });
-      break;
-
-    // Date
-    case 'P580':
-    case 'P585':
-      rProp = 'accessed';
-      rValue = (0, _date2.default)(value);
-      break;
-
-    // DOI
-    case 'P356':
-      rProp = 'DOI';
-      break;
-
-    // Instance of
-    case 'P31':
-      rProp = 'type';
-      rValue = (0, _type2.default)(value);
-
-      if (rValue === undefined) {
-        console.warn('[set]', 'This entry type is not recognized and therefore interpreted as \'article-journal\': ' + value);
-        rValue = 'article-journal';
-      }
-      break;
-
-    // ISBN 13 & 10
-    case 'P212':
-    case 'P957':
-      rProp = 'ISBN';
-      break;
-
-    // Issue
-    case 'P433':
-      rProp = 'issue';
-      break;
-
-    // Journal
-    case 'P1433':
-      rProp = 'container-title';
-      rValue = fetchWikidataLabel(value, lang)[0];
-      break;
-
-    // Pages
-    case 'P304':
-      rProp = 'page';
-      break;
-
-    // Print/edition
-    case 'P393':
-      rProp = 'edition';
-      break;
-
-    // Pubdate
-    case 'P577':
-      rProp = 'issued';
-      rValue = (0, _date2.default)(value);
-      break;
-
-    // Title
-    case 'P1476':
-      rProp = 'title';
-      break;
-
-    // URL
-    case 'P953':
-      // (full work available at)
-      rProp = 'URL';
-      break;
-
-    // Volume
-    case 'P478':
-      rProp = 'volume';
-      break;
-
-    case 'P2860': // Cites
-    case 'P921': // Main subject
-    case 'P3181': // OpenCitations bibliographic resource ID
-    case 'P364': // Original language of work
-    case 'P698': // PMID
-    case 'P932': // PMCID
-    case 'P1104':
-      // Number of pages
-      // Property ignored
-      break;
-
-    default:
-      console.info('[set]', 'Unknown property: ' + prop);
-      break;
-  }
-
-  return [rProp, rValue];
-};
-
-exports.default = parseWikidataProp;
-},{"../../util/fetchFile":46,"../date":29,"../name":37,"./type":43,"wikidata-sdk":367}],43:[function(require,module,exports){
-'use strict';
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-/**
- * Object containing a list of Wikidata Instances and it's corresponding name as specified by the docs
- *
- * @access protected
- * @constant varWikidataTypes
- * @default
- */
-var varWikidataTypes = {
-  Q13442814: 'article-journal',
-  Q18918145: 'article-journal',
-  Q191067: 'article',
-  Q3331189: 'book',
-  Q571: 'book'
-};
-
-/**
- * Get CSL type from Wikidata type (P31)
- *
- * @access protected
- * @method fetchWikidataType
- *
- * @param {String} value - Input P31 Wikidata ID
- *
- * @return {String} Output CSL type
- */
-var fetchWikidataType = function fetchWikidataType(value) {
-  return varWikidataTypes[value];
-};
-
-exports.default = fetchWikidataType;
-},{}],44:[function(require,module,exports){
-'use strict';
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-/**
- * Add data-* attribute to a HTML string
- *
- * @access protected
- * @method getAttributedEntry
- *
- * @param {String} string - HTML string
- * @param {String} name - attribute name
- * @param {String} value - attribute value
- *
- * @return {String} HTML string with attribute
- */
-var getAttributedEntry = function getAttributedEntry(string, name, value) {
-  return string.replace(/^\s*<[a-z]+/, function (match) {
-    return match + ' data-' + name + '="' + value + '"';
-  });
-};
-
-/**
- * Add CSL identifiers to entry
- *
- * @access protected
- * @method getPrefixedEntry
- *
- * @param {String} value - HTML string
- * @param {Number} index - ID index
- * @param {String[]} list - ID list
- *
- * @return {String} HTML string with CSL ID
- */
-var getPrefixedEntry = function getPrefixedEntry(value, index, list) {
-  return getAttributedEntry(value, 'csl-entry-id', list[index]);
-};
-
-exports.getAttributedEntry = getAttributedEntry;
-exports.getPrefixedEntry = getPrefixedEntry;
-},{}],45:[function(require,module,exports){
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-/**
- * Duplicate objects to prevent Cite changing values outside of own scope
- *
- * @access protected
- * @method deepCopy
- *
- * @param {Object} obj - Input object
- *
- * @return {Object} Duplicated object
- */
-var deepCopy = function deepCopy(obj) {
-  return JSON.parse(JSON.stringify(obj));
-};
-
-exports.default = deepCopy;
-},{}],46:[function(require,module,exports){
-'use strict';
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _syncRequest = require('sync-request');
-
-var _syncRequest2 = _interopRequireDefault(_syncRequest);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-/**
- * Fetch file
- *
- * @access protected
- * @method fetchFile
- *
- * @param {String} url - The input url
- *
- * @return {String} The fetched string
- */
-var fetchFile = function fetchFile(url) {
-  try {
-    return (0, _syncRequest2.default)('GET', url, { uri: url }).getBody('utf8');
-  } catch (e) {
-    console.error('[set]', 'File could not be fetched');
-    return undefined;
-  }
-};
-
-exports.default = fetchFile;
-},{"sync-request":358}],47:[function(require,module,exports){
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-/**
- * Generate ID
- *
- * @access protected
- * @method fetchId
- *
- * @param {String[]} list - old ID list
- * @param {String} prefix - ID prefix
- *
- * @return {String} CSL ID
- */
-var fetchId = function fetchId(list, prefix) {
-  var id = void 0;
-
-  while (list.includes(id)) {
-    id = "" + prefix + Math.random().toString().slice(2);
-  }
-
-  return id;
-};
-
-exports.default = fetchId;
-},{}],48:[function(require,module,exports){
-'use strict';
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.fetchId = exports.fetchFile = exports.deepCopy = exports.attr = undefined;
-
-var _attr = require('./attr');
-
-var attr = _interopRequireWildcard(_attr);
-
-var _deepCopy = require('./deepCopy');
-
-var _deepCopy2 = _interopRequireDefault(_deepCopy);
-
-var _fetchFile = require('./fetchFile');
-
-var _fetchFile2 = _interopRequireDefault(_fetchFile);
-
-var _fetchId = require('./fetchId');
-
-var _fetchId2 = _interopRequireDefault(_fetchId);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
-
-exports.attr = attr;
-exports.deepCopy = _deepCopy2.default;
-exports.fetchFile = _fetchFile2.default;
-exports.fetchId = _fetchId2.default;
-},{"./attr":44,"./deepCopy":45,"./fetchFile":46,"./fetchId":47}],49:[function(require,module,exports){
-'use strict';
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.citeproc = exports.cite = undefined;
-
-var _package = require('../package.json');
-
-var _citeproc = require('citeproc');
-
-var _citeproc2 = _interopRequireDefault(_citeproc);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-var citeproc = _citeproc2.default.PROCESSOR_VERSION;
-
-exports.cite = _package.version;
-exports.citeproc = citeproc;
-},{"../package.json":378,"citeproc":51}],50:[function(require,module,exports){
 (function (global){
 "use strict";
 
@@ -3134,8 +28,9 @@ define(String.prototype, "padRight", "".padEnd);
 "pop,reverse,shift,keys,values,entries,indexOf,every,some,forEach,map,filter,find,findIndex,includes,join,slice,concat,push,splice,unshift,sort,lastIndexOf,reduce,reduceRight,copyWithin,fill".split(",").forEach(function (key) {
   [][key] && define(Array, key, Function.call.bind([][key]));
 });
+
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"core-js/fn/regexp/escape":52,"core-js/shim":345,"regenerator-runtime/runtime":356}],51:[function(require,module,exports){
+},{"core-js/fn/regexp/escape":3,"core-js/shim":296,"regenerator-runtime/runtime":307}],2:[function(require,module,exports){
 /*
  * Copyright (c) 2009-2016 Frank Bennett
  * 
@@ -19895,115 +16790,146 @@ CSL.parseParticles = function(){
 
 if (typeof module != 'undefined') { module.exports = CSL }
 
-},{}],52:[function(require,module,exports){
+},{}],3:[function(require,module,exports){
+'use strict';
+
 require('../../modules/core.regexp.escape');
 module.exports = require('../../modules/_core').RegExp.escape;
-},{"../../modules/_core":73,"../../modules/core.regexp.escape":169}],53:[function(require,module,exports){
-module.exports = function(it){
-  if(typeof it != 'function')throw TypeError(it + ' is not a function!');
+
+},{"../../modules/_core":24,"../../modules/core.regexp.escape":120}],4:[function(require,module,exports){
+'use strict';
+
+module.exports = function (it) {
+  if (typeof it != 'function') throw TypeError(it + ' is not a function!');
   return it;
 };
-},{}],54:[function(require,module,exports){
+
+},{}],5:[function(require,module,exports){
+'use strict';
+
 var cof = require('./_cof');
-module.exports = function(it, msg){
-  if(typeof it != 'number' && cof(it) != 'Number')throw TypeError(msg);
+module.exports = function (it, msg) {
+  if (typeof it != 'number' && cof(it) != 'Number') throw TypeError(msg);
   return +it;
 };
-},{"./_cof":68}],55:[function(require,module,exports){
+
+},{"./_cof":19}],6:[function(require,module,exports){
+'use strict';
+
 // 22.1.3.31 Array.prototype[@@unscopables]
-var UNSCOPABLES = require('./_wks')('unscopables')
-  , ArrayProto  = Array.prototype;
-if(ArrayProto[UNSCOPABLES] == undefined)require('./_hide')(ArrayProto, UNSCOPABLES, {});
-module.exports = function(key){
+var UNSCOPABLES = require('./_wks')('unscopables'),
+    ArrayProto = Array.prototype;
+if (ArrayProto[UNSCOPABLES] == undefined) require('./_hide')(ArrayProto, UNSCOPABLES, {});
+module.exports = function (key) {
   ArrayProto[UNSCOPABLES][key] = true;
 };
-},{"./_hide":90,"./_wks":167}],56:[function(require,module,exports){
-module.exports = function(it, Constructor, name, forbiddenField){
-  if(!(it instanceof Constructor) || (forbiddenField !== undefined && forbiddenField in it)){
+
+},{"./_hide":41,"./_wks":118}],7:[function(require,module,exports){
+'use strict';
+
+module.exports = function (it, Constructor, name, forbiddenField) {
+  if (!(it instanceof Constructor) || forbiddenField !== undefined && forbiddenField in it) {
     throw TypeError(name + ': incorrect invocation!');
-  } return it;
+  }return it;
 };
-},{}],57:[function(require,module,exports){
+
+},{}],8:[function(require,module,exports){
+'use strict';
+
 var isObject = require('./_is-object');
-module.exports = function(it){
-  if(!isObject(it))throw TypeError(it + ' is not an object!');
+module.exports = function (it) {
+  if (!isObject(it)) throw TypeError(it + ' is not an object!');
   return it;
 };
-},{"./_is-object":99}],58:[function(require,module,exports){
+
+},{"./_is-object":50}],9:[function(require,module,exports){
 // 22.1.3.3 Array.prototype.copyWithin(target, start, end = this.length)
 'use strict';
-var toObject = require('./_to-object')
-  , toIndex  = require('./_to-index')
-  , toLength = require('./_to-length');
 
-module.exports = [].copyWithin || function copyWithin(target/*= 0*/, start/*= 0, end = @length*/){
-  var O     = toObject(this)
-    , len   = toLength(O.length)
-    , to    = toIndex(target, len)
-    , from  = toIndex(start, len)
-    , end   = arguments.length > 2 ? arguments[2] : undefined
-    , count = Math.min((end === undefined ? len : toIndex(end, len)) - from, len - to)
-    , inc   = 1;
-  if(from < to && to < from + count){
-    inc  = -1;
+var toObject = require('./_to-object'),
+    toIndex = require('./_to-index'),
+    toLength = require('./_to-length');
+
+module.exports = [].copyWithin || function copyWithin(target /*= 0*/, start /*= 0, end = @length*/) {
+  var O = toObject(this),
+      len = toLength(O.length),
+      to = toIndex(target, len),
+      from = toIndex(start, len),
+      end = arguments.length > 2 ? arguments[2] : undefined,
+      count = Math.min((end === undefined ? len : toIndex(end, len)) - from, len - to),
+      inc = 1;
+  if (from < to && to < from + count) {
+    inc = -1;
     from += count - 1;
-    to   += count - 1;
+    to += count - 1;
   }
-  while(count-- > 0){
-    if(from in O)O[to] = O[from];
-    else delete O[to];
-    to   += inc;
+  while (count-- > 0) {
+    if (from in O) O[to] = O[from];else delete O[to];
+    to += inc;
     from += inc;
-  } return O;
+  }return O;
 };
-},{"./_to-index":155,"./_to-length":158,"./_to-object":159}],59:[function(require,module,exports){
+
+},{"./_to-index":106,"./_to-length":109,"./_to-object":110}],10:[function(require,module,exports){
 // 22.1.3.6 Array.prototype.fill(value, start = 0, end = this.length)
 'use strict';
-var toObject = require('./_to-object')
-  , toIndex  = require('./_to-index')
-  , toLength = require('./_to-length');
-module.exports = function fill(value /*, start = 0, end = @length */){
-  var O      = toObject(this)
-    , length = toLength(O.length)
-    , aLen   = arguments.length
-    , index  = toIndex(aLen > 1 ? arguments[1] : undefined, length)
-    , end    = aLen > 2 ? arguments[2] : undefined
-    , endPos = end === undefined ? length : toIndex(end, length);
-  while(endPos > index)O[index++] = value;
-  return O;
+
+var toObject = require('./_to-object'),
+    toIndex = require('./_to-index'),
+    toLength = require('./_to-length');
+module.exports = function fill(value /*, start = 0, end = @length */) {
+  var O = toObject(this),
+      length = toLength(O.length),
+      aLen = arguments.length,
+      index = toIndex(aLen > 1 ? arguments[1] : undefined, length),
+      end = aLen > 2 ? arguments[2] : undefined,
+      endPos = end === undefined ? length : toIndex(end, length);
+  while (endPos > index) {
+    O[index++] = value;
+  }return O;
 };
-},{"./_to-index":155,"./_to-length":158,"./_to-object":159}],60:[function(require,module,exports){
+
+},{"./_to-index":106,"./_to-length":109,"./_to-object":110}],11:[function(require,module,exports){
+'use strict';
+
 var forOf = require('./_for-of');
 
-module.exports = function(iter, ITERATOR){
+module.exports = function (iter, ITERATOR) {
   var result = [];
   forOf(iter, false, result.push, result, ITERATOR);
   return result;
 };
 
-},{"./_for-of":87}],61:[function(require,module,exports){
+},{"./_for-of":38}],12:[function(require,module,exports){
+'use strict';
+
 // false -> Array#indexOf
 // true  -> Array#includes
-var toIObject = require('./_to-iobject')
-  , toLength  = require('./_to-length')
-  , toIndex   = require('./_to-index');
-module.exports = function(IS_INCLUDES){
-  return function($this, el, fromIndex){
-    var O      = toIObject($this)
-      , length = toLength(O.length)
-      , index  = toIndex(fromIndex, length)
-      , value;
+var toIObject = require('./_to-iobject'),
+    toLength = require('./_to-length'),
+    toIndex = require('./_to-index');
+module.exports = function (IS_INCLUDES) {
+  return function ($this, el, fromIndex) {
+    var O = toIObject($this),
+        length = toLength(O.length),
+        index = toIndex(fromIndex, length),
+        value;
     // Array#includes uses SameValueZero equality algorithm
-    if(IS_INCLUDES && el != el)while(length > index){
+    if (IS_INCLUDES && el != el) while (length > index) {
       value = O[index++];
-      if(value != value)return true;
-    // Array#toIndex ignores holes, Array#includes - not
-    } else for(;length > index; index++)if(IS_INCLUDES || index in O){
-      if(O[index] === el)return IS_INCLUDES || index || 0;
-    } return !IS_INCLUDES && -1;
+      if (value != value) return true;
+      // Array#toIndex ignores holes, Array#includes - not
+    } else for (; length > index; index++) {
+      if (IS_INCLUDES || index in O) {
+        if (O[index] === el) return IS_INCLUDES || index || 0;
+      }
+    }return !IS_INCLUDES && -1;
   };
 };
-},{"./_to-index":155,"./_to-iobject":157,"./_to-length":158}],62:[function(require,module,exports){
+
+},{"./_to-index":106,"./_to-iobject":108,"./_to-length":109}],13:[function(require,module,exports){
+'use strict';
+
 // 0 -> Array#forEach
 // 1 -> Array#map
 // 2 -> Array#filter
@@ -20011,194 +16937,225 @@ module.exports = function(IS_INCLUDES){
 // 4 -> Array#every
 // 5 -> Array#find
 // 6 -> Array#findIndex
-var ctx      = require('./_ctx')
-  , IObject  = require('./_iobject')
-  , toObject = require('./_to-object')
-  , toLength = require('./_to-length')
-  , asc      = require('./_array-species-create');
-module.exports = function(TYPE, $create){
-  var IS_MAP        = TYPE == 1
-    , IS_FILTER     = TYPE == 2
-    , IS_SOME       = TYPE == 3
-    , IS_EVERY      = TYPE == 4
-    , IS_FIND_INDEX = TYPE == 6
-    , NO_HOLES      = TYPE == 5 || IS_FIND_INDEX
-    , create        = $create || asc;
-  return function($this, callbackfn, that){
-    var O      = toObject($this)
-      , self   = IObject(O)
-      , f      = ctx(callbackfn, that, 3)
-      , length = toLength(self.length)
-      , index  = 0
-      , result = IS_MAP ? create($this, length) : IS_FILTER ? create($this, 0) : undefined
-      , val, res;
-    for(;length > index; index++)if(NO_HOLES || index in self){
-      val = self[index];
-      res = f(val, index, O);
-      if(TYPE){
-        if(IS_MAP)result[index] = res;            // map
-        else if(res)switch(TYPE){
-          case 3: return true;                    // some
-          case 5: return val;                     // find
-          case 6: return index;                   // findIndex
-          case 2: result.push(val);               // filter
-        } else if(IS_EVERY)return false;          // every
+var ctx = require('./_ctx'),
+    IObject = require('./_iobject'),
+    toObject = require('./_to-object'),
+    toLength = require('./_to-length'),
+    asc = require('./_array-species-create');
+module.exports = function (TYPE, $create) {
+  var IS_MAP = TYPE == 1,
+      IS_FILTER = TYPE == 2,
+      IS_SOME = TYPE == 3,
+      IS_EVERY = TYPE == 4,
+      IS_FIND_INDEX = TYPE == 6,
+      NO_HOLES = TYPE == 5 || IS_FIND_INDEX,
+      create = $create || asc;
+  return function ($this, callbackfn, that) {
+    var O = toObject($this),
+        self = IObject(O),
+        f = ctx(callbackfn, that, 3),
+        length = toLength(self.length),
+        index = 0,
+        result = IS_MAP ? create($this, length) : IS_FILTER ? create($this, 0) : undefined,
+        val,
+        res;
+    for (; length > index; index++) {
+      if (NO_HOLES || index in self) {
+        val = self[index];
+        res = f(val, index, O);
+        if (TYPE) {
+          if (IS_MAP) result[index] = res; // map
+          else if (res) switch (TYPE) {
+              case 3:
+                return true; // some
+              case 5:
+                return val; // find
+              case 6:
+                return index; // findIndex
+              case 2:
+                result.push(val); // filter
+            } else if (IS_EVERY) return false; // every
+        }
       }
-    }
-    return IS_FIND_INDEX ? -1 : IS_SOME || IS_EVERY ? IS_EVERY : result;
+    }return IS_FIND_INDEX ? -1 : IS_SOME || IS_EVERY ? IS_EVERY : result;
   };
 };
-},{"./_array-species-create":65,"./_ctx":75,"./_iobject":95,"./_to-length":158,"./_to-object":159}],63:[function(require,module,exports){
-var aFunction = require('./_a-function')
-  , toObject  = require('./_to-object')
-  , IObject   = require('./_iobject')
-  , toLength  = require('./_to-length');
 
-module.exports = function(that, callbackfn, aLen, memo, isRight){
+},{"./_array-species-create":16,"./_ctx":26,"./_iobject":46,"./_to-length":109,"./_to-object":110}],14:[function(require,module,exports){
+'use strict';
+
+var aFunction = require('./_a-function'),
+    toObject = require('./_to-object'),
+    IObject = require('./_iobject'),
+    toLength = require('./_to-length');
+
+module.exports = function (that, callbackfn, aLen, memo, isRight) {
   aFunction(callbackfn);
-  var O      = toObject(that)
-    , self   = IObject(O)
-    , length = toLength(O.length)
-    , index  = isRight ? length - 1 : 0
-    , i      = isRight ? -1 : 1;
-  if(aLen < 2)for(;;){
-    if(index in self){
+  var O = toObject(that),
+      self = IObject(O),
+      length = toLength(O.length),
+      index = isRight ? length - 1 : 0,
+      i = isRight ? -1 : 1;
+  if (aLen < 2) for (;;) {
+    if (index in self) {
       memo = self[index];
       index += i;
       break;
     }
     index += i;
-    if(isRight ? index < 0 : length <= index){
+    if (isRight ? index < 0 : length <= index) {
       throw TypeError('Reduce of empty array with no initial value');
     }
   }
-  for(;isRight ? index >= 0 : length > index; index += i)if(index in self){
-    memo = callbackfn(memo, self[index], index, O);
-  }
-  return memo;
+  for (; isRight ? index >= 0 : length > index; index += i) {
+    if (index in self) {
+      memo = callbackfn(memo, self[index], index, O);
+    }
+  }return memo;
 };
-},{"./_a-function":53,"./_iobject":95,"./_to-length":158,"./_to-object":159}],64:[function(require,module,exports){
-var isObject = require('./_is-object')
-  , isArray  = require('./_is-array')
-  , SPECIES  = require('./_wks')('species');
 
-module.exports = function(original){
+},{"./_a-function":4,"./_iobject":46,"./_to-length":109,"./_to-object":110}],15:[function(require,module,exports){
+'use strict';
+
+var isObject = require('./_is-object'),
+    isArray = require('./_is-array'),
+    SPECIES = require('./_wks')('species');
+
+module.exports = function (original) {
   var C;
-  if(isArray(original)){
+  if (isArray(original)) {
     C = original.constructor;
     // cross-realm fallback
-    if(typeof C == 'function' && (C === Array || isArray(C.prototype)))C = undefined;
-    if(isObject(C)){
+    if (typeof C == 'function' && (C === Array || isArray(C.prototype))) C = undefined;
+    if (isObject(C)) {
       C = C[SPECIES];
-      if(C === null)C = undefined;
+      if (C === null) C = undefined;
     }
-  } return C === undefined ? Array : C;
+  }return C === undefined ? Array : C;
 };
-},{"./_is-array":97,"./_is-object":99,"./_wks":167}],65:[function(require,module,exports){
+
+},{"./_is-array":48,"./_is-object":50,"./_wks":118}],16:[function(require,module,exports){
+'use strict';
+
 // 9.4.2.3 ArraySpeciesCreate(originalArray, length)
 var speciesConstructor = require('./_array-species-constructor');
 
-module.exports = function(original, length){
+module.exports = function (original, length) {
   return new (speciesConstructor(original))(length);
 };
-},{"./_array-species-constructor":64}],66:[function(require,module,exports){
-'use strict';
-var aFunction  = require('./_a-function')
-  , isObject   = require('./_is-object')
-  , invoke     = require('./_invoke')
-  , arraySlice = [].slice
-  , factories  = {};
 
-var construct = function(F, len, args){
-  if(!(len in factories)){
-    for(var n = [], i = 0; i < len; i++)n[i] = 'a[' + i + ']';
-    factories[len] = Function('F,a', 'return new F(' + n.join(',') + ')');
-  } return factories[len](F, args);
+},{"./_array-species-constructor":15}],17:[function(require,module,exports){
+'use strict';
+
+var aFunction = require('./_a-function'),
+    isObject = require('./_is-object'),
+    invoke = require('./_invoke'),
+    arraySlice = [].slice,
+    factories = {};
+
+var construct = function construct(F, len, args) {
+  if (!(len in factories)) {
+    for (var n = [], i = 0; i < len; i++) {
+      n[i] = 'a[' + i + ']';
+    }factories[len] = Function('F,a', 'return new F(' + n.join(',') + ')');
+  }return factories[len](F, args);
 };
 
-module.exports = Function.bind || function bind(that /*, args... */){
-  var fn       = aFunction(this)
-    , partArgs = arraySlice.call(arguments, 1);
-  var bound = function(/* args... */){
+module.exports = Function.bind || function bind(that /*, args... */) {
+  var fn = aFunction(this),
+      partArgs = arraySlice.call(arguments, 1);
+  var bound = function bound() /* args... */{
     var args = partArgs.concat(arraySlice.call(arguments));
     return this instanceof bound ? construct(fn, args.length, args) : invoke(fn, args, that);
   };
-  if(isObject(fn.prototype))bound.prototype = fn.prototype;
+  if (isObject(fn.prototype)) bound.prototype = fn.prototype;
   return bound;
 };
-},{"./_a-function":53,"./_invoke":94,"./_is-object":99}],67:[function(require,module,exports){
+
+},{"./_a-function":4,"./_invoke":45,"./_is-object":50}],18:[function(require,module,exports){
+'use strict';
+
 // getting tag from 19.1.3.6 Object.prototype.toString()
-var cof = require('./_cof')
-  , TAG = require('./_wks')('toStringTag')
-  // ES3 wrong here
-  , ARG = cof(function(){ return arguments; }()) == 'Arguments';
+var cof = require('./_cof'),
+    TAG = require('./_wks')('toStringTag')
+// ES3 wrong here
+,
+    ARG = cof(function () {
+  return arguments;
+}()) == 'Arguments';
 
 // fallback for IE11 Script Access Denied error
-var tryGet = function(it, key){
+var tryGet = function tryGet(it, key) {
   try {
     return it[key];
-  } catch(e){ /* empty */ }
+  } catch (e) {/* empty */}
 };
 
-module.exports = function(it){
+module.exports = function (it) {
   var O, T, B;
   return it === undefined ? 'Undefined' : it === null ? 'Null'
-    // @@toStringTag case
-    : typeof (T = tryGet(O = Object(it), TAG)) == 'string' ? T
-    // builtinTag case
-    : ARG ? cof(O)
-    // ES3 arguments fallback
-    : (B = cof(O)) == 'Object' && typeof O.callee == 'function' ? 'Arguments' : B;
+  // @@toStringTag case
+  : typeof (T = tryGet(O = Object(it), TAG)) == 'string' ? T
+  // builtinTag case
+  : ARG ? cof(O)
+  // ES3 arguments fallback
+  : (B = cof(O)) == 'Object' && typeof O.callee == 'function' ? 'Arguments' : B;
 };
-},{"./_cof":68,"./_wks":167}],68:[function(require,module,exports){
+
+},{"./_cof":19,"./_wks":118}],19:[function(require,module,exports){
+"use strict";
+
 var toString = {}.toString;
 
-module.exports = function(it){
+module.exports = function (it) {
   return toString.call(it).slice(8, -1);
 };
-},{}],69:[function(require,module,exports){
-'use strict';
-var dP          = require('./_object-dp').f
-  , create      = require('./_object-create')
-  , redefineAll = require('./_redefine-all')
-  , ctx         = require('./_ctx')
-  , anInstance  = require('./_an-instance')
-  , defined     = require('./_defined')
-  , forOf       = require('./_for-of')
-  , $iterDefine = require('./_iter-define')
-  , step        = require('./_iter-step')
-  , setSpecies  = require('./_set-species')
-  , DESCRIPTORS = require('./_descriptors')
-  , fastKey     = require('./_meta').fastKey
-  , SIZE        = DESCRIPTORS ? '_s' : 'size';
 
-var getEntry = function(that, key){
+},{}],20:[function(require,module,exports){
+'use strict';
+
+var dP = require('./_object-dp').f,
+    create = require('./_object-create'),
+    redefineAll = require('./_redefine-all'),
+    ctx = require('./_ctx'),
+    anInstance = require('./_an-instance'),
+    defined = require('./_defined'),
+    forOf = require('./_for-of'),
+    $iterDefine = require('./_iter-define'),
+    step = require('./_iter-step'),
+    setSpecies = require('./_set-species'),
+    DESCRIPTORS = require('./_descriptors'),
+    fastKey = require('./_meta').fastKey,
+    SIZE = DESCRIPTORS ? '_s' : 'size';
+
+var getEntry = function getEntry(that, key) {
   // fast case
-  var index = fastKey(key), entry;
-  if(index !== 'F')return that._i[index];
+  var index = fastKey(key),
+      entry;
+  if (index !== 'F') return that._i[index];
   // frozen object case
-  for(entry = that._f; entry; entry = entry.n){
-    if(entry.k == key)return entry;
+  for (entry = that._f; entry; entry = entry.n) {
+    if (entry.k == key) return entry;
   }
 };
 
 module.exports = {
-  getConstructor: function(wrapper, NAME, IS_MAP, ADDER){
-    var C = wrapper(function(that, iterable){
+  getConstructor: function getConstructor(wrapper, NAME, IS_MAP, ADDER) {
+    var C = wrapper(function (that, iterable) {
       anInstance(that, C, NAME, '_i');
       that._i = create(null); // index
-      that._f = undefined;    // first entry
-      that._l = undefined;    // last entry
-      that[SIZE] = 0;         // size
-      if(iterable != undefined)forOf(iterable, IS_MAP, that[ADDER], that);
+      that._f = undefined; // first entry
+      that._l = undefined; // last entry
+      that[SIZE] = 0; // size
+      if (iterable != undefined) forOf(iterable, IS_MAP, that[ADDER], that);
     });
     redefineAll(C.prototype, {
       // 23.1.3.1 Map.prototype.clear()
       // 23.2.3.2 Set.prototype.clear()
-      clear: function clear(){
-        for(var that = this, data = that._i, entry = that._f; entry; entry = entry.n){
+      clear: function clear() {
+        for (var that = this, data = that._i, entry = that._f; entry; entry = entry.n) {
           entry.r = true;
-          if(entry.p)entry.p = entry.p.n = undefined;
+          if (entry.p) entry.p = entry.p.n = undefined;
           delete data[entry.i];
         }
         that._f = that._l = undefined;
@@ -20206,268 +17163,287 @@ module.exports = {
       },
       // 23.1.3.3 Map.prototype.delete(key)
       // 23.2.3.4 Set.prototype.delete(value)
-      'delete': function(key){
-        var that  = this
-          , entry = getEntry(that, key);
-        if(entry){
-          var next = entry.n
-            , prev = entry.p;
+      'delete': function _delete(key) {
+        var that = this,
+            entry = getEntry(that, key);
+        if (entry) {
+          var next = entry.n,
+              prev = entry.p;
           delete that._i[entry.i];
           entry.r = true;
-          if(prev)prev.n = next;
-          if(next)next.p = prev;
-          if(that._f == entry)that._f = next;
-          if(that._l == entry)that._l = prev;
+          if (prev) prev.n = next;
+          if (next) next.p = prev;
+          if (that._f == entry) that._f = next;
+          if (that._l == entry) that._l = prev;
           that[SIZE]--;
-        } return !!entry;
+        }return !!entry;
       },
       // 23.2.3.6 Set.prototype.forEach(callbackfn, thisArg = undefined)
       // 23.1.3.5 Map.prototype.forEach(callbackfn, thisArg = undefined)
-      forEach: function forEach(callbackfn /*, that = undefined */){
+      forEach: function forEach(callbackfn /*, that = undefined */) {
         anInstance(this, C, 'forEach');
-        var f = ctx(callbackfn, arguments.length > 1 ? arguments[1] : undefined, 3)
-          , entry;
-        while(entry = entry ? entry.n : this._f){
+        var f = ctx(callbackfn, arguments.length > 1 ? arguments[1] : undefined, 3),
+            entry;
+        while (entry = entry ? entry.n : this._f) {
           f(entry.v, entry.k, this);
           // revert to the last existing entry
-          while(entry && entry.r)entry = entry.p;
+          while (entry && entry.r) {
+            entry = entry.p;
+          }
         }
       },
       // 23.1.3.7 Map.prototype.has(key)
       // 23.2.3.7 Set.prototype.has(value)
-      has: function has(key){
+      has: function has(key) {
         return !!getEntry(this, key);
       }
     });
-    if(DESCRIPTORS)dP(C.prototype, 'size', {
-      get: function(){
+    if (DESCRIPTORS) dP(C.prototype, 'size', {
+      get: function get() {
         return defined(this[SIZE]);
       }
     });
     return C;
   },
-  def: function(that, key, value){
-    var entry = getEntry(that, key)
-      , prev, index;
+  def: function def(that, key, value) {
+    var entry = getEntry(that, key),
+        prev,
+        index;
     // change existing entry
-    if(entry){
+    if (entry) {
       entry.v = value;
-    // create new entry
+      // create new entry
     } else {
       that._l = entry = {
         i: index = fastKey(key, true), // <- index
-        k: key,                        // <- key
-        v: value,                      // <- value
-        p: prev = that._l,             // <- previous entry
-        n: undefined,                  // <- next entry
-        r: false                       // <- removed
+        k: key, // <- key
+        v: value, // <- value
+        p: prev = that._l, // <- previous entry
+        n: undefined, // <- next entry
+        r: false // <- removed
       };
-      if(!that._f)that._f = entry;
-      if(prev)prev.n = entry;
+      if (!that._f) that._f = entry;
+      if (prev) prev.n = entry;
       that[SIZE]++;
       // add to index
-      if(index !== 'F')that._i[index] = entry;
-    } return that;
+      if (index !== 'F') that._i[index] = entry;
+    }return that;
   },
   getEntry: getEntry,
-  setStrong: function(C, NAME, IS_MAP){
+  setStrong: function setStrong(C, NAME, IS_MAP) {
     // add .keys, .values, .entries, [@@iterator]
     // 23.1.3.4, 23.1.3.8, 23.1.3.11, 23.1.3.12, 23.2.3.5, 23.2.3.8, 23.2.3.10, 23.2.3.11
-    $iterDefine(C, NAME, function(iterated, kind){
-      this._t = iterated;  // target
-      this._k = kind;      // kind
+    $iterDefine(C, NAME, function (iterated, kind) {
+      this._t = iterated; // target
+      this._k = kind; // kind
       this._l = undefined; // previous
-    }, function(){
-      var that  = this
-        , kind  = that._k
-        , entry = that._l;
+    }, function () {
+      var that = this,
+          kind = that._k,
+          entry = that._l;
       // revert to the last existing entry
-      while(entry && entry.r)entry = entry.p;
-      // get next entry
-      if(!that._t || !(that._l = entry = entry ? entry.n : that._t._f)){
+      while (entry && entry.r) {
+        entry = entry.p;
+      } // get next entry
+      if (!that._t || !(that._l = entry = entry ? entry.n : that._t._f)) {
         // or finish the iteration
         that._t = undefined;
         return step(1);
       }
       // return step by kind
-      if(kind == 'keys'  )return step(0, entry.k);
-      if(kind == 'values')return step(0, entry.v);
+      if (kind == 'keys') return step(0, entry.k);
+      if (kind == 'values') return step(0, entry.v);
       return step(0, [entry.k, entry.v]);
-    }, IS_MAP ? 'entries' : 'values' , !IS_MAP, true);
+    }, IS_MAP ? 'entries' : 'values', !IS_MAP, true);
 
     // add [@@species], 23.1.2.2, 23.2.2.2
     setSpecies(NAME);
   }
 };
-},{"./_an-instance":56,"./_ctx":75,"./_defined":77,"./_descriptors":78,"./_for-of":87,"./_iter-define":103,"./_iter-step":105,"./_meta":112,"./_object-create":116,"./_object-dp":117,"./_redefine-all":136,"./_set-species":141}],70:[function(require,module,exports){
+
+},{"./_an-instance":7,"./_ctx":26,"./_defined":28,"./_descriptors":29,"./_for-of":38,"./_iter-define":54,"./_iter-step":56,"./_meta":63,"./_object-create":67,"./_object-dp":68,"./_redefine-all":87,"./_set-species":92}],21:[function(require,module,exports){
+'use strict';
+
 // https://github.com/DavidBruant/Map-Set.prototype.toJSON
-var classof = require('./_classof')
-  , from    = require('./_array-from-iterable');
-module.exports = function(NAME){
-  return function toJSON(){
-    if(classof(this) != NAME)throw TypeError(NAME + "#toJSON isn't generic");
+var classof = require('./_classof'),
+    from = require('./_array-from-iterable');
+module.exports = function (NAME) {
+  return function toJSON() {
+    if (classof(this) != NAME) throw TypeError(NAME + "#toJSON isn't generic");
     return from(this);
   };
 };
-},{"./_array-from-iterable":60,"./_classof":67}],71:[function(require,module,exports){
+
+},{"./_array-from-iterable":11,"./_classof":18}],22:[function(require,module,exports){
 'use strict';
-var redefineAll       = require('./_redefine-all')
-  , getWeak           = require('./_meta').getWeak
-  , anObject          = require('./_an-object')
-  , isObject          = require('./_is-object')
-  , anInstance        = require('./_an-instance')
-  , forOf             = require('./_for-of')
-  , createArrayMethod = require('./_array-methods')
-  , $has              = require('./_has')
-  , arrayFind         = createArrayMethod(5)
-  , arrayFindIndex    = createArrayMethod(6)
-  , id                = 0;
+
+var redefineAll = require('./_redefine-all'),
+    getWeak = require('./_meta').getWeak,
+    anObject = require('./_an-object'),
+    isObject = require('./_is-object'),
+    anInstance = require('./_an-instance'),
+    forOf = require('./_for-of'),
+    createArrayMethod = require('./_array-methods'),
+    $has = require('./_has'),
+    arrayFind = createArrayMethod(5),
+    arrayFindIndex = createArrayMethod(6),
+    id = 0;
 
 // fallback for uncaught frozen keys
-var uncaughtFrozenStore = function(that){
-  return that._l || (that._l = new UncaughtFrozenStore);
+var uncaughtFrozenStore = function uncaughtFrozenStore(that) {
+  return that._l || (that._l = new UncaughtFrozenStore());
 };
-var UncaughtFrozenStore = function(){
+var UncaughtFrozenStore = function UncaughtFrozenStore() {
   this.a = [];
 };
-var findUncaughtFrozen = function(store, key){
-  return arrayFind(store.a, function(it){
+var findUncaughtFrozen = function findUncaughtFrozen(store, key) {
+  return arrayFind(store.a, function (it) {
     return it[0] === key;
   });
 };
 UncaughtFrozenStore.prototype = {
-  get: function(key){
+  get: function get(key) {
     var entry = findUncaughtFrozen(this, key);
-    if(entry)return entry[1];
+    if (entry) return entry[1];
   },
-  has: function(key){
+  has: function has(key) {
     return !!findUncaughtFrozen(this, key);
   },
-  set: function(key, value){
+  set: function set(key, value) {
     var entry = findUncaughtFrozen(this, key);
-    if(entry)entry[1] = value;
-    else this.a.push([key, value]);
+    if (entry) entry[1] = value;else this.a.push([key, value]);
   },
-  'delete': function(key){
-    var index = arrayFindIndex(this.a, function(it){
+  'delete': function _delete(key) {
+    var index = arrayFindIndex(this.a, function (it) {
       return it[0] === key;
     });
-    if(~index)this.a.splice(index, 1);
+    if (~index) this.a.splice(index, 1);
     return !!~index;
   }
 };
 
 module.exports = {
-  getConstructor: function(wrapper, NAME, IS_MAP, ADDER){
-    var C = wrapper(function(that, iterable){
+  getConstructor: function getConstructor(wrapper, NAME, IS_MAP, ADDER) {
+    var C = wrapper(function (that, iterable) {
       anInstance(that, C, NAME, '_i');
-      that._i = id++;      // collection id
+      that._i = id++; // collection id
       that._l = undefined; // leak store for uncaught frozen objects
-      if(iterable != undefined)forOf(iterable, IS_MAP, that[ADDER], that);
+      if (iterable != undefined) forOf(iterable, IS_MAP, that[ADDER], that);
     });
     redefineAll(C.prototype, {
       // 23.3.3.2 WeakMap.prototype.delete(key)
       // 23.4.3.3 WeakSet.prototype.delete(value)
-      'delete': function(key){
-        if(!isObject(key))return false;
+      'delete': function _delete(key) {
+        if (!isObject(key)) return false;
         var data = getWeak(key);
-        if(data === true)return uncaughtFrozenStore(this)['delete'](key);
+        if (data === true) return uncaughtFrozenStore(this)['delete'](key);
         return data && $has(data, this._i) && delete data[this._i];
       },
       // 23.3.3.4 WeakMap.prototype.has(key)
       // 23.4.3.4 WeakSet.prototype.has(value)
-      has: function has(key){
-        if(!isObject(key))return false;
+      has: function has(key) {
+        if (!isObject(key)) return false;
         var data = getWeak(key);
-        if(data === true)return uncaughtFrozenStore(this).has(key);
+        if (data === true) return uncaughtFrozenStore(this).has(key);
         return data && $has(data, this._i);
       }
     });
     return C;
   },
-  def: function(that, key, value){
+  def: function def(that, key, value) {
     var data = getWeak(anObject(key), true);
-    if(data === true)uncaughtFrozenStore(that).set(key, value);
-    else data[that._i] = value;
+    if (data === true) uncaughtFrozenStore(that).set(key, value);else data[that._i] = value;
     return that;
   },
   ufstore: uncaughtFrozenStore
 };
-},{"./_an-instance":56,"./_an-object":57,"./_array-methods":62,"./_for-of":87,"./_has":89,"./_is-object":99,"./_meta":112,"./_redefine-all":136}],72:[function(require,module,exports){
-'use strict';
-var global            = require('./_global')
-  , $export           = require('./_export')
-  , redefine          = require('./_redefine')
-  , redefineAll       = require('./_redefine-all')
-  , meta              = require('./_meta')
-  , forOf             = require('./_for-of')
-  , anInstance        = require('./_an-instance')
-  , isObject          = require('./_is-object')
-  , fails             = require('./_fails')
-  , $iterDetect       = require('./_iter-detect')
-  , setToStringTag    = require('./_set-to-string-tag')
-  , inheritIfRequired = require('./_inherit-if-required');
 
-module.exports = function(NAME, wrapper, methods, common, IS_MAP, IS_WEAK){
-  var Base  = global[NAME]
-    , C     = Base
-    , ADDER = IS_MAP ? 'set' : 'add'
-    , proto = C && C.prototype
-    , O     = {};
-  var fixMethod = function(KEY){
+},{"./_an-instance":7,"./_an-object":8,"./_array-methods":13,"./_for-of":38,"./_has":40,"./_is-object":50,"./_meta":63,"./_redefine-all":87}],23:[function(require,module,exports){
+'use strict';
+
+var global = require('./_global'),
+    $export = require('./_export'),
+    redefine = require('./_redefine'),
+    redefineAll = require('./_redefine-all'),
+    meta = require('./_meta'),
+    forOf = require('./_for-of'),
+    anInstance = require('./_an-instance'),
+    isObject = require('./_is-object'),
+    fails = require('./_fails'),
+    $iterDetect = require('./_iter-detect'),
+    setToStringTag = require('./_set-to-string-tag'),
+    inheritIfRequired = require('./_inherit-if-required');
+
+module.exports = function (NAME, wrapper, methods, common, IS_MAP, IS_WEAK) {
+  var Base = global[NAME],
+      C = Base,
+      ADDER = IS_MAP ? 'set' : 'add',
+      proto = C && C.prototype,
+      O = {};
+  var fixMethod = function fixMethod(KEY) {
     var fn = proto[KEY];
-    redefine(proto, KEY,
-      KEY == 'delete' ? function(a){
-        return IS_WEAK && !isObject(a) ? false : fn.call(this, a === 0 ? 0 : a);
-      } : KEY == 'has' ? function has(a){
-        return IS_WEAK && !isObject(a) ? false : fn.call(this, a === 0 ? 0 : a);
-      } : KEY == 'get' ? function get(a){
-        return IS_WEAK && !isObject(a) ? undefined : fn.call(this, a === 0 ? 0 : a);
-      } : KEY == 'add' ? function add(a){ fn.call(this, a === 0 ? 0 : a); return this; }
-        : function set(a, b){ fn.call(this, a === 0 ? 0 : a, b); return this; }
-    );
+    redefine(proto, KEY, KEY == 'delete' ? function (a) {
+      return IS_WEAK && !isObject(a) ? false : fn.call(this, a === 0 ? 0 : a);
+    } : KEY == 'has' ? function has(a) {
+      return IS_WEAK && !isObject(a) ? false : fn.call(this, a === 0 ? 0 : a);
+    } : KEY == 'get' ? function get(a) {
+      return IS_WEAK && !isObject(a) ? undefined : fn.call(this, a === 0 ? 0 : a);
+    } : KEY == 'add' ? function add(a) {
+      fn.call(this, a === 0 ? 0 : a);return this;
+    } : function set(a, b) {
+      fn.call(this, a === 0 ? 0 : a, b);return this;
+    });
   };
-  if(typeof C != 'function' || !(IS_WEAK || proto.forEach && !fails(function(){
+  if (typeof C != 'function' || !(IS_WEAK || proto.forEach && !fails(function () {
     new C().entries().next();
-  }))){
+  }))) {
     // create collection constructor
     C = common.getConstructor(wrapper, NAME, IS_MAP, ADDER);
     redefineAll(C.prototype, methods);
     meta.NEED = true;
   } else {
-    var instance             = new C
-      // early implementations not supports chaining
-      , HASNT_CHAINING       = instance[ADDER](IS_WEAK ? {} : -0, 1) != instance
-      // V8 ~  Chromium 40- weak-collections throws on primitives, but should return false
-      , THROWS_ON_PRIMITIVES = fails(function(){ instance.has(1); })
-      // most early implementations doesn't supports iterables, most modern - not close it correctly
-      , ACCEPT_ITERABLES     = $iterDetect(function(iter){ new C(iter); }) // eslint-disable-line no-new
-      // for early implementations -0 and +0 not the same
-      , BUGGY_ZERO = !IS_WEAK && fails(function(){
-        // V8 ~ Chromium 42- fails only with 5+ elements
-        var $instance = new C()
-          , index     = 5;
-        while(index--)$instance[ADDER](index, index);
-        return !$instance.has(-0);
-      });
-    if(!ACCEPT_ITERABLES){ 
-      C = wrapper(function(target, iterable){
+    var instance = new C()
+    // early implementations not supports chaining
+    ,
+        HASNT_CHAINING = instance[ADDER](IS_WEAK ? {} : -0, 1) != instance
+    // V8 ~  Chromium 40- weak-collections throws on primitives, but should return false
+    ,
+        THROWS_ON_PRIMITIVES = fails(function () {
+      instance.has(1);
+    })
+    // most early implementations doesn't supports iterables, most modern - not close it correctly
+    ,
+        ACCEPT_ITERABLES = $iterDetect(function (iter) {
+      new C(iter);
+    }) // eslint-disable-line no-new
+    // for early implementations -0 and +0 not the same
+    ,
+        BUGGY_ZERO = !IS_WEAK && fails(function () {
+      // V8 ~ Chromium 42- fails only with 5+ elements
+      var $instance = new C(),
+          index = 5;
+      while (index--) {
+        $instance[ADDER](index, index);
+      }return !$instance.has(-0);
+    });
+    if (!ACCEPT_ITERABLES) {
+      C = wrapper(function (target, iterable) {
         anInstance(target, C, NAME);
-        var that = inheritIfRequired(new Base, target, C);
-        if(iterable != undefined)forOf(iterable, IS_MAP, that[ADDER], that);
+        var that = inheritIfRequired(new Base(), target, C);
+        if (iterable != undefined) forOf(iterable, IS_MAP, that[ADDER], that);
         return that;
       });
       C.prototype = proto;
       proto.constructor = C;
     }
-    if(THROWS_ON_PRIMITIVES || BUGGY_ZERO){
+    if (THROWS_ON_PRIMITIVES || BUGGY_ZERO) {
       fixMethod('delete');
       fixMethod('has');
       IS_MAP && fixMethod('get');
     }
-    if(BUGGY_ZERO || HASNT_CHAINING)fixMethod(ADDER);
+    if (BUGGY_ZERO || HASNT_CHAINING) fixMethod(ADDER);
     // weak collections should not contains .clear method
-    if(IS_WEAK && proto.clear)delete proto.clear;
+    if (IS_WEAK && proto.clear) delete proto.clear;
   }
 
   setToStringTag(C, NAME);
@@ -20475,113 +17451,149 @@ module.exports = function(NAME, wrapper, methods, common, IS_MAP, IS_WEAK){
   O[NAME] = C;
   $export($export.G + $export.W + $export.F * (C != Base), O);
 
-  if(!IS_WEAK)common.setStrong(C, NAME, IS_MAP);
+  if (!IS_WEAK) common.setStrong(C, NAME, IS_MAP);
 
   return C;
 };
-},{"./_an-instance":56,"./_export":82,"./_fails":84,"./_for-of":87,"./_global":88,"./_inherit-if-required":93,"./_is-object":99,"./_iter-detect":104,"./_meta":112,"./_redefine":137,"./_redefine-all":136,"./_set-to-string-tag":142}],73:[function(require,module,exports){
-var core = module.exports = {version: '2.4.0'};
-if(typeof __e == 'number')__e = core; // eslint-disable-line no-undef
-},{}],74:[function(require,module,exports){
-'use strict';
-var $defineProperty = require('./_object-dp')
-  , createDesc      = require('./_property-desc');
 
-module.exports = function(object, index, value){
-  if(index in object)$defineProperty.f(object, index, createDesc(0, value));
-  else object[index] = value;
+},{"./_an-instance":7,"./_export":33,"./_fails":35,"./_for-of":38,"./_global":39,"./_inherit-if-required":44,"./_is-object":50,"./_iter-detect":55,"./_meta":63,"./_redefine":88,"./_redefine-all":87,"./_set-to-string-tag":93}],24:[function(require,module,exports){
+'use strict';
+
+var core = module.exports = { version: '2.4.0' };
+if (typeof __e == 'number') __e = core; // eslint-disable-line no-undef
+
+},{}],25:[function(require,module,exports){
+'use strict';
+
+var $defineProperty = require('./_object-dp'),
+    createDesc = require('./_property-desc');
+
+module.exports = function (object, index, value) {
+  if (index in object) $defineProperty.f(object, index, createDesc(0, value));else object[index] = value;
 };
-},{"./_object-dp":117,"./_property-desc":135}],75:[function(require,module,exports){
+
+},{"./_object-dp":68,"./_property-desc":86}],26:[function(require,module,exports){
+'use strict';
+
 // optional / simple context binding
 var aFunction = require('./_a-function');
-module.exports = function(fn, that, length){
+module.exports = function (fn, that, length) {
   aFunction(fn);
-  if(that === undefined)return fn;
-  switch(length){
-    case 1: return function(a){
-      return fn.call(that, a);
-    };
-    case 2: return function(a, b){
-      return fn.call(that, a, b);
-    };
-    case 3: return function(a, b, c){
-      return fn.call(that, a, b, c);
-    };
+  if (that === undefined) return fn;
+  switch (length) {
+    case 1:
+      return function (a) {
+        return fn.call(that, a);
+      };
+    case 2:
+      return function (a, b) {
+        return fn.call(that, a, b);
+      };
+    case 3:
+      return function (a, b, c) {
+        return fn.call(that, a, b, c);
+      };
   }
-  return function(/* ...args */){
+  return function () /* ...args */{
     return fn.apply(that, arguments);
   };
 };
-},{"./_a-function":53}],76:[function(require,module,exports){
-'use strict';
-var anObject    = require('./_an-object')
-  , toPrimitive = require('./_to-primitive')
-  , NUMBER      = 'number';
 
-module.exports = function(hint){
-  if(hint !== 'string' && hint !== NUMBER && hint !== 'default')throw TypeError('Incorrect hint');
+},{"./_a-function":4}],27:[function(require,module,exports){
+'use strict';
+
+var anObject = require('./_an-object'),
+    toPrimitive = require('./_to-primitive'),
+    NUMBER = 'number';
+
+module.exports = function (hint) {
+  if (hint !== 'string' && hint !== NUMBER && hint !== 'default') throw TypeError('Incorrect hint');
   return toPrimitive(anObject(this), hint != NUMBER);
 };
-},{"./_an-object":57,"./_to-primitive":160}],77:[function(require,module,exports){
+
+},{"./_an-object":8,"./_to-primitive":111}],28:[function(require,module,exports){
+"use strict";
+
 // 7.2.1 RequireObjectCoercible(argument)
-module.exports = function(it){
-  if(it == undefined)throw TypeError("Can't call method on  " + it);
+module.exports = function (it) {
+  if (it == undefined) throw TypeError("Can't call method on  " + it);
   return it;
 };
-},{}],78:[function(require,module,exports){
+
+},{}],29:[function(require,module,exports){
+'use strict';
+
 // Thank's IE8 for his funny defineProperty
-module.exports = !require('./_fails')(function(){
-  return Object.defineProperty({}, 'a', {get: function(){ return 7; }}).a != 7;
+module.exports = !require('./_fails')(function () {
+  return Object.defineProperty({}, 'a', { get: function get() {
+      return 7;
+    } }).a != 7;
 });
-},{"./_fails":84}],79:[function(require,module,exports){
-var isObject = require('./_is-object')
-  , document = require('./_global').document
-  // in old IE typeof document.createElement is 'object'
-  , is = isObject(document) && isObject(document.createElement);
-module.exports = function(it){
+
+},{"./_fails":35}],30:[function(require,module,exports){
+'use strict';
+
+var isObject = require('./_is-object'),
+    document = require('./_global').document
+// in old IE typeof document.createElement is 'object'
+,
+    is = isObject(document) && isObject(document.createElement);
+module.exports = function (it) {
   return is ? document.createElement(it) : {};
 };
-},{"./_global":88,"./_is-object":99}],80:[function(require,module,exports){
-// IE 8- don't enum bug keys
-module.exports = (
-  'constructor,hasOwnProperty,isPrototypeOf,propertyIsEnumerable,toLocaleString,toString,valueOf'
-).split(',');
-},{}],81:[function(require,module,exports){
-// all enumerable object keys, includes symbols
-var getKeys = require('./_object-keys')
-  , gOPS    = require('./_object-gops')
-  , pIE     = require('./_object-pie');
-module.exports = function(it){
-  var result     = getKeys(it)
-    , getSymbols = gOPS.f;
-  if(getSymbols){
-    var symbols = getSymbols(it)
-      , isEnum  = pIE.f
-      , i       = 0
-      , key;
-    while(symbols.length > i)if(isEnum.call(it, key = symbols[i++]))result.push(key);
-  } return result;
-};
-},{"./_object-gops":123,"./_object-keys":126,"./_object-pie":127}],82:[function(require,module,exports){
-var global    = require('./_global')
-  , core      = require('./_core')
-  , hide      = require('./_hide')
-  , redefine  = require('./_redefine')
-  , ctx       = require('./_ctx')
-  , PROTOTYPE = 'prototype';
 
-var $export = function(type, name, source){
-  var IS_FORCED = type & $export.F
-    , IS_GLOBAL = type & $export.G
-    , IS_STATIC = type & $export.S
-    , IS_PROTO  = type & $export.P
-    , IS_BIND   = type & $export.B
-    , target    = IS_GLOBAL ? global : IS_STATIC ? global[name] || (global[name] = {}) : (global[name] || {})[PROTOTYPE]
-    , exports   = IS_GLOBAL ? core : core[name] || (core[name] = {})
-    , expProto  = exports[PROTOTYPE] || (exports[PROTOTYPE] = {})
-    , key, own, out, exp;
-  if(IS_GLOBAL)source = name;
-  for(key in source){
+},{"./_global":39,"./_is-object":50}],31:[function(require,module,exports){
+'use strict';
+
+// IE 8- don't enum bug keys
+module.exports = 'constructor,hasOwnProperty,isPrototypeOf,propertyIsEnumerable,toLocaleString,toString,valueOf'.split(',');
+
+},{}],32:[function(require,module,exports){
+'use strict';
+
+// all enumerable object keys, includes symbols
+var getKeys = require('./_object-keys'),
+    gOPS = require('./_object-gops'),
+    pIE = require('./_object-pie');
+module.exports = function (it) {
+  var result = getKeys(it),
+      getSymbols = gOPS.f;
+  if (getSymbols) {
+    var symbols = getSymbols(it),
+        isEnum = pIE.f,
+        i = 0,
+        key;
+    while (symbols.length > i) {
+      if (isEnum.call(it, key = symbols[i++])) result.push(key);
+    }
+  }return result;
+};
+
+},{"./_object-gops":74,"./_object-keys":77,"./_object-pie":78}],33:[function(require,module,exports){
+'use strict';
+
+var global = require('./_global'),
+    core = require('./_core'),
+    hide = require('./_hide'),
+    redefine = require('./_redefine'),
+    ctx = require('./_ctx'),
+    PROTOTYPE = 'prototype';
+
+var $export = function $export(type, name, source) {
+  var IS_FORCED = type & $export.F,
+      IS_GLOBAL = type & $export.G,
+      IS_STATIC = type & $export.S,
+      IS_PROTO = type & $export.P,
+      IS_BIND = type & $export.B,
+      target = IS_GLOBAL ? global : IS_STATIC ? global[name] || (global[name] = {}) : (global[name] || {})[PROTOTYPE],
+      exports = IS_GLOBAL ? core : core[name] || (core[name] = {}),
+      expProto = exports[PROTOTYPE] || (exports[PROTOTYPE] = {}),
+      key,
+      own,
+      out,
+      exp;
+  if (IS_GLOBAL) source = name;
+  for (key in source) {
     // contains in native
     own = !IS_FORCED && target && target[key] !== undefined;
     // export native or passed
@@ -20589,458 +17601,593 @@ var $export = function(type, name, source){
     // bind timers to global for call from export context
     exp = IS_BIND && own ? ctx(out, global) : IS_PROTO && typeof out == 'function' ? ctx(Function.call, out) : out;
     // extend global
-    if(target)redefine(target, key, out, type & $export.U);
+    if (target) redefine(target, key, out, type & $export.U);
     // export
-    if(exports[key] != out)hide(exports, key, exp);
-    if(IS_PROTO && expProto[key] != out)expProto[key] = out;
+    if (exports[key] != out) hide(exports, key, exp);
+    if (IS_PROTO && expProto[key] != out) expProto[key] = out;
   }
 };
 global.core = core;
 // type bitmap
-$export.F = 1;   // forced
-$export.G = 2;   // global
-$export.S = 4;   // static
-$export.P = 8;   // proto
-$export.B = 16;  // bind
-$export.W = 32;  // wrap
-$export.U = 64;  // safe
+$export.F = 1; // forced
+$export.G = 2; // global
+$export.S = 4; // static
+$export.P = 8; // proto
+$export.B = 16; // bind
+$export.W = 32; // wrap
+$export.U = 64; // safe
 $export.R = 128; // real proto method for `library` 
 module.exports = $export;
-},{"./_core":73,"./_ctx":75,"./_global":88,"./_hide":90,"./_redefine":137}],83:[function(require,module,exports){
+
+},{"./_core":24,"./_ctx":26,"./_global":39,"./_hide":41,"./_redefine":88}],34:[function(require,module,exports){
+'use strict';
+
 var MATCH = require('./_wks')('match');
-module.exports = function(KEY){
+module.exports = function (KEY) {
   var re = /./;
   try {
     '/./'[KEY](re);
-  } catch(e){
+  } catch (e) {
     try {
       re[MATCH] = false;
       return !'/./'[KEY](re);
-    } catch(f){ /* empty */ }
-  } return true;
+    } catch (f) {/* empty */}
+  }return true;
 };
-},{"./_wks":167}],84:[function(require,module,exports){
-module.exports = function(exec){
+
+},{"./_wks":118}],35:[function(require,module,exports){
+"use strict";
+
+module.exports = function (exec) {
   try {
     return !!exec();
-  } catch(e){
+  } catch (e) {
     return true;
   }
 };
-},{}],85:[function(require,module,exports){
-'use strict';
-var hide     = require('./_hide')
-  , redefine = require('./_redefine')
-  , fails    = require('./_fails')
-  , defined  = require('./_defined')
-  , wks      = require('./_wks');
 
-module.exports = function(KEY, length, exec){
-  var SYMBOL   = wks(KEY)
-    , fns      = exec(defined, SYMBOL, ''[KEY])
-    , strfn    = fns[0]
-    , rxfn     = fns[1];
-  if(fails(function(){
+},{}],36:[function(require,module,exports){
+'use strict';
+
+var hide = require('./_hide'),
+    redefine = require('./_redefine'),
+    fails = require('./_fails'),
+    defined = require('./_defined'),
+    wks = require('./_wks');
+
+module.exports = function (KEY, length, exec) {
+  var SYMBOL = wks(KEY),
+      fns = exec(defined, SYMBOL, ''[KEY]),
+      strfn = fns[0],
+      rxfn = fns[1];
+  if (fails(function () {
     var O = {};
-    O[SYMBOL] = function(){ return 7; };
+    O[SYMBOL] = function () {
+      return 7;
+    };
     return ''[KEY](O) != 7;
-  })){
+  })) {
     redefine(String.prototype, KEY, strfn);
     hide(RegExp.prototype, SYMBOL, length == 2
-      // 21.2.5.8 RegExp.prototype[@@replace](string, replaceValue)
-      // 21.2.5.11 RegExp.prototype[@@split](string, limit)
-      ? function(string, arg){ return rxfn.call(string, this, arg); }
-      // 21.2.5.6 RegExp.prototype[@@match](string)
-      // 21.2.5.9 RegExp.prototype[@@search](string)
-      : function(string){ return rxfn.call(string, this); }
-    );
+    // 21.2.5.8 RegExp.prototype[@@replace](string, replaceValue)
+    // 21.2.5.11 RegExp.prototype[@@split](string, limit)
+    ? function (string, arg) {
+      return rxfn.call(string, this, arg);
+    }
+    // 21.2.5.6 RegExp.prototype[@@match](string)
+    // 21.2.5.9 RegExp.prototype[@@search](string)
+    : function (string) {
+      return rxfn.call(string, this);
+    });
   }
 };
-},{"./_defined":77,"./_fails":84,"./_hide":90,"./_redefine":137,"./_wks":167}],86:[function(require,module,exports){
+
+},{"./_defined":28,"./_fails":35,"./_hide":41,"./_redefine":88,"./_wks":118}],37:[function(require,module,exports){
 'use strict';
 // 21.2.5.3 get RegExp.prototype.flags
+
 var anObject = require('./_an-object');
-module.exports = function(){
-  var that   = anObject(this)
-    , result = '';
-  if(that.global)     result += 'g';
-  if(that.ignoreCase) result += 'i';
-  if(that.multiline)  result += 'm';
-  if(that.unicode)    result += 'u';
-  if(that.sticky)     result += 'y';
+module.exports = function () {
+  var that = anObject(this),
+      result = '';
+  if (that.global) result += 'g';
+  if (that.ignoreCase) result += 'i';
+  if (that.multiline) result += 'm';
+  if (that.unicode) result += 'u';
+  if (that.sticky) result += 'y';
   return result;
 };
-},{"./_an-object":57}],87:[function(require,module,exports){
-var ctx         = require('./_ctx')
-  , call        = require('./_iter-call')
-  , isArrayIter = require('./_is-array-iter')
-  , anObject    = require('./_an-object')
-  , toLength    = require('./_to-length')
-  , getIterFn   = require('./core.get-iterator-method')
-  , BREAK       = {}
-  , RETURN      = {};
-var exports = module.exports = function(iterable, entries, fn, that, ITERATOR){
-  var iterFn = ITERATOR ? function(){ return iterable; } : getIterFn(iterable)
-    , f      = ctx(fn, that, entries ? 2 : 1)
-    , index  = 0
-    , length, step, iterator, result;
-  if(typeof iterFn != 'function')throw TypeError(iterable + ' is not iterable!');
+
+},{"./_an-object":8}],38:[function(require,module,exports){
+'use strict';
+
+var ctx = require('./_ctx'),
+    call = require('./_iter-call'),
+    isArrayIter = require('./_is-array-iter'),
+    anObject = require('./_an-object'),
+    toLength = require('./_to-length'),
+    getIterFn = require('./core.get-iterator-method'),
+    BREAK = {},
+    RETURN = {};
+var _exports = module.exports = function (iterable, entries, fn, that, ITERATOR) {
+  var iterFn = ITERATOR ? function () {
+    return iterable;
+  } : getIterFn(iterable),
+      f = ctx(fn, that, entries ? 2 : 1),
+      index = 0,
+      length,
+      step,
+      iterator,
+      result;
+  if (typeof iterFn != 'function') throw TypeError(iterable + ' is not iterable!');
   // fast case for arrays with default iterator
-  if(isArrayIter(iterFn))for(length = toLength(iterable.length); length > index; index++){
+  if (isArrayIter(iterFn)) for (length = toLength(iterable.length); length > index; index++) {
     result = entries ? f(anObject(step = iterable[index])[0], step[1]) : f(iterable[index]);
-    if(result === BREAK || result === RETURN)return result;
-  } else for(iterator = iterFn.call(iterable); !(step = iterator.next()).done; ){
+    if (result === BREAK || result === RETURN) return result;
+  } else for (iterator = iterFn.call(iterable); !(step = iterator.next()).done;) {
     result = call(iterator, f, step.value, entries);
-    if(result === BREAK || result === RETURN)return result;
+    if (result === BREAK || result === RETURN) return result;
   }
 };
-exports.BREAK  = BREAK;
-exports.RETURN = RETURN;
-},{"./_an-object":57,"./_ctx":75,"./_is-array-iter":96,"./_iter-call":101,"./_to-length":158,"./core.get-iterator-method":168}],88:[function(require,module,exports){
+_exports.BREAK = BREAK;
+_exports.RETURN = RETURN;
+
+},{"./_an-object":8,"./_ctx":26,"./_is-array-iter":47,"./_iter-call":52,"./_to-length":109,"./core.get-iterator-method":119}],39:[function(require,module,exports){
+'use strict';
+
 // https://github.com/zloirock/core-js/issues/86#issuecomment-115759028
-var global = module.exports = typeof window != 'undefined' && window.Math == Math
-  ? window : typeof self != 'undefined' && self.Math == Math ? self : Function('return this')();
-if(typeof __g == 'number')__g = global; // eslint-disable-line no-undef
-},{}],89:[function(require,module,exports){
+var global = module.exports = typeof window != 'undefined' && window.Math == Math ? window : typeof self != 'undefined' && self.Math == Math ? self : Function('return this')();
+if (typeof __g == 'number') __g = global; // eslint-disable-line no-undef
+
+},{}],40:[function(require,module,exports){
+"use strict";
+
 var hasOwnProperty = {}.hasOwnProperty;
-module.exports = function(it, key){
+module.exports = function (it, key) {
   return hasOwnProperty.call(it, key);
 };
-},{}],90:[function(require,module,exports){
-var dP         = require('./_object-dp')
-  , createDesc = require('./_property-desc');
-module.exports = require('./_descriptors') ? function(object, key, value){
+
+},{}],41:[function(require,module,exports){
+'use strict';
+
+var dP = require('./_object-dp'),
+    createDesc = require('./_property-desc');
+module.exports = require('./_descriptors') ? function (object, key, value) {
   return dP.f(object, key, createDesc(1, value));
-} : function(object, key, value){
+} : function (object, key, value) {
   object[key] = value;
   return object;
 };
-},{"./_descriptors":78,"./_object-dp":117,"./_property-desc":135}],91:[function(require,module,exports){
+
+},{"./_descriptors":29,"./_object-dp":68,"./_property-desc":86}],42:[function(require,module,exports){
+'use strict';
+
 module.exports = require('./_global').document && document.documentElement;
-},{"./_global":88}],92:[function(require,module,exports){
-module.exports = !require('./_descriptors') && !require('./_fails')(function(){
-  return Object.defineProperty(require('./_dom-create')('div'), 'a', {get: function(){ return 7; }}).a != 7;
+
+},{"./_global":39}],43:[function(require,module,exports){
+'use strict';
+
+module.exports = !require('./_descriptors') && !require('./_fails')(function () {
+  return Object.defineProperty(require('./_dom-create')('div'), 'a', { get: function get() {
+      return 7;
+    } }).a != 7;
 });
-},{"./_descriptors":78,"./_dom-create":79,"./_fails":84}],93:[function(require,module,exports){
-var isObject       = require('./_is-object')
-  , setPrototypeOf = require('./_set-proto').set;
-module.exports = function(that, target, C){
-  var P, S = target.constructor;
-  if(S !== C && typeof S == 'function' && (P = S.prototype) !== C.prototype && isObject(P) && setPrototypeOf){
+
+},{"./_descriptors":29,"./_dom-create":30,"./_fails":35}],44:[function(require,module,exports){
+'use strict';
+
+var isObject = require('./_is-object'),
+    setPrototypeOf = require('./_set-proto').set;
+module.exports = function (that, target, C) {
+  var P,
+      S = target.constructor;
+  if (S !== C && typeof S == 'function' && (P = S.prototype) !== C.prototype && isObject(P) && setPrototypeOf) {
     setPrototypeOf(that, P);
-  } return that;
+  }return that;
 };
-},{"./_is-object":99,"./_set-proto":140}],94:[function(require,module,exports){
+
+},{"./_is-object":50,"./_set-proto":91}],45:[function(require,module,exports){
+"use strict";
+
 // fast apply, http://jsperf.lnkit.com/fast-apply/5
-module.exports = function(fn, args, that){
-  var un = that === undefined;
-  switch(args.length){
-    case 0: return un ? fn()
-                      : fn.call(that);
-    case 1: return un ? fn(args[0])
-                      : fn.call(that, args[0]);
-    case 2: return un ? fn(args[0], args[1])
-                      : fn.call(that, args[0], args[1]);
-    case 3: return un ? fn(args[0], args[1], args[2])
-                      : fn.call(that, args[0], args[1], args[2]);
-    case 4: return un ? fn(args[0], args[1], args[2], args[3])
-                      : fn.call(that, args[0], args[1], args[2], args[3]);
-  } return              fn.apply(that, args);
+module.exports = function (fn, args, that) {
+                  var un = that === undefined;
+                  switch (args.length) {
+                                    case 0:
+                                                      return un ? fn() : fn.call(that);
+                                    case 1:
+                                                      return un ? fn(args[0]) : fn.call(that, args[0]);
+                                    case 2:
+                                                      return un ? fn(args[0], args[1]) : fn.call(that, args[0], args[1]);
+                                    case 3:
+                                                      return un ? fn(args[0], args[1], args[2]) : fn.call(that, args[0], args[1], args[2]);
+                                    case 4:
+                                                      return un ? fn(args[0], args[1], args[2], args[3]) : fn.call(that, args[0], args[1], args[2], args[3]);
+                  }return fn.apply(that, args);
 };
-},{}],95:[function(require,module,exports){
+
+},{}],46:[function(require,module,exports){
+'use strict';
+
 // fallback for non-array-like ES3 and non-enumerable old V8 strings
 var cof = require('./_cof');
-module.exports = Object('z').propertyIsEnumerable(0) ? Object : function(it){
+module.exports = Object('z').propertyIsEnumerable(0) ? Object : function (it) {
   return cof(it) == 'String' ? it.split('') : Object(it);
 };
-},{"./_cof":68}],96:[function(require,module,exports){
-// check on default Array iterator
-var Iterators  = require('./_iterators')
-  , ITERATOR   = require('./_wks')('iterator')
-  , ArrayProto = Array.prototype;
 
-module.exports = function(it){
+},{"./_cof":19}],47:[function(require,module,exports){
+'use strict';
+
+// check on default Array iterator
+var Iterators = require('./_iterators'),
+    ITERATOR = require('./_wks')('iterator'),
+    ArrayProto = Array.prototype;
+
+module.exports = function (it) {
   return it !== undefined && (Iterators.Array === it || ArrayProto[ITERATOR] === it);
 };
-},{"./_iterators":106,"./_wks":167}],97:[function(require,module,exports){
+
+},{"./_iterators":57,"./_wks":118}],48:[function(require,module,exports){
+'use strict';
+
 // 7.2.2 IsArray(argument)
 var cof = require('./_cof');
-module.exports = Array.isArray || function isArray(arg){
+module.exports = Array.isArray || function isArray(arg) {
   return cof(arg) == 'Array';
 };
-},{"./_cof":68}],98:[function(require,module,exports){
+
+},{"./_cof":19}],49:[function(require,module,exports){
+'use strict';
+
 // 20.1.2.3 Number.isInteger(number)
-var isObject = require('./_is-object')
-  , floor    = Math.floor;
-module.exports = function isInteger(it){
+var isObject = require('./_is-object'),
+    floor = Math.floor;
+module.exports = function isInteger(it) {
   return !isObject(it) && isFinite(it) && floor(it) === it;
 };
-},{"./_is-object":99}],99:[function(require,module,exports){
-module.exports = function(it){
-  return typeof it === 'object' ? it !== null : typeof it === 'function';
+
+},{"./_is-object":50}],50:[function(require,module,exports){
+'use strict';
+
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
+module.exports = function (it) {
+  return (typeof it === 'undefined' ? 'undefined' : _typeof(it)) === 'object' ? it !== null : typeof it === 'function';
 };
-},{}],100:[function(require,module,exports){
+
+},{}],51:[function(require,module,exports){
+'use strict';
+
 // 7.2.8 IsRegExp(argument)
-var isObject = require('./_is-object')
-  , cof      = require('./_cof')
-  , MATCH    = require('./_wks')('match');
-module.exports = function(it){
+var isObject = require('./_is-object'),
+    cof = require('./_cof'),
+    MATCH = require('./_wks')('match');
+module.exports = function (it) {
   var isRegExp;
   return isObject(it) && ((isRegExp = it[MATCH]) !== undefined ? !!isRegExp : cof(it) == 'RegExp');
 };
-},{"./_cof":68,"./_is-object":99,"./_wks":167}],101:[function(require,module,exports){
+
+},{"./_cof":19,"./_is-object":50,"./_wks":118}],52:[function(require,module,exports){
+'use strict';
+
 // call something on iterator step with safe closing on error
 var anObject = require('./_an-object');
-module.exports = function(iterator, fn, value, entries){
+module.exports = function (iterator, fn, value, entries) {
   try {
     return entries ? fn(anObject(value)[0], value[1]) : fn(value);
-  // 7.4.6 IteratorClose(iterator, completion)
-  } catch(e){
+    // 7.4.6 IteratorClose(iterator, completion)
+  } catch (e) {
     var ret = iterator['return'];
-    if(ret !== undefined)anObject(ret.call(iterator));
+    if (ret !== undefined) anObject(ret.call(iterator));
     throw e;
   }
 };
-},{"./_an-object":57}],102:[function(require,module,exports){
+
+},{"./_an-object":8}],53:[function(require,module,exports){
 'use strict';
-var create         = require('./_object-create')
-  , descriptor     = require('./_property-desc')
-  , setToStringTag = require('./_set-to-string-tag')
-  , IteratorPrototype = {};
+
+var create = require('./_object-create'),
+    descriptor = require('./_property-desc'),
+    setToStringTag = require('./_set-to-string-tag'),
+    IteratorPrototype = {};
 
 // 25.1.2.1.1 %IteratorPrototype%[@@iterator]()
-require('./_hide')(IteratorPrototype, require('./_wks')('iterator'), function(){ return this; });
+require('./_hide')(IteratorPrototype, require('./_wks')('iterator'), function () {
+  return this;
+});
 
-module.exports = function(Constructor, NAME, next){
-  Constructor.prototype = create(IteratorPrototype, {next: descriptor(1, next)});
+module.exports = function (Constructor, NAME, next) {
+  Constructor.prototype = create(IteratorPrototype, { next: descriptor(1, next) });
   setToStringTag(Constructor, NAME + ' Iterator');
 };
-},{"./_hide":90,"./_object-create":116,"./_property-desc":135,"./_set-to-string-tag":142,"./_wks":167}],103:[function(require,module,exports){
+
+},{"./_hide":41,"./_object-create":67,"./_property-desc":86,"./_set-to-string-tag":93,"./_wks":118}],54:[function(require,module,exports){
 'use strict';
-var LIBRARY        = require('./_library')
-  , $export        = require('./_export')
-  , redefine       = require('./_redefine')
-  , hide           = require('./_hide')
-  , has            = require('./_has')
-  , Iterators      = require('./_iterators')
-  , $iterCreate    = require('./_iter-create')
-  , setToStringTag = require('./_set-to-string-tag')
-  , getPrototypeOf = require('./_object-gpo')
-  , ITERATOR       = require('./_wks')('iterator')
-  , BUGGY          = !([].keys && 'next' in [].keys()) // Safari has buggy iterators w/o `next`
-  , FF_ITERATOR    = '@@iterator'
-  , KEYS           = 'keys'
-  , VALUES         = 'values';
 
-var returnThis = function(){ return this; };
+var LIBRARY = require('./_library'),
+    $export = require('./_export'),
+    redefine = require('./_redefine'),
+    hide = require('./_hide'),
+    has = require('./_has'),
+    Iterators = require('./_iterators'),
+    $iterCreate = require('./_iter-create'),
+    setToStringTag = require('./_set-to-string-tag'),
+    getPrototypeOf = require('./_object-gpo'),
+    ITERATOR = require('./_wks')('iterator'),
+    BUGGY = !([].keys && 'next' in [].keys()) // Safari has buggy iterators w/o `next`
+,
+    FF_ITERATOR = '@@iterator',
+    KEYS = 'keys',
+    VALUES = 'values';
 
-module.exports = function(Base, NAME, Constructor, next, DEFAULT, IS_SET, FORCED){
+var returnThis = function returnThis() {
+  return this;
+};
+
+module.exports = function (Base, NAME, Constructor, next, DEFAULT, IS_SET, FORCED) {
   $iterCreate(Constructor, NAME, next);
-  var getMethod = function(kind){
-    if(!BUGGY && kind in proto)return proto[kind];
-    switch(kind){
-      case KEYS: return function keys(){ return new Constructor(this, kind); };
-      case VALUES: return function values(){ return new Constructor(this, kind); };
-    } return function entries(){ return new Constructor(this, kind); };
+  var getMethod = function getMethod(kind) {
+    if (!BUGGY && kind in proto) return proto[kind];
+    switch (kind) {
+      case KEYS:
+        return function keys() {
+          return new Constructor(this, kind);
+        };
+      case VALUES:
+        return function values() {
+          return new Constructor(this, kind);
+        };
+    }return function entries() {
+      return new Constructor(this, kind);
+    };
   };
-  var TAG        = NAME + ' Iterator'
-    , DEF_VALUES = DEFAULT == VALUES
-    , VALUES_BUG = false
-    , proto      = Base.prototype
-    , $native    = proto[ITERATOR] || proto[FF_ITERATOR] || DEFAULT && proto[DEFAULT]
-    , $default   = $native || getMethod(DEFAULT)
-    , $entries   = DEFAULT ? !DEF_VALUES ? $default : getMethod('entries') : undefined
-    , $anyNative = NAME == 'Array' ? proto.entries || $native : $native
-    , methods, key, IteratorPrototype;
+  var TAG = NAME + ' Iterator',
+      DEF_VALUES = DEFAULT == VALUES,
+      VALUES_BUG = false,
+      proto = Base.prototype,
+      $native = proto[ITERATOR] || proto[FF_ITERATOR] || DEFAULT && proto[DEFAULT],
+      $default = $native || getMethod(DEFAULT),
+      $entries = DEFAULT ? !DEF_VALUES ? $default : getMethod('entries') : undefined,
+      $anyNative = NAME == 'Array' ? proto.entries || $native : $native,
+      methods,
+      key,
+      IteratorPrototype;
   // Fix native
-  if($anyNative){
-    IteratorPrototype = getPrototypeOf($anyNative.call(new Base));
-    if(IteratorPrototype !== Object.prototype){
+  if ($anyNative) {
+    IteratorPrototype = getPrototypeOf($anyNative.call(new Base()));
+    if (IteratorPrototype !== Object.prototype) {
       // Set @@toStringTag to native iterators
       setToStringTag(IteratorPrototype, TAG, true);
       // fix for some old engines
-      if(!LIBRARY && !has(IteratorPrototype, ITERATOR))hide(IteratorPrototype, ITERATOR, returnThis);
+      if (!LIBRARY && !has(IteratorPrototype, ITERATOR)) hide(IteratorPrototype, ITERATOR, returnThis);
     }
   }
   // fix Array#{values, @@iterator}.name in V8 / FF
-  if(DEF_VALUES && $native && $native.name !== VALUES){
+  if (DEF_VALUES && $native && $native.name !== VALUES) {
     VALUES_BUG = true;
-    $default = function values(){ return $native.call(this); };
+    $default = function values() {
+      return $native.call(this);
+    };
   }
   // Define iterator
-  if((!LIBRARY || FORCED) && (BUGGY || VALUES_BUG || !proto[ITERATOR])){
+  if ((!LIBRARY || FORCED) && (BUGGY || VALUES_BUG || !proto[ITERATOR])) {
     hide(proto, ITERATOR, $default);
   }
   // Plug for library
   Iterators[NAME] = $default;
-  Iterators[TAG]  = returnThis;
-  if(DEFAULT){
+  Iterators[TAG] = returnThis;
+  if (DEFAULT) {
     methods = {
-      values:  DEF_VALUES ? $default : getMethod(VALUES),
-      keys:    IS_SET     ? $default : getMethod(KEYS),
+      values: DEF_VALUES ? $default : getMethod(VALUES),
+      keys: IS_SET ? $default : getMethod(KEYS),
       entries: $entries
     };
-    if(FORCED)for(key in methods){
-      if(!(key in proto))redefine(proto, key, methods[key]);
+    if (FORCED) for (key in methods) {
+      if (!(key in proto)) redefine(proto, key, methods[key]);
     } else $export($export.P + $export.F * (BUGGY || VALUES_BUG), NAME, methods);
   }
   return methods;
 };
-},{"./_export":82,"./_has":89,"./_hide":90,"./_iter-create":102,"./_iterators":106,"./_library":108,"./_object-gpo":124,"./_redefine":137,"./_set-to-string-tag":142,"./_wks":167}],104:[function(require,module,exports){
-var ITERATOR     = require('./_wks')('iterator')
-  , SAFE_CLOSING = false;
+
+},{"./_export":33,"./_has":40,"./_hide":41,"./_iter-create":53,"./_iterators":57,"./_library":59,"./_object-gpo":75,"./_redefine":88,"./_set-to-string-tag":93,"./_wks":118}],55:[function(require,module,exports){
+'use strict';
+
+var ITERATOR = require('./_wks')('iterator'),
+    SAFE_CLOSING = false;
 
 try {
   var riter = [7][ITERATOR]();
-  riter['return'] = function(){ SAFE_CLOSING = true; };
-  Array.from(riter, function(){ throw 2; });
-} catch(e){ /* empty */ }
+  riter['return'] = function () {
+    SAFE_CLOSING = true;
+  };
+  Array.from(riter, function () {
+    throw 2;
+  });
+} catch (e) {/* empty */}
 
-module.exports = function(exec, skipClosing){
-  if(!skipClosing && !SAFE_CLOSING)return false;
+module.exports = function (exec, skipClosing) {
+  if (!skipClosing && !SAFE_CLOSING) return false;
   var safe = false;
   try {
-    var arr  = [7]
-      , iter = arr[ITERATOR]();
-    iter.next = function(){ return {done: safe = true}; };
-    arr[ITERATOR] = function(){ return iter; };
+    var arr = [7],
+        iter = arr[ITERATOR]();
+    iter.next = function () {
+      return { done: safe = true };
+    };
+    arr[ITERATOR] = function () {
+      return iter;
+    };
     exec(arr);
-  } catch(e){ /* empty */ }
+  } catch (e) {/* empty */}
   return safe;
 };
-},{"./_wks":167}],105:[function(require,module,exports){
-module.exports = function(done, value){
-  return {value: value, done: !!done};
+
+},{"./_wks":118}],56:[function(require,module,exports){
+"use strict";
+
+module.exports = function (done, value) {
+  return { value: value, done: !!done };
 };
-},{}],106:[function(require,module,exports){
+
+},{}],57:[function(require,module,exports){
+"use strict";
+
 module.exports = {};
-},{}],107:[function(require,module,exports){
-var getKeys   = require('./_object-keys')
-  , toIObject = require('./_to-iobject');
-module.exports = function(object, el){
-  var O      = toIObject(object)
-    , keys   = getKeys(O)
-    , length = keys.length
-    , index  = 0
-    , key;
-  while(length > index)if(O[key = keys[index++]] === el)return key;
+
+},{}],58:[function(require,module,exports){
+'use strict';
+
+var getKeys = require('./_object-keys'),
+    toIObject = require('./_to-iobject');
+module.exports = function (object, el) {
+  var O = toIObject(object),
+      keys = getKeys(O),
+      length = keys.length,
+      index = 0,
+      key;
+  while (length > index) {
+    if (O[key = keys[index++]] === el) return key;
+  }
 };
-},{"./_object-keys":126,"./_to-iobject":157}],108:[function(require,module,exports){
+
+},{"./_object-keys":77,"./_to-iobject":108}],59:[function(require,module,exports){
+"use strict";
+
 module.exports = false;
-},{}],109:[function(require,module,exports){
+
+},{}],60:[function(require,module,exports){
+"use strict";
+
 // 20.2.2.14 Math.expm1(x)
 var $expm1 = Math.expm1;
-module.exports = (!$expm1
-  // Old FF bug
-  || $expm1(10) > 22025.465794806719 || $expm1(10) < 22025.4657948067165168
-  // Tor Browser bug
-  || $expm1(-2e-17) != -2e-17
-) ? function expm1(x){
+module.exports = !$expm1
+// Old FF bug
+|| $expm1(10) > 22025.465794806719 || $expm1(10) < 22025.4657948067165168
+// Tor Browser bug
+|| $expm1(-2e-17) != -2e-17 ? function expm1(x) {
   return (x = +x) == 0 ? x : x > -1e-6 && x < 1e-6 ? x + x * x / 2 : Math.exp(x) - 1;
 } : $expm1;
-},{}],110:[function(require,module,exports){
+
+},{}],61:[function(require,module,exports){
+"use strict";
+
 // 20.2.2.20 Math.log1p(x)
-module.exports = Math.log1p || function log1p(x){
+module.exports = Math.log1p || function log1p(x) {
   return (x = +x) > -1e-8 && x < 1e-8 ? x - x * x / 2 : Math.log(1 + x);
 };
-},{}],111:[function(require,module,exports){
+
+},{}],62:[function(require,module,exports){
+"use strict";
+
 // 20.2.2.28 Math.sign(x)
-module.exports = Math.sign || function sign(x){
+module.exports = Math.sign || function sign(x) {
   return (x = +x) == 0 || x != x ? x : x < 0 ? -1 : 1;
 };
-},{}],112:[function(require,module,exports){
-var META     = require('./_uid')('meta')
-  , isObject = require('./_is-object')
-  , has      = require('./_has')
-  , setDesc  = require('./_object-dp').f
-  , id       = 0;
-var isExtensible = Object.isExtensible || function(){
+
+},{}],63:[function(require,module,exports){
+'use strict';
+
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
+var META = require('./_uid')('meta'),
+    isObject = require('./_is-object'),
+    has = require('./_has'),
+    setDesc = require('./_object-dp').f,
+    id = 0;
+var isExtensible = Object.isExtensible || function () {
   return true;
 };
-var FREEZE = !require('./_fails')(function(){
+var FREEZE = !require('./_fails')(function () {
   return isExtensible(Object.preventExtensions({}));
 });
-var setMeta = function(it){
-  setDesc(it, META, {value: {
-    i: 'O' + ++id, // object ID
-    w: {}          // weak collections IDs
-  }});
+var setMeta = function setMeta(it) {
+  setDesc(it, META, { value: {
+      i: 'O' + ++id, // object ID
+      w: {} // weak collections IDs
+    } });
 };
-var fastKey = function(it, create){
+var fastKey = function fastKey(it, create) {
   // return primitive with prefix
-  if(!isObject(it))return typeof it == 'symbol' ? it : (typeof it == 'string' ? 'S' : 'P') + it;
-  if(!has(it, META)){
+  if (!isObject(it)) return (typeof it === 'undefined' ? 'undefined' : _typeof(it)) == 'symbol' ? it : (typeof it == 'string' ? 'S' : 'P') + it;
+  if (!has(it, META)) {
     // can't set metadata to uncaught frozen object
-    if(!isExtensible(it))return 'F';
+    if (!isExtensible(it)) return 'F';
     // not necessary to add metadata
-    if(!create)return 'E';
+    if (!create) return 'E';
     // add missing metadata
     setMeta(it);
-  // return object ID
-  } return it[META].i;
+    // return object ID
+  }return it[META].i;
 };
-var getWeak = function(it, create){
-  if(!has(it, META)){
+var getWeak = function getWeak(it, create) {
+  if (!has(it, META)) {
     // can't set metadata to uncaught frozen object
-    if(!isExtensible(it))return true;
+    if (!isExtensible(it)) return true;
     // not necessary to add metadata
-    if(!create)return false;
+    if (!create) return false;
     // add missing metadata
     setMeta(it);
-  // return hash weak collections IDs
-  } return it[META].w;
+    // return hash weak collections IDs
+  }return it[META].w;
 };
 // add metadata on freeze-family methods calling
-var onFreeze = function(it){
-  if(FREEZE && meta.NEED && isExtensible(it) && !has(it, META))setMeta(it);
+var onFreeze = function onFreeze(it) {
+  if (FREEZE && meta.NEED && isExtensible(it) && !has(it, META)) setMeta(it);
   return it;
 };
 var meta = module.exports = {
-  KEY:      META,
-  NEED:     false,
-  fastKey:  fastKey,
-  getWeak:  getWeak,
+  KEY: META,
+  NEED: false,
+  fastKey: fastKey,
+  getWeak: getWeak,
   onFreeze: onFreeze
 };
-},{"./_fails":84,"./_has":89,"./_is-object":99,"./_object-dp":117,"./_uid":164}],113:[function(require,module,exports){
-var Map     = require('./es6.map')
-  , $export = require('./_export')
-  , shared  = require('./_shared')('metadata')
-  , store   = shared.store || (shared.store = new (require('./es6.weak-map')));
 
-var getOrCreateMetadataMap = function(target, targetKey, create){
+},{"./_fails":35,"./_has":40,"./_is-object":50,"./_object-dp":68,"./_uid":115}],64:[function(require,module,exports){
+'use strict';
+
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
+var Map = require('./es6.map'),
+    $export = require('./_export'),
+    shared = require('./_shared')('metadata'),
+    store = shared.store || (shared.store = new (require('./es6.weak-map'))());
+
+var getOrCreateMetadataMap = function getOrCreateMetadataMap(target, targetKey, create) {
   var targetMetadata = store.get(target);
-  if(!targetMetadata){
-    if(!create)return undefined;
-    store.set(target, targetMetadata = new Map);
+  if (!targetMetadata) {
+    if (!create) return undefined;
+    store.set(target, targetMetadata = new Map());
   }
   var keyMetadata = targetMetadata.get(targetKey);
-  if(!keyMetadata){
-    if(!create)return undefined;
-    targetMetadata.set(targetKey, keyMetadata = new Map);
-  } return keyMetadata;
+  if (!keyMetadata) {
+    if (!create) return undefined;
+    targetMetadata.set(targetKey, keyMetadata = new Map());
+  }return keyMetadata;
 };
-var ordinaryHasOwnMetadata = function(MetadataKey, O, P){
+var ordinaryHasOwnMetadata = function ordinaryHasOwnMetadata(MetadataKey, O, P) {
   var metadataMap = getOrCreateMetadataMap(O, P, false);
   return metadataMap === undefined ? false : metadataMap.has(MetadataKey);
 };
-var ordinaryGetOwnMetadata = function(MetadataKey, O, P){
+var ordinaryGetOwnMetadata = function ordinaryGetOwnMetadata(MetadataKey, O, P) {
   var metadataMap = getOrCreateMetadataMap(O, P, false);
   return metadataMap === undefined ? undefined : metadataMap.get(MetadataKey);
 };
-var ordinaryDefineOwnMetadata = function(MetadataKey, MetadataValue, O, P){
+var ordinaryDefineOwnMetadata = function ordinaryDefineOwnMetadata(MetadataKey, MetadataValue, O, P) {
   getOrCreateMetadataMap(O, P, true).set(MetadataKey, MetadataValue);
 };
-var ordinaryOwnMetadataKeys = function(target, targetKey){
-  var metadataMap = getOrCreateMetadataMap(target, targetKey, false)
-    , keys        = [];
-  if(metadataMap)metadataMap.forEach(function(_, key){ keys.push(key); });
+var ordinaryOwnMetadataKeys = function ordinaryOwnMetadataKeys(target, targetKey) {
+  var metadataMap = getOrCreateMetadataMap(target, targetKey, false),
+      keys = [];
+  if (metadataMap) metadataMap.forEach(function (_, key) {
+    keys.push(key);
+  });
   return keys;
 };
-var toMetaKey = function(it){
-  return it === undefined || typeof it == 'symbol' ? it : String(it);
+var toMetaKey = function toMetaKey(it) {
+  return it === undefined || (typeof it === 'undefined' ? 'undefined' : _typeof(it)) == 'symbol' ? it : String(it);
 };
-var exp = function(O){
+var exp = function exp(O) {
   $export($export.S, 'Reflect', O);
 };
 
@@ -21054,126 +18201,138 @@ module.exports = {
   key: toMetaKey,
   exp: exp
 };
-},{"./_export":82,"./_shared":144,"./es6.map":199,"./es6.weak-map":305}],114:[function(require,module,exports){
-var global    = require('./_global')
-  , macrotask = require('./_task').set
-  , Observer  = global.MutationObserver || global.WebKitMutationObserver
-  , process   = global.process
-  , Promise   = global.Promise
-  , isNode    = require('./_cof')(process) == 'process';
 
-module.exports = function(){
+},{"./_export":33,"./_shared":95,"./es6.map":150,"./es6.weak-map":256}],65:[function(require,module,exports){
+'use strict';
+
+var global = require('./_global'),
+    macrotask = require('./_task').set,
+    Observer = global.MutationObserver || global.WebKitMutationObserver,
+    process = global.process,
+    Promise = global.Promise,
+    isNode = require('./_cof')(process) == 'process';
+
+module.exports = function () {
   var head, last, notify;
 
-  var flush = function(){
+  var flush = function flush() {
     var parent, fn;
-    if(isNode && (parent = process.domain))parent.exit();
-    while(head){
-      fn   = head.fn;
+    if (isNode && (parent = process.domain)) parent.exit();
+    while (head) {
+      fn = head.fn;
       head = head.next;
       try {
         fn();
-      } catch(e){
-        if(head)notify();
-        else last = undefined;
+      } catch (e) {
+        if (head) notify();else last = undefined;
         throw e;
       }
-    } last = undefined;
-    if(parent)parent.enter();
+    }last = undefined;
+    if (parent) parent.enter();
   };
 
   // Node.js
-  if(isNode){
-    notify = function(){
+  if (isNode) {
+    notify = function notify() {
       process.nextTick(flush);
     };
-  // browsers with MutationObserver
-  } else if(Observer){
-    var toggle = true
-      , node   = document.createTextNode('');
-    new Observer(flush).observe(node, {characterData: true}); // eslint-disable-line no-new
-    notify = function(){
+    // browsers with MutationObserver
+  } else if (Observer) {
+    var toggle = true,
+        node = document.createTextNode('');
+    new Observer(flush).observe(node, { characterData: true }); // eslint-disable-line no-new
+    notify = function notify() {
       node.data = toggle = !toggle;
     };
-  // environments with maybe non-completely correct, but existent Promise
-  } else if(Promise && Promise.resolve){
+    // environments with maybe non-completely correct, but existent Promise
+  } else if (Promise && Promise.resolve) {
     var promise = Promise.resolve();
-    notify = function(){
+    notify = function notify() {
       promise.then(flush);
     };
-  // for other environments - macrotask based on:
-  // - setImmediate
-  // - MessageChannel
-  // - window.postMessag
-  // - onreadystatechange
-  // - setTimeout
+    // for other environments - macrotask based on:
+    // - setImmediate
+    // - MessageChannel
+    // - window.postMessag
+    // - onreadystatechange
+    // - setTimeout
   } else {
-    notify = function(){
+    notify = function notify() {
       // strange IE + webpack dev server bug - use .call(global)
       macrotask.call(global, flush);
     };
   }
 
-  return function(fn){
-    var task = {fn: fn, next: undefined};
-    if(last)last.next = task;
-    if(!head){
+  return function (fn) {
+    var task = { fn: fn, next: undefined };
+    if (last) last.next = task;
+    if (!head) {
       head = task;
       notify();
-    } last = task;
+    }last = task;
   };
 };
-},{"./_cof":68,"./_global":88,"./_task":154}],115:[function(require,module,exports){
+
+},{"./_cof":19,"./_global":39,"./_task":105}],66:[function(require,module,exports){
 'use strict';
 // 19.1.2.1 Object.assign(target, source, ...)
-var getKeys  = require('./_object-keys')
-  , gOPS     = require('./_object-gops')
-  , pIE      = require('./_object-pie')
-  , toObject = require('./_to-object')
-  , IObject  = require('./_iobject')
-  , $assign  = Object.assign;
+
+var getKeys = require('./_object-keys'),
+    gOPS = require('./_object-gops'),
+    pIE = require('./_object-pie'),
+    toObject = require('./_to-object'),
+    IObject = require('./_iobject'),
+    $assign = Object.assign;
 
 // should work with symbols and should have deterministic property order (V8 bug)
-module.exports = !$assign || require('./_fails')(function(){
-  var A = {}
-    , B = {}
-    , S = Symbol()
-    , K = 'abcdefghijklmnopqrst';
+module.exports = !$assign || require('./_fails')(function () {
+  var A = {},
+      B = {},
+      S = Symbol(),
+      K = 'abcdefghijklmnopqrst';
   A[S] = 7;
-  K.split('').forEach(function(k){ B[k] = k; });
+  K.split('').forEach(function (k) {
+    B[k] = k;
+  });
   return $assign({}, A)[S] != 7 || Object.keys($assign({}, B)).join('') != K;
-}) ? function assign(target, source){ // eslint-disable-line no-unused-vars
-  var T     = toObject(target)
-    , aLen  = arguments.length
-    , index = 1
-    , getSymbols = gOPS.f
-    , isEnum     = pIE.f;
-  while(aLen > index){
-    var S      = IObject(arguments[index++])
-      , keys   = getSymbols ? getKeys(S).concat(getSymbols(S)) : getKeys(S)
-      , length = keys.length
-      , j      = 0
-      , key;
-    while(length > j)if(isEnum.call(S, key = keys[j++]))T[key] = S[key];
-  } return T;
+}) ? function assign(target, source) {
+  // eslint-disable-line no-unused-vars
+  var T = toObject(target),
+      aLen = arguments.length,
+      index = 1,
+      getSymbols = gOPS.f,
+      isEnum = pIE.f;
+  while (aLen > index) {
+    var S = IObject(arguments[index++]),
+        keys = getSymbols ? getKeys(S).concat(getSymbols(S)) : getKeys(S),
+        length = keys.length,
+        j = 0,
+        key;
+    while (length > j) {
+      if (isEnum.call(S, key = keys[j++])) T[key] = S[key];
+    }
+  }return T;
 } : $assign;
-},{"./_fails":84,"./_iobject":95,"./_object-gops":123,"./_object-keys":126,"./_object-pie":127,"./_to-object":159}],116:[function(require,module,exports){
+
+},{"./_fails":35,"./_iobject":46,"./_object-gops":74,"./_object-keys":77,"./_object-pie":78,"./_to-object":110}],67:[function(require,module,exports){
+'use strict';
+
 // 19.1.2.2 / 15.2.3.5 Object.create(O [, Properties])
-var anObject    = require('./_an-object')
-  , dPs         = require('./_object-dps')
-  , enumBugKeys = require('./_enum-bug-keys')
-  , IE_PROTO    = require('./_shared-key')('IE_PROTO')
-  , Empty       = function(){ /* empty */ }
-  , PROTOTYPE   = 'prototype';
+var anObject = require('./_an-object'),
+    dPs = require('./_object-dps'),
+    enumBugKeys = require('./_enum-bug-keys'),
+    IE_PROTO = require('./_shared-key')('IE_PROTO'),
+    Empty = function Empty() {/* empty */},
+    PROTOTYPE = 'prototype';
 
 // Create object with fake `null` prototype: use iframe Object with cleared prototype
-var createDict = function(){
+var _createDict = function createDict() {
   // Thrash, waste and sodomy: IE GC bug
-  var iframe = require('./_dom-create')('iframe')
-    , i      = enumBugKeys.length
-    , lt     = '<'
-    , gt     = '>'
-    , iframeDocument;
+  var iframe = require('./_dom-create')('iframe'),
+      i = enumBugKeys.length,
+      lt = '<',
+      gt = '>',
+      iframeDocument;
   iframe.style.display = 'none';
   require('./_html').appendChild(iframe);
   iframe.src = 'javascript:'; // eslint-disable-line no-script-url
@@ -21183,933 +18342,1086 @@ var createDict = function(){
   iframeDocument.open();
   iframeDocument.write(lt + 'script' + gt + 'document.F=Object' + lt + '/script' + gt);
   iframeDocument.close();
-  createDict = iframeDocument.F;
-  while(i--)delete createDict[PROTOTYPE][enumBugKeys[i]];
-  return createDict();
+  _createDict = iframeDocument.F;
+  while (i--) {
+    delete _createDict[PROTOTYPE][enumBugKeys[i]];
+  }return _createDict();
 };
 
-module.exports = Object.create || function create(O, Properties){
+module.exports = Object.create || function create(O, Properties) {
   var result;
-  if(O !== null){
+  if (O !== null) {
     Empty[PROTOTYPE] = anObject(O);
-    result = new Empty;
+    result = new Empty();
     Empty[PROTOTYPE] = null;
     // add "__proto__" for Object.getPrototypeOf polyfill
     result[IE_PROTO] = O;
-  } else result = createDict();
+  } else result = _createDict();
   return Properties === undefined ? result : dPs(result, Properties);
 };
 
-},{"./_an-object":57,"./_dom-create":79,"./_enum-bug-keys":80,"./_html":91,"./_object-dps":118,"./_shared-key":143}],117:[function(require,module,exports){
-var anObject       = require('./_an-object')
-  , IE8_DOM_DEFINE = require('./_ie8-dom-define')
-  , toPrimitive    = require('./_to-primitive')
-  , dP             = Object.defineProperty;
+},{"./_an-object":8,"./_dom-create":30,"./_enum-bug-keys":31,"./_html":42,"./_object-dps":69,"./_shared-key":94}],68:[function(require,module,exports){
+'use strict';
 
-exports.f = require('./_descriptors') ? Object.defineProperty : function defineProperty(O, P, Attributes){
+var anObject = require('./_an-object'),
+    IE8_DOM_DEFINE = require('./_ie8-dom-define'),
+    toPrimitive = require('./_to-primitive'),
+    dP = Object.defineProperty;
+
+exports.f = require('./_descriptors') ? Object.defineProperty : function defineProperty(O, P, Attributes) {
   anObject(O);
   P = toPrimitive(P, true);
   anObject(Attributes);
-  if(IE8_DOM_DEFINE)try {
+  if (IE8_DOM_DEFINE) try {
     return dP(O, P, Attributes);
-  } catch(e){ /* empty */ }
-  if('get' in Attributes || 'set' in Attributes)throw TypeError('Accessors not supported!');
-  if('value' in Attributes)O[P] = Attributes.value;
+  } catch (e) {/* empty */}
+  if ('get' in Attributes || 'set' in Attributes) throw TypeError('Accessors not supported!');
+  if ('value' in Attributes) O[P] = Attributes.value;
   return O;
 };
-},{"./_an-object":57,"./_descriptors":78,"./_ie8-dom-define":92,"./_to-primitive":160}],118:[function(require,module,exports){
-var dP       = require('./_object-dp')
-  , anObject = require('./_an-object')
-  , getKeys  = require('./_object-keys');
 
-module.exports = require('./_descriptors') ? Object.defineProperties : function defineProperties(O, Properties){
+},{"./_an-object":8,"./_descriptors":29,"./_ie8-dom-define":43,"./_to-primitive":111}],69:[function(require,module,exports){
+'use strict';
+
+var dP = require('./_object-dp'),
+    anObject = require('./_an-object'),
+    getKeys = require('./_object-keys');
+
+module.exports = require('./_descriptors') ? Object.defineProperties : function defineProperties(O, Properties) {
   anObject(O);
-  var keys   = getKeys(Properties)
-    , length = keys.length
-    , i = 0
-    , P;
-  while(length > i)dP.f(O, P = keys[i++], Properties[P]);
-  return O;
+  var keys = getKeys(Properties),
+      length = keys.length,
+      i = 0,
+      P;
+  while (length > i) {
+    dP.f(O, P = keys[i++], Properties[P]);
+  }return O;
 };
-},{"./_an-object":57,"./_descriptors":78,"./_object-dp":117,"./_object-keys":126}],119:[function(require,module,exports){
+
+},{"./_an-object":8,"./_descriptors":29,"./_object-dp":68,"./_object-keys":77}],70:[function(require,module,exports){
+'use strict';
+
 // Forced replacement prototype accessors methods
-module.exports = require('./_library')|| !require('./_fails')(function(){
+module.exports = require('./_library') || !require('./_fails')(function () {
   var K = Math.random();
   // In FF throws only define methods
-  __defineSetter__.call(null, K, function(){ /* empty */});
+  __defineSetter__.call(null, K, function () {/* empty */});
   delete require('./_global')[K];
 });
-},{"./_fails":84,"./_global":88,"./_library":108}],120:[function(require,module,exports){
-var pIE            = require('./_object-pie')
-  , createDesc     = require('./_property-desc')
-  , toIObject      = require('./_to-iobject')
-  , toPrimitive    = require('./_to-primitive')
-  , has            = require('./_has')
-  , IE8_DOM_DEFINE = require('./_ie8-dom-define')
-  , gOPD           = Object.getOwnPropertyDescriptor;
 
-exports.f = require('./_descriptors') ? gOPD : function getOwnPropertyDescriptor(O, P){
+},{"./_fails":35,"./_global":39,"./_library":59}],71:[function(require,module,exports){
+'use strict';
+
+var pIE = require('./_object-pie'),
+    createDesc = require('./_property-desc'),
+    toIObject = require('./_to-iobject'),
+    toPrimitive = require('./_to-primitive'),
+    has = require('./_has'),
+    IE8_DOM_DEFINE = require('./_ie8-dom-define'),
+    gOPD = Object.getOwnPropertyDescriptor;
+
+exports.f = require('./_descriptors') ? gOPD : function getOwnPropertyDescriptor(O, P) {
   O = toIObject(O);
   P = toPrimitive(P, true);
-  if(IE8_DOM_DEFINE)try {
+  if (IE8_DOM_DEFINE) try {
     return gOPD(O, P);
-  } catch(e){ /* empty */ }
-  if(has(O, P))return createDesc(!pIE.f.call(O, P), O[P]);
+  } catch (e) {/* empty */}
+  if (has(O, P)) return createDesc(!pIE.f.call(O, P), O[P]);
 };
-},{"./_descriptors":78,"./_has":89,"./_ie8-dom-define":92,"./_object-pie":127,"./_property-desc":135,"./_to-iobject":157,"./_to-primitive":160}],121:[function(require,module,exports){
+
+},{"./_descriptors":29,"./_has":40,"./_ie8-dom-define":43,"./_object-pie":78,"./_property-desc":86,"./_to-iobject":108,"./_to-primitive":111}],72:[function(require,module,exports){
+'use strict';
+
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
 // fallback for IE11 buggy Object.getOwnPropertyNames with iframe and window
-var toIObject = require('./_to-iobject')
-  , gOPN      = require('./_object-gopn').f
-  , toString  = {}.toString;
+var toIObject = require('./_to-iobject'),
+    gOPN = require('./_object-gopn').f,
+    toString = {}.toString;
 
-var windowNames = typeof window == 'object' && window && Object.getOwnPropertyNames
-  ? Object.getOwnPropertyNames(window) : [];
+var windowNames = (typeof window === 'undefined' ? 'undefined' : _typeof(window)) == 'object' && window && Object.getOwnPropertyNames ? Object.getOwnPropertyNames(window) : [];
 
-var getWindowNames = function(it){
+var getWindowNames = function getWindowNames(it) {
   try {
     return gOPN(it);
-  } catch(e){
+  } catch (e) {
     return windowNames.slice();
   }
 };
 
-module.exports.f = function getOwnPropertyNames(it){
+module.exports.f = function getOwnPropertyNames(it) {
   return windowNames && toString.call(it) == '[object Window]' ? getWindowNames(it) : gOPN(toIObject(it));
 };
 
-},{"./_object-gopn":122,"./_to-iobject":157}],122:[function(require,module,exports){
-// 19.1.2.7 / 15.2.3.4 Object.getOwnPropertyNames(O)
-var $keys      = require('./_object-keys-internal')
-  , hiddenKeys = require('./_enum-bug-keys').concat('length', 'prototype');
+},{"./_object-gopn":73,"./_to-iobject":108}],73:[function(require,module,exports){
+'use strict';
 
-exports.f = Object.getOwnPropertyNames || function getOwnPropertyNames(O){
+// 19.1.2.7 / 15.2.3.4 Object.getOwnPropertyNames(O)
+var $keys = require('./_object-keys-internal'),
+    hiddenKeys = require('./_enum-bug-keys').concat('length', 'prototype');
+
+exports.f = Object.getOwnPropertyNames || function getOwnPropertyNames(O) {
   return $keys(O, hiddenKeys);
 };
-},{"./_enum-bug-keys":80,"./_object-keys-internal":125}],123:[function(require,module,exports){
+
+},{"./_enum-bug-keys":31,"./_object-keys-internal":76}],74:[function(require,module,exports){
+"use strict";
+
 exports.f = Object.getOwnPropertySymbols;
-},{}],124:[function(require,module,exports){
+
+},{}],75:[function(require,module,exports){
+'use strict';
+
 // 19.1.2.9 / 15.2.3.2 Object.getPrototypeOf(O)
-var has         = require('./_has')
-  , toObject    = require('./_to-object')
-  , IE_PROTO    = require('./_shared-key')('IE_PROTO')
-  , ObjectProto = Object.prototype;
+var has = require('./_has'),
+    toObject = require('./_to-object'),
+    IE_PROTO = require('./_shared-key')('IE_PROTO'),
+    ObjectProto = Object.prototype;
 
-module.exports = Object.getPrototypeOf || function(O){
+module.exports = Object.getPrototypeOf || function (O) {
   O = toObject(O);
-  if(has(O, IE_PROTO))return O[IE_PROTO];
-  if(typeof O.constructor == 'function' && O instanceof O.constructor){
+  if (has(O, IE_PROTO)) return O[IE_PROTO];
+  if (typeof O.constructor == 'function' && O instanceof O.constructor) {
     return O.constructor.prototype;
-  } return O instanceof Object ? ObjectProto : null;
+  }return O instanceof Object ? ObjectProto : null;
 };
-},{"./_has":89,"./_shared-key":143,"./_to-object":159}],125:[function(require,module,exports){
-var has          = require('./_has')
-  , toIObject    = require('./_to-iobject')
-  , arrayIndexOf = require('./_array-includes')(false)
-  , IE_PROTO     = require('./_shared-key')('IE_PROTO');
 
-module.exports = function(object, names){
-  var O      = toIObject(object)
-    , i      = 0
-    , result = []
-    , key;
-  for(key in O)if(key != IE_PROTO)has(O, key) && result.push(key);
-  // Don't enum bug & hidden keys
-  while(names.length > i)if(has(O, key = names[i++])){
-    ~arrayIndexOf(result, key) || result.push(key);
-  }
-  return result;
+},{"./_has":40,"./_shared-key":94,"./_to-object":110}],76:[function(require,module,exports){
+'use strict';
+
+var has = require('./_has'),
+    toIObject = require('./_to-iobject'),
+    arrayIndexOf = require('./_array-includes')(false),
+    IE_PROTO = require('./_shared-key')('IE_PROTO');
+
+module.exports = function (object, names) {
+  var O = toIObject(object),
+      i = 0,
+      result = [],
+      key;
+  for (key in O) {
+    if (key != IE_PROTO) has(O, key) && result.push(key);
+  } // Don't enum bug & hidden keys
+  while (names.length > i) {
+    if (has(O, key = names[i++])) {
+      ~arrayIndexOf(result, key) || result.push(key);
+    }
+  }return result;
 };
-},{"./_array-includes":61,"./_has":89,"./_shared-key":143,"./_to-iobject":157}],126:[function(require,module,exports){
+
+},{"./_array-includes":12,"./_has":40,"./_shared-key":94,"./_to-iobject":108}],77:[function(require,module,exports){
+'use strict';
+
 // 19.1.2.14 / 15.2.3.14 Object.keys(O)
-var $keys       = require('./_object-keys-internal')
-  , enumBugKeys = require('./_enum-bug-keys');
+var $keys = require('./_object-keys-internal'),
+    enumBugKeys = require('./_enum-bug-keys');
 
-module.exports = Object.keys || function keys(O){
+module.exports = Object.keys || function keys(O) {
   return $keys(O, enumBugKeys);
 };
-},{"./_enum-bug-keys":80,"./_object-keys-internal":125}],127:[function(require,module,exports){
+
+},{"./_enum-bug-keys":31,"./_object-keys-internal":76}],78:[function(require,module,exports){
+"use strict";
+
 exports.f = {}.propertyIsEnumerable;
-},{}],128:[function(require,module,exports){
+
+},{}],79:[function(require,module,exports){
+'use strict';
+
 // most Object methods by ES6 should accept primitives
-var $export = require('./_export')
-  , core    = require('./_core')
-  , fails   = require('./_fails');
-module.exports = function(KEY, exec){
-  var fn  = (core.Object || {})[KEY] || Object[KEY]
-    , exp = {};
+var $export = require('./_export'),
+    core = require('./_core'),
+    fails = require('./_fails');
+module.exports = function (KEY, exec) {
+  var fn = (core.Object || {})[KEY] || Object[KEY],
+      exp = {};
   exp[KEY] = exec(fn);
-  $export($export.S + $export.F * fails(function(){ fn(1); }), 'Object', exp);
+  $export($export.S + $export.F * fails(function () {
+    fn(1);
+  }), 'Object', exp);
 };
-},{"./_core":73,"./_export":82,"./_fails":84}],129:[function(require,module,exports){
-var getKeys   = require('./_object-keys')
-  , toIObject = require('./_to-iobject')
-  , isEnum    = require('./_object-pie').f;
-module.exports = function(isEntries){
-  return function(it){
-    var O      = toIObject(it)
-      , keys   = getKeys(O)
-      , length = keys.length
-      , i      = 0
-      , result = []
-      , key;
-    while(length > i)if(isEnum.call(O, key = keys[i++])){
-      result.push(isEntries ? [key, O[key]] : O[key]);
-    } return result;
+
+},{"./_core":24,"./_export":33,"./_fails":35}],80:[function(require,module,exports){
+'use strict';
+
+var getKeys = require('./_object-keys'),
+    toIObject = require('./_to-iobject'),
+    isEnum = require('./_object-pie').f;
+module.exports = function (isEntries) {
+  return function (it) {
+    var O = toIObject(it),
+        keys = getKeys(O),
+        length = keys.length,
+        i = 0,
+        result = [],
+        key;
+    while (length > i) {
+      if (isEnum.call(O, key = keys[i++])) {
+        result.push(isEntries ? [key, O[key]] : O[key]);
+      }
+    }return result;
   };
 };
-},{"./_object-keys":126,"./_object-pie":127,"./_to-iobject":157}],130:[function(require,module,exports){
+
+},{"./_object-keys":77,"./_object-pie":78,"./_to-iobject":108}],81:[function(require,module,exports){
+'use strict';
+
 // all object keys, includes non-enumerable and symbols
-var gOPN     = require('./_object-gopn')
-  , gOPS     = require('./_object-gops')
-  , anObject = require('./_an-object')
-  , Reflect  = require('./_global').Reflect;
-module.exports = Reflect && Reflect.ownKeys || function ownKeys(it){
-  var keys       = gOPN.f(anObject(it))
-    , getSymbols = gOPS.f;
+var gOPN = require('./_object-gopn'),
+    gOPS = require('./_object-gops'),
+    anObject = require('./_an-object'),
+    Reflect = require('./_global').Reflect;
+module.exports = Reflect && Reflect.ownKeys || function ownKeys(it) {
+  var keys = gOPN.f(anObject(it)),
+      getSymbols = gOPS.f;
   return getSymbols ? keys.concat(getSymbols(it)) : keys;
 };
-},{"./_an-object":57,"./_global":88,"./_object-gopn":122,"./_object-gops":123}],131:[function(require,module,exports){
-var $parseFloat = require('./_global').parseFloat
-  , $trim       = require('./_string-trim').trim;
 
-module.exports = 1 / $parseFloat(require('./_string-ws') + '-0') !== -Infinity ? function parseFloat(str){
-  var string = $trim(String(str), 3)
-    , result = $parseFloat(string);
+},{"./_an-object":8,"./_global":39,"./_object-gopn":73,"./_object-gops":74}],82:[function(require,module,exports){
+'use strict';
+
+var $parseFloat = require('./_global').parseFloat,
+    $trim = require('./_string-trim').trim;
+
+module.exports = 1 / $parseFloat(require('./_string-ws') + '-0') !== -Infinity ? function parseFloat(str) {
+  var string = $trim(String(str), 3),
+      result = $parseFloat(string);
   return result === 0 && string.charAt(0) == '-' ? -0 : result;
 } : $parseFloat;
-},{"./_global":88,"./_string-trim":152,"./_string-ws":153}],132:[function(require,module,exports){
-var $parseInt = require('./_global').parseInt
-  , $trim     = require('./_string-trim').trim
-  , ws        = require('./_string-ws')
-  , hex       = /^[\-+]?0[xX]/;
 
-module.exports = $parseInt(ws + '08') !== 8 || $parseInt(ws + '0x16') !== 22 ? function parseInt(str, radix){
-  var string = $trim(String(str), 3);
-  return $parseInt(string, (radix >>> 0) || (hex.test(string) ? 16 : 10));
-} : $parseInt;
-},{"./_global":88,"./_string-trim":152,"./_string-ws":153}],133:[function(require,module,exports){
+},{"./_global":39,"./_string-trim":103,"./_string-ws":104}],83:[function(require,module,exports){
 'use strict';
-var path      = require('./_path')
-  , invoke    = require('./_invoke')
-  , aFunction = require('./_a-function');
-module.exports = function(/* ...pargs */){
-  var fn     = aFunction(this)
-    , length = arguments.length
-    , pargs  = Array(length)
-    , i      = 0
-    , _      = path._
-    , holder = false;
-  while(length > i)if((pargs[i] = arguments[i++]) === _)holder = true;
-  return function(/* ...args */){
-    var that = this
-      , aLen = arguments.length
-      , j = 0, k = 0, args;
-    if(!holder && !aLen)return invoke(fn, pargs, that);
-    args = pargs.slice();
-    if(holder)for(;length > j; j++)if(args[j] === _)args[j] = arguments[k++];
-    while(aLen > k)args.push(arguments[k++]);
-    return invoke(fn, args, that);
-  };
-};
-},{"./_a-function":53,"./_invoke":94,"./_path":134}],134:[function(require,module,exports){
-module.exports = require('./_global');
-},{"./_global":88}],135:[function(require,module,exports){
-module.exports = function(bitmap, value){
-  return {
-    enumerable  : !(bitmap & 1),
-    configurable: !(bitmap & 2),
-    writable    : !(bitmap & 4),
-    value       : value
-  };
-};
-},{}],136:[function(require,module,exports){
-var redefine = require('./_redefine');
-module.exports = function(target, src, safe){
-  for(var key in src)redefine(target, key, src[key], safe);
-  return target;
-};
-},{"./_redefine":137}],137:[function(require,module,exports){
-var global    = require('./_global')
-  , hide      = require('./_hide')
-  , has       = require('./_has')
-  , SRC       = require('./_uid')('src')
-  , TO_STRING = 'toString'
-  , $toString = Function[TO_STRING]
-  , TPL       = ('' + $toString).split(TO_STRING);
 
-require('./_core').inspectSource = function(it){
+var $parseInt = require('./_global').parseInt,
+    $trim = require('./_string-trim').trim,
+    ws = require('./_string-ws'),
+    hex = /^[\-+]?0[xX]/;
+
+module.exports = $parseInt(ws + '08') !== 8 || $parseInt(ws + '0x16') !== 22 ? function parseInt(str, radix) {
+  var string = $trim(String(str), 3);
+  return $parseInt(string, radix >>> 0 || (hex.test(string) ? 16 : 10));
+} : $parseInt;
+
+},{"./_global":39,"./_string-trim":103,"./_string-ws":104}],84:[function(require,module,exports){
+'use strict';
+
+var path = require('./_path'),
+    invoke = require('./_invoke'),
+    aFunction = require('./_a-function');
+module.exports = function () /* ...pargs */{
+  var fn = aFunction(this),
+      length = arguments.length,
+      pargs = Array(length),
+      i = 0,
+      _ = path._,
+      holder = false;
+  while (length > i) {
+    if ((pargs[i] = arguments[i++]) === _) holder = true;
+  }return function () /* ...args */{
+    var that = this,
+        aLen = arguments.length,
+        j = 0,
+        k = 0,
+        args;
+    if (!holder && !aLen) return invoke(fn, pargs, that);
+    args = pargs.slice();
+    if (holder) for (; length > j; j++) {
+      if (args[j] === _) args[j] = arguments[k++];
+    }while (aLen > k) {
+      args.push(arguments[k++]);
+    }return invoke(fn, args, that);
+  };
+};
+
+},{"./_a-function":4,"./_invoke":45,"./_path":85}],85:[function(require,module,exports){
+'use strict';
+
+module.exports = require('./_global');
+
+},{"./_global":39}],86:[function(require,module,exports){
+"use strict";
+
+module.exports = function (bitmap, value) {
+  return {
+    enumerable: !(bitmap & 1),
+    configurable: !(bitmap & 2),
+    writable: !(bitmap & 4),
+    value: value
+  };
+};
+
+},{}],87:[function(require,module,exports){
+'use strict';
+
+var redefine = require('./_redefine');
+module.exports = function (target, src, safe) {
+  for (var key in src) {
+    redefine(target, key, src[key], safe);
+  }return target;
+};
+
+},{"./_redefine":88}],88:[function(require,module,exports){
+'use strict';
+
+var global = require('./_global'),
+    hide = require('./_hide'),
+    has = require('./_has'),
+    SRC = require('./_uid')('src'),
+    TO_STRING = 'toString',
+    $toString = Function[TO_STRING],
+    TPL = ('' + $toString).split(TO_STRING);
+
+require('./_core').inspectSource = function (it) {
   return $toString.call(it);
 };
 
-(module.exports = function(O, key, val, safe){
+(module.exports = function (O, key, val, safe) {
   var isFunction = typeof val == 'function';
-  if(isFunction)has(val, 'name') || hide(val, 'name', key);
-  if(O[key] === val)return;
-  if(isFunction)has(val, SRC) || hide(val, SRC, O[key] ? '' + O[key] : TPL.join(String(key)));
-  if(O === global){
+  if (isFunction) has(val, 'name') || hide(val, 'name', key);
+  if (O[key] === val) return;
+  if (isFunction) has(val, SRC) || hide(val, SRC, O[key] ? '' + O[key] : TPL.join(String(key)));
+  if (O === global) {
     O[key] = val;
   } else {
-    if(!safe){
+    if (!safe) {
       delete O[key];
       hide(O, key, val);
     } else {
-      if(O[key])O[key] = val;
-      else hide(O, key, val);
+      if (O[key]) O[key] = val;else hide(O, key, val);
     }
   }
-// add fake Function#toString for correct work wrapped methods / constructors with methods like LoDash isNative
-})(Function.prototype, TO_STRING, function toString(){
+  // add fake Function#toString for correct work wrapped methods / constructors with methods like LoDash isNative
+})(Function.prototype, TO_STRING, function toString() {
   return typeof this == 'function' && this[SRC] || $toString.call(this);
 });
-},{"./_core":73,"./_global":88,"./_has":89,"./_hide":90,"./_uid":164}],138:[function(require,module,exports){
-module.exports = function(regExp, replace){
-  var replacer = replace === Object(replace) ? function(part){
+
+},{"./_core":24,"./_global":39,"./_has":40,"./_hide":41,"./_uid":115}],89:[function(require,module,exports){
+"use strict";
+
+module.exports = function (regExp, replace) {
+  var replacer = replace === Object(replace) ? function (part) {
     return replace[part];
   } : replace;
-  return function(it){
+  return function (it) {
     return String(it).replace(regExp, replacer);
   };
 };
-},{}],139:[function(require,module,exports){
+
+},{}],90:[function(require,module,exports){
+"use strict";
+
 // 7.2.9 SameValue(x, y)
-module.exports = Object.is || function is(x, y){
+module.exports = Object.is || function is(x, y) {
   return x === y ? x !== 0 || 1 / x === 1 / y : x != x && y != y;
 };
-},{}],140:[function(require,module,exports){
+
+},{}],91:[function(require,module,exports){
+'use strict';
+
 // Works with __proto__ only. Old v8 can't work with null proto objects.
 /* eslint-disable no-proto */
-var isObject = require('./_is-object')
-  , anObject = require('./_an-object');
-var check = function(O, proto){
+var isObject = require('./_is-object'),
+    anObject = require('./_an-object');
+var check = function check(O, proto) {
   anObject(O);
-  if(!isObject(proto) && proto !== null)throw TypeError(proto + ": can't set as prototype!");
+  if (!isObject(proto) && proto !== null) throw TypeError(proto + ": can't set as prototype!");
 };
 module.exports = {
   set: Object.setPrototypeOf || ('__proto__' in {} ? // eslint-disable-line
-    function(test, buggy, set){
-      try {
-        set = require('./_ctx')(Function.call, require('./_object-gopd').f(Object.prototype, '__proto__').set, 2);
-        set(test, []);
-        buggy = !(test instanceof Array);
-      } catch(e){ buggy = true; }
-      return function setPrototypeOf(O, proto){
-        check(O, proto);
-        if(buggy)O.__proto__ = proto;
-        else set(O, proto);
-        return O;
-      };
-    }({}, false) : undefined),
+  function (test, buggy, set) {
+    try {
+      set = require('./_ctx')(Function.call, require('./_object-gopd').f(Object.prototype, '__proto__').set, 2);
+      set(test, []);
+      buggy = !(test instanceof Array);
+    } catch (e) {
+      buggy = true;
+    }
+    return function setPrototypeOf(O, proto) {
+      check(O, proto);
+      if (buggy) O.__proto__ = proto;else set(O, proto);
+      return O;
+    };
+  }({}, false) : undefined),
   check: check
 };
-},{"./_an-object":57,"./_ctx":75,"./_is-object":99,"./_object-gopd":120}],141:[function(require,module,exports){
-'use strict';
-var global      = require('./_global')
-  , dP          = require('./_object-dp')
-  , DESCRIPTORS = require('./_descriptors')
-  , SPECIES     = require('./_wks')('species');
 
-module.exports = function(KEY){
+},{"./_an-object":8,"./_ctx":26,"./_is-object":50,"./_object-gopd":71}],92:[function(require,module,exports){
+'use strict';
+
+var global = require('./_global'),
+    dP = require('./_object-dp'),
+    DESCRIPTORS = require('./_descriptors'),
+    SPECIES = require('./_wks')('species');
+
+module.exports = function (KEY) {
   var C = global[KEY];
-  if(DESCRIPTORS && C && !C[SPECIES])dP.f(C, SPECIES, {
+  if (DESCRIPTORS && C && !C[SPECIES]) dP.f(C, SPECIES, {
     configurable: true,
-    get: function(){ return this; }
+    get: function get() {
+      return this;
+    }
   });
 };
-},{"./_descriptors":78,"./_global":88,"./_object-dp":117,"./_wks":167}],142:[function(require,module,exports){
-var def = require('./_object-dp').f
-  , has = require('./_has')
-  , TAG = require('./_wks')('toStringTag');
 
-module.exports = function(it, tag, stat){
-  if(it && !has(it = stat ? it : it.prototype, TAG))def(it, TAG, {configurable: true, value: tag});
+},{"./_descriptors":29,"./_global":39,"./_object-dp":68,"./_wks":118}],93:[function(require,module,exports){
+'use strict';
+
+var def = require('./_object-dp').f,
+    has = require('./_has'),
+    TAG = require('./_wks')('toStringTag');
+
+module.exports = function (it, tag, stat) {
+  if (it && !has(it = stat ? it : it.prototype, TAG)) def(it, TAG, { configurable: true, value: tag });
 };
-},{"./_has":89,"./_object-dp":117,"./_wks":167}],143:[function(require,module,exports){
-var shared = require('./_shared')('keys')
-  , uid    = require('./_uid');
-module.exports = function(key){
+
+},{"./_has":40,"./_object-dp":68,"./_wks":118}],94:[function(require,module,exports){
+'use strict';
+
+var shared = require('./_shared')('keys'),
+    uid = require('./_uid');
+module.exports = function (key) {
   return shared[key] || (shared[key] = uid(key));
 };
-},{"./_shared":144,"./_uid":164}],144:[function(require,module,exports){
-var global = require('./_global')
-  , SHARED = '__core-js_shared__'
-  , store  = global[SHARED] || (global[SHARED] = {});
-module.exports = function(key){
+
+},{"./_shared":95,"./_uid":115}],95:[function(require,module,exports){
+'use strict';
+
+var global = require('./_global'),
+    SHARED = '__core-js_shared__',
+    store = global[SHARED] || (global[SHARED] = {});
+module.exports = function (key) {
   return store[key] || (store[key] = {});
 };
-},{"./_global":88}],145:[function(require,module,exports){
+
+},{"./_global":39}],96:[function(require,module,exports){
+'use strict';
+
 // 7.3.20 SpeciesConstructor(O, defaultConstructor)
-var anObject  = require('./_an-object')
-  , aFunction = require('./_a-function')
-  , SPECIES   = require('./_wks')('species');
-module.exports = function(O, D){
-  var C = anObject(O).constructor, S;
+var anObject = require('./_an-object'),
+    aFunction = require('./_a-function'),
+    SPECIES = require('./_wks')('species');
+module.exports = function (O, D) {
+  var C = anObject(O).constructor,
+      S;
   return C === undefined || (S = anObject(C)[SPECIES]) == undefined ? D : aFunction(S);
 };
-},{"./_a-function":53,"./_an-object":57,"./_wks":167}],146:[function(require,module,exports){
+
+},{"./_a-function":4,"./_an-object":8,"./_wks":118}],97:[function(require,module,exports){
+'use strict';
+
 var fails = require('./_fails');
 
-module.exports = function(method, arg){
-  return !!method && fails(function(){
-    arg ? method.call(null, function(){}, 1) : method.call(null);
+module.exports = function (method, arg) {
+  return !!method && fails(function () {
+    arg ? method.call(null, function () {}, 1) : method.call(null);
   });
 };
-},{"./_fails":84}],147:[function(require,module,exports){
-var toInteger = require('./_to-integer')
-  , defined   = require('./_defined');
+
+},{"./_fails":35}],98:[function(require,module,exports){
+'use strict';
+
+var toInteger = require('./_to-integer'),
+    defined = require('./_defined');
 // true  -> String#at
 // false -> String#codePointAt
-module.exports = function(TO_STRING){
-  return function(that, pos){
-    var s = String(defined(that))
-      , i = toInteger(pos)
-      , l = s.length
-      , a, b;
-    if(i < 0 || i >= l)return TO_STRING ? '' : undefined;
+module.exports = function (TO_STRING) {
+  return function (that, pos) {
+    var s = String(defined(that)),
+        i = toInteger(pos),
+        l = s.length,
+        a,
+        b;
+    if (i < 0 || i >= l) return TO_STRING ? '' : undefined;
     a = s.charCodeAt(i);
-    return a < 0xd800 || a > 0xdbff || i + 1 === l || (b = s.charCodeAt(i + 1)) < 0xdc00 || b > 0xdfff
-      ? TO_STRING ? s.charAt(i) : a
-      : TO_STRING ? s.slice(i, i + 2) : (a - 0xd800 << 10) + (b - 0xdc00) + 0x10000;
+    return a < 0xd800 || a > 0xdbff || i + 1 === l || (b = s.charCodeAt(i + 1)) < 0xdc00 || b > 0xdfff ? TO_STRING ? s.charAt(i) : a : TO_STRING ? s.slice(i, i + 2) : (a - 0xd800 << 10) + (b - 0xdc00) + 0x10000;
   };
 };
-},{"./_defined":77,"./_to-integer":156}],148:[function(require,module,exports){
-// helper for String#{startsWith, endsWith, includes}
-var isRegExp = require('./_is-regexp')
-  , defined  = require('./_defined');
 
-module.exports = function(that, searchString, NAME){
-  if(isRegExp(searchString))throw TypeError('String#' + NAME + " doesn't accept regex!");
+},{"./_defined":28,"./_to-integer":107}],99:[function(require,module,exports){
+'use strict';
+
+// helper for String#{startsWith, endsWith, includes}
+var isRegExp = require('./_is-regexp'),
+    defined = require('./_defined');
+
+module.exports = function (that, searchString, NAME) {
+  if (isRegExp(searchString)) throw TypeError('String#' + NAME + " doesn't accept regex!");
   return String(defined(that));
 };
-},{"./_defined":77,"./_is-regexp":100}],149:[function(require,module,exports){
-var $export = require('./_export')
-  , fails   = require('./_fails')
-  , defined = require('./_defined')
-  , quot    = /"/g;
+
+},{"./_defined":28,"./_is-regexp":51}],100:[function(require,module,exports){
+'use strict';
+
+var $export = require('./_export'),
+    fails = require('./_fails'),
+    defined = require('./_defined'),
+    quot = /"/g;
 // B.2.3.2.1 CreateHTML(string, tag, attribute, value)
-var createHTML = function(string, tag, attribute, value) {
-  var S  = String(defined(string))
-    , p1 = '<' + tag;
-  if(attribute !== '')p1 += ' ' + attribute + '="' + String(value).replace(quot, '&quot;') + '"';
+var createHTML = function createHTML(string, tag, attribute, value) {
+  var S = String(defined(string)),
+      p1 = '<' + tag;
+  if (attribute !== '') p1 += ' ' + attribute + '="' + String(value).replace(quot, '&quot;') + '"';
   return p1 + '>' + S + '</' + tag + '>';
 };
-module.exports = function(NAME, exec){
+module.exports = function (NAME, exec) {
   var O = {};
   O[NAME] = exec(createHTML);
-  $export($export.P + $export.F * fails(function(){
+  $export($export.P + $export.F * fails(function () {
     var test = ''[NAME]('"');
     return test !== test.toLowerCase() || test.split('"').length > 3;
   }), 'String', O);
 };
-},{"./_defined":77,"./_export":82,"./_fails":84}],150:[function(require,module,exports){
-// https://github.com/tc39/proposal-string-pad-start-end
-var toLength = require('./_to-length')
-  , repeat   = require('./_string-repeat')
-  , defined  = require('./_defined');
 
-module.exports = function(that, maxLength, fillString, left){
-  var S            = String(defined(that))
-    , stringLength = S.length
-    , fillStr      = fillString === undefined ? ' ' : String(fillString)
-    , intMaxLength = toLength(maxLength);
-  if(intMaxLength <= stringLength || fillStr == '')return S;
-  var fillLen = intMaxLength - stringLength
-    , stringFiller = repeat.call(fillStr, Math.ceil(fillLen / fillStr.length));
-  if(stringFiller.length > fillLen)stringFiller = stringFiller.slice(0, fillLen);
+},{"./_defined":28,"./_export":33,"./_fails":35}],101:[function(require,module,exports){
+'use strict';
+
+// https://github.com/tc39/proposal-string-pad-start-end
+var toLength = require('./_to-length'),
+    repeat = require('./_string-repeat'),
+    defined = require('./_defined');
+
+module.exports = function (that, maxLength, fillString, left) {
+  var S = String(defined(that)),
+      stringLength = S.length,
+      fillStr = fillString === undefined ? ' ' : String(fillString),
+      intMaxLength = toLength(maxLength);
+  if (intMaxLength <= stringLength || fillStr == '') return S;
+  var fillLen = intMaxLength - stringLength,
+      stringFiller = repeat.call(fillStr, Math.ceil(fillLen / fillStr.length));
+  if (stringFiller.length > fillLen) stringFiller = stringFiller.slice(0, fillLen);
   return left ? stringFiller + S : S + stringFiller;
 };
 
-},{"./_defined":77,"./_string-repeat":151,"./_to-length":158}],151:[function(require,module,exports){
+},{"./_defined":28,"./_string-repeat":102,"./_to-length":109}],102:[function(require,module,exports){
 'use strict';
-var toInteger = require('./_to-integer')
-  , defined   = require('./_defined');
 
-module.exports = function repeat(count){
-  var str = String(defined(this))
-    , res = ''
-    , n   = toInteger(count);
-  if(n < 0 || n == Infinity)throw RangeError("Count can't be negative");
-  for(;n > 0; (n >>>= 1) && (str += str))if(n & 1)res += str;
-  return res;
+var toInteger = require('./_to-integer'),
+    defined = require('./_defined');
+
+module.exports = function repeat(count) {
+  var str = String(defined(this)),
+      res = '',
+      n = toInteger(count);
+  if (n < 0 || n == Infinity) throw RangeError("Count can't be negative");
+  for (; n > 0; (n >>>= 1) && (str += str)) {
+    if (n & 1) res += str;
+  }return res;
 };
-},{"./_defined":77,"./_to-integer":156}],152:[function(require,module,exports){
-var $export = require('./_export')
-  , defined = require('./_defined')
-  , fails   = require('./_fails')
-  , spaces  = require('./_string-ws')
-  , space   = '[' + spaces + ']'
-  , non     = '\u200b\u0085'
-  , ltrim   = RegExp('^' + space + space + '*')
-  , rtrim   = RegExp(space + space + '*$');
 
-var exporter = function(KEY, exec, ALIAS){
-  var exp   = {};
-  var FORCE = fails(function(){
+},{"./_defined":28,"./_to-integer":107}],103:[function(require,module,exports){
+'use strict';
+
+var $export = require('./_export'),
+    defined = require('./_defined'),
+    fails = require('./_fails'),
+    spaces = require('./_string-ws'),
+    space = '[' + spaces + ']',
+    non = '\u200B\x85',
+    ltrim = RegExp('^' + space + space + '*'),
+    rtrim = RegExp(space + space + '*$');
+
+var exporter = function exporter(KEY, exec, ALIAS) {
+  var exp = {};
+  var FORCE = fails(function () {
     return !!spaces[KEY]() || non[KEY]() != non;
   });
   var fn = exp[KEY] = FORCE ? exec(trim) : spaces[KEY];
-  if(ALIAS)exp[ALIAS] = fn;
+  if (ALIAS) exp[ALIAS] = fn;
   $export($export.P + $export.F * FORCE, 'String', exp);
 };
 
 // 1 -> String#trimLeft
 // 2 -> String#trimRight
 // 3 -> String#trim
-var trim = exporter.trim = function(string, TYPE){
+var trim = exporter.trim = function (string, TYPE) {
   string = String(defined(string));
-  if(TYPE & 1)string = string.replace(ltrim, '');
-  if(TYPE & 2)string = string.replace(rtrim, '');
+  if (TYPE & 1) string = string.replace(ltrim, '');
+  if (TYPE & 2) string = string.replace(rtrim, '');
   return string;
 };
 
 module.exports = exporter;
-},{"./_defined":77,"./_export":82,"./_fails":84,"./_string-ws":153}],153:[function(require,module,exports){
-module.exports = '\x09\x0A\x0B\x0C\x0D\x20\xA0\u1680\u180E\u2000\u2001\u2002\u2003' +
-  '\u2004\u2005\u2006\u2007\u2008\u2009\u200A\u202F\u205F\u3000\u2028\u2029\uFEFF';
-},{}],154:[function(require,module,exports){
-var ctx                = require('./_ctx')
-  , invoke             = require('./_invoke')
-  , html               = require('./_html')
-  , cel                = require('./_dom-create')
-  , global             = require('./_global')
-  , process            = global.process
-  , setTask            = global.setImmediate
-  , clearTask          = global.clearImmediate
-  , MessageChannel     = global.MessageChannel
-  , counter            = 0
-  , queue              = {}
-  , ONREADYSTATECHANGE = 'onreadystatechange'
-  , defer, channel, port;
-var run = function(){
+
+},{"./_defined":28,"./_export":33,"./_fails":35,"./_string-ws":104}],104:[function(require,module,exports){
+'use strict';
+
+module.exports = '\t\n\x0B\f\r \xA0\u1680\u180E\u2000\u2001\u2002\u2003' + '\u2004\u2005\u2006\u2007\u2008\u2009\u200A\u202F\u205F\u3000\u2028\u2029\uFEFF';
+
+},{}],105:[function(require,module,exports){
+'use strict';
+
+var ctx = require('./_ctx'),
+    invoke = require('./_invoke'),
+    html = require('./_html'),
+    cel = require('./_dom-create'),
+    global = require('./_global'),
+    process = global.process,
+    setTask = global.setImmediate,
+    clearTask = global.clearImmediate,
+    MessageChannel = global.MessageChannel,
+    counter = 0,
+    queue = {},
+    ONREADYSTATECHANGE = 'onreadystatechange',
+    defer,
+    channel,
+    port;
+var run = function run() {
   var id = +this;
-  if(queue.hasOwnProperty(id)){
+  if (queue.hasOwnProperty(id)) {
     var fn = queue[id];
     delete queue[id];
     fn();
   }
 };
-var listener = function(event){
+var listener = function listener(event) {
   run.call(event.data);
 };
 // Node.js 0.9+ & IE10+ has setImmediate, otherwise:
-if(!setTask || !clearTask){
-  setTask = function setImmediate(fn){
-    var args = [], i = 1;
-    while(arguments.length > i)args.push(arguments[i++]);
-    queue[++counter] = function(){
+if (!setTask || !clearTask) {
+  setTask = function setImmediate(fn) {
+    var args = [],
+        i = 1;
+    while (arguments.length > i) {
+      args.push(arguments[i++]);
+    }queue[++counter] = function () {
       invoke(typeof fn == 'function' ? fn : Function(fn), args);
     };
     defer(counter);
     return counter;
   };
-  clearTask = function clearImmediate(id){
+  clearTask = function clearImmediate(id) {
     delete queue[id];
   };
   // Node.js 0.8-
-  if(require('./_cof')(process) == 'process'){
-    defer = function(id){
+  if (require('./_cof')(process) == 'process') {
+    defer = function defer(id) {
       process.nextTick(ctx(run, id, 1));
     };
-  // Browsers with MessageChannel, includes WebWorkers
-  } else if(MessageChannel){
-    channel = new MessageChannel;
-    port    = channel.port2;
+    // Browsers with MessageChannel, includes WebWorkers
+  } else if (MessageChannel) {
+    channel = new MessageChannel();
+    port = channel.port2;
     channel.port1.onmessage = listener;
     defer = ctx(port.postMessage, port, 1);
-  // Browsers with postMessage, skip WebWorkers
-  // IE8 has postMessage, but it's sync & typeof its postMessage is 'object'
-  } else if(global.addEventListener && typeof postMessage == 'function' && !global.importScripts){
-    defer = function(id){
+    // Browsers with postMessage, skip WebWorkers
+    // IE8 has postMessage, but it's sync & typeof its postMessage is 'object'
+  } else if (global.addEventListener && typeof postMessage == 'function' && !global.importScripts) {
+    defer = function defer(id) {
       global.postMessage(id + '', '*');
     };
     global.addEventListener('message', listener, false);
-  // IE8-
-  } else if(ONREADYSTATECHANGE in cel('script')){
-    defer = function(id){
-      html.appendChild(cel('script'))[ONREADYSTATECHANGE] = function(){
+    // IE8-
+  } else if (ONREADYSTATECHANGE in cel('script')) {
+    defer = function defer(id) {
+      html.appendChild(cel('script'))[ONREADYSTATECHANGE] = function () {
         html.removeChild(this);
         run.call(id);
       };
     };
-  // Rest old browsers
+    // Rest old browsers
   } else {
-    defer = function(id){
+    defer = function defer(id) {
       setTimeout(ctx(run, id, 1), 0);
     };
   }
 }
 module.exports = {
-  set:   setTask,
+  set: setTask,
   clear: clearTask
 };
-},{"./_cof":68,"./_ctx":75,"./_dom-create":79,"./_global":88,"./_html":91,"./_invoke":94}],155:[function(require,module,exports){
-var toInteger = require('./_to-integer')
-  , max       = Math.max
-  , min       = Math.min;
-module.exports = function(index, length){
+
+},{"./_cof":19,"./_ctx":26,"./_dom-create":30,"./_global":39,"./_html":42,"./_invoke":45}],106:[function(require,module,exports){
+'use strict';
+
+var toInteger = require('./_to-integer'),
+    max = Math.max,
+    min = Math.min;
+module.exports = function (index, length) {
   index = toInteger(index);
   return index < 0 ? max(index + length, 0) : min(index, length);
 };
-},{"./_to-integer":156}],156:[function(require,module,exports){
+
+},{"./_to-integer":107}],107:[function(require,module,exports){
+"use strict";
+
 // 7.1.4 ToInteger
-var ceil  = Math.ceil
-  , floor = Math.floor;
-module.exports = function(it){
+var ceil = Math.ceil,
+    floor = Math.floor;
+module.exports = function (it) {
   return isNaN(it = +it) ? 0 : (it > 0 ? floor : ceil)(it);
 };
-},{}],157:[function(require,module,exports){
+
+},{}],108:[function(require,module,exports){
+'use strict';
+
 // to indexed object, toObject with fallback for non-array-like ES3 strings
-var IObject = require('./_iobject')
-  , defined = require('./_defined');
-module.exports = function(it){
+var IObject = require('./_iobject'),
+    defined = require('./_defined');
+module.exports = function (it) {
   return IObject(defined(it));
 };
-},{"./_defined":77,"./_iobject":95}],158:[function(require,module,exports){
+
+},{"./_defined":28,"./_iobject":46}],109:[function(require,module,exports){
+'use strict';
+
 // 7.1.15 ToLength
-var toInteger = require('./_to-integer')
-  , min       = Math.min;
-module.exports = function(it){
+var toInteger = require('./_to-integer'),
+    min = Math.min;
+module.exports = function (it) {
   return it > 0 ? min(toInteger(it), 0x1fffffffffffff) : 0; // pow(2, 53) - 1 == 9007199254740991
 };
-},{"./_to-integer":156}],159:[function(require,module,exports){
+
+},{"./_to-integer":107}],110:[function(require,module,exports){
+'use strict';
+
 // 7.1.13 ToObject(argument)
 var defined = require('./_defined');
-module.exports = function(it){
+module.exports = function (it) {
   return Object(defined(it));
 };
-},{"./_defined":77}],160:[function(require,module,exports){
+
+},{"./_defined":28}],111:[function(require,module,exports){
+'use strict';
+
 // 7.1.1 ToPrimitive(input [, PreferredType])
 var isObject = require('./_is-object');
 // instead of the ES6 spec version, we didn't implement @@toPrimitive case
 // and the second argument - flag - preferred type is a string
-module.exports = function(it, S){
-  if(!isObject(it))return it;
+module.exports = function (it, S) {
+  if (!isObject(it)) return it;
   var fn, val;
-  if(S && typeof (fn = it.toString) == 'function' && !isObject(val = fn.call(it)))return val;
-  if(typeof (fn = it.valueOf) == 'function' && !isObject(val = fn.call(it)))return val;
-  if(!S && typeof (fn = it.toString) == 'function' && !isObject(val = fn.call(it)))return val;
+  if (S && typeof (fn = it.toString) == 'function' && !isObject(val = fn.call(it))) return val;
+  if (typeof (fn = it.valueOf) == 'function' && !isObject(val = fn.call(it))) return val;
+  if (!S && typeof (fn = it.toString) == 'function' && !isObject(val = fn.call(it))) return val;
   throw TypeError("Can't convert object to primitive value");
 };
-},{"./_is-object":99}],161:[function(require,module,exports){
-'use strict';
-if(require('./_descriptors')){
-  var LIBRARY             = require('./_library')
-    , global              = require('./_global')
-    , fails               = require('./_fails')
-    , $export             = require('./_export')
-    , $typed              = require('./_typed')
-    , $buffer             = require('./_typed-buffer')
-    , ctx                 = require('./_ctx')
-    , anInstance          = require('./_an-instance')
-    , propertyDesc        = require('./_property-desc')
-    , hide                = require('./_hide')
-    , redefineAll         = require('./_redefine-all')
-    , toInteger           = require('./_to-integer')
-    , toLength            = require('./_to-length')
-    , toIndex             = require('./_to-index')
-    , toPrimitive         = require('./_to-primitive')
-    , has                 = require('./_has')
-    , same                = require('./_same-value')
-    , classof             = require('./_classof')
-    , isObject            = require('./_is-object')
-    , toObject            = require('./_to-object')
-    , isArrayIter         = require('./_is-array-iter')
-    , create              = require('./_object-create')
-    , getPrototypeOf      = require('./_object-gpo')
-    , gOPN                = require('./_object-gopn').f
-    , getIterFn           = require('./core.get-iterator-method')
-    , uid                 = require('./_uid')
-    , wks                 = require('./_wks')
-    , createArrayMethod   = require('./_array-methods')
-    , createArrayIncludes = require('./_array-includes')
-    , speciesConstructor  = require('./_species-constructor')
-    , ArrayIterators      = require('./es6.array.iterator')
-    , Iterators           = require('./_iterators')
-    , $iterDetect         = require('./_iter-detect')
-    , setSpecies          = require('./_set-species')
-    , arrayFill           = require('./_array-fill')
-    , arrayCopyWithin     = require('./_array-copy-within')
-    , $DP                 = require('./_object-dp')
-    , $GOPD               = require('./_object-gopd')
-    , dP                  = $DP.f
-    , gOPD                = $GOPD.f
-    , RangeError          = global.RangeError
-    , TypeError           = global.TypeError
-    , Uint8Array          = global.Uint8Array
-    , ARRAY_BUFFER        = 'ArrayBuffer'
-    , SHARED_BUFFER       = 'Shared' + ARRAY_BUFFER
-    , BYTES_PER_ELEMENT   = 'BYTES_PER_ELEMENT'
-    , PROTOTYPE           = 'prototype'
-    , ArrayProto          = Array[PROTOTYPE]
-    , $ArrayBuffer        = $buffer.ArrayBuffer
-    , $DataView           = $buffer.DataView
-    , arrayForEach        = createArrayMethod(0)
-    , arrayFilter         = createArrayMethod(2)
-    , arraySome           = createArrayMethod(3)
-    , arrayEvery          = createArrayMethod(4)
-    , arrayFind           = createArrayMethod(5)
-    , arrayFindIndex      = createArrayMethod(6)
-    , arrayIncludes       = createArrayIncludes(true)
-    , arrayIndexOf        = createArrayIncludes(false)
-    , arrayValues         = ArrayIterators.values
-    , arrayKeys           = ArrayIterators.keys
-    , arrayEntries        = ArrayIterators.entries
-    , arrayLastIndexOf    = ArrayProto.lastIndexOf
-    , arrayReduce         = ArrayProto.reduce
-    , arrayReduceRight    = ArrayProto.reduceRight
-    , arrayJoin           = ArrayProto.join
-    , arraySort           = ArrayProto.sort
-    , arraySlice          = ArrayProto.slice
-    , arrayToString       = ArrayProto.toString
-    , arrayToLocaleString = ArrayProto.toLocaleString
-    , ITERATOR            = wks('iterator')
-    , TAG                 = wks('toStringTag')
-    , TYPED_CONSTRUCTOR   = uid('typed_constructor')
-    , DEF_CONSTRUCTOR     = uid('def_constructor')
-    , ALL_CONSTRUCTORS    = $typed.CONSTR
-    , TYPED_ARRAY         = $typed.TYPED
-    , VIEW                = $typed.VIEW
-    , WRONG_LENGTH        = 'Wrong length!';
 
-  var $map = createArrayMethod(1, function(O, length){
+},{"./_is-object":50}],112:[function(require,module,exports){
+'use strict';
+
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
+if (require('./_descriptors')) {
+  var LIBRARY = require('./_library'),
+      global = require('./_global'),
+      fails = require('./_fails'),
+      $export = require('./_export'),
+      $typed = require('./_typed'),
+      $buffer = require('./_typed-buffer'),
+      ctx = require('./_ctx'),
+      anInstance = require('./_an-instance'),
+      propertyDesc = require('./_property-desc'),
+      hide = require('./_hide'),
+      redefineAll = require('./_redefine-all'),
+      toInteger = require('./_to-integer'),
+      toLength = require('./_to-length'),
+      toIndex = require('./_to-index'),
+      toPrimitive = require('./_to-primitive'),
+      has = require('./_has'),
+      same = require('./_same-value'),
+      classof = require('./_classof'),
+      isObject = require('./_is-object'),
+      toObject = require('./_to-object'),
+      isArrayIter = require('./_is-array-iter'),
+      create = require('./_object-create'),
+      getPrototypeOf = require('./_object-gpo'),
+      gOPN = require('./_object-gopn').f,
+      getIterFn = require('./core.get-iterator-method'),
+      uid = require('./_uid'),
+      wks = require('./_wks'),
+      createArrayMethod = require('./_array-methods'),
+      createArrayIncludes = require('./_array-includes'),
+      speciesConstructor = require('./_species-constructor'),
+      ArrayIterators = require('./es6.array.iterator'),
+      Iterators = require('./_iterators'),
+      $iterDetect = require('./_iter-detect'),
+      setSpecies = require('./_set-species'),
+      arrayFill = require('./_array-fill'),
+      arrayCopyWithin = require('./_array-copy-within'),
+      $DP = require('./_object-dp'),
+      $GOPD = require('./_object-gopd'),
+      dP = $DP.f,
+      gOPD = $GOPD.f,
+      RangeError = global.RangeError,
+      TypeError = global.TypeError,
+      Uint8Array = global.Uint8Array,
+      ARRAY_BUFFER = 'ArrayBuffer',
+      SHARED_BUFFER = 'Shared' + ARRAY_BUFFER,
+      BYTES_PER_ELEMENT = 'BYTES_PER_ELEMENT',
+      PROTOTYPE = 'prototype',
+      ArrayProto = Array[PROTOTYPE],
+      $ArrayBuffer = $buffer.ArrayBuffer,
+      $DataView = $buffer.DataView,
+      arrayForEach = createArrayMethod(0),
+      arrayFilter = createArrayMethod(2),
+      arraySome = createArrayMethod(3),
+      arrayEvery = createArrayMethod(4),
+      arrayFind = createArrayMethod(5),
+      arrayFindIndex = createArrayMethod(6),
+      arrayIncludes = createArrayIncludes(true),
+      arrayIndexOf = createArrayIncludes(false),
+      arrayValues = ArrayIterators.values,
+      arrayKeys = ArrayIterators.keys,
+      arrayEntries = ArrayIterators.entries,
+      arrayLastIndexOf = ArrayProto.lastIndexOf,
+      arrayReduce = ArrayProto.reduce,
+      arrayReduceRight = ArrayProto.reduceRight,
+      arrayJoin = ArrayProto.join,
+      arraySort = ArrayProto.sort,
+      arraySlice = ArrayProto.slice,
+      arrayToString = ArrayProto.toString,
+      arrayToLocaleString = ArrayProto.toLocaleString,
+      ITERATOR = wks('iterator'),
+      TAG = wks('toStringTag'),
+      TYPED_CONSTRUCTOR = uid('typed_constructor'),
+      DEF_CONSTRUCTOR = uid('def_constructor'),
+      ALL_CONSTRUCTORS = $typed.CONSTR,
+      TYPED_ARRAY = $typed.TYPED,
+      VIEW = $typed.VIEW,
+      WRONG_LENGTH = 'Wrong length!';
+
+  var $map = createArrayMethod(1, function (O, length) {
     return allocate(speciesConstructor(O, O[DEF_CONSTRUCTOR]), length);
   });
 
-  var LITTLE_ENDIAN = fails(function(){
+  var LITTLE_ENDIAN = fails(function () {
     return new Uint8Array(new Uint16Array([1]).buffer)[0] === 1;
   });
 
-  var FORCED_SET = !!Uint8Array && !!Uint8Array[PROTOTYPE].set && fails(function(){
+  var FORCED_SET = !!Uint8Array && !!Uint8Array[PROTOTYPE].set && fails(function () {
     new Uint8Array(1).set({});
   });
 
-  var strictToLength = function(it, SAME){
-    if(it === undefined)throw TypeError(WRONG_LENGTH);
-    var number = +it
-      , length = toLength(it);
-    if(SAME && !same(number, length))throw RangeError(WRONG_LENGTH);
+  var strictToLength = function strictToLength(it, SAME) {
+    if (it === undefined) throw TypeError(WRONG_LENGTH);
+    var number = +it,
+        length = toLength(it);
+    if (SAME && !same(number, length)) throw RangeError(WRONG_LENGTH);
     return length;
   };
 
-  var toOffset = function(it, BYTES){
+  var toOffset = function toOffset(it, BYTES) {
     var offset = toInteger(it);
-    if(offset < 0 || offset % BYTES)throw RangeError('Wrong offset!');
+    if (offset < 0 || offset % BYTES) throw RangeError('Wrong offset!');
     return offset;
   };
 
-  var validate = function(it){
-    if(isObject(it) && TYPED_ARRAY in it)return it;
+  var validate = function validate(it) {
+    if (isObject(it) && TYPED_ARRAY in it) return it;
     throw TypeError(it + ' is not a typed array!');
   };
 
-  var allocate = function(C, length){
-    if(!(isObject(C) && TYPED_CONSTRUCTOR in C)){
+  var allocate = function allocate(C, length) {
+    if (!(isObject(C) && TYPED_CONSTRUCTOR in C)) {
       throw TypeError('It is not a typed array constructor!');
-    } return new C(length);
+    }return new C(length);
   };
 
-  var speciesFromList = function(O, list){
+  var speciesFromList = function speciesFromList(O, list) {
     return fromList(speciesConstructor(O, O[DEF_CONSTRUCTOR]), list);
   };
 
-  var fromList = function(C, list){
-    var index  = 0
-      , length = list.length
-      , result = allocate(C, length);
-    while(length > index)result[index] = list[index++];
-    return result;
+  var fromList = function fromList(C, list) {
+    var index = 0,
+        length = list.length,
+        result = allocate(C, length);
+    while (length > index) {
+      result[index] = list[index++];
+    }return result;
   };
 
-  var addGetter = function(it, key, internal){
-    dP(it, key, {get: function(){ return this._d[internal]; }});
+  var addGetter = function addGetter(it, key, internal) {
+    dP(it, key, { get: function get() {
+        return this._d[internal];
+      } });
   };
 
-  var $from = function from(source /*, mapfn, thisArg */){
-    var O       = toObject(source)
-      , aLen    = arguments.length
-      , mapfn   = aLen > 1 ? arguments[1] : undefined
-      , mapping = mapfn !== undefined
-      , iterFn  = getIterFn(O)
-      , i, length, values, result, step, iterator;
-    if(iterFn != undefined && !isArrayIter(iterFn)){
-      for(iterator = iterFn.call(O), values = [], i = 0; !(step = iterator.next()).done; i++){
+  var $from = function from(source /*, mapfn, thisArg */) {
+    var O = toObject(source),
+        aLen = arguments.length,
+        mapfn = aLen > 1 ? arguments[1] : undefined,
+        mapping = mapfn !== undefined,
+        iterFn = getIterFn(O),
+        i,
+        length,
+        values,
+        result,
+        step,
+        iterator;
+    if (iterFn != undefined && !isArrayIter(iterFn)) {
+      for (iterator = iterFn.call(O), values = [], i = 0; !(step = iterator.next()).done; i++) {
         values.push(step.value);
-      } O = values;
+      }O = values;
     }
-    if(mapping && aLen > 2)mapfn = ctx(mapfn, arguments[2], 2);
-    for(i = 0, length = toLength(O.length), result = allocate(this, length); length > i; i++){
+    if (mapping && aLen > 2) mapfn = ctx(mapfn, arguments[2], 2);
+    for (i = 0, length = toLength(O.length), result = allocate(this, length); length > i; i++) {
       result[i] = mapping ? mapfn(O[i], i) : O[i];
     }
     return result;
   };
 
-  var $of = function of(/*...items*/){
-    var index  = 0
-      , length = arguments.length
-      , result = allocate(this, length);
-    while(length > index)result[index] = arguments[index++];
-    return result;
+  var $of = function of() /*...items*/{
+    var index = 0,
+        length = arguments.length,
+        result = allocate(this, length);
+    while (length > index) {
+      result[index] = arguments[index++];
+    }return result;
   };
 
   // iOS Safari 6.x fails here
-  var TO_LOCALE_BUG = !!Uint8Array && fails(function(){ arrayToLocaleString.call(new Uint8Array(1)); });
+  var TO_LOCALE_BUG = !!Uint8Array && fails(function () {
+    arrayToLocaleString.call(new Uint8Array(1));
+  });
 
-  var $toLocaleString = function toLocaleString(){
+  var $toLocaleString = function toLocaleString() {
     return arrayToLocaleString.apply(TO_LOCALE_BUG ? arraySlice.call(validate(this)) : validate(this), arguments);
   };
 
   var proto = {
-    copyWithin: function copyWithin(target, start /*, end */){
+    copyWithin: function copyWithin(target, start /*, end */) {
       return arrayCopyWithin.call(validate(this), target, start, arguments.length > 2 ? arguments[2] : undefined);
     },
-    every: function every(callbackfn /*, thisArg */){
+    every: function every(callbackfn /*, thisArg */) {
       return arrayEvery(validate(this), callbackfn, arguments.length > 1 ? arguments[1] : undefined);
     },
-    fill: function fill(value /*, start, end */){ // eslint-disable-line no-unused-vars
+    fill: function fill(value /*, start, end */) {
+      // eslint-disable-line no-unused-vars
       return arrayFill.apply(validate(this), arguments);
     },
-    filter: function filter(callbackfn /*, thisArg */){
-      return speciesFromList(this, arrayFilter(validate(this), callbackfn,
-        arguments.length > 1 ? arguments[1] : undefined));
+    filter: function filter(callbackfn /*, thisArg */) {
+      return speciesFromList(this, arrayFilter(validate(this), callbackfn, arguments.length > 1 ? arguments[1] : undefined));
     },
-    find: function find(predicate /*, thisArg */){
+    find: function find(predicate /*, thisArg */) {
       return arrayFind(validate(this), predicate, arguments.length > 1 ? arguments[1] : undefined);
     },
-    findIndex: function findIndex(predicate /*, thisArg */){
+    findIndex: function findIndex(predicate /*, thisArg */) {
       return arrayFindIndex(validate(this), predicate, arguments.length > 1 ? arguments[1] : undefined);
     },
-    forEach: function forEach(callbackfn /*, thisArg */){
+    forEach: function forEach(callbackfn /*, thisArg */) {
       arrayForEach(validate(this), callbackfn, arguments.length > 1 ? arguments[1] : undefined);
     },
-    indexOf: function indexOf(searchElement /*, fromIndex */){
+    indexOf: function indexOf(searchElement /*, fromIndex */) {
       return arrayIndexOf(validate(this), searchElement, arguments.length > 1 ? arguments[1] : undefined);
     },
-    includes: function includes(searchElement /*, fromIndex */){
+    includes: function includes(searchElement /*, fromIndex */) {
       return arrayIncludes(validate(this), searchElement, arguments.length > 1 ? arguments[1] : undefined);
     },
-    join: function join(separator){ // eslint-disable-line no-unused-vars
+    join: function join(separator) {
+      // eslint-disable-line no-unused-vars
       return arrayJoin.apply(validate(this), arguments);
     },
-    lastIndexOf: function lastIndexOf(searchElement /*, fromIndex */){ // eslint-disable-line no-unused-vars
+    lastIndexOf: function lastIndexOf(searchElement /*, fromIndex */) {
+      // eslint-disable-line no-unused-vars
       return arrayLastIndexOf.apply(validate(this), arguments);
     },
-    map: function map(mapfn /*, thisArg */){
+    map: function map(mapfn /*, thisArg */) {
       return $map(validate(this), mapfn, arguments.length > 1 ? arguments[1] : undefined);
     },
-    reduce: function reduce(callbackfn /*, initialValue */){ // eslint-disable-line no-unused-vars
+    reduce: function reduce(callbackfn /*, initialValue */) {
+      // eslint-disable-line no-unused-vars
       return arrayReduce.apply(validate(this), arguments);
     },
-    reduceRight: function reduceRight(callbackfn /*, initialValue */){ // eslint-disable-line no-unused-vars
+    reduceRight: function reduceRight(callbackfn /*, initialValue */) {
+      // eslint-disable-line no-unused-vars
       return arrayReduceRight.apply(validate(this), arguments);
     },
-    reverse: function reverse(){
-      var that   = this
-        , length = validate(that).length
-        , middle = Math.floor(length / 2)
-        , index  = 0
-        , value;
-      while(index < middle){
-        value         = that[index];
+    reverse: function reverse() {
+      var that = this,
+          length = validate(that).length,
+          middle = Math.floor(length / 2),
+          index = 0,
+          value;
+      while (index < middle) {
+        value = that[index];
         that[index++] = that[--length];
-        that[length]  = value;
-      } return that;
+        that[length] = value;
+      }return that;
     },
-    some: function some(callbackfn /*, thisArg */){
+    some: function some(callbackfn /*, thisArg */) {
       return arraySome(validate(this), callbackfn, arguments.length > 1 ? arguments[1] : undefined);
     },
-    sort: function sort(comparefn){
+    sort: function sort(comparefn) {
       return arraySort.call(validate(this), comparefn);
     },
-    subarray: function subarray(begin, end){
-      var O      = validate(this)
-        , length = O.length
-        , $begin = toIndex(begin, length);
-      return new (speciesConstructor(O, O[DEF_CONSTRUCTOR]))(
-        O.buffer,
-        O.byteOffset + $begin * O.BYTES_PER_ELEMENT,
-        toLength((end === undefined ? length : toIndex(end, length)) - $begin)
-      );
+    subarray: function subarray(begin, end) {
+      var O = validate(this),
+          length = O.length,
+          $begin = toIndex(begin, length);
+      return new (speciesConstructor(O, O[DEF_CONSTRUCTOR]))(O.buffer, O.byteOffset + $begin * O.BYTES_PER_ELEMENT, toLength((end === undefined ? length : toIndex(end, length)) - $begin));
     }
   };
 
-  var $slice = function slice(start, end){
+  var $slice = function slice(start, end) {
     return speciesFromList(this, arraySlice.call(validate(this), start, end));
   };
 
-  var $set = function set(arrayLike /*, offset */){
+  var $set = function set(arrayLike /*, offset */) {
     validate(this);
-    var offset = toOffset(arguments[1], 1)
-      , length = this.length
-      , src    = toObject(arrayLike)
-      , len    = toLength(src.length)
-      , index  = 0;
-    if(len + offset > length)throw RangeError(WRONG_LENGTH);
-    while(index < len)this[offset + index] = src[index++];
+    var offset = toOffset(arguments[1], 1),
+        length = this.length,
+        src = toObject(arrayLike),
+        len = toLength(src.length),
+        index = 0;
+    if (len + offset > length) throw RangeError(WRONG_LENGTH);
+    while (index < len) {
+      this[offset + index] = src[index++];
+    }
   };
 
   var $iterators = {
-    entries: function entries(){
+    entries: function entries() {
       return arrayEntries.call(validate(this));
     },
-    keys: function keys(){
+    keys: function keys() {
       return arrayKeys.call(validate(this));
     },
-    values: function values(){
+    values: function values() {
       return arrayValues.call(validate(this));
     }
   };
 
-  var isTAIndex = function(target, key){
-    return isObject(target)
-      && target[TYPED_ARRAY]
-      && typeof key != 'symbol'
-      && key in target
-      && String(+key) == String(key);
+  var isTAIndex = function isTAIndex(target, key) {
+    return isObject(target) && target[TYPED_ARRAY] && (typeof key === 'undefined' ? 'undefined' : _typeof(key)) != 'symbol' && key in target && String(+key) == String(key);
   };
-  var $getDesc = function getOwnPropertyDescriptor(target, key){
-    return isTAIndex(target, key = toPrimitive(key, true))
-      ? propertyDesc(2, target[key])
-      : gOPD(target, key);
+  var $getDesc = function getOwnPropertyDescriptor(target, key) {
+    return isTAIndex(target, key = toPrimitive(key, true)) ? propertyDesc(2, target[key]) : gOPD(target, key);
   };
-  var $setDesc = function defineProperty(target, key, desc){
-    if(isTAIndex(target, key = toPrimitive(key, true))
-      && isObject(desc)
-      && has(desc, 'value')
-      && !has(desc, 'get')
-      && !has(desc, 'set')
-      // TODO: add validation descriptor w/o calling accessors
-      && !desc.configurable
-      && (!has(desc, 'writable') || desc.writable)
-      && (!has(desc, 'enumerable') || desc.enumerable)
-    ){
+  var $setDesc = function defineProperty(target, key, desc) {
+    if (isTAIndex(target, key = toPrimitive(key, true)) && isObject(desc) && has(desc, 'value') && !has(desc, 'get') && !has(desc, 'set')
+    // TODO: add validation descriptor w/o calling accessors
+    && !desc.configurable && (!has(desc, 'writable') || desc.writable) && (!has(desc, 'enumerable') || desc.enumerable)) {
       target[key] = desc.value;
       return target;
     } else return dP(target, key, desc);
   };
 
-  if(!ALL_CONSTRUCTORS){
+  if (!ALL_CONSTRUCTORS) {
     $GOPD.f = $getDesc;
-    $DP.f   = $setDesc;
+    $DP.f = $setDesc;
   }
 
   $export($export.S + $export.F * !ALL_CONSTRUCTORS, 'Object', {
     getOwnPropertyDescriptor: $getDesc,
-    defineProperty:           $setDesc
+    defineProperty: $setDesc
   });
 
-  if(fails(function(){ arrayToString.call({}); })){
-    arrayToString = arrayToLocaleString = function toString(){
+  if (fails(function () {
+    arrayToString.call({});
+  })) {
+    arrayToString = arrayToLocaleString = function toString() {
       return arrayJoin.call(this);
-    }
+    };
   }
 
   var $TypedArrayPrototype$ = redefineAll({}, proto);
   redefineAll($TypedArrayPrototype$, $iterators);
   hide($TypedArrayPrototype$, ITERATOR, $iterators.values);
   redefineAll($TypedArrayPrototype$, {
-    slice:          $slice,
-    set:            $set,
-    constructor:    function(){ /* noop */ },
-    toString:       arrayToString,
+    slice: $slice,
+    set: $set,
+    constructor: function constructor() {/* noop */},
+    toString: arrayToString,
     toLocaleString: $toLocaleString
   });
   addGetter($TypedArrayPrototype$, 'buffer', 'b');
@@ -22117,65 +19429,70 @@ if(require('./_descriptors')){
   addGetter($TypedArrayPrototype$, 'byteLength', 'l');
   addGetter($TypedArrayPrototype$, 'length', 'e');
   dP($TypedArrayPrototype$, TAG, {
-    get: function(){ return this[TYPED_ARRAY]; }
+    get: function get() {
+      return this[TYPED_ARRAY];
+    }
   });
 
-  module.exports = function(KEY, BYTES, wrapper, CLAMPED){
+  module.exports = function (KEY, BYTES, wrapper, CLAMPED) {
     CLAMPED = !!CLAMPED;
-    var NAME       = KEY + (CLAMPED ? 'Clamped' : '') + 'Array'
-      , ISNT_UINT8 = NAME != 'Uint8Array'
-      , GETTER     = 'get' + KEY
-      , SETTER     = 'set' + KEY
-      , TypedArray = global[NAME]
-      , Base       = TypedArray || {}
-      , TAC        = TypedArray && getPrototypeOf(TypedArray)
-      , FORCED     = !TypedArray || !$typed.ABV
-      , O          = {}
-      , TypedArrayPrototype = TypedArray && TypedArray[PROTOTYPE];
-    var getter = function(that, index){
+    var NAME = KEY + (CLAMPED ? 'Clamped' : '') + 'Array',
+        ISNT_UINT8 = NAME != 'Uint8Array',
+        GETTER = 'get' + KEY,
+        SETTER = 'set' + KEY,
+        TypedArray = global[NAME],
+        Base = TypedArray || {},
+        TAC = TypedArray && getPrototypeOf(TypedArray),
+        FORCED = !TypedArray || !$typed.ABV,
+        O = {},
+        TypedArrayPrototype = TypedArray && TypedArray[PROTOTYPE];
+    var getter = function getter(that, index) {
       var data = that._d;
       return data.v[GETTER](index * BYTES + data.o, LITTLE_ENDIAN);
     };
-    var setter = function(that, index, value){
+    var setter = function setter(that, index, value) {
       var data = that._d;
-      if(CLAMPED)value = (value = Math.round(value)) < 0 ? 0 : value > 0xff ? 0xff : value & 0xff;
+      if (CLAMPED) value = (value = Math.round(value)) < 0 ? 0 : value > 0xff ? 0xff : value & 0xff;
       data.v[SETTER](index * BYTES + data.o, value, LITTLE_ENDIAN);
     };
-    var addElement = function(that, index){
+    var addElement = function addElement(that, index) {
       dP(that, index, {
-        get: function(){
+        get: function get() {
           return getter(this, index);
         },
-        set: function(value){
+        set: function set(value) {
           return setter(this, index, value);
         },
         enumerable: true
       });
     };
-    if(FORCED){
-      TypedArray = wrapper(function(that, data, $offset, $length){
+    if (FORCED) {
+      TypedArray = wrapper(function (that, data, $offset, $length) {
         anInstance(that, TypedArray, NAME, '_d');
-        var index  = 0
-          , offset = 0
-          , buffer, byteLength, length, klass;
-        if(!isObject(data)){
-          length     = strictToLength(data, true)
+        var index = 0,
+            offset = 0,
+            buffer,
+            byteLength,
+            length,
+            klass;
+        if (!isObject(data)) {
+          length = strictToLength(data, true);
           byteLength = length * BYTES;
-          buffer     = new $ArrayBuffer(byteLength);
-        } else if(data instanceof $ArrayBuffer || (klass = classof(data)) == ARRAY_BUFFER || klass == SHARED_BUFFER){
+          buffer = new $ArrayBuffer(byteLength);
+        } else if (data instanceof $ArrayBuffer || (klass = classof(data)) == ARRAY_BUFFER || klass == SHARED_BUFFER) {
           buffer = data;
           offset = toOffset($offset, BYTES);
           var $len = data.byteLength;
-          if($length === undefined){
-            if($len % BYTES)throw RangeError(WRONG_LENGTH);
+          if ($length === undefined) {
+            if ($len % BYTES) throw RangeError(WRONG_LENGTH);
             byteLength = $len - offset;
-            if(byteLength < 0)throw RangeError(WRONG_LENGTH);
+            if (byteLength < 0) throw RangeError(WRONG_LENGTH);
           } else {
             byteLength = toLength($length) * BYTES;
-            if(byteLength + offset > $len)throw RangeError(WRONG_LENGTH);
+            if (byteLength + offset > $len) throw RangeError(WRONG_LENGTH);
           }
           length = byteLength / BYTES;
-        } else if(TYPED_ARRAY in data){
+        } else if (TYPED_ARRAY in data) {
           return fromList(TypedArray, data);
         } else {
           return $from.call(TypedArray, data);
@@ -22187,49 +19504,49 @@ if(require('./_descriptors')){
           e: length,
           v: new $DataView(buffer)
         });
-        while(index < length)addElement(that, index++);
+        while (index < length) {
+          addElement(that, index++);
+        }
       });
       TypedArrayPrototype = TypedArray[PROTOTYPE] = create($TypedArrayPrototype$);
       hide(TypedArrayPrototype, 'constructor', TypedArray);
-    } else if(!$iterDetect(function(iter){
+    } else if (!$iterDetect(function (iter) {
       // V8 works with iterators, but fails in many other cases
       // https://code.google.com/p/v8/issues/detail?id=4552
       new TypedArray(null); // eslint-disable-line no-new
       new TypedArray(iter); // eslint-disable-line no-new
-    }, true)){
-      TypedArray = wrapper(function(that, data, $offset, $length){
+    }, true)) {
+      TypedArray = wrapper(function (that, data, $offset, $length) {
         anInstance(that, TypedArray, NAME);
         var klass;
         // `ws` module bug, temporarily remove validation length for Uint8Array
         // https://github.com/websockets/ws/pull/645
-        if(!isObject(data))return new Base(strictToLength(data, ISNT_UINT8));
-        if(data instanceof $ArrayBuffer || (klass = classof(data)) == ARRAY_BUFFER || klass == SHARED_BUFFER){
-          return $length !== undefined
-            ? new Base(data, toOffset($offset, BYTES), $length)
-            : $offset !== undefined
-              ? new Base(data, toOffset($offset, BYTES))
-              : new Base(data);
+        if (!isObject(data)) return new Base(strictToLength(data, ISNT_UINT8));
+        if (data instanceof $ArrayBuffer || (klass = classof(data)) == ARRAY_BUFFER || klass == SHARED_BUFFER) {
+          return $length !== undefined ? new Base(data, toOffset($offset, BYTES), $length) : $offset !== undefined ? new Base(data, toOffset($offset, BYTES)) : new Base(data);
         }
-        if(TYPED_ARRAY in data)return fromList(TypedArray, data);
+        if (TYPED_ARRAY in data) return fromList(TypedArray, data);
         return $from.call(TypedArray, data);
       });
-      arrayForEach(TAC !== Function.prototype ? gOPN(Base).concat(gOPN(TAC)) : gOPN(Base), function(key){
-        if(!(key in TypedArray))hide(TypedArray, key, Base[key]);
+      arrayForEach(TAC !== Function.prototype ? gOPN(Base).concat(gOPN(TAC)) : gOPN(Base), function (key) {
+        if (!(key in TypedArray)) hide(TypedArray, key, Base[key]);
       });
       TypedArray[PROTOTYPE] = TypedArrayPrototype;
-      if(!LIBRARY)TypedArrayPrototype.constructor = TypedArray;
+      if (!LIBRARY) TypedArrayPrototype.constructor = TypedArray;
     }
-    var $nativeIterator   = TypedArrayPrototype[ITERATOR]
-      , CORRECT_ITER_NAME = !!$nativeIterator && ($nativeIterator.name == 'values' || $nativeIterator.name == undefined)
-      , $iterator         = $iterators.values;
+    var $nativeIterator = TypedArrayPrototype[ITERATOR],
+        CORRECT_ITER_NAME = !!$nativeIterator && ($nativeIterator.name == 'values' || $nativeIterator.name == undefined),
+        $iterator = $iterators.values;
     hide(TypedArray, TYPED_CONSTRUCTOR, true);
     hide(TypedArrayPrototype, TYPED_ARRAY, NAME);
     hide(TypedArrayPrototype, VIEW, true);
     hide(TypedArrayPrototype, DEF_CONSTRUCTOR, TypedArray);
 
-    if(CLAMPED ? new TypedArray(1)[TAG] != NAME : !(TAG in TypedArrayPrototype)){
+    if (CLAMPED ? new TypedArray(1)[TAG] != NAME : !(TAG in TypedArrayPrototype)) {
       dP(TypedArrayPrototype, TAG, {
-        get: function(){ return NAME; }
+        get: function get() {
+          return NAME;
+        }
       });
     }
 
@@ -22243,104 +19560,108 @@ if(require('./_descriptors')){
       of: $of
     });
 
-    if(!(BYTES_PER_ELEMENT in TypedArrayPrototype))hide(TypedArrayPrototype, BYTES_PER_ELEMENT, BYTES);
+    if (!(BYTES_PER_ELEMENT in TypedArrayPrototype)) hide(TypedArrayPrototype, BYTES_PER_ELEMENT, BYTES);
 
     $export($export.P, NAME, proto);
 
     setSpecies(NAME);
 
-    $export($export.P + $export.F * FORCED_SET, NAME, {set: $set});
+    $export($export.P + $export.F * FORCED_SET, NAME, { set: $set });
 
     $export($export.P + $export.F * !CORRECT_ITER_NAME, NAME, $iterators);
 
-    $export($export.P + $export.F * (TypedArrayPrototype.toString != arrayToString), NAME, {toString: arrayToString});
+    $export($export.P + $export.F * (TypedArrayPrototype.toString != arrayToString), NAME, { toString: arrayToString });
 
-    $export($export.P + $export.F * fails(function(){
+    $export($export.P + $export.F * fails(function () {
       new TypedArray(1).slice();
-    }), NAME, {slice: $slice});
+    }), NAME, { slice: $slice });
 
-    $export($export.P + $export.F * (fails(function(){
-      return [1, 2].toLocaleString() != new TypedArray([1, 2]).toLocaleString()
-    }) || !fails(function(){
+    $export($export.P + $export.F * (fails(function () {
+      return [1, 2].toLocaleString() != new TypedArray([1, 2]).toLocaleString();
+    }) || !fails(function () {
       TypedArrayPrototype.toLocaleString.call([1, 2]);
-    })), NAME, {toLocaleString: $toLocaleString});
+    })), NAME, { toLocaleString: $toLocaleString });
 
     Iterators[NAME] = CORRECT_ITER_NAME ? $nativeIterator : $iterator;
-    if(!LIBRARY && !CORRECT_ITER_NAME)hide(TypedArrayPrototype, ITERATOR, $iterator);
+    if (!LIBRARY && !CORRECT_ITER_NAME) hide(TypedArrayPrototype, ITERATOR, $iterator);
   };
-} else module.exports = function(){ /* empty */ };
-},{"./_an-instance":56,"./_array-copy-within":58,"./_array-fill":59,"./_array-includes":61,"./_array-methods":62,"./_classof":67,"./_ctx":75,"./_descriptors":78,"./_export":82,"./_fails":84,"./_global":88,"./_has":89,"./_hide":90,"./_is-array-iter":96,"./_is-object":99,"./_iter-detect":104,"./_iterators":106,"./_library":108,"./_object-create":116,"./_object-dp":117,"./_object-gopd":120,"./_object-gopn":122,"./_object-gpo":124,"./_property-desc":135,"./_redefine-all":136,"./_same-value":139,"./_set-species":141,"./_species-constructor":145,"./_to-index":155,"./_to-integer":156,"./_to-length":158,"./_to-object":159,"./_to-primitive":160,"./_typed":163,"./_typed-buffer":162,"./_uid":164,"./_wks":167,"./core.get-iterator-method":168,"./es6.array.iterator":180}],162:[function(require,module,exports){
+} else module.exports = function () {/* empty */};
+
+},{"./_an-instance":7,"./_array-copy-within":9,"./_array-fill":10,"./_array-includes":12,"./_array-methods":13,"./_classof":18,"./_ctx":26,"./_descriptors":29,"./_export":33,"./_fails":35,"./_global":39,"./_has":40,"./_hide":41,"./_is-array-iter":47,"./_is-object":50,"./_iter-detect":55,"./_iterators":57,"./_library":59,"./_object-create":67,"./_object-dp":68,"./_object-gopd":71,"./_object-gopn":73,"./_object-gpo":75,"./_property-desc":86,"./_redefine-all":87,"./_same-value":90,"./_set-species":92,"./_species-constructor":96,"./_to-index":106,"./_to-integer":107,"./_to-length":109,"./_to-object":110,"./_to-primitive":111,"./_typed":114,"./_typed-buffer":113,"./_uid":115,"./_wks":118,"./core.get-iterator-method":119,"./es6.array.iterator":131}],113:[function(require,module,exports){
 'use strict';
-var global         = require('./_global')
-  , DESCRIPTORS    = require('./_descriptors')
-  , LIBRARY        = require('./_library')
-  , $typed         = require('./_typed')
-  , hide           = require('./_hide')
-  , redefineAll    = require('./_redefine-all')
-  , fails          = require('./_fails')
-  , anInstance     = require('./_an-instance')
-  , toInteger      = require('./_to-integer')
-  , toLength       = require('./_to-length')
-  , gOPN           = require('./_object-gopn').f
-  , dP             = require('./_object-dp').f
-  , arrayFill      = require('./_array-fill')
-  , setToStringTag = require('./_set-to-string-tag')
-  , ARRAY_BUFFER   = 'ArrayBuffer'
-  , DATA_VIEW      = 'DataView'
-  , PROTOTYPE      = 'prototype'
-  , WRONG_LENGTH   = 'Wrong length!'
-  , WRONG_INDEX    = 'Wrong index!'
-  , $ArrayBuffer   = global[ARRAY_BUFFER]
-  , $DataView      = global[DATA_VIEW]
-  , Math           = global.Math
-  , RangeError     = global.RangeError
-  , Infinity       = global.Infinity
-  , BaseBuffer     = $ArrayBuffer
-  , abs            = Math.abs
-  , pow            = Math.pow
-  , floor          = Math.floor
-  , log            = Math.log
-  , LN2            = Math.LN2
-  , BUFFER         = 'buffer'
-  , BYTE_LENGTH    = 'byteLength'
-  , BYTE_OFFSET    = 'byteOffset'
-  , $BUFFER        = DESCRIPTORS ? '_b' : BUFFER
-  , $LENGTH        = DESCRIPTORS ? '_l' : BYTE_LENGTH
-  , $OFFSET        = DESCRIPTORS ? '_o' : BYTE_OFFSET;
+
+var global = require('./_global'),
+    DESCRIPTORS = require('./_descriptors'),
+    LIBRARY = require('./_library'),
+    $typed = require('./_typed'),
+    hide = require('./_hide'),
+    redefineAll = require('./_redefine-all'),
+    fails = require('./_fails'),
+    anInstance = require('./_an-instance'),
+    toInteger = require('./_to-integer'),
+    toLength = require('./_to-length'),
+    gOPN = require('./_object-gopn').f,
+    dP = require('./_object-dp').f,
+    arrayFill = require('./_array-fill'),
+    setToStringTag = require('./_set-to-string-tag'),
+    ARRAY_BUFFER = 'ArrayBuffer',
+    DATA_VIEW = 'DataView',
+    PROTOTYPE = 'prototype',
+    WRONG_LENGTH = 'Wrong length!',
+    WRONG_INDEX = 'Wrong index!',
+    $ArrayBuffer = global[ARRAY_BUFFER],
+    $DataView = global[DATA_VIEW],
+    Math = global.Math,
+    RangeError = global.RangeError,
+    Infinity = global.Infinity,
+    BaseBuffer = $ArrayBuffer,
+    abs = Math.abs,
+    pow = Math.pow,
+    floor = Math.floor,
+    log = Math.log,
+    LN2 = Math.LN2,
+    BUFFER = 'buffer',
+    BYTE_LENGTH = 'byteLength',
+    BYTE_OFFSET = 'byteOffset',
+    $BUFFER = DESCRIPTORS ? '_b' : BUFFER,
+    $LENGTH = DESCRIPTORS ? '_l' : BYTE_LENGTH,
+    $OFFSET = DESCRIPTORS ? '_o' : BYTE_OFFSET;
 
 // IEEE754 conversions based on https://github.com/feross/ieee754
-var packIEEE754 = function(value, mLen, nBytes){
-  var buffer = Array(nBytes)
-    , eLen   = nBytes * 8 - mLen - 1
-    , eMax   = (1 << eLen) - 1
-    , eBias  = eMax >> 1
-    , rt     = mLen === 23 ? pow(2, -24) - pow(2, -77) : 0
-    , i      = 0
-    , s      = value < 0 || value === 0 && 1 / value < 0 ? 1 : 0
-    , e, m, c;
-  value = abs(value)
-  if(value != value || value === Infinity){
+var packIEEE754 = function packIEEE754(value, mLen, nBytes) {
+  var buffer = Array(nBytes),
+      eLen = nBytes * 8 - mLen - 1,
+      eMax = (1 << eLen) - 1,
+      eBias = eMax >> 1,
+      rt = mLen === 23 ? pow(2, -24) - pow(2, -77) : 0,
+      i = 0,
+      s = value < 0 || value === 0 && 1 / value < 0 ? 1 : 0,
+      e,
+      m,
+      c;
+  value = abs(value);
+  if (value != value || value === Infinity) {
     m = value != value ? 1 : 0;
     e = eMax;
   } else {
     e = floor(log(value) / LN2);
-    if(value * (c = pow(2, -e)) < 1){
+    if (value * (c = pow(2, -e)) < 1) {
       e--;
       c *= 2;
     }
-    if(e + eBias >= 1){
+    if (e + eBias >= 1) {
       value += rt / c;
     } else {
       value += rt * pow(2, 1 - eBias);
     }
-    if(value * c >= 2){
+    if (value * c >= 2) {
       e++;
       c /= 2;
     }
-    if(e + eBias >= eMax){
+    if (e + eBias >= eMax) {
       m = 0;
       e = eMax;
-    } else if(e + eBias >= 1){
+    } else if (e + eBias >= 1) {
       m = (value * c - 1) * pow(2, mLen);
       e = e + eBias;
     } else {
@@ -22348,109 +19669,113 @@ var packIEEE754 = function(value, mLen, nBytes){
       e = 0;
     }
   }
-  for(; mLen >= 8; buffer[i++] = m & 255, m /= 256, mLen -= 8);
+  for (; mLen >= 8; buffer[i++] = m & 255, m /= 256, mLen -= 8) {}
   e = e << mLen | m;
   eLen += mLen;
-  for(; eLen > 0; buffer[i++] = e & 255, e /= 256, eLen -= 8);
+  for (; eLen > 0; buffer[i++] = e & 255, e /= 256, eLen -= 8) {}
   buffer[--i] |= s * 128;
   return buffer;
 };
-var unpackIEEE754 = function(buffer, mLen, nBytes){
-  var eLen  = nBytes * 8 - mLen - 1
-    , eMax  = (1 << eLen) - 1
-    , eBias = eMax >> 1
-    , nBits = eLen - 7
-    , i     = nBytes - 1
-    , s     = buffer[i--]
-    , e     = s & 127
-    , m;
+var unpackIEEE754 = function unpackIEEE754(buffer, mLen, nBytes) {
+  var eLen = nBytes * 8 - mLen - 1,
+      eMax = (1 << eLen) - 1,
+      eBias = eMax >> 1,
+      nBits = eLen - 7,
+      i = nBytes - 1,
+      s = buffer[i--],
+      e = s & 127,
+      m;
   s >>= 7;
-  for(; nBits > 0; e = e * 256 + buffer[i], i--, nBits -= 8);
+  for (; nBits > 0; e = e * 256 + buffer[i], i--, nBits -= 8) {}
   m = e & (1 << -nBits) - 1;
   e >>= -nBits;
   nBits += mLen;
-  for(; nBits > 0; m = m * 256 + buffer[i], i--, nBits -= 8);
-  if(e === 0){
+  for (; nBits > 0; m = m * 256 + buffer[i], i--, nBits -= 8) {}
+  if (e === 0) {
     e = 1 - eBias;
-  } else if(e === eMax){
+  } else if (e === eMax) {
     return m ? NaN : s ? -Infinity : Infinity;
   } else {
     m = m + pow(2, mLen);
     e = e - eBias;
-  } return (s ? -1 : 1) * m * pow(2, e - mLen);
+  }return (s ? -1 : 1) * m * pow(2, e - mLen);
 };
 
-var unpackI32 = function(bytes){
+var unpackI32 = function unpackI32(bytes) {
   return bytes[3] << 24 | bytes[2] << 16 | bytes[1] << 8 | bytes[0];
 };
-var packI8 = function(it){
+var packI8 = function packI8(it) {
   return [it & 0xff];
 };
-var packI16 = function(it){
+var packI16 = function packI16(it) {
   return [it & 0xff, it >> 8 & 0xff];
 };
-var packI32 = function(it){
+var packI32 = function packI32(it) {
   return [it & 0xff, it >> 8 & 0xff, it >> 16 & 0xff, it >> 24 & 0xff];
 };
-var packF64 = function(it){
+var packF64 = function packF64(it) {
   return packIEEE754(it, 52, 8);
 };
-var packF32 = function(it){
+var packF32 = function packF32(it) {
   return packIEEE754(it, 23, 4);
 };
 
-var addGetter = function(C, key, internal){
-  dP(C[PROTOTYPE], key, {get: function(){ return this[internal]; }});
+var addGetter = function addGetter(C, key, internal) {
+  dP(C[PROTOTYPE], key, { get: function get() {
+      return this[internal];
+    } });
 };
 
-var get = function(view, bytes, index, isLittleEndian){
-  var numIndex = +index
-    , intIndex = toInteger(numIndex);
-  if(numIndex != intIndex || intIndex < 0 || intIndex + bytes > view[$LENGTH])throw RangeError(WRONG_INDEX);
-  var store = view[$BUFFER]._b
-    , start = intIndex + view[$OFFSET]
-    , pack  = store.slice(start, start + bytes);
+var get = function get(view, bytes, index, isLittleEndian) {
+  var numIndex = +index,
+      intIndex = toInteger(numIndex);
+  if (numIndex != intIndex || intIndex < 0 || intIndex + bytes > view[$LENGTH]) throw RangeError(WRONG_INDEX);
+  var store = view[$BUFFER]._b,
+      start = intIndex + view[$OFFSET],
+      pack = store.slice(start, start + bytes);
   return isLittleEndian ? pack : pack.reverse();
 };
-var set = function(view, bytes, index, conversion, value, isLittleEndian){
-  var numIndex = +index
-    , intIndex = toInteger(numIndex);
-  if(numIndex != intIndex || intIndex < 0 || intIndex + bytes > view[$LENGTH])throw RangeError(WRONG_INDEX);
-  var store = view[$BUFFER]._b
-    , start = intIndex + view[$OFFSET]
-    , pack  = conversion(+value);
-  for(var i = 0; i < bytes; i++)store[start + i] = pack[isLittleEndian ? i : bytes - i - 1];
+var set = function set(view, bytes, index, conversion, value, isLittleEndian) {
+  var numIndex = +index,
+      intIndex = toInteger(numIndex);
+  if (numIndex != intIndex || intIndex < 0 || intIndex + bytes > view[$LENGTH]) throw RangeError(WRONG_INDEX);
+  var store = view[$BUFFER]._b,
+      start = intIndex + view[$OFFSET],
+      pack = conversion(+value);
+  for (var i = 0; i < bytes; i++) {
+    store[start + i] = pack[isLittleEndian ? i : bytes - i - 1];
+  }
 };
 
-var validateArrayBufferArguments = function(that, length){
+var validateArrayBufferArguments = function validateArrayBufferArguments(that, length) {
   anInstance(that, $ArrayBuffer, ARRAY_BUFFER);
-  var numberLength = +length
-    , byteLength   = toLength(numberLength);
-  if(numberLength != byteLength)throw RangeError(WRONG_LENGTH);
+  var numberLength = +length,
+      byteLength = toLength(numberLength);
+  if (numberLength != byteLength) throw RangeError(WRONG_LENGTH);
   return byteLength;
 };
 
-if(!$typed.ABV){
-  $ArrayBuffer = function ArrayBuffer(length){
+if (!$typed.ABV) {
+  $ArrayBuffer = function ArrayBuffer(length) {
     var byteLength = validateArrayBufferArguments(this, length);
-    this._b       = arrayFill.call(Array(byteLength), 0);
+    this._b = arrayFill.call(Array(byteLength), 0);
     this[$LENGTH] = byteLength;
   };
 
-  $DataView = function DataView(buffer, byteOffset, byteLength){
+  $DataView = function DataView(buffer, byteOffset, byteLength) {
     anInstance(this, $DataView, DATA_VIEW);
     anInstance(buffer, $ArrayBuffer, DATA_VIEW);
-    var bufferLength = buffer[$LENGTH]
-      , offset       = toInteger(byteOffset);
-    if(offset < 0 || offset > bufferLength)throw RangeError('Wrong offset!');
+    var bufferLength = buffer[$LENGTH],
+        offset = toInteger(byteOffset);
+    if (offset < 0 || offset > bufferLength) throw RangeError('Wrong offset!');
     byteLength = byteLength === undefined ? bufferLength - offset : toLength(byteLength);
-    if(offset + byteLength > bufferLength)throw RangeError(WRONG_LENGTH);
+    if (offset + byteLength > bufferLength) throw RangeError(WRONG_LENGTH);
     this[$BUFFER] = buffer;
     this[$OFFSET] = offset;
     this[$LENGTH] = byteLength;
   };
 
-  if(DESCRIPTORS){
+  if (DESCRIPTORS) {
     addGetter($ArrayBuffer, BYTE_LENGTH, '_l');
     addGetter($DataView, BUFFER, '_b');
     addGetter($DataView, BYTE_LENGTH, '_l');
@@ -22458,82 +19783,82 @@ if(!$typed.ABV){
   }
 
   redefineAll($DataView[PROTOTYPE], {
-    getInt8: function getInt8(byteOffset){
+    getInt8: function getInt8(byteOffset) {
       return get(this, 1, byteOffset)[0] << 24 >> 24;
     },
-    getUint8: function getUint8(byteOffset){
+    getUint8: function getUint8(byteOffset) {
       return get(this, 1, byteOffset)[0];
     },
-    getInt16: function getInt16(byteOffset /*, littleEndian */){
+    getInt16: function getInt16(byteOffset /*, littleEndian */) {
       var bytes = get(this, 2, byteOffset, arguments[1]);
       return (bytes[1] << 8 | bytes[0]) << 16 >> 16;
     },
-    getUint16: function getUint16(byteOffset /*, littleEndian */){
+    getUint16: function getUint16(byteOffset /*, littleEndian */) {
       var bytes = get(this, 2, byteOffset, arguments[1]);
       return bytes[1] << 8 | bytes[0];
     },
-    getInt32: function getInt32(byteOffset /*, littleEndian */){
+    getInt32: function getInt32(byteOffset /*, littleEndian */) {
       return unpackI32(get(this, 4, byteOffset, arguments[1]));
     },
-    getUint32: function getUint32(byteOffset /*, littleEndian */){
+    getUint32: function getUint32(byteOffset /*, littleEndian */) {
       return unpackI32(get(this, 4, byteOffset, arguments[1])) >>> 0;
     },
-    getFloat32: function getFloat32(byteOffset /*, littleEndian */){
+    getFloat32: function getFloat32(byteOffset /*, littleEndian */) {
       return unpackIEEE754(get(this, 4, byteOffset, arguments[1]), 23, 4);
     },
-    getFloat64: function getFloat64(byteOffset /*, littleEndian */){
+    getFloat64: function getFloat64(byteOffset /*, littleEndian */) {
       return unpackIEEE754(get(this, 8, byteOffset, arguments[1]), 52, 8);
     },
-    setInt8: function setInt8(byteOffset, value){
+    setInt8: function setInt8(byteOffset, value) {
       set(this, 1, byteOffset, packI8, value);
     },
-    setUint8: function setUint8(byteOffset, value){
+    setUint8: function setUint8(byteOffset, value) {
       set(this, 1, byteOffset, packI8, value);
     },
-    setInt16: function setInt16(byteOffset, value /*, littleEndian */){
+    setInt16: function setInt16(byteOffset, value /*, littleEndian */) {
       set(this, 2, byteOffset, packI16, value, arguments[2]);
     },
-    setUint16: function setUint16(byteOffset, value /*, littleEndian */){
+    setUint16: function setUint16(byteOffset, value /*, littleEndian */) {
       set(this, 2, byteOffset, packI16, value, arguments[2]);
     },
-    setInt32: function setInt32(byteOffset, value /*, littleEndian */){
+    setInt32: function setInt32(byteOffset, value /*, littleEndian */) {
       set(this, 4, byteOffset, packI32, value, arguments[2]);
     },
-    setUint32: function setUint32(byteOffset, value /*, littleEndian */){
+    setUint32: function setUint32(byteOffset, value /*, littleEndian */) {
       set(this, 4, byteOffset, packI32, value, arguments[2]);
     },
-    setFloat32: function setFloat32(byteOffset, value /*, littleEndian */){
+    setFloat32: function setFloat32(byteOffset, value /*, littleEndian */) {
       set(this, 4, byteOffset, packF32, value, arguments[2]);
     },
-    setFloat64: function setFloat64(byteOffset, value /*, littleEndian */){
+    setFloat64: function setFloat64(byteOffset, value /*, littleEndian */) {
       set(this, 8, byteOffset, packF64, value, arguments[2]);
     }
   });
 } else {
-  if(!fails(function(){
-    new $ArrayBuffer;     // eslint-disable-line no-new
-  }) || !fails(function(){
+  if (!fails(function () {
+    new $ArrayBuffer(); // eslint-disable-line no-new
+  }) || !fails(function () {
     new $ArrayBuffer(.5); // eslint-disable-line no-new
-  })){
-    $ArrayBuffer = function ArrayBuffer(length){
+  })) {
+    $ArrayBuffer = function ArrayBuffer(length) {
       return new BaseBuffer(validateArrayBufferArguments(this, length));
     };
     var ArrayBufferProto = $ArrayBuffer[PROTOTYPE] = BaseBuffer[PROTOTYPE];
-    for(var keys = gOPN(BaseBuffer), j = 0, key; keys.length > j; ){
-      if(!((key = keys[j++]) in $ArrayBuffer))hide($ArrayBuffer, key, BaseBuffer[key]);
+    for (var keys = gOPN(BaseBuffer), j = 0, key; keys.length > j;) {
+      if (!((key = keys[j++]) in $ArrayBuffer)) hide($ArrayBuffer, key, BaseBuffer[key]);
     };
-    if(!LIBRARY)ArrayBufferProto.constructor = $ArrayBuffer;
+    if (!LIBRARY) ArrayBufferProto.constructor = $ArrayBuffer;
   }
   // iOS Safari 7.x bug
-  var view = new $DataView(new $ArrayBuffer(2))
-    , $setInt8 = $DataView[PROTOTYPE].setInt8;
+  var view = new $DataView(new $ArrayBuffer(2)),
+      $setInt8 = $DataView[PROTOTYPE].setInt8;
   view.setInt8(0, 2147483648);
   view.setInt8(1, 2147483649);
-  if(view.getInt8(0) || !view.getInt8(1))redefineAll($DataView[PROTOTYPE], {
-    setInt8: function setInt8(byteOffset, value){
+  if (view.getInt8(0) || !view.getInt8(1)) redefineAll($DataView[PROTOTYPE], {
+    setInt8: function setInt8(byteOffset, value) {
       $setInt8.call(this, byteOffset, value << 24 >> 24);
     },
-    setUint8: function setUint8(byteOffset, value){
+    setUint8: function setUint8(byteOffset, value) {
       $setInt8.call(this, byteOffset, value << 24 >> 24);
     }
   }, true);
@@ -22543,188 +19868,234 @@ setToStringTag($DataView, DATA_VIEW);
 hide($DataView[PROTOTYPE], $typed.VIEW, true);
 exports[ARRAY_BUFFER] = $ArrayBuffer;
 exports[DATA_VIEW] = $DataView;
-},{"./_an-instance":56,"./_array-fill":59,"./_descriptors":78,"./_fails":84,"./_global":88,"./_hide":90,"./_library":108,"./_object-dp":117,"./_object-gopn":122,"./_redefine-all":136,"./_set-to-string-tag":142,"./_to-integer":156,"./_to-length":158,"./_typed":163}],163:[function(require,module,exports){
-var global = require('./_global')
-  , hide   = require('./_hide')
-  , uid    = require('./_uid')
-  , TYPED  = uid('typed_array')
-  , VIEW   = uid('view')
-  , ABV    = !!(global.ArrayBuffer && global.DataView)
-  , CONSTR = ABV
-  , i = 0, l = 9, Typed;
 
-var TypedArrayConstructors = (
-  'Int8Array,Uint8Array,Uint8ClampedArray,Int16Array,Uint16Array,Int32Array,Uint32Array,Float32Array,Float64Array'
-).split(',');
+},{"./_an-instance":7,"./_array-fill":10,"./_descriptors":29,"./_fails":35,"./_global":39,"./_hide":41,"./_library":59,"./_object-dp":68,"./_object-gopn":73,"./_redefine-all":87,"./_set-to-string-tag":93,"./_to-integer":107,"./_to-length":109,"./_typed":114}],114:[function(require,module,exports){
+'use strict';
 
-while(i < l){
-  if(Typed = global[TypedArrayConstructors[i++]]){
+var global = require('./_global'),
+    hide = require('./_hide'),
+    uid = require('./_uid'),
+    TYPED = uid('typed_array'),
+    VIEW = uid('view'),
+    ABV = !!(global.ArrayBuffer && global.DataView),
+    CONSTR = ABV,
+    i = 0,
+    l = 9,
+    Typed;
+
+var TypedArrayConstructors = 'Int8Array,Uint8Array,Uint8ClampedArray,Int16Array,Uint16Array,Int32Array,Uint32Array,Float32Array,Float64Array'.split(',');
+
+while (i < l) {
+  if (Typed = global[TypedArrayConstructors[i++]]) {
     hide(Typed.prototype, TYPED, true);
     hide(Typed.prototype, VIEW, true);
   } else CONSTR = false;
 }
 
 module.exports = {
-  ABV:    ABV,
+  ABV: ABV,
   CONSTR: CONSTR,
-  TYPED:  TYPED,
-  VIEW:   VIEW
+  TYPED: TYPED,
+  VIEW: VIEW
 };
-},{"./_global":88,"./_hide":90,"./_uid":164}],164:[function(require,module,exports){
-var id = 0
-  , px = Math.random();
-module.exports = function(key){
+
+},{"./_global":39,"./_hide":41,"./_uid":115}],115:[function(require,module,exports){
+'use strict';
+
+var id = 0,
+    px = Math.random();
+module.exports = function (key) {
   return 'Symbol('.concat(key === undefined ? '' : key, ')_', (++id + px).toString(36));
 };
-},{}],165:[function(require,module,exports){
-var global         = require('./_global')
-  , core           = require('./_core')
-  , LIBRARY        = require('./_library')
-  , wksExt         = require('./_wks-ext')
-  , defineProperty = require('./_object-dp').f;
-module.exports = function(name){
-  var $Symbol = core.Symbol || (core.Symbol = LIBRARY ? {} : global.Symbol || {});
-  if(name.charAt(0) != '_' && !(name in $Symbol))defineProperty($Symbol, name, {value: wksExt.f(name)});
-};
-},{"./_core":73,"./_global":88,"./_library":108,"./_object-dp":117,"./_wks-ext":166}],166:[function(require,module,exports){
-exports.f = require('./_wks');
-},{"./_wks":167}],167:[function(require,module,exports){
-var store      = require('./_shared')('wks')
-  , uid        = require('./_uid')
-  , Symbol     = require('./_global').Symbol
-  , USE_SYMBOL = typeof Symbol == 'function';
 
-var $exports = module.exports = function(name){
-  return store[name] || (store[name] =
-    USE_SYMBOL && Symbol[name] || (USE_SYMBOL ? Symbol : uid)('Symbol.' + name));
+},{}],116:[function(require,module,exports){
+'use strict';
+
+var global = require('./_global'),
+    core = require('./_core'),
+    LIBRARY = require('./_library'),
+    wksExt = require('./_wks-ext'),
+    defineProperty = require('./_object-dp').f;
+module.exports = function (name) {
+  var $Symbol = core.Symbol || (core.Symbol = LIBRARY ? {} : global.Symbol || {});
+  if (name.charAt(0) != '_' && !(name in $Symbol)) defineProperty($Symbol, name, { value: wksExt.f(name) });
+};
+
+},{"./_core":24,"./_global":39,"./_library":59,"./_object-dp":68,"./_wks-ext":117}],117:[function(require,module,exports){
+'use strict';
+
+exports.f = require('./_wks');
+
+},{"./_wks":118}],118:[function(require,module,exports){
+'use strict';
+
+var store = require('./_shared')('wks'),
+    uid = require('./_uid'),
+    _Symbol = require('./_global').Symbol,
+    USE_SYMBOL = typeof _Symbol == 'function';
+
+var $exports = module.exports = function (name) {
+  return store[name] || (store[name] = USE_SYMBOL && _Symbol[name] || (USE_SYMBOL ? _Symbol : uid)('Symbol.' + name));
 };
 
 $exports.store = store;
-},{"./_global":88,"./_shared":144,"./_uid":164}],168:[function(require,module,exports){
-var classof   = require('./_classof')
-  , ITERATOR  = require('./_wks')('iterator')
-  , Iterators = require('./_iterators');
-module.exports = require('./_core').getIteratorMethod = function(it){
-  if(it != undefined)return it[ITERATOR]
-    || it['@@iterator']
-    || Iterators[classof(it)];
+
+},{"./_global":39,"./_shared":95,"./_uid":115}],119:[function(require,module,exports){
+'use strict';
+
+var classof = require('./_classof'),
+    ITERATOR = require('./_wks')('iterator'),
+    Iterators = require('./_iterators');
+module.exports = require('./_core').getIteratorMethod = function (it) {
+  if (it != undefined) return it[ITERATOR] || it['@@iterator'] || Iterators[classof(it)];
 };
-},{"./_classof":67,"./_core":73,"./_iterators":106,"./_wks":167}],169:[function(require,module,exports){
+
+},{"./_classof":18,"./_core":24,"./_iterators":57,"./_wks":118}],120:[function(require,module,exports){
+'use strict';
+
 // https://github.com/benjamingr/RexExp.escape
-var $export = require('./_export')
-  , $re     = require('./_replacer')(/[\\^$*+?.()|[\]{}]/g, '\\$&');
+var $export = require('./_export'),
+    $re = require('./_replacer')(/[\\^$*+?.()|[\]{}]/g, '\\$&');
 
-$export($export.S, 'RegExp', {escape: function escape(it){ return $re(it); }});
+$export($export.S, 'RegExp', { escape: function escape(it) {
+    return $re(it);
+  } });
 
-},{"./_export":82,"./_replacer":138}],170:[function(require,module,exports){
+},{"./_export":33,"./_replacer":89}],121:[function(require,module,exports){
+'use strict';
+
 // 22.1.3.3 Array.prototype.copyWithin(target, start, end = this.length)
 var $export = require('./_export');
 
-$export($export.P, 'Array', {copyWithin: require('./_array-copy-within')});
+$export($export.P, 'Array', { copyWithin: require('./_array-copy-within') });
 
 require('./_add-to-unscopables')('copyWithin');
-},{"./_add-to-unscopables":55,"./_array-copy-within":58,"./_export":82}],171:[function(require,module,exports){
+
+},{"./_add-to-unscopables":6,"./_array-copy-within":9,"./_export":33}],122:[function(require,module,exports){
 'use strict';
-var $export = require('./_export')
-  , $every  = require('./_array-methods')(4);
+
+var $export = require('./_export'),
+    $every = require('./_array-methods')(4);
 
 $export($export.P + $export.F * !require('./_strict-method')([].every, true), 'Array', {
   // 22.1.3.5 / 15.4.4.16 Array.prototype.every(callbackfn [, thisArg])
-  every: function every(callbackfn /* , thisArg */){
+  every: function every(callbackfn /* , thisArg */) {
     return $every(this, callbackfn, arguments[1]);
   }
 });
-},{"./_array-methods":62,"./_export":82,"./_strict-method":146}],172:[function(require,module,exports){
+
+},{"./_array-methods":13,"./_export":33,"./_strict-method":97}],123:[function(require,module,exports){
+'use strict';
+
 // 22.1.3.6 Array.prototype.fill(value, start = 0, end = this.length)
 var $export = require('./_export');
 
-$export($export.P, 'Array', {fill: require('./_array-fill')});
+$export($export.P, 'Array', { fill: require('./_array-fill') });
 
 require('./_add-to-unscopables')('fill');
-},{"./_add-to-unscopables":55,"./_array-fill":59,"./_export":82}],173:[function(require,module,exports){
+
+},{"./_add-to-unscopables":6,"./_array-fill":10,"./_export":33}],124:[function(require,module,exports){
 'use strict';
-var $export = require('./_export')
-  , $filter = require('./_array-methods')(2);
+
+var $export = require('./_export'),
+    $filter = require('./_array-methods')(2);
 
 $export($export.P + $export.F * !require('./_strict-method')([].filter, true), 'Array', {
   // 22.1.3.7 / 15.4.4.20 Array.prototype.filter(callbackfn [, thisArg])
-  filter: function filter(callbackfn /* , thisArg */){
+  filter: function filter(callbackfn /* , thisArg */) {
     return $filter(this, callbackfn, arguments[1]);
   }
 });
-},{"./_array-methods":62,"./_export":82,"./_strict-method":146}],174:[function(require,module,exports){
+
+},{"./_array-methods":13,"./_export":33,"./_strict-method":97}],125:[function(require,module,exports){
 'use strict';
 // 22.1.3.9 Array.prototype.findIndex(predicate, thisArg = undefined)
-var $export = require('./_export')
-  , $find   = require('./_array-methods')(6)
-  , KEY     = 'findIndex'
-  , forced  = true;
+
+var $export = require('./_export'),
+    $find = require('./_array-methods')(6),
+    KEY = 'findIndex',
+    forced = true;
 // Shouldn't skip holes
-if(KEY in [])Array(1)[KEY](function(){ forced = false; });
+if (KEY in []) Array(1)[KEY](function () {
+  forced = false;
+});
 $export($export.P + $export.F * forced, 'Array', {
-  findIndex: function findIndex(callbackfn/*, that = undefined */){
+  findIndex: function findIndex(callbackfn /*, that = undefined */) {
     return $find(this, callbackfn, arguments.length > 1 ? arguments[1] : undefined);
   }
 });
 require('./_add-to-unscopables')(KEY);
-},{"./_add-to-unscopables":55,"./_array-methods":62,"./_export":82}],175:[function(require,module,exports){
+
+},{"./_add-to-unscopables":6,"./_array-methods":13,"./_export":33}],126:[function(require,module,exports){
 'use strict';
 // 22.1.3.8 Array.prototype.find(predicate, thisArg = undefined)
-var $export = require('./_export')
-  , $find   = require('./_array-methods')(5)
-  , KEY     = 'find'
-  , forced  = true;
+
+var $export = require('./_export'),
+    $find = require('./_array-methods')(5),
+    KEY = 'find',
+    forced = true;
 // Shouldn't skip holes
-if(KEY in [])Array(1)[KEY](function(){ forced = false; });
+if (KEY in []) Array(1)[KEY](function () {
+  forced = false;
+});
 $export($export.P + $export.F * forced, 'Array', {
-  find: function find(callbackfn/*, that = undefined */){
+  find: function find(callbackfn /*, that = undefined */) {
     return $find(this, callbackfn, arguments.length > 1 ? arguments[1] : undefined);
   }
 });
 require('./_add-to-unscopables')(KEY);
-},{"./_add-to-unscopables":55,"./_array-methods":62,"./_export":82}],176:[function(require,module,exports){
+
+},{"./_add-to-unscopables":6,"./_array-methods":13,"./_export":33}],127:[function(require,module,exports){
 'use strict';
-var $export  = require('./_export')
-  , $forEach = require('./_array-methods')(0)
-  , STRICT   = require('./_strict-method')([].forEach, true);
+
+var $export = require('./_export'),
+    $forEach = require('./_array-methods')(0),
+    STRICT = require('./_strict-method')([].forEach, true);
 
 $export($export.P + $export.F * !STRICT, 'Array', {
   // 22.1.3.10 / 15.4.4.18 Array.prototype.forEach(callbackfn [, thisArg])
-  forEach: function forEach(callbackfn /* , thisArg */){
+  forEach: function forEach(callbackfn /* , thisArg */) {
     return $forEach(this, callbackfn, arguments[1]);
   }
 });
-},{"./_array-methods":62,"./_export":82,"./_strict-method":146}],177:[function(require,module,exports){
-'use strict';
-var ctx            = require('./_ctx')
-  , $export        = require('./_export')
-  , toObject       = require('./_to-object')
-  , call           = require('./_iter-call')
-  , isArrayIter    = require('./_is-array-iter')
-  , toLength       = require('./_to-length')
-  , createProperty = require('./_create-property')
-  , getIterFn      = require('./core.get-iterator-method');
 
-$export($export.S + $export.F * !require('./_iter-detect')(function(iter){ Array.from(iter); }), 'Array', {
+},{"./_array-methods":13,"./_export":33,"./_strict-method":97}],128:[function(require,module,exports){
+'use strict';
+
+var ctx = require('./_ctx'),
+    $export = require('./_export'),
+    toObject = require('./_to-object'),
+    call = require('./_iter-call'),
+    isArrayIter = require('./_is-array-iter'),
+    toLength = require('./_to-length'),
+    createProperty = require('./_create-property'),
+    getIterFn = require('./core.get-iterator-method');
+
+$export($export.S + $export.F * !require('./_iter-detect')(function (iter) {
+  Array.from(iter);
+}), 'Array', {
   // 22.1.2.1 Array.from(arrayLike, mapfn = undefined, thisArg = undefined)
-  from: function from(arrayLike/*, mapfn = undefined, thisArg = undefined*/){
-    var O       = toObject(arrayLike)
-      , C       = typeof this == 'function' ? this : Array
-      , aLen    = arguments.length
-      , mapfn   = aLen > 1 ? arguments[1] : undefined
-      , mapping = mapfn !== undefined
-      , index   = 0
-      , iterFn  = getIterFn(O)
-      , length, result, step, iterator;
-    if(mapping)mapfn = ctx(mapfn, aLen > 2 ? arguments[2] : undefined, 2);
+  from: function from(arrayLike /*, mapfn = undefined, thisArg = undefined*/) {
+    var O = toObject(arrayLike),
+        C = typeof this == 'function' ? this : Array,
+        aLen = arguments.length,
+        mapfn = aLen > 1 ? arguments[1] : undefined,
+        mapping = mapfn !== undefined,
+        index = 0,
+        iterFn = getIterFn(O),
+        length,
+        result,
+        step,
+        iterator;
+    if (mapping) mapfn = ctx(mapfn, aLen > 2 ? arguments[2] : undefined, 2);
     // if object isn't iterable or it's array with default iterator - use simple case
-    if(iterFn != undefined && !(C == Array && isArrayIter(iterFn))){
-      for(iterator = iterFn.call(O), result = new C; !(step = iterator.next()).done; index++){
+    if (iterFn != undefined && !(C == Array && isArrayIter(iterFn))) {
+      for (iterator = iterFn.call(O), result = new C(); !(step = iterator.next()).done; index++) {
         createProperty(result, index, mapping ? call(iterator, mapfn, [step.value, index], true) : step.value);
       }
     } else {
       length = toLength(O.length);
-      for(result = new C(length); length > index; index++){
+      for (result = new C(length); length > index; index++) {
         createProperty(result, index, mapping ? mapfn(O[index], index) : O[index]);
       }
     }
@@ -22733,53 +20104,58 @@ $export($export.S + $export.F * !require('./_iter-detect')(function(iter){ Array
   }
 });
 
-},{"./_create-property":74,"./_ctx":75,"./_export":82,"./_is-array-iter":96,"./_iter-call":101,"./_iter-detect":104,"./_to-length":158,"./_to-object":159,"./core.get-iterator-method":168}],178:[function(require,module,exports){
+},{"./_create-property":25,"./_ctx":26,"./_export":33,"./_is-array-iter":47,"./_iter-call":52,"./_iter-detect":55,"./_to-length":109,"./_to-object":110,"./core.get-iterator-method":119}],129:[function(require,module,exports){
 'use strict';
-var $export       = require('./_export')
-  , $indexOf      = require('./_array-includes')(false)
-  , $native       = [].indexOf
-  , NEGATIVE_ZERO = !!$native && 1 / [1].indexOf(1, -0) < 0;
+
+var $export = require('./_export'),
+    $indexOf = require('./_array-includes')(false),
+    $native = [].indexOf,
+    NEGATIVE_ZERO = !!$native && 1 / [1].indexOf(1, -0) < 0;
 
 $export($export.P + $export.F * (NEGATIVE_ZERO || !require('./_strict-method')($native)), 'Array', {
   // 22.1.3.11 / 15.4.4.14 Array.prototype.indexOf(searchElement [, fromIndex])
-  indexOf: function indexOf(searchElement /*, fromIndex = 0 */){
+  indexOf: function indexOf(searchElement /*, fromIndex = 0 */) {
     return NEGATIVE_ZERO
-      // convert -0 to +0
-      ? $native.apply(this, arguments) || 0
-      : $indexOf(this, searchElement, arguments[1]);
+    // convert -0 to +0
+    ? $native.apply(this, arguments) || 0 : $indexOf(this, searchElement, arguments[1]);
   }
 });
-},{"./_array-includes":61,"./_export":82,"./_strict-method":146}],179:[function(require,module,exports){
+
+},{"./_array-includes":12,"./_export":33,"./_strict-method":97}],130:[function(require,module,exports){
+'use strict';
+
 // 22.1.2.2 / 15.4.3.2 Array.isArray(arg)
 var $export = require('./_export');
 
-$export($export.S, 'Array', {isArray: require('./_is-array')});
-},{"./_export":82,"./_is-array":97}],180:[function(require,module,exports){
+$export($export.S, 'Array', { isArray: require('./_is-array') });
+
+},{"./_export":33,"./_is-array":48}],131:[function(require,module,exports){
 'use strict';
-var addToUnscopables = require('./_add-to-unscopables')
-  , step             = require('./_iter-step')
-  , Iterators        = require('./_iterators')
-  , toIObject        = require('./_to-iobject');
+
+var addToUnscopables = require('./_add-to-unscopables'),
+    step = require('./_iter-step'),
+    Iterators = require('./_iterators'),
+    toIObject = require('./_to-iobject');
 
 // 22.1.3.4 Array.prototype.entries()
 // 22.1.3.13 Array.prototype.keys()
 // 22.1.3.29 Array.prototype.values()
 // 22.1.3.30 Array.prototype[@@iterator]()
-module.exports = require('./_iter-define')(Array, 'Array', function(iterated, kind){
+module.exports = require('./_iter-define')(Array, 'Array', function (iterated, kind) {
   this._t = toIObject(iterated); // target
-  this._i = 0;                   // next index
-  this._k = kind;                // kind
-// 22.1.5.2.1 %ArrayIteratorPrototype%.next()
-}, function(){
-  var O     = this._t
-    , kind  = this._k
-    , index = this._i++;
-  if(!O || index >= O.length){
+  this._i = 0; // next index
+  this._k = kind; // kind
+  // 22.1.5.2.1 %ArrayIteratorPrototype%.next()
+}, function () {
+  var O = this._t,
+      kind = this._k,
+      index = this._i++;
+  if (!O || index >= O.length) {
     this._t = undefined;
     return step(1);
   }
-  if(kind == 'keys'  )return step(0, index);
-  if(kind == 'values')return step(0, O[index]);
+  if (kind == 'keys') return step(0, index);
+  if (kind == 'values') return step(0, O[index]);
   return step(0, [index, O[index]]);
 }, 'values');
 
@@ -22789,566 +20165,668 @@ Iterators.Arguments = Iterators.Array;
 addToUnscopables('keys');
 addToUnscopables('values');
 addToUnscopables('entries');
-},{"./_add-to-unscopables":55,"./_iter-define":103,"./_iter-step":105,"./_iterators":106,"./_to-iobject":157}],181:[function(require,module,exports){
+
+},{"./_add-to-unscopables":6,"./_iter-define":54,"./_iter-step":56,"./_iterators":57,"./_to-iobject":108}],132:[function(require,module,exports){
 'use strict';
 // 22.1.3.13 Array.prototype.join(separator)
-var $export   = require('./_export')
-  , toIObject = require('./_to-iobject')
-  , arrayJoin = [].join;
+
+var $export = require('./_export'),
+    toIObject = require('./_to-iobject'),
+    arrayJoin = [].join;
 
 // fallback for not array-like strings
 $export($export.P + $export.F * (require('./_iobject') != Object || !require('./_strict-method')(arrayJoin)), 'Array', {
-  join: function join(separator){
+  join: function join(separator) {
     return arrayJoin.call(toIObject(this), separator === undefined ? ',' : separator);
   }
 });
-},{"./_export":82,"./_iobject":95,"./_strict-method":146,"./_to-iobject":157}],182:[function(require,module,exports){
+
+},{"./_export":33,"./_iobject":46,"./_strict-method":97,"./_to-iobject":108}],133:[function(require,module,exports){
 'use strict';
-var $export       = require('./_export')
-  , toIObject     = require('./_to-iobject')
-  , toInteger     = require('./_to-integer')
-  , toLength      = require('./_to-length')
-  , $native       = [].lastIndexOf
-  , NEGATIVE_ZERO = !!$native && 1 / [1].lastIndexOf(1, -0) < 0;
+
+var $export = require('./_export'),
+    toIObject = require('./_to-iobject'),
+    toInteger = require('./_to-integer'),
+    toLength = require('./_to-length'),
+    $native = [].lastIndexOf,
+    NEGATIVE_ZERO = !!$native && 1 / [1].lastIndexOf(1, -0) < 0;
 
 $export($export.P + $export.F * (NEGATIVE_ZERO || !require('./_strict-method')($native)), 'Array', {
   // 22.1.3.14 / 15.4.4.15 Array.prototype.lastIndexOf(searchElement [, fromIndex])
-  lastIndexOf: function lastIndexOf(searchElement /*, fromIndex = @[*-1] */){
+  lastIndexOf: function lastIndexOf(searchElement /*, fromIndex = @[*-1] */) {
     // convert -0 to +0
-    if(NEGATIVE_ZERO)return $native.apply(this, arguments) || 0;
-    var O      = toIObject(this)
-      , length = toLength(O.length)
-      , index  = length - 1;
-    if(arguments.length > 1)index = Math.min(index, toInteger(arguments[1]));
-    if(index < 0)index = length + index;
-    for(;index >= 0; index--)if(index in O)if(O[index] === searchElement)return index || 0;
-    return -1;
+    if (NEGATIVE_ZERO) return $native.apply(this, arguments) || 0;
+    var O = toIObject(this),
+        length = toLength(O.length),
+        index = length - 1;
+    if (arguments.length > 1) index = Math.min(index, toInteger(arguments[1]));
+    if (index < 0) index = length + index;
+    for (; index >= 0; index--) {
+      if (index in O) if (O[index] === searchElement) return index || 0;
+    }return -1;
   }
 });
-},{"./_export":82,"./_strict-method":146,"./_to-integer":156,"./_to-iobject":157,"./_to-length":158}],183:[function(require,module,exports){
+
+},{"./_export":33,"./_strict-method":97,"./_to-integer":107,"./_to-iobject":108,"./_to-length":109}],134:[function(require,module,exports){
 'use strict';
-var $export = require('./_export')
-  , $map    = require('./_array-methods')(1);
+
+var $export = require('./_export'),
+    $map = require('./_array-methods')(1);
 
 $export($export.P + $export.F * !require('./_strict-method')([].map, true), 'Array', {
   // 22.1.3.15 / 15.4.4.19 Array.prototype.map(callbackfn [, thisArg])
-  map: function map(callbackfn /* , thisArg */){
+  map: function map(callbackfn /* , thisArg */) {
     return $map(this, callbackfn, arguments[1]);
   }
 });
-},{"./_array-methods":62,"./_export":82,"./_strict-method":146}],184:[function(require,module,exports){
+
+},{"./_array-methods":13,"./_export":33,"./_strict-method":97}],135:[function(require,module,exports){
 'use strict';
-var $export        = require('./_export')
-  , createProperty = require('./_create-property');
+
+var $export = require('./_export'),
+    createProperty = require('./_create-property');
 
 // WebKit Array.of isn't generic
-$export($export.S + $export.F * require('./_fails')(function(){
-  function F(){}
+$export($export.S + $export.F * require('./_fails')(function () {
+  function F() {}
   return !(Array.of.call(F) instanceof F);
 }), 'Array', {
   // 22.1.2.3 Array.of( ...items)
-  of: function of(/* ...args */){
-    var index  = 0
-      , aLen   = arguments.length
-      , result = new (typeof this == 'function' ? this : Array)(aLen);
-    while(aLen > index)createProperty(result, index, arguments[index++]);
-    result.length = aLen;
+  of: function of() /* ...args */{
+    var index = 0,
+        aLen = arguments.length,
+        result = new (typeof this == 'function' ? this : Array)(aLen);
+    while (aLen > index) {
+      createProperty(result, index, arguments[index++]);
+    }result.length = aLen;
     return result;
   }
 });
-},{"./_create-property":74,"./_export":82,"./_fails":84}],185:[function(require,module,exports){
+
+},{"./_create-property":25,"./_export":33,"./_fails":35}],136:[function(require,module,exports){
 'use strict';
-var $export = require('./_export')
-  , $reduce = require('./_array-reduce');
+
+var $export = require('./_export'),
+    $reduce = require('./_array-reduce');
 
 $export($export.P + $export.F * !require('./_strict-method')([].reduceRight, true), 'Array', {
   // 22.1.3.19 / 15.4.4.22 Array.prototype.reduceRight(callbackfn [, initialValue])
-  reduceRight: function reduceRight(callbackfn /* , initialValue */){
+  reduceRight: function reduceRight(callbackfn /* , initialValue */) {
     return $reduce(this, callbackfn, arguments.length, arguments[1], true);
   }
 });
-},{"./_array-reduce":63,"./_export":82,"./_strict-method":146}],186:[function(require,module,exports){
+
+},{"./_array-reduce":14,"./_export":33,"./_strict-method":97}],137:[function(require,module,exports){
 'use strict';
-var $export = require('./_export')
-  , $reduce = require('./_array-reduce');
+
+var $export = require('./_export'),
+    $reduce = require('./_array-reduce');
 
 $export($export.P + $export.F * !require('./_strict-method')([].reduce, true), 'Array', {
   // 22.1.3.18 / 15.4.4.21 Array.prototype.reduce(callbackfn [, initialValue])
-  reduce: function reduce(callbackfn /* , initialValue */){
+  reduce: function reduce(callbackfn /* , initialValue */) {
     return $reduce(this, callbackfn, arguments.length, arguments[1], false);
   }
 });
-},{"./_array-reduce":63,"./_export":82,"./_strict-method":146}],187:[function(require,module,exports){
+
+},{"./_array-reduce":14,"./_export":33,"./_strict-method":97}],138:[function(require,module,exports){
 'use strict';
-var $export    = require('./_export')
-  , html       = require('./_html')
-  , cof        = require('./_cof')
-  , toIndex    = require('./_to-index')
-  , toLength   = require('./_to-length')
-  , arraySlice = [].slice;
+
+var $export = require('./_export'),
+    html = require('./_html'),
+    cof = require('./_cof'),
+    toIndex = require('./_to-index'),
+    toLength = require('./_to-length'),
+    arraySlice = [].slice;
 
 // fallback for not array-like ES3 strings and DOM objects
-$export($export.P + $export.F * require('./_fails')(function(){
-  if(html)arraySlice.call(html);
+$export($export.P + $export.F * require('./_fails')(function () {
+  if (html) arraySlice.call(html);
 }), 'Array', {
-  slice: function slice(begin, end){
-    var len   = toLength(this.length)
-      , klass = cof(this);
+  slice: function slice(begin, end) {
+    var len = toLength(this.length),
+        klass = cof(this);
     end = end === undefined ? len : end;
-    if(klass == 'Array')return arraySlice.call(this, begin, end);
-    var start  = toIndex(begin, len)
-      , upTo   = toIndex(end, len)
-      , size   = toLength(upTo - start)
-      , cloned = Array(size)
-      , i      = 0;
-    for(; i < size; i++)cloned[i] = klass == 'String'
-      ? this.charAt(start + i)
-      : this[start + i];
-    return cloned;
+    if (klass == 'Array') return arraySlice.call(this, begin, end);
+    var start = toIndex(begin, len),
+        upTo = toIndex(end, len),
+        size = toLength(upTo - start),
+        cloned = Array(size),
+        i = 0;
+    for (; i < size; i++) {
+      cloned[i] = klass == 'String' ? this.charAt(start + i) : this[start + i];
+    }return cloned;
   }
 });
-},{"./_cof":68,"./_export":82,"./_fails":84,"./_html":91,"./_to-index":155,"./_to-length":158}],188:[function(require,module,exports){
+
+},{"./_cof":19,"./_export":33,"./_fails":35,"./_html":42,"./_to-index":106,"./_to-length":109}],139:[function(require,module,exports){
 'use strict';
-var $export = require('./_export')
-  , $some   = require('./_array-methods')(3);
+
+var $export = require('./_export'),
+    $some = require('./_array-methods')(3);
 
 $export($export.P + $export.F * !require('./_strict-method')([].some, true), 'Array', {
   // 22.1.3.23 / 15.4.4.17 Array.prototype.some(callbackfn [, thisArg])
-  some: function some(callbackfn /* , thisArg */){
+  some: function some(callbackfn /* , thisArg */) {
     return $some(this, callbackfn, arguments[1]);
   }
 });
-},{"./_array-methods":62,"./_export":82,"./_strict-method":146}],189:[function(require,module,exports){
-'use strict';
-var $export   = require('./_export')
-  , aFunction = require('./_a-function')
-  , toObject  = require('./_to-object')
-  , fails     = require('./_fails')
-  , $sort     = [].sort
-  , test      = [1, 2, 3];
 
-$export($export.P + $export.F * (fails(function(){
+},{"./_array-methods":13,"./_export":33,"./_strict-method":97}],140:[function(require,module,exports){
+'use strict';
+
+var $export = require('./_export'),
+    aFunction = require('./_a-function'),
+    toObject = require('./_to-object'),
+    fails = require('./_fails'),
+    $sort = [].sort,
+    test = [1, 2, 3];
+
+$export($export.P + $export.F * (fails(function () {
   // IE8-
   test.sort(undefined);
-}) || !fails(function(){
+}) || !fails(function () {
   // V8 bug
   test.sort(null);
   // Old WebKit
 }) || !require('./_strict-method')($sort)), 'Array', {
   // 22.1.3.25 Array.prototype.sort(comparefn)
-  sort: function sort(comparefn){
-    return comparefn === undefined
-      ? $sort.call(toObject(this))
-      : $sort.call(toObject(this), aFunction(comparefn));
+  sort: function sort(comparefn) {
+    return comparefn === undefined ? $sort.call(toObject(this)) : $sort.call(toObject(this), aFunction(comparefn));
   }
 });
-},{"./_a-function":53,"./_export":82,"./_fails":84,"./_strict-method":146,"./_to-object":159}],190:[function(require,module,exports){
+
+},{"./_a-function":4,"./_export":33,"./_fails":35,"./_strict-method":97,"./_to-object":110}],141:[function(require,module,exports){
+'use strict';
+
 require('./_set-species')('Array');
-},{"./_set-species":141}],191:[function(require,module,exports){
+
+},{"./_set-species":92}],142:[function(require,module,exports){
+'use strict';
+
 // 20.3.3.1 / 15.9.4.4 Date.now()
 var $export = require('./_export');
 
-$export($export.S, 'Date', {now: function(){ return new Date().getTime(); }});
-},{"./_export":82}],192:[function(require,module,exports){
+$export($export.S, 'Date', { now: function now() {
+    return new Date().getTime();
+  } });
+
+},{"./_export":33}],143:[function(require,module,exports){
 'use strict';
 // 20.3.4.36 / 15.9.5.43 Date.prototype.toISOString()
-var $export = require('./_export')
-  , fails   = require('./_fails')
-  , getTime = Date.prototype.getTime;
 
-var lz = function(num){
+var $export = require('./_export'),
+    fails = require('./_fails'),
+    getTime = Date.prototype.getTime;
+
+var lz = function lz(num) {
   return num > 9 ? num : '0' + num;
 };
 
 // PhantomJS / old WebKit has a broken implementations
-$export($export.P + $export.F * (fails(function(){
+$export($export.P + $export.F * (fails(function () {
   return new Date(-5e13 - 1).toISOString() != '0385-07-25T07:06:39.999Z';
-}) || !fails(function(){
+}) || !fails(function () {
   new Date(NaN).toISOString();
 })), 'Date', {
-  toISOString: function toISOString(){
-    if(!isFinite(getTime.call(this)))throw RangeError('Invalid time value');
-    var d = this
-      , y = d.getUTCFullYear()
-      , m = d.getUTCMilliseconds()
-      , s = y < 0 ? '-' : y > 9999 ? '+' : '';
-    return s + ('00000' + Math.abs(y)).slice(s ? -6 : -4) +
-      '-' + lz(d.getUTCMonth() + 1) + '-' + lz(d.getUTCDate()) +
-      'T' + lz(d.getUTCHours()) + ':' + lz(d.getUTCMinutes()) +
-      ':' + lz(d.getUTCSeconds()) + '.' + (m > 99 ? m : '0' + lz(m)) + 'Z';
+  toISOString: function toISOString() {
+    if (!isFinite(getTime.call(this))) throw RangeError('Invalid time value');
+    var d = this,
+        y = d.getUTCFullYear(),
+        m = d.getUTCMilliseconds(),
+        s = y < 0 ? '-' : y > 9999 ? '+' : '';
+    return s + ('00000' + Math.abs(y)).slice(s ? -6 : -4) + '-' + lz(d.getUTCMonth() + 1) + '-' + lz(d.getUTCDate()) + 'T' + lz(d.getUTCHours()) + ':' + lz(d.getUTCMinutes()) + ':' + lz(d.getUTCSeconds()) + '.' + (m > 99 ? m : '0' + lz(m)) + 'Z';
   }
 });
-},{"./_export":82,"./_fails":84}],193:[function(require,module,exports){
-'use strict';
-var $export     = require('./_export')
-  , toObject    = require('./_to-object')
-  , toPrimitive = require('./_to-primitive');
 
-$export($export.P + $export.F * require('./_fails')(function(){
-  return new Date(NaN).toJSON() !== null || Date.prototype.toJSON.call({toISOString: function(){ return 1; }}) !== 1;
+},{"./_export":33,"./_fails":35}],144:[function(require,module,exports){
+'use strict';
+
+var $export = require('./_export'),
+    toObject = require('./_to-object'),
+    toPrimitive = require('./_to-primitive');
+
+$export($export.P + $export.F * require('./_fails')(function () {
+  return new Date(NaN).toJSON() !== null || Date.prototype.toJSON.call({ toISOString: function toISOString() {
+      return 1;
+    } }) !== 1;
 }), 'Date', {
-  toJSON: function toJSON(key){
-    var O  = toObject(this)
-      , pv = toPrimitive(O);
+  toJSON: function toJSON(key) {
+    var O = toObject(this),
+        pv = toPrimitive(O);
     return typeof pv == 'number' && !isFinite(pv) ? null : O.toISOString();
   }
 });
-},{"./_export":82,"./_fails":84,"./_to-object":159,"./_to-primitive":160}],194:[function(require,module,exports){
-var TO_PRIMITIVE = require('./_wks')('toPrimitive')
-  , proto        = Date.prototype;
 
-if(!(TO_PRIMITIVE in proto))require('./_hide')(proto, TO_PRIMITIVE, require('./_date-to-primitive'));
-},{"./_date-to-primitive":76,"./_hide":90,"./_wks":167}],195:[function(require,module,exports){
-var DateProto    = Date.prototype
-  , INVALID_DATE = 'Invalid Date'
-  , TO_STRING    = 'toString'
-  , $toString    = DateProto[TO_STRING]
-  , getTime      = DateProto.getTime;
-if(new Date(NaN) + '' != INVALID_DATE){
-  require('./_redefine')(DateProto, TO_STRING, function toString(){
+},{"./_export":33,"./_fails":35,"./_to-object":110,"./_to-primitive":111}],145:[function(require,module,exports){
+'use strict';
+
+var TO_PRIMITIVE = require('./_wks')('toPrimitive'),
+    proto = Date.prototype;
+
+if (!(TO_PRIMITIVE in proto)) require('./_hide')(proto, TO_PRIMITIVE, require('./_date-to-primitive'));
+
+},{"./_date-to-primitive":27,"./_hide":41,"./_wks":118}],146:[function(require,module,exports){
+'use strict';
+
+var DateProto = Date.prototype,
+    INVALID_DATE = 'Invalid Date',
+    TO_STRING = 'toString',
+    $toString = DateProto[TO_STRING],
+    getTime = DateProto.getTime;
+if (new Date(NaN) + '' != INVALID_DATE) {
+  require('./_redefine')(DateProto, TO_STRING, function toString() {
     var value = getTime.call(this);
     return value === value ? $toString.call(this) : INVALID_DATE;
   });
 }
-},{"./_redefine":137}],196:[function(require,module,exports){
+
+},{"./_redefine":88}],147:[function(require,module,exports){
+'use strict';
+
 // 19.2.3.2 / 15.3.4.5 Function.prototype.bind(thisArg, args...)
 var $export = require('./_export');
 
-$export($export.P, 'Function', {bind: require('./_bind')});
-},{"./_bind":66,"./_export":82}],197:[function(require,module,exports){
-'use strict';
-var isObject       = require('./_is-object')
-  , getPrototypeOf = require('./_object-gpo')
-  , HAS_INSTANCE   = require('./_wks')('hasInstance')
-  , FunctionProto  = Function.prototype;
-// 19.2.3.6 Function.prototype[@@hasInstance](V)
-if(!(HAS_INSTANCE in FunctionProto))require('./_object-dp').f(FunctionProto, HAS_INSTANCE, {value: function(O){
-  if(typeof this != 'function' || !isObject(O))return false;
-  if(!isObject(this.prototype))return O instanceof this;
-  // for environment w/o native `@@hasInstance` logic enough `instanceof`, but add this:
-  while(O = getPrototypeOf(O))if(this.prototype === O)return true;
-  return false;
-}});
-},{"./_is-object":99,"./_object-dp":117,"./_object-gpo":124,"./_wks":167}],198:[function(require,module,exports){
-var dP         = require('./_object-dp').f
-  , createDesc = require('./_property-desc')
-  , has        = require('./_has')
-  , FProto     = Function.prototype
-  , nameRE     = /^\s*function ([^ (]*)/
-  , NAME       = 'name';
+$export($export.P, 'Function', { bind: require('./_bind') });
 
-var isExtensible = Object.isExtensible || function(){
+},{"./_bind":17,"./_export":33}],148:[function(require,module,exports){
+'use strict';
+
+var isObject = require('./_is-object'),
+    getPrototypeOf = require('./_object-gpo'),
+    HAS_INSTANCE = require('./_wks')('hasInstance'),
+    FunctionProto = Function.prototype;
+// 19.2.3.6 Function.prototype[@@hasInstance](V)
+if (!(HAS_INSTANCE in FunctionProto)) require('./_object-dp').f(FunctionProto, HAS_INSTANCE, { value: function value(O) {
+    if (typeof this != 'function' || !isObject(O)) return false;
+    if (!isObject(this.prototype)) return O instanceof this;
+    // for environment w/o native `@@hasInstance` logic enough `instanceof`, but add this:
+    while (O = getPrototypeOf(O)) {
+      if (this.prototype === O) return true;
+    }return false;
+  } });
+
+},{"./_is-object":50,"./_object-dp":68,"./_object-gpo":75,"./_wks":118}],149:[function(require,module,exports){
+'use strict';
+
+var dP = require('./_object-dp').f,
+    createDesc = require('./_property-desc'),
+    has = require('./_has'),
+    FProto = Function.prototype,
+    nameRE = /^\s*function ([^ (]*)/,
+    NAME = 'name';
+
+var isExtensible = Object.isExtensible || function () {
   return true;
 };
 
 // 19.2.4.2 name
 NAME in FProto || require('./_descriptors') && dP(FProto, NAME, {
   configurable: true,
-  get: function(){
+  get: function get() {
     try {
-      var that = this
-        , name = ('' + that).match(nameRE)[1];
+      var that = this,
+          name = ('' + that).match(nameRE)[1];
       has(that, NAME) || !isExtensible(that) || dP(that, NAME, createDesc(5, name));
       return name;
-    } catch(e){
+    } catch (e) {
       return '';
     }
   }
 });
-},{"./_descriptors":78,"./_has":89,"./_object-dp":117,"./_property-desc":135}],199:[function(require,module,exports){
+
+},{"./_descriptors":29,"./_has":40,"./_object-dp":68,"./_property-desc":86}],150:[function(require,module,exports){
 'use strict';
+
 var strong = require('./_collection-strong');
 
 // 23.1 Map Objects
-module.exports = require('./_collection')('Map', function(get){
-  return function Map(){ return get(this, arguments.length > 0 ? arguments[0] : undefined); };
+module.exports = require('./_collection')('Map', function (get) {
+  return function Map() {
+    return get(this, arguments.length > 0 ? arguments[0] : undefined);
+  };
 }, {
   // 23.1.3.6 Map.prototype.get(key)
-  get: function get(key){
+  get: function get(key) {
     var entry = strong.getEntry(this, key);
     return entry && entry.v;
   },
   // 23.1.3.9 Map.prototype.set(key, value)
-  set: function set(key, value){
+  set: function set(key, value) {
     return strong.def(this, key === 0 ? 0 : key, value);
   }
 }, strong, true);
-},{"./_collection":72,"./_collection-strong":69}],200:[function(require,module,exports){
+
+},{"./_collection":23,"./_collection-strong":20}],151:[function(require,module,exports){
+'use strict';
+
 // 20.2.2.3 Math.acosh(x)
-var $export = require('./_export')
-  , log1p   = require('./_math-log1p')
-  , sqrt    = Math.sqrt
-  , $acosh  = Math.acosh;
+var $export = require('./_export'),
+    log1p = require('./_math-log1p'),
+    sqrt = Math.sqrt,
+    $acosh = Math.acosh;
 
 $export($export.S + $export.F * !($acosh
-  // V8 bug: https://code.google.com/p/v8/issues/detail?id=3509
-  && Math.floor($acosh(Number.MAX_VALUE)) == 710
-  // Tor Browser bug: Math.acosh(Infinity) -> NaN 
-  && $acosh(Infinity) == Infinity
-), 'Math', {
-  acosh: function acosh(x){
-    return (x = +x) < 1 ? NaN : x > 94906265.62425156
-      ? Math.log(x) + Math.LN2
-      : log1p(x - 1 + sqrt(x - 1) * sqrt(x + 1));
+// V8 bug: https://code.google.com/p/v8/issues/detail?id=3509
+&& Math.floor($acosh(Number.MAX_VALUE)) == 710
+// Tor Browser bug: Math.acosh(Infinity) -> NaN 
+&& $acosh(Infinity) == Infinity), 'Math', {
+  acosh: function acosh(x) {
+    return (x = +x) < 1 ? NaN : x > 94906265.62425156 ? Math.log(x) + Math.LN2 : log1p(x - 1 + sqrt(x - 1) * sqrt(x + 1));
   }
 });
-},{"./_export":82,"./_math-log1p":110}],201:[function(require,module,exports){
-// 20.2.2.5 Math.asinh(x)
-var $export = require('./_export')
-  , $asinh  = Math.asinh;
 
-function asinh(x){
+},{"./_export":33,"./_math-log1p":61}],152:[function(require,module,exports){
+'use strict';
+
+// 20.2.2.5 Math.asinh(x)
+var $export = require('./_export'),
+    $asinh = Math.asinh;
+
+function asinh(x) {
   return !isFinite(x = +x) || x == 0 ? x : x < 0 ? -asinh(-x) : Math.log(x + Math.sqrt(x * x + 1));
 }
 
 // Tor Browser bug: Math.asinh(0) -> -0 
-$export($export.S + $export.F * !($asinh && 1 / $asinh(0) > 0), 'Math', {asinh: asinh});
-},{"./_export":82}],202:[function(require,module,exports){
+$export($export.S + $export.F * !($asinh && 1 / $asinh(0) > 0), 'Math', { asinh: asinh });
+
+},{"./_export":33}],153:[function(require,module,exports){
+'use strict';
+
 // 20.2.2.7 Math.atanh(x)
-var $export = require('./_export')
-  , $atanh  = Math.atanh;
+var $export = require('./_export'),
+    $atanh = Math.atanh;
 
 // Tor Browser bug: Math.atanh(-0) -> 0 
 $export($export.S + $export.F * !($atanh && 1 / $atanh(-0) < 0), 'Math', {
-  atanh: function atanh(x){
+  atanh: function atanh(x) {
     return (x = +x) == 0 ? x : Math.log((1 + x) / (1 - x)) / 2;
   }
 });
-},{"./_export":82}],203:[function(require,module,exports){
+
+},{"./_export":33}],154:[function(require,module,exports){
+'use strict';
+
 // 20.2.2.9 Math.cbrt(x)
-var $export = require('./_export')
-  , sign    = require('./_math-sign');
+var $export = require('./_export'),
+    sign = require('./_math-sign');
 
 $export($export.S, 'Math', {
-  cbrt: function cbrt(x){
+  cbrt: function cbrt(x) {
     return sign(x = +x) * Math.pow(Math.abs(x), 1 / 3);
   }
 });
-},{"./_export":82,"./_math-sign":111}],204:[function(require,module,exports){
+
+},{"./_export":33,"./_math-sign":62}],155:[function(require,module,exports){
+'use strict';
+
 // 20.2.2.11 Math.clz32(x)
 var $export = require('./_export');
 
 $export($export.S, 'Math', {
-  clz32: function clz32(x){
+  clz32: function clz32(x) {
     return (x >>>= 0) ? 31 - Math.floor(Math.log(x + 0.5) * Math.LOG2E) : 32;
   }
 });
-},{"./_export":82}],205:[function(require,module,exports){
+
+},{"./_export":33}],156:[function(require,module,exports){
+'use strict';
+
 // 20.2.2.12 Math.cosh(x)
-var $export = require('./_export')
-  , exp     = Math.exp;
+var $export = require('./_export'),
+    exp = Math.exp;
 
 $export($export.S, 'Math', {
-  cosh: function cosh(x){
+  cosh: function cosh(x) {
     return (exp(x = +x) + exp(-x)) / 2;
   }
 });
-},{"./_export":82}],206:[function(require,module,exports){
+
+},{"./_export":33}],157:[function(require,module,exports){
+'use strict';
+
 // 20.2.2.14 Math.expm1(x)
-var $export = require('./_export')
-  , $expm1  = require('./_math-expm1');
+var $export = require('./_export'),
+    $expm1 = require('./_math-expm1');
 
-$export($export.S + $export.F * ($expm1 != Math.expm1), 'Math', {expm1: $expm1});
-},{"./_export":82,"./_math-expm1":109}],207:[function(require,module,exports){
+$export($export.S + $export.F * ($expm1 != Math.expm1), 'Math', { expm1: $expm1 });
+
+},{"./_export":33,"./_math-expm1":60}],158:[function(require,module,exports){
+'use strict';
+
 // 20.2.2.16 Math.fround(x)
-var $export   = require('./_export')
-  , sign      = require('./_math-sign')
-  , pow       = Math.pow
-  , EPSILON   = pow(2, -52)
-  , EPSILON32 = pow(2, -23)
-  , MAX32     = pow(2, 127) * (2 - EPSILON32)
-  , MIN32     = pow(2, -126);
+var $export = require('./_export'),
+    sign = require('./_math-sign'),
+    pow = Math.pow,
+    EPSILON = pow(2, -52),
+    EPSILON32 = pow(2, -23),
+    MAX32 = pow(2, 127) * (2 - EPSILON32),
+    MIN32 = pow(2, -126);
 
-var roundTiesToEven = function(n){
+var roundTiesToEven = function roundTiesToEven(n) {
   return n + 1 / EPSILON - 1 / EPSILON;
 };
 
-
 $export($export.S, 'Math', {
-  fround: function fround(x){
-    var $abs  = Math.abs(x)
-      , $sign = sign(x)
-      , a, result;
-    if($abs < MIN32)return $sign * roundTiesToEven($abs / MIN32 / EPSILON32) * MIN32 * EPSILON32;
+  fround: function fround(x) {
+    var $abs = Math.abs(x),
+        $sign = sign(x),
+        a,
+        result;
+    if ($abs < MIN32) return $sign * roundTiesToEven($abs / MIN32 / EPSILON32) * MIN32 * EPSILON32;
     a = (1 + EPSILON32 / EPSILON) * $abs;
     result = a - (a - $abs);
-    if(result > MAX32 || result != result)return $sign * Infinity;
+    if (result > MAX32 || result != result) return $sign * Infinity;
     return $sign * result;
   }
 });
-},{"./_export":82,"./_math-sign":111}],208:[function(require,module,exports){
+
+},{"./_export":33,"./_math-sign":62}],159:[function(require,module,exports){
+'use strict';
+
 // 20.2.2.17 Math.hypot([value1[, value2[, … ]]])
-var $export = require('./_export')
-  , abs     = Math.abs;
+var $export = require('./_export'),
+    abs = Math.abs;
 
 $export($export.S, 'Math', {
-  hypot: function hypot(value1, value2){ // eslint-disable-line no-unused-vars
-    var sum  = 0
-      , i    = 0
-      , aLen = arguments.length
-      , larg = 0
-      , arg, div;
-    while(i < aLen){
+  hypot: function hypot(value1, value2) {
+    // eslint-disable-line no-unused-vars
+    var sum = 0,
+        i = 0,
+        aLen = arguments.length,
+        larg = 0,
+        arg,
+        div;
+    while (i < aLen) {
       arg = abs(arguments[i++]);
-      if(larg < arg){
-        div  = larg / arg;
-        sum  = sum * div * div + 1;
+      if (larg < arg) {
+        div = larg / arg;
+        sum = sum * div * div + 1;
         larg = arg;
-      } else if(arg > 0){
-        div  = arg / larg;
+      } else if (arg > 0) {
+        div = arg / larg;
         sum += div * div;
       } else sum += arg;
     }
     return larg === Infinity ? Infinity : larg * Math.sqrt(sum);
   }
 });
-},{"./_export":82}],209:[function(require,module,exports){
+
+},{"./_export":33}],160:[function(require,module,exports){
+'use strict';
+
 // 20.2.2.18 Math.imul(x, y)
-var $export = require('./_export')
-  , $imul   = Math.imul;
+var $export = require('./_export'),
+    $imul = Math.imul;
 
 // some WebKit versions fails with big numbers, some has wrong arity
-$export($export.S + $export.F * require('./_fails')(function(){
+$export($export.S + $export.F * require('./_fails')(function () {
   return $imul(0xffffffff, 5) != -5 || $imul.length != 2;
 }), 'Math', {
-  imul: function imul(x, y){
-    var UINT16 = 0xffff
-      , xn = +x
-      , yn = +y
-      , xl = UINT16 & xn
-      , yl = UINT16 & yn;
+  imul: function imul(x, y) {
+    var UINT16 = 0xffff,
+        xn = +x,
+        yn = +y,
+        xl = UINT16 & xn,
+        yl = UINT16 & yn;
     return 0 | xl * yl + ((UINT16 & xn >>> 16) * yl + xl * (UINT16 & yn >>> 16) << 16 >>> 0);
   }
 });
-},{"./_export":82,"./_fails":84}],210:[function(require,module,exports){
+
+},{"./_export":33,"./_fails":35}],161:[function(require,module,exports){
+'use strict';
+
 // 20.2.2.21 Math.log10(x)
 var $export = require('./_export');
 
 $export($export.S, 'Math', {
-  log10: function log10(x){
+  log10: function log10(x) {
     return Math.log(x) / Math.LN10;
   }
 });
-},{"./_export":82}],211:[function(require,module,exports){
+
+},{"./_export":33}],162:[function(require,module,exports){
+'use strict';
+
 // 20.2.2.20 Math.log1p(x)
 var $export = require('./_export');
 
-$export($export.S, 'Math', {log1p: require('./_math-log1p')});
-},{"./_export":82,"./_math-log1p":110}],212:[function(require,module,exports){
+$export($export.S, 'Math', { log1p: require('./_math-log1p') });
+
+},{"./_export":33,"./_math-log1p":61}],163:[function(require,module,exports){
+'use strict';
+
 // 20.2.2.22 Math.log2(x)
 var $export = require('./_export');
 
 $export($export.S, 'Math', {
-  log2: function log2(x){
+  log2: function log2(x) {
     return Math.log(x) / Math.LN2;
   }
 });
-},{"./_export":82}],213:[function(require,module,exports){
+
+},{"./_export":33}],164:[function(require,module,exports){
+'use strict';
+
 // 20.2.2.28 Math.sign(x)
 var $export = require('./_export');
 
-$export($export.S, 'Math', {sign: require('./_math-sign')});
-},{"./_export":82,"./_math-sign":111}],214:[function(require,module,exports){
+$export($export.S, 'Math', { sign: require('./_math-sign') });
+
+},{"./_export":33,"./_math-sign":62}],165:[function(require,module,exports){
+'use strict';
+
 // 20.2.2.30 Math.sinh(x)
-var $export = require('./_export')
-  , expm1   = require('./_math-expm1')
-  , exp     = Math.exp;
+var $export = require('./_export'),
+    expm1 = require('./_math-expm1'),
+    exp = Math.exp;
 
 // V8 near Chromium 38 has a problem with very small numbers
-$export($export.S + $export.F * require('./_fails')(function(){
+$export($export.S + $export.F * require('./_fails')(function () {
   return !Math.sinh(-2e-17) != -2e-17;
 }), 'Math', {
-  sinh: function sinh(x){
-    return Math.abs(x = +x) < 1
-      ? (expm1(x) - expm1(-x)) / 2
-      : (exp(x - 1) - exp(-x - 1)) * (Math.E / 2);
+  sinh: function sinh(x) {
+    return Math.abs(x = +x) < 1 ? (expm1(x) - expm1(-x)) / 2 : (exp(x - 1) - exp(-x - 1)) * (Math.E / 2);
   }
 });
-},{"./_export":82,"./_fails":84,"./_math-expm1":109}],215:[function(require,module,exports){
+
+},{"./_export":33,"./_fails":35,"./_math-expm1":60}],166:[function(require,module,exports){
+'use strict';
+
 // 20.2.2.33 Math.tanh(x)
-var $export = require('./_export')
-  , expm1   = require('./_math-expm1')
-  , exp     = Math.exp;
+var $export = require('./_export'),
+    expm1 = require('./_math-expm1'),
+    exp = Math.exp;
 
 $export($export.S, 'Math', {
-  tanh: function tanh(x){
-    var a = expm1(x = +x)
-      , b = expm1(-x);
+  tanh: function tanh(x) {
+    var a = expm1(x = +x),
+        b = expm1(-x);
     return a == Infinity ? 1 : b == Infinity ? -1 : (a - b) / (exp(x) + exp(-x));
   }
 });
-},{"./_export":82,"./_math-expm1":109}],216:[function(require,module,exports){
+
+},{"./_export":33,"./_math-expm1":60}],167:[function(require,module,exports){
+'use strict';
+
 // 20.2.2.34 Math.trunc(x)
 var $export = require('./_export');
 
 $export($export.S, 'Math', {
-  trunc: function trunc(it){
+  trunc: function trunc(it) {
     return (it > 0 ? Math.floor : Math.ceil)(it);
   }
 });
-},{"./_export":82}],217:[function(require,module,exports){
+
+},{"./_export":33}],168:[function(require,module,exports){
 'use strict';
-var global            = require('./_global')
-  , has               = require('./_has')
-  , cof               = require('./_cof')
-  , inheritIfRequired = require('./_inherit-if-required')
-  , toPrimitive       = require('./_to-primitive')
-  , fails             = require('./_fails')
-  , gOPN              = require('./_object-gopn').f
-  , gOPD              = require('./_object-gopd').f
-  , dP                = require('./_object-dp').f
-  , $trim             = require('./_string-trim').trim
-  , NUMBER            = 'Number'
-  , $Number           = global[NUMBER]
-  , Base              = $Number
-  , proto             = $Number.prototype
-  // Opera ~12 has broken Object#toString
-  , BROKEN_COF        = cof(require('./_object-create')(proto)) == NUMBER
-  , TRIM              = 'trim' in String.prototype;
+
+var global = require('./_global'),
+    has = require('./_has'),
+    cof = require('./_cof'),
+    inheritIfRequired = require('./_inherit-if-required'),
+    toPrimitive = require('./_to-primitive'),
+    fails = require('./_fails'),
+    gOPN = require('./_object-gopn').f,
+    gOPD = require('./_object-gopd').f,
+    dP = require('./_object-dp').f,
+    $trim = require('./_string-trim').trim,
+    NUMBER = 'Number',
+    $Number = global[NUMBER],
+    Base = $Number,
+    proto = $Number.prototype
+// Opera ~12 has broken Object#toString
+,
+    BROKEN_COF = cof(require('./_object-create')(proto)) == NUMBER,
+    TRIM = 'trim' in String.prototype;
 
 // 7.1.3 ToNumber(argument)
-var toNumber = function(argument){
+var toNumber = function toNumber(argument) {
   var it = toPrimitive(argument, false);
-  if(typeof it == 'string' && it.length > 2){
+  if (typeof it == 'string' && it.length > 2) {
     it = TRIM ? it.trim() : $trim(it, 3);
-    var first = it.charCodeAt(0)
-      , third, radix, maxCode;
-    if(first === 43 || first === 45){
+    var first = it.charCodeAt(0),
+        third,
+        radix,
+        maxCode;
+    if (first === 43 || first === 45) {
       third = it.charCodeAt(2);
-      if(third === 88 || third === 120)return NaN; // Number('+0x1') should be NaN, old V8 fix
-    } else if(first === 48){
-      switch(it.charCodeAt(1)){
-        case 66 : case 98  : radix = 2; maxCode = 49; break; // fast equal /^0b[01]+$/i
-        case 79 : case 111 : radix = 8; maxCode = 55; break; // fast equal /^0o[0-7]+$/i
-        default : return +it;
+      if (third === 88 || third === 120) return NaN; // Number('+0x1') should be NaN, old V8 fix
+    } else if (first === 48) {
+      switch (it.charCodeAt(1)) {
+        case 66:case 98:
+          radix = 2;maxCode = 49;break; // fast equal /^0b[01]+$/i
+        case 79:case 111:
+          radix = 8;maxCode = 55;break; // fast equal /^0o[0-7]+$/i
+        default:
+          return +it;
       }
-      for(var digits = it.slice(2), i = 0, l = digits.length, code; i < l; i++){
+      for (var digits = it.slice(2), i = 0, l = digits.length, code; i < l; i++) {
         code = digits.charCodeAt(i);
         // parseInt parses a string to a first unavailable symbol
         // but ToNumber should return NaN if a string contains unavailable symbols
-        if(code < 48 || code > maxCode)return NaN;
-      } return parseInt(digits, radix);
+        if (code < 48 || code > maxCode) return NaN;
+      }return parseInt(digits, radix);
     }
-  } return +it;
+  }return +it;
 };
 
-if(!$Number(' 0o1') || !$Number('0b1') || $Number('+0x1')){
-  $Number = function Number(value){
-    var it = arguments.length < 1 ? 0 : value
-      , that = this;
+if (!$Number(' 0o1') || !$Number('0b1') || $Number('+0x1')) {
+  $Number = function Number(value) {
+    var it = arguments.length < 1 ? 0 : value,
+        that = this;
     return that instanceof $Number
-      // check on 1..constructor(foo) case
-      && (BROKEN_COF ? fails(function(){ proto.valueOf.call(that); }) : cof(that) != NUMBER)
-        ? inheritIfRequired(new Base(toNumber(it)), that, $Number) : toNumber(it);
+    // check on 1..constructor(foo) case
+    && (BROKEN_COF ? fails(function () {
+      proto.valueOf.call(that);
+    }) : cof(that) != NUMBER) ? inheritIfRequired(new Base(toNumber(it)), that, $Number) : toNumber(it);
   };
-  for(var keys = require('./_descriptors') ? gOPN(Base) : (
-    // ES3:
-    'MAX_VALUE,MIN_VALUE,NaN,NEGATIVE_INFINITY,POSITIVE_INFINITY,' +
-    // ES6 (in case, if modules with ES6 Number statics required before):
-    'EPSILON,isFinite,isInteger,isNaN,isSafeInteger,MAX_SAFE_INTEGER,' +
-    'MIN_SAFE_INTEGER,parseFloat,parseInt,isInteger'
-  ).split(','), j = 0, key; keys.length > j; j++){
-    if(has(Base, key = keys[j]) && !has($Number, key)){
+  for (var keys = require('./_descriptors') ? gOPN(Base) : (
+  // ES3:
+  'MAX_VALUE,MIN_VALUE,NaN,NEGATIVE_INFINITY,POSITIVE_INFINITY,' +
+  // ES6 (in case, if modules with ES6 Number statics required before):
+  'EPSILON,isFinite,isInteger,isNaN,isSafeInteger,MAX_SAFE_INTEGER,' + 'MIN_SAFE_INTEGER,parseFloat,parseInt,isInteger').split(','), j = 0, key; keys.length > j; j++) {
+    if (has(Base, key = keys[j]) && !has($Number, key)) {
       dP($Number, key, gOPD(Base, key));
     }
   }
@@ -23356,159 +20834,186 @@ if(!$Number(' 0o1') || !$Number('0b1') || $Number('+0x1')){
   proto.constructor = $Number;
   require('./_redefine')(global, NUMBER, $Number);
 }
-},{"./_cof":68,"./_descriptors":78,"./_fails":84,"./_global":88,"./_has":89,"./_inherit-if-required":93,"./_object-create":116,"./_object-dp":117,"./_object-gopd":120,"./_object-gopn":122,"./_redefine":137,"./_string-trim":152,"./_to-primitive":160}],218:[function(require,module,exports){
+
+},{"./_cof":19,"./_descriptors":29,"./_fails":35,"./_global":39,"./_has":40,"./_inherit-if-required":44,"./_object-create":67,"./_object-dp":68,"./_object-gopd":71,"./_object-gopn":73,"./_redefine":88,"./_string-trim":103,"./_to-primitive":111}],169:[function(require,module,exports){
+'use strict';
+
 // 20.1.2.1 Number.EPSILON
 var $export = require('./_export');
 
-$export($export.S, 'Number', {EPSILON: Math.pow(2, -52)});
-},{"./_export":82}],219:[function(require,module,exports){
+$export($export.S, 'Number', { EPSILON: Math.pow(2, -52) });
+
+},{"./_export":33}],170:[function(require,module,exports){
+'use strict';
+
 // 20.1.2.2 Number.isFinite(number)
-var $export   = require('./_export')
-  , _isFinite = require('./_global').isFinite;
+var $export = require('./_export'),
+    _isFinite = require('./_global').isFinite;
 
 $export($export.S, 'Number', {
-  isFinite: function isFinite(it){
+  isFinite: function isFinite(it) {
     return typeof it == 'number' && _isFinite(it);
   }
 });
-},{"./_export":82,"./_global":88}],220:[function(require,module,exports){
+
+},{"./_export":33,"./_global":39}],171:[function(require,module,exports){
+'use strict';
+
 // 20.1.2.3 Number.isInteger(number)
 var $export = require('./_export');
 
-$export($export.S, 'Number', {isInteger: require('./_is-integer')});
-},{"./_export":82,"./_is-integer":98}],221:[function(require,module,exports){
+$export($export.S, 'Number', { isInteger: require('./_is-integer') });
+
+},{"./_export":33,"./_is-integer":49}],172:[function(require,module,exports){
+'use strict';
+
 // 20.1.2.4 Number.isNaN(number)
 var $export = require('./_export');
 
 $export($export.S, 'Number', {
-  isNaN: function isNaN(number){
+  isNaN: function isNaN(number) {
     return number != number;
   }
 });
-},{"./_export":82}],222:[function(require,module,exports){
+
+},{"./_export":33}],173:[function(require,module,exports){
+'use strict';
+
 // 20.1.2.5 Number.isSafeInteger(number)
-var $export   = require('./_export')
-  , isInteger = require('./_is-integer')
-  , abs       = Math.abs;
+var $export = require('./_export'),
+    isInteger = require('./_is-integer'),
+    abs = Math.abs;
 
 $export($export.S, 'Number', {
-  isSafeInteger: function isSafeInteger(number){
+  isSafeInteger: function isSafeInteger(number) {
     return isInteger(number) && abs(number) <= 0x1fffffffffffff;
   }
 });
-},{"./_export":82,"./_is-integer":98}],223:[function(require,module,exports){
+
+},{"./_export":33,"./_is-integer":49}],174:[function(require,module,exports){
+'use strict';
+
 // 20.1.2.6 Number.MAX_SAFE_INTEGER
 var $export = require('./_export');
 
-$export($export.S, 'Number', {MAX_SAFE_INTEGER: 0x1fffffffffffff});
-},{"./_export":82}],224:[function(require,module,exports){
+$export($export.S, 'Number', { MAX_SAFE_INTEGER: 0x1fffffffffffff });
+
+},{"./_export":33}],175:[function(require,module,exports){
+'use strict';
+
 // 20.1.2.10 Number.MIN_SAFE_INTEGER
 var $export = require('./_export');
 
-$export($export.S, 'Number', {MIN_SAFE_INTEGER: -0x1fffffffffffff});
-},{"./_export":82}],225:[function(require,module,exports){
-var $export     = require('./_export')
-  , $parseFloat = require('./_parse-float');
-// 20.1.2.12 Number.parseFloat(string)
-$export($export.S + $export.F * (Number.parseFloat != $parseFloat), 'Number', {parseFloat: $parseFloat});
-},{"./_export":82,"./_parse-float":131}],226:[function(require,module,exports){
-var $export   = require('./_export')
-  , $parseInt = require('./_parse-int');
-// 20.1.2.13 Number.parseInt(string, radix)
-$export($export.S + $export.F * (Number.parseInt != $parseInt), 'Number', {parseInt: $parseInt});
-},{"./_export":82,"./_parse-int":132}],227:[function(require,module,exports){
-'use strict';
-var $export      = require('./_export')
-  , toInteger    = require('./_to-integer')
-  , aNumberValue = require('./_a-number-value')
-  , repeat       = require('./_string-repeat')
-  , $toFixed     = 1..toFixed
-  , floor        = Math.floor
-  , data         = [0, 0, 0, 0, 0, 0]
-  , ERROR        = 'Number.toFixed: incorrect invocation!'
-  , ZERO         = '0';
+$export($export.S, 'Number', { MIN_SAFE_INTEGER: -0x1fffffffffffff });
 
-var multiply = function(n, c){
-  var i  = -1
-    , c2 = c;
-  while(++i < 6){
+},{"./_export":33}],176:[function(require,module,exports){
+'use strict';
+
+var $export = require('./_export'),
+    $parseFloat = require('./_parse-float');
+// 20.1.2.12 Number.parseFloat(string)
+$export($export.S + $export.F * (Number.parseFloat != $parseFloat), 'Number', { parseFloat: $parseFloat });
+
+},{"./_export":33,"./_parse-float":82}],177:[function(require,module,exports){
+'use strict';
+
+var $export = require('./_export'),
+    $parseInt = require('./_parse-int');
+// 20.1.2.13 Number.parseInt(string, radix)
+$export($export.S + $export.F * (Number.parseInt != $parseInt), 'Number', { parseInt: $parseInt });
+
+},{"./_export":33,"./_parse-int":83}],178:[function(require,module,exports){
+'use strict';
+
+var $export = require('./_export'),
+    toInteger = require('./_to-integer'),
+    aNumberValue = require('./_a-number-value'),
+    repeat = require('./_string-repeat'),
+    $toFixed = 1..toFixed,
+    floor = Math.floor,
+    data = [0, 0, 0, 0, 0, 0],
+    ERROR = 'Number.toFixed: incorrect invocation!',
+    ZERO = '0';
+
+var multiply = function multiply(n, c) {
+  var i = -1,
+      c2 = c;
+  while (++i < 6) {
     c2 += n * data[i];
     data[i] = c2 % 1e7;
     c2 = floor(c2 / 1e7);
   }
 };
-var divide = function(n){
-  var i = 6
-    , c = 0;
-  while(--i >= 0){
+var divide = function divide(n) {
+  var i = 6,
+      c = 0;
+  while (--i >= 0) {
     c += data[i];
     data[i] = floor(c / n);
-    c = (c % n) * 1e7;
+    c = c % n * 1e7;
   }
 };
-var numToString = function(){
-  var i = 6
-    , s = '';
-  while(--i >= 0){
-    if(s !== '' || i === 0 || data[i] !== 0){
+var numToString = function numToString() {
+  var i = 6,
+      s = '';
+  while (--i >= 0) {
+    if (s !== '' || i === 0 || data[i] !== 0) {
       var t = String(data[i]);
       s = s === '' ? t : s + repeat.call(ZERO, 7 - t.length) + t;
     }
-  } return s;
+  }return s;
 };
-var pow = function(x, n, acc){
+var pow = function pow(x, n, acc) {
   return n === 0 ? acc : n % 2 === 1 ? pow(x, n - 1, acc * x) : pow(x * x, n / 2, acc);
 };
-var log = function(x){
-  var n  = 0
-    , x2 = x;
-  while(x2 >= 4096){
+var log = function log(x) {
+  var n = 0,
+      x2 = x;
+  while (x2 >= 4096) {
     n += 12;
     x2 /= 4096;
   }
-  while(x2 >= 2){
-    n  += 1;
+  while (x2 >= 2) {
+    n += 1;
     x2 /= 2;
-  } return n;
+  }return n;
 };
 
-$export($export.P + $export.F * (!!$toFixed && (
-  0.00008.toFixed(3) !== '0.000' ||
-  0.9.toFixed(0) !== '1' ||
-  1.255.toFixed(2) !== '1.25' ||
-  1000000000000000128..toFixed(0) !== '1000000000000000128'
-) || !require('./_fails')(function(){
+$export($export.P + $export.F * (!!$toFixed && (0.00008.toFixed(3) !== '0.000' || 0.9.toFixed(0) !== '1' || 1.255.toFixed(2) !== '1.25' || 1000000000000000128..toFixed(0) !== '1000000000000000128') || !require('./_fails')(function () {
   // V8 ~ Android 4.3-
   $toFixed.call({});
 })), 'Number', {
-  toFixed: function toFixed(fractionDigits){
-    var x = aNumberValue(this, ERROR)
-      , f = toInteger(fractionDigits)
-      , s = ''
-      , m = ZERO
-      , e, z, j, k;
-    if(f < 0 || f > 20)throw RangeError(ERROR);
-    if(x != x)return 'NaN';
-    if(x <= -1e21 || x >= 1e21)return String(x);
-    if(x < 0){
+  toFixed: function toFixed(fractionDigits) {
+    var x = aNumberValue(this, ERROR),
+        f = toInteger(fractionDigits),
+        s = '',
+        m = ZERO,
+        e,
+        z,
+        j,
+        k;
+    if (f < 0 || f > 20) throw RangeError(ERROR);
+    if (x != x) return 'NaN';
+    if (x <= -1e21 || x >= 1e21) return String(x);
+    if (x < 0) {
       s = '-';
       x = -x;
     }
-    if(x > 1e-21){
+    if (x > 1e-21) {
       e = log(x * pow(2, 69, 1)) - 69;
       z = e < 0 ? x * pow(2, -e, 1) : x / pow(2, e, 1);
       z *= 0x10000000000000;
       e = 52 - e;
-      if(e > 0){
+      if (e > 0) {
         multiply(0, z);
         j = f;
-        while(j >= 7){
+        while (j >= 7) {
           multiply(1e7, 0);
           j -= 7;
         }
         multiply(pow(10, j, 1), 0);
         j = e - 1;
-        while(j >= 23){
+        while (j >= 23) {
           divide(1 << 23);
           j -= 23;
         }
@@ -23522,341 +21027,407 @@ $export($export.P + $export.F * (!!$toFixed && (
         m = numToString() + repeat.call(ZERO, f);
       }
     }
-    if(f > 0){
+    if (f > 0) {
       k = m.length;
       m = s + (k <= f ? '0.' + repeat.call(ZERO, f - k) + m : m.slice(0, k - f) + '.' + m.slice(k - f));
     } else {
       m = s + m;
-    } return m;
+    }return m;
   }
 });
-},{"./_a-number-value":54,"./_export":82,"./_fails":84,"./_string-repeat":151,"./_to-integer":156}],228:[function(require,module,exports){
-'use strict';
-var $export      = require('./_export')
-  , $fails       = require('./_fails')
-  , aNumberValue = require('./_a-number-value')
-  , $toPrecision = 1..toPrecision;
 
-$export($export.P + $export.F * ($fails(function(){
+},{"./_a-number-value":5,"./_export":33,"./_fails":35,"./_string-repeat":102,"./_to-integer":107}],179:[function(require,module,exports){
+'use strict';
+
+var $export = require('./_export'),
+    $fails = require('./_fails'),
+    aNumberValue = require('./_a-number-value'),
+    $toPrecision = 1..toPrecision;
+
+$export($export.P + $export.F * ($fails(function () {
   // IE7-
   return $toPrecision.call(1, undefined) !== '1';
-}) || !$fails(function(){
+}) || !$fails(function () {
   // V8 ~ Android 4.3-
   $toPrecision.call({});
 })), 'Number', {
-  toPrecision: function toPrecision(precision){
+  toPrecision: function toPrecision(precision) {
     var that = aNumberValue(this, 'Number#toPrecision: incorrect invocation!');
-    return precision === undefined ? $toPrecision.call(that) : $toPrecision.call(that, precision); 
+    return precision === undefined ? $toPrecision.call(that) : $toPrecision.call(that, precision);
   }
 });
-},{"./_a-number-value":54,"./_export":82,"./_fails":84}],229:[function(require,module,exports){
+
+},{"./_a-number-value":5,"./_export":33,"./_fails":35}],180:[function(require,module,exports){
+'use strict';
+
 // 19.1.3.1 Object.assign(target, source)
 var $export = require('./_export');
 
-$export($export.S + $export.F, 'Object', {assign: require('./_object-assign')});
-},{"./_export":82,"./_object-assign":115}],230:[function(require,module,exports){
-var $export = require('./_export')
+$export($export.S + $export.F, 'Object', { assign: require('./_object-assign') });
+
+},{"./_export":33,"./_object-assign":66}],181:[function(require,module,exports){
+'use strict';
+
+var $export = require('./_export');
 // 19.1.2.2 / 15.2.3.5 Object.create(O [, Properties])
-$export($export.S, 'Object', {create: require('./_object-create')});
-},{"./_export":82,"./_object-create":116}],231:[function(require,module,exports){
+$export($export.S, 'Object', { create: require('./_object-create') });
+
+},{"./_export":33,"./_object-create":67}],182:[function(require,module,exports){
+'use strict';
+
 var $export = require('./_export');
 // 19.1.2.3 / 15.2.3.7 Object.defineProperties(O, Properties)
-$export($export.S + $export.F * !require('./_descriptors'), 'Object', {defineProperties: require('./_object-dps')});
-},{"./_descriptors":78,"./_export":82,"./_object-dps":118}],232:[function(require,module,exports){
+$export($export.S + $export.F * !require('./_descriptors'), 'Object', { defineProperties: require('./_object-dps') });
+
+},{"./_descriptors":29,"./_export":33,"./_object-dps":69}],183:[function(require,module,exports){
+'use strict';
+
 var $export = require('./_export');
 // 19.1.2.4 / 15.2.3.6 Object.defineProperty(O, P, Attributes)
-$export($export.S + $export.F * !require('./_descriptors'), 'Object', {defineProperty: require('./_object-dp').f});
-},{"./_descriptors":78,"./_export":82,"./_object-dp":117}],233:[function(require,module,exports){
-// 19.1.2.5 Object.freeze(O)
-var isObject = require('./_is-object')
-  , meta     = require('./_meta').onFreeze;
+$export($export.S + $export.F * !require('./_descriptors'), 'Object', { defineProperty: require('./_object-dp').f });
 
-require('./_object-sap')('freeze', function($freeze){
-  return function freeze(it){
+},{"./_descriptors":29,"./_export":33,"./_object-dp":68}],184:[function(require,module,exports){
+'use strict';
+
+// 19.1.2.5 Object.freeze(O)
+var isObject = require('./_is-object'),
+    meta = require('./_meta').onFreeze;
+
+require('./_object-sap')('freeze', function ($freeze) {
+  return function freeze(it) {
     return $freeze && isObject(it) ? $freeze(meta(it)) : it;
   };
 });
-},{"./_is-object":99,"./_meta":112,"./_object-sap":128}],234:[function(require,module,exports){
-// 19.1.2.6 Object.getOwnPropertyDescriptor(O, P)
-var toIObject                 = require('./_to-iobject')
-  , $getOwnPropertyDescriptor = require('./_object-gopd').f;
 
-require('./_object-sap')('getOwnPropertyDescriptor', function(){
-  return function getOwnPropertyDescriptor(it, key){
+},{"./_is-object":50,"./_meta":63,"./_object-sap":79}],185:[function(require,module,exports){
+'use strict';
+
+// 19.1.2.6 Object.getOwnPropertyDescriptor(O, P)
+var toIObject = require('./_to-iobject'),
+    $getOwnPropertyDescriptor = require('./_object-gopd').f;
+
+require('./_object-sap')('getOwnPropertyDescriptor', function () {
+  return function getOwnPropertyDescriptor(it, key) {
     return $getOwnPropertyDescriptor(toIObject(it), key);
   };
 });
-},{"./_object-gopd":120,"./_object-sap":128,"./_to-iobject":157}],235:[function(require,module,exports){
+
+},{"./_object-gopd":71,"./_object-sap":79,"./_to-iobject":108}],186:[function(require,module,exports){
+'use strict';
+
 // 19.1.2.7 Object.getOwnPropertyNames(O)
-require('./_object-sap')('getOwnPropertyNames', function(){
+require('./_object-sap')('getOwnPropertyNames', function () {
   return require('./_object-gopn-ext').f;
 });
-},{"./_object-gopn-ext":121,"./_object-sap":128}],236:[function(require,module,exports){
-// 19.1.2.9 Object.getPrototypeOf(O)
-var toObject        = require('./_to-object')
-  , $getPrototypeOf = require('./_object-gpo');
 
-require('./_object-sap')('getPrototypeOf', function(){
-  return function getPrototypeOf(it){
+},{"./_object-gopn-ext":72,"./_object-sap":79}],187:[function(require,module,exports){
+'use strict';
+
+// 19.1.2.9 Object.getPrototypeOf(O)
+var toObject = require('./_to-object'),
+    $getPrototypeOf = require('./_object-gpo');
+
+require('./_object-sap')('getPrototypeOf', function () {
+  return function getPrototypeOf(it) {
     return $getPrototypeOf(toObject(it));
   };
 });
-},{"./_object-gpo":124,"./_object-sap":128,"./_to-object":159}],237:[function(require,module,exports){
+
+},{"./_object-gpo":75,"./_object-sap":79,"./_to-object":110}],188:[function(require,module,exports){
+'use strict';
+
 // 19.1.2.11 Object.isExtensible(O)
 var isObject = require('./_is-object');
 
-require('./_object-sap')('isExtensible', function($isExtensible){
-  return function isExtensible(it){
+require('./_object-sap')('isExtensible', function ($isExtensible) {
+  return function isExtensible(it) {
     return isObject(it) ? $isExtensible ? $isExtensible(it) : true : false;
   };
 });
-},{"./_is-object":99,"./_object-sap":128}],238:[function(require,module,exports){
+
+},{"./_is-object":50,"./_object-sap":79}],189:[function(require,module,exports){
+'use strict';
+
 // 19.1.2.12 Object.isFrozen(O)
 var isObject = require('./_is-object');
 
-require('./_object-sap')('isFrozen', function($isFrozen){
-  return function isFrozen(it){
+require('./_object-sap')('isFrozen', function ($isFrozen) {
+  return function isFrozen(it) {
     return isObject(it) ? $isFrozen ? $isFrozen(it) : false : true;
   };
 });
-},{"./_is-object":99,"./_object-sap":128}],239:[function(require,module,exports){
+
+},{"./_is-object":50,"./_object-sap":79}],190:[function(require,module,exports){
+'use strict';
+
 // 19.1.2.13 Object.isSealed(O)
 var isObject = require('./_is-object');
 
-require('./_object-sap')('isSealed', function($isSealed){
-  return function isSealed(it){
+require('./_object-sap')('isSealed', function ($isSealed) {
+  return function isSealed(it) {
     return isObject(it) ? $isSealed ? $isSealed(it) : false : true;
   };
 });
-},{"./_is-object":99,"./_object-sap":128}],240:[function(require,module,exports){
+
+},{"./_is-object":50,"./_object-sap":79}],191:[function(require,module,exports){
+'use strict';
+
 // 19.1.3.10 Object.is(value1, value2)
 var $export = require('./_export');
-$export($export.S, 'Object', {is: require('./_same-value')});
-},{"./_export":82,"./_same-value":139}],241:[function(require,module,exports){
-// 19.1.2.14 Object.keys(O)
-var toObject = require('./_to-object')
-  , $keys    = require('./_object-keys');
+$export($export.S, 'Object', { is: require('./_same-value') });
 
-require('./_object-sap')('keys', function(){
-  return function keys(it){
+},{"./_export":33,"./_same-value":90}],192:[function(require,module,exports){
+'use strict';
+
+// 19.1.2.14 Object.keys(O)
+var toObject = require('./_to-object'),
+    $keys = require('./_object-keys');
+
+require('./_object-sap')('keys', function () {
+  return function keys(it) {
     return $keys(toObject(it));
   };
 });
-},{"./_object-keys":126,"./_object-sap":128,"./_to-object":159}],242:[function(require,module,exports){
-// 19.1.2.15 Object.preventExtensions(O)
-var isObject = require('./_is-object')
-  , meta     = require('./_meta').onFreeze;
 
-require('./_object-sap')('preventExtensions', function($preventExtensions){
-  return function preventExtensions(it){
+},{"./_object-keys":77,"./_object-sap":79,"./_to-object":110}],193:[function(require,module,exports){
+'use strict';
+
+// 19.1.2.15 Object.preventExtensions(O)
+var isObject = require('./_is-object'),
+    meta = require('./_meta').onFreeze;
+
+require('./_object-sap')('preventExtensions', function ($preventExtensions) {
+  return function preventExtensions(it) {
     return $preventExtensions && isObject(it) ? $preventExtensions(meta(it)) : it;
   };
 });
-},{"./_is-object":99,"./_meta":112,"./_object-sap":128}],243:[function(require,module,exports){
-// 19.1.2.17 Object.seal(O)
-var isObject = require('./_is-object')
-  , meta     = require('./_meta').onFreeze;
 
-require('./_object-sap')('seal', function($seal){
-  return function seal(it){
+},{"./_is-object":50,"./_meta":63,"./_object-sap":79}],194:[function(require,module,exports){
+'use strict';
+
+// 19.1.2.17 Object.seal(O)
+var isObject = require('./_is-object'),
+    meta = require('./_meta').onFreeze;
+
+require('./_object-sap')('seal', function ($seal) {
+  return function seal(it) {
     return $seal && isObject(it) ? $seal(meta(it)) : it;
   };
 });
-},{"./_is-object":99,"./_meta":112,"./_object-sap":128}],244:[function(require,module,exports){
+
+},{"./_is-object":50,"./_meta":63,"./_object-sap":79}],195:[function(require,module,exports){
+'use strict';
+
 // 19.1.3.19 Object.setPrototypeOf(O, proto)
 var $export = require('./_export');
-$export($export.S, 'Object', {setPrototypeOf: require('./_set-proto').set});
-},{"./_export":82,"./_set-proto":140}],245:[function(require,module,exports){
+$export($export.S, 'Object', { setPrototypeOf: require('./_set-proto').set });
+
+},{"./_export":33,"./_set-proto":91}],196:[function(require,module,exports){
 'use strict';
 // 19.1.3.6 Object.prototype.toString()
-var classof = require('./_classof')
-  , test    = {};
+
+var classof = require('./_classof'),
+    test = {};
 test[require('./_wks')('toStringTag')] = 'z';
-if(test + '' != '[object z]'){
-  require('./_redefine')(Object.prototype, 'toString', function toString(){
+if (test + '' != '[object z]') {
+  require('./_redefine')(Object.prototype, 'toString', function toString() {
     return '[object ' + classof(this) + ']';
   }, true);
 }
-},{"./_classof":67,"./_redefine":137,"./_wks":167}],246:[function(require,module,exports){
-var $export     = require('./_export')
-  , $parseFloat = require('./_parse-float');
-// 18.2.4 parseFloat(string)
-$export($export.G + $export.F * (parseFloat != $parseFloat), {parseFloat: $parseFloat});
-},{"./_export":82,"./_parse-float":131}],247:[function(require,module,exports){
-var $export   = require('./_export')
-  , $parseInt = require('./_parse-int');
-// 18.2.5 parseInt(string, radix)
-$export($export.G + $export.F * (parseInt != $parseInt), {parseInt: $parseInt});
-},{"./_export":82,"./_parse-int":132}],248:[function(require,module,exports){
-'use strict';
-var LIBRARY            = require('./_library')
-  , global             = require('./_global')
-  , ctx                = require('./_ctx')
-  , classof            = require('./_classof')
-  , $export            = require('./_export')
-  , isObject           = require('./_is-object')
-  , aFunction          = require('./_a-function')
-  , anInstance         = require('./_an-instance')
-  , forOf              = require('./_for-of')
-  , speciesConstructor = require('./_species-constructor')
-  , task               = require('./_task').set
-  , microtask          = require('./_microtask')()
-  , PROMISE            = 'Promise'
-  , TypeError          = global.TypeError
-  , process            = global.process
-  , $Promise           = global[PROMISE]
-  , process            = global.process
-  , isNode             = classof(process) == 'process'
-  , empty              = function(){ /* empty */ }
-  , Internal, GenericPromiseCapability, Wrapper;
 
-var USE_NATIVE = !!function(){
+},{"./_classof":18,"./_redefine":88,"./_wks":118}],197:[function(require,module,exports){
+'use strict';
+
+var $export = require('./_export'),
+    $parseFloat = require('./_parse-float');
+// 18.2.4 parseFloat(string)
+$export($export.G + $export.F * (parseFloat != $parseFloat), { parseFloat: $parseFloat });
+
+},{"./_export":33,"./_parse-float":82}],198:[function(require,module,exports){
+'use strict';
+
+var $export = require('./_export'),
+    $parseInt = require('./_parse-int');
+// 18.2.5 parseInt(string, radix)
+$export($export.G + $export.F * (parseInt != $parseInt), { parseInt: $parseInt });
+
+},{"./_export":33,"./_parse-int":83}],199:[function(require,module,exports){
+'use strict';
+
+var LIBRARY = require('./_library'),
+    global = require('./_global'),
+    ctx = require('./_ctx'),
+    classof = require('./_classof'),
+    $export = require('./_export'),
+    isObject = require('./_is-object'),
+    aFunction = require('./_a-function'),
+    anInstance = require('./_an-instance'),
+    forOf = require('./_for-of'),
+    speciesConstructor = require('./_species-constructor'),
+    task = require('./_task').set,
+    microtask = require('./_microtask')(),
+    PROMISE = 'Promise',
+    TypeError = global.TypeError,
+    process = global.process,
+    $Promise = global[PROMISE],
+    process = global.process,
+    isNode = classof(process) == 'process',
+    empty = function empty() {/* empty */},
+    Internal,
+    GenericPromiseCapability,
+    Wrapper;
+
+var USE_NATIVE = !!function () {
   try {
     // correct subclassing with @@species support
-    var promise     = $Promise.resolve(1)
-      , FakePromise = (promise.constructor = {})[require('./_wks')('species')] = function(exec){ exec(empty, empty); };
+    var promise = $Promise.resolve(1),
+        FakePromise = (promise.constructor = {})[require('./_wks')('species')] = function (exec) {
+      exec(empty, empty);
+    };
     // unhandled rejections tracking support, NodeJS Promise without it fails @@species test
     return (isNode || typeof PromiseRejectionEvent == 'function') && promise.then(empty) instanceof FakePromise;
-  } catch(e){ /* empty */ }
+  } catch (e) {/* empty */}
 }();
 
 // helpers
-var sameConstructor = function(a, b){
+var sameConstructor = function sameConstructor(a, b) {
   // with library wrapper special case
   return a === b || a === $Promise && b === Wrapper;
 };
-var isThenable = function(it){
+var isThenable = function isThenable(it) {
   var then;
   return isObject(it) && typeof (then = it.then) == 'function' ? then : false;
 };
-var newPromiseCapability = function(C){
-  return sameConstructor($Promise, C)
-    ? new PromiseCapability(C)
-    : new GenericPromiseCapability(C);
+var newPromiseCapability = function newPromiseCapability(C) {
+  return sameConstructor($Promise, C) ? new PromiseCapability(C) : new GenericPromiseCapability(C);
 };
-var PromiseCapability = GenericPromiseCapability = function(C){
+var PromiseCapability = GenericPromiseCapability = function GenericPromiseCapability(C) {
   var resolve, reject;
-  this.promise = new C(function($$resolve, $$reject){
-    if(resolve !== undefined || reject !== undefined)throw TypeError('Bad Promise constructor');
+  this.promise = new C(function ($$resolve, $$reject) {
+    if (resolve !== undefined || reject !== undefined) throw TypeError('Bad Promise constructor');
     resolve = $$resolve;
-    reject  = $$reject;
+    reject = $$reject;
   });
   this.resolve = aFunction(resolve);
-  this.reject  = aFunction(reject);
+  this.reject = aFunction(reject);
 };
-var perform = function(exec){
+var perform = function perform(exec) {
   try {
     exec();
-  } catch(e){
-    return {error: e};
+  } catch (e) {
+    return { error: e };
   }
 };
-var notify = function(promise, isReject){
-  if(promise._n)return;
+var notify = function notify(promise, isReject) {
+  if (promise._n) return;
   promise._n = true;
   var chain = promise._c;
-  microtask(function(){
-    var value = promise._v
-      , ok    = promise._s == 1
-      , i     = 0;
-    var run = function(reaction){
-      var handler = ok ? reaction.ok : reaction.fail
-        , resolve = reaction.resolve
-        , reject  = reaction.reject
-        , domain  = reaction.domain
-        , result, then;
+  microtask(function () {
+    var value = promise._v,
+        ok = promise._s == 1,
+        i = 0;
+    var run = function run(reaction) {
+      var handler = ok ? reaction.ok : reaction.fail,
+          resolve = reaction.resolve,
+          reject = reaction.reject,
+          domain = reaction.domain,
+          result,
+          then;
       try {
-        if(handler){
-          if(!ok){
-            if(promise._h == 2)onHandleUnhandled(promise);
+        if (handler) {
+          if (!ok) {
+            if (promise._h == 2) onHandleUnhandled(promise);
             promise._h = 1;
           }
-          if(handler === true)result = value;
-          else {
-            if(domain)domain.enter();
+          if (handler === true) result = value;else {
+            if (domain) domain.enter();
             result = handler(value);
-            if(domain)domain.exit();
+            if (domain) domain.exit();
           }
-          if(result === reaction.promise){
+          if (result === reaction.promise) {
             reject(TypeError('Promise-chain cycle'));
-          } else if(then = isThenable(result)){
+          } else if (then = isThenable(result)) {
             then.call(result, resolve, reject);
           } else resolve(result);
         } else reject(value);
-      } catch(e){
+      } catch (e) {
         reject(e);
       }
     };
-    while(chain.length > i)run(chain[i++]); // variable length - can't use forEach
+    while (chain.length > i) {
+      run(chain[i++]);
+    } // variable length - can't use forEach
     promise._c = [];
     promise._n = false;
-    if(isReject && !promise._h)onUnhandled(promise);
+    if (isReject && !promise._h) onUnhandled(promise);
   });
 };
-var onUnhandled = function(promise){
-  task.call(global, function(){
-    var value = promise._v
-      , abrupt, handler, console;
-    if(isUnhandled(promise)){
-      abrupt = perform(function(){
-        if(isNode){
+var onUnhandled = function onUnhandled(promise) {
+  task.call(global, function () {
+    var value = promise._v,
+        abrupt,
+        handler,
+        console;
+    if (isUnhandled(promise)) {
+      abrupt = perform(function () {
+        if (isNode) {
           process.emit('unhandledRejection', value, promise);
-        } else if(handler = global.onunhandledrejection){
-          handler({promise: promise, reason: value});
-        } else if((console = global.console) && console.error){
+        } else if (handler = global.onunhandledrejection) {
+          handler({ promise: promise, reason: value });
+        } else if ((console = global.console) && console.error) {
           console.error('Unhandled promise rejection', value);
         }
       });
       // Browsers should not trigger `rejectionHandled` event if it was handled here, NodeJS - should
       promise._h = isNode || isUnhandled(promise) ? 2 : 1;
-    } promise._a = undefined;
-    if(abrupt)throw abrupt.error;
+    }promise._a = undefined;
+    if (abrupt) throw abrupt.error;
   });
 };
-var isUnhandled = function(promise){
-  if(promise._h == 1)return false;
-  var chain = promise._a || promise._c
-    , i     = 0
-    , reaction;
-  while(chain.length > i){
+var isUnhandled = function isUnhandled(promise) {
+  if (promise._h == 1) return false;
+  var chain = promise._a || promise._c,
+      i = 0,
+      reaction;
+  while (chain.length > i) {
     reaction = chain[i++];
-    if(reaction.fail || !isUnhandled(reaction.promise))return false;
-  } return true;
+    if (reaction.fail || !isUnhandled(reaction.promise)) return false;
+  }return true;
 };
-var onHandleUnhandled = function(promise){
-  task.call(global, function(){
+var onHandleUnhandled = function onHandleUnhandled(promise) {
+  task.call(global, function () {
     var handler;
-    if(isNode){
+    if (isNode) {
       process.emit('rejectionHandled', promise);
-    } else if(handler = global.onrejectionhandled){
-      handler({promise: promise, reason: promise._v});
+    } else if (handler = global.onrejectionhandled) {
+      handler({ promise: promise, reason: promise._v });
     }
   });
 };
-var $reject = function(value){
+var $reject = function $reject(value) {
   var promise = this;
-  if(promise._d)return;
+  if (promise._d) return;
   promise._d = true;
   promise = promise._w || promise; // unwrap
   promise._v = value;
   promise._s = 2;
-  if(!promise._a)promise._a = promise._c.slice();
+  if (!promise._a) promise._a = promise._c.slice();
   notify(promise, true);
 };
-var $resolve = function(value){
-  var promise = this
-    , then;
-  if(promise._d)return;
+var $resolve = function $resolve(value) {
+  var promise = this,
+      then;
+  if (promise._d) return;
   promise._d = true;
   promise = promise._w || promise; // unwrap
   try {
-    if(promise === value)throw TypeError("Promise can't be resolved itself");
-    if(then = isThenable(value)){
-      microtask(function(){
-        var wrapper = {_w: promise, _d: false}; // wrap
+    if (promise === value) throw TypeError("Promise can't be resolved itself");
+    if (then = isThenable(value)) {
+      microtask(function () {
+        var wrapper = { _w: promise, _d: false }; // wrap
         try {
           then.call(value, ctx($resolve, wrapper, 1), ctx($reject, wrapper, 1));
-        } catch(e){
+        } catch (e) {
           $reject.call(wrapper, e);
         }
       });
@@ -23865,59 +21436,59 @@ var $resolve = function(value){
       promise._s = 1;
       notify(promise, false);
     }
-  } catch(e){
-    $reject.call({_w: promise, _d: false}, e); // wrap
+  } catch (e) {
+    $reject.call({ _w: promise, _d: false }, e); // wrap
   }
 };
 
 // constructor polyfill
-if(!USE_NATIVE){
+if (!USE_NATIVE) {
   // 25.4.3.1 Promise(executor)
-  $Promise = function Promise(executor){
+  $Promise = function Promise(executor) {
     anInstance(this, $Promise, PROMISE, '_h');
     aFunction(executor);
     Internal.call(this);
     try {
       executor(ctx($resolve, this, 1), ctx($reject, this, 1));
-    } catch(err){
+    } catch (err) {
       $reject.call(this, err);
     }
   };
-  Internal = function Promise(executor){
-    this._c = [];             // <- awaiting reactions
-    this._a = undefined;      // <- checked in isUnhandled reactions
-    this._s = 0;              // <- state
-    this._d = false;          // <- done
-    this._v = undefined;      // <- value
-    this._h = 0;              // <- rejection state, 0 - default, 1 - handled, 2 - unhandled
-    this._n = false;          // <- notify
+  Internal = function Promise(executor) {
+    this._c = []; // <- awaiting reactions
+    this._a = undefined; // <- checked in isUnhandled reactions
+    this._s = 0; // <- state
+    this._d = false; // <- done
+    this._v = undefined; // <- value
+    this._h = 0; // <- rejection state, 0 - default, 1 - handled, 2 - unhandled
+    this._n = false; // <- notify
   };
   Internal.prototype = require('./_redefine-all')($Promise.prototype, {
     // 25.4.5.3 Promise.prototype.then(onFulfilled, onRejected)
-    then: function then(onFulfilled, onRejected){
-      var reaction    = newPromiseCapability(speciesConstructor(this, $Promise));
-      reaction.ok     = typeof onFulfilled == 'function' ? onFulfilled : true;
-      reaction.fail   = typeof onRejected == 'function' && onRejected;
+    then: function then(onFulfilled, onRejected) {
+      var reaction = newPromiseCapability(speciesConstructor(this, $Promise));
+      reaction.ok = typeof onFulfilled == 'function' ? onFulfilled : true;
+      reaction.fail = typeof onRejected == 'function' && onRejected;
       reaction.domain = isNode ? process.domain : undefined;
       this._c.push(reaction);
-      if(this._a)this._a.push(reaction);
-      if(this._s)notify(this, false);
+      if (this._a) this._a.push(reaction);
+      if (this._s) notify(this, false);
       return reaction.promise;
     },
     // 25.4.5.1 Promise.prototype.catch(onRejected)
-    'catch': function(onRejected){
+    'catch': function _catch(onRejected) {
       return this.then(undefined, onRejected);
     }
   });
-  PromiseCapability = function(){
-    var promise  = new Internal;
+  PromiseCapability = function PromiseCapability() {
+    var promise = new Internal();
     this.promise = promise;
     this.resolve = ctx($resolve, promise, 1);
-    this.reject  = ctx($reject, promise, 1);
+    this.reject = ctx($reject, promise, 1);
   };
 }
 
-$export($export.G + $export.W + $export.F * !USE_NATIVE, {Promise: $Promise});
+$export($export.G + $export.W + $export.F * !USE_NATIVE, { Promise: $Promise });
 require('./_set-to-string-tag')($Promise, PROMISE);
 require('./_set-species')(PROMISE);
 Wrapper = require('./_core')[PROMISE];
@@ -23925,321 +21496,368 @@ Wrapper = require('./_core')[PROMISE];
 // statics
 $export($export.S + $export.F * !USE_NATIVE, PROMISE, {
   // 25.4.4.5 Promise.reject(r)
-  reject: function reject(r){
-    var capability = newPromiseCapability(this)
-      , $$reject   = capability.reject;
+  reject: function reject(r) {
+    var capability = newPromiseCapability(this),
+        $$reject = capability.reject;
     $$reject(r);
     return capability.promise;
   }
 });
 $export($export.S + $export.F * (LIBRARY || !USE_NATIVE), PROMISE, {
   // 25.4.4.6 Promise.resolve(x)
-  resolve: function resolve(x){
+  resolve: function resolve(x) {
     // instanceof instead of internal slot check because we should fix it without replacement native Promise core
-    if(x instanceof $Promise && sameConstructor(x.constructor, this))return x;
-    var capability = newPromiseCapability(this)
-      , $$resolve  = capability.resolve;
+    if (x instanceof $Promise && sameConstructor(x.constructor, this)) return x;
+    var capability = newPromiseCapability(this),
+        $$resolve = capability.resolve;
     $$resolve(x);
     return capability.promise;
   }
 });
-$export($export.S + $export.F * !(USE_NATIVE && require('./_iter-detect')(function(iter){
+$export($export.S + $export.F * !(USE_NATIVE && require('./_iter-detect')(function (iter) {
   $Promise.all(iter)['catch'](empty);
 })), PROMISE, {
   // 25.4.4.1 Promise.all(iterable)
-  all: function all(iterable){
-    var C          = this
-      , capability = newPromiseCapability(C)
-      , resolve    = capability.resolve
-      , reject     = capability.reject;
-    var abrupt = perform(function(){
-      var values    = []
-        , index     = 0
-        , remaining = 1;
-      forOf(iterable, false, function(promise){
-        var $index        = index++
-          , alreadyCalled = false;
+  all: function all(iterable) {
+    var C = this,
+        capability = newPromiseCapability(C),
+        resolve = capability.resolve,
+        reject = capability.reject;
+    var abrupt = perform(function () {
+      var values = [],
+          index = 0,
+          remaining = 1;
+      forOf(iterable, false, function (promise) {
+        var $index = index++,
+            alreadyCalled = false;
         values.push(undefined);
         remaining++;
-        C.resolve(promise).then(function(value){
-          if(alreadyCalled)return;
-          alreadyCalled  = true;
+        C.resolve(promise).then(function (value) {
+          if (alreadyCalled) return;
+          alreadyCalled = true;
           values[$index] = value;
           --remaining || resolve(values);
         }, reject);
       });
       --remaining || resolve(values);
     });
-    if(abrupt)reject(abrupt.error);
+    if (abrupt) reject(abrupt.error);
     return capability.promise;
   },
   // 25.4.4.4 Promise.race(iterable)
-  race: function race(iterable){
-    var C          = this
-      , capability = newPromiseCapability(C)
-      , reject     = capability.reject;
-    var abrupt = perform(function(){
-      forOf(iterable, false, function(promise){
+  race: function race(iterable) {
+    var C = this,
+        capability = newPromiseCapability(C),
+        reject = capability.reject;
+    var abrupt = perform(function () {
+      forOf(iterable, false, function (promise) {
         C.resolve(promise).then(capability.resolve, reject);
       });
     });
-    if(abrupt)reject(abrupt.error);
+    if (abrupt) reject(abrupt.error);
     return capability.promise;
   }
 });
-},{"./_a-function":53,"./_an-instance":56,"./_classof":67,"./_core":73,"./_ctx":75,"./_export":82,"./_for-of":87,"./_global":88,"./_is-object":99,"./_iter-detect":104,"./_library":108,"./_microtask":114,"./_redefine-all":136,"./_set-species":141,"./_set-to-string-tag":142,"./_species-constructor":145,"./_task":154,"./_wks":167}],249:[function(require,module,exports){
+
+},{"./_a-function":4,"./_an-instance":7,"./_classof":18,"./_core":24,"./_ctx":26,"./_export":33,"./_for-of":38,"./_global":39,"./_is-object":50,"./_iter-detect":55,"./_library":59,"./_microtask":65,"./_redefine-all":87,"./_set-species":92,"./_set-to-string-tag":93,"./_species-constructor":96,"./_task":105,"./_wks":118}],200:[function(require,module,exports){
+'use strict';
+
 // 26.1.1 Reflect.apply(target, thisArgument, argumentsList)
-var $export   = require('./_export')
-  , aFunction = require('./_a-function')
-  , anObject  = require('./_an-object')
-  , rApply    = (require('./_global').Reflect || {}).apply
-  , fApply    = Function.apply;
+var $export = require('./_export'),
+    aFunction = require('./_a-function'),
+    anObject = require('./_an-object'),
+    rApply = (require('./_global').Reflect || {}).apply,
+    fApply = Function.apply;
 // MS Edge argumentsList argument is optional
-$export($export.S + $export.F * !require('./_fails')(function(){
-  rApply(function(){});
+$export($export.S + $export.F * !require('./_fails')(function () {
+  rApply(function () {});
 }), 'Reflect', {
-  apply: function apply(target, thisArgument, argumentsList){
-    var T = aFunction(target)
-      , L = anObject(argumentsList);
+  apply: function apply(target, thisArgument, argumentsList) {
+    var T = aFunction(target),
+        L = anObject(argumentsList);
     return rApply ? rApply(T, thisArgument, L) : fApply.call(T, thisArgument, L);
   }
 });
-},{"./_a-function":53,"./_an-object":57,"./_export":82,"./_fails":84,"./_global":88}],250:[function(require,module,exports){
+
+},{"./_a-function":4,"./_an-object":8,"./_export":33,"./_fails":35,"./_global":39}],201:[function(require,module,exports){
+'use strict';
+
 // 26.1.2 Reflect.construct(target, argumentsList [, newTarget])
-var $export    = require('./_export')
-  , create     = require('./_object-create')
-  , aFunction  = require('./_a-function')
-  , anObject   = require('./_an-object')
-  , isObject   = require('./_is-object')
-  , fails      = require('./_fails')
-  , bind       = require('./_bind')
-  , rConstruct = (require('./_global').Reflect || {}).construct;
+var $export = require('./_export'),
+    create = require('./_object-create'),
+    aFunction = require('./_a-function'),
+    anObject = require('./_an-object'),
+    isObject = require('./_is-object'),
+    fails = require('./_fails'),
+    bind = require('./_bind'),
+    rConstruct = (require('./_global').Reflect || {}).construct;
 
 // MS Edge supports only 2 arguments and argumentsList argument is optional
 // FF Nightly sets third argument as `new.target`, but does not create `this` from it
-var NEW_TARGET_BUG = fails(function(){
-  function F(){}
-  return !(rConstruct(function(){}, [], F) instanceof F);
+var NEW_TARGET_BUG = fails(function () {
+  function F() {}
+  return !(rConstruct(function () {}, [], F) instanceof F);
 });
-var ARGS_BUG = !fails(function(){
-  rConstruct(function(){});
+var ARGS_BUG = !fails(function () {
+  rConstruct(function () {});
 });
 
 $export($export.S + $export.F * (NEW_TARGET_BUG || ARGS_BUG), 'Reflect', {
-  construct: function construct(Target, args /*, newTarget*/){
+  construct: function construct(Target, args /*, newTarget*/) {
     aFunction(Target);
     anObject(args);
     var newTarget = arguments.length < 3 ? Target : aFunction(arguments[2]);
-    if(ARGS_BUG && !NEW_TARGET_BUG)return rConstruct(Target, args, newTarget);
-    if(Target == newTarget){
+    if (ARGS_BUG && !NEW_TARGET_BUG) return rConstruct(Target, args, newTarget);
+    if (Target == newTarget) {
       // w/o altered newTarget, optimization for 0-4 arguments
-      switch(args.length){
-        case 0: return new Target;
-        case 1: return new Target(args[0]);
-        case 2: return new Target(args[0], args[1]);
-        case 3: return new Target(args[0], args[1], args[2]);
-        case 4: return new Target(args[0], args[1], args[2], args[3]);
+      switch (args.length) {
+        case 0:
+          return new Target();
+        case 1:
+          return new Target(args[0]);
+        case 2:
+          return new Target(args[0], args[1]);
+        case 3:
+          return new Target(args[0], args[1], args[2]);
+        case 4:
+          return new Target(args[0], args[1], args[2], args[3]);
       }
       // w/o altered newTarget, lot of arguments case
       var $args = [null];
       $args.push.apply($args, args);
-      return new (bind.apply(Target, $args));
+      return new (bind.apply(Target, $args))();
     }
     // with altered newTarget, not support built-in constructors
-    var proto    = newTarget.prototype
-      , instance = create(isObject(proto) ? proto : Object.prototype)
-      , result   = Function.apply.call(Target, instance, args);
+    var proto = newTarget.prototype,
+        instance = create(isObject(proto) ? proto : Object.prototype),
+        result = Function.apply.call(Target, instance, args);
     return isObject(result) ? result : instance;
   }
 });
-},{"./_a-function":53,"./_an-object":57,"./_bind":66,"./_export":82,"./_fails":84,"./_global":88,"./_is-object":99,"./_object-create":116}],251:[function(require,module,exports){
+
+},{"./_a-function":4,"./_an-object":8,"./_bind":17,"./_export":33,"./_fails":35,"./_global":39,"./_is-object":50,"./_object-create":67}],202:[function(require,module,exports){
+'use strict';
+
 // 26.1.3 Reflect.defineProperty(target, propertyKey, attributes)
-var dP          = require('./_object-dp')
-  , $export     = require('./_export')
-  , anObject    = require('./_an-object')
-  , toPrimitive = require('./_to-primitive');
+var dP = require('./_object-dp'),
+    $export = require('./_export'),
+    anObject = require('./_an-object'),
+    toPrimitive = require('./_to-primitive');
 
 // MS Edge has broken Reflect.defineProperty - throwing instead of returning false
-$export($export.S + $export.F * require('./_fails')(function(){
-  Reflect.defineProperty(dP.f({}, 1, {value: 1}), 1, {value: 2});
+$export($export.S + $export.F * require('./_fails')(function () {
+  Reflect.defineProperty(dP.f({}, 1, { value: 1 }), 1, { value: 2 });
 }), 'Reflect', {
-  defineProperty: function defineProperty(target, propertyKey, attributes){
+  defineProperty: function defineProperty(target, propertyKey, attributes) {
     anObject(target);
     propertyKey = toPrimitive(propertyKey, true);
     anObject(attributes);
     try {
       dP.f(target, propertyKey, attributes);
       return true;
-    } catch(e){
+    } catch (e) {
       return false;
     }
   }
 });
-},{"./_an-object":57,"./_export":82,"./_fails":84,"./_object-dp":117,"./_to-primitive":160}],252:[function(require,module,exports){
+
+},{"./_an-object":8,"./_export":33,"./_fails":35,"./_object-dp":68,"./_to-primitive":111}],203:[function(require,module,exports){
+'use strict';
+
 // 26.1.4 Reflect.deleteProperty(target, propertyKey)
-var $export  = require('./_export')
-  , gOPD     = require('./_object-gopd').f
-  , anObject = require('./_an-object');
+var $export = require('./_export'),
+    gOPD = require('./_object-gopd').f,
+    anObject = require('./_an-object');
 
 $export($export.S, 'Reflect', {
-  deleteProperty: function deleteProperty(target, propertyKey){
+  deleteProperty: function deleteProperty(target, propertyKey) {
     var desc = gOPD(anObject(target), propertyKey);
     return desc && !desc.configurable ? false : delete target[propertyKey];
   }
 });
-},{"./_an-object":57,"./_export":82,"./_object-gopd":120}],253:[function(require,module,exports){
+
+},{"./_an-object":8,"./_export":33,"./_object-gopd":71}],204:[function(require,module,exports){
 'use strict';
 // 26.1.5 Reflect.enumerate(target)
-var $export  = require('./_export')
-  , anObject = require('./_an-object');
-var Enumerate = function(iterated){
+
+var $export = require('./_export'),
+    anObject = require('./_an-object');
+var Enumerate = function Enumerate(iterated) {
   this._t = anObject(iterated); // target
-  this._i = 0;                  // next index
-  var keys = this._k = []       // keys
-    , key;
-  for(key in iterated)keys.push(key);
+  this._i = 0; // next index
+  var keys = this._k = [] // keys
+  ,
+      key;
+  for (key in iterated) {
+    keys.push(key);
+  }
 };
-require('./_iter-create')(Enumerate, 'Object', function(){
-  var that = this
-    , keys = that._k
-    , key;
+require('./_iter-create')(Enumerate, 'Object', function () {
+  var that = this,
+      keys = that._k,
+      key;
   do {
-    if(that._i >= keys.length)return {value: undefined, done: true};
-  } while(!((key = keys[that._i++]) in that._t));
-  return {value: key, done: false};
+    if (that._i >= keys.length) return { value: undefined, done: true };
+  } while (!((key = keys[that._i++]) in that._t));
+  return { value: key, done: false };
 });
 
 $export($export.S, 'Reflect', {
-  enumerate: function enumerate(target){
+  enumerate: function enumerate(target) {
     return new Enumerate(target);
   }
 });
-},{"./_an-object":57,"./_export":82,"./_iter-create":102}],254:[function(require,module,exports){
+
+},{"./_an-object":8,"./_export":33,"./_iter-create":53}],205:[function(require,module,exports){
+'use strict';
+
 // 26.1.7 Reflect.getOwnPropertyDescriptor(target, propertyKey)
-var gOPD     = require('./_object-gopd')
-  , $export  = require('./_export')
-  , anObject = require('./_an-object');
+var gOPD = require('./_object-gopd'),
+    $export = require('./_export'),
+    anObject = require('./_an-object');
 
 $export($export.S, 'Reflect', {
-  getOwnPropertyDescriptor: function getOwnPropertyDescriptor(target, propertyKey){
+  getOwnPropertyDescriptor: function getOwnPropertyDescriptor(target, propertyKey) {
     return gOPD.f(anObject(target), propertyKey);
   }
 });
-},{"./_an-object":57,"./_export":82,"./_object-gopd":120}],255:[function(require,module,exports){
+
+},{"./_an-object":8,"./_export":33,"./_object-gopd":71}],206:[function(require,module,exports){
+'use strict';
+
 // 26.1.8 Reflect.getPrototypeOf(target)
-var $export  = require('./_export')
-  , getProto = require('./_object-gpo')
-  , anObject = require('./_an-object');
+var $export = require('./_export'),
+    getProto = require('./_object-gpo'),
+    anObject = require('./_an-object');
 
 $export($export.S, 'Reflect', {
-  getPrototypeOf: function getPrototypeOf(target){
+  getPrototypeOf: function getPrototypeOf(target) {
     return getProto(anObject(target));
   }
 });
-},{"./_an-object":57,"./_export":82,"./_object-gpo":124}],256:[function(require,module,exports){
-// 26.1.6 Reflect.get(target, propertyKey [, receiver])
-var gOPD           = require('./_object-gopd')
-  , getPrototypeOf = require('./_object-gpo')
-  , has            = require('./_has')
-  , $export        = require('./_export')
-  , isObject       = require('./_is-object')
-  , anObject       = require('./_an-object');
 
-function get(target, propertyKey/*, receiver*/){
-  var receiver = arguments.length < 3 ? target : arguments[2]
-    , desc, proto;
-  if(anObject(target) === receiver)return target[propertyKey];
-  if(desc = gOPD.f(target, propertyKey))return has(desc, 'value')
-    ? desc.value
-    : desc.get !== undefined
-      ? desc.get.call(receiver)
-      : undefined;
-  if(isObject(proto = getPrototypeOf(target)))return get(proto, propertyKey, receiver);
+},{"./_an-object":8,"./_export":33,"./_object-gpo":75}],207:[function(require,module,exports){
+'use strict';
+
+// 26.1.6 Reflect.get(target, propertyKey [, receiver])
+var gOPD = require('./_object-gopd'),
+    getPrototypeOf = require('./_object-gpo'),
+    has = require('./_has'),
+    $export = require('./_export'),
+    isObject = require('./_is-object'),
+    anObject = require('./_an-object');
+
+function get(target, propertyKey /*, receiver*/) {
+  var receiver = arguments.length < 3 ? target : arguments[2],
+      desc,
+      proto;
+  if (anObject(target) === receiver) return target[propertyKey];
+  if (desc = gOPD.f(target, propertyKey)) return has(desc, 'value') ? desc.value : desc.get !== undefined ? desc.get.call(receiver) : undefined;
+  if (isObject(proto = getPrototypeOf(target))) return get(proto, propertyKey, receiver);
 }
 
-$export($export.S, 'Reflect', {get: get});
-},{"./_an-object":57,"./_export":82,"./_has":89,"./_is-object":99,"./_object-gopd":120,"./_object-gpo":124}],257:[function(require,module,exports){
+$export($export.S, 'Reflect', { get: get });
+
+},{"./_an-object":8,"./_export":33,"./_has":40,"./_is-object":50,"./_object-gopd":71,"./_object-gpo":75}],208:[function(require,module,exports){
+'use strict';
+
 // 26.1.9 Reflect.has(target, propertyKey)
 var $export = require('./_export');
 
 $export($export.S, 'Reflect', {
-  has: function has(target, propertyKey){
+  has: function has(target, propertyKey) {
     return propertyKey in target;
   }
 });
-},{"./_export":82}],258:[function(require,module,exports){
+
+},{"./_export":33}],209:[function(require,module,exports){
+'use strict';
+
 // 26.1.10 Reflect.isExtensible(target)
-var $export       = require('./_export')
-  , anObject      = require('./_an-object')
-  , $isExtensible = Object.isExtensible;
+var $export = require('./_export'),
+    anObject = require('./_an-object'),
+    $isExtensible = Object.isExtensible;
 
 $export($export.S, 'Reflect', {
-  isExtensible: function isExtensible(target){
+  isExtensible: function isExtensible(target) {
     anObject(target);
     return $isExtensible ? $isExtensible(target) : true;
   }
 });
-},{"./_an-object":57,"./_export":82}],259:[function(require,module,exports){
+
+},{"./_an-object":8,"./_export":33}],210:[function(require,module,exports){
+'use strict';
+
 // 26.1.11 Reflect.ownKeys(target)
 var $export = require('./_export');
 
-$export($export.S, 'Reflect', {ownKeys: require('./_own-keys')});
-},{"./_export":82,"./_own-keys":130}],260:[function(require,module,exports){
+$export($export.S, 'Reflect', { ownKeys: require('./_own-keys') });
+
+},{"./_export":33,"./_own-keys":81}],211:[function(require,module,exports){
+'use strict';
+
 // 26.1.12 Reflect.preventExtensions(target)
-var $export            = require('./_export')
-  , anObject           = require('./_an-object')
-  , $preventExtensions = Object.preventExtensions;
+var $export = require('./_export'),
+    anObject = require('./_an-object'),
+    $preventExtensions = Object.preventExtensions;
 
 $export($export.S, 'Reflect', {
-  preventExtensions: function preventExtensions(target){
+  preventExtensions: function preventExtensions(target) {
     anObject(target);
     try {
-      if($preventExtensions)$preventExtensions(target);
+      if ($preventExtensions) $preventExtensions(target);
       return true;
-    } catch(e){
+    } catch (e) {
       return false;
     }
   }
 });
-},{"./_an-object":57,"./_export":82}],261:[function(require,module,exports){
-// 26.1.14 Reflect.setPrototypeOf(target, proto)
-var $export  = require('./_export')
-  , setProto = require('./_set-proto');
 
-if(setProto)$export($export.S, 'Reflect', {
-  setPrototypeOf: function setPrototypeOf(target, proto){
+},{"./_an-object":8,"./_export":33}],212:[function(require,module,exports){
+'use strict';
+
+// 26.1.14 Reflect.setPrototypeOf(target, proto)
+var $export = require('./_export'),
+    setProto = require('./_set-proto');
+
+if (setProto) $export($export.S, 'Reflect', {
+  setPrototypeOf: function setPrototypeOf(target, proto) {
     setProto.check(target, proto);
     try {
       setProto.set(target, proto);
       return true;
-    } catch(e){
+    } catch (e) {
       return false;
     }
   }
 });
-},{"./_export":82,"./_set-proto":140}],262:[function(require,module,exports){
-// 26.1.13 Reflect.set(target, propertyKey, V [, receiver])
-var dP             = require('./_object-dp')
-  , gOPD           = require('./_object-gopd')
-  , getPrototypeOf = require('./_object-gpo')
-  , has            = require('./_has')
-  , $export        = require('./_export')
-  , createDesc     = require('./_property-desc')
-  , anObject       = require('./_an-object')
-  , isObject       = require('./_is-object');
 
-function set(target, propertyKey, V/*, receiver*/){
-  var receiver = arguments.length < 4 ? target : arguments[3]
-    , ownDesc  = gOPD.f(anObject(target), propertyKey)
-    , existingDescriptor, proto;
-  if(!ownDesc){
-    if(isObject(proto = getPrototypeOf(target))){
+},{"./_export":33,"./_set-proto":91}],213:[function(require,module,exports){
+'use strict';
+
+// 26.1.13 Reflect.set(target, propertyKey, V [, receiver])
+var dP = require('./_object-dp'),
+    gOPD = require('./_object-gopd'),
+    getPrototypeOf = require('./_object-gpo'),
+    has = require('./_has'),
+    $export = require('./_export'),
+    createDesc = require('./_property-desc'),
+    anObject = require('./_an-object'),
+    isObject = require('./_is-object');
+
+function set(target, propertyKey, V /*, receiver*/) {
+  var receiver = arguments.length < 4 ? target : arguments[3],
+      ownDesc = gOPD.f(anObject(target), propertyKey),
+      existingDescriptor,
+      proto;
+  if (!ownDesc) {
+    if (isObject(proto = getPrototypeOf(target))) {
       return set(proto, propertyKey, V, receiver);
     }
     ownDesc = createDesc(0);
   }
-  if(has(ownDesc, 'value')){
-    if(ownDesc.writable === false || !isObject(receiver))return false;
+  if (has(ownDesc, 'value')) {
+    if (ownDesc.writable === false || !isObject(receiver)) return false;
     existingDescriptor = gOPD.f(receiver, propertyKey) || createDesc(0);
     existingDescriptor.value = V;
     dP.f(receiver, propertyKey, existingDescriptor);
@@ -24248,631 +21866,700 @@ function set(target, propertyKey, V/*, receiver*/){
   return ownDesc.set === undefined ? false : (ownDesc.set.call(receiver, V), true);
 }
 
-$export($export.S, 'Reflect', {set: set});
-},{"./_an-object":57,"./_export":82,"./_has":89,"./_is-object":99,"./_object-dp":117,"./_object-gopd":120,"./_object-gpo":124,"./_property-desc":135}],263:[function(require,module,exports){
-var global            = require('./_global')
-  , inheritIfRequired = require('./_inherit-if-required')
-  , dP                = require('./_object-dp').f
-  , gOPN              = require('./_object-gopn').f
-  , isRegExp          = require('./_is-regexp')
-  , $flags            = require('./_flags')
-  , $RegExp           = global.RegExp
-  , Base              = $RegExp
-  , proto             = $RegExp.prototype
-  , re1               = /a/g
-  , re2               = /a/g
-  // "new" creates a new object, old webkit buggy here
-  , CORRECT_NEW       = new $RegExp(re1) !== re1;
+$export($export.S, 'Reflect', { set: set });
 
-if(require('./_descriptors') && (!CORRECT_NEW || require('./_fails')(function(){
+},{"./_an-object":8,"./_export":33,"./_has":40,"./_is-object":50,"./_object-dp":68,"./_object-gopd":71,"./_object-gpo":75,"./_property-desc":86}],214:[function(require,module,exports){
+'use strict';
+
+var global = require('./_global'),
+    inheritIfRequired = require('./_inherit-if-required'),
+    dP = require('./_object-dp').f,
+    gOPN = require('./_object-gopn').f,
+    isRegExp = require('./_is-regexp'),
+    $flags = require('./_flags'),
+    $RegExp = global.RegExp,
+    Base = $RegExp,
+    proto = $RegExp.prototype,
+    re1 = /a/g,
+    re2 = /a/g
+// "new" creates a new object, old webkit buggy here
+,
+    CORRECT_NEW = new $RegExp(re1) !== re1;
+
+if (require('./_descriptors') && (!CORRECT_NEW || require('./_fails')(function () {
   re2[require('./_wks')('match')] = false;
   // RegExp constructor can alter flags and IsRegExp works correct with @@match
   return $RegExp(re1) != re1 || $RegExp(re2) == re2 || $RegExp(re1, 'i') != '/a/i';
-}))){
-  $RegExp = function RegExp(p, f){
-    var tiRE = this instanceof $RegExp
-      , piRE = isRegExp(p)
-      , fiU  = f === undefined;
-    return !tiRE && piRE && p.constructor === $RegExp && fiU ? p
-      : inheritIfRequired(CORRECT_NEW
-        ? new Base(piRE && !fiU ? p.source : p, f)
-        : Base((piRE = p instanceof $RegExp) ? p.source : p, piRE && fiU ? $flags.call(p) : f)
-      , tiRE ? this : proto, $RegExp);
+}))) {
+  $RegExp = function RegExp(p, f) {
+    var tiRE = this instanceof $RegExp,
+        piRE = isRegExp(p),
+        fiU = f === undefined;
+    return !tiRE && piRE && p.constructor === $RegExp && fiU ? p : inheritIfRequired(CORRECT_NEW ? new Base(piRE && !fiU ? p.source : p, f) : Base((piRE = p instanceof $RegExp) ? p.source : p, piRE && fiU ? $flags.call(p) : f), tiRE ? this : proto, $RegExp);
   };
-  var proxy = function(key){
+  var proxy = function proxy(key) {
     key in $RegExp || dP($RegExp, key, {
       configurable: true,
-      get: function(){ return Base[key]; },
-      set: function(it){ Base[key] = it; }
+      get: function get() {
+        return Base[key];
+      },
+      set: function set(it) {
+        Base[key] = it;
+      }
     });
   };
-  for(var keys = gOPN(Base), i = 0; keys.length > i; )proxy(keys[i++]);
-  proto.constructor = $RegExp;
+  for (var keys = gOPN(Base), i = 0; keys.length > i;) {
+    proxy(keys[i++]);
+  }proto.constructor = $RegExp;
   $RegExp.prototype = proto;
   require('./_redefine')(global, 'RegExp', $RegExp);
 }
 
 require('./_set-species')('RegExp');
-},{"./_descriptors":78,"./_fails":84,"./_flags":86,"./_global":88,"./_inherit-if-required":93,"./_is-regexp":100,"./_object-dp":117,"./_object-gopn":122,"./_redefine":137,"./_set-species":141,"./_wks":167}],264:[function(require,module,exports){
+
+},{"./_descriptors":29,"./_fails":35,"./_flags":37,"./_global":39,"./_inherit-if-required":44,"./_is-regexp":51,"./_object-dp":68,"./_object-gopn":73,"./_redefine":88,"./_set-species":92,"./_wks":118}],215:[function(require,module,exports){
+'use strict';
+
 // 21.2.5.3 get RegExp.prototype.flags()
-if(require('./_descriptors') && /./g.flags != 'g')require('./_object-dp').f(RegExp.prototype, 'flags', {
+if (require('./_descriptors') && /./g.flags != 'g') require('./_object-dp').f(RegExp.prototype, 'flags', {
   configurable: true,
   get: require('./_flags')
 });
-},{"./_descriptors":78,"./_flags":86,"./_object-dp":117}],265:[function(require,module,exports){
+
+},{"./_descriptors":29,"./_flags":37,"./_object-dp":68}],216:[function(require,module,exports){
+'use strict';
+
 // @@match logic
-require('./_fix-re-wks')('match', 1, function(defined, MATCH, $match){
+require('./_fix-re-wks')('match', 1, function (defined, MATCH, $match) {
   // 21.1.3.11 String.prototype.match(regexp)
-  return [function match(regexp){
+  return [function match(regexp) {
     'use strict';
-    var O  = defined(this)
-      , fn = regexp == undefined ? undefined : regexp[MATCH];
+
+    var O = defined(this),
+        fn = regexp == undefined ? undefined : regexp[MATCH];
     return fn !== undefined ? fn.call(regexp, O) : new RegExp(regexp)[MATCH](String(O));
   }, $match];
 });
-},{"./_fix-re-wks":85}],266:[function(require,module,exports){
+
+},{"./_fix-re-wks":36}],217:[function(require,module,exports){
+'use strict';
+
 // @@replace logic
-require('./_fix-re-wks')('replace', 2, function(defined, REPLACE, $replace){
+require('./_fix-re-wks')('replace', 2, function (defined, REPLACE, $replace) {
   // 21.1.3.14 String.prototype.replace(searchValue, replaceValue)
-  return [function replace(searchValue, replaceValue){
+  return [function replace(searchValue, replaceValue) {
     'use strict';
-    var O  = defined(this)
-      , fn = searchValue == undefined ? undefined : searchValue[REPLACE];
-    return fn !== undefined
-      ? fn.call(searchValue, O, replaceValue)
-      : $replace.call(String(O), searchValue, replaceValue);
+
+    var O = defined(this),
+        fn = searchValue == undefined ? undefined : searchValue[REPLACE];
+    return fn !== undefined ? fn.call(searchValue, O, replaceValue) : $replace.call(String(O), searchValue, replaceValue);
   }, $replace];
 });
-},{"./_fix-re-wks":85}],267:[function(require,module,exports){
+
+},{"./_fix-re-wks":36}],218:[function(require,module,exports){
+'use strict';
+
 // @@search logic
-require('./_fix-re-wks')('search', 1, function(defined, SEARCH, $search){
+require('./_fix-re-wks')('search', 1, function (defined, SEARCH, $search) {
   // 21.1.3.15 String.prototype.search(regexp)
-  return [function search(regexp){
+  return [function search(regexp) {
     'use strict';
-    var O  = defined(this)
-      , fn = regexp == undefined ? undefined : regexp[SEARCH];
+
+    var O = defined(this),
+        fn = regexp == undefined ? undefined : regexp[SEARCH];
     return fn !== undefined ? fn.call(regexp, O) : new RegExp(regexp)[SEARCH](String(O));
   }, $search];
 });
-},{"./_fix-re-wks":85}],268:[function(require,module,exports){
+
+},{"./_fix-re-wks":36}],219:[function(require,module,exports){
+'use strict';
+
 // @@split logic
-require('./_fix-re-wks')('split', 2, function(defined, SPLIT, $split){
+require('./_fix-re-wks')('split', 2, function (defined, SPLIT, $split) {
   'use strict';
-  var isRegExp   = require('./_is-regexp')
-    , _split     = $split
-    , $push      = [].push
-    , $SPLIT     = 'split'
-    , LENGTH     = 'length'
-    , LAST_INDEX = 'lastIndex';
-  if(
-    'abbc'[$SPLIT](/(b)*/)[1] == 'c' ||
-    'test'[$SPLIT](/(?:)/, -1)[LENGTH] != 4 ||
-    'ab'[$SPLIT](/(?:ab)*/)[LENGTH] != 2 ||
-    '.'[$SPLIT](/(.?)(.?)/)[LENGTH] != 4 ||
-    '.'[$SPLIT](/()()/)[LENGTH] > 1 ||
-    ''[$SPLIT](/.?/)[LENGTH]
-  ){
+
+  var isRegExp = require('./_is-regexp'),
+      _split = $split,
+      $push = [].push,
+      $SPLIT = 'split',
+      LENGTH = 'length',
+      LAST_INDEX = 'lastIndex';
+  if ('abbc'[$SPLIT](/(b)*/)[1] == 'c' || 'test'[$SPLIT](/(?:)/, -1)[LENGTH] != 4 || 'ab'[$SPLIT](/(?:ab)*/)[LENGTH] != 2 || '.'[$SPLIT](/(.?)(.?)/)[LENGTH] != 4 || '.'[$SPLIT](/()()/)[LENGTH] > 1 || ''[$SPLIT](/.?/)[LENGTH]) {
     var NPCG = /()??/.exec('')[1] === undefined; // nonparticipating capturing group
     // based on es5-shim implementation, need to rework it
-    $split = function(separator, limit){
+    $split = function $split(separator, limit) {
       var string = String(this);
-      if(separator === undefined && limit === 0)return [];
+      if (separator === undefined && limit === 0) return [];
       // If `separator` is not a regex, use native split
-      if(!isRegExp(separator))return _split.call(string, separator, limit);
+      if (!isRegExp(separator)) return _split.call(string, separator, limit);
       var output = [];
-      var flags = (separator.ignoreCase ? 'i' : '') +
-                  (separator.multiline ? 'm' : '') +
-                  (separator.unicode ? 'u' : '') +
-                  (separator.sticky ? 'y' : '');
+      var flags = (separator.ignoreCase ? 'i' : '') + (separator.multiline ? 'm' : '') + (separator.unicode ? 'u' : '') + (separator.sticky ? 'y' : '');
       var lastLastIndex = 0;
       var splitLimit = limit === undefined ? 4294967295 : limit >>> 0;
       // Make `global` and avoid `lastIndex` issues by working with a copy
       var separatorCopy = new RegExp(separator.source, flags + 'g');
       var separator2, match, lastIndex, lastLength, i;
       // Doesn't need flags gy, but they don't hurt
-      if(!NPCG)separator2 = new RegExp('^' + separatorCopy.source + '$(?!\\s)', flags);
-      while(match = separatorCopy.exec(string)){
+      if (!NPCG) separator2 = new RegExp('^' + separatorCopy.source + '$(?!\\s)', flags);
+      while (match = separatorCopy.exec(string)) {
         // `separatorCopy.lastIndex` is not reliable cross-browser
         lastIndex = match.index + match[0][LENGTH];
-        if(lastIndex > lastLastIndex){
+        if (lastIndex > lastLastIndex) {
           output.push(string.slice(lastLastIndex, match.index));
           // Fix browsers whose `exec` methods don't consistently return `undefined` for NPCG
-          if(!NPCG && match[LENGTH] > 1)match[0].replace(separator2, function(){
-            for(i = 1; i < arguments[LENGTH] - 2; i++)if(arguments[i] === undefined)match[i] = undefined;
+          if (!NPCG && match[LENGTH] > 1) match[0].replace(separator2, function () {
+            for (i = 1; i < arguments[LENGTH] - 2; i++) {
+              if (arguments[i] === undefined) match[i] = undefined;
+            }
           });
-          if(match[LENGTH] > 1 && match.index < string[LENGTH])$push.apply(output, match.slice(1));
+          if (match[LENGTH] > 1 && match.index < string[LENGTH]) $push.apply(output, match.slice(1));
           lastLength = match[0][LENGTH];
           lastLastIndex = lastIndex;
-          if(output[LENGTH] >= splitLimit)break;
+          if (output[LENGTH] >= splitLimit) break;
         }
-        if(separatorCopy[LAST_INDEX] === match.index)separatorCopy[LAST_INDEX]++; // Avoid an infinite loop
+        if (separatorCopy[LAST_INDEX] === match.index) separatorCopy[LAST_INDEX]++; // Avoid an infinite loop
       }
-      if(lastLastIndex === string[LENGTH]){
-        if(lastLength || !separatorCopy.test(''))output.push('');
+      if (lastLastIndex === string[LENGTH]) {
+        if (lastLength || !separatorCopy.test('')) output.push('');
       } else output.push(string.slice(lastLastIndex));
       return output[LENGTH] > splitLimit ? output.slice(0, splitLimit) : output;
     };
-  // Chakra, V8
-  } else if('0'[$SPLIT](undefined, 0)[LENGTH]){
-    $split = function(separator, limit){
+    // Chakra, V8
+  } else if ('0'[$SPLIT](undefined, 0)[LENGTH]) {
+    $split = function $split(separator, limit) {
       return separator === undefined && limit === 0 ? [] : _split.call(this, separator, limit);
     };
   }
   // 21.1.3.17 String.prototype.split(separator, limit)
-  return [function split(separator, limit){
-    var O  = defined(this)
-      , fn = separator == undefined ? undefined : separator[SPLIT];
+  return [function split(separator, limit) {
+    var O = defined(this),
+        fn = separator == undefined ? undefined : separator[SPLIT];
     return fn !== undefined ? fn.call(separator, O, limit) : $split.call(String(O), separator, limit);
   }, $split];
 });
-},{"./_fix-re-wks":85,"./_is-regexp":100}],269:[function(require,module,exports){
-'use strict';
-require('./es6.regexp.flags');
-var anObject    = require('./_an-object')
-  , $flags      = require('./_flags')
-  , DESCRIPTORS = require('./_descriptors')
-  , TO_STRING   = 'toString'
-  , $toString   = /./[TO_STRING];
 
-var define = function(fn){
+},{"./_fix-re-wks":36,"./_is-regexp":51}],220:[function(require,module,exports){
+'use strict';
+
+require('./es6.regexp.flags');
+var anObject = require('./_an-object'),
+    $flags = require('./_flags'),
+    DESCRIPTORS = require('./_descriptors'),
+    TO_STRING = 'toString',
+    $toString = /./[TO_STRING];
+
+var define = function define(fn) {
   require('./_redefine')(RegExp.prototype, TO_STRING, fn, true);
 };
 
 // 21.2.5.14 RegExp.prototype.toString()
-if(require('./_fails')(function(){ return $toString.call({source: 'a', flags: 'b'}) != '/a/b'; })){
-  define(function toString(){
+if (require('./_fails')(function () {
+  return $toString.call({ source: 'a', flags: 'b' }) != '/a/b';
+})) {
+  define(function toString() {
     var R = anObject(this);
-    return '/'.concat(R.source, '/',
-      'flags' in R ? R.flags : !DESCRIPTORS && R instanceof RegExp ? $flags.call(R) : undefined);
+    return '/'.concat(R.source, '/', 'flags' in R ? R.flags : !DESCRIPTORS && R instanceof RegExp ? $flags.call(R) : undefined);
   });
-// FF44- RegExp#toString has a wrong name
-} else if($toString.name != TO_STRING){
-  define(function toString(){
+  // FF44- RegExp#toString has a wrong name
+} else if ($toString.name != TO_STRING) {
+  define(function toString() {
     return $toString.call(this);
   });
 }
-},{"./_an-object":57,"./_descriptors":78,"./_fails":84,"./_flags":86,"./_redefine":137,"./es6.regexp.flags":264}],270:[function(require,module,exports){
+
+},{"./_an-object":8,"./_descriptors":29,"./_fails":35,"./_flags":37,"./_redefine":88,"./es6.regexp.flags":215}],221:[function(require,module,exports){
 'use strict';
+
 var strong = require('./_collection-strong');
 
 // 23.2 Set Objects
-module.exports = require('./_collection')('Set', function(get){
-  return function Set(){ return get(this, arguments.length > 0 ? arguments[0] : undefined); };
+module.exports = require('./_collection')('Set', function (get) {
+  return function Set() {
+    return get(this, arguments.length > 0 ? arguments[0] : undefined);
+  };
 }, {
   // 23.2.3.1 Set.prototype.add(value)
-  add: function add(value){
+  add: function add(value) {
     return strong.def(this, value = value === 0 ? 0 : value, value);
   }
 }, strong);
-},{"./_collection":72,"./_collection-strong":69}],271:[function(require,module,exports){
+
+},{"./_collection":23,"./_collection-strong":20}],222:[function(require,module,exports){
 'use strict';
 // B.2.3.2 String.prototype.anchor(name)
-require('./_string-html')('anchor', function(createHTML){
-  return function anchor(name){
+
+require('./_string-html')('anchor', function (createHTML) {
+  return function anchor(name) {
     return createHTML(this, 'a', 'name', name);
-  }
+  };
 });
-},{"./_string-html":149}],272:[function(require,module,exports){
+
+},{"./_string-html":100}],223:[function(require,module,exports){
 'use strict';
 // B.2.3.3 String.prototype.big()
-require('./_string-html')('big', function(createHTML){
-  return function big(){
+
+require('./_string-html')('big', function (createHTML) {
+  return function big() {
     return createHTML(this, 'big', '', '');
-  }
+  };
 });
-},{"./_string-html":149}],273:[function(require,module,exports){
+
+},{"./_string-html":100}],224:[function(require,module,exports){
 'use strict';
 // B.2.3.4 String.prototype.blink()
-require('./_string-html')('blink', function(createHTML){
-  return function blink(){
+
+require('./_string-html')('blink', function (createHTML) {
+  return function blink() {
     return createHTML(this, 'blink', '', '');
-  }
+  };
 });
-},{"./_string-html":149}],274:[function(require,module,exports){
+
+},{"./_string-html":100}],225:[function(require,module,exports){
 'use strict';
 // B.2.3.5 String.prototype.bold()
-require('./_string-html')('bold', function(createHTML){
-  return function bold(){
+
+require('./_string-html')('bold', function (createHTML) {
+  return function bold() {
     return createHTML(this, 'b', '', '');
-  }
+  };
 });
-},{"./_string-html":149}],275:[function(require,module,exports){
+
+},{"./_string-html":100}],226:[function(require,module,exports){
 'use strict';
-var $export = require('./_export')
-  , $at     = require('./_string-at')(false);
+
+var $export = require('./_export'),
+    $at = require('./_string-at')(false);
 $export($export.P, 'String', {
   // 21.1.3.3 String.prototype.codePointAt(pos)
-  codePointAt: function codePointAt(pos){
+  codePointAt: function codePointAt(pos) {
     return $at(this, pos);
   }
 });
-},{"./_export":82,"./_string-at":147}],276:[function(require,module,exports){
+
+},{"./_export":33,"./_string-at":98}],227:[function(require,module,exports){
 // 21.1.3.6 String.prototype.endsWith(searchString [, endPosition])
 'use strict';
-var $export   = require('./_export')
-  , toLength  = require('./_to-length')
-  , context   = require('./_string-context')
-  , ENDS_WITH = 'endsWith'
-  , $endsWith = ''[ENDS_WITH];
+
+var $export = require('./_export'),
+    toLength = require('./_to-length'),
+    context = require('./_string-context'),
+    ENDS_WITH = 'endsWith',
+    $endsWith = ''[ENDS_WITH];
 
 $export($export.P + $export.F * require('./_fails-is-regexp')(ENDS_WITH), 'String', {
-  endsWith: function endsWith(searchString /*, endPosition = @length */){
-    var that = context(this, searchString, ENDS_WITH)
-      , endPosition = arguments.length > 1 ? arguments[1] : undefined
-      , len    = toLength(that.length)
-      , end    = endPosition === undefined ? len : Math.min(toLength(endPosition), len)
-      , search = String(searchString);
-    return $endsWith
-      ? $endsWith.call(that, search, end)
-      : that.slice(end - search.length, end) === search;
+  endsWith: function endsWith(searchString /*, endPosition = @length */) {
+    var that = context(this, searchString, ENDS_WITH),
+        endPosition = arguments.length > 1 ? arguments[1] : undefined,
+        len = toLength(that.length),
+        end = endPosition === undefined ? len : Math.min(toLength(endPosition), len),
+        search = String(searchString);
+    return $endsWith ? $endsWith.call(that, search, end) : that.slice(end - search.length, end) === search;
   }
 });
-},{"./_export":82,"./_fails-is-regexp":83,"./_string-context":148,"./_to-length":158}],277:[function(require,module,exports){
+
+},{"./_export":33,"./_fails-is-regexp":34,"./_string-context":99,"./_to-length":109}],228:[function(require,module,exports){
 'use strict';
 // B.2.3.6 String.prototype.fixed()
-require('./_string-html')('fixed', function(createHTML){
-  return function fixed(){
+
+require('./_string-html')('fixed', function (createHTML) {
+  return function fixed() {
     return createHTML(this, 'tt', '', '');
-  }
+  };
 });
-},{"./_string-html":149}],278:[function(require,module,exports){
+
+},{"./_string-html":100}],229:[function(require,module,exports){
 'use strict';
 // B.2.3.7 String.prototype.fontcolor(color)
-require('./_string-html')('fontcolor', function(createHTML){
-  return function fontcolor(color){
+
+require('./_string-html')('fontcolor', function (createHTML) {
+  return function fontcolor(color) {
     return createHTML(this, 'font', 'color', color);
-  }
+  };
 });
-},{"./_string-html":149}],279:[function(require,module,exports){
+
+},{"./_string-html":100}],230:[function(require,module,exports){
 'use strict';
 // B.2.3.8 String.prototype.fontsize(size)
-require('./_string-html')('fontsize', function(createHTML){
-  return function fontsize(size){
+
+require('./_string-html')('fontsize', function (createHTML) {
+  return function fontsize(size) {
     return createHTML(this, 'font', 'size', size);
-  }
+  };
 });
-},{"./_string-html":149}],280:[function(require,module,exports){
-var $export        = require('./_export')
-  , toIndex        = require('./_to-index')
-  , fromCharCode   = String.fromCharCode
-  , $fromCodePoint = String.fromCodePoint;
+
+},{"./_string-html":100}],231:[function(require,module,exports){
+'use strict';
+
+var $export = require('./_export'),
+    toIndex = require('./_to-index'),
+    fromCharCode = String.fromCharCode,
+    $fromCodePoint = String.fromCodePoint;
 
 // length should be 1, old FF problem
 $export($export.S + $export.F * (!!$fromCodePoint && $fromCodePoint.length != 1), 'String', {
   // 21.1.2.2 String.fromCodePoint(...codePoints)
-  fromCodePoint: function fromCodePoint(x){ // eslint-disable-line no-unused-vars
-    var res  = []
-      , aLen = arguments.length
-      , i    = 0
-      , code;
-    while(aLen > i){
+  fromCodePoint: function fromCodePoint(x) {
+    // eslint-disable-line no-unused-vars
+    var res = [],
+        aLen = arguments.length,
+        i = 0,
+        code;
+    while (aLen > i) {
       code = +arguments[i++];
-      if(toIndex(code, 0x10ffff) !== code)throw RangeError(code + ' is not a valid code point');
-      res.push(code < 0x10000
-        ? fromCharCode(code)
-        : fromCharCode(((code -= 0x10000) >> 10) + 0xd800, code % 0x400 + 0xdc00)
-      );
-    } return res.join('');
+      if (toIndex(code, 0x10ffff) !== code) throw RangeError(code + ' is not a valid code point');
+      res.push(code < 0x10000 ? fromCharCode(code) : fromCharCode(((code -= 0x10000) >> 10) + 0xd800, code % 0x400 + 0xdc00));
+    }return res.join('');
   }
 });
-},{"./_export":82,"./_to-index":155}],281:[function(require,module,exports){
+
+},{"./_export":33,"./_to-index":106}],232:[function(require,module,exports){
 // 21.1.3.7 String.prototype.includes(searchString, position = 0)
 'use strict';
-var $export  = require('./_export')
-  , context  = require('./_string-context')
-  , INCLUDES = 'includes';
+
+var $export = require('./_export'),
+    context = require('./_string-context'),
+    INCLUDES = 'includes';
 
 $export($export.P + $export.F * require('./_fails-is-regexp')(INCLUDES), 'String', {
-  includes: function includes(searchString /*, position = 0 */){
-    return !!~context(this, searchString, INCLUDES)
-      .indexOf(searchString, arguments.length > 1 ? arguments[1] : undefined);
+  includes: function includes(searchString /*, position = 0 */) {
+    return !!~context(this, searchString, INCLUDES).indexOf(searchString, arguments.length > 1 ? arguments[1] : undefined);
   }
 });
-},{"./_export":82,"./_fails-is-regexp":83,"./_string-context":148}],282:[function(require,module,exports){
+
+},{"./_export":33,"./_fails-is-regexp":34,"./_string-context":99}],233:[function(require,module,exports){
 'use strict';
 // B.2.3.9 String.prototype.italics()
-require('./_string-html')('italics', function(createHTML){
-  return function italics(){
+
+require('./_string-html')('italics', function (createHTML) {
+  return function italics() {
     return createHTML(this, 'i', '', '');
-  }
+  };
 });
-},{"./_string-html":149}],283:[function(require,module,exports){
+
+},{"./_string-html":100}],234:[function(require,module,exports){
 'use strict';
-var $at  = require('./_string-at')(true);
+
+var $at = require('./_string-at')(true);
 
 // 21.1.3.27 String.prototype[@@iterator]()
-require('./_iter-define')(String, 'String', function(iterated){
+require('./_iter-define')(String, 'String', function (iterated) {
   this._t = String(iterated); // target
-  this._i = 0;                // next index
-// 21.1.5.2.1 %StringIteratorPrototype%.next()
-}, function(){
-  var O     = this._t
-    , index = this._i
-    , point;
-  if(index >= O.length)return {value: undefined, done: true};
+  this._i = 0; // next index
+  // 21.1.5.2.1 %StringIteratorPrototype%.next()
+}, function () {
+  var O = this._t,
+      index = this._i,
+      point;
+  if (index >= O.length) return { value: undefined, done: true };
   point = $at(O, index);
   this._i += point.length;
-  return {value: point, done: false};
+  return { value: point, done: false };
 });
-},{"./_iter-define":103,"./_string-at":147}],284:[function(require,module,exports){
+
+},{"./_iter-define":54,"./_string-at":98}],235:[function(require,module,exports){
 'use strict';
 // B.2.3.10 String.prototype.link(url)
-require('./_string-html')('link', function(createHTML){
-  return function link(url){
+
+require('./_string-html')('link', function (createHTML) {
+  return function link(url) {
     return createHTML(this, 'a', 'href', url);
-  }
+  };
 });
-},{"./_string-html":149}],285:[function(require,module,exports){
-var $export   = require('./_export')
-  , toIObject = require('./_to-iobject')
-  , toLength  = require('./_to-length');
+
+},{"./_string-html":100}],236:[function(require,module,exports){
+'use strict';
+
+var $export = require('./_export'),
+    toIObject = require('./_to-iobject'),
+    toLength = require('./_to-length');
 
 $export($export.S, 'String', {
   // 21.1.2.4 String.raw(callSite, ...substitutions)
-  raw: function raw(callSite){
-    var tpl  = toIObject(callSite.raw)
-      , len  = toLength(tpl.length)
-      , aLen = arguments.length
-      , res  = []
-      , i    = 0;
-    while(len > i){
+  raw: function raw(callSite) {
+    var tpl = toIObject(callSite.raw),
+        len = toLength(tpl.length),
+        aLen = arguments.length,
+        res = [],
+        i = 0;
+    while (len > i) {
       res.push(String(tpl[i++]));
-      if(i < aLen)res.push(String(arguments[i]));
-    } return res.join('');
+      if (i < aLen) res.push(String(arguments[i]));
+    }return res.join('');
   }
 });
-},{"./_export":82,"./_to-iobject":157,"./_to-length":158}],286:[function(require,module,exports){
+
+},{"./_export":33,"./_to-iobject":108,"./_to-length":109}],237:[function(require,module,exports){
+'use strict';
+
 var $export = require('./_export');
 
 $export($export.P, 'String', {
   // 21.1.3.13 String.prototype.repeat(count)
   repeat: require('./_string-repeat')
 });
-},{"./_export":82,"./_string-repeat":151}],287:[function(require,module,exports){
+
+},{"./_export":33,"./_string-repeat":102}],238:[function(require,module,exports){
 'use strict';
 // B.2.3.11 String.prototype.small()
-require('./_string-html')('small', function(createHTML){
-  return function small(){
+
+require('./_string-html')('small', function (createHTML) {
+  return function small() {
     return createHTML(this, 'small', '', '');
-  }
+  };
 });
-},{"./_string-html":149}],288:[function(require,module,exports){
+
+},{"./_string-html":100}],239:[function(require,module,exports){
 // 21.1.3.18 String.prototype.startsWith(searchString [, position ])
 'use strict';
-var $export     = require('./_export')
-  , toLength    = require('./_to-length')
-  , context     = require('./_string-context')
-  , STARTS_WITH = 'startsWith'
-  , $startsWith = ''[STARTS_WITH];
+
+var $export = require('./_export'),
+    toLength = require('./_to-length'),
+    context = require('./_string-context'),
+    STARTS_WITH = 'startsWith',
+    $startsWith = ''[STARTS_WITH];
 
 $export($export.P + $export.F * require('./_fails-is-regexp')(STARTS_WITH), 'String', {
-  startsWith: function startsWith(searchString /*, position = 0 */){
-    var that   = context(this, searchString, STARTS_WITH)
-      , index  = toLength(Math.min(arguments.length > 1 ? arguments[1] : undefined, that.length))
-      , search = String(searchString);
-    return $startsWith
-      ? $startsWith.call(that, search, index)
-      : that.slice(index, index + search.length) === search;
+  startsWith: function startsWith(searchString /*, position = 0 */) {
+    var that = context(this, searchString, STARTS_WITH),
+        index = toLength(Math.min(arguments.length > 1 ? arguments[1] : undefined, that.length)),
+        search = String(searchString);
+    return $startsWith ? $startsWith.call(that, search, index) : that.slice(index, index + search.length) === search;
   }
 });
-},{"./_export":82,"./_fails-is-regexp":83,"./_string-context":148,"./_to-length":158}],289:[function(require,module,exports){
+
+},{"./_export":33,"./_fails-is-regexp":34,"./_string-context":99,"./_to-length":109}],240:[function(require,module,exports){
 'use strict';
 // B.2.3.12 String.prototype.strike()
-require('./_string-html')('strike', function(createHTML){
-  return function strike(){
+
+require('./_string-html')('strike', function (createHTML) {
+  return function strike() {
     return createHTML(this, 'strike', '', '');
-  }
+  };
 });
-},{"./_string-html":149}],290:[function(require,module,exports){
+
+},{"./_string-html":100}],241:[function(require,module,exports){
 'use strict';
 // B.2.3.13 String.prototype.sub()
-require('./_string-html')('sub', function(createHTML){
-  return function sub(){
+
+require('./_string-html')('sub', function (createHTML) {
+  return function sub() {
     return createHTML(this, 'sub', '', '');
-  }
+  };
 });
-},{"./_string-html":149}],291:[function(require,module,exports){
+
+},{"./_string-html":100}],242:[function(require,module,exports){
 'use strict';
 // B.2.3.14 String.prototype.sup()
-require('./_string-html')('sup', function(createHTML){
-  return function sup(){
+
+require('./_string-html')('sup', function (createHTML) {
+  return function sup() {
     return createHTML(this, 'sup', '', '');
-  }
+  };
 });
-},{"./_string-html":149}],292:[function(require,module,exports){
+
+},{"./_string-html":100}],243:[function(require,module,exports){
 'use strict';
 // 21.1.3.25 String.prototype.trim()
-require('./_string-trim')('trim', function($trim){
-  return function trim(){
+
+require('./_string-trim')('trim', function ($trim) {
+  return function trim() {
     return $trim(this, 3);
   };
 });
-},{"./_string-trim":152}],293:[function(require,module,exports){
+
+},{"./_string-trim":103}],244:[function(require,module,exports){
 'use strict';
 // ECMAScript 6 symbols shim
-var global         = require('./_global')
-  , has            = require('./_has')
-  , DESCRIPTORS    = require('./_descriptors')
-  , $export        = require('./_export')
-  , redefine       = require('./_redefine')
-  , META           = require('./_meta').KEY
-  , $fails         = require('./_fails')
-  , shared         = require('./_shared')
-  , setToStringTag = require('./_set-to-string-tag')
-  , uid            = require('./_uid')
-  , wks            = require('./_wks')
-  , wksExt         = require('./_wks-ext')
-  , wksDefine      = require('./_wks-define')
-  , keyOf          = require('./_keyof')
-  , enumKeys       = require('./_enum-keys')
-  , isArray        = require('./_is-array')
-  , anObject       = require('./_an-object')
-  , toIObject      = require('./_to-iobject')
-  , toPrimitive    = require('./_to-primitive')
-  , createDesc     = require('./_property-desc')
-  , _create        = require('./_object-create')
-  , gOPNExt        = require('./_object-gopn-ext')
-  , $GOPD          = require('./_object-gopd')
-  , $DP            = require('./_object-dp')
-  , $keys          = require('./_object-keys')
-  , gOPD           = $GOPD.f
-  , dP             = $DP.f
-  , gOPN           = gOPNExt.f
-  , $Symbol        = global.Symbol
-  , $JSON          = global.JSON
-  , _stringify     = $JSON && $JSON.stringify
-  , PROTOTYPE      = 'prototype'
-  , HIDDEN         = wks('_hidden')
-  , TO_PRIMITIVE   = wks('toPrimitive')
-  , isEnum         = {}.propertyIsEnumerable
-  , SymbolRegistry = shared('symbol-registry')
-  , AllSymbols     = shared('symbols')
-  , OPSymbols      = shared('op-symbols')
-  , ObjectProto    = Object[PROTOTYPE]
-  , USE_NATIVE     = typeof $Symbol == 'function'
-  , QObject        = global.QObject;
+
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
+var global = require('./_global'),
+    has = require('./_has'),
+    DESCRIPTORS = require('./_descriptors'),
+    $export = require('./_export'),
+    redefine = require('./_redefine'),
+    META = require('./_meta').KEY,
+    $fails = require('./_fails'),
+    shared = require('./_shared'),
+    setToStringTag = require('./_set-to-string-tag'),
+    uid = require('./_uid'),
+    wks = require('./_wks'),
+    wksExt = require('./_wks-ext'),
+    wksDefine = require('./_wks-define'),
+    keyOf = require('./_keyof'),
+    enumKeys = require('./_enum-keys'),
+    isArray = require('./_is-array'),
+    anObject = require('./_an-object'),
+    toIObject = require('./_to-iobject'),
+    toPrimitive = require('./_to-primitive'),
+    createDesc = require('./_property-desc'),
+    _create = require('./_object-create'),
+    gOPNExt = require('./_object-gopn-ext'),
+    $GOPD = require('./_object-gopd'),
+    $DP = require('./_object-dp'),
+    $keys = require('./_object-keys'),
+    gOPD = $GOPD.f,
+    dP = $DP.f,
+    gOPN = gOPNExt.f,
+    $Symbol = global.Symbol,
+    $JSON = global.JSON,
+    _stringify = $JSON && $JSON.stringify,
+    PROTOTYPE = 'prototype',
+    HIDDEN = wks('_hidden'),
+    TO_PRIMITIVE = wks('toPrimitive'),
+    isEnum = {}.propertyIsEnumerable,
+    SymbolRegistry = shared('symbol-registry'),
+    AllSymbols = shared('symbols'),
+    OPSymbols = shared('op-symbols'),
+    ObjectProto = Object[PROTOTYPE],
+    USE_NATIVE = typeof $Symbol == 'function',
+    QObject = global.QObject;
 // Don't use setters in Qt Script, https://github.com/zloirock/core-js/issues/173
 var setter = !QObject || !QObject[PROTOTYPE] || !QObject[PROTOTYPE].findChild;
 
 // fallback for old Android, https://code.google.com/p/v8/issues/detail?id=687
-var setSymbolDesc = DESCRIPTORS && $fails(function(){
+var setSymbolDesc = DESCRIPTORS && $fails(function () {
   return _create(dP({}, 'a', {
-    get: function(){ return dP(this, 'a', {value: 7}).a; }
+    get: function get() {
+      return dP(this, 'a', { value: 7 }).a;
+    }
   })).a != 7;
-}) ? function(it, key, D){
+}) ? function (it, key, D) {
   var protoDesc = gOPD(ObjectProto, key);
-  if(protoDesc)delete ObjectProto[key];
+  if (protoDesc) delete ObjectProto[key];
   dP(it, key, D);
-  if(protoDesc && it !== ObjectProto)dP(ObjectProto, key, protoDesc);
+  if (protoDesc && it !== ObjectProto) dP(ObjectProto, key, protoDesc);
 } : dP;
 
-var wrap = function(tag){
+var wrap = function wrap(tag) {
   var sym = AllSymbols[tag] = _create($Symbol[PROTOTYPE]);
   sym._k = tag;
   return sym;
 };
 
-var isSymbol = USE_NATIVE && typeof $Symbol.iterator == 'symbol' ? function(it){
-  return typeof it == 'symbol';
-} : function(it){
+var isSymbol = USE_NATIVE && _typeof($Symbol.iterator) == 'symbol' ? function (it) {
+  return (typeof it === 'undefined' ? 'undefined' : _typeof(it)) == 'symbol';
+} : function (it) {
   return it instanceof $Symbol;
 };
 
-var $defineProperty = function defineProperty(it, key, D){
-  if(it === ObjectProto)$defineProperty(OPSymbols, key, D);
+var $defineProperty = function defineProperty(it, key, D) {
+  if (it === ObjectProto) $defineProperty(OPSymbols, key, D);
   anObject(it);
   key = toPrimitive(key, true);
   anObject(D);
-  if(has(AllSymbols, key)){
-    if(!D.enumerable){
-      if(!has(it, HIDDEN))dP(it, HIDDEN, createDesc(1, {}));
+  if (has(AllSymbols, key)) {
+    if (!D.enumerable) {
+      if (!has(it, HIDDEN)) dP(it, HIDDEN, createDesc(1, {}));
       it[HIDDEN][key] = true;
     } else {
-      if(has(it, HIDDEN) && it[HIDDEN][key])it[HIDDEN][key] = false;
-      D = _create(D, {enumerable: createDesc(0, false)});
-    } return setSymbolDesc(it, key, D);
-  } return dP(it, key, D);
+      if (has(it, HIDDEN) && it[HIDDEN][key]) it[HIDDEN][key] = false;
+      D = _create(D, { enumerable: createDesc(0, false) });
+    }return setSymbolDesc(it, key, D);
+  }return dP(it, key, D);
 };
-var $defineProperties = function defineProperties(it, P){
+var $defineProperties = function defineProperties(it, P) {
   anObject(it);
-  var keys = enumKeys(P = toIObject(P))
-    , i    = 0
-    , l = keys.length
-    , key;
-  while(l > i)$defineProperty(it, key = keys[i++], P[key]);
-  return it;
+  var keys = enumKeys(P = toIObject(P)),
+      i = 0,
+      l = keys.length,
+      key;
+  while (l > i) {
+    $defineProperty(it, key = keys[i++], P[key]);
+  }return it;
 };
-var $create = function create(it, P){
+var $create = function create(it, P) {
   return P === undefined ? _create(it) : $defineProperties(_create(it), P);
 };
-var $propertyIsEnumerable = function propertyIsEnumerable(key){
+var $propertyIsEnumerable = function propertyIsEnumerable(key) {
   var E = isEnum.call(this, key = toPrimitive(key, true));
-  if(this === ObjectProto && has(AllSymbols, key) && !has(OPSymbols, key))return false;
+  if (this === ObjectProto && has(AllSymbols, key) && !has(OPSymbols, key)) return false;
   return E || !has(this, key) || !has(AllSymbols, key) || has(this, HIDDEN) && this[HIDDEN][key] ? E : true;
 };
-var $getOwnPropertyDescriptor = function getOwnPropertyDescriptor(it, key){
-  it  = toIObject(it);
+var $getOwnPropertyDescriptor = function getOwnPropertyDescriptor(it, key) {
+  it = toIObject(it);
   key = toPrimitive(key, true);
-  if(it === ObjectProto && has(AllSymbols, key) && !has(OPSymbols, key))return;
+  if (it === ObjectProto && has(AllSymbols, key) && !has(OPSymbols, key)) return;
   var D = gOPD(it, key);
-  if(D && has(AllSymbols, key) && !(has(it, HIDDEN) && it[HIDDEN][key]))D.enumerable = true;
+  if (D && has(AllSymbols, key) && !(has(it, HIDDEN) && it[HIDDEN][key])) D.enumerable = true;
   return D;
 };
-var $getOwnPropertyNames = function getOwnPropertyNames(it){
-  var names  = gOPN(toIObject(it))
-    , result = []
-    , i      = 0
-    , key;
-  while(names.length > i){
-    if(!has(AllSymbols, key = names[i++]) && key != HIDDEN && key != META)result.push(key);
-  } return result;
+var $getOwnPropertyNames = function getOwnPropertyNames(it) {
+  var names = gOPN(toIObject(it)),
+      result = [],
+      i = 0,
+      key;
+  while (names.length > i) {
+    if (!has(AllSymbols, key = names[i++]) && key != HIDDEN && key != META) result.push(key);
+  }return result;
 };
-var $getOwnPropertySymbols = function getOwnPropertySymbols(it){
-  var IS_OP  = it === ObjectProto
-    , names  = gOPN(IS_OP ? OPSymbols : toIObject(it))
-    , result = []
-    , i      = 0
-    , key;
-  while(names.length > i){
-    if(has(AllSymbols, key = names[i++]) && (IS_OP ? has(ObjectProto, key) : true))result.push(AllSymbols[key]);
-  } return result;
+var $getOwnPropertySymbols = function getOwnPropertySymbols(it) {
+  var IS_OP = it === ObjectProto,
+      names = gOPN(IS_OP ? OPSymbols : toIObject(it)),
+      result = [],
+      i = 0,
+      key;
+  while (names.length > i) {
+    if (has(AllSymbols, key = names[i++]) && (IS_OP ? has(ObjectProto, key) : true)) result.push(AllSymbols[key]);
+  }return result;
 };
 
 // 19.4.1.1 Symbol([description])
-if(!USE_NATIVE){
-  $Symbol = function Symbol(){
-    if(this instanceof $Symbol)throw TypeError('Symbol is not a constructor!');
+if (!USE_NATIVE) {
+  $Symbol = function _Symbol() {
+    if (this instanceof $Symbol) throw TypeError('Symbol is not a constructor!');
     var tag = uid(arguments.length > 0 ? arguments[0] : undefined);
-    var $set = function(value){
-      if(this === ObjectProto)$set.call(OPSymbols, value);
-      if(has(this, HIDDEN) && has(this[HIDDEN], tag))this[HIDDEN][tag] = false;
+    var $set = function $set(value) {
+      if (this === ObjectProto) $set.call(OPSymbols, value);
+      if (has(this, HIDDEN) && has(this[HIDDEN], tag)) this[HIDDEN][tag] = false;
       setSymbolDesc(this, tag, createDesc(1, value));
     };
-    if(DESCRIPTORS && setter)setSymbolDesc(ObjectProto, tag, {configurable: true, set: $set});
+    if (DESCRIPTORS && setter) setSymbolDesc(ObjectProto, tag, { configurable: true, set: $set });
     return wrap(tag);
   };
-  redefine($Symbol[PROTOTYPE], 'toString', function toString(){
+  redefine($Symbol[PROTOTYPE], 'toString', function toString() {
     return this._k;
   });
 
   $GOPD.f = $getOwnPropertyDescriptor;
-  $DP.f   = $defineProperty;
+  $DP.f = $defineProperty;
   require('./_object-gopn').f = gOPNExt.f = $getOwnPropertyNames;
-  require('./_object-pie').f  = $propertyIsEnumerable;
+  require('./_object-pie').f = $propertyIsEnumerable;
   require('./_object-gops').f = $getOwnPropertySymbols;
 
-  if(DESCRIPTORS && !require('./_library')){
+  if (DESCRIPTORS && !require('./_library')) {
     redefine(ObjectProto, 'propertyIsEnumerable', $propertyIsEnumerable, true);
   }
 
-  wksExt.f = function(name){
+  wksExt.f = function (name) {
     return wrap(wks(name));
-  }
+  };
 }
 
-$export($export.G + $export.W + $export.F * !USE_NATIVE, {Symbol: $Symbol});
+$export($export.G + $export.W + $export.F * !USE_NATIVE, { Symbol: $Symbol });
 
-for(var symbols = (
-  // 19.4.2.2, 19.4.2.3, 19.4.2.4, 19.4.2.6, 19.4.2.8, 19.4.2.9, 19.4.2.10, 19.4.2.11, 19.4.2.12, 19.4.2.13, 19.4.2.14
-  'hasInstance,isConcatSpreadable,iterator,match,replace,search,species,split,toPrimitive,toStringTag,unscopables'
-).split(','), i = 0; symbols.length > i; )wks(symbols[i++]);
-
-for(var symbols = $keys(wks.store), i = 0; symbols.length > i; )wksDefine(symbols[i++]);
-
-$export($export.S + $export.F * !USE_NATIVE, 'Symbol', {
+for (var symbols =
+// 19.4.2.2, 19.4.2.3, 19.4.2.4, 19.4.2.6, 19.4.2.8, 19.4.2.9, 19.4.2.10, 19.4.2.11, 19.4.2.12, 19.4.2.13, 19.4.2.14
+'hasInstance,isConcatSpreadable,iterator,match,replace,search,species,split,toPrimitive,toStringTag,unscopables'.split(','), i = 0; symbols.length > i;) {
+  wks(symbols[i++]);
+}for (var symbols = $keys(wks.store), i = 0; symbols.length > i;) {
+  wksDefine(symbols[i++]);
+}$export($export.S + $export.F * !USE_NATIVE, 'Symbol', {
   // 19.4.2.1 Symbol.for(key)
-  'for': function(key){
-    return has(SymbolRegistry, key += '')
-      ? SymbolRegistry[key]
-      : SymbolRegistry[key] = $Symbol(key);
+  'for': function _for(key) {
+    return has(SymbolRegistry, key += '') ? SymbolRegistry[key] : SymbolRegistry[key] = $Symbol(key);
   },
   // 19.4.2.5 Symbol.keyFor(sym)
-  keyFor: function keyFor(key){
-    if(isSymbol(key))return keyOf(SymbolRegistry, key);
+  keyFor: function keyFor(key) {
+    if (isSymbol(key)) return keyOf(SymbolRegistry, key);
     throw TypeError(key + ' is not a symbol!');
   },
-  useSetter: function(){ setter = true; },
-  useSimple: function(){ setter = false; }
+  useSetter: function useSetter() {
+    setter = true;
+  },
+  useSimple: function useSimple() {
+    setter = false;
+  }
 });
 
 $export($export.S + $export.F * !USE_NATIVE, 'Object', {
@@ -24891,24 +22578,26 @@ $export($export.S + $export.F * !USE_NATIVE, 'Object', {
 });
 
 // 24.3.2 JSON.stringify(value [, replacer [, space]])
-$JSON && $export($export.S + $export.F * (!USE_NATIVE || $fails(function(){
+$JSON && $export($export.S + $export.F * (!USE_NATIVE || $fails(function () {
   var S = $Symbol();
   // MS Edge converts symbol values to JSON as {}
   // WebKit converts symbol values to JSON as null
   // V8 throws on boxed symbols
-  return _stringify([S]) != '[null]' || _stringify({a: S}) != '{}' || _stringify(Object(S)) != '{}';
+  return _stringify([S]) != '[null]' || _stringify({ a: S }) != '{}' || _stringify(Object(S)) != '{}';
 })), 'JSON', {
-  stringify: function stringify(it){
-    if(it === undefined || isSymbol(it))return; // IE8 returns string on undefined
-    var args = [it]
-      , i    = 1
-      , replacer, $replacer;
-    while(arguments.length > i)args.push(arguments[i++]);
-    replacer = args[1];
-    if(typeof replacer == 'function')$replacer = replacer;
-    if($replacer || !isArray(replacer))replacer = function(key, value){
-      if($replacer)value = $replacer.call(this, key, value);
-      if(!isSymbol(value))return value;
+  stringify: function stringify(it) {
+    if (it === undefined || isSymbol(it)) return; // IE8 returns string on undefined
+    var args = [it],
+        i = 1,
+        replacer,
+        $replacer;
+    while (arguments.length > i) {
+      args.push(arguments[i++]);
+    }replacer = args[1];
+    if (typeof replacer == 'function') $replacer = replacer;
+    if ($replacer || !isArray(replacer)) replacer = function replacer(key, value) {
+      if ($replacer) value = $replacer.call(this, key, value);
+      if (!isSymbol(value)) return value;
     };
     args[1] = replacer;
     return _stringify.apply($JSON, args);
@@ -24923,143 +22612,177 @@ setToStringTag($Symbol, 'Symbol');
 setToStringTag(Math, 'Math', true);
 // 24.3.3 JSON[@@toStringTag]
 setToStringTag(global.JSON, 'JSON', true);
-},{"./_an-object":57,"./_descriptors":78,"./_enum-keys":81,"./_export":82,"./_fails":84,"./_global":88,"./_has":89,"./_hide":90,"./_is-array":97,"./_keyof":107,"./_library":108,"./_meta":112,"./_object-create":116,"./_object-dp":117,"./_object-gopd":120,"./_object-gopn":122,"./_object-gopn-ext":121,"./_object-gops":123,"./_object-keys":126,"./_object-pie":127,"./_property-desc":135,"./_redefine":137,"./_set-to-string-tag":142,"./_shared":144,"./_to-iobject":157,"./_to-primitive":160,"./_uid":164,"./_wks":167,"./_wks-define":165,"./_wks-ext":166}],294:[function(require,module,exports){
-'use strict';
-var $export      = require('./_export')
-  , $typed       = require('./_typed')
-  , buffer       = require('./_typed-buffer')
-  , anObject     = require('./_an-object')
-  , toIndex      = require('./_to-index')
-  , toLength     = require('./_to-length')
-  , isObject     = require('./_is-object')
-  , ArrayBuffer  = require('./_global').ArrayBuffer
-  , speciesConstructor = require('./_species-constructor')
-  , $ArrayBuffer = buffer.ArrayBuffer
-  , $DataView    = buffer.DataView
-  , $isView      = $typed.ABV && ArrayBuffer.isView
-  , $slice       = $ArrayBuffer.prototype.slice
-  , VIEW         = $typed.VIEW
-  , ARRAY_BUFFER = 'ArrayBuffer';
 
-$export($export.G + $export.W + $export.F * (ArrayBuffer !== $ArrayBuffer), {ArrayBuffer: $ArrayBuffer});
+},{"./_an-object":8,"./_descriptors":29,"./_enum-keys":32,"./_export":33,"./_fails":35,"./_global":39,"./_has":40,"./_hide":41,"./_is-array":48,"./_keyof":58,"./_library":59,"./_meta":63,"./_object-create":67,"./_object-dp":68,"./_object-gopd":71,"./_object-gopn":73,"./_object-gopn-ext":72,"./_object-gops":74,"./_object-keys":77,"./_object-pie":78,"./_property-desc":86,"./_redefine":88,"./_set-to-string-tag":93,"./_shared":95,"./_to-iobject":108,"./_to-primitive":111,"./_uid":115,"./_wks":118,"./_wks-define":116,"./_wks-ext":117}],245:[function(require,module,exports){
+'use strict';
+
+var $export = require('./_export'),
+    $typed = require('./_typed'),
+    buffer = require('./_typed-buffer'),
+    anObject = require('./_an-object'),
+    toIndex = require('./_to-index'),
+    toLength = require('./_to-length'),
+    isObject = require('./_is-object'),
+    ArrayBuffer = require('./_global').ArrayBuffer,
+    speciesConstructor = require('./_species-constructor'),
+    $ArrayBuffer = buffer.ArrayBuffer,
+    $DataView = buffer.DataView,
+    $isView = $typed.ABV && ArrayBuffer.isView,
+    $slice = $ArrayBuffer.prototype.slice,
+    VIEW = $typed.VIEW,
+    ARRAY_BUFFER = 'ArrayBuffer';
+
+$export($export.G + $export.W + $export.F * (ArrayBuffer !== $ArrayBuffer), { ArrayBuffer: $ArrayBuffer });
 
 $export($export.S + $export.F * !$typed.CONSTR, ARRAY_BUFFER, {
   // 24.1.3.1 ArrayBuffer.isView(arg)
-  isView: function isView(it){
+  isView: function isView(it) {
     return $isView && $isView(it) || isObject(it) && VIEW in it;
   }
 });
 
-$export($export.P + $export.U + $export.F * require('./_fails')(function(){
+$export($export.P + $export.U + $export.F * require('./_fails')(function () {
   return !new $ArrayBuffer(2).slice(1, undefined).byteLength;
 }), ARRAY_BUFFER, {
   // 24.1.4.3 ArrayBuffer.prototype.slice(start, end)
-  slice: function slice(start, end){
-    if($slice !== undefined && end === undefined)return $slice.call(anObject(this), start); // FF fix
-    var len    = anObject(this).byteLength
-      , first  = toIndex(start, len)
-      , final  = toIndex(end === undefined ? len : end, len)
-      , result = new (speciesConstructor(this, $ArrayBuffer))(toLength(final - first))
-      , viewS  = new $DataView(this)
-      , viewT  = new $DataView(result)
-      , index  = 0;
-    while(first < final){
+  slice: function slice(start, end) {
+    if ($slice !== undefined && end === undefined) return $slice.call(anObject(this), start); // FF fix
+    var len = anObject(this).byteLength,
+        first = toIndex(start, len),
+        final = toIndex(end === undefined ? len : end, len),
+        result = new (speciesConstructor(this, $ArrayBuffer))(toLength(final - first)),
+        viewS = new $DataView(this),
+        viewT = new $DataView(result),
+        index = 0;
+    while (first < final) {
       viewT.setUint8(index++, viewS.getUint8(first++));
-    } return result;
+    }return result;
   }
 });
 
 require('./_set-species')(ARRAY_BUFFER);
-},{"./_an-object":57,"./_export":82,"./_fails":84,"./_global":88,"./_is-object":99,"./_set-species":141,"./_species-constructor":145,"./_to-index":155,"./_to-length":158,"./_typed":163,"./_typed-buffer":162}],295:[function(require,module,exports){
+
+},{"./_an-object":8,"./_export":33,"./_fails":35,"./_global":39,"./_is-object":50,"./_set-species":92,"./_species-constructor":96,"./_to-index":106,"./_to-length":109,"./_typed":114,"./_typed-buffer":113}],246:[function(require,module,exports){
+'use strict';
+
 var $export = require('./_export');
 $export($export.G + $export.W + $export.F * !require('./_typed').ABV, {
   DataView: require('./_typed-buffer').DataView
 });
-},{"./_export":82,"./_typed":163,"./_typed-buffer":162}],296:[function(require,module,exports){
-require('./_typed-array')('Float32', 4, function(init){
-  return function Float32Array(data, byteOffset, length){
+
+},{"./_export":33,"./_typed":114,"./_typed-buffer":113}],247:[function(require,module,exports){
+'use strict';
+
+require('./_typed-array')('Float32', 4, function (init) {
+  return function Float32Array(data, byteOffset, length) {
     return init(this, data, byteOffset, length);
   };
 });
-},{"./_typed-array":161}],297:[function(require,module,exports){
-require('./_typed-array')('Float64', 8, function(init){
-  return function Float64Array(data, byteOffset, length){
+
+},{"./_typed-array":112}],248:[function(require,module,exports){
+'use strict';
+
+require('./_typed-array')('Float64', 8, function (init) {
+  return function Float64Array(data, byteOffset, length) {
     return init(this, data, byteOffset, length);
   };
 });
-},{"./_typed-array":161}],298:[function(require,module,exports){
-require('./_typed-array')('Int16', 2, function(init){
-  return function Int16Array(data, byteOffset, length){
+
+},{"./_typed-array":112}],249:[function(require,module,exports){
+'use strict';
+
+require('./_typed-array')('Int16', 2, function (init) {
+  return function Int16Array(data, byteOffset, length) {
     return init(this, data, byteOffset, length);
   };
 });
-},{"./_typed-array":161}],299:[function(require,module,exports){
-require('./_typed-array')('Int32', 4, function(init){
-  return function Int32Array(data, byteOffset, length){
+
+},{"./_typed-array":112}],250:[function(require,module,exports){
+'use strict';
+
+require('./_typed-array')('Int32', 4, function (init) {
+  return function Int32Array(data, byteOffset, length) {
     return init(this, data, byteOffset, length);
   };
 });
-},{"./_typed-array":161}],300:[function(require,module,exports){
-require('./_typed-array')('Int8', 1, function(init){
-  return function Int8Array(data, byteOffset, length){
+
+},{"./_typed-array":112}],251:[function(require,module,exports){
+'use strict';
+
+require('./_typed-array')('Int8', 1, function (init) {
+  return function Int8Array(data, byteOffset, length) {
     return init(this, data, byteOffset, length);
   };
 });
-},{"./_typed-array":161}],301:[function(require,module,exports){
-require('./_typed-array')('Uint16', 2, function(init){
-  return function Uint16Array(data, byteOffset, length){
+
+},{"./_typed-array":112}],252:[function(require,module,exports){
+'use strict';
+
+require('./_typed-array')('Uint16', 2, function (init) {
+  return function Uint16Array(data, byteOffset, length) {
     return init(this, data, byteOffset, length);
   };
 });
-},{"./_typed-array":161}],302:[function(require,module,exports){
-require('./_typed-array')('Uint32', 4, function(init){
-  return function Uint32Array(data, byteOffset, length){
+
+},{"./_typed-array":112}],253:[function(require,module,exports){
+'use strict';
+
+require('./_typed-array')('Uint32', 4, function (init) {
+  return function Uint32Array(data, byteOffset, length) {
     return init(this, data, byteOffset, length);
   };
 });
-},{"./_typed-array":161}],303:[function(require,module,exports){
-require('./_typed-array')('Uint8', 1, function(init){
-  return function Uint8Array(data, byteOffset, length){
+
+},{"./_typed-array":112}],254:[function(require,module,exports){
+'use strict';
+
+require('./_typed-array')('Uint8', 1, function (init) {
+  return function Uint8Array(data, byteOffset, length) {
     return init(this, data, byteOffset, length);
   };
 });
-},{"./_typed-array":161}],304:[function(require,module,exports){
-require('./_typed-array')('Uint8', 1, function(init){
-  return function Uint8ClampedArray(data, byteOffset, length){
+
+},{"./_typed-array":112}],255:[function(require,module,exports){
+'use strict';
+
+require('./_typed-array')('Uint8', 1, function (init) {
+  return function Uint8ClampedArray(data, byteOffset, length) {
     return init(this, data, byteOffset, length);
   };
 }, true);
-},{"./_typed-array":161}],305:[function(require,module,exports){
-'use strict';
-var each         = require('./_array-methods')(0)
-  , redefine     = require('./_redefine')
-  , meta         = require('./_meta')
-  , assign       = require('./_object-assign')
-  , weak         = require('./_collection-weak')
-  , isObject     = require('./_is-object')
-  , getWeak      = meta.getWeak
-  , isExtensible = Object.isExtensible
-  , uncaughtFrozenStore = weak.ufstore
-  , tmp          = {}
-  , InternalMap;
 
-var wrapper = function(get){
-  return function WeakMap(){
+},{"./_typed-array":112}],256:[function(require,module,exports){
+'use strict';
+
+var each = require('./_array-methods')(0),
+    redefine = require('./_redefine'),
+    meta = require('./_meta'),
+    assign = require('./_object-assign'),
+    weak = require('./_collection-weak'),
+    isObject = require('./_is-object'),
+    getWeak = meta.getWeak,
+    isExtensible = Object.isExtensible,
+    uncaughtFrozenStore = weak.ufstore,
+    tmp = {},
+    InternalMap;
+
+var wrapper = function wrapper(get) {
+  return function WeakMap() {
     return get(this, arguments.length > 0 ? arguments[0] : undefined);
   };
 };
 
 var methods = {
   // 23.3.3.3 WeakMap.prototype.get(key)
-  get: function get(key){
-    if(isObject(key)){
+  get: function get(key) {
+    if (isObject(key)) {
       var data = getWeak(key);
-      if(data === true)return uncaughtFrozenStore(this).get(key);
+      if (data === true) return uncaughtFrozenStore(this).get(key);
       return data ? data[this._i] : undefined;
     }
   },
   // 23.3.3.5 WeakMap.prototype.set(key, value)
-  set: function set(key, value){
+  set: function set(key, value) {
     return weak.def(this, key, value);
   }
 };
@@ -25068,315 +22791,365 @@ var methods = {
 var $WeakMap = module.exports = require('./_collection')('WeakMap', wrapper, methods, weak, true, true);
 
 // IE11 WeakMap frozen keys fix
-if(new $WeakMap().set((Object.freeze || Object)(tmp), 7).get(tmp) != 7){
+if (new $WeakMap().set((Object.freeze || Object)(tmp), 7).get(tmp) != 7) {
   InternalMap = weak.getConstructor(wrapper);
   assign(InternalMap.prototype, methods);
   meta.NEED = true;
-  each(['delete', 'has', 'get', 'set'], function(key){
-    var proto  = $WeakMap.prototype
-      , method = proto[key];
-    redefine(proto, key, function(a, b){
+  each(['delete', 'has', 'get', 'set'], function (key) {
+    var proto = $WeakMap.prototype,
+        method = proto[key];
+    redefine(proto, key, function (a, b) {
       // store frozen objects on internal weakmap shim
-      if(isObject(a) && !isExtensible(a)){
-        if(!this._f)this._f = new InternalMap;
+      if (isObject(a) && !isExtensible(a)) {
+        if (!this._f) this._f = new InternalMap();
         var result = this._f[key](a, b);
         return key == 'set' ? this : result;
-      // store all the rest on native weakmap
-      } return method.call(this, a, b);
+        // store all the rest on native weakmap
+      }return method.call(this, a, b);
     });
   });
 }
-},{"./_array-methods":62,"./_collection":72,"./_collection-weak":71,"./_is-object":99,"./_meta":112,"./_object-assign":115,"./_redefine":137}],306:[function(require,module,exports){
+
+},{"./_array-methods":13,"./_collection":23,"./_collection-weak":22,"./_is-object":50,"./_meta":63,"./_object-assign":66,"./_redefine":88}],257:[function(require,module,exports){
 'use strict';
+
 var weak = require('./_collection-weak');
 
 // 23.4 WeakSet Objects
-require('./_collection')('WeakSet', function(get){
-  return function WeakSet(){ return get(this, arguments.length > 0 ? arguments[0] : undefined); };
+require('./_collection')('WeakSet', function (get) {
+  return function WeakSet() {
+    return get(this, arguments.length > 0 ? arguments[0] : undefined);
+  };
 }, {
   // 23.4.3.1 WeakSet.prototype.add(value)
-  add: function add(value){
+  add: function add(value) {
     return weak.def(this, value, true);
   }
 }, weak, false, true);
-},{"./_collection":72,"./_collection-weak":71}],307:[function(require,module,exports){
+
+},{"./_collection":23,"./_collection-weak":22}],258:[function(require,module,exports){
 'use strict';
 // https://github.com/tc39/Array.prototype.includes
-var $export   = require('./_export')
-  , $includes = require('./_array-includes')(true);
+
+var $export = require('./_export'),
+    $includes = require('./_array-includes')(true);
 
 $export($export.P, 'Array', {
-  includes: function includes(el /*, fromIndex = 0 */){
+  includes: function includes(el /*, fromIndex = 0 */) {
     return $includes(this, el, arguments.length > 1 ? arguments[1] : undefined);
   }
 });
 
 require('./_add-to-unscopables')('includes');
-},{"./_add-to-unscopables":55,"./_array-includes":61,"./_export":82}],308:[function(require,module,exports){
+
+},{"./_add-to-unscopables":6,"./_array-includes":12,"./_export":33}],259:[function(require,module,exports){
+'use strict';
+
 // https://github.com/rwaldron/tc39-notes/blob/master/es6/2014-09/sept-25.md#510-globalasap-for-enqueuing-a-microtask
-var $export   = require('./_export')
-  , microtask = require('./_microtask')()
-  , process   = require('./_global').process
-  , isNode    = require('./_cof')(process) == 'process';
+var $export = require('./_export'),
+    microtask = require('./_microtask')(),
+    process = require('./_global').process,
+    isNode = require('./_cof')(process) == 'process';
 
 $export($export.G, {
-  asap: function asap(fn){
+  asap: function asap(fn) {
     var domain = isNode && process.domain;
     microtask(domain ? domain.bind(fn) : fn);
   }
 });
-},{"./_cof":68,"./_export":82,"./_global":88,"./_microtask":114}],309:[function(require,module,exports){
+
+},{"./_cof":19,"./_export":33,"./_global":39,"./_microtask":65}],260:[function(require,module,exports){
+'use strict';
+
 // https://github.com/ljharb/proposal-is-error
-var $export = require('./_export')
-  , cof     = require('./_cof');
+var $export = require('./_export'),
+    cof = require('./_cof');
 
 $export($export.S, 'Error', {
-  isError: function isError(it){
+  isError: function isError(it) {
     return cof(it) === 'Error';
   }
 });
-},{"./_cof":68,"./_export":82}],310:[function(require,module,exports){
-// https://github.com/DavidBruant/Map-Set.prototype.toJSON
-var $export  = require('./_export');
 
-$export($export.P + $export.R, 'Map', {toJSON: require('./_collection-to-json')('Map')});
-},{"./_collection-to-json":70,"./_export":82}],311:[function(require,module,exports){
+},{"./_cof":19,"./_export":33}],261:[function(require,module,exports){
+'use strict';
+
+// https://github.com/DavidBruant/Map-Set.prototype.toJSON
+var $export = require('./_export');
+
+$export($export.P + $export.R, 'Map', { toJSON: require('./_collection-to-json')('Map') });
+
+},{"./_collection-to-json":21,"./_export":33}],262:[function(require,module,exports){
+'use strict';
+
 // https://gist.github.com/BrendanEich/4294d5c212a6d2254703
 var $export = require('./_export');
 
 $export($export.S, 'Math', {
-  iaddh: function iaddh(x0, x1, y0, y1){
-    var $x0 = x0 >>> 0
-      , $x1 = x1 >>> 0
-      , $y0 = y0 >>> 0;
+  iaddh: function iaddh(x0, x1, y0, y1) {
+    var $x0 = x0 >>> 0,
+        $x1 = x1 >>> 0,
+        $y0 = y0 >>> 0;
     return $x1 + (y1 >>> 0) + (($x0 & $y0 | ($x0 | $y0) & ~($x0 + $y0 >>> 0)) >>> 31) | 0;
   }
 });
-},{"./_export":82}],312:[function(require,module,exports){
+
+},{"./_export":33}],263:[function(require,module,exports){
+'use strict';
+
 // https://gist.github.com/BrendanEich/4294d5c212a6d2254703
 var $export = require('./_export');
 
 $export($export.S, 'Math', {
-  imulh: function imulh(u, v){
-    var UINT16 = 0xffff
-      , $u = +u
-      , $v = +v
-      , u0 = $u & UINT16
-      , v0 = $v & UINT16
-      , u1 = $u >> 16
-      , v1 = $v >> 16
-      , t  = (u1 * v0 >>> 0) + (u0 * v0 >>> 16);
+  imulh: function imulh(u, v) {
+    var UINT16 = 0xffff,
+        $u = +u,
+        $v = +v,
+        u0 = $u & UINT16,
+        v0 = $v & UINT16,
+        u1 = $u >> 16,
+        v1 = $v >> 16,
+        t = (u1 * v0 >>> 0) + (u0 * v0 >>> 16);
     return u1 * v1 + (t >> 16) + ((u0 * v1 >>> 0) + (t & UINT16) >> 16);
   }
 });
-},{"./_export":82}],313:[function(require,module,exports){
+
+},{"./_export":33}],264:[function(require,module,exports){
+'use strict';
+
 // https://gist.github.com/BrendanEich/4294d5c212a6d2254703
 var $export = require('./_export');
 
 $export($export.S, 'Math', {
-  isubh: function isubh(x0, x1, y0, y1){
-    var $x0 = x0 >>> 0
-      , $x1 = x1 >>> 0
-      , $y0 = y0 >>> 0;
+  isubh: function isubh(x0, x1, y0, y1) {
+    var $x0 = x0 >>> 0,
+        $x1 = x1 >>> 0,
+        $y0 = y0 >>> 0;
     return $x1 - (y1 >>> 0) - ((~$x0 & $y0 | ~($x0 ^ $y0) & $x0 - $y0 >>> 0) >>> 31) | 0;
   }
 });
-},{"./_export":82}],314:[function(require,module,exports){
+
+},{"./_export":33}],265:[function(require,module,exports){
+'use strict';
+
 // https://gist.github.com/BrendanEich/4294d5c212a6d2254703
 var $export = require('./_export');
 
 $export($export.S, 'Math', {
-  umulh: function umulh(u, v){
-    var UINT16 = 0xffff
-      , $u = +u
-      , $v = +v
-      , u0 = $u & UINT16
-      , v0 = $v & UINT16
-      , u1 = $u >>> 16
-      , v1 = $v >>> 16
-      , t  = (u1 * v0 >>> 0) + (u0 * v0 >>> 16);
+  umulh: function umulh(u, v) {
+    var UINT16 = 0xffff,
+        $u = +u,
+        $v = +v,
+        u0 = $u & UINT16,
+        v0 = $v & UINT16,
+        u1 = $u >>> 16,
+        v1 = $v >>> 16,
+        t = (u1 * v0 >>> 0) + (u0 * v0 >>> 16);
     return u1 * v1 + (t >>> 16) + ((u0 * v1 >>> 0) + (t & UINT16) >>> 16);
   }
 });
-},{"./_export":82}],315:[function(require,module,exports){
+
+},{"./_export":33}],266:[function(require,module,exports){
 'use strict';
-var $export         = require('./_export')
-  , toObject        = require('./_to-object')
-  , aFunction       = require('./_a-function')
-  , $defineProperty = require('./_object-dp');
+
+var $export = require('./_export'),
+    toObject = require('./_to-object'),
+    aFunction = require('./_a-function'),
+    $defineProperty = require('./_object-dp');
 
 // B.2.2.2 Object.prototype.__defineGetter__(P, getter)
 require('./_descriptors') && $export($export.P + require('./_object-forced-pam'), 'Object', {
-  __defineGetter__: function __defineGetter__(P, getter){
-    $defineProperty.f(toObject(this), P, {get: aFunction(getter), enumerable: true, configurable: true});
+  __defineGetter__: function __defineGetter__(P, getter) {
+    $defineProperty.f(toObject(this), P, { get: aFunction(getter), enumerable: true, configurable: true });
   }
 });
-},{"./_a-function":53,"./_descriptors":78,"./_export":82,"./_object-dp":117,"./_object-forced-pam":119,"./_to-object":159}],316:[function(require,module,exports){
+
+},{"./_a-function":4,"./_descriptors":29,"./_export":33,"./_object-dp":68,"./_object-forced-pam":70,"./_to-object":110}],267:[function(require,module,exports){
 'use strict';
-var $export         = require('./_export')
-  , toObject        = require('./_to-object')
-  , aFunction       = require('./_a-function')
-  , $defineProperty = require('./_object-dp');
+
+var $export = require('./_export'),
+    toObject = require('./_to-object'),
+    aFunction = require('./_a-function'),
+    $defineProperty = require('./_object-dp');
 
 // B.2.2.3 Object.prototype.__defineSetter__(P, setter)
 require('./_descriptors') && $export($export.P + require('./_object-forced-pam'), 'Object', {
-  __defineSetter__: function __defineSetter__(P, setter){
-    $defineProperty.f(toObject(this), P, {set: aFunction(setter), enumerable: true, configurable: true});
+  __defineSetter__: function __defineSetter__(P, setter) {
+    $defineProperty.f(toObject(this), P, { set: aFunction(setter), enumerable: true, configurable: true });
   }
 });
-},{"./_a-function":53,"./_descriptors":78,"./_export":82,"./_object-dp":117,"./_object-forced-pam":119,"./_to-object":159}],317:[function(require,module,exports){
+
+},{"./_a-function":4,"./_descriptors":29,"./_export":33,"./_object-dp":68,"./_object-forced-pam":70,"./_to-object":110}],268:[function(require,module,exports){
+'use strict';
+
 // https://github.com/tc39/proposal-object-values-entries
-var $export  = require('./_export')
-  , $entries = require('./_object-to-array')(true);
+var $export = require('./_export'),
+    $entries = require('./_object-to-array')(true);
 
 $export($export.S, 'Object', {
-  entries: function entries(it){
+  entries: function entries(it) {
     return $entries(it);
   }
 });
-},{"./_export":82,"./_object-to-array":129}],318:[function(require,module,exports){
+
+},{"./_export":33,"./_object-to-array":80}],269:[function(require,module,exports){
+'use strict';
+
 // https://github.com/tc39/proposal-object-getownpropertydescriptors
-var $export        = require('./_export')
-  , ownKeys        = require('./_own-keys')
-  , toIObject      = require('./_to-iobject')
-  , gOPD           = require('./_object-gopd')
-  , createProperty = require('./_create-property');
+var $export = require('./_export'),
+    ownKeys = require('./_own-keys'),
+    toIObject = require('./_to-iobject'),
+    gOPD = require('./_object-gopd'),
+    createProperty = require('./_create-property');
 
 $export($export.S, 'Object', {
-  getOwnPropertyDescriptors: function getOwnPropertyDescriptors(object){
-    var O       = toIObject(object)
-      , getDesc = gOPD.f
-      , keys    = ownKeys(O)
-      , result  = {}
-      , i       = 0
-      , key;
-    while(keys.length > i)createProperty(result, key = keys[i++], getDesc(O, key));
-    return result;
+  getOwnPropertyDescriptors: function getOwnPropertyDescriptors(object) {
+    var O = toIObject(object),
+        getDesc = gOPD.f,
+        keys = ownKeys(O),
+        result = {},
+        i = 0,
+        key;
+    while (keys.length > i) {
+      createProperty(result, key = keys[i++], getDesc(O, key));
+    }return result;
   }
 });
-},{"./_create-property":74,"./_export":82,"./_object-gopd":120,"./_own-keys":130,"./_to-iobject":157}],319:[function(require,module,exports){
+
+},{"./_create-property":25,"./_export":33,"./_object-gopd":71,"./_own-keys":81,"./_to-iobject":108}],270:[function(require,module,exports){
 'use strict';
-var $export                  = require('./_export')
-  , toObject                 = require('./_to-object')
-  , toPrimitive              = require('./_to-primitive')
-  , getPrototypeOf           = require('./_object-gpo')
-  , getOwnPropertyDescriptor = require('./_object-gopd').f;
+
+var $export = require('./_export'),
+    toObject = require('./_to-object'),
+    toPrimitive = require('./_to-primitive'),
+    getPrototypeOf = require('./_object-gpo'),
+    getOwnPropertyDescriptor = require('./_object-gopd').f;
 
 // B.2.2.4 Object.prototype.__lookupGetter__(P)
 require('./_descriptors') && $export($export.P + require('./_object-forced-pam'), 'Object', {
-  __lookupGetter__: function __lookupGetter__(P){
-    var O = toObject(this)
-      , K = toPrimitive(P, true)
-      , D;
+  __lookupGetter__: function __lookupGetter__(P) {
+    var O = toObject(this),
+        K = toPrimitive(P, true),
+        D;
     do {
-      if(D = getOwnPropertyDescriptor(O, K))return D.get;
-    } while(O = getPrototypeOf(O));
+      if (D = getOwnPropertyDescriptor(O, K)) return D.get;
+    } while (O = getPrototypeOf(O));
   }
 });
-},{"./_descriptors":78,"./_export":82,"./_object-forced-pam":119,"./_object-gopd":120,"./_object-gpo":124,"./_to-object":159,"./_to-primitive":160}],320:[function(require,module,exports){
+
+},{"./_descriptors":29,"./_export":33,"./_object-forced-pam":70,"./_object-gopd":71,"./_object-gpo":75,"./_to-object":110,"./_to-primitive":111}],271:[function(require,module,exports){
 'use strict';
-var $export                  = require('./_export')
-  , toObject                 = require('./_to-object')
-  , toPrimitive              = require('./_to-primitive')
-  , getPrototypeOf           = require('./_object-gpo')
-  , getOwnPropertyDescriptor = require('./_object-gopd').f;
+
+var $export = require('./_export'),
+    toObject = require('./_to-object'),
+    toPrimitive = require('./_to-primitive'),
+    getPrototypeOf = require('./_object-gpo'),
+    getOwnPropertyDescriptor = require('./_object-gopd').f;
 
 // B.2.2.5 Object.prototype.__lookupSetter__(P)
 require('./_descriptors') && $export($export.P + require('./_object-forced-pam'), 'Object', {
-  __lookupSetter__: function __lookupSetter__(P){
-    var O = toObject(this)
-      , K = toPrimitive(P, true)
-      , D;
+  __lookupSetter__: function __lookupSetter__(P) {
+    var O = toObject(this),
+        K = toPrimitive(P, true),
+        D;
     do {
-      if(D = getOwnPropertyDescriptor(O, K))return D.set;
-    } while(O = getPrototypeOf(O));
+      if (D = getOwnPropertyDescriptor(O, K)) return D.set;
+    } while (O = getPrototypeOf(O));
   }
 });
-},{"./_descriptors":78,"./_export":82,"./_object-forced-pam":119,"./_object-gopd":120,"./_object-gpo":124,"./_to-object":159,"./_to-primitive":160}],321:[function(require,module,exports){
+
+},{"./_descriptors":29,"./_export":33,"./_object-forced-pam":70,"./_object-gopd":71,"./_object-gpo":75,"./_to-object":110,"./_to-primitive":111}],272:[function(require,module,exports){
+'use strict';
+
 // https://github.com/tc39/proposal-object-values-entries
-var $export = require('./_export')
-  , $values = require('./_object-to-array')(false);
+var $export = require('./_export'),
+    $values = require('./_object-to-array')(false);
 
 $export($export.S, 'Object', {
-  values: function values(it){
+  values: function values(it) {
     return $values(it);
   }
 });
-},{"./_export":82,"./_object-to-array":129}],322:[function(require,module,exports){
+
+},{"./_export":33,"./_object-to-array":80}],273:[function(require,module,exports){
 'use strict';
 // https://github.com/zenparsing/es-observable
-var $export     = require('./_export')
-  , global      = require('./_global')
-  , core        = require('./_core')
-  , microtask   = require('./_microtask')()
-  , OBSERVABLE  = require('./_wks')('observable')
-  , aFunction   = require('./_a-function')
-  , anObject    = require('./_an-object')
-  , anInstance  = require('./_an-instance')
-  , redefineAll = require('./_redefine-all')
-  , hide        = require('./_hide')
-  , forOf       = require('./_for-of')
-  , RETURN      = forOf.RETURN;
 
-var getMethod = function(fn){
+var $export = require('./_export'),
+    global = require('./_global'),
+    core = require('./_core'),
+    microtask = require('./_microtask')(),
+    OBSERVABLE = require('./_wks')('observable'),
+    aFunction = require('./_a-function'),
+    anObject = require('./_an-object'),
+    anInstance = require('./_an-instance'),
+    redefineAll = require('./_redefine-all'),
+    hide = require('./_hide'),
+    forOf = require('./_for-of'),
+    RETURN = forOf.RETURN;
+
+var getMethod = function getMethod(fn) {
   return fn == null ? undefined : aFunction(fn);
 };
 
-var cleanupSubscription = function(subscription){
+var cleanupSubscription = function cleanupSubscription(subscription) {
   var cleanup = subscription._c;
-  if(cleanup){
+  if (cleanup) {
     subscription._c = undefined;
     cleanup();
   }
 };
 
-var subscriptionClosed = function(subscription){
+var subscriptionClosed = function subscriptionClosed(subscription) {
   return subscription._o === undefined;
 };
 
-var closeSubscription = function(subscription){
-  if(!subscriptionClosed(subscription)){
+var closeSubscription = function closeSubscription(subscription) {
+  if (!subscriptionClosed(subscription)) {
     subscription._o = undefined;
     cleanupSubscription(subscription);
   }
 };
 
-var Subscription = function(observer, subscriber){
+var Subscription = function Subscription(observer, subscriber) {
   anObject(observer);
   this._c = undefined;
   this._o = observer;
   observer = new SubscriptionObserver(this);
   try {
-    var cleanup      = subscriber(observer)
-      , subscription = cleanup;
-    if(cleanup != null){
-      if(typeof cleanup.unsubscribe === 'function')cleanup = function(){ subscription.unsubscribe(); };
-      else aFunction(cleanup);
+    var cleanup = subscriber(observer),
+        subscription = cleanup;
+    if (cleanup != null) {
+      if (typeof cleanup.unsubscribe === 'function') cleanup = function cleanup() {
+        subscription.unsubscribe();
+      };else aFunction(cleanup);
       this._c = cleanup;
     }
-  } catch(e){
+  } catch (e) {
     observer.error(e);
     return;
-  } if(subscriptionClosed(this))cleanupSubscription(this);
+  }if (subscriptionClosed(this)) cleanupSubscription(this);
 };
 
 Subscription.prototype = redefineAll({}, {
-  unsubscribe: function unsubscribe(){ closeSubscription(this); }
+  unsubscribe: function unsubscribe() {
+    closeSubscription(this);
+  }
 });
 
-var SubscriptionObserver = function(subscription){
+var SubscriptionObserver = function SubscriptionObserver(subscription) {
   this._s = subscription;
 };
 
 SubscriptionObserver.prototype = redefineAll({}, {
-  next: function next(value){
+  next: function next(value) {
     var subscription = this._s;
-    if(!subscriptionClosed(subscription)){
+    if (!subscriptionClosed(subscription)) {
       var observer = subscription._o;
       try {
         var m = getMethod(observer.next);
-        if(m)return m.call(observer, value);
-      } catch(e){
+        if (m) return m.call(observer, value);
+      } catch (e) {
         try {
           closeSubscription(subscription);
         } finally {
@@ -25385,61 +23158,61 @@ SubscriptionObserver.prototype = redefineAll({}, {
       }
     }
   },
-  error: function error(value){
+  error: function error(value) {
     var subscription = this._s;
-    if(subscriptionClosed(subscription))throw value;
+    if (subscriptionClosed(subscription)) throw value;
     var observer = subscription._o;
     subscription._o = undefined;
     try {
       var m = getMethod(observer.error);
-      if(!m)throw value;
+      if (!m) throw value;
       value = m.call(observer, value);
-    } catch(e){
+    } catch (e) {
       try {
         cleanupSubscription(subscription);
       } finally {
         throw e;
       }
-    } cleanupSubscription(subscription);
+    }cleanupSubscription(subscription);
     return value;
   },
-  complete: function complete(value){
+  complete: function complete(value) {
     var subscription = this._s;
-    if(!subscriptionClosed(subscription)){
+    if (!subscriptionClosed(subscription)) {
       var observer = subscription._o;
       subscription._o = undefined;
       try {
         var m = getMethod(observer.complete);
         value = m ? m.call(observer, value) : undefined;
-      } catch(e){
+      } catch (e) {
         try {
           cleanupSubscription(subscription);
         } finally {
           throw e;
         }
-      } cleanupSubscription(subscription);
+      }cleanupSubscription(subscription);
       return value;
     }
   }
 });
 
-var $Observable = function Observable(subscriber){
+var $Observable = function Observable(subscriber) {
   anInstance(this, $Observable, 'Observable', '_f')._f = aFunction(subscriber);
 };
 
 redefineAll($Observable.prototype, {
-  subscribe: function subscribe(observer){
+  subscribe: function subscribe(observer) {
     return new Subscription(observer, this._f);
   },
-  forEach: function forEach(fn){
+  forEach: function forEach(fn) {
     var that = this;
-    return new (core.Promise || global.Promise)(function(resolve, reject){
+    return new (core.Promise || global.Promise)(function (resolve, reject) {
       aFunction(fn);
       var subscription = that.subscribe({
-        next : function(value){
+        next: function next(value) {
           try {
             return fn(value);
-          } catch(e){
+          } catch (e) {
             reject(e);
             subscription.unsubscribe();
           }
@@ -25452,327 +23225,389 @@ redefineAll($Observable.prototype, {
 });
 
 redefineAll($Observable, {
-  from: function from(x){
+  from: function from(x) {
     var C = typeof this === 'function' ? this : $Observable;
     var method = getMethod(anObject(x)[OBSERVABLE]);
-    if(method){
+    if (method) {
       var observable = anObject(method.call(x));
-      return observable.constructor === C ? observable : new C(function(observer){
+      return observable.constructor === C ? observable : new C(function (observer) {
         return observable.subscribe(observer);
       });
     }
-    return new C(function(observer){
+    return new C(function (observer) {
       var done = false;
-      microtask(function(){
-        if(!done){
+      microtask(function () {
+        if (!done) {
           try {
-            if(forOf(x, false, function(it){
+            if (forOf(x, false, function (it) {
               observer.next(it);
-              if(done)return RETURN;
-            }) === RETURN)return;
-          } catch(e){
-            if(done)throw e;
+              if (done) return RETURN;
+            }) === RETURN) return;
+          } catch (e) {
+            if (done) throw e;
             observer.error(e);
             return;
-          } observer.complete();
+          }observer.complete();
         }
       });
-      return function(){ done = true; };
+      return function () {
+        done = true;
+      };
     });
   },
-  of: function of(){
-    for(var i = 0, l = arguments.length, items = Array(l); i < l;)items[i] = arguments[i++];
-    return new (typeof this === 'function' ? this : $Observable)(function(observer){
+  of: function of() {
+    for (var i = 0, l = arguments.length, items = Array(l); i < l;) {
+      items[i] = arguments[i++];
+    }return new (typeof this === 'function' ? this : $Observable)(function (observer) {
       var done = false;
-      microtask(function(){
-        if(!done){
-          for(var i = 0; i < items.length; ++i){
+      microtask(function () {
+        if (!done) {
+          for (var i = 0; i < items.length; ++i) {
             observer.next(items[i]);
-            if(done)return;
-          } observer.complete();
+            if (done) return;
+          }observer.complete();
         }
       });
-      return function(){ done = true; };
+      return function () {
+        done = true;
+      };
     });
   }
 });
 
-hide($Observable.prototype, OBSERVABLE, function(){ return this; });
+hide($Observable.prototype, OBSERVABLE, function () {
+  return this;
+});
 
-$export($export.G, {Observable: $Observable});
+$export($export.G, { Observable: $Observable });
 
 require('./_set-species')('Observable');
-},{"./_a-function":53,"./_an-instance":56,"./_an-object":57,"./_core":73,"./_export":82,"./_for-of":87,"./_global":88,"./_hide":90,"./_microtask":114,"./_redefine-all":136,"./_set-species":141,"./_wks":167}],323:[function(require,module,exports){
-var metadata                  = require('./_metadata')
-  , anObject                  = require('./_an-object')
-  , toMetaKey                 = metadata.key
-  , ordinaryDefineOwnMetadata = metadata.set;
 
-metadata.exp({defineMetadata: function defineMetadata(metadataKey, metadataValue, target, targetKey){
-  ordinaryDefineOwnMetadata(metadataKey, metadataValue, anObject(target), toMetaKey(targetKey));
-}});
-},{"./_an-object":57,"./_metadata":113}],324:[function(require,module,exports){
-var metadata               = require('./_metadata')
-  , anObject               = require('./_an-object')
-  , toMetaKey              = metadata.key
-  , getOrCreateMetadataMap = metadata.map
-  , store                  = metadata.store;
+},{"./_a-function":4,"./_an-instance":7,"./_an-object":8,"./_core":24,"./_export":33,"./_for-of":38,"./_global":39,"./_hide":41,"./_microtask":65,"./_redefine-all":87,"./_set-species":92,"./_wks":118}],274:[function(require,module,exports){
+'use strict';
 
-metadata.exp({deleteMetadata: function deleteMetadata(metadataKey, target /*, targetKey */){
-  var targetKey   = arguments.length < 3 ? undefined : toMetaKey(arguments[2])
-    , metadataMap = getOrCreateMetadataMap(anObject(target), targetKey, false);
-  if(metadataMap === undefined || !metadataMap['delete'](metadataKey))return false;
-  if(metadataMap.size)return true;
-  var targetMetadata = store.get(target);
-  targetMetadata['delete'](targetKey);
-  return !!targetMetadata.size || store['delete'](target);
-}});
-},{"./_an-object":57,"./_metadata":113}],325:[function(require,module,exports){
-var Set                     = require('./es6.set')
-  , from                    = require('./_array-from-iterable')
-  , metadata                = require('./_metadata')
-  , anObject                = require('./_an-object')
-  , getPrototypeOf          = require('./_object-gpo')
-  , ordinaryOwnMetadataKeys = metadata.keys
-  , toMetaKey               = metadata.key;
+var metadata = require('./_metadata'),
+    anObject = require('./_an-object'),
+    toMetaKey = metadata.key,
+    ordinaryDefineOwnMetadata = metadata.set;
 
-var ordinaryMetadataKeys = function(O, P){
-  var oKeys  = ordinaryOwnMetadataKeys(O, P)
-    , parent = getPrototypeOf(O);
-  if(parent === null)return oKeys;
-  var pKeys  = ordinaryMetadataKeys(parent, P);
+metadata.exp({ defineMetadata: function defineMetadata(metadataKey, metadataValue, target, targetKey) {
+    ordinaryDefineOwnMetadata(metadataKey, metadataValue, anObject(target), toMetaKey(targetKey));
+  } });
+
+},{"./_an-object":8,"./_metadata":64}],275:[function(require,module,exports){
+'use strict';
+
+var metadata = require('./_metadata'),
+    anObject = require('./_an-object'),
+    toMetaKey = metadata.key,
+    getOrCreateMetadataMap = metadata.map,
+    store = metadata.store;
+
+metadata.exp({ deleteMetadata: function deleteMetadata(metadataKey, target /*, targetKey */) {
+    var targetKey = arguments.length < 3 ? undefined : toMetaKey(arguments[2]),
+        metadataMap = getOrCreateMetadataMap(anObject(target), targetKey, false);
+    if (metadataMap === undefined || !metadataMap['delete'](metadataKey)) return false;
+    if (metadataMap.size) return true;
+    var targetMetadata = store.get(target);
+    targetMetadata['delete'](targetKey);
+    return !!targetMetadata.size || store['delete'](target);
+  } });
+
+},{"./_an-object":8,"./_metadata":64}],276:[function(require,module,exports){
+'use strict';
+
+var Set = require('./es6.set'),
+    from = require('./_array-from-iterable'),
+    metadata = require('./_metadata'),
+    anObject = require('./_an-object'),
+    getPrototypeOf = require('./_object-gpo'),
+    ordinaryOwnMetadataKeys = metadata.keys,
+    toMetaKey = metadata.key;
+
+var ordinaryMetadataKeys = function ordinaryMetadataKeys(O, P) {
+  var oKeys = ordinaryOwnMetadataKeys(O, P),
+      parent = getPrototypeOf(O);
+  if (parent === null) return oKeys;
+  var pKeys = ordinaryMetadataKeys(parent, P);
   return pKeys.length ? oKeys.length ? from(new Set(oKeys.concat(pKeys))) : pKeys : oKeys;
 };
 
-metadata.exp({getMetadataKeys: function getMetadataKeys(target /*, targetKey */){
-  return ordinaryMetadataKeys(anObject(target), arguments.length < 2 ? undefined : toMetaKey(arguments[1]));
-}});
-},{"./_an-object":57,"./_array-from-iterable":60,"./_metadata":113,"./_object-gpo":124,"./es6.set":270}],326:[function(require,module,exports){
-var metadata               = require('./_metadata')
-  , anObject               = require('./_an-object')
-  , getPrototypeOf         = require('./_object-gpo')
-  , ordinaryHasOwnMetadata = metadata.has
-  , ordinaryGetOwnMetadata = metadata.get
-  , toMetaKey              = metadata.key;
+metadata.exp({ getMetadataKeys: function getMetadataKeys(target /*, targetKey */) {
+    return ordinaryMetadataKeys(anObject(target), arguments.length < 2 ? undefined : toMetaKey(arguments[1]));
+  } });
 
-var ordinaryGetMetadata = function(MetadataKey, O, P){
+},{"./_an-object":8,"./_array-from-iterable":11,"./_metadata":64,"./_object-gpo":75,"./es6.set":221}],277:[function(require,module,exports){
+'use strict';
+
+var metadata = require('./_metadata'),
+    anObject = require('./_an-object'),
+    getPrototypeOf = require('./_object-gpo'),
+    ordinaryHasOwnMetadata = metadata.has,
+    ordinaryGetOwnMetadata = metadata.get,
+    toMetaKey = metadata.key;
+
+var ordinaryGetMetadata = function ordinaryGetMetadata(MetadataKey, O, P) {
   var hasOwn = ordinaryHasOwnMetadata(MetadataKey, O, P);
-  if(hasOwn)return ordinaryGetOwnMetadata(MetadataKey, O, P);
+  if (hasOwn) return ordinaryGetOwnMetadata(MetadataKey, O, P);
   var parent = getPrototypeOf(O);
   return parent !== null ? ordinaryGetMetadata(MetadataKey, parent, P) : undefined;
 };
 
-metadata.exp({getMetadata: function getMetadata(metadataKey, target /*, targetKey */){
-  return ordinaryGetMetadata(metadataKey, anObject(target), arguments.length < 3 ? undefined : toMetaKey(arguments[2]));
-}});
-},{"./_an-object":57,"./_metadata":113,"./_object-gpo":124}],327:[function(require,module,exports){
-var metadata                = require('./_metadata')
-  , anObject                = require('./_an-object')
-  , ordinaryOwnMetadataKeys = metadata.keys
-  , toMetaKey               = metadata.key;
+metadata.exp({ getMetadata: function getMetadata(metadataKey, target /*, targetKey */) {
+    return ordinaryGetMetadata(metadataKey, anObject(target), arguments.length < 3 ? undefined : toMetaKey(arguments[2]));
+  } });
 
-metadata.exp({getOwnMetadataKeys: function getOwnMetadataKeys(target /*, targetKey */){
-  return ordinaryOwnMetadataKeys(anObject(target), arguments.length < 2 ? undefined : toMetaKey(arguments[1]));
-}});
-},{"./_an-object":57,"./_metadata":113}],328:[function(require,module,exports){
-var metadata               = require('./_metadata')
-  , anObject               = require('./_an-object')
-  , ordinaryGetOwnMetadata = metadata.get
-  , toMetaKey              = metadata.key;
+},{"./_an-object":8,"./_metadata":64,"./_object-gpo":75}],278:[function(require,module,exports){
+'use strict';
 
-metadata.exp({getOwnMetadata: function getOwnMetadata(metadataKey, target /*, targetKey */){
-  return ordinaryGetOwnMetadata(metadataKey, anObject(target)
-    , arguments.length < 3 ? undefined : toMetaKey(arguments[2]));
-}});
-},{"./_an-object":57,"./_metadata":113}],329:[function(require,module,exports){
-var metadata               = require('./_metadata')
-  , anObject               = require('./_an-object')
-  , getPrototypeOf         = require('./_object-gpo')
-  , ordinaryHasOwnMetadata = metadata.has
-  , toMetaKey              = metadata.key;
+var metadata = require('./_metadata'),
+    anObject = require('./_an-object'),
+    ordinaryOwnMetadataKeys = metadata.keys,
+    toMetaKey = metadata.key;
 
-var ordinaryHasMetadata = function(MetadataKey, O, P){
+metadata.exp({ getOwnMetadataKeys: function getOwnMetadataKeys(target /*, targetKey */) {
+    return ordinaryOwnMetadataKeys(anObject(target), arguments.length < 2 ? undefined : toMetaKey(arguments[1]));
+  } });
+
+},{"./_an-object":8,"./_metadata":64}],279:[function(require,module,exports){
+'use strict';
+
+var metadata = require('./_metadata'),
+    anObject = require('./_an-object'),
+    ordinaryGetOwnMetadata = metadata.get,
+    toMetaKey = metadata.key;
+
+metadata.exp({ getOwnMetadata: function getOwnMetadata(metadataKey, target /*, targetKey */) {
+    return ordinaryGetOwnMetadata(metadataKey, anObject(target), arguments.length < 3 ? undefined : toMetaKey(arguments[2]));
+  } });
+
+},{"./_an-object":8,"./_metadata":64}],280:[function(require,module,exports){
+'use strict';
+
+var metadata = require('./_metadata'),
+    anObject = require('./_an-object'),
+    getPrototypeOf = require('./_object-gpo'),
+    ordinaryHasOwnMetadata = metadata.has,
+    toMetaKey = metadata.key;
+
+var ordinaryHasMetadata = function ordinaryHasMetadata(MetadataKey, O, P) {
   var hasOwn = ordinaryHasOwnMetadata(MetadataKey, O, P);
-  if(hasOwn)return true;
+  if (hasOwn) return true;
   var parent = getPrototypeOf(O);
   return parent !== null ? ordinaryHasMetadata(MetadataKey, parent, P) : false;
 };
 
-metadata.exp({hasMetadata: function hasMetadata(metadataKey, target /*, targetKey */){
-  return ordinaryHasMetadata(metadataKey, anObject(target), arguments.length < 3 ? undefined : toMetaKey(arguments[2]));
-}});
-},{"./_an-object":57,"./_metadata":113,"./_object-gpo":124}],330:[function(require,module,exports){
-var metadata               = require('./_metadata')
-  , anObject               = require('./_an-object')
-  , ordinaryHasOwnMetadata = metadata.has
-  , toMetaKey              = metadata.key;
+metadata.exp({ hasMetadata: function hasMetadata(metadataKey, target /*, targetKey */) {
+    return ordinaryHasMetadata(metadataKey, anObject(target), arguments.length < 3 ? undefined : toMetaKey(arguments[2]));
+  } });
 
-metadata.exp({hasOwnMetadata: function hasOwnMetadata(metadataKey, target /*, targetKey */){
-  return ordinaryHasOwnMetadata(metadataKey, anObject(target)
-    , arguments.length < 3 ? undefined : toMetaKey(arguments[2]));
-}});
-},{"./_an-object":57,"./_metadata":113}],331:[function(require,module,exports){
-var metadata                  = require('./_metadata')
-  , anObject                  = require('./_an-object')
-  , aFunction                 = require('./_a-function')
-  , toMetaKey                 = metadata.key
-  , ordinaryDefineOwnMetadata = metadata.set;
+},{"./_an-object":8,"./_metadata":64,"./_object-gpo":75}],281:[function(require,module,exports){
+'use strict';
 
-metadata.exp({metadata: function metadata(metadataKey, metadataValue){
-  return function decorator(target, targetKey){
-    ordinaryDefineOwnMetadata(
-      metadataKey, metadataValue,
-      (targetKey !== undefined ? anObject : aFunction)(target),
-      toMetaKey(targetKey)
-    );
-  };
-}});
-},{"./_a-function":53,"./_an-object":57,"./_metadata":113}],332:[function(require,module,exports){
+var metadata = require('./_metadata'),
+    anObject = require('./_an-object'),
+    ordinaryHasOwnMetadata = metadata.has,
+    toMetaKey = metadata.key;
+
+metadata.exp({ hasOwnMetadata: function hasOwnMetadata(metadataKey, target /*, targetKey */) {
+    return ordinaryHasOwnMetadata(metadataKey, anObject(target), arguments.length < 3 ? undefined : toMetaKey(arguments[2]));
+  } });
+
+},{"./_an-object":8,"./_metadata":64}],282:[function(require,module,exports){
+'use strict';
+
+var metadata = require('./_metadata'),
+    anObject = require('./_an-object'),
+    aFunction = require('./_a-function'),
+    toMetaKey = metadata.key,
+    ordinaryDefineOwnMetadata = metadata.set;
+
+metadata.exp({ metadata: function metadata(metadataKey, metadataValue) {
+    return function decorator(target, targetKey) {
+      ordinaryDefineOwnMetadata(metadataKey, metadataValue, (targetKey !== undefined ? anObject : aFunction)(target), toMetaKey(targetKey));
+    };
+  } });
+
+},{"./_a-function":4,"./_an-object":8,"./_metadata":64}],283:[function(require,module,exports){
+'use strict';
+
 // https://github.com/DavidBruant/Map-Set.prototype.toJSON
-var $export  = require('./_export');
+var $export = require('./_export');
 
-$export($export.P + $export.R, 'Set', {toJSON: require('./_collection-to-json')('Set')});
-},{"./_collection-to-json":70,"./_export":82}],333:[function(require,module,exports){
+$export($export.P + $export.R, 'Set', { toJSON: require('./_collection-to-json')('Set') });
+
+},{"./_collection-to-json":21,"./_export":33}],284:[function(require,module,exports){
 'use strict';
 // https://github.com/mathiasbynens/String.prototype.at
-var $export = require('./_export')
-  , $at     = require('./_string-at')(true);
+
+var $export = require('./_export'),
+    $at = require('./_string-at')(true);
 
 $export($export.P, 'String', {
-  at: function at(pos){
+  at: function at(pos) {
     return $at(this, pos);
   }
 });
-},{"./_export":82,"./_string-at":147}],334:[function(require,module,exports){
+
+},{"./_export":33,"./_string-at":98}],285:[function(require,module,exports){
 'use strict';
 // https://tc39.github.io/String.prototype.matchAll/
-var $export     = require('./_export')
-  , defined     = require('./_defined')
-  , toLength    = require('./_to-length')
-  , isRegExp    = require('./_is-regexp')
-  , getFlags    = require('./_flags')
-  , RegExpProto = RegExp.prototype;
 
-var $RegExpStringIterator = function(regexp, string){
+var $export = require('./_export'),
+    defined = require('./_defined'),
+    toLength = require('./_to-length'),
+    isRegExp = require('./_is-regexp'),
+    getFlags = require('./_flags'),
+    RegExpProto = RegExp.prototype;
+
+var $RegExpStringIterator = function $RegExpStringIterator(regexp, string) {
   this._r = regexp;
   this._s = string;
 };
 
-require('./_iter-create')($RegExpStringIterator, 'RegExp String', function next(){
+require('./_iter-create')($RegExpStringIterator, 'RegExp String', function next() {
   var match = this._r.exec(this._s);
-  return {value: match, done: match === null};
+  return { value: match, done: match === null };
 });
 
 $export($export.P, 'String', {
-  matchAll: function matchAll(regexp){
+  matchAll: function matchAll(regexp) {
     defined(this);
-    if(!isRegExp(regexp))throw TypeError(regexp + ' is not a regexp!');
-    var S     = String(this)
-      , flags = 'flags' in RegExpProto ? String(regexp.flags) : getFlags.call(regexp)
-      , rx    = new RegExp(regexp.source, ~flags.indexOf('g') ? flags : 'g' + flags);
+    if (!isRegExp(regexp)) throw TypeError(regexp + ' is not a regexp!');
+    var S = String(this),
+        flags = 'flags' in RegExpProto ? String(regexp.flags) : getFlags.call(regexp),
+        rx = new RegExp(regexp.source, ~flags.indexOf('g') ? flags : 'g' + flags);
     rx.lastIndex = toLength(regexp.lastIndex);
     return new $RegExpStringIterator(rx, S);
   }
 });
-},{"./_defined":77,"./_export":82,"./_flags":86,"./_is-regexp":100,"./_iter-create":102,"./_to-length":158}],335:[function(require,module,exports){
+
+},{"./_defined":28,"./_export":33,"./_flags":37,"./_is-regexp":51,"./_iter-create":53,"./_to-length":109}],286:[function(require,module,exports){
 'use strict';
 // https://github.com/tc39/proposal-string-pad-start-end
-var $export = require('./_export')
-  , $pad    = require('./_string-pad');
+
+var $export = require('./_export'),
+    $pad = require('./_string-pad');
 
 $export($export.P, 'String', {
-  padEnd: function padEnd(maxLength /*, fillString = ' ' */){
+  padEnd: function padEnd(maxLength /*, fillString = ' ' */) {
     return $pad(this, maxLength, arguments.length > 1 ? arguments[1] : undefined, false);
   }
 });
-},{"./_export":82,"./_string-pad":150}],336:[function(require,module,exports){
+
+},{"./_export":33,"./_string-pad":101}],287:[function(require,module,exports){
 'use strict';
 // https://github.com/tc39/proposal-string-pad-start-end
-var $export = require('./_export')
-  , $pad    = require('./_string-pad');
+
+var $export = require('./_export'),
+    $pad = require('./_string-pad');
 
 $export($export.P, 'String', {
-  padStart: function padStart(maxLength /*, fillString = ' ' */){
+  padStart: function padStart(maxLength /*, fillString = ' ' */) {
     return $pad(this, maxLength, arguments.length > 1 ? arguments[1] : undefined, true);
   }
 });
-},{"./_export":82,"./_string-pad":150}],337:[function(require,module,exports){
+
+},{"./_export":33,"./_string-pad":101}],288:[function(require,module,exports){
 'use strict';
 // https://github.com/sebmarkbage/ecmascript-string-left-right-trim
-require('./_string-trim')('trimLeft', function($trim){
-  return function trimLeft(){
+
+require('./_string-trim')('trimLeft', function ($trim) {
+  return function trimLeft() {
     return $trim(this, 1);
   };
 }, 'trimStart');
-},{"./_string-trim":152}],338:[function(require,module,exports){
+
+},{"./_string-trim":103}],289:[function(require,module,exports){
 'use strict';
 // https://github.com/sebmarkbage/ecmascript-string-left-right-trim
-require('./_string-trim')('trimRight', function($trim){
-  return function trimRight(){
+
+require('./_string-trim')('trimRight', function ($trim) {
+  return function trimRight() {
     return $trim(this, 2);
   };
 }, 'trimEnd');
-},{"./_string-trim":152}],339:[function(require,module,exports){
+
+},{"./_string-trim":103}],290:[function(require,module,exports){
+'use strict';
+
 require('./_wks-define')('asyncIterator');
-},{"./_wks-define":165}],340:[function(require,module,exports){
+
+},{"./_wks-define":116}],291:[function(require,module,exports){
+'use strict';
+
 require('./_wks-define')('observable');
-},{"./_wks-define":165}],341:[function(require,module,exports){
+
+},{"./_wks-define":116}],292:[function(require,module,exports){
+'use strict';
+
 // https://github.com/ljharb/proposal-global
 var $export = require('./_export');
 
-$export($export.S, 'System', {global: require('./_global')});
-},{"./_export":82,"./_global":88}],342:[function(require,module,exports){
-var $iterators    = require('./es6.array.iterator')
-  , redefine      = require('./_redefine')
-  , global        = require('./_global')
-  , hide          = require('./_hide')
-  , Iterators     = require('./_iterators')
-  , wks           = require('./_wks')
-  , ITERATOR      = wks('iterator')
-  , TO_STRING_TAG = wks('toStringTag')
-  , ArrayValues   = Iterators.Array;
+$export($export.S, 'System', { global: require('./_global') });
 
-for(var collections = ['NodeList', 'DOMTokenList', 'MediaList', 'StyleSheetList', 'CSSRuleList'], i = 0; i < 5; i++){
-  var NAME       = collections[i]
-    , Collection = global[NAME]
-    , proto      = Collection && Collection.prototype
-    , key;
-  if(proto){
-    if(!proto[ITERATOR])hide(proto, ITERATOR, ArrayValues);
-    if(!proto[TO_STRING_TAG])hide(proto, TO_STRING_TAG, NAME);
+},{"./_export":33,"./_global":39}],293:[function(require,module,exports){
+'use strict';
+
+var $iterators = require('./es6.array.iterator'),
+    redefine = require('./_redefine'),
+    global = require('./_global'),
+    hide = require('./_hide'),
+    Iterators = require('./_iterators'),
+    wks = require('./_wks'),
+    ITERATOR = wks('iterator'),
+    TO_STRING_TAG = wks('toStringTag'),
+    ArrayValues = Iterators.Array;
+
+for (var collections = ['NodeList', 'DOMTokenList', 'MediaList', 'StyleSheetList', 'CSSRuleList'], i = 0; i < 5; i++) {
+  var NAME = collections[i],
+      Collection = global[NAME],
+      proto = Collection && Collection.prototype,
+      key;
+  if (proto) {
+    if (!proto[ITERATOR]) hide(proto, ITERATOR, ArrayValues);
+    if (!proto[TO_STRING_TAG]) hide(proto, TO_STRING_TAG, NAME);
     Iterators[NAME] = ArrayValues;
-    for(key in $iterators)if(!proto[key])redefine(proto, key, $iterators[key], true);
+    for (key in $iterators) {
+      if (!proto[key]) redefine(proto, key, $iterators[key], true);
+    }
   }
 }
-},{"./_global":88,"./_hide":90,"./_iterators":106,"./_redefine":137,"./_wks":167,"./es6.array.iterator":180}],343:[function(require,module,exports){
-var $export = require('./_export')
-  , $task   = require('./_task');
+
+},{"./_global":39,"./_hide":41,"./_iterators":57,"./_redefine":88,"./_wks":118,"./es6.array.iterator":131}],294:[function(require,module,exports){
+'use strict';
+
+var $export = require('./_export'),
+    $task = require('./_task');
 $export($export.G + $export.B, {
-  setImmediate:   $task.set,
+  setImmediate: $task.set,
   clearImmediate: $task.clear
 });
-},{"./_export":82,"./_task":154}],344:[function(require,module,exports){
+
+},{"./_export":33,"./_task":105}],295:[function(require,module,exports){
+'use strict';
+
 // ie9- setTimeout & setInterval additional parameters fix
-var global     = require('./_global')
-  , $export    = require('./_export')
-  , invoke     = require('./_invoke')
-  , partial    = require('./_partial')
-  , navigator  = global.navigator
-  , MSIE       = !!navigator && /MSIE .\./.test(navigator.userAgent); // <- dirty ie9- check
-var wrap = function(set){
-  return MSIE ? function(fn, time /*, ...args */){
-    return set(invoke(
-      partial,
-      [].slice.call(arguments, 2),
-      typeof fn == 'function' ? fn : Function(fn)
-    ), time);
+var global = require('./_global'),
+    $export = require('./_export'),
+    invoke = require('./_invoke'),
+    partial = require('./_partial'),
+    navigator = global.navigator,
+    MSIE = !!navigator && /MSIE .\./.test(navigator.userAgent); // <- dirty ie9- check
+var wrap = function wrap(set) {
+  return MSIE ? function (fn, time /*, ...args */) {
+    return set(invoke(partial, [].slice.call(arguments, 2), typeof fn == 'function' ? fn : Function(fn)), time);
   } : set;
 };
 $export($export.G + $export.B + $export.F * MSIE, {
-  setTimeout:  wrap(global.setTimeout),
+  setTimeout: wrap(global.setTimeout),
   setInterval: wrap(global.setInterval)
 });
-},{"./_export":82,"./_global":88,"./_invoke":94,"./_partial":133}],345:[function(require,module,exports){
+
+},{"./_export":33,"./_global":39,"./_invoke":45,"./_partial":84}],296:[function(require,module,exports){
+'use strict';
+
 require('./modules/es6.symbol');
 require('./modules/es6.object.create');
 require('./modules/es6.object.define-property');
@@ -25949,24 +23784,28 @@ require('./modules/web.timers');
 require('./modules/web.immediate');
 require('./modules/web.dom.iterable');
 module.exports = require('./modules/_core');
-},{"./modules/_core":73,"./modules/es6.array.copy-within":170,"./modules/es6.array.every":171,"./modules/es6.array.fill":172,"./modules/es6.array.filter":173,"./modules/es6.array.find":175,"./modules/es6.array.find-index":174,"./modules/es6.array.for-each":176,"./modules/es6.array.from":177,"./modules/es6.array.index-of":178,"./modules/es6.array.is-array":179,"./modules/es6.array.iterator":180,"./modules/es6.array.join":181,"./modules/es6.array.last-index-of":182,"./modules/es6.array.map":183,"./modules/es6.array.of":184,"./modules/es6.array.reduce":186,"./modules/es6.array.reduce-right":185,"./modules/es6.array.slice":187,"./modules/es6.array.some":188,"./modules/es6.array.sort":189,"./modules/es6.array.species":190,"./modules/es6.date.now":191,"./modules/es6.date.to-iso-string":192,"./modules/es6.date.to-json":193,"./modules/es6.date.to-primitive":194,"./modules/es6.date.to-string":195,"./modules/es6.function.bind":196,"./modules/es6.function.has-instance":197,"./modules/es6.function.name":198,"./modules/es6.map":199,"./modules/es6.math.acosh":200,"./modules/es6.math.asinh":201,"./modules/es6.math.atanh":202,"./modules/es6.math.cbrt":203,"./modules/es6.math.clz32":204,"./modules/es6.math.cosh":205,"./modules/es6.math.expm1":206,"./modules/es6.math.fround":207,"./modules/es6.math.hypot":208,"./modules/es6.math.imul":209,"./modules/es6.math.log10":210,"./modules/es6.math.log1p":211,"./modules/es6.math.log2":212,"./modules/es6.math.sign":213,"./modules/es6.math.sinh":214,"./modules/es6.math.tanh":215,"./modules/es6.math.trunc":216,"./modules/es6.number.constructor":217,"./modules/es6.number.epsilon":218,"./modules/es6.number.is-finite":219,"./modules/es6.number.is-integer":220,"./modules/es6.number.is-nan":221,"./modules/es6.number.is-safe-integer":222,"./modules/es6.number.max-safe-integer":223,"./modules/es6.number.min-safe-integer":224,"./modules/es6.number.parse-float":225,"./modules/es6.number.parse-int":226,"./modules/es6.number.to-fixed":227,"./modules/es6.number.to-precision":228,"./modules/es6.object.assign":229,"./modules/es6.object.create":230,"./modules/es6.object.define-properties":231,"./modules/es6.object.define-property":232,"./modules/es6.object.freeze":233,"./modules/es6.object.get-own-property-descriptor":234,"./modules/es6.object.get-own-property-names":235,"./modules/es6.object.get-prototype-of":236,"./modules/es6.object.is":240,"./modules/es6.object.is-extensible":237,"./modules/es6.object.is-frozen":238,"./modules/es6.object.is-sealed":239,"./modules/es6.object.keys":241,"./modules/es6.object.prevent-extensions":242,"./modules/es6.object.seal":243,"./modules/es6.object.set-prototype-of":244,"./modules/es6.object.to-string":245,"./modules/es6.parse-float":246,"./modules/es6.parse-int":247,"./modules/es6.promise":248,"./modules/es6.reflect.apply":249,"./modules/es6.reflect.construct":250,"./modules/es6.reflect.define-property":251,"./modules/es6.reflect.delete-property":252,"./modules/es6.reflect.enumerate":253,"./modules/es6.reflect.get":256,"./modules/es6.reflect.get-own-property-descriptor":254,"./modules/es6.reflect.get-prototype-of":255,"./modules/es6.reflect.has":257,"./modules/es6.reflect.is-extensible":258,"./modules/es6.reflect.own-keys":259,"./modules/es6.reflect.prevent-extensions":260,"./modules/es6.reflect.set":262,"./modules/es6.reflect.set-prototype-of":261,"./modules/es6.regexp.constructor":263,"./modules/es6.regexp.flags":264,"./modules/es6.regexp.match":265,"./modules/es6.regexp.replace":266,"./modules/es6.regexp.search":267,"./modules/es6.regexp.split":268,"./modules/es6.regexp.to-string":269,"./modules/es6.set":270,"./modules/es6.string.anchor":271,"./modules/es6.string.big":272,"./modules/es6.string.blink":273,"./modules/es6.string.bold":274,"./modules/es6.string.code-point-at":275,"./modules/es6.string.ends-with":276,"./modules/es6.string.fixed":277,"./modules/es6.string.fontcolor":278,"./modules/es6.string.fontsize":279,"./modules/es6.string.from-code-point":280,"./modules/es6.string.includes":281,"./modules/es6.string.italics":282,"./modules/es6.string.iterator":283,"./modules/es6.string.link":284,"./modules/es6.string.raw":285,"./modules/es6.string.repeat":286,"./modules/es6.string.small":287,"./modules/es6.string.starts-with":288,"./modules/es6.string.strike":289,"./modules/es6.string.sub":290,"./modules/es6.string.sup":291,"./modules/es6.string.trim":292,"./modules/es6.symbol":293,"./modules/es6.typed.array-buffer":294,"./modules/es6.typed.data-view":295,"./modules/es6.typed.float32-array":296,"./modules/es6.typed.float64-array":297,"./modules/es6.typed.int16-array":298,"./modules/es6.typed.int32-array":299,"./modules/es6.typed.int8-array":300,"./modules/es6.typed.uint16-array":301,"./modules/es6.typed.uint32-array":302,"./modules/es6.typed.uint8-array":303,"./modules/es6.typed.uint8-clamped-array":304,"./modules/es6.weak-map":305,"./modules/es6.weak-set":306,"./modules/es7.array.includes":307,"./modules/es7.asap":308,"./modules/es7.error.is-error":309,"./modules/es7.map.to-json":310,"./modules/es7.math.iaddh":311,"./modules/es7.math.imulh":312,"./modules/es7.math.isubh":313,"./modules/es7.math.umulh":314,"./modules/es7.object.define-getter":315,"./modules/es7.object.define-setter":316,"./modules/es7.object.entries":317,"./modules/es7.object.get-own-property-descriptors":318,"./modules/es7.object.lookup-getter":319,"./modules/es7.object.lookup-setter":320,"./modules/es7.object.values":321,"./modules/es7.observable":322,"./modules/es7.reflect.define-metadata":323,"./modules/es7.reflect.delete-metadata":324,"./modules/es7.reflect.get-metadata":326,"./modules/es7.reflect.get-metadata-keys":325,"./modules/es7.reflect.get-own-metadata":328,"./modules/es7.reflect.get-own-metadata-keys":327,"./modules/es7.reflect.has-metadata":329,"./modules/es7.reflect.has-own-metadata":330,"./modules/es7.reflect.metadata":331,"./modules/es7.set.to-json":332,"./modules/es7.string.at":333,"./modules/es7.string.match-all":334,"./modules/es7.string.pad-end":335,"./modules/es7.string.pad-start":336,"./modules/es7.string.trim-left":337,"./modules/es7.string.trim-right":338,"./modules/es7.symbol.async-iterator":339,"./modules/es7.symbol.observable":340,"./modules/es7.system.global":341,"./modules/web.dom.iterable":342,"./modules/web.immediate":343,"./modules/web.timers":344}],346:[function(require,module,exports){
-module.exports = function deepFreeze (o) {
+
+},{"./modules/_core":24,"./modules/es6.array.copy-within":121,"./modules/es6.array.every":122,"./modules/es6.array.fill":123,"./modules/es6.array.filter":124,"./modules/es6.array.find":126,"./modules/es6.array.find-index":125,"./modules/es6.array.for-each":127,"./modules/es6.array.from":128,"./modules/es6.array.index-of":129,"./modules/es6.array.is-array":130,"./modules/es6.array.iterator":131,"./modules/es6.array.join":132,"./modules/es6.array.last-index-of":133,"./modules/es6.array.map":134,"./modules/es6.array.of":135,"./modules/es6.array.reduce":137,"./modules/es6.array.reduce-right":136,"./modules/es6.array.slice":138,"./modules/es6.array.some":139,"./modules/es6.array.sort":140,"./modules/es6.array.species":141,"./modules/es6.date.now":142,"./modules/es6.date.to-iso-string":143,"./modules/es6.date.to-json":144,"./modules/es6.date.to-primitive":145,"./modules/es6.date.to-string":146,"./modules/es6.function.bind":147,"./modules/es6.function.has-instance":148,"./modules/es6.function.name":149,"./modules/es6.map":150,"./modules/es6.math.acosh":151,"./modules/es6.math.asinh":152,"./modules/es6.math.atanh":153,"./modules/es6.math.cbrt":154,"./modules/es6.math.clz32":155,"./modules/es6.math.cosh":156,"./modules/es6.math.expm1":157,"./modules/es6.math.fround":158,"./modules/es6.math.hypot":159,"./modules/es6.math.imul":160,"./modules/es6.math.log10":161,"./modules/es6.math.log1p":162,"./modules/es6.math.log2":163,"./modules/es6.math.sign":164,"./modules/es6.math.sinh":165,"./modules/es6.math.tanh":166,"./modules/es6.math.trunc":167,"./modules/es6.number.constructor":168,"./modules/es6.number.epsilon":169,"./modules/es6.number.is-finite":170,"./modules/es6.number.is-integer":171,"./modules/es6.number.is-nan":172,"./modules/es6.number.is-safe-integer":173,"./modules/es6.number.max-safe-integer":174,"./modules/es6.number.min-safe-integer":175,"./modules/es6.number.parse-float":176,"./modules/es6.number.parse-int":177,"./modules/es6.number.to-fixed":178,"./modules/es6.number.to-precision":179,"./modules/es6.object.assign":180,"./modules/es6.object.create":181,"./modules/es6.object.define-properties":182,"./modules/es6.object.define-property":183,"./modules/es6.object.freeze":184,"./modules/es6.object.get-own-property-descriptor":185,"./modules/es6.object.get-own-property-names":186,"./modules/es6.object.get-prototype-of":187,"./modules/es6.object.is":191,"./modules/es6.object.is-extensible":188,"./modules/es6.object.is-frozen":189,"./modules/es6.object.is-sealed":190,"./modules/es6.object.keys":192,"./modules/es6.object.prevent-extensions":193,"./modules/es6.object.seal":194,"./modules/es6.object.set-prototype-of":195,"./modules/es6.object.to-string":196,"./modules/es6.parse-float":197,"./modules/es6.parse-int":198,"./modules/es6.promise":199,"./modules/es6.reflect.apply":200,"./modules/es6.reflect.construct":201,"./modules/es6.reflect.define-property":202,"./modules/es6.reflect.delete-property":203,"./modules/es6.reflect.enumerate":204,"./modules/es6.reflect.get":207,"./modules/es6.reflect.get-own-property-descriptor":205,"./modules/es6.reflect.get-prototype-of":206,"./modules/es6.reflect.has":208,"./modules/es6.reflect.is-extensible":209,"./modules/es6.reflect.own-keys":210,"./modules/es6.reflect.prevent-extensions":211,"./modules/es6.reflect.set":213,"./modules/es6.reflect.set-prototype-of":212,"./modules/es6.regexp.constructor":214,"./modules/es6.regexp.flags":215,"./modules/es6.regexp.match":216,"./modules/es6.regexp.replace":217,"./modules/es6.regexp.search":218,"./modules/es6.regexp.split":219,"./modules/es6.regexp.to-string":220,"./modules/es6.set":221,"./modules/es6.string.anchor":222,"./modules/es6.string.big":223,"./modules/es6.string.blink":224,"./modules/es6.string.bold":225,"./modules/es6.string.code-point-at":226,"./modules/es6.string.ends-with":227,"./modules/es6.string.fixed":228,"./modules/es6.string.fontcolor":229,"./modules/es6.string.fontsize":230,"./modules/es6.string.from-code-point":231,"./modules/es6.string.includes":232,"./modules/es6.string.italics":233,"./modules/es6.string.iterator":234,"./modules/es6.string.link":235,"./modules/es6.string.raw":236,"./modules/es6.string.repeat":237,"./modules/es6.string.small":238,"./modules/es6.string.starts-with":239,"./modules/es6.string.strike":240,"./modules/es6.string.sub":241,"./modules/es6.string.sup":242,"./modules/es6.string.trim":243,"./modules/es6.symbol":244,"./modules/es6.typed.array-buffer":245,"./modules/es6.typed.data-view":246,"./modules/es6.typed.float32-array":247,"./modules/es6.typed.float64-array":248,"./modules/es6.typed.int16-array":249,"./modules/es6.typed.int32-array":250,"./modules/es6.typed.int8-array":251,"./modules/es6.typed.uint16-array":252,"./modules/es6.typed.uint32-array":253,"./modules/es6.typed.uint8-array":254,"./modules/es6.typed.uint8-clamped-array":255,"./modules/es6.weak-map":256,"./modules/es6.weak-set":257,"./modules/es7.array.includes":258,"./modules/es7.asap":259,"./modules/es7.error.is-error":260,"./modules/es7.map.to-json":261,"./modules/es7.math.iaddh":262,"./modules/es7.math.imulh":263,"./modules/es7.math.isubh":264,"./modules/es7.math.umulh":265,"./modules/es7.object.define-getter":266,"./modules/es7.object.define-setter":267,"./modules/es7.object.entries":268,"./modules/es7.object.get-own-property-descriptors":269,"./modules/es7.object.lookup-getter":270,"./modules/es7.object.lookup-setter":271,"./modules/es7.object.values":272,"./modules/es7.observable":273,"./modules/es7.reflect.define-metadata":274,"./modules/es7.reflect.delete-metadata":275,"./modules/es7.reflect.get-metadata":277,"./modules/es7.reflect.get-metadata-keys":276,"./modules/es7.reflect.get-own-metadata":279,"./modules/es7.reflect.get-own-metadata-keys":278,"./modules/es7.reflect.has-metadata":280,"./modules/es7.reflect.has-own-metadata":281,"./modules/es7.reflect.metadata":282,"./modules/es7.set.to-json":283,"./modules/es7.string.at":284,"./modules/es7.string.match-all":285,"./modules/es7.string.pad-end":286,"./modules/es7.string.pad-start":287,"./modules/es7.string.trim-left":288,"./modules/es7.string.trim-right":289,"./modules/es7.symbol.async-iterator":290,"./modules/es7.symbol.observable":291,"./modules/es7.system.global":292,"./modules/web.dom.iterable":293,"./modules/web.immediate":294,"./modules/web.timers":295}],297:[function(require,module,exports){
+"use strict";
+
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
+module.exports = function deepFreeze(o) {
   Object.freeze(o);
 
   Object.getOwnPropertyNames(o).forEach(function (prop) {
-    if (o.hasOwnProperty(prop)
-    && o[prop] !== null
-    && (typeof o[prop] === "object" || typeof o[prop] === "function")
-    && !Object.isFrozen(o[prop])) {
+    if (o.hasOwnProperty(prop) && o[prop] !== null && (_typeof(o[prop]) === "object" || typeof o[prop] === "function") && !Object.isFrozen(o[prop])) {
       deepFreeze(o[prop]);
     }
   });
-  
+
   return o;
 };
 
-},{}],347:[function(require,module,exports){
+},{}],298:[function(require,module,exports){
 'use strict';
+
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
 module.exports = Response;
 
@@ -25980,13 +23819,13 @@ module.exports = Response;
  */
 function Response(statusCode, headers, body, url) {
   if (typeof statusCode !== 'number') {
-    throw new TypeError('statusCode must be a number but was ' + (typeof statusCode));
+    throw new TypeError('statusCode must be a number but was ' + (typeof statusCode === 'undefined' ? 'undefined' : _typeof(statusCode)));
   }
   if (headers === null) {
     throw new TypeError('headers cannot be null');
   }
-  if (typeof headers !== 'object') {
-    throw new TypeError('headers must be an object but was ' + (typeof headers));
+  if ((typeof headers === 'undefined' ? 'undefined' : _typeof(headers)) !== 'object') {
+    throw new TypeError('headers must be an object but was ' + (typeof headers === 'undefined' ? 'undefined' : _typeof(headers)));
   }
   this.statusCode = statusCode;
   this.headers = {};
@@ -25999,8 +23838,7 @@ function Response(statusCode, headers, body, url) {
 
 Response.prototype.getBody = function (encoding) {
   if (this.statusCode >= 300) {
-    var err = new Error('Server responded with status code '
-                    + this.statusCode + ':\n' + this.body.toString());
+    var err = new Error('Server responded with status code ' + this.statusCode + ':\n' + this.body.toString());
     err.statusCode = this.statusCode;
     err.headers = this.headers;
     err.body = this.body;
@@ -26010,7 +23848,7 @@ Response.prototype.getBody = function (encoding) {
   return encoding ? this.body.toString(encoding) : this.body;
 };
 
-},{}],348:[function(require,module,exports){
+},{}],299:[function(require,module,exports){
 'use strict';
 
 var replace = String.prototype.replace;
@@ -26019,10 +23857,10 @@ var percentTwenties = /%20/g;
 module.exports = {
     'default': 'RFC3986',
     formatters: {
-        RFC1738: function (value) {
+        RFC1738: function RFC1738(value) {
             return replace.call(value, percentTwenties, '+');
         },
-        RFC3986: function (value) {
+        RFC3986: function RFC3986(value) {
             return value;
         }
     },
@@ -26030,7 +23868,7 @@ module.exports = {
     RFC3986: 'RFC3986'
 };
 
-},{}],349:[function(require,module,exports){
+},{}],300:[function(require,module,exports){
 'use strict';
 
 var stringify = require('./stringify');
@@ -26043,7 +23881,7 @@ module.exports = {
     stringify: stringify
 };
 
-},{"./formats":348,"./parse":350,"./stringify":351}],350:[function(require,module,exports){
+},{"./formats":299,"./parse":301,"./stringify":302}],301:[function(require,module,exports){
 'use strict';
 
 var utils = require('./utils');
@@ -26103,13 +23941,7 @@ var parseObject = function parseObjectRecursive(chain, val, options) {
         obj = options.plainObjects ? Object.create(null) : {};
         var cleanRoot = root.charAt(0) === '[' && root.charAt(root.length - 1) === ']' ? root.slice(1, -1) : root;
         var index = parseInt(cleanRoot, 10);
-        if (
-            !isNaN(index) &&
-            root !== cleanRoot &&
-            String(index) === cleanRoot &&
-            index >= 0 &&
-            (options.parseArrays && index <= options.arrayLimit)
-        ) {
+        if (!isNaN(index) && root !== cleanRoot && String(index) === cleanRoot && index >= 0 && options.parseArrays && index <= options.arrayLimit) {
             obj = [];
             obj[index] = parseObject(chain, val, options);
         } else {
@@ -26212,20 +24044,25 @@ module.exports = function (str, opts) {
     return utils.compact(obj);
 };
 
-},{"./utils":352}],351:[function(require,module,exports){
+},{"./utils":303}],302:[function(require,module,exports){
 'use strict';
+
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
 var utils = require('./utils');
 var formats = require('./formats');
 
 var arrayPrefixGenerators = {
-    brackets: function brackets(prefix) { // eslint-disable-line func-name-matching
+    brackets: function brackets(prefix) {
+        // eslint-disable-line func-name-matching
         return prefix + '[]';
     },
-    indices: function indices(prefix, key) { // eslint-disable-line func-name-matching
+    indices: function indices(prefix, key) {
+        // eslint-disable-line func-name-matching
         return prefix + '[' + key + ']';
     },
-    repeat: function repeat(prefix) { // eslint-disable-line func-name-matching
+    repeat: function repeat(prefix) {
+        // eslint-disable-line func-name-matching
         return prefix;
     }
 };
@@ -26237,7 +24074,8 @@ var defaults = {
     encode: true,
     encoder: utils.encode,
     encodeValuesOnly: false,
-    serializeDate: function serializeDate(date) { // eslint-disable-line func-name-matching
+    serializeDate: function serializeDate(date) {
+        // eslint-disable-line func-name-matching
         return toISO.call(date);
     },
     skipNulls: false,
@@ -26245,19 +24083,7 @@ var defaults = {
 };
 
 var stringify = function stringify( // eslint-disable-line func-name-matching
-    object,
-    prefix,
-    generateArrayPrefix,
-    strictNullHandling,
-    skipNulls,
-    encoder,
-    filter,
-    sort,
-    allowDots,
-    serializeDate,
-    formatter,
-    encodeValuesOnly
-) {
+object, prefix, generateArrayPrefix, strictNullHandling, skipNulls, encoder, filter, sort, allowDots, serializeDate, formatter, encodeValuesOnly) {
     var obj = object;
     if (typeof filter === 'function') {
         obj = filter(prefix, obj);
@@ -26301,35 +24127,9 @@ var stringify = function stringify( // eslint-disable-line func-name-matching
         }
 
         if (Array.isArray(obj)) {
-            values = values.concat(stringify(
-                obj[key],
-                generateArrayPrefix(prefix, key),
-                generateArrayPrefix,
-                strictNullHandling,
-                skipNulls,
-                encoder,
-                filter,
-                sort,
-                allowDots,
-                serializeDate,
-                formatter,
-                encodeValuesOnly
-            ));
+            values = values.concat(stringify(obj[key], generateArrayPrefix(prefix, key), generateArrayPrefix, strictNullHandling, skipNulls, encoder, filter, sort, allowDots, serializeDate, formatter, encodeValuesOnly));
         } else {
-            values = values.concat(stringify(
-                obj[key],
-                prefix + (allowDots ? '.' + key : '[' + key + ']'),
-                generateArrayPrefix,
-                strictNullHandling,
-                skipNulls,
-                encoder,
-                filter,
-                sort,
-                allowDots,
-                serializeDate,
-                formatter,
-                encodeValuesOnly
-            ));
+            values = values.concat(stringify(obj[key], prefix + (allowDots ? '.' + key : '[' + key + ']'), generateArrayPrefix, strictNullHandling, skipNulls, encoder, filter, sort, allowDots, serializeDate, formatter, encodeValuesOnly));
         }
     }
 
@@ -26372,7 +24172,7 @@ module.exports = function (object, opts) {
 
     var keys = [];
 
-    if (typeof obj !== 'object' || obj === null) {
+    if ((typeof obj === 'undefined' ? 'undefined' : _typeof(obj)) !== 'object' || obj === null) {
         return '';
     }
 
@@ -26402,38 +24202,27 @@ module.exports = function (object, opts) {
             continue;
         }
 
-        keys = keys.concat(stringify(
-            obj[key],
-            key,
-            generateArrayPrefix,
-            strictNullHandling,
-            skipNulls,
-            encode ? encoder : null,
-            filter,
-            sort,
-            allowDots,
-            serializeDate,
-            formatter,
-            encodeValuesOnly
-        ));
+        keys = keys.concat(stringify(obj[key], key, generateArrayPrefix, strictNullHandling, skipNulls, encode ? encoder : null, filter, sort, allowDots, serializeDate, formatter, encodeValuesOnly));
     }
 
     return keys.join(delimiter);
 };
 
-},{"./formats":348,"./utils":352}],352:[function(require,module,exports){
+},{"./formats":299,"./utils":303}],303:[function(require,module,exports){
 'use strict';
+
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
 var has = Object.prototype.hasOwnProperty;
 
-var hexTable = (function () {
+var hexTable = function () {
     var array = [];
     for (var i = 0; i < 256; ++i) {
         array.push('%' + ((i < 16 ? '0' : '') + i.toString(16)).toUpperCase());
     }
 
     return array;
-}());
+}();
 
 exports.arrayToObject = function (source, options) {
     var obj = options && options.plainObjects ? Object.create(null) : {};
@@ -26451,10 +24240,10 @@ exports.merge = function (target, source, options) {
         return target;
     }
 
-    if (typeof source !== 'object') {
+    if ((typeof source === 'undefined' ? 'undefined' : _typeof(source)) !== 'object') {
         if (Array.isArray(target)) {
             target.push(source);
-        } else if (typeof target === 'object') {
+        } else if ((typeof target === 'undefined' ? 'undefined' : _typeof(target)) === 'object') {
             if (options.plainObjects || options.allowPrototypes || !has.call(Object.prototype, source)) {
                 target[source] = true;
             }
@@ -26465,7 +24254,7 @@ exports.merge = function (target, source, options) {
         return target;
     }
 
-    if (typeof target !== 'object') {
+    if ((typeof target === 'undefined' ? 'undefined' : _typeof(target)) !== 'object') {
         return [target].concat(source);
     }
 
@@ -26477,7 +24266,7 @@ exports.merge = function (target, source, options) {
     if (Array.isArray(target) && Array.isArray(source)) {
         source.forEach(function (item, i) {
             if (has.call(target, i)) {
-                if (target[i] && typeof target[i] === 'object') {
+                if (target[i] && _typeof(target[i]) === 'object') {
                     target[i] = exports.merge(target[i], item, options);
                 } else {
                     target.push(item);
@@ -26522,18 +24311,17 @@ exports.encode = function (str) {
     for (var i = 0; i < string.length; ++i) {
         var c = string.charCodeAt(i);
 
-        if (
-            c === 0x2D || // -
-            c === 0x2E || // .
-            c === 0x5F || // _
-            c === 0x7E || // ~
-            (c >= 0x30 && c <= 0x39) || // 0-9
-            (c >= 0x41 && c <= 0x5A) || // a-z
-            (c >= 0x61 && c <= 0x7A) // A-Z
+        if (c === 0x2D || // -
+        c === 0x2E || // .
+        c === 0x5F || // _
+        c === 0x7E || // ~
+        c >= 0x30 && c <= 0x39 || // 0-9
+        c >= 0x41 && c <= 0x5A || // a-z
+        c >= 0x61 && c <= 0x7A // A-Z
         ) {
-            out += string.charAt(i);
-            continue;
-        }
+                out += string.charAt(i);
+                continue;
+            }
 
         if (c < 0x80) {
             out = out + hexTable[c];
@@ -26541,25 +24329,25 @@ exports.encode = function (str) {
         }
 
         if (c < 0x800) {
-            out = out + (hexTable[0xC0 | (c >> 6)] + hexTable[0x80 | (c & 0x3F)]);
+            out = out + (hexTable[0xC0 | c >> 6] + hexTable[0x80 | c & 0x3F]);
             continue;
         }
 
         if (c < 0xD800 || c >= 0xE000) {
-            out = out + (hexTable[0xE0 | (c >> 12)] + hexTable[0x80 | ((c >> 6) & 0x3F)] + hexTable[0x80 | (c & 0x3F)]);
+            out = out + (hexTable[0xE0 | c >> 12] + hexTable[0x80 | c >> 6 & 0x3F] + hexTable[0x80 | c & 0x3F]);
             continue;
         }
 
         i += 1;
-        c = 0x10000 + (((c & 0x3FF) << 10) | (string.charCodeAt(i) & 0x3FF));
-        out += hexTable[0xF0 | (c >> 18)] + hexTable[0x80 | ((c >> 12) & 0x3F)] + hexTable[0x80 | ((c >> 6) & 0x3F)] + hexTable[0x80 | (c & 0x3F)]; // eslint-disable-line max-len
+        c = 0x10000 + ((c & 0x3FF) << 10 | string.charCodeAt(i) & 0x3FF);
+        out += hexTable[0xF0 | c >> 18] + hexTable[0x80 | c >> 12 & 0x3F] + hexTable[0x80 | c >> 6 & 0x3F] + hexTable[0x80 | c & 0x3F]; // eslint-disable-line max-len
     }
 
     return out;
 };
 
 exports.compact = function (obj, references) {
-    if (typeof obj !== 'object' || obj === null) {
+    if ((typeof obj === 'undefined' ? 'undefined' : _typeof(obj)) !== 'object' || obj === null) {
         return obj;
     }
 
@@ -26575,7 +24363,7 @@ exports.compact = function (obj, references) {
         var compacted = [];
 
         for (var i = 0; i < obj.length; ++i) {
-            if (obj[i] && typeof obj[i] === 'object') {
+            if (obj[i] && _typeof(obj[i]) === 'object') {
                 compacted.push(exports.compact(obj[i], refs));
             } else if (typeof obj[i] !== 'undefined') {
                 compacted.push(obj[i]);
@@ -26605,7 +24393,7 @@ exports.isBuffer = function (obj) {
     return !!(obj.constructor && obj.constructor.isBuffer && obj.constructor.isBuffer(obj));
 };
 
-},{}],353:[function(require,module,exports){
+},{}],304:[function(require,module,exports){
 // Copyright Joyent, Inc. and other Node contributors.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a
@@ -26632,11 +24420,12 @@ exports.isBuffer = function (obj) {
 // If obj.hasOwnProperty has been overridden, then calling
 // obj.hasOwnProperty(prop) will break.
 // See: https://github.com/joyent/node/issues/1707
+
 function hasOwnProperty(obj, prop) {
   return Object.prototype.hasOwnProperty.call(obj, prop);
 }
 
-module.exports = function(qs, sep, eq, options) {
+module.exports = function (qs, sep, eq, options) {
   sep = sep || '&';
   eq = eq || '=';
   var obj = {};
@@ -26662,7 +24451,10 @@ module.exports = function(qs, sep, eq, options) {
   for (var i = 0; i < len; ++i) {
     var x = qs[i].replace(regexp, '%20'),
         idx = x.indexOf(eq),
-        kstr, vstr, k, v;
+        kstr,
+        vstr,
+        k,
+        v;
 
     if (idx >= 0) {
       kstr = x.substr(0, idx);
@@ -26691,7 +24483,7 @@ var isArray = Array.isArray || function (xs) {
   return Object.prototype.toString.call(xs) === '[object Array]';
 };
 
-},{}],354:[function(require,module,exports){
+},{}],305:[function(require,module,exports){
 // Copyright Joyent, Inc. and other Node contributors.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a
@@ -26715,8 +24507,10 @@ var isArray = Array.isArray || function (xs) {
 
 'use strict';
 
-var stringifyPrimitive = function(v) {
-  switch (typeof v) {
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
+var stringifyPrimitive = function stringifyPrimitive(v) {
+  switch (typeof v === 'undefined' ? 'undefined' : _typeof(v)) {
     case 'string':
       return v;
 
@@ -26731,37 +24525,35 @@ var stringifyPrimitive = function(v) {
   }
 };
 
-module.exports = function(obj, sep, eq, name) {
+module.exports = function (obj, sep, eq, name) {
   sep = sep || '&';
   eq = eq || '=';
   if (obj === null) {
     obj = undefined;
   }
 
-  if (typeof obj === 'object') {
-    return map(objectKeys(obj), function(k) {
+  if ((typeof obj === 'undefined' ? 'undefined' : _typeof(obj)) === 'object') {
+    return map(objectKeys(obj), function (k) {
       var ks = encodeURIComponent(stringifyPrimitive(k)) + eq;
       if (isArray(obj[k])) {
-        return map(obj[k], function(v) {
+        return map(obj[k], function (v) {
           return ks + encodeURIComponent(stringifyPrimitive(v));
         }).join(sep);
       } else {
         return ks + encodeURIComponent(stringifyPrimitive(obj[k]));
       }
     }).join(sep);
-
   }
 
   if (!name) return '';
-  return encodeURIComponent(stringifyPrimitive(name)) + eq +
-         encodeURIComponent(stringifyPrimitive(obj));
+  return encodeURIComponent(stringifyPrimitive(name)) + eq + encodeURIComponent(stringifyPrimitive(obj));
 };
 
 var isArray = Array.isArray || function (xs) {
   return Object.prototype.toString.call(xs) === '[object Array]';
 };
 
-function map (xs, f) {
+function map(xs, f) {
   if (xs.map) return xs.map(f);
   var res = [];
   for (var i = 0; i < xs.length; i++) {
@@ -26778,14 +24570,18 @@ var objectKeys = Object.keys || function (obj) {
   return res;
 };
 
-},{}],355:[function(require,module,exports){
+},{}],306:[function(require,module,exports){
 'use strict';
 
 exports.decode = exports.parse = require('./decode');
 exports.encode = exports.stringify = require('./encode');
 
-},{"./decode":353,"./encode":354}],356:[function(require,module,exports){
+},{"./decode":304,"./encode":305}],307:[function(require,module,exports){
 (function (global){
+"use strict";
+
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
 /**
  * Copyright (c) 2014, Facebook, Inc.
  * All rights reserved.
@@ -26796,7 +24592,7 @@ exports.encode = exports.stringify = require('./encode');
  * the same directory.
  */
 
-!(function(global) {
+!function (global) {
   "use strict";
 
   var Op = Object.prototype;
@@ -26807,7 +24603,7 @@ exports.encode = exports.stringify = require('./encode');
   var asyncIteratorSymbol = $Symbol.asyncIterator || "@@asyncIterator";
   var toStringTagSymbol = $Symbol.toStringTag || "@@toStringTag";
 
-  var inModule = typeof module === "object";
+  var inModule = (typeof module === "undefined" ? "undefined" : _typeof(module)) === "object";
   var runtime = global.regeneratorRuntime;
   if (runtime) {
     if (inModule) {
@@ -26882,42 +24678,36 @@ exports.encode = exports.stringify = require('./encode');
 
   var getProto = Object.getPrototypeOf;
   var NativeIteratorPrototype = getProto && getProto(getProto(values([])));
-  if (NativeIteratorPrototype &&
-      NativeIteratorPrototype !== Op &&
-      hasOwn.call(NativeIteratorPrototype, iteratorSymbol)) {
+  if (NativeIteratorPrototype && NativeIteratorPrototype !== Op && hasOwn.call(NativeIteratorPrototype, iteratorSymbol)) {
     // This environment has a native %IteratorPrototype%; use it instead
     // of the polyfill.
     IteratorPrototype = NativeIteratorPrototype;
   }
 
-  var Gp = GeneratorFunctionPrototype.prototype =
-    Generator.prototype = Object.create(IteratorPrototype);
+  var Gp = GeneratorFunctionPrototype.prototype = Generator.prototype = Object.create(IteratorPrototype);
   GeneratorFunction.prototype = Gp.constructor = GeneratorFunctionPrototype;
   GeneratorFunctionPrototype.constructor = GeneratorFunction;
-  GeneratorFunctionPrototype[toStringTagSymbol] =
-    GeneratorFunction.displayName = "GeneratorFunction";
+  GeneratorFunctionPrototype[toStringTagSymbol] = GeneratorFunction.displayName = "GeneratorFunction";
 
   // Helper for defining the .next, .throw, and .return methods of the
   // Iterator interface in terms of a single ._invoke method.
   function defineIteratorMethods(prototype) {
-    ["next", "throw", "return"].forEach(function(method) {
-      prototype[method] = function(arg) {
+    ["next", "throw", "return"].forEach(function (method) {
+      prototype[method] = function (arg) {
         return this._invoke(method, arg);
       };
     });
   }
 
-  runtime.isGeneratorFunction = function(genFun) {
+  runtime.isGeneratorFunction = function (genFun) {
     var ctor = typeof genFun === "function" && genFun.constructor;
-    return ctor
-      ? ctor === GeneratorFunction ||
-        // For the native GeneratorFunction constructor, the best we can
-        // do is to check its .name property.
-        (ctor.displayName || ctor.name) === "GeneratorFunction"
-      : false;
+    return ctor ? ctor === GeneratorFunction ||
+    // For the native GeneratorFunction constructor, the best we can
+    // do is to check its .name property.
+    (ctor.displayName || ctor.name) === "GeneratorFunction" : false;
   };
 
-  runtime.mark = function(genFun) {
+  runtime.mark = function (genFun) {
     if (Object.setPrototypeOf) {
       Object.setPrototypeOf(genFun, GeneratorFunctionPrototype);
     } else {
@@ -26934,7 +24724,7 @@ exports.encode = exports.stringify = require('./encode');
   // `yield regeneratorRuntime.awrap(x)`, so that the runtime can test
   // `hasOwn.call(value, "__await")` to determine if the yielded value is
   // meant to be awaited.
-  runtime.awrap = function(arg) {
+  runtime.awrap = function (arg) {
     return { __await: arg };
   };
 
@@ -26946,17 +24736,15 @@ exports.encode = exports.stringify = require('./encode');
       } else {
         var result = record.arg;
         var value = result.value;
-        if (value &&
-            typeof value === "object" &&
-            hasOwn.call(value, "__await")) {
-          return Promise.resolve(value.__await).then(function(value) {
+        if (value && (typeof value === "undefined" ? "undefined" : _typeof(value)) === "object" && hasOwn.call(value, "__await")) {
+          return Promise.resolve(value.__await).then(function (value) {
             invoke("next", value, resolve, reject);
-          }, function(err) {
+          }, function (err) {
             invoke("throw", err, resolve, reject);
           });
         }
 
-        return Promise.resolve(value).then(function(unwrapped) {
+        return Promise.resolve(value).then(function (unwrapped) {
           // When a yielded Promise is resolved, its final value becomes
           // the .value of the Promise<{value,done}> result for the
           // current iteration. If the Promise is rejected, however, the
@@ -26978,7 +24766,7 @@ exports.encode = exports.stringify = require('./encode');
       }
     }
 
-    if (typeof global.process === "object" && global.process.domain) {
+    if (_typeof(global.process) === "object" && global.process.domain) {
       invoke = global.process.domain.bind(invoke);
     }
 
@@ -26986,30 +24774,28 @@ exports.encode = exports.stringify = require('./encode');
 
     function enqueue(method, arg) {
       function callInvokeWithMethodAndArg() {
-        return new Promise(function(resolve, reject) {
+        return new Promise(function (resolve, reject) {
           invoke(method, arg, resolve, reject);
         });
       }
 
       return previousPromise =
-        // If enqueue has been called before, then we want to wait until
-        // all previous Promises have been resolved before calling invoke,
-        // so that results are always delivered in the correct order. If
-        // enqueue has not been called before, then it is important to
-        // call invoke immediately, without waiting on a callback to fire,
-        // so that the async generator function has the opportunity to do
-        // any necessary setup in a predictable way. This predictability
-        // is why the Promise constructor synchronously invokes its
-        // executor callback, and why async functions synchronously
-        // execute code before the first await. Since we implement simple
-        // async functions in terms of async generators, it is especially
-        // important to get this right, even though it requires care.
-        previousPromise ? previousPromise.then(
-          callInvokeWithMethodAndArg,
-          // Avoid propagating failures to Promises returned by later
-          // invocations of the iterator.
-          callInvokeWithMethodAndArg
-        ) : callInvokeWithMethodAndArg();
+      // If enqueue has been called before, then we want to wait until
+      // all previous Promises have been resolved before calling invoke,
+      // so that results are always delivered in the correct order. If
+      // enqueue has not been called before, then it is important to
+      // call invoke immediately, without waiting on a callback to fire,
+      // so that the async generator function has the opportunity to do
+      // any necessary setup in a predictable way. This predictability
+      // is why the Promise constructor synchronously invokes its
+      // executor callback, and why async functions synchronously
+      // execute code before the first await. Since we implement simple
+      // async functions in terms of async generators, it is especially
+      // important to get this right, even though it requires care.
+      previousPromise ? previousPromise.then(callInvokeWithMethodAndArg,
+      // Avoid propagating failures to Promises returned by later
+      // invocations of the iterator.
+      callInvokeWithMethodAndArg) : callInvokeWithMethodAndArg();
     }
 
     // Define the unified helper method that is used to implement .next,
@@ -27026,16 +24812,13 @@ exports.encode = exports.stringify = require('./encode');
   // Note that simple async functions are implemented on top of
   // AsyncIterator objects; they just return a Promise for the value of
   // the final result produced by the iterator.
-  runtime.async = function(innerFn, outerFn, self, tryLocsList) {
-    var iter = new AsyncIterator(
-      wrap(innerFn, outerFn, self, tryLocsList)
-    );
+  runtime.async = function (innerFn, outerFn, self, tryLocsList) {
+    var iter = new AsyncIterator(wrap(innerFn, outerFn, self, tryLocsList));
 
-    return runtime.isGeneratorFunction(outerFn)
-      ? iter // If outerFn is a generator, return the full iterator.
-      : iter.next().then(function(result) {
-          return result.done ? result.value : iter.next();
-        });
+    return runtime.isGeneratorFunction(outerFn) ? iter // If outerFn is a generator, return the full iterator.
+    : iter.next().then(function (result) {
+      return result.done ? result.value : iter.next();
+    });
   };
 
   function makeInvokeMethod(innerFn, self, context) {
@@ -27073,7 +24856,6 @@ exports.encode = exports.stringify = require('./encode');
           // Setting context._sent for legacy support of Babel's
           // function.sent implementation.
           context.sent = context._sent = context.arg;
-
         } else if (context.method === "throw") {
           if (state === GenStateSuspendedStart) {
             state = GenStateCompleted;
@@ -27081,7 +24863,6 @@ exports.encode = exports.stringify = require('./encode');
           }
 
           context.dispatchException(context.arg);
-
         } else if (context.method === "return") {
           context.abrupt("return", context.arg);
         }
@@ -27092,9 +24873,7 @@ exports.encode = exports.stringify = require('./encode');
         if (record.type === "normal") {
           // If an exception is thrown from innerFn, we leave state ===
           // GenStateExecuting and loop back for another invocation.
-          state = context.done
-            ? GenStateCompleted
-            : GenStateSuspendedYield;
+          state = context.done ? GenStateCompleted : GenStateSuspendedYield;
 
           if (record.arg === ContinueSentinel) {
             continue;
@@ -27104,7 +24883,6 @@ exports.encode = exports.stringify = require('./encode');
             value: record.arg,
             done: context.done
           };
-
         } else if (record.type === "throw") {
           state = GenStateCompleted;
           // Dispatch the exception by looping back around to the
@@ -27143,8 +24921,7 @@ exports.encode = exports.stringify = require('./encode');
         }
 
         context.method = "throw";
-        context.arg = new TypeError(
-          "The iterator does not provide a 'throw' method");
+        context.arg = new TypeError("The iterator does not provide a 'throw' method");
       }
 
       return ContinueSentinel;
@@ -27161,7 +24938,7 @@ exports.encode = exports.stringify = require('./encode');
 
     var info = record.arg;
 
-    if (! info) {
+    if (!info) {
       context.method = "throw";
       context.arg = new TypeError("iterator result is not an object");
       context.delegate = null;
@@ -27186,7 +24963,6 @@ exports.encode = exports.stringify = require('./encode');
         context.method = "next";
         context.arg = undefined;
       }
-
     } else {
       // Re-yield the result returned by the delegate method.
       return info;
@@ -27209,11 +24985,11 @@ exports.encode = exports.stringify = require('./encode');
   // iterator prototype chain incorrectly implement this, causing the Generator
   // object to not be returned from this call. This ensures that doesn't happen.
   // See https://github.com/facebook/regenerator/issues/274 for more details.
-  Gp[iteratorSymbol] = function() {
+  Gp[iteratorSymbol] = function () {
     return this;
   };
 
-  Gp.toString = function() {
+  Gp.toString = function () {
     return "[object Generator]";
   };
 
@@ -27248,7 +25024,7 @@ exports.encode = exports.stringify = require('./encode');
     this.reset(true);
   }
 
-  runtime.keys = function(object) {
+  runtime.keys = function (object) {
     var keys = [];
     for (var key in object) {
       keys.push(key);
@@ -27287,7 +25063,8 @@ exports.encode = exports.stringify = require('./encode');
       }
 
       if (!isNaN(iterable.length)) {
-        var i = -1, next = function next() {
+        var i = -1,
+            next = function next() {
           while (++i < iterable.length) {
             if (hasOwn.call(iterable, i)) {
               next.value = iterable[i];
@@ -27318,7 +25095,7 @@ exports.encode = exports.stringify = require('./encode');
   Context.prototype = {
     constructor: Context,
 
-    reset: function(skipTempReset) {
+    reset: function reset(skipTempReset) {
       this.prev = 0;
       this.next = 0;
       // Resetting context._sent for legacy support of Babel's
@@ -27335,16 +25112,14 @@ exports.encode = exports.stringify = require('./encode');
       if (!skipTempReset) {
         for (var name in this) {
           // Not sure about the optimal order of these conditions:
-          if (name.charAt(0) === "t" &&
-              hasOwn.call(this, name) &&
-              !isNaN(+name.slice(1))) {
+          if (name.charAt(0) === "t" && hasOwn.call(this, name) && !isNaN(+name.slice(1))) {
             this[name] = undefined;
           }
         }
       }
     },
 
-    stop: function() {
+    stop: function stop() {
       this.done = true;
 
       var rootEntry = this.tryEntries[0];
@@ -27356,7 +25131,7 @@ exports.encode = exports.stringify = require('./encode');
       return this.rval;
     },
 
-    dispatchException: function(exception) {
+    dispatchException: function dispatchException(exception) {
       if (this.done) {
         throw exception;
       }
@@ -27374,7 +25149,7 @@ exports.encode = exports.stringify = require('./encode');
           context.arg = undefined;
         }
 
-        return !! caught;
+        return !!caught;
       }
 
       for (var i = this.tryEntries.length - 1; i >= 0; --i) {
@@ -27398,17 +25173,14 @@ exports.encode = exports.stringify = require('./encode');
             } else if (this.prev < entry.finallyLoc) {
               return handle(entry.finallyLoc);
             }
-
           } else if (hasCatch) {
             if (this.prev < entry.catchLoc) {
               return handle(entry.catchLoc, true);
             }
-
           } else if (hasFinally) {
             if (this.prev < entry.finallyLoc) {
               return handle(entry.finallyLoc);
             }
-
           } else {
             throw new Error("try statement without catch or finally");
           }
@@ -27416,22 +25188,16 @@ exports.encode = exports.stringify = require('./encode');
       }
     },
 
-    abrupt: function(type, arg) {
+    abrupt: function abrupt(type, arg) {
       for (var i = this.tryEntries.length - 1; i >= 0; --i) {
         var entry = this.tryEntries[i];
-        if (entry.tryLoc <= this.prev &&
-            hasOwn.call(entry, "finallyLoc") &&
-            this.prev < entry.finallyLoc) {
+        if (entry.tryLoc <= this.prev && hasOwn.call(entry, "finallyLoc") && this.prev < entry.finallyLoc) {
           var finallyEntry = entry;
           break;
         }
       }
 
-      if (finallyEntry &&
-          (type === "break" ||
-           type === "continue") &&
-          finallyEntry.tryLoc <= arg &&
-          arg <= finallyEntry.finallyLoc) {
+      if (finallyEntry && (type === "break" || type === "continue") && finallyEntry.tryLoc <= arg && arg <= finallyEntry.finallyLoc) {
         // Ignore the finally entry if control is not jumping to a
         // location outside the try/catch block.
         finallyEntry = null;
@@ -27450,13 +25216,12 @@ exports.encode = exports.stringify = require('./encode');
       return this.complete(record);
     },
 
-    complete: function(record, afterLoc) {
+    complete: function complete(record, afterLoc) {
       if (record.type === "throw") {
         throw record.arg;
       }
 
-      if (record.type === "break" ||
-          record.type === "continue") {
+      if (record.type === "break" || record.type === "continue") {
         this.next = record.arg;
       } else if (record.type === "return") {
         this.rval = this.arg = record.arg;
@@ -27469,7 +25234,7 @@ exports.encode = exports.stringify = require('./encode');
       return ContinueSentinel;
     },
 
-    finish: function(finallyLoc) {
+    finish: function finish(finallyLoc) {
       for (var i = this.tryEntries.length - 1; i >= 0; --i) {
         var entry = this.tryEntries[i];
         if (entry.finallyLoc === finallyLoc) {
@@ -27480,7 +25245,7 @@ exports.encode = exports.stringify = require('./encode');
       }
     },
 
-    "catch": function(tryLoc) {
+    "catch": function _catch(tryLoc) {
       for (var i = this.tryEntries.length - 1; i >= 0; --i) {
         var entry = this.tryEntries[i];
         if (entry.tryLoc === tryLoc) {
@@ -27498,7 +25263,7 @@ exports.encode = exports.stringify = require('./encode');
       throw new Error("illegal catch attempt");
     },
 
-    delegateYield: function(iterable, resultName, nextLoc) {
+    delegateYield: function delegateYield(iterable, resultName, nextLoc) {
       this.delegate = {
         iterator: values(iterable),
         resultName: resultName,
@@ -27514,43 +25279,42 @@ exports.encode = exports.stringify = require('./encode');
       return ContinueSentinel;
     }
   };
-})(
-  // Among the various tricks for obtaining a reference to the global
-  // object, this seems to be the most reliable technique that does not
-  // use indirect eval (which violates Content Security Policy).
-  typeof global === "object" ? global :
-  typeof window === "object" ? window :
-  typeof self === "object" ? self : this
-);
+}(
+// Among the various tricks for obtaining a reference to the global
+// object, this seems to be the most reliable technique that does not
+// use indirect eval (which violates Content Security Policy).
+(typeof global === "undefined" ? "undefined" : _typeof(global)) === "object" ? global : (typeof window === "undefined" ? "undefined" : _typeof(window)) === "object" ? window : (typeof self === "undefined" ? "undefined" : _typeof(self)) === "object" ? self : undefined);
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{}],357:[function(require,module,exports){
+},{}],308:[function(require,module,exports){
 'use strict';
+
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
 (function (global) {
 
-    const STATE_PLAINTEXT = Symbol('plaintext');
-    const STATE_HTML      = Symbol('html');
-    const STATE_COMMENT   = Symbol('comment');
+    var STATE_PLAINTEXT = Symbol('plaintext');
+    var STATE_HTML = Symbol('html');
+    var STATE_COMMENT = Symbol('comment');
 
-    const ALLOWED_TAGS_REGEX  = /<(\w*)>/g;
-    const NORMALIZE_TAG_REGEX = /<\/?([^\s\/>]+)/;
+    var ALLOWED_TAGS_REGEX = /<(\w*)>/g;
+    var NORMALIZE_TAG_REGEX = /<\/?([^\s\/>]+)/;
 
     function striptags(html, allowable_tags, tag_replacement) {
-        html            = html || '';
-        allowable_tags  = allowable_tags || [];
+        html = html || '';
+        allowable_tags = allowable_tags || [];
         tag_replacement = tag_replacement || '';
 
-        let context = init_context(allowable_tags, tag_replacement);
+        var context = init_context(allowable_tags, tag_replacement);
 
         return striptags_internal(html, context);
     }
 
     function init_striptags_stream(allowable_tags, tag_replacement) {
-        allowable_tags  = allowable_tags || [];
+        allowable_tags = allowable_tags || [];
         tag_replacement = tag_replacement || '';
 
-        let context = init_context(allowable_tags, tag_replacement);
+        var context = init_context(allowable_tags, tag_replacement);
 
         return function striptags_stream(html) {
             return striptags_internal(html || '', context);
@@ -27563,33 +25327,33 @@ exports.encode = exports.stringify = require('./encode');
         allowable_tags = parse_allowable_tags(allowable_tags);
 
         return {
-            allowable_tags,
-            tag_replacement,
+            allowable_tags: allowable_tags,
+            tag_replacement: tag_replacement,
 
-            state         : STATE_PLAINTEXT,
-            tag_buffer    : '',
-            depth         : 0,
-            in_quote_char : ''
+            state: STATE_PLAINTEXT,
+            tag_buffer: '',
+            depth: 0,
+            in_quote_char: ''
         };
     }
 
     function striptags_internal(html, context) {
-        let allowable_tags  = context.allowable_tags;
-        let tag_replacement = context.tag_replacement;
+        var allowable_tags = context.allowable_tags;
+        var tag_replacement = context.tag_replacement;
 
-        let state         = context.state;
-        let tag_buffer    = context.tag_buffer;
-        let depth         = context.depth;
-        let in_quote_char = context.in_quote_char;
-        let output        = '';
+        var state = context.state;
+        var tag_buffer = context.tag_buffer;
+        var depth = context.depth;
+        var in_quote_char = context.in_quote_char;
+        var output = '';
 
-        for (let idx = 0, length = html.length; idx < length; idx++) {
-            let char = html[idx];
+        for (var idx = 0, length = html.length; idx < length; idx++) {
+            var char = html[idx];
 
             if (state === STATE_PLAINTEXT) {
                 switch (char) {
                     case '<':
-                        state       = STATE_HTML;
+                        state = STATE_HTML;
                         tag_buffer += char;
                         break;
 
@@ -27597,9 +25361,7 @@ exports.encode = exports.stringify = require('./encode');
                         output += char;
                         break;
                 }
-            }
-
-            else if (state === STATE_HTML) {
+            } else if (state === STATE_HTML) {
                 switch (char) {
                     case '<':
                         // ignore '<' if inside a quote
@@ -27626,8 +25388,8 @@ exports.encode = exports.stringify = require('./encode');
 
                         // this is closing the tag in tag_buffer
                         in_quote_char = '';
-                        state         = STATE_PLAINTEXT;
-                        tag_buffer   += '>';
+                        state = STATE_PLAINTEXT;
+                        tag_buffer += '>';
 
                         if (allowable_tags.has(normalize_tag(tag_buffer))) {
                             output += tag_buffer;
@@ -27662,8 +25424,8 @@ exports.encode = exports.stringify = require('./encode');
                     case ' ':
                     case '\n':
                         if (tag_buffer === '<') {
-                            state      = STATE_PLAINTEXT;
-                            output    += '< ';
+                            state = STATE_PLAINTEXT;
+                            output += '< ';
                             tag_buffer = '';
 
                             break;
@@ -27676,9 +25438,7 @@ exports.encode = exports.stringify = require('./encode');
                         tag_buffer += char;
                         break;
                 }
-            }
-
-            else if (state === STATE_COMMENT) {
+            } else if (state === STATE_COMMENT) {
                 switch (char) {
                     case '>':
                         if (tag_buffer.slice(-2) == '--') {
@@ -27697,26 +25457,24 @@ exports.encode = exports.stringify = require('./encode');
         }
 
         // save the context for future iterations
-        context.state         = state;
-        context.tag_buffer    = tag_buffer;
-        context.depth         = depth;
+        context.state = state;
+        context.tag_buffer = tag_buffer;
+        context.depth = depth;
         context.in_quote_char = in_quote_char;
 
         return output;
     }
 
     function parse_allowable_tags(allowable_tags) {
-        let tags_array = [];
+        var tags_array = [];
 
         if (typeof allowable_tags === 'string') {
-            let match;
+            var match = void 0;
 
             while ((match = ALLOWED_TAGS_REGEX.exec(allowable_tags)) !== null) {
                 tags_array.push(match[1]);
             }
-        }
-
-        else if (typeof allowable_tags[Symbol.iterator] === 'function') {
+        } else if (typeof allowable_tags[Symbol.iterator] === 'function') {
             tags_array = allowable_tags;
         }
 
@@ -27724,29 +25482,29 @@ exports.encode = exports.stringify = require('./encode');
     }
 
     function normalize_tag(tag_buffer) {
-        let match = NORMALIZE_TAG_REGEX.exec(tag_buffer);
+        var match = NORMALIZE_TAG_REGEX.exec(tag_buffer);
 
         return match ? match[1].toLowerCase() : null;
     }
 
     if (typeof define === 'function' && define.amd) {
         // AMD
-        define(function module_factory() { return striptags; });
-    }
-
-    else if (typeof module === 'object' && module.exports) {
+        define(function module_factory() {
+            return striptags;
+        });
+    } else if ((typeof module === 'undefined' ? 'undefined' : _typeof(module)) === 'object' && module.exports) {
         // Node
         module.exports = striptags;
-    }
-
-    else {
+    } else {
         // Browser
         global.striptags = striptags;
     }
-}(this));
+})(undefined);
 
-},{}],358:[function(require,module,exports){
+},{}],309:[function(require,module,exports){
 'use strict';
+
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
 var Response = require('http-response-object');
 var handleQs = require('then-request/lib/handle-qs.js');
@@ -27766,7 +25524,7 @@ function doRequest(method, url, options) {
   if (options === null || options === undefined) {
     options = {};
   }
-  if (typeof options !== 'object') {
+  if ((typeof options === 'undefined' ? 'undefined' : _typeof(options)) !== 'object') {
     throw new TypeError('Options must be an object (or null).');
   }
 
@@ -27776,7 +25534,7 @@ function doRequest(method, url, options) {
   // handle cross domain
 
   var match;
-  var crossDomain = !!((match = /^([\w-]+:)?\/\/([^\/]+)/.exec(url)) && (match[2] != location.host));
+  var crossDomain = !!((match = /^([\w-]+:)?\/\/([^\/]+)/.exec(url)) && match[2] != location.host);
   if (!crossDomain) options.headers['X-Requested-With'] = 'XMLHttpRequest';
 
   // handle query string
@@ -27800,7 +25558,6 @@ function doRequest(method, url, options) {
   // avoid sending empty string (#319)
   xhr.send(options.body ? options.body : null);
 
-
   var headers = {};
   xhr.getAllResponseHeaders().split('\r\n').forEach(function (header) {
     var h = header.split(':');
@@ -27811,7 +25568,7 @@ function doRequest(method, url, options) {
   return new Response(xhr.status, headers, xhr.responseText);
 }
 
-},{"http-response-object":347,"then-request/lib/handle-qs.js":359}],359:[function(require,module,exports){
+},{"http-response-object":298,"then-request/lib/handle-qs.js":310}],310:[function(require,module,exports){
 'use strict';
 
 var parse = require('qs').parse;
@@ -27835,181 +25592,258 @@ function handleQs(url, query) {
   return start + qs + end;
 }
 
-},{"qs":349}],360:[function(require,module,exports){
-const toDateObject = require('./wikidata_time_to_date_object')
+},{"qs":300}],311:[function(require,module,exports){
+'use strict';
 
-const helpers = {}
-helpers.isNumericId = (id) => /^[0-9]+$/.test(id)
-helpers.isEntityId = (id) => /^(Q|P)[0-9]+$/.test(id)
-helpers.isItemId = (id) => /^Q[0-9]+$/.test(id)
-helpers.isPropertyId = (id) => /^P[0-9]+$/.test(id)
+var toDateObject = require('./wikidata_time_to_date_object');
+
+var helpers = {};
+helpers.isNumericId = function (id) {
+  return (/^[0-9]+$/.test(id)
+  );
+};
+helpers.isEntityId = function (id) {
+  return (/^(Q|P)[0-9]+$/.test(id)
+  );
+};
+helpers.isItemId = function (id) {
+  return (/^Q[0-9]+$/.test(id)
+  );
+};
+helpers.isPropertyId = function (id) {
+  return (/^P[0-9]+$/.test(id)
+  );
+};
 
 helpers.getNumericId = function (id) {
-  if (!(helpers.isEntityId(id))) throw new Error(`invalid wikidata id: ${id}`)
-  return id.replace(/Q|P/, '')
-}
+  if (!helpers.isEntityId(id)) throw new Error('invalid wikidata id: ' + id);
+  return id.replace(/Q|P/, '');
+};
 
-helpers.wikidataTimeToDateObject = toDateObject
+helpers.wikidataTimeToDateObject = toDateObject;
 
 // Try to parse the date or return the input
-const bestEffort = (fn) => (value) => {
-  try {
-    return fn(value)
-  } catch (err) {
-    return value
-  }
-}
+var bestEffort = function bestEffort(fn) {
+  return function (value) {
+    try {
+      return fn(value);
+    } catch (err) {
+      return value;
+    }
+  };
+};
 
-const toEpochTime = (wikidataTime) => toDateObject(wikidataTime).getTime()
-const toISOString = (wikidataTime) => toDateObject(wikidataTime).toISOString()
+var toEpochTime = function toEpochTime(wikidataTime) {
+  return toDateObject(wikidataTime).getTime();
+};
+var toISOString = function toISOString(wikidataTime) {
+  return toDateObject(wikidataTime).toISOString();
+};
 
-helpers.wikidataTimeToEpochTime = bestEffort(toEpochTime)
-helpers.wikidataTimeToISOString = bestEffort(toISOString)
+helpers.wikidataTimeToEpochTime = bestEffort(toEpochTime);
+helpers.wikidataTimeToISOString = bestEffort(toISOString);
 
-module.exports = helpers
+module.exports = helpers;
 
-},{"./wikidata_time_to_date_object":366}],361:[function(require,module,exports){
-const { wikidataTimeToISOString, wikidataTimeToEpochTime } = require('./helpers')
+},{"./wikidata_time_to_date_object":317}],312:[function(require,module,exports){
+'use strict';
 
-const simple = (datavalue) => datavalue.value
-const monolingualtext = (datavalue) => datavalue.value.text
-const item = (datavalue, options) => prefixedId(datavalue, options.entityPrefix)
-const property = (datavalue, options) => {
-  return prefixedId(datavalue, options.propertyPrefix)
-}
-const prefixedId = function (datavalue, prefix) {
-  const { id } = datavalue.value
-  return typeof prefix === 'string' ? `${prefix}:${id}` : id
-}
-const quantity = (datavalue) => parseFloat(datavalue.value.amount)
-const coordinate = (datavalue) => {
-  return [ datavalue.value.latitude, datavalue.value.longitude ]
-}
-const time = (datavalue, options) => {
-  return getTimeConverter(options.timeConverter)(datavalue.value.time)
-}
-const getTimeConverter = (key = 'iso') => timeConverters[key]
-const identity = (arg) => arg
+var _require = require('./helpers'),
+    wikidataTimeToISOString = _require.wikidataTimeToISOString,
+    wikidataTimeToEpochTime = _require.wikidataTimeToEpochTime;
 
-const timeConverters = {
+var simple = function simple(datavalue) {
+  return datavalue.value;
+};
+var monolingualtext = function monolingualtext(datavalue) {
+  return datavalue.value.text;
+};
+var item = function item(datavalue, options) {
+  return prefixedId(datavalue, options.entityPrefix);
+};
+var property = function property(datavalue, options) {
+  return prefixedId(datavalue, options.propertyPrefix);
+};
+var prefixedId = function prefixedId(datavalue, prefix) {
+  var id = datavalue.value.id;
+
+  return typeof prefix === 'string' ? prefix + ':' + id : id;
+};
+var quantity = function quantity(datavalue) {
+  return parseFloat(datavalue.value.amount);
+};
+var coordinate = function coordinate(datavalue) {
+  return [datavalue.value.latitude, datavalue.value.longitude];
+};
+var time = function time(datavalue, options) {
+  return getTimeConverter(options.timeConverter)(datavalue.value.time);
+};
+var getTimeConverter = function getTimeConverter() {
+  var key = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 'iso';
+  return timeConverters[key];
+};
+var identity = function identity(arg) {
+  return arg;
+};
+
+var timeConverters = {
   iso: wikidataTimeToISOString,
   epoch: wikidataTimeToEpochTime,
   none: identity
-}
+};
 
-const claimParsers = {
+var claimParsers = {
   string: simple,
   commonsMedia: simple,
   url: simple,
   'external-id': simple,
   math: simple,
-  monolingualtext,
+  monolingualtext: monolingualtext,
   'wikibase-item': item,
   'wikibase-property': property,
-  time,
-  quantity,
+  time: time,
+  quantity: quantity,
   'globe-coordinate': coordinate
-}
+};
 
-module.exports = (datatype, datavalue, options) => {
-  return claimParsers[datatype](datavalue, options)
-}
+module.exports = function (datatype, datavalue, options) {
+  return claimParsers[datatype](datavalue, options);
+};
 
-},{"./helpers":360}],362:[function(require,module,exports){
-const simplifyEntity = require('./simplify_entity')
+},{"./helpers":311}],313:[function(require,module,exports){
+'use strict';
+
+var simplifyEntity = require('./simplify_entity');
 
 module.exports = {
   wd: {
-    entities: function (res) {
-      res = res.body || res
-      const { entities } = res
-      Object.keys(entities).forEach(entityId => {
-        entities[entityId] = simplifyEntity(entities[entityId])
-      })
-      return entities
+    entities: function entities(res) {
+      res = res.body || res;
+      var _res = res,
+          entities = _res.entities;
+
+      Object.keys(entities).forEach(function (entityId) {
+        entities[entityId] = simplifyEntity(entities[entityId]);
+      });
+      return entities;
     }
   }
-}
+};
 
-},{"./simplify_entity":364}],363:[function(require,module,exports){
-const parseClaim = require('./parse_claim')
+},{"./simplify_entity":315}],314:[function(require,module,exports){
+'use strict';
+
+var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; }();
+
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
+var parseClaim = require('./parse_claim');
 
 // Expects an entity 'claims' object
 // Ex: entity.claims
-const simplifyClaims = function (claims, ...options) {
-  const { propertyPrefix } = parseOptions(options)
-  const simpleClaims = {}
-  for (let id in claims) {
-    let propClaims = claims[id]
-    if (propertyPrefix) {
-      id = propertyPrefix + ':' + id
-    }
-    simpleClaims[id] = simplifyPropertyClaims(propClaims, ...options)
+var simplifyClaims = function simplifyClaims(claims) {
+  for (var _len = arguments.length, options = Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
+    options[_key - 1] = arguments[_key];
   }
-  return simpleClaims
-}
+
+  var _parseOptions = parseOptions(options),
+      propertyPrefix = _parseOptions.propertyPrefix;
+
+  var simpleClaims = {};
+  for (var id in claims) {
+    var propClaims = claims[id];
+    if (propertyPrefix) {
+      id = propertyPrefix + ':' + id;
+    }
+    simpleClaims[id] = simplifyPropertyClaims.apply(undefined, [propClaims].concat(options));
+  }
+  return simpleClaims;
+};
 
 // Expects the 'claims' array of a particular property
 // Ex: entity.claims.P369
-const simplifyPropertyClaims = function (propClaims, ...options) {
-  return propClaims
-  .map((claim) => simplifyClaim(claim, ...options))
-  .filter(nonNull)
-}
+var simplifyPropertyClaims = function simplifyPropertyClaims(propClaims) {
+  for (var _len2 = arguments.length, options = Array(_len2 > 1 ? _len2 - 1 : 0), _key2 = 1; _key2 < _len2; _key2++) {
+    options[_key2 - 1] = arguments[_key2];
+  }
 
-const nonNull = (obj) => obj != null
+  return propClaims.map(function (claim) {
+    return simplifyClaim.apply(undefined, [claim].concat(options));
+  }).filter(nonNull);
+};
+
+var nonNull = function nonNull(obj) {
+  return obj != null;
+};
 
 // Expects a single claim object
 // Ex: entity.claims.P369[0]
-const simplifyClaim = function (claim, ...options) {
-  options = parseOptions(options)
-  const { keepQualifiers } = options
-  // tries to replace wikidata deep claim object by a simple value
-  // e.g. a string, an entity Qid or an epoch time number
-  const { mainsnak, qualifiers } = claim
-
-  var datatype, datavalue, isQualifier
-  if (mainsnak) {
-    datatype = mainsnak.datatype
-    datavalue = mainsnak.datavalue
-    // Known case: snaktype set to `somevalue`
-    if (!datavalue) return null
-  } else {
-    // Should only happen in snaktype: `novalue` cases or alikes
-    if (!(claim && claim.datavalue)) return null
-    // Qualifiers have no mainsnak, and define datatype, datavalue on claim
-    datavalue = claim.datavalue
-    datatype = claim.datatype
-    isQualifier = true
+var simplifyClaim = function simplifyClaim(claim) {
+  for (var _len3 = arguments.length, options = Array(_len3 > 1 ? _len3 - 1 : 0), _key3 = 1; _key3 < _len3; _key3++) {
+    options[_key3 - 1] = arguments[_key3];
   }
 
-  const value = parseClaim(datatype, datavalue, options)
+  options = parseOptions(options);
+  var _options = options,
+      keepQualifiers = _options.keepQualifiers;
+  // tries to replace wikidata deep claim object by a simple value
+  // e.g. a string, an entity Qid or an epoch time number
+
+  var mainsnak = claim.mainsnak,
+      qualifiers = claim.qualifiers;
+
+
+  var datatype, datavalue, isQualifier;
+  if (mainsnak) {
+    datatype = mainsnak.datatype;
+    datavalue = mainsnak.datavalue;
+    // Known case: snaktype set to `somevalue`
+    if (!datavalue) return null;
+  } else {
+    // Should only happen in snaktype: `novalue` cases or alikes
+    if (!(claim && claim.datavalue)) return null;
+    // Qualifiers have no mainsnak, and define datatype, datavalue on claim
+    datavalue = claim.datavalue;
+    datatype = claim.datatype;
+    isQualifier = true;
+  }
+
+  var value = parseClaim(datatype, datavalue, options);
 
   // Qualifiers should not attempt to keep sub-qualifiers
-  if (!keepQualifiers || isQualifier) return value
+  if (!keepQualifiers || isQualifier) return value;
 
   // When keeping qualifiers, the value becomes an object
   // instead of a direct value
-  return { value, qualifiers: simplifyClaims(qualifiers, options) }
-}
+  return { value: value, qualifiers: simplifyClaims(qualifiers, options) };
+};
 
-const parseOptions = function (options) {
-  if (options == null) return {}
+var parseOptions = function parseOptions(options) {
+  if (options == null) return {};
 
-  if (options[0] && typeof options[0] === 'object') return options[0]
+  if (options[0] && _typeof(options[0]) === 'object') return options[0];
 
   // Legacy interface
-  var [ entityPrefix, propertyPrefix, keepQualifiers ] = options
-  return { entityPrefix, propertyPrefix, keepQualifiers }
-}
 
-module.exports = { simplifyClaims, simplifyPropertyClaims, simplifyClaim }
+  var _options2 = _slicedToArray(options, 3),
+      entityPrefix = _options2[0],
+      propertyPrefix = _options2[1],
+      keepQualifiers = _options2[2];
 
-},{"./parse_claim":361}],364:[function(require,module,exports){
-const { simplifyClaims } = require('./simplify_claims')
-const simplify = require('./simplify_text_attributes')
+  return { entityPrefix: entityPrefix, propertyPrefix: propertyPrefix, keepQualifiers: keepQualifiers };
+};
 
-module.exports = (entity) => {
+module.exports = { simplifyClaims: simplifyClaims, simplifyPropertyClaims: simplifyPropertyClaims, simplifyClaim: simplifyClaim };
+
+},{"./parse_claim":312}],315:[function(require,module,exports){
+'use strict';
+
+var _require = require('./simplify_claims'),
+    simplifyClaims = _require.simplifyClaims;
+
+var simplify = require('./simplify_text_attributes');
+
+module.exports = function (entity) {
   return {
     id: entity.id,
     type: entity.type,
@@ -28019,279 +25853,317 @@ module.exports = (entity) => {
     aliases: simplify.aliases(entity.aliases),
     claims: simplifyClaims(entity.claims),
     sitelinks: simplify.sitelinks(entity.sitelinks)
-  }
-}
+  };
+};
 
-},{"./simplify_claims":363,"./simplify_text_attributes":365}],365:[function(require,module,exports){
-const simplifyTextAttributes = (multivalue, attribute) => data => {
-  const simplifiedData = {}
-  Object.keys(data).forEach(lang => {
-    let obj = data[lang]
-    simplifiedData[lang] = multivalue ? obj.map(getValue) : obj[attribute]
-  })
-  return simplifiedData
-}
+},{"./simplify_claims":314,"./simplify_text_attributes":316}],316:[function(require,module,exports){
+'use strict';
 
-const getValue = (obj) => obj.value
+var simplifyTextAttributes = function simplifyTextAttributes(multivalue, attribute) {
+  return function (data) {
+    var simplifiedData = {};
+    Object.keys(data).forEach(function (lang) {
+      var obj = data[lang];
+      simplifiedData[lang] = multivalue ? obj.map(getValue) : obj[attribute];
+    });
+    return simplifiedData;
+  };
+};
 
-const labelsOrDescription = simplifyTextAttributes(false, 'value')
+var getValue = function getValue(obj) {
+  return obj.value;
+};
+
+var labelsOrDescription = simplifyTextAttributes(false, 'value');
 
 module.exports = {
   labels: labelsOrDescription,
   descriptions: labelsOrDescription,
   aliases: simplifyTextAttributes(true, 'value'),
   sitelinks: simplifyTextAttributes(false, 'title')
-}
+};
 
-},{}],366:[function(require,module,exports){
+},{}],317:[function(require,module,exports){
+'use strict';
+
 module.exports = function (wikidataTime) {
-  const sign = wikidataTime[0]
-  const rest = wikidataTime.slice(1)
-  const date = fullDateData(sign, rest)
+  var sign = wikidataTime[0];
+  var rest = wikidataTime.slice(1);
+  var date = fullDateData(sign, rest);
 
   if (date.toString() === 'Invalid Date') {
-    return parseInvalideDate(sign, rest)
+    return parseInvalideDate(sign, rest);
   } else {
-    return date
+    return date;
   }
-}
+};
 
-const fullDateData = function (sign, rest) {
-  return sign === '-' ? negativeDate(rest) : positiveDate(rest)
-}
+var fullDateData = function fullDateData(sign, rest) {
+  return sign === '-' ? negativeDate(rest) : positiveDate(rest);
+};
 
-const positiveDate = (rest) => new Date(rest)
-const negativeDate = function (rest) {
+var positiveDate = function positiveDate(rest) {
+  return new Date(rest);
+};
+var negativeDate = function negativeDate(rest) {
   // using ISO8601 expanded notation for negative years: adding 2 leading zeros
-  const date = `-00${rest}`
-  return new Date(date)
-}
+  var date = '-00' + rest;
+  return new Date(date);
+};
 
-const parseInvalideDate = function (sign, rest) {
+var parseInvalideDate = function parseInvalideDate(sign, rest) {
   // This is probably a date of unsuffisient precision
   // such as 1953-00-00T00:00:00Z, thus invalid
   // It should at least have a year, so let's fallback to ${year}-01-01
-  const year = rest.split('T')[0].split('-')[0]
-  return fullDateData(sign, year)
-}
+  var year = rest.split('T')[0].split('-')[0];
+  return fullDateData(sign, year);
+};
 
-},{}],367:[function(require,module,exports){
-const wdk = module.exports = {}
+},{}],318:[function(require,module,exports){
+'use strict';
 
-wdk.searchEntities = require('./queries/search_entities')
-wdk.getEntities = require('./queries/get_entities')
-wdk.getManyEntities = require('./queries/get_many_entities')
-wdk.getWikidataIdsFromSitelinks = require('./queries/get_wikidata_ids_from_sitelinks')
-wdk.sparqlQuery = require('./queries/sparql_query')
-wdk.getReverseClaims = require('./queries/get_reverse_claims')
-wdk.parse = require('./helpers/parse_responses')
+var wdk = module.exports = {};
 
-const claimsSimplifiers = require('./helpers/simplify_claims')
-const simplifySparqlResults = require('./queries/simplify_sparql_results')
+wdk.searchEntities = require('./queries/search_entities');
+wdk.getEntities = require('./queries/get_entities');
+wdk.getManyEntities = require('./queries/get_many_entities');
+wdk.getWikidataIdsFromSitelinks = require('./queries/get_wikidata_ids_from_sitelinks');
+wdk.sparqlQuery = require('./queries/sparql_query');
+wdk.getReverseClaims = require('./queries/get_reverse_claims');
+wdk.parse = require('./helpers/parse_responses');
 
-wdk.simplify = require('../lib/helpers/simplify_text_attributes')
-wdk.simplify.entity = require('../lib/helpers/simplify_entity')
-wdk.simplify.claim = claimsSimplifiers.simplifyClaim
-wdk.simplify.propertyClaims = claimsSimplifiers.simplifyPropertyClaims
-wdk.simplify.claims = claimsSimplifiers.simplifyClaims
-wdk.simplify.sparqlResults = simplifySparqlResults
+var claimsSimplifiers = require('./helpers/simplify_claims');
+var simplifySparqlResults = require('./queries/simplify_sparql_results');
+
+wdk.simplify = require('../lib/helpers/simplify_text_attributes');
+wdk.simplify.entity = require('../lib/helpers/simplify_entity');
+wdk.simplify.claim = claimsSimplifiers.simplifyClaim;
+wdk.simplify.propertyClaims = claimsSimplifiers.simplifyPropertyClaims;
+wdk.simplify.claims = claimsSimplifiers.simplifyClaims;
+wdk.simplify.sparqlResults = simplifySparqlResults;
 
 // Legacy
-wdk.simplifySparqlResults = require('./queries/simplify_sparql_results')
-Object.assign(wdk, claimsSimplifiers)
+wdk.simplifySparqlResults = require('./queries/simplify_sparql_results');
+Object.assign(wdk, claimsSimplifiers);
 
 // Aliases
-wdk.getWikidataIdsFromWikipediaTitles = wdk.getWikidataIdsFromSitelinks
+wdk.getWikidataIdsFromWikipediaTitles = wdk.getWikidataIdsFromSitelinks;
 
-Object.assign(wdk, require('./helpers/helpers'))
+Object.assign(wdk, require('./helpers/helpers'));
 
-},{"../lib/helpers/simplify_entity":364,"../lib/helpers/simplify_text_attributes":365,"./helpers/helpers":360,"./helpers/parse_responses":362,"./helpers/simplify_claims":363,"./queries/get_entities":368,"./queries/get_many_entities":369,"./queries/get_reverse_claims":370,"./queries/get_wikidata_ids_from_sitelinks":371,"./queries/search_entities":372,"./queries/simplify_sparql_results":373,"./queries/sparql_query":374}],368:[function(require,module,exports){
-const buildUrl = require('../utils/build_url')
-const { isPlainObject, forceArray, shortLang } = require('../utils/utils')
+},{"../lib/helpers/simplify_entity":315,"../lib/helpers/simplify_text_attributes":316,"./helpers/helpers":311,"./helpers/parse_responses":313,"./helpers/simplify_claims":314,"./queries/get_entities":319,"./queries/get_many_entities":320,"./queries/get_reverse_claims":321,"./queries/get_wikidata_ids_from_sitelinks":322,"./queries/search_entities":323,"./queries/simplify_sparql_results":324,"./queries/sparql_query":325}],319:[function(require,module,exports){
+'use strict';
+
+var buildUrl = require('../utils/build_url');
+
+var _require = require('../utils/utils'),
+    isPlainObject = _require.isPlainObject,
+    forceArray = _require.forceArray,
+    shortLang = _require.shortLang;
 
 module.exports = function (ids, languages, props, format) {
   // polymorphism: arguments can be passed as an object keys
   if (isPlainObject(ids)) {
-    ({ ids, languages, props, format } = ids)
+    var _ids = ids;
+    ids = _ids.ids;
+    languages = _ids.languages;
+    props = _ids.props;
+    format = _ids.format;
   }
 
-  format = format || 'json'
+  format = format || 'json';
 
   // ids can't be let empty
-  if (!(ids && ids.length > 0)) throw new Error('no id provided')
+  if (!(ids && ids.length > 0)) throw new Error('no id provided');
 
   // Allow to pass ids as a single string
-  ids = forceArray(ids)
+  ids = forceArray(ids);
 
   if (ids.length > 50) {
-    console.warn(`getEntities accepts 50 ids max to match Wikidata API limitations:
-      this request won't get all the desired entities.
-      You can use getManyEntities instead to generate several request urls
-      to work around this limitation`)
+    console.warn('getEntities accepts 50 ids max to match Wikidata API limitations:\n      this request won\'t get all the desired entities.\n      You can use getManyEntities instead to generate several request urls\n      to work around this limitation');
   }
 
   // Properties can be either one property as a string
   // or an array or properties;
   // either case me just want to deal with arrays
 
-  const query = {
+  var query = {
     action: 'wbgetentities',
     ids: ids.join('|'),
-    format
-  }
+    format: format
+  };
 
   if (languages) {
-    languages = forceArray(languages).map(shortLang)
-    query.languages = languages.join('|')
+    languages = forceArray(languages).map(shortLang);
+    query.languages = languages.join('|');
   }
 
-  if (props && props.length > 0) query.props = forceArray(props).join('|')
+  if (props && props.length > 0) query.props = forceArray(props).join('|');
 
-  return buildUrl(query)
-}
+  return buildUrl(query);
+};
 
-},{"../utils/build_url":375,"../utils/utils":377}],369:[function(require,module,exports){
-const getEntities = require('./get_entities')
-const { isPlainObject } = require('../utils/utils')
+},{"../utils/build_url":326,"../utils/utils":328}],320:[function(require,module,exports){
+'use strict';
+
+var _templateObject = _taggedTemplateLiteral(['getManyEntities expects an array of ids'], ['getManyEntities expects an array of ids']);
+
+function _taggedTemplateLiteral(strings, raw) { return Object.freeze(Object.defineProperties(strings, { raw: { value: Object.freeze(raw) } })); }
+
+var getEntities = require('./get_entities');
+
+var _require = require('../utils/utils'),
+    isPlainObject = _require.isPlainObject;
 
 module.exports = function (ids, languages, props, format) {
   // polymorphism: arguments can be passed as an object keys
   if (isPlainObject(ids)) {
     // Not using destructuring assigment there as it messes with both babel and standard
-    const params = ids
-    ids = params.ids
-    languages = params.languages
-    props = params.props
-    format = params.format
+    var params = ids;
+    ids = params.ids;
+    languages = params.languages;
+    props = params.props;
+    format = params.format;
   }
 
-  if (!(ids instanceof Array)) throw new Error `getManyEntities expects an array of ids`()
+  if (!(ids instanceof Array)) throw new (Error(_templateObject))();
 
-  return getIdsGroups(ids)
-  .map((idsGroup) => getEntities(idsGroup, languages, props, format))
-}
+  return getIdsGroups(ids).map(function (idsGroup) {
+    return getEntities(idsGroup, languages, props, format);
+  });
+};
 
-const getIdsGroups = function (ids) {
-  const groups = []
+var getIdsGroups = function getIdsGroups(ids) {
+  var groups = [];
   while (ids.length > 0) {
-    let group = ids.slice(0, 50)
-    ids = ids.slice(50)
-    groups.push(group)
+    var group = ids.slice(0, 50);
+    ids = ids.slice(50);
+    groups.push(group);
   }
-  return groups
-}
+  return groups;
+};
 
-},{"../utils/utils":377,"./get_entities":368}],370:[function(require,module,exports){
-const helpers = require('../helpers/helpers')
-const sparqlQuery = require('./sparql_query')
+},{"../utils/utils":328,"./get_entities":319}],321:[function(require,module,exports){
+'use strict';
 
-module.exports = function (property, value, options = {}) {
-  var { limit, caseInsensitive } = options
-  limit = limit || 1000
-  const sparqlFn = caseInsensitive ? caseInsensitiveValueQuery : directValueQuery
-  const valueString = getValueString(value)
-  const sparql = sparqlFn(property, valueString, limit)
-  return sparqlQuery(sparql)
-}
+var helpers = require('../helpers/helpers');
+var sparqlQuery = require('./sparql_query');
 
-function getValueString (value) {
+module.exports = function (property, value) {
+  var options = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
+  var limit = options.limit,
+      caseInsensitive = options.caseInsensitive;
+
+  limit = limit || 1000;
+  var sparqlFn = caseInsensitive ? caseInsensitiveValueQuery : directValueQuery;
+  var valueString = getValueString(value);
+  var sparql = sparqlFn(property, valueString, limit);
+  return sparqlQuery(sparql);
+};
+
+function getValueString(value) {
   if (helpers.isItemId(value)) {
-    value = `wd:${value}`
+    value = 'wd:' + value;
   } else if (typeof value === 'string') {
-    value = `'${value}'`
+    value = '\'' + value + '\'';
   }
-  return value
+  return value;
 }
 
-function directValueQuery (property, value, limit) {
-  return `SELECT ?subject WHERE {
-      ?subject wdt:${property} ${value} .
-    }
-    LIMIT ${limit}`
+function directValueQuery(property, value, limit) {
+  return 'SELECT ?subject WHERE {\n      ?subject wdt:' + property + ' ' + value + ' .\n    }\n    LIMIT ' + limit;
 }
 
 // Discussion on how to make this query optimal:
 // http://stackoverflow.com/q/43073266/3324977
-function caseInsensitiveValueQuery (property, value, limit) {
-  return `SELECT ?subject WHERE {
-    ?subject wdt:${property} ?value .
-    FILTER (lcase(?value) = ${value.toLowerCase()})
-  }
-  LIMIT ${limit}`
+function caseInsensitiveValueQuery(property, value, limit) {
+  return 'SELECT ?subject WHERE {\n    ?subject wdt:' + property + ' ?value .\n    FILTER (lcase(?value) = ' + value.toLowerCase() + ')\n  }\n  LIMIT ' + limit;
 }
 
-},{"../helpers/helpers":360,"./sparql_query":374}],371:[function(require,module,exports){
-const buildUrl = require('../utils/build_url')
-const { isPlainObject, forceArray, shortLang } = require('../utils/utils')
+},{"../helpers/helpers":311,"./sparql_query":325}],322:[function(require,module,exports){
+'use strict';
+
+var buildUrl = require('../utils/build_url');
+
+var _require = require('../utils/utils'),
+    isPlainObject = _require.isPlainObject,
+    forceArray = _require.forceArray,
+    shortLang = _require.shortLang;
 
 module.exports = function (titles, sites, languages, props, format) {
   // polymorphism: arguments can be passed as an object keys
   if (isPlainObject(titles)) {
     // Not using destructuring assigment there as it messes with both babel and standard
-    const params = titles
-    titles = params.titles
-    sites = params.sites
-    languages = params.languages
-    props = params.props
-    format = params.format
+    var params = titles;
+    titles = params.titles;
+    sites = params.sites;
+    languages = params.languages;
+    props = params.props;
+    format = params.format;
   }
 
-  format = format || 'json'
+  format = format || 'json';
 
   // titles cant be let empty
-  if (!(titles && titles.length > 0)) throw new Error('no title provided')
+  if (!(titles && titles.length > 0)) throw new Error('no title provided');
   // default to the English Wikipedia
-  if (!(sites && sites.length > 0)) sites = [ 'enwiki' ]
+  if (!(sites && sites.length > 0)) sites = ['enwiki'];
 
   // Properties can be either one property as a string
   // or an array or properties;
   // either case me just want to deal with arrays
-  titles = forceArray(titles)
-  sites = forceArray(sites).map(parseSite)
-  props = forceArray(props)
+  titles = forceArray(titles);
+  sites = forceArray(sites).map(parseSite);
+  props = forceArray(props);
 
-  const query = {
+  var query = {
     action: 'wbgetentities',
     titles: titles.join('|'),
     sites: sites.join('|'),
     format: format
-  }
+  };
 
   if (languages) {
-    languages = forceArray(languages).map(shortLang)
-    query.languages = languages.join('|')
+    languages = forceArray(languages).map(shortLang);
+    query.languages = languages.join('|');
   }
 
-  if (props && props.length > 0) query.props = props.join('|')
+  if (props && props.length > 0) query.props = props.join('|');
 
-  return buildUrl(query)
-}
+  return buildUrl(query);
+};
 
 // convert 2 letters language code to Wikipedia sitelinks code
-const parseSite = (site) => site.length === 2 ? `${site}wiki` : site
+var parseSite = function parseSite(site) {
+  return site.length === 2 ? site + 'wiki' : site;
+};
 
-},{"../utils/build_url":375,"../utils/utils":377}],372:[function(require,module,exports){
-const buildUrl = require('../utils/build_url')
-const { isPlainObject } = require('../utils/utils')
+},{"../utils/build_url":326,"../utils/utils":328}],323:[function(require,module,exports){
+'use strict';
+
+var buildUrl = require('../utils/build_url');
+
+var _require = require('../utils/utils'),
+    isPlainObject = _require.isPlainObject;
 
 module.exports = function (search, language, limit, format, uselang) {
   // polymorphism: arguments can be passed as an object keys
   if (isPlainObject(search)) {
     // Not using destructuring assigment there as it messes with both babel and standard
-    const params = search
-    search = params.search
-    language = params.language
-    limit = params.limit
-    format = params.format
-    uselang = params.uselang
+    var params = search;
+    search = params.search;
+    language = params.language;
+    limit = params.limit;
+    format = params.format;
+    uselang = params.uselang;
   }
 
-  if (!(search && search.length > 0)) throw new Error("search can't be empty")
+  if (!(search && search.length > 0)) throw new Error("search can't be empty");
 
-  language = language || 'en'
-  uselang = uselang || language
-  limit = limit || '20'
-  format = format || 'json'
+  language = language || 'en';
+  uselang = uselang || language;
+  limit = limit || '20';
+  format = format || 'json';
 
   return buildUrl({
     action: 'wbsearchentities',
@@ -28300,163 +26172,268 @@ module.exports = function (search, language, limit, format, uselang) {
     limit: limit,
     format: format,
     uselang: uselang
-  })
-}
+  });
+};
 
-},{"../utils/build_url":375,"../utils/utils":377}],373:[function(require,module,exports){
+},{"../utils/build_url":326,"../utils/utils":328}],324:[function(require,module,exports){
+'use strict';
+
+var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; }();
+
 module.exports = function (input) {
-  if (typeof input === 'string') input = JSON.parse(input)
+  if (typeof input === 'string') input = JSON.parse(input);
 
-  const { vars } = input.head
-  const results = input.results.bindings
+  var vars = input.head.vars;
+
+  var results = input.results.bindings;
 
   if (vars.length === 1) {
-    const varName = vars[0]
-    return results
-    .map((result) => parseValue(result[varName]))
+    var varName = vars[0];
+    return results.map(function (result) {
+      return parseValue(result[varName]);
+    })
     // filtering-out bnodes
-    .filter((result) => result != null)
+    .filter(function (result) {
+      return result != null;
+    });
   } else {
-    const [ varsWithLabel, varsWithout ] = identifyVars(vars)
-    return results.map(getSimplifiedResult(varsWithLabel, varsWithout))
+    var _identifyVars = identifyVars(vars),
+        _identifyVars2 = _slicedToArray(_identifyVars, 2),
+        varsWithLabel = _identifyVars2[0],
+        varsWithout = _identifyVars2[1];
+
+    return results.map(getSimplifiedResult(varsWithLabel, varsWithout));
   }
-}
+};
 
-const parseValue = function (valueObj) {
-  if (!(valueObj)) return
-  var { datatype } = valueObj
-  datatype = datatype && datatype.replace('http://www.w3.org/2001/XMLSchema#', '')
-  const parser = parsers[valueObj.type] || getDatatypesParsers(datatype)
-  return parser(valueObj)
-}
+var parseValue = function parseValue(valueObj) {
+  if (!valueObj) return;
+  var datatype = valueObj.datatype;
 
-const parsers = {
-  uri: (valueObj) => parseUri(valueObj.value),
+  datatype = datatype && datatype.replace('http://www.w3.org/2001/XMLSchema#', '');
+  var parser = parsers[valueObj.type] || getDatatypesParsers(datatype);
+  return parser(valueObj);
+};
+
+var parsers = {
+  uri: function uri(valueObj) {
+    return parseUri(valueObj.value);
+  },
   // blank nodes will be filtered-out in order to get things simple
-  bnode: () => null
-}
+  bnode: function bnode() {
+    return null;
+  }
+};
 
-const numberParser = (valueObj) => parseFloat(valueObj.value)
+var numberParser = function numberParser(valueObj) {
+  return parseFloat(valueObj.value);
+};
 
-const getDatatypesParsers = function (datatype) {
-  datatype = datatype && datatype.replace('http://www.w3.org/2001/XMLSchema#', '')
-  return datatypesParsers[datatype] || passValue
-}
+var getDatatypesParsers = function getDatatypesParsers(datatype) {
+  datatype = datatype && datatype.replace('http://www.w3.org/2001/XMLSchema#', '');
+  return datatypesParsers[datatype] || passValue;
+};
 
-const datatypesParsers = {
+var datatypesParsers = {
   decimal: numberParser,
   integer: numberParser,
   float: numberParser,
   double: numberParser,
-  boolean: (valueObj) => valueObj.value === 'true'
-}
+  boolean: function boolean(valueObj) {
+    return valueObj.value === 'true';
+  }
+};
 
 // return the raw value if the datatype is missing
-const passValue = (valueObj) => valueObj.value
+var passValue = function passValue(valueObj) {
+  return valueObj.value;
+};
 
-const parseUri = (uri) => uri.replace('http://www.wikidata.org/entity/', '')
+var parseUri = function parseUri(uri) {
+  return uri.replace('http://www.wikidata.org/entity/', '');
+};
 
-const identifyVars = function (vars) {
-  const varsWithLabel = []
-  const varsWithoutLabel = []
+var identifyVars = function identifyVars(vars) {
+  var varsWithLabel = [];
+  var varsWithoutLabel = [];
 
-  for (let varName of vars) {
-    if (vars.indexOf(`${varName}Label`) > -1) {
-      varsWithLabel.push(varName)
-    } else if (!(/^\w+Label$/.test(varName))) {
-      varsWithoutLabel.push(varName)
+  var _iteratorNormalCompletion = true;
+  var _didIteratorError = false;
+  var _iteratorError = undefined;
+
+  try {
+    for (var _iterator = vars[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+      var varName = _step.value;
+
+      if (vars.indexOf(varName + 'Label') > -1) {
+        varsWithLabel.push(varName);
+      } else if (!/^\w+Label$/.test(varName)) {
+        varsWithoutLabel.push(varName);
+      }
+      // letting aside `${varName}Label` vars
+      // as they will simply be embedded in varName results
     }
-    // letting aside `${varName}Label` vars
-    // as they will simply be embedded in varName results
-  }
-
-  return [ varsWithLabel, varsWithoutLabel ]
-}
-
-const getSimplifiedResult = function (varsWithLabel, varsWithout) {
-  return function (result) {
-    const simplifiedResult = {}
-    for (let varName of varsWithLabel) {
-      let value = parseValue(result[varName])
-      if (value != null) {
-        let label = result[`${varName}Label`] && result[`${varName}Label`].value
-        simplifiedResult[varName] = { value, label }
+  } catch (err) {
+    _didIteratorError = true;
+    _iteratorError = err;
+  } finally {
+    try {
+      if (!_iteratorNormalCompletion && _iterator.return) {
+        _iterator.return();
+      }
+    } finally {
+      if (_didIteratorError) {
+        throw _iteratorError;
       }
     }
-    for (let varName of varsWithout) {
-      simplifiedResult[varName] = parseValue(result[varName])
-    }
-    return simplifiedResult
   }
-}
 
-},{}],374:[function(require,module,exports){
-const { fixedEncodeURIComponent } = require('../utils/utils')
+  return [varsWithLabel, varsWithoutLabel];
+};
+
+var getSimplifiedResult = function getSimplifiedResult(varsWithLabel, varsWithout) {
+  return function (result) {
+    var simplifiedResult = {};
+    var _iteratorNormalCompletion2 = true;
+    var _didIteratorError2 = false;
+    var _iteratorError2 = undefined;
+
+    try {
+      for (var _iterator2 = varsWithLabel[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
+        var varName = _step2.value;
+
+        var value = parseValue(result[varName]);
+        if (value != null) {
+          var label = result[varName + 'Label'] && result[varName + 'Label'].value;
+          simplifiedResult[varName] = { value: value, label: label };
+        }
+      }
+    } catch (err) {
+      _didIteratorError2 = true;
+      _iteratorError2 = err;
+    } finally {
+      try {
+        if (!_iteratorNormalCompletion2 && _iterator2.return) {
+          _iterator2.return();
+        }
+      } finally {
+        if (_didIteratorError2) {
+          throw _iteratorError2;
+        }
+      }
+    }
+
+    var _iteratorNormalCompletion3 = true;
+    var _didIteratorError3 = false;
+    var _iteratorError3 = undefined;
+
+    try {
+      for (var _iterator3 = varsWithout[Symbol.iterator](), _step3; !(_iteratorNormalCompletion3 = (_step3 = _iterator3.next()).done); _iteratorNormalCompletion3 = true) {
+        var _varName = _step3.value;
+
+        simplifiedResult[_varName] = parseValue(result[_varName]);
+      }
+    } catch (err) {
+      _didIteratorError3 = true;
+      _iteratorError3 = err;
+    } finally {
+      try {
+        if (!_iteratorNormalCompletion3 && _iterator3.return) {
+          _iterator3.return();
+        }
+      } finally {
+        if (_didIteratorError3) {
+          throw _iteratorError3;
+        }
+      }
+    }
+
+    return simplifiedResult;
+  };
+};
+
+},{}],325:[function(require,module,exports){
+'use strict';
+
+var _require = require('../utils/utils'),
+    fixedEncodeURIComponent = _require.fixedEncodeURIComponent;
 
 module.exports = function (sparql) {
-  const query = fixedEncodeURIComponent(sparql)
-  return `https://query.wikidata.org/sparql?format=json&query=${query}`
-}
+  var query = fixedEncodeURIComponent(sparql);
+  return 'https://query.wikidata.org/sparql?format=json&query=' + query;
+};
 
-},{"../utils/utils":377}],375:[function(require,module,exports){
-const wikidataApiRoot = 'https://www.wikidata.org/w/api.php'
-const isBrowser = typeof location !== 'undefined' && typeof document !== 'undefined'
-const qs = isBrowser ? require('./querystring_lite') : require('querystring')
+},{"../utils/utils":328}],326:[function(require,module,exports){
+'use strict';
+
+var wikidataApiRoot = 'https://www.wikidata.org/w/api.php';
+var isBrowser = typeof location !== 'undefined' && typeof document !== 'undefined';
+var qs = isBrowser ? require('./querystring_lite') : require('querystring');
 
 module.exports = function (queryObj) {
   // Request CORS headers if the request is made from a browser
   // See https://www.wikidata.org/w/api.php ('origin' parameter)
-  if (isBrowser) queryObj.origin = '*'
-  return wikidataApiRoot + '?' + qs.stringify(queryObj)
-}
+  if (isBrowser) queryObj.origin = '*';
+  return wikidataApiRoot + '?' + qs.stringify(queryObj);
+};
 
-},{"./querystring_lite":376,"querystring":355}],376:[function(require,module,exports){
+},{"./querystring_lite":327,"querystring":306}],327:[function(require,module,exports){
+'use strict';
+
 module.exports = {
-  stringify: function (queryObj) {
-    var qstring = ''
-    for (let key in queryObj) {
-      let value = queryObj[key]
-      if (value) qstring += `&${key}=${value}`
+  stringify: function stringify(queryObj) {
+    var qstring = '';
+    for (var key in queryObj) {
+      var value = queryObj[key];
+      if (value) qstring += '&' + key + '=' + value;
     }
 
-    qstring = qstring.slice(1)
+    qstring = qstring.slice(1);
 
     // encodeURI should be accessible in a browser environment
     // otherwise if neither node.js querystring nor encodeURI
     // are accessible, just return the string
-    if (encodeURI) return encodeURI(qstring)
-    return qstring
+    if (encodeURI) return encodeURI(qstring);
+    return qstring;
   }
-}
+};
 
-},{}],377:[function(require,module,exports){
+},{}],328:[function(require,module,exports){
+'use strict';
+
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
 module.exports = {
   // Ex: keep only 'fr' in 'fr_FR'
-  shortLang: (language) => language.toLowerCase().split(/[^a-z]/)[0],
+  shortLang: function shortLang(language) {
+    return language.toLowerCase().split(/[^a-z]/)[0];
+  },
 
   // a polymorphism helper:
   // accept either a string or an array and return an array
-  forceArray: function (array) {
-    if (typeof array === 'string') array = [ array ]
-    return array || []
+  forceArray: function forceArray(array) {
+    if (typeof array === 'string') array = [array];
+    return array || [];
   },
 
   // simplistic implementation to filter-out arrays
-  isPlainObject: function (obj) {
-    if (!obj || typeof obj !== 'object' || obj instanceof Array) return false
-    return true
+  isPlainObject: function isPlainObject(obj) {
+    if (!obj || (typeof obj === 'undefined' ? 'undefined' : _typeof(obj)) !== 'object' || obj instanceof Array) return false;
+    return true;
   },
 
   // encodeURIComponent ignores !, ', (, ), and *
   // cf https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/encodeURIComponent#Description
-  fixedEncodeURIComponent: function (str) {
-    return encodeURIComponent(str).replace(/[!'()*]/g, encodeCharacter)
+  fixedEncodeURIComponent: function fixedEncodeURIComponent(str) {
+    return encodeURIComponent(str).replace(/[!'()*]/g, encodeCharacter);
   }
-}
+};
 
-const encodeCharacter = (c) => '%' + c.charCodeAt(0).toString(16)
+var encodeCharacter = function encodeCharacter(c) {
+  return '%' + c.charCodeAt(0).toString(16);
+};
 
-},{}],378:[function(require,module,exports){
+},{}],329:[function(require,module,exports){
 module.exports={
   "name": "citation-js",
   "version": "0.3.0-5",
@@ -28492,8 +26469,10 @@ module.exports={
   "devDependencies": {
     "babel-cli": "^6.24.1",
     "babel-core": "^6.24.1",
+    "babel-preset-env": "^1.4.0",
     "babel-preset-es2015": "^6.24.1",
     "babel-preset-stage-0": "^6.24.1",
+    "babelify": "^7.3.0",
     "brfs": "^1.4.3",
     "browserify": "^14.3.0",
     "jasmine-node": "^1.14.5",
@@ -28503,7 +26482,19 @@ module.exports={
   "babel": {
     "presets": [
       "es2015",
-      "stage-0"
+      "stage-0",
+      [
+        "env",
+        {
+          "targets": {
+            "browser": [
+              "> 1%",
+              "last 10 versions",
+              "ie > 7"
+            ]
+          }
+        }
+      ]
     ]
   },
   "scripts": {
@@ -28512,8 +26503,8 @@ module.exports={
     "babel": "babel src -d lib --copy-files",
     "dev:test": "npm run babel && npm run test",
     "dev:test-browser": "npm run babel && npm run test && npm run build && npm run build-test",
-    "build": "browserify -r ./lib/index.js:citation-js -o build/citation.js && cp build/citation.js docs/src/citation.js",
-    "build-test": "browserify -t brfs -e test/citation.spec.js -o build/test.citation.js && cp build/test.citation.js docs/src/test.citation.js",
+    "build":      "browserify -r ./src/index.js:citation-js -o build/citation.js      -g [ babelify --ignore=citeproc --presets [ env ] ]         && cp build/citation.js      docs/src/citation.js",
+    "build-test": "browserify -e test/citation.spec.js      -o build/test.citation.js -g [ babelify --ignore=citeproc --presets [ env ] ] -t brfs && cp build/test.citation.js docs/src/test.citation.js",
     "build-docs": "jsdoc ./src README.md -c docs/conf.json"
   },
   "author": "Lars Willighagen (https://larsgw.github.io)",
@@ -28529,7 +26520,3148 @@ module.exports={
   "homepage": "https://larsgw.github.com/citation.js/"
 }
 
-},{}],"citation-js":[function(require,module,exports){
+},{}],330:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _citeproc = require('citeproc');
+
+var _citeproc2 = _interopRequireDefault(_citeproc);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+/**
+ * Object containing CSL Engines
+ *
+ * @access protected
+ * @constant varCSLEngines
+ * @default
+ */
+var varCSLEngines = {};
+
+/**
+ * @callback Cite~retrieveItem
+ * @param {String} id - Citation id
+ * @return {CSL} CSL Citation object
+ */
+
+/**
+ * @callback Cite~retrieveLocale
+ * @param {String} lang - Language code
+ * @return {String} CSL Locale
+ */
+
+/**
+ * Retrieve CSL parsing engine
+ *
+ * @access protected
+ * @method fetchCSLEngine
+ *
+ * @param {String} style - CSL style id
+ * @param {String} lang - Language code
+ * @param {String} template - CSL XML template
+ * @param {Cite~retrieveItem} retrieveItem - Code to retreive item
+ * @param {Cite~retrieveLocale} retrieveLocale - Code to retreive locale
+ *
+ * @return {Object} CSL Engine
+ */
+var fetchCSLEngine = function fetchCSLEngine(style, lang, template, retrieveItem, retrieveLocale) {
+  var prop = style + '|' + lang;
+  var engine = void 0;
+
+  if (varCSLEngines.hasOwnProperty(prop)) {
+    engine = varCSLEngines[prop];
+    engine.sys.retrieveItem = retrieveItem;
+  } else {
+    engine = varCSLEngines[prop] = new _citeproc2.default.Engine({ retrieveLocale: retrieveLocale, retrieveItem: retrieveItem }, template, lang, true);
+  }
+
+  return engine;
+};
+
+exports.default = fetchCSLEngine;
+
+},{"citeproc":2}],331:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.item = exports.engine = exports.locale = exports.style = undefined;
+
+var _styles = require('./styles');
+
+var _styles2 = _interopRequireDefault(_styles);
+
+var _locales = require('./locales');
+
+var _locales2 = _interopRequireDefault(_locales);
+
+var _engines = require('./engines');
+
+var _engines2 = _interopRequireDefault(_engines);
+
+var _items = require('./items');
+
+var _items2 = _interopRequireDefault(_items);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+exports.style = _styles2.default;
+exports.locale = _locales2.default;
+exports.engine = _engines2.default;
+exports.item = _items2.default;
+
+},{"./engines":330,"./items":332,"./locales":333,"./styles":334}],332:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+/**
+ * Retrieve CSL item callback function
+ *
+ * @access protected
+ * @method fetchCSLItemCallback
+ *
+ * @param {CSL[]} data - CSL array
+ *
+ * @return {Cite~retrieveItem} Code to retreive item
+ */
+var fetchCSLItemCallback = function fetchCSLItemCallback(data) {
+  var _data = data;
+
+  return function (id) {
+    return _data.find(function (entry) {
+      return entry.id === id;
+    });
+  };
+};
+
+exports.default = fetchCSLItemCallback;
+
+},{}],333:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+/**
+ * Object containing CSL locales
+ *
+ * Locales from the [CSL Project](http://citationstyles.org/)<br>
+ * [REPO](https://github.com/citation-style-language/locales)
+ *
+ * Accesed 10/22/2016
+ *
+ * @access protected
+ * @constant varCSLLocales
+ * @default
+ */
+var varCSLLocales = {
+  'en-US': '<?xml version="1.0" encoding="utf-8"?><locale xmlns="http://purl.org/net/xbiblio/csl" version="1.0" xml:lang="en-US"><info><rights license="http://creativecommons.org/licenses/by-sa/3.0/">This work is licensed under a Creative Commons Attribution-ShareAlike 3.0 License</rights><updated>2015-10-10T23:31:02+00:00</updated></info><style-options punctuation-in-quote="true"/><date form="text"><date-part name="month" suffix=" "/><date-part name="day" suffix=", "/><date-part name="year"/></date><date form="numeric"><date-part name="month" form="numeric-leading-zeros" suffix="/"/><date-part name="day" form="numeric-leading-zeros" suffix="/"/><date-part name="year"/></date><terms><term name="accessed">accessed</term><term name="and">and</term><term name="and others">and others</term><term name="anonymous">anonymous</term><term name="anonymous" form="short">anon.</term><term name="at">at</term><term name="available at">available at</term><term name="by">by</term><term name="circa">circa</term><term name="circa" form="short">c.</term><term name="cited">cited</term><term name="edition"><single>edition</single><multiple>editions</multiple></term><term name="edition" form="short">ed.</term><term name="et-al">et al.</term><term name="forthcoming">forthcoming</term><term name="from">from</term><term name="ibid">ibid.</term><term name="in">in</term><term name="in press">in press</term><term name="internet">internet</term><term name="interview">interview</term><term name="letter">letter</term><term name="no date">no date</term><term name="no date" form="short">n.d.</term><term name="online">online</term><term name="presented at">presented at the</term><term name="reference"><single>reference</single><multiple>references</multiple></term><term name="reference" form="short"><single>ref.</single><multiple>refs.</multiple></term><term name="retrieved">retrieved</term><term name="scale">scale</term><term name="version">version</term><term name="ad">AD</term><term name="bc">BC</term><term name="open-quote">\u201C</term><term name="close-quote">\u201D</term><term name="open-inner-quote">\u2018</term><term name="close-inner-quote">\u2019</term><term name="page-range-delimiter">\u2013</term><term name="ordinal">th</term><term name="ordinal-01">st</term><term name="ordinal-02">nd</term><term name="ordinal-03">rd</term><term name="ordinal-11">th</term><term name="ordinal-12">th</term><term name="ordinal-13">th</term><term name="long-ordinal-01">first</term><term name="long-ordinal-02">second</term><term name="long-ordinal-03">third</term><term name="long-ordinal-04">fourth</term><term name="long-ordinal-05">fifth</term><term name="long-ordinal-06">sixth</term><term name="long-ordinal-07">seventh</term><term name="long-ordinal-08">eighth</term><term name="long-ordinal-09">ninth</term><term name="long-ordinal-10">tenth</term><term name="book"><single>book</single><multiple>books</multiple></term><term name="chapter"><single>chapter</single><multiple>chapters</multiple></term><term name="column"><single>column</single><multiple>columns</multiple></term><term name="figure"><single>figure</single><multiple>figures</multiple></term><term name="folio"><single>folio</single><multiple>folios</multiple></term><term name="issue"><single>number</single><multiple>numbers</multiple></term><term name="line"><single>line</single><multiple>lines</multiple></term><term name="note"><single>note</single><multiple>notes</multiple></term><term name="opus"><single>opus</single><multiple>opera</multiple></term><term name="page"><single>page</single><multiple>pages</multiple></term><term name="number-of-pages"><single>page</single><multiple>pages</multiple></term><term name="paragraph"><single>paragraph</single><multiple>paragraphs</multiple></term><term name="part"><single>part</single><multiple>parts</multiple></term><term name="section"><single>section</single><multiple>sections</multiple></term><term name="sub verbo"><single>sub verbo</single><multiple>sub verbis</multiple></term><term name="verse"><single>verse</single><multiple>verses</multiple>\n</term><term name="volume"><single>volume</single><multiple>volumes</multiple></term><term name="book" form="short"><single>bk.</single><multiple>bks.</multiple></term><term name="chapter" form="short"><single>chap.</single><multiple>chaps.</multiple></term><term name="column" form="short"><single>col.</single><multiple>cols.</multiple></term><term name="figure" form="short"><single>fig.</single><multiple>figs.</multiple></term><term name="folio" form="short"><single>fol.</single><multiple>fols.</multiple></term><term name="issue" form="short"><single>no.</single><multiple>nos.</multiple></term><term name="line" form="short"><single>l.</single><multiple>ll.</multiple></term><term name="note" form="short"><single>n.</single><multiple>nn.</multiple></term><term name="opus" form="short"><single>op.</single><multiple>opp.</multiple></term><term name="page" form="short"><single>p.</single><multiple>pp.</multiple></term><term name="number-of-pages" form="short"><single>p.</single><multiple>pp.</multiple></term><term name="paragraph" form="short"><single>para.</single><multiple>paras.</multiple></term><term name="part" form="short"><single>pt.</single><multiple>pts.</multiple></term><term name="section" form="short"><single>sec.</single><multiple>secs.</multiple></term><term name="sub verbo" form="short"><single>s.v.</single><multiple>s.vv.</multiple></term><term name="verse" form="short"><single>v.</single><multiple>vv.</multiple></term><term name="volume" form="short"><single>vol.</single><multiple>vols.</multiple></term><term name="paragraph" form="symbol"><single>\xB6</single><multiple>\xB6\xB6</multiple></term><term name="section" form="symbol"><single>\xA7</single><multiple>\xA7\xA7</multiple></term><term name="director"><single>director</single><multiple>directors</multiple></term><term name="editor"><single>editor</single><multiple>editors</multiple></term><term name="editorial-director"><single>editor</single><multiple>editors</multiple></term><term name="illustrator"><single>illustrator</single><multiple>illustrators</multiple></term><term name="translator"><single>translator</single><multiple>translators</multiple></term><term name="editortranslator"><single>editor &amp; translator</single><multiple>editors &amp; translators</multiple></term><term name="director" form="short"><single>dir.</single><multiple>dirs.</multiple></term><term name="editor" form="short"><single>ed.</single><multiple>eds.</multiple></term><term name="editorial-director" form="short"><single>ed.</single><multiple>eds.</multiple></term><term name="illustrator" form="short"><single>ill.</single><multiple>ills.</multiple></term><term name="translator" form="short"><single>tran.</single><multiple>trans.</multiple></term><term name="editortranslator" form="short"><single>ed. &amp; tran.</single><multiple>eds. &amp; trans.</multiple></term><term name="container-author" form="verb">by</term><term name="director" form="verb">directed by</term><term name="editor" form="verb">edited by</term><term name="editorial-director" form="verb">edited by</term><term name="illustrator" form="verb">illustrated by</term><term name="interviewer" form="verb">interview by</term><term name="recipient" form="verb">to</term><term name="reviewed-author" form="verb">by</term><term name="translator" form="verb">translated by</term><term name="editortranslator" form="verb">edited &amp; translated by</term><term name="director" form="verb-short">dir. by</term><term name="editor" form="verb-short">ed. by</term><term name="editorial-director" form="verb-short">ed. by</term><term name="illustrator" form="verb-short">illus. by</term><term name="translator" form="verb-short">trans. by</term><term name="editortranslator" form="verb-short">ed. &amp; trans. by</term><term name="month-01">January</term><term name="month-02">February</term><term name="month-03">March</term><term name="month-04">April</term><term name="month-05">May</term><term name="month-06">June</term><term name="month-07">July</term><term name="month-08">August</term><term name="month-09">September</term>\n<term name="month-10">October</term><term name="month-11">November</term><term name="month-12">December</term><term name="month-01" form="short">Jan.</term><term name="month-02" form="short">Feb.</term><term name="month-03" form="short">Mar.</term><term name="month-04" form="short">Apr.</term><term name="month-05" form="short">May</term><term name="month-06" form="short">Jun.</term><term name="month-07" form="short">Jul.</term><term name="month-08" form="short">Aug.</term><term name="month-09" form="short">Sep.</term><term name="month-10" form="short">Oct.</term><term name="month-11" form="short">Nov.</term><term name="month-12" form="short">Dec.</term><term name="season-01">Spring</term><term name="season-02">Summer</term><term name="season-03">Autumn</term><term name="season-04">Winter</term></terms></locale>',
+
+  'nl-NL': '<?xml version="1.0" encoding="utf-8"?><locale xmlns="http://purl.org/net/xbiblio/csl" version="1.0" xml:lang="nl-NL"><info><translator><name>Rintze Zelle</name><uri>http://twitter.com/rintzezelle</uri></translator><rights license="http://creativecommons.org/licenses/by-sa/3.0/">This work is licensed under a Creative Commons Attribution-ShareAlike 3.0 License</rights><updated>2012-07-04T23:31:02+00:00</updated></info><style-options punctuation-in-quote="false"/><date form="text"><date-part name="day" suffix=" "/><date-part name="month" suffix=" "/><date-part name="year"/></date><date form="numeric"><date-part name="day" suffix="-" range-delimiter="/"/><date-part name="month" form="numeric" suffix="-" range-delimiter="/"/><date-part name="year"/></date><terms><term name="accessed">geraadpleegd</term><term name="and">en</term><term name="and others">en anderen</term><term name="anonymous">anoniem</term><term name="anonymous" form="short">anon.</term><term name="at">bij</term><term name="available at">beschikbaar op</term><term name="by">door</term><term name="circa">circa</term><term name="circa" form="short">c.</term><term name="cited">geciteerd</term><term name="edition"><single>editie</single><multiple>edities</multiple></term><term name="edition" form="short">ed.</term><term name="et-al">e.a.</term><term name="forthcoming">in voorbereiding</term><term name="from">van</term><term name="ibid">ibid.</term><term name="in">in</term><term name="in press">in druk</term><term name="internet">internet</term><term name="interview">interview</term><term name="letter">brief</term><term name="no date">zonder datum</term><term name="no date" form="short">z.d.</term><term name="online">online</term><term name="presented at">gepresenteerd bij</term><term name="reference"><single>referentie</single><multiple>referenties</multiple></term><term name="reference" form="short"><single>ref.</single><multiple>refs.</multiple></term><term name="retrieved">geraadpleegd</term><term name="scale">schaal</term><term name="version">versie</term><term name="ad">AD</term><term name="bc">BC</term><term name="open-quote">\u201C</term><term name="close-quote">\u201D</term><term name="open-inner-quote">\u2018</term><term name="close-inner-quote">\u2019</term><term name="page-range-delimiter">\u2013</term><term name="ordinal">ste</term><term name="ordinal-00" match="whole-number">de</term><term name="ordinal-02" match="last-two-digits">de</term><term name="ordinal-03" match="last-two-digits">de</term><term name="ordinal-04" match="last-two-digits">de</term><term name="ordinal-05" match="last-two-digits">de</term><term name="ordinal-06" match="last-two-digits">de</term><term name="ordinal-07" match="last-two-digits">de</term><term name="ordinal-09" match="last-two-digits">de</term><term name="ordinal-10">de</term><term name="ordinal-11">de</term><term name="ordinal-12">de</term><term name="ordinal-13">de</term><term name="ordinal-14">de</term><term name="ordinal-15">de</term><term name="ordinal-16">de</term><term name="ordinal-17">de</term><term name="ordinal-18">de</term><term name="ordinal-19">de</term><term name="long-ordinal-01">eerste</term><term name="long-ordinal-02">tweede</term><term name="long-ordinal-03">derde</term><term name="long-ordinal-04">vierde</term><term name="long-ordinal-05">vijfde</term><term name="long-ordinal-06">zesde</term><term name="long-ordinal-07">zevende</term><term name="long-ordinal-08">achtste</term><term name="long-ordinal-09">negende</term><term name="long-ordinal-10">tiende</term><term name="book"><single>boek</single><multiple>boeken</multiple></term><term name="chapter"><single>hoofdstuk</single><multiple>hoofdstukken</multiple></term><term name="column"><single>column</single><multiple>columns</multiple></term><term name="figure"><single>figuur</single><multiple>figuren</multiple></term><term name="folio"><single>folio</single><multiple>folio\'s</multiple></term><term name="issue"><single>nummer</single><multiple>nummers</multiple></term><term name="line"><single>regel</single><multiple>regels</multiple>\n</term><term name="note"><single>aantekening</single><multiple>aantekeningen</multiple></term><term name="opus"><single>opus</single><multiple>opera</multiple></term><term name="page"><single>pagina</single><multiple>pagina\'s</multiple></term><term name="number-of-pages"><single>pagina</single><multiple>pagina\'s</multiple></term><term name="paragraph"><single>paragraaf</single><multiple>paragrafen</multiple></term><term name="part"><single>deel</single><multiple>delen</multiple></term><term name="section"><single>sectie</single><multiple>secties</multiple></term><term name="sub verbo"><single>sub verbo</single><multiple>sub verbis</multiple></term><term name="verse"><single>vers</single><multiple>versen</multiple></term><term name="volume"><single>volume</single><multiple>volumes</multiple></term><term name="book" form="short">bk.</term><term name="chapter" form="short">hfdst.</term><term name="column" form="short">col.</term><term name="figure" form="short">fig.</term><term name="folio" form="short">f.</term><term name="issue" form="short">nr.</term><term name="line" form="short">l.</term><term name="note" form="short">n.</term><term name="opus" form="short">op.</term><term name="page" form="short"><single>p.</single><multiple>pp.</multiple></term><term name="number-of-pages" form="short"><single>p.</single><multiple>pp.</multiple></term><term name="paragraph" form="short">par.</term><term name="part" form="short">deel</term><term name="section" form="short">sec.</term><term name="sub verbo" form="short"><single>s.v.</single><multiple>s.vv.</multiple></term><term name="verse" form="short"><single>v.</single><multiple>vv.</multiple></term><term name="volume" form="short"><single>vol.</single><multiple>vols.</multiple></term><term name="paragraph" form="symbol"><single>\xB6</single><multiple>\xB6\xB6</multiple></term><term name="section" form="symbol"><single>\xA7</single><multiple>\xA7\xA7</multiple></term><term name="director"><single>regisseur</single><multiple>regisseurs</multiple></term><term name="editor"><single>redacteur</single><multiple>redacteuren</multiple></term><term name="editorial-director"><single>redacteur</single><multiple>redacteuren</multiple></term><term name="illustrator"><single>illustrator</single><multiple>illustrators</multiple></term><term name="translator"><single>vertaler</single><multiple>vertalers</multiple></term><term name="editortranslator"><single>redacteur &amp; vertaler</single><multiple>redacteuren &amp; vertalers</multiple></term><term name="director" form="short"><single>reg.</single><multiple>reg.</multiple></term><term name="editor" form="short"><single>red.</single><multiple>red.</multiple></term><term name="editorial-director" form="short"><single>red.</single><multiple>red.</multiple></term><term name="illustrator" form="short"><single>ill.</single><multiple>ill.</multiple></term><term name="translator" form="short"><single>vert.</single><multiple>vert.</multiple></term><term name="editortranslator" form="short"><single>red. &amp; vert.</single><multiple>red. &amp; vert.</multiple></term><term name="container-author" form="verb">door</term><term name="director" form="verb">geregisseerd door</term><term name="editor" form="verb">bewerkt door</term><term name="editorial-director" form="verb">bewerkt door</term><term name="illustrator" form="verb">ge\xEFllustreerd door</term><term name="interviewer" form="verb">ge\xEFnterviewd door</term><term name="recipient" form="verb">ontvangen door</term><term name="reviewed-author" form="verb">door</term><term name="translator" form="verb">vertaald door</term><term name="editortranslator" form="verb">bewerkt &amp; vertaald door</term><term name="director" form="verb-short">geregisseerd door</term><term name="editor" form="verb-short">bewerkt door</term><term name="editorial-director" form="verb-short">bewerkt door</term><term name="illustrator" form="verb-short">ge\xEFllustreerd door</term><term name="translator" form="verb-short">vertaald door</term><term name="editortranslator" form="verb-short">bewerkt &amp; vertaald door</term>\n<term name="month-01">januari</term><term name="month-02">februari</term><term name="month-03">maart</term><term name="month-04">april</term><term name="month-05">mei</term><term name="month-06">juni</term><term name="month-07">juli</term><term name="month-08">augustus</term><term name="month-09">september</term><term name="month-10">oktober</term><term name="month-11">november</term><term name="month-12">december</term><term name="month-01" form="short">jan.</term><term name="month-02" form="short">feb.</term><term name="month-03" form="short">mrt.</term><term name="month-04" form="short">apr.</term><term name="month-05" form="short">mei</term><term name="month-06" form="short">jun.</term><term name="month-07" form="short">jul.</term><term name="month-08" form="short">aug.</term><term name="month-09" form="short">sep.</term><term name="month-10" form="short">okt.</term><term name="month-11" form="short">nov.</term><term name="month-12" form="short">dec.</term><term name="season-01">lente</term><term name="season-02">zomer</term><term name="season-03">herst</term><term name="season-04">winter</term></terms></locale>',
+
+  'fr-FR': '<?xml version="1.0" encoding="utf-8"?><locale xmlns="http://purl.org/net/xbiblio/csl" version="1.0" xml:lang="fr-FR"><info><translator><name>Gr\xE9goire Colly</name></translator><rights license="http://creativecommons.org/licenses/by-sa/3.0/">This work is licensed under a Creative Commons Attribution-ShareAlike 3.0 License</rights><updated>2012-07-04T23:31:02+00:00</updated></info><style-options punctuation-in-quote="false" limit-day-ordinals-to-day-1="true"/><date form="text"><date-part name="day" suffix=" "/><date-part name="month" suffix=" "/><date-part name="year"/></date><date form="numeric"><date-part name="day" form="numeric-leading-zeros" suffix="/"/><date-part name="month" form="numeric-leading-zeros" suffix="/"/><date-part name="year"/></date><terms><term name="accessed">consult\xE9 le</term><term name="and">et</term><term name="and others">et autres</term><term name="anonymous">anonyme</term><term name="anonymous" form="short">anon.</term><term name="at">sur</term><term name="available at">disponible sur</term><term name="by">par</term><term name="circa">vers</term><term name="circa" form="short">v.</term><term name="cited">cit\xE9</term><term name="edition" gender="feminine"><single>\xE9dition</single><multiple>\xE9ditions</multiple></term><term name="edition" form="short">\xE9d.</term><term name="et-al">et al.</term><term name="forthcoming">\xE0 para\xEEtre</term><term name="from">\xE0 l\'adresse</term><term name="ibid">ibid.</term><term name="in">in</term><term name="in press">sous presse</term><term name="internet">Internet</term><term name="interview">entretien</term><term name="letter">lettre</term><term name="no date">sans date</term><term name="no date" form="short">s.&#160;d.</term><term name="online">en ligne</term><term name="presented at">pr\xE9sent\xE9 \xE0</term><term name="reference"><single>r\xE9f\xE9rence</single><multiple>r\xE9f\xE9rences</multiple></term><term name="reference" form="short"><single>r\xE9f.</single><multiple>r\xE9f.</multiple></term><term name="retrieved">consult\xE9</term><term name="scale">\xE9chelle</term><term name="version">version</term><term name="ad">apr. J.-C.</term><term name="bc">av. J.-C.</term><term name="open-quote">\xAB&#160;</term><term name="close-quote">&#160;\xBB</term><term name="open-inner-quote">\u201C</term><term name="close-inner-quote">\u201D</term><term name="page-range-delimiter">&#8209;</term><term name="ordinal">\u1D49</term><term name="ordinal-01" gender-form="feminine" match="whole-number">\u02B3\u1D49</term><term name="ordinal-01" gender-form="masculine" match="whole-number">\u1D49\u02B3</term><term name="long-ordinal-01">premier</term><term name="long-ordinal-02">deuxi\xE8me</term><term name="long-ordinal-03">troisi\xE8me</term><term name="long-ordinal-04">quatri\xE8me</term><term name="long-ordinal-05">cinqui\xE8me</term><term name="long-ordinal-06">sixi\xE8me</term><term name="long-ordinal-07">septi\xE8me</term><term name="long-ordinal-08">huiti\xE8me</term><term name="long-ordinal-09">neuvi\xE8me</term><term name="long-ordinal-10">dixi\xE8me</term><term name="book"><single>livre</single><multiple>livres</multiple></term><term name="chapter"><single>chapitre</single><multiple>chapitres</multiple></term><term name="column"><single>colonne</single><multiple>colonnes</multiple></term><term name="figure"><single>figure</single><multiple>figures</multiple></term><term name="folio"><single>folio</single><multiple>folios</multiple></term><term name="issue" gender="masculine"><single>num\xE9ro</single><multiple>num\xE9ros</multiple></term><term name="line"><single>ligne</single><multiple>lignes</multiple></term><term name="note"><single>note</single><multiple>notes</multiple></term><term name="opus"><single>opus</single><multiple>opus</multiple></term><term name="page"><single>page</single><multiple>pages</multiple></term><term name="number-of-pages"><single>page</single><multiple>pages</multiple></term><term name="paragraph"><single>paragraphe</single><multiple>paragraphes</multiple></term><term name="part"><single>partie</single><multiple>parties</multiple></term><term name="section"><single>section</single><multiple>sections</multiple>\n</term><term name="sub verbo"><single>sub verbo</single><multiple>sub verbis</multiple></term><term name="verse"><single>verset</single><multiple>versets</multiple></term><term name="volume" gender="masculine"><single>volume</single><multiple>volumes</multiple></term><term name="book" form="short">liv.</term><term name="chapter" form="short">chap.</term><term name="column" form="short">col.</term><term name="figure" form="short">fig.</term><term name="folio" form="short"><single>f\u1D52</single><multiple>f\u1D52\u02E2</multiple></term><term name="issue" form="short"><single>n\u1D52</single><multiple>n\u1D52\u02E2</multiple></term><term name="line" form="short">l.</term><term name="note" form="short">n.</term><term name="opus" form="short">op.</term><term name="page" form="short"><single>p.</single><multiple>p.</multiple></term><term name="number-of-pages" form="short"><single>p.</single><multiple>p.</multiple></term><term name="paragraph" form="short">paragr.</term><term name="part" form="short">part.</term><term name="section" form="short">sect.</term><term name="sub verbo" form="short"><single>s.&#160;v.</single><multiple>s.&#160;vv.</multiple></term><term name="verse" form="short"><single>v.</single><multiple>v.</multiple></term><term name="volume" form="short"><single>vol.</single><multiple>vol.</multiple></term><term name="paragraph" form="symbol"><single>\xA7</single><multiple>\xA7</multiple></term><term name="section" form="symbol"><single>\xA7</single><multiple>\xA7</multiple></term><term name="director"><single>r\xE9alisateur</single><multiple>r\xE9alisateurs</multiple></term><term name="editor"><single>\xE9diteur</single><multiple>\xE9diteurs</multiple></term><term name="editorial-director"><single>directeur</single><multiple>directeurs</multiple></term><term name="illustrator"><single>illustrateur</single><multiple>illustrateurs</multiple></term><term name="translator"><single>traducteur</single><multiple>traducteurs</multiple></term><term name="editortranslator"><single>\xE9diteur et traducteur</single><multiple>\xE9diteurs et traducteurs</multiple></term><term name="director" form="short"><single>r\xE9al.</single><multiple>r\xE9al.</multiple></term><term name="editor" form="short"><single>\xE9d.</single><multiple>\xE9d.</multiple></term><term name="editorial-director" form="short"><single>dir.</single><multiple>dir.</multiple></term><term name="illustrator" form="short"><single>ill.</single><multiple>ill.</multiple></term><term name="translator" form="short"><single>trad.</single><multiple>trad.</multiple></term><term name="editortranslator" form="short"><single>\xE9d. et trad.</single><multiple>\xE9d. et trad.</multiple></term><term name="container-author" form="verb">par</term><term name="director" form="verb">r\xE9alis\xE9 par</term><term name="editor" form="verb">\xE9dit\xE9 par</term><term name="editorial-director" form="verb">sous la direction de</term><term name="illustrator" form="verb">illustr\xE9 par</term><term name="interviewer" form="verb">entretien r\xE9alis\xE9 par</term><term name="recipient" form="verb">\xE0</term><term name="reviewed-author" form="verb">par</term><term name="translator" form="verb">traduit par</term><term name="editortranslator" form="verb">\xE9dit\xE9 et traduit par</term><term name="director" form="verb-short">r\xE9al. par</term><term name="editor" form="verb-short">\xE9d. par</term><term name="editorial-director" form="verb-short">ss la dir. de</term><term name="illustrator" form="verb-short">ill. par</term><term name="translator" form="verb-short">trad. par</term><term name="editortranslator" form="verb-short">\xE9d. et trad. par</term><term name="month-01" gender="masculine">janvier</term><term name="month-02" gender="masculine">f\xE9vrier</term><term name="month-03" gender="masculine">mars</term><term name="month-04" gender="masculine">avril</term><term name="month-05" gender="masculine">mai</term><term name="month-06" gender="masculine">juin</term><term name="month-07" gender="masculine">juillet</term><term name="month-08" gender="masculine">ao\xFBt</term><term name="month-09" gender="masculine">septembre</term><term name="month-10" gender="masculine">\noctobre</term><term name="month-11" gender="masculine">novembre</term><term name="month-12" gender="masculine">d\xE9cembre</term><term name="month-01" form="short">janv.</term><term name="month-02" form="short">f\xE9vr.</term><term name="month-03" form="short">mars</term><term name="month-04" form="short">avr.</term><term name="month-05" form="short">mai</term><term name="month-06" form="short">juin</term><term name="month-07" form="short">juill.</term><term name="month-08" form="short">ao\xFBt</term><term name="month-09" form="short">sept.</term><term name="month-10" form="short">oct.</term><term name="month-11" form="short">nov.</term><term name="month-12" form="short">d\xE9c.</term><term name="season-01">printemps</term><term name="season-02">\xE9t\xE9</term><term name="season-03">automne</term><term name="season-04">hiver</term></terms></locale>',
+
+  'de-DE': '<?xml version="1.0" encoding="utf-8"?><locale xmlns="http://purl.org/net/xbiblio/csl" version="1.0" xml:lang="de-DE"><info><rights license="http://creativecommons.org/licenses/by-sa/3.0/">This work is licensed under a Creative Commons Attribution-ShareAlike 3.0 License</rights><updated>2012-07-04T23:31:02+00:00</updated></info><style-options punctuation-in-quote="false"/><date form="text"><date-part name="day" form="ordinal" suffix=" "/><date-part name="month" suffix=" "/><date-part name="year"/></date><date form="numeric"><date-part name="day" form="numeric-leading-zeros" suffix="."/><date-part name="month" form="numeric-leading-zeros" suffix="."/><date-part name="year"/></date><terms><term name="accessed">zugegriffen</term><term name="and">und</term><term name="and others">und andere</term><term name="anonymous">ohne Autor</term><term name="anonymous" form="short">o.&#160;A.</term><term name="at">auf</term><term name="available at">verf\xFCgbar unter</term><term name="by">von</term><term name="circa">circa</term><term name="circa" form="short">ca.</term><term name="cited">zitiert</term><term name="edition"><single>Auflage</single><multiple>Auflagen</multiple></term><term name="edition" form="short">Aufl.</term><term name="et-al">u.&#160;a.</term><term name="forthcoming">i.&#160;E.</term><term name="from">von</term><term name="ibid">ebd.</term><term name="in">in</term><term name="in press">im Druck</term><term name="internet">Internet</term><term name="interview">Interview</term><term name="letter">Brief</term><term name="no date">ohne Datum</term><term name="no date" form="short">o.&#160;J.</term><term name="online">online</term><term name="presented at">gehalten auf der</term><term name="reference"><single>Referenz</single><multiple>Referenzen</multiple></term><term name="reference" form="short"><single>Ref.</single><multiple>Ref.</multiple></term><term name="retrieved">abgerufen</term><term name="scale">Ma\xDFstab</term><term name="version">Version</term><term name="ad">n.&#160;Chr.</term><term name="bc">v.&#160;Chr.</term><term name="open-quote">\u201E</term><term name="close-quote">\u201C</term><term name="open-inner-quote">\u201A</term><term name="close-inner-quote">\u2018</term><term name="page-range-delimiter">\u2013</term><term name="ordinal">.</term><term name="long-ordinal-01">erster</term><term name="long-ordinal-02">zweiter</term><term name="long-ordinal-03">dritter</term><term name="long-ordinal-04">vierter</term><term name="long-ordinal-05">f\xFCnfter</term><term name="long-ordinal-06">sechster</term><term name="long-ordinal-07">siebter</term><term name="long-ordinal-08">achter</term><term name="long-ordinal-09">neunter</term><term name="long-ordinal-10">zehnter</term><term name="book"><single>Buch</single><multiple>B\xFCcher</multiple></term><term name="chapter"><single>Kapitel</single><multiple>Kapitel</multiple></term><term name="column"><single>Spalte</single><multiple>Spalten</multiple></term><term name="figure"><single>Abbildung</single><multiple>Abbildungen</multiple></term><term name="folio"><single>Blatt</single><multiple>Bl\xE4tter</multiple></term><term name="issue"><single>Nummer</single><multiple>Nummern</multiple></term><term name="line"><single>Zeile</single><multiple>Zeilen</multiple></term><term name="note"><single>Note</single><multiple>Noten</multiple></term><term name="opus"><single>Opus</single><multiple>Opera</multiple></term><term name="page"><single>Seite</single><multiple>Seiten</multiple></term><term name="number-of-pages"><single>Seite</single><multiple>Seiten</multiple></term><term name="paragraph"><single>Absatz</single><multiple>Abs\xE4tze</multiple></term><term name="part"><single>Teil</single><multiple>Teile</multiple></term><term name="section"><single>Abschnitt</single><multiple>Abschnitte</multiple></term><term name="sub verbo"><single>sub verbo</single><multiple>sub verbis</multiple></term><term name="verse"><single>Vers</single><multiple>Verse</multiple></term><term name="volume"><single>Band</single><multiple>B\xE4nde</multiple></term><term name="book" form="short">B.</term>\n<term name="chapter" form="short">Kap.</term><term name="column" form="short">Sp.</term><term name="figure" form="short">Abb.</term><term name="folio" form="short">Fol.</term><term name="issue" form="short">Nr.</term><term name="line" form="short">Z.</term><term name="note" form="short">N.</term><term name="opus" form="short">op.</term><term name="page" form="short"><single>S.</single><multiple>S.</multiple></term><term name="number-of-pages" form="short"><single>S.</single><multiple>S.</multiple></term><term name="paragraph" form="short">Abs.</term><term name="part" form="short">Teil</term><term name="section" form="short">Abschn.</term><term name="sub verbo" form="short"><single>s.&#160;v.</single><multiple>s.&#160;vv.</multiple></term><term name="verse" form="short"><single>V.</single><multiple>V.</multiple></term><term name="volume" form="short"><single>Bd.</single><multiple>Bde.</multiple></term><term name="paragraph" form="symbol"><single>\xB6</single><multiple>\xB6\xB6</multiple></term><term name="section" form="symbol"><single>\xA7</single><multiple>\xA7\xA7</multiple></term><term name="director"><single>Regisseur</single><multiple>Regisseure</multiple></term><term name="editor"><single>Herausgeber</single><multiple>Herausgeber</multiple></term><term name="collection-editor"><single>Reihenherausgeber</single><multiple>Reihenherausgeber</multiple></term><term name="editorial-director"><single>Herausgeber</single><multiple>Herausgeber</multiple></term><term name="illustrator"><single>Illustrator</single><multiple>Illustratoren</multiple></term><term name="translator"><single>\xDCbersetzer</single><multiple>\xDCbersetzer</multiple></term><term name="editortranslator"><single>Herausgeber&#160;&amp; \xDCbersetzer</single><multiple>Herausgeber&#160;&amp; \xDCbersetzer</multiple></term><term name="director" form="short"><single>Reg.</single><multiple>Reg.</multiple></term><term name="editor" form="short"><single>Hrsg.</single><multiple>Hrsg.</multiple></term><term name="collection-editor" form="short"><single>Hrsg.</single><multiple>Hrsg.</multiple></term><term name="editorial-director" form="short"><single>Hrsg.</single><multiple>Hrsg.</multiple></term><term name="illustrator" form="short"><single>Ill.</single><multiple>Ill.</multiple></term><term name="translator" form="short"><single>\xDCbers.</single><multiple>\xDCbers.</multiple></term><term name="editortranslator" form="short"><single>Hrsg.&#160;&amp; \xDCbers.</single><multiple>Hrsg.&#160;&amp; \xDCbers</multiple></term><term name="container-author" form="verb">von</term><term name="director" form="verb">Regie von</term><term name="editor" form="verb">herausgegeben von</term><term name="collection-editor" form="verb">herausgegeben von</term><term name="editorial-director" form="verb">herausgegeben von</term><term name="illustrator" form="verb">illustriert von</term><term name="interviewer" form="verb">interviewt von</term><term name="recipient" form="verb">an</term><term name="reviewed-author" form="verb">von</term><term name="translator" form="verb">\xFCbersetzt von</term><term name="editortranslator" form="verb">herausgegeben und \xFCbersetzt von</term><term name="director" form="verb-short">Reg.</term><term name="editor" form="verb-short">hg. von</term><term name="collection-editor" form="verb-short">hg. von</term><term name="editorial-director" form="verb-short">hg. von</term><term name="illustrator" form="verb-short">illus. von</term><term name="translator" form="verb-short">\xFCbers. von</term><term name="editortranslator" form="verb-short">hg.&#160;&amp; \xFCbers. von</term><term name="month-01">Januar</term><term name="month-02">Februar</term><term name="month-03">M\xE4rz</term><term name="month-04">April</term><term name="month-05">Mai</term><term name="month-06">Juni</term><term name="month-07">Juli</term><term name="month-08">August</term><term name="month-09">September</term><term name="month-10">Oktober</term><term name="month-11">November</term><term name="month-12">Dezember</term><term name="month-01" form="short">Jan.</term><term name="month-02" form="short">Feb.</term>\n<term name="month-03" form="short">M\xE4rz</term><term name="month-04" form="short">Apr.</term><term name="month-05" form="short">Mai</term><term name="month-06" form="short">Juni</term><term name="month-07" form="short">Juli</term><term name="month-08" form="short">Aug.</term><term name="month-09" form="short">Sep.</term><term name="month-10" form="short">Okt.</term><term name="month-11" form="short">Nov.</term><term name="month-12" form="short">Dez.</term><term name="season-01">Fr\xFChjahr</term><term name="season-02">Sommer</term><term name="season-03">Herbst</term><term name="season-04">Winter</term></terms></locale>',
+
+  'es-ES': '<?xml version="1.0" encoding="utf-8"?><locale xmlns="http://purl.org/net/xbiblio/csl" version="1.0" xml:lang="es-ES"><info><rights license="http://creativecommons.org/licenses/by-sa/3.0/">This work is licensed under a Creative Commons Attribution-ShareAlike 3.0 License</rights><updated>2012-07-04T23:31:02+00:00</updated></info><style-options punctuation-in-quote="false"/><date form="text"><date-part name="day" suffix=" de "/><date-part name="month" suffix=" de "/><date-part name="year"/></date><date form="numeric"><date-part name="day" form="numeric-leading-zeros" suffix="/"/><date-part name="month" form="numeric-leading-zeros" suffix="/"/><date-part name="year"/></date><terms><term name="accessed">accedido</term><term name="and">y</term><term name="and others">y otros</term><term name="anonymous">an\xF3nimo</term><term name="anonymous" form="short">an\xF3n.</term><term name="at">en</term><term name="available at">disponible en</term><term name="by">de</term><term name="circa">circa</term><term name="circa" form="short">c.</term><term name="cited">citado</term><term name="edition"><single>edici\xF3n</single><multiple>ediciones</multiple></term><term name="edition" form="short">ed.</term><term name="et-al">et&#160;al.</term><term name="forthcoming">previsto</term><term name="from">a partir de</term><term name="ibid">ibid.</term><term name="in">en</term><term name="in press">en imprenta</term><term name="internet">internet</term><term name="interview">entrevista</term><term name="letter">carta</term><term name="no date">sin fecha</term><term name="no date" form="short">s.&#160;f.</term><term name="online">en l\xEDnea</term><term name="presented at">presentado en</term><term name="reference"><single>referencia</single><multiple>referencias</multiple></term><term name="reference" form="short"><single>ref.</single><multiple>refs.</multiple></term><term name="retrieved">recuperado</term><term name="scale">escala</term><term name="version">versi\xF3n</term><term name="ad">d.&#160;C.</term><term name="bc">a.&#160;C.</term><term name="open-quote">\xAB</term><term name="close-quote">\xBB</term><term name="open-inner-quote">\u201C</term><term name="close-inner-quote">\u201D</term><term name="page-range-delimiter">-</term><term name="ordinal">.\xAA</term><term name="long-ordinal-01">primera</term><term name="long-ordinal-02">segunda</term><term name="long-ordinal-03">tercera</term><term name="long-ordinal-04">cuarta</term><term name="long-ordinal-05">quinta</term><term name="long-ordinal-06">sexta</term><term name="long-ordinal-07">s\xE9ptima</term><term name="long-ordinal-08">octava</term><term name="long-ordinal-09">novena</term><term name="long-ordinal-10">d\xE9cima</term><term name="book"><single>libro</single><multiple>libros</multiple></term><term name="chapter"><single>cap\xEDtulo</single><multiple>cap\xEDtulos</multiple></term><term name="column"><single>columna</single><multiple>columnas</multiple></term><term name="figure"><single>figura</single><multiple>figuras</multiple></term><term name="folio"><single>folio</single><multiple>folios</multiple></term><term name="issue"><single>n\xFAmero</single><multiple>n\xFAmeros</multiple></term><term name="line"><single>l\xEDnea</single><multiple>l\xEDneas</multiple></term><term name="note"><single>nota</single><multiple>notas</multiple></term><term name="opus"><single>opus</single><multiple>opera</multiple></term><term name="page"><single>p\xE1gina</single><multiple>p\xE1ginas</multiple></term><term name="number-of-pages"><single>p\xE1gina</single><multiple>p\xE1ginas</multiple></term><term name="paragraph"><single>p\xE1rrafo</single><multiple>p\xE1rrafos</multiple></term><term name="part"><single>parte</single><multiple>partes</multiple></term><term name="section"><single>secci\xF3n</single><multiple>secciones</multiple></term><term name="sub verbo"><single>sub voce</single><multiple>sub vocibus</multiple></term><term name="verse"><single>verso</single><multiple>versos</multiple></term><term name="volume"><single>volumen</single><multiple>vol\xFAmenes</multiple></term><term name="book" form="short">lib.</term>\n<term name="chapter" form="short">cap.</term><term name="column" form="short">col.</term><term name="figure" form="short">fig.</term><term name="folio" form="short">f.</term><term name="issue" form="short">n.\xBA</term><term name="line" form="short">l.</term><term name="note" form="short">n.</term><term name="opus" form="short">op.</term><term name="page" form="short"><single>p.</single><multiple>pp.</multiple></term><term name="number-of-pages" form="short"><single>p.</single><multiple>pp.</multiple></term><term name="paragraph" form="short">p\xE1rr.</term><term name="part" form="short">pt.</term><term name="section" form="short">sec.</term><term name="sub verbo" form="short"><single>s.&#160;v.</single><multiple>s.&#160;vv.</multiple></term><term name="verse" form="short"><single>v.</single><multiple>vv.</multiple></term><term name="volume" form="short"><single>vol.</single><multiple>vols.</multiple></term><term name="paragraph" form="symbol"><single>\xA7</single><multiple>\xA7</multiple></term><term name="section" form="symbol"><single>\xA7</single><multiple>\xA7</multiple></term><term name="director"><single>director</single><multiple>directores</multiple></term><term name="editor"><single>editor</single><multiple>editores</multiple></term><term name="editorial-director"><single>editor</single><multiple>editores</multiple></term><term name="illustrator"><single>ilustrador</single><multiple>ilustradores</multiple></term><term name="translator"><single>traductor</single><multiple>traductores</multiple></term><term name="editortranslator"><single>editor y traductor</single><multiple>editores y traductores</multiple></term><term name="director" form="short"><single>dir.</single><multiple>dirs.</multiple></term><term name="editor" form="short"><single>ed.</single><multiple>eds.</multiple></term><term name="editorial-director" form="short"><single>ed.</single><multiple>eds.</multiple></term><term name="illustrator" form="short"><single>ilust.</single><multiple>ilusts.</multiple></term><term name="translator" form="short"><single>trad.</single><multiple>trads.</multiple></term><term name="editortranslator" form="short"><single>ed. y trad.</single><multiple>eds. y trads.</multiple></term><term name="container-author" form="verb">de</term><term name="director" form="verb">dirigido por</term><term name="editor" form="verb">editado por</term><term name="editorial-director" form="verb">editado por</term><term name="illustrator" form="verb">ilustrado por</term><term name="interviewer" form="verb">entrevistado por</term><term name="recipient" form="verb">a</term><term name="reviewed-author" form="verb">por</term><term name="translator" form="verb">traducido por</term><term name="editortranslator" form="verb">editado y traducido por</term><term name="director" form="verb-short">dir.</term><term name="editor" form="verb-short">ed.</term><term name="editorial-director" form="verb-short">ed.</term><term name="illustrator" form="verb-short">ilust.</term><term name="translator" form="verb-short">trad.</term><term name="editortranslator" form="verb-short">ed. y trad.</term><term name="month-01">enero</term><term name="month-02">febrero</term><term name="month-03">marzo</term><term name="month-04">abril</term><term name="month-05">mayo</term><term name="month-06">junio</term><term name="month-07">julio</term><term name="month-08">agosto</term><term name="month-09">septiembre</term><term name="month-10">octubre</term><term name="month-11">noviembre</term><term name="month-12">diciembre</term><term name="month-01" form="short">ene.</term><term name="month-02" form="short">feb.</term><term name="month-03" form="short">mar.</term><term name="month-04" form="short">abr.</term><term name="month-05" form="short">may</term><term name="month-06" form="short">jun.</term><term name="month-07" form="short">jul.</term><term name="month-08" form="short">ago.</term><term name="month-09" form="short">sep.</term><term name="month-10" form="short">oct.</term><term name="month-11" form="short">nov.</term><term name="month-12" form="short">\ndic.</term><term name="season-01">primavera</term><term name="season-02">verano</term><term name="season-03">oto\xF1o</term><term name="season-04">invierno</term></terms></locale>'
+};
+
+/**
+ * Retrieve CSL locale
+ *
+ * @access protected
+ * @method fetchCSLLocale
+ *
+ * @param {String} lang - lang code
+ *
+ * @return {String} CSL locale
+ */
+var fetchCSLLocale = function fetchCSLLocale(lang) {
+  return varCSLLocales[lang];
+};
+
+exports.default = fetchCSLLocale;
+
+},{}],334:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+/**
+ * Object containing CSL templates
+ *
+ * Templates from the [CSL Project](http://citationstyles.org/)<br>
+ * [REPO](https://github.com/citation-style-language/styles), [LICENSE](https://creativecommons.org/licenses/by-sa/3.0/)
+ *
+ * Accesed 10/22/2016
+ *
+ * @access protected
+ * @constant varCSLStyles
+ * @default
+ */
+var varCSLStyles = {
+  apa: '<?xml version="1.0" encoding="utf-8"?><style xmlns="http://purl.org/net/xbiblio/csl" class="in-text" version="1.0" demote-non-dropping-particle="never"><info><title>American Psychological Association 6th edition</title><title-short>APA</title-short><id>http://www.zotero.org/styles/apa</id><link href="http://www.zotero.org/styles/apa" rel="self"/><link href="http://owl.english.purdue.edu/owl/resource/560/01/" rel="documentation"/><author><name>Simon Kornblith</name><email>simon@simonster.com</email></author><contributor><name>Bruce D\'Arcus</name></contributor><contributor><name>Curtis M. Humphrey</name></contributor><contributor><name>Richard Karnesky</name><email>karnesky+zotero@gmail.com</email><uri>http://arc.nucapt.northwestern.edu/Richard_Karnesky</uri></contributor><contributor><name>Sebastian Karcher</name></contributor><contributor><name> Brenton M. Wiernik</name><email>zotero@wiernik.org</email></contributor><category citation-format="author-date"/><category field="psychology"/><category field="generic-base"/><updated>2016-05-25T09:01:49+00:00</updated><rights license="http://creativecommons.org/licenses/by-sa/3.0/">This work is licensed under a Creative Commons Attribution-ShareAlike 3.0 License</rights></info><locale xml:lang="en"><terms><term name="editortranslator" form="short"><single>ed. &amp; trans.</single><multiple>eds. &amp; trans.</multiple></term><term name="translator" form="short"><single>trans.</single><multiple>trans.</multiple></term></terms></locale><macro name="container-contributors"><choose><if type="chapter paper-conference entry-dictionary entry-encyclopedia" match="any"><group delimiter=", "><names variable="container-author" delimiter=", "><name and="symbol" initialize-with=". " delimiter=", "/><label form="short" prefix=" (" text-case="title" suffix=")"/></names><names variable="editor translator" delimiter=", "><name and="symbol" initialize-with=". " delimiter=", "/><label form="short" prefix=" (" text-case="title" suffix=")"/></names></group></if></choose></macro><macro name="secondary-contributors"><choose><if type="article-journal chapter paper-conference entry-dictionary entry-encyclopedia" match="none"><group delimiter=", " prefix=" (" suffix=")"><names variable="container-author" delimiter=", "><name and="symbol" initialize-with=". " delimiter=", "/><label form="short" prefix=", " text-case="title"/></names><names variable="editor translator" delimiter=", "><name and="symbol" initialize-with=". " delimiter=", "/><label form="short" prefix=", " text-case="title"/></names></group></if></choose></macro><macro name="author"><names variable="author"><name name-as-sort-order="all" and="symbol" sort-separator=", " initialize-with=". " delimiter=", " delimiter-precedes-last="always"/><label form="short" prefix=" (" suffix=")" text-case="capitalize-first"/><substitute><names variable="editor"/><names variable="translator"/><choose><if type="report"><text variable="publisher"/><text macro="title"/></if><else><text macro="title"/></else></choose></substitute></names></macro><macro name="author-short"><names variable="author"><name form="short" and="symbol" delimiter=", " initialize-with=". "/><substitute><names variable="editor"/><names variable="translator"/><choose><if type="report"><text variable="publisher"/><text variable="title" form="short" font-style="italic"/></if><else-if type="legal_case"><text variable="title" font-style="italic"/></else-if><else-if type="bill book graphic legislation motion_picture song" match="any"><text variable="title" form="short" font-style="italic"/></else-if><else-if variable="reviewed-author"><choose><if variable="reviewed-title" match="none"><text variable="title" form="short" font-style="italic" prefix="Review of "/></if><else><text variable="title" form="short" quotes="true"/></else></choose></else-if><else><text variable="title" form="short" quotes="true"/></else></choose></substitute></names></macro><macro name="access"><choose><if type="thesis report" match="any"><choose><if variable="DOI" match="any">\n<text variable="DOI" prefix="https://doi.org/"/></if><else-if variable="archive" match="any"><group><text term="retrieved" text-case="capitalize-first" suffix=" "/><text term="from" suffix=" "/><text variable="archive" suffix="."/><text variable="archive_location" prefix=" (" suffix=")"/></group></else-if><else><group><text term="retrieved" text-case="capitalize-first" suffix=" "/><text term="from" suffix=" "/><text variable="URL"/></group></else></choose></if><else><choose><if variable="DOI"><text variable="DOI" prefix="https://doi.org/"/></if><else><choose><if type="webpage"><group delimiter=" "><text term="retrieved" text-case="capitalize-first" suffix=" "/><group><date variable="accessed" form="text" suffix=", "/></group><text term="from"/><text variable="URL"/></group></if><else><group><text term="retrieved" text-case="capitalize-first" suffix=" "/><text term="from" suffix=" "/><text variable="URL"/></group></else></choose></else></choose></else></choose></macro><macro name="title"><choose><if type="book graphic manuscript motion_picture report song speech thesis" match="any"><choose><if variable="version" type="book" match="all"><text variable="title"/></if><else><text variable="title" font-style="italic"/></else></choose></if><else-if variable="reviewed-author"><choose><if variable="reviewed-title"><group delimiter=" "><text variable="title"/><group delimiter=", " prefix="[" suffix="]"><text variable="reviewed-title" font-style="italic" prefix="Review of "/><names variable="reviewed-author" delimiter=", "><label form="verb-short" suffix=" "/><name and="symbol" initialize-with=". " delimiter=", "/></names></group></group></if><else><group delimiter=", " prefix="[" suffix="]"><text variable="title" font-style="italic" prefix="Review of "/><names variable="reviewed-author" delimiter=", "><label form="verb-short" suffix=" "/><name and="symbol" initialize-with=". " delimiter=", "/></names></group></else></choose></else-if><else><text variable="title"/></else></choose></macro><macro name="title-plus-extra"><text macro="title"/><choose><if type="report thesis" match="any"><group prefix=" (" suffix=")" delimiter=", "><group delimiter=" "><choose><if variable="genre" match="any"><text variable="genre"/></if><else><text variable="collection-title"/></else></choose><text variable="number" prefix="No. "/></group><group delimiter=" "><text term="version" text-case="capitalize-first"/><text variable="version"/></group><text macro="edition"/></group></if><else-if type="post-weblog webpage" match="any"><text variable="genre" prefix=" [" suffix="]"/></else-if><else-if variable="version"><group delimiter=" " prefix=" (" suffix=")"><text term="version" text-case="capitalize-first"/><text variable="version"/></group></else-if></choose><text macro="format" prefix=" [" suffix="]"/></macro><macro name="format"><choose><if match="any" variable="medium"><text variable="medium" text-case="capitalize-first"/></if><else-if type="dataset" match="any"><text value="Data set"/></else-if></choose></macro><macro name="publisher"><choose><if type="report" match="any"><group delimiter=": "><text variable="publisher-place"/><text variable="publisher"/></group></if><else-if type="thesis" match="any"><group delimiter=", "><text variable="publisher"/><text variable="publisher-place"/></group></else-if><else-if type="post-weblog webpage" match="none"><group delimiter=", "><choose><if variable="event version" type="speech motion_picture" match="none"><text variable="genre"/></if></choose><choose><if type="article-journal article-magazine" match="none"><group delimiter=": "><choose><if variable="publisher-place"><text variable="publisher-place"/></if><else><text variable="event-place"/></else></choose><text variable="publisher"/></group></if></choose></group></else-if></choose></macro><macro name="event"><choose><if variable="container-title" match="none"><choose><if variable="event"><choose><if variable="genre" match="none"><text term="presented at" text-case="capitalize-first" suffix=" "/><text variable="event"/></if><else>\n<group delimiter=" "><text variable="genre" text-case="capitalize-first"/><text term="presented at"/><text variable="event"/></group></else></choose></if><else-if type="speech"><text variable="genre" text-case="capitalize-first"/></else-if></choose></if></choose></macro><macro name="issued"><choose><if type="bill legal_case legislation" match="none"><choose><if variable="issued"><group prefix=" (" suffix=")"><date variable="issued"><date-part name="year"/></date><text variable="year-suffix"/><choose><if type="speech" match="any"><date variable="issued"><date-part prefix=", " name="month"/></date></if><else-if type="article-journal bill book chapter graphic legal_case legislation motion_picture paper-conference report song dataset" match="none"><date variable="issued"><date-part prefix=", " name="month"/><date-part prefix=" " name="day"/></date></else-if></choose></group></if><else-if variable="status"><group prefix=" (" suffix=")"><text variable="status"/><text variable="year-suffix" prefix="-"/></group></else-if><else><group prefix=" (" suffix=")"><text term="no date" form="short"/><text variable="year-suffix" prefix="-"/></group></else></choose></if></choose></macro><macro name="issued-sort"><choose><if type="article-journal bill book chapter graphic legal_case legislation motion_picture paper-conference report song dataset" match="none"><date variable="issued"><date-part name="year"/><date-part name="month"/><date-part name="day"/></date></if><else><date variable="issued"><date-part name="year"/></date></else></choose></macro><macro name="issued-year"><choose><if variable="issued"><group delimiter="/"><date variable="original-date" form="text"/><group><date variable="issued"><date-part name="year"/></date><text variable="year-suffix"/></group></group></if><else-if variable="status"><text variable="status"/><text variable="year-suffix" prefix="-"/></else-if><else><text term="no date" form="short"/><text variable="year-suffix" prefix="-"/></else></choose></macro><macro name="edition"><choose><if is-numeric="edition"><group delimiter=" "><number variable="edition" form="ordinal"/><text term="edition" form="short"/></group></if><else><text variable="edition"/></else></choose></macro><macro name="locators"><choose><if type="article-journal article-magazine" match="any"><group prefix=", " delimiter=", "><group><text variable="volume" font-style="italic"/><text variable="issue" prefix="(" suffix=")"/></group><text variable="page"/></group><choose><if variable="issued"><choose><if variable="page issue" match="none"><text variable="status" prefix=". "/></if></choose></if></choose></if><else-if type="article-newspaper"><group delimiter=" " prefix=", "><label variable="page" form="short"/><text variable="page"/></group></else-if><else-if type="book graphic motion_picture report song chapter paper-conference entry-encyclopedia entry-dictionary" match="any"><group prefix=" (" suffix=")" delimiter=", "><choose><if type="report" match="none"><text macro="edition"/></if></choose><choose><if variable="volume" match="any"><group><text term="volume" form="short" text-case="capitalize-first" suffix=" "/><number variable="volume" form="numeric"/></group></if><else><group><text term="volume" form="short" plural="true" text-case="capitalize-first" suffix=" "/><number variable="number-of-volumes" form="numeric" prefix="1&#8211;"/></group></else></choose><group><label variable="page" form="short" suffix=" "/><text variable="page"/></group></group></else-if><else-if type="legal_case"><group prefix=" (" suffix=")" delimiter=" "><text variable="authority"/><date variable="issued" form="text"/></group></else-if><else-if type="bill legislation" match="any"><date variable="issued" prefix=" (" suffix=")"><date-part name="year"/></date></else-if></choose></macro><macro name="citation-locator"><group><choose><if locator="chapter"><label variable="locator" form="long" text-case="capitalize-first"/></if><else><label variable="locator" form="short"/></else></choose><text variable="locator" prefix=" "/></group></macro>\n<macro name="container"><choose><if type="post-weblog webpage" match="none"><group><choose><if type="chapter paper-conference entry-encyclopedia" match="any"><text term="in" text-case="capitalize-first" suffix=" "/></if></choose><group delimiter=", "><text macro="container-contributors"/><text macro="secondary-contributors"/><text macro="container-title"/></group></group></if></choose></macro><macro name="container-title"><choose><if type="article article-journal article-magazine article-newspaper" match="any"><text variable="container-title" font-style="italic" text-case="title"/></if><else-if type="bill legal_case legislation" match="none"><text variable="container-title" font-style="italic"/></else-if></choose></macro><macro name="legal-cites"><choose><if type="bill legal_case legislation" match="any"><group delimiter=" " prefix=", "><choose><if variable="container-title"><text variable="volume"/><text variable="container-title"/><group delimiter=" "><text term="section" form="symbol"/><text variable="section"/></group><text variable="page"/></if><else><choose><if type="legal_case"><text variable="number" prefix="No. "/></if><else><text variable="number" prefix="Pub. L. No. "/><group delimiter=" "><text term="section" form="symbol"/><text variable="section"/></group></else></choose></else></choose></group></if></choose></macro><macro name="original-date"><choose><if variable="original-date"><group prefix="(" suffix=")" delimiter=" "><text value="Original work published"/><date variable="original-date" form="text"/></group></if></choose></macro><citation et-al-min="6" et-al-use-first="1" et-al-subsequent-min="3" et-al-subsequent-use-first="1" disambiguate-add-year-suffix="true" disambiguate-add-names="true" disambiguate-add-givenname="true" collapse="year" givenname-disambiguation-rule="primary-name"><sort><key macro="author"/><key macro="issued-sort"/></sort><layout prefix="(" suffix=")" delimiter="; "><group delimiter=", "><text macro="author-short"/><text macro="issued-year"/><text macro="citation-locator"/></group></layout></citation><bibliography hanging-indent="true" et-al-min="8" et-al-use-first="6" et-al-use-last="true" entry-spacing="0" line-spacing="2"><sort><key macro="author"/><key macro="issued-sort" sort="ascending"/><key macro="title"/></sort><layout><group suffix="."><group delimiter=". "><text macro="author"/><text macro="issued"/><text macro="title-plus-extra"/><text macro="container"/></group><text macro="legal-cites"/><text macro="locators"/><group delimiter=", " prefix=". "><text macro="event"/><text macro="publisher"/></group></group><text macro="access" prefix=" "/><text macro="original-date" prefix=" "/></layout></bibliography></style>',
+  vancouver: '<?xml version="1.0" encoding="utf-8"?><style xmlns="http://purl.org/net/xbiblio/csl" class="in-text" version="1.0" demote-non-dropping-particle="sort-only" page-range-format="minimal"><info><title>Vancouver</title><id>http://www.zotero.org/styles/vancouver</id><link href="http://www.zotero.org/styles/vancouver" rel="self"/><link href="http://www.nlm.nih.gov/bsd/uniform_requirements.html" rel="documentation"/><author><name>Michael Berkowitz</name><email>mberkowi@gmu.edu</email></author><contributor><name>Sean Takats</name><email>stakats@gmu.edu</email></contributor><contributor><name>Sebastian Karcher</name></contributor><category citation-format="numeric"/><category field="medicine"/><summary>Vancouver style as outlined by International Committee of Medical Journal Editors Uniform Requirements for Manuscripts Submitted to Biomedical Journals: Sample References</summary><updated>2014-09-06T16:03:01+00:00</updated><rights license="http://creativecommons.org/licenses/by-sa/3.0/">This work is licensed under a Creative Commons Attribution-ShareAlike 3.0 License</rights></info><locale xml:lang="en"><date form="text" delimiter=" "><date-part name="year"/><date-part name="month" form="short" strip-periods="true"/><date-part name="day"/></date><terms><term name="collection-editor" form="long"><single>editor</single><multiple>editors</multiple></term><term name="presented at">presented at</term><term name="available at">available from</term><term name="section" form="short">sect.</term></terms></locale><locale xml:lang="fr"><date form="text" delimiter=" "><date-part name="day"/><date-part name="month" form="short" strip-periods="true"/><date-part name="year"/></date></locale><macro name="author"><names variable="author"><name sort-separator=" " initialize-with="" name-as-sort-order="all" delimiter=", " delimiter-precedes-last="always"/><label form="long" prefix=", "/><substitute><names variable="editor"/></substitute></names></macro><macro name="editor"><names variable="editor" suffix="."><name sort-separator=" " initialize-with="" name-as-sort-order="all" delimiter=", " delimiter-precedes-last="always"/><label form="long" prefix=", "/></names></macro><macro name="chapter-marker"><choose><if type="chapter paper-conference entry-dictionary entry-encyclopedia" match="any"><text term="in" text-case="capitalize-first"/></if></choose></macro><macro name="publisher"><choose><if type="article-journal article-magazine article-newspaper" match="none"><group delimiter=": " suffix=";"><choose><if type="thesis"><text variable="publisher-place" prefix="[" suffix="]"/></if><else-if type="speech"/><else><text variable="publisher-place"/></else></choose><text variable="publisher"/></group></if></choose></macro><macro name="access"><choose><if variable="URL"><group delimiter=": "><text term="available at" text-case="capitalize-first"/><text variable="URL"/></group></if></choose></macro><macro name="accessed-date"><choose><if variable="URL"><group prefix="[" suffix="]" delimiter=" "><text term="cited" text-case="lowercase"/><date variable="accessed" form="text"/></group></if></choose></macro><macro name="container-title"><choose><if type="article-journal article-magazine chapter paper-conference article-newspaper review review-book entry-dictionary entry-encyclopedia" match="any"><group suffix="." delimiter=" "><choose><if type="article-journal review review-book" match="any"><text variable="container-title" form="short" strip-periods="true"/></if><else><text variable="container-title" strip-periods="true"/></else></choose><choose><if variable="URL"><text term="internet" prefix="[" suffix="]" text-case="capitalize-first"/></if></choose></group><text macro="edition" prefix=" "/></if><else-if type="bill legislation" match="any"><group delimiter=", "><group delimiter=". "><text variable="container-title"/><group delimiter=" "><text term="section" form="short" text-case="capitalize-first"/><text variable="section"/></group></group><text variable="number"/></group></else-if><else-if type="speech">\n<group delimiter=": " suffix=";"><group delimiter=" "><text variable="genre" text-case="capitalize-first"/><text term="presented at"/></group><text variable="event"/></group></else-if><else><group delimiter=", " suffix="."><choose><if variable="collection-title" match="none"><group delimiter=" "><label variable="volume" form="short" text-case="capitalize-first"/><text variable="volume"/></group></if></choose><text variable="container-title"/></group></else></choose></macro><macro name="title"><text variable="title"/><choose><if type="article-journal article-magazine chapter paper-conference article-newspaper review review-book entry-dictionary entry-encyclopedia" match="none"><choose><if variable="URL"><text term="internet" prefix=" [" suffix="]" text-case="capitalize-first"/></if></choose><text macro="edition" prefix=". "/></if></choose><choose><if type="thesis"><text variable="genre" prefix=" [" suffix="]"/></if></choose></macro><macro name="edition"><choose><if is-numeric="edition"><group delimiter=" "><number variable="edition" form="ordinal"/><text term="edition" form="short"/></group></if><else><text variable="edition" suffix="."/></else></choose></macro><macro name="date"><choose><if type="article-journal article-magazine article-newspaper review review-book" match="any"><group suffix=";" delimiter=" "><date variable="issued" form="text"/><text macro="accessed-date"/></group></if><else-if type="bill legislation" match="any"><group delimiter=", "><date variable="issued" delimiter=" "><date-part name="month" form="short" strip-periods="true"/><date-part name="day"/></date><date variable="issued"><date-part name="year"/></date></group></else-if><else-if type="report"><date variable="issued" delimiter=" "><date-part name="year"/><date-part name="month" form="short" strip-periods="true"/></date><text macro="accessed-date" prefix=" "/></else-if><else-if type="patent"><group suffix="."><group delimiter=", "><text variable="number"/><date variable="issued"><date-part name="year"/></date></group><text macro="accessed-date" prefix=" "/></group></else-if><else-if type="speech"><group delimiter="; "><group delimiter=" "><date variable="issued" delimiter=" "><date-part name="year"/><date-part name="month" form="short" strip-periods="true"/><date-part name="day"/></date><text macro="accessed-date"/></group><text variable="event-place"/></group></else-if><else><group suffix="."><date variable="issued"><date-part name="year"/></date><text macro="accessed-date" prefix=" "/></group></else></choose></macro><macro name="pages"><choose><if type="article-journal article-magazine article-newspaper review review-book" match="any"><text variable="page" prefix=":"/></if><else-if type="book" match="any"><text variable="number-of-pages" prefix=" "/><choose><if is-numeric="number-of-pages"><label variable="number-of-pages" form="short" prefix=" " plural="never"/></if></choose></else-if><else><group prefix=" " delimiter=" "><label variable="page" form="short" plural="never"/><text variable="page"/></group></else></choose></macro><macro name="journal-location"><choose><if type="article-journal article-magazine review review-book" match="any"><text variable="volume"/><text variable="issue" prefix="(" suffix=")"/></if></choose></macro><macro name="collection-details"><choose><if type="article-journal article-magazine article-newspaper review review-book" match="none"><choose><if variable="collection-title"><group delimiter=" " prefix="(" suffix=")"><names variable="collection-editor" suffix="."><name sort-separator=" " initialize-with="" name-as-sort-order="all" delimiter=", " delimiter-precedes-last="always"/><label form="long" prefix=", "/></names><group delimiter="; "><text variable="collection-title"/><group delimiter=" "><label variable="volume" form="short"/><text variable="volume"/></group></group></group></if></choose></if></choose></macro><macro name="report-details"><choose><if type="report"><text variable="number" prefix="Report No.: "/></if></choose></macro><citation collapse="citation-number">\n<sort><key variable="citation-number"/></sort><layout prefix="(" suffix=")" delimiter=","><text variable="citation-number"/></layout></citation><bibliography et-al-min="7" et-al-use-first="6" second-field-align="flush"><layout><text variable="citation-number" suffix=". "/><group delimiter=". " suffix=". "><text macro="author"/><text macro="title"/></group><group delimiter=" " suffix=". "><group delimiter=": "><text macro="chapter-marker"/><group delimiter=" "><text macro="editor"/><text macro="container-title"/></group></group><text macro="publisher"/><group><text macro="date"/><text macro="journal-location"/><text macro="pages"/></group></group><text macro="collection-details" suffix=". "/><text macro="report-details" suffix=". "/><text macro="access"/></layout></bibliography></style>',
+  harvard1: '<?xml version="1.0" encoding="utf-8"?><style xmlns="http://purl.org/net/xbiblio/csl" class="in-text" version="1.0" demote-non-dropping-particle="sort-only"><info><title>Harvard Reference format 1 (author-date)</title><id>http://www.zotero.org/styles/harvard1</id><link href="http://www.zotero.org/styles/harvard1" rel="self"/><link href="http://libweb.anglia.ac.uk/referencing/harvard.htm" rel="documentation"/><author><name>Julian Onions</name><email>julian.onions@gmail.com</email></author><category citation-format="author-date"/><category field="generic-base"/><summary>The Harvard author-date style</summary><updated>2012-09-27T22:06:38+00:00</updated><rights license="http://creativecommons.org/licenses/by-sa/3.0/">This work is licensed under a Creative Commons Attribution-ShareAlike 3.0 License</rights></info><macro name="editor"><names variable="editor" delimiter=", "><name and="symbol" initialize-with=". " delimiter=", "/><label form="short" prefix=", " text-case="lowercase"/></names></macro><macro name="anon"><text term="anonymous" form="short" text-case="capitalize-first" strip-periods="true"/></macro><macro name="author"><names variable="author"><name name-as-sort-order="all" and="symbol" sort-separator=", " initialize-with="." delimiter-precedes-last="never" delimiter=", "/><label form="short" prefix=" " text-case="lowercase"/><substitute><names variable="editor"/><text macro="anon"/></substitute></names></macro><macro name="author-short"><names variable="author"><name form="short" and="symbol" delimiter=", " delimiter-precedes-last="never" initialize-with=". "/><substitute><names variable="editor"/><names variable="translator"/><text macro="anon"/></substitute></names></macro><macro name="access"><choose><if variable="URL"><text value="Available at:" suffix=" "/><text variable="URL"/><group prefix=" [" suffix="]"><text term="accessed" text-case="capitalize-first" suffix=" "/><date variable="accessed"><date-part name="month" suffix=" "/><date-part name="day" suffix=", "/><date-part name="year"/></date></group></if></choose></macro><macro name="title"><choose><if type="bill book graphic legal_case legislation motion_picture report song thesis" match="any"><text variable="title" font-style="italic"/></if><else><text variable="title"/></else></choose></macro><macro name="publisher"><group delimiter=": "><text variable="publisher-place"/><text variable="publisher"/></group></macro><macro name="year-date"><choose><if variable="issued"><date variable="issued"><date-part name="year"/></date></if><else><text term="no date" form="short"/></else></choose></macro><macro name="edition"><choose><if is-numeric="edition"><group delimiter=" "><number variable="edition" form="ordinal"/><text term="edition" form="short"/></group></if><else><text variable="edition" suffix="."/></else></choose></macro><macro name="pages"><group><label variable="page" form="short" suffix=" "/><text variable="page"/></group></macro><citation et-al-min="3" et-al-use-first="1" disambiguate-add-year-suffix="true" disambiguate-add-names="true" disambiguate-add-givenname="true"><layout prefix="(" suffix=")" delimiter="; "><group delimiter=", "><group delimiter=" "><text macro="author-short"/><text macro="year-date"/></group><group><label variable="locator" form="short"/><text variable="locator"/></group></group></layout></citation><bibliography hanging-indent="true" et-al-min="4" et-al-use-first="1"><sort><key macro="author"/><key variable="title"/></sort><layout><text macro="author" suffix=","/><date variable="issued" prefix=" " suffix="."><date-part name="year"/></date><choose><if type="bill book graphic legal_case legislation motion_picture report song" match="any"><group prefix=" " delimiter=" " suffix=","><text macro="title"/><text macro="edition"/><text macro="editor"/></group><text prefix=" " suffix="." macro="publisher"/></if><else-if type="chapter paper-conference" match="any"><text macro="title" prefix=" " suffix="."/><group prefix=" " delimiter=" "><text term="in" text-case="capitalize-first"/>\n<text macro="editor"/><text variable="container-title" font-style="italic" suffix="."/><text variable="collection-title" suffix="."/><text variable="event" suffix="."/><group suffix="." delimiter=", "><text macro="publisher" prefix=" "/><text macro="pages"/></group></group></else-if><else-if type="thesis"><group prefix=" " suffix="." delimiter=". "><text macro="title"/><text variable="genre"/><text macro="publisher"/></group></else-if><else><group suffix="."><text macro="title" prefix=" "/><text macro="editor" prefix=" "/></group><group prefix=" " suffix="."><text variable="container-title" font-style="italic"/><group prefix=", "><text variable="volume"/><text variable="issue" prefix="(" suffix=")"/></group><group prefix=", "><label variable="page" form="short"/><text variable="page"/></group></group></else></choose><text prefix=" " macro="access" suffix="."/></layout></bibliography></style>'
+};
+
+/**
+ * Retrieve CSL style
+ *
+ * @access protected
+ * @method fetchCSLStyle
+ *
+ * @param {String} [style="apa"] - style name
+ *
+ * @return {String} CSL style
+ */
+var fetchCSLStyle = function fetchCSLStyle(style) {
+  return varCSLStyles.hasOwnProperty(style || '') ? varCSLStyles[style] : varCSLStyles['apa'];
+};
+
+exports.default = fetchCSLStyle;
+
+},{}],335:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.get = exports.getIds = undefined;
+
+var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; }();
+
+var _striptags = require('striptags');
+
+var _striptags2 = _interopRequireDefault(_striptags);
+
+var _attr = require('../util/attr.js');
+
+var _deepCopy = require('../util/deepCopy');
+
+var _deepCopy2 = _interopRequireDefault(_deepCopy);
+
+var _json = require('../get/bibtex/json');
+
+var _json2 = _interopRequireDefault(_json);
+
+var _text = require('../get/bibtex/text');
+
+var _text2 = _interopRequireDefault(_text);
+
+var _json3 = require('../get/json');
+
+var _json4 = _interopRequireDefault(_json3);
+
+var _engines = require('../CSL/engines');
+
+var _engines2 = _interopRequireDefault(_engines);
+
+var _styles = require('../CSL/styles');
+
+var _styles2 = _interopRequireDefault(_styles);
+
+var _locales = require('../CSL/locales');
+
+var _locales2 = _interopRequireDefault(_locales);
+
+var _items = require('../CSL/items');
+
+var _items2 = _interopRequireDefault(_items);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+/**
+ * Get a list of the data entry IDs, in the order of that list
+ *
+ * @method getIds
+ * @memberof Cite
+ * @this Cite
+ *
+ * @return {String[]} List of IDs
+ */
+var getIds = function getIds() {
+  return this.data.map(function (entry) {
+    return entry.id;
+  });
+};
+
+/**
+ * Get formatted data from your object. For more info, see [Output](../#output).
+ *
+ * @method get
+ * @memberof Cite
+ * @this Cite
+ *
+ * @param {Object} options - The options for the output. See [input options](../#citation.cite.in.options)
+ * @param {String} [options.locale] - Custom CSL locale for citeproc
+ * @param {String} [options.template] - Custom CSL style template for citeproc
+ *
+ * @return {String|Object[]} The formatted data
+ */
+var get = function get(options) {
+  var _data = (0, _deepCopy2.default)(this.data);
+
+  var result = void 0;
+
+  var _Object$assign = Object.assign({ format: 'real', type: 'json', style: 'csl', lang: 'en-US' }, this._options, { locale: '', template: '' }, options),
+      format = _Object$assign.format,
+      type = _Object$assign.type,
+      style = _Object$assign.style,
+      lang = _Object$assign.lang,
+      locale = _Object$assign.locale,
+      template = _Object$assign.template;
+
+  var _style$match = style.match(/^([^-]+)(?:-(.+))?$/),
+      _style$match2 = _slicedToArray(_style$match, 3),
+      styleType = _style$match2[1],
+      styleFormat = _style$match2[2];
+
+  switch ([type, styleType].join()) {
+    case 'html,citation':
+      var cbLocale = locale ? function () {
+        return locale;
+      } : _locales2.default;
+      var cbItem = (0, _items2.default)(_data);
+      var useTemplate = template || (0, _styles2.default)(styleFormat);
+      var useLang = (0, _locales2.default)(lang) ? lang : 'en-US';
+
+      var citeproc = (0, _engines2.default)(styleFormat, useLang, useTemplate, cbItem, cbLocale);
+      var sortedIds = citeproc.updateItems(this.getIds());
+
+      var _citeproc$makeBibliog = citeproc.makeBibliography(),
+          _citeproc$makeBibliog2 = _slicedToArray(_citeproc$makeBibliog, 2),
+          _citeproc$makeBibliog3 = _citeproc$makeBibliog2[0],
+          bibStart = _citeproc$makeBibliog3.bibstart,
+          bibEnd = _citeproc$makeBibliog3.bibend,
+          bibBody = _citeproc$makeBibliog2[1];
+
+      bibBody = bibBody.map(function (element, index) {
+        return (0, _attr.getPrefixedEntry)(element, index, sortedIds);
+      });
+
+      result = '' + bibStart + bibBody.join('<br />') + bibEnd;
+      break;
+
+    case 'html,csl':
+      result = (0, _json4.default)(_data);
+      break;
+
+    case 'html,bibtex':
+      result = (0, _text2.default)(_data, true);
+      break;
+
+    case 'string,bibtex':
+      result = (0, _text2.default)(_data, false);
+      break;
+
+    case 'string,citation':
+      result = (0, _striptags2.default)(this.get(Object.assign({}, options, { type: 'html' })));
+      break;
+
+    case 'string,csl':
+      result = JSON.stringify(_data);
+      break;
+
+    case 'json,csl':
+      result = JSON.stringify(_data);
+      break;
+
+    case 'json,bibtex':
+      result = JSON.stringify(_data.map(_json2.default));
+      break;
+
+    case 'json,citation':
+      console.error('[get]', 'Combination type/style of json/citation-* is not valid: ' + type + '/' + style); //
+      break;
+
+    default:
+      console.error('[get]', 'Invalid options');
+      break;
+  }
+
+  if (format === 'real') {
+    if (type === 'json') {
+      result = JSON.parse(result);
+    } else if (document && document.createElement && type === 'html') {
+      var tmp = document.createElement('div');
+      tmp.innerHTML = result;
+      result = result.childNodes;
+    }
+  }
+
+  return result;
+};
+
+exports.getIds = getIds;
+exports.get = get;
+
+},{"../CSL/engines":330,"../CSL/items":332,"../CSL/locales":333,"../CSL/styles":334,"../get/bibtex/json":342,"../get/bibtex/text":344,"../get/json":349,"../util/attr.js":373,"../util/deepCopy":374,"striptags":308}],336:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _log = require('./log');
+
+var log = _interopRequireWildcard(_log);
+
+var _options = require('./options');
+
+var options = _interopRequireWildcard(_options);
+
+var _set = require('./set');
+
+var set = _interopRequireWildcard(_set);
+
+var _sort = require('./sort');
+
+var sort = _interopRequireWildcard(_sort);
+
+var _get = require('./get');
+
+var get = _interopRequireWildcard(_get);
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+
+/**
+ * @constructor Cite
+ *
+ * @description Create a `Cite` object with almost any kind of data, and manipulate it with its default methods.
+ *
+ * @param {String|CSL|Object|String[]|CSL[]|Object[]} data - Input data. If no data is passed, an empty object is returned
+ * @param {Object} options - The options for the output. See [input options](../#citation.cite.in.options).
+ */
+function Cite(data, options) {
+  // Making it Scope-Safe
+  if (!(this instanceof Cite)) {
+    return new Cite(data, options);
+  }
+
+  /**
+   * The default options for the output. See [input options](../#citation.cite.in.options)
+   *
+   * @memberof Cite
+   * @access protected
+   * @type Object
+   * @default {}
+   */
+  this._options = options || {};
+
+  /**
+   * The log, containing all logged data, consisting of copies of the Cite object at different moments in time.
+   *
+   * The `.reset()` function **does not** reset on the log. This way, you can still undo all changes.
+   *
+   * <br /><br />
+   * `.currentVersion()` and similar function **are not** logged, because this would be influenced by function using other functions.
+   *
+   * @memberof Cite
+   * @access protected
+   * @type Object[]
+   *
+   * @property {Cite} 0 - The first image.
+   */
+  this.log = [];
+
+  /**
+   * The data formatted to JSON
+   *
+   * @memberof Cite
+   * @access protected
+   * @type Object
+   * @default []
+   */
+  this.data = [];
+
+  this.set(data);
+  this.options(options);
+  this.save();
+
+  return this;
+}
+
+Object.assign(Cite.prototype, log, options, set, sort, get);
+
+exports.default = Cite;
+
+},{"./get":335,"./log":337,"./options":338,"./set":339,"./sort":340}],337:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.save = exports.undo = exports.retrieveLastVersion = exports.retrieveVersion = exports.currentVersion = undefined;
+
+var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; }();
+
+var _index = require('./index');
+
+var _index2 = _interopRequireDefault(_index);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+/**
+ *
+ * @method currentVersion
+ * @memberof Cite
+ * @this Cite
+ *
+ * @return {Number} The latest version of the object
+ */
+var currentVersion = function currentVersion() {
+  return this.log.length;
+};
+
+/**
+ * Returns an image of the object in the version specified.
+ *
+ * @method retrieveVersion
+ * @memberof Cite
+ * @this Cite
+ *
+ * @param {Number} versnum - The number of the version you want to retrieve. Illegel numbers: numbers under zero, floats, numbers above the current version of the object.
+ *
+ * @return {Cite} The version of the object with the version number passed. `undefined` if an illegal number is passed.
+ */
+var retrieveVersion = function retrieveVersion(versnum) {
+  versnum = versnum <= 0 ? 1 : versnum;
+
+  if (versnum > this.currentVersion()) {
+    return null;
+  } else {
+    var _log = _slicedToArray(this.log[versnum - 1], 2),
+        data = _log[0],
+        options = _log[1];
+
+    var image = new _index2.default(JSON.parse(data), JSON.parse(options));
+    image.log = this.log.slice(0, versnum);
+    return image;
+  }
+};
+
+/**
+ * Returns the second to last saved image of the object.
+ *
+ * @method undo
+ * @memberof Cite
+ * @this Cite
+ *
+ * @param {Number} [number=1] - number of versions to go back.
+ *
+ * @return {Cite} The second to last version of the object. `undefined` if used on first version.
+ */
+var undo = function undo() {
+  var number = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 1;
+
+  return this.retrieveVersion(this.currentVersion() - number);
+};
+
+/**
+ * Returns the last saved image of the object.
+ *
+ * @method undo
+ * @memberof Cite
+ * @this Cite
+ *
+ * @return {Cite} The last version of the object. `undefined` if used on first version.
+ */
+var retrieveLastVersion = function retrieveLastVersion() {
+  return this.retrieveVersion(this.currentVersion());
+};
+
+/**
+ * Save an image of the current version of the object.
+ *
+ * @method save
+ * @memberof Cite
+ * @this Cite
+ *
+ * @return {Cite} The current version of the object.
+ */
+var save = function save() {
+  this.log.push([JSON.stringify(this.data), JSON.stringify(this._options)]);
+
+  return this;
+};
+
+exports.currentVersion = currentVersion;
+exports.retrieveVersion = retrieveVersion;
+exports.retrieveLastVersion = retrieveLastVersion;
+exports.undo = undo;
+exports.save = save;
+
+},{"./index":336}],338:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+/**
+ * Change the default options of a `Cite` object.
+ *
+ * @method options
+ * @memberof Cite
+ * @this Cite
+ *
+ * @param {Object} options - The options for the output. See [input options](../#citation.cite.in.options)
+ * @param {Boolean} log - Show this call in the log
+ *
+ * @return {Cite} The updated parent object
+ */
+var options = function options(_options, log) {
+  if (log) {
+    this.save();
+  }
+
+  Object.assign(this._options, _options);
+
+  return this;
+};
+
+exports.options = options;
+
+},{}],339:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.reset = exports.set = exports.add = undefined;
+
+var _chain = require('../parse/input/chain');
+
+var _chain2 = _interopRequireDefault(_chain);
+
+var _fetchId = require('../util/fetchId');
+
+var _fetchId2 = _interopRequireDefault(_fetchId);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+/**
+ * Add an object to the array of objects
+ *
+ * @method add
+ * @memberof Cite
+ * @this Cite
+ *
+ * @param {String|CSL|Object|String[]|CSL[]|Object[]} data - The data to add to your object
+ * @param {Boolean} log - Show this call in the log
+ *
+ * @return {Cite} The updated parent object
+ */
+var add = function add(data, log) {
+  var _this = this;
+
+  if (log) {
+    this.save();
+  }
+
+  this.data = this.data.concat((0, _chain2.default)(data));
+
+  this.data.filter(function (entry) {
+    return !entry.hasOwnProperty('id');
+  }).forEach(function (entry) {
+    entry.id = (0, _fetchId2.default)(_this.getIds(), 'temp_id_');
+  });
+
+  return this;
+};
+
+/**
+ * Recreate a `Cite` object with almost any kind of data, and manipulate it with its default methods.
+ *
+ * @method set
+ * @memberof Cite
+ * @this Cite
+ *
+ * @param {String|CSL|Object|String[]|CSL[]|Object[]} data - The data to replace the data in your object
+ * @param {Boolean} log - Show this call in the log
+ *
+ * @return {Cite} The updated parent object
+ */
+var set = function set(data, log) {
+  if (log) {
+    this.save();
+  }
+
+  this.data = [];
+  this.add(data);
+
+  return this;
+};
+
+/**
+ * Reset a `Cite` object.
+ *
+ * @method reset
+ * @memberof Cite
+ * @this Cite
+ *
+ * @param {Boolean} log - Show this call in the log
+ *
+ * @return {Cite} The updated, empty parent object (except the log, the log lives)
+ */
+var reset = function reset(log) {
+  if (log) {
+    this.save();
+  }
+
+  this.data = [];
+  this._options = {};
+
+  return this;
+};
+
+exports.add = add;
+exports.set = set;
+exports.reset = reset;
+
+},{"../parse/input/chain":360,"../util/fetchId":376}],340:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.sort = undefined;
+
+var _label = require('../get/label');
+
+var _label2 = _interopRequireDefault(_label);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+/**
+ * Sort the datasets alphabetically, on basis of it's BibTeX label
+ *
+ * @method sort
+ * @memberof Cite
+ * @this Cite
+ *
+ * @param {Boolean} log - Show this call in the log
+ *
+ * @return {Cite} The updated parent object
+ */
+var sort = function sort(log) {
+  if (log) {
+    this.save();
+  }
+
+  this.data.sort(function (a, b) {
+    var labelA = (0, _label2.default)(a);
+    var labelB = (0, _label2.default)(b);
+
+    return labelA !== labelB ? labelA > labelB ? 1 : -1 : 0;
+  });
+
+  return this;
+};
+
+exports.sort = sort;
+
+},{"../get/label":350}],341:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.type = exports.label = exports.text = exports.json = undefined;
+
+var _json = require('./json');
+
+var _json2 = _interopRequireDefault(_json);
+
+var _text = require('./text');
+
+var _text2 = _interopRequireDefault(_text);
+
+var _label = require('./label');
+
+var _label2 = _interopRequireDefault(_label);
+
+var _type = require('./type');
+
+var _type2 = _interopRequireDefault(_type);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+exports.json = _json2.default;
+exports.text = _text2.default;
+exports.label = _label2.default;
+exports.type = _type2.default;
+
+},{"./json":342,"./label":343,"./text":344,"./type":345}],342:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _type = require('./type');
+
+var _type2 = _interopRequireDefault(_type);
+
+var _label = require('./label');
+
+var _label2 = _interopRequireDefault(_label);
+
+var _name = require('../name');
+
+var _name2 = _interopRequireDefault(_name);
+
+var _date = require('../date');
+
+var _date2 = _interopRequireDefault(_date);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+/**
+ * Get BibTeX-JSON from CSL(-JSON)
+ *
+ * @access protected
+ * @method getBibTeXJSON
+ *
+ * @param {CSL} src - Input CSL
+ *
+ * @return {Object} Output BibTeX-JSON
+ */
+var getBibTeXJSON = function getBibTeXJSON(src) {
+  var res = {
+    label: src.label || (0, _label2.default)(src),
+    type: (0, _type2.default)(src.type)
+  };
+  var props = {};
+
+  if (src.hasOwnProperty('author')) {
+    props.author = src.author.map(_name2.default).join(' and ');
+  }
+  if (src.hasOwnProperty('event')) {
+    props.organization = src.event;
+  }
+  if (src.hasOwnProperty('accessed')) {
+    props.note = '[Online; accesed ' + (0, _date2.default)(src.accessed) + ']';
+  }
+  if (src.hasOwnProperty('DOI')) {
+    props.doi = src.DOI;
+  }
+  if (src.hasOwnProperty('editor')) {
+    props.editor = src.editor.map(_name2.default).join(' and ');
+  }
+  if (src.hasOwnProperty('ISBN')) {
+    props.isbn = src.ISBN;
+  }
+  if (src.hasOwnProperty('ISSN')) {
+    props.issn = src.ISSN;
+  }
+  if (src.hasOwnProperty('container-title')) {
+    props.journal = src['container-title'];
+  }
+  if (src.hasOwnProperty('issue')) {
+    props.issue = src.issue.toString();
+  }
+  if (src.hasOwnProperty('page')) {
+    props.pages = src.page.replace('-', '--');
+  }
+  if (src.hasOwnProperty('publisher-place')) {
+    props.address = src['publisher-place'];
+  }
+  if (src.hasOwnProperty('edition')) {
+    props.edition = src.edition.toString();
+  }
+  if (src.hasOwnProperty('publisher')) {
+    props.publisher = src.publisher;
+  }
+  if (src.hasOwnProperty('title')) {
+    props.title = src['title'];
+  }
+  if (src.hasOwnProperty('url')) {
+    props.url = src.url;
+  }
+  if (src.hasOwnProperty('volume')) {
+    props.volume = src.volume.toString();
+  }
+  if (src.hasOwnProperty('issued') && Array.isArray(src.issued) && src.issued[0]['date-parts'].length === 3) {
+    props.year = src.issued[0]['date-parts'][0].toString();
+  }
+
+  res.properties = props;
+
+  return res;
+};
+
+exports.default = getBibTeXJSON;
+
+},{"../date":346,"../name":351,"./label":343,"./type":345}],343:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+/**
+ * Get a BibTeX label from CSL data
+ *
+ * @access protected
+ * @method getBibTeXLabel
+ *
+ * @param {CSL} src - Input CSL
+ *
+ * @return {String} The label
+ */
+var getBibTeXLabel = function getBibTeXLabel() {
+  var _ref = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
+      _ref$author = _ref.author,
+      author = _ref$author === undefined ? [] : _ref$author,
+      year = _ref.year,
+      _ref$issued = _ref.issued,
+      issued = _ref$issued === undefined ? [] : _ref$issued,
+      title = _ref.title;
+
+  var res = '';
+
+  if (author.length > 0) {
+    res += author[0].family || author[0].literal;
+  }
+
+  if (year) {
+    res += year;
+  } else if (issued.length > 0 && issued[0]['date-parts']) {
+    res += issued[0]['date-parts'][0];
+  }
+
+  if (title) {
+    res += title.match(/^(?:(?:the|a|an)\s+)?(\S+)/i)[1];
+  }
+
+  return res;
+};
+
+exports.default = getBibTeXLabel;
+
+},{}],344:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _json = require('./json');
+
+var _json2 = _interopRequireDefault(_json);
+
+var _dict = require('../dict');
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+/**
+ * Mapping of BibTeX syntax chars to BibTeX Escaped Chars.
+ *
+ * From [Zotero's alwaysMap object](https://github.com/zotero/translators/blob/master/BibTeX.js#L225)
+ * [REPO](https://github.com/zotero/translators)
+ *
+ * Accesed 11/20/2016
+ *
+ * @access protected
+ * @constant varBibTeXSyntaxTokens
+ * @default
+ */
+var varBibTeXSyntaxTokens = {
+  '|': '{\\textbar}',
+  '<': '{\\textless}',
+  '>': '{\\textgreater}',
+  '~': '{\\textasciitilde}',
+  '^': '{\\textasciicircum}',
+  '\\': '{\\textbackslash}',
+  // See http://tex.stackexchange.com/questions/230750/open-brace-in-bibtex-fields/230754
+  '{': '\\{\\vphantom{\\}}',
+  '}': '\\vphantom{\\{}\\}'
+};
+
+/**
+ * Get a BibTeX (HTML) string from CSL
+ *
+ * @access protected
+ * @method getBibTeX
+ *
+ * @param {CSL[]} src - Input CSL
+ * @param {Boolean} html - Output as HTML string (instead of plain text)
+ *
+ * @return {String} BibTeX (HTML) string
+ */
+var getBibTeX = function getBibTeX(src, html) {
+  var dict = html ? _dict.htmlDict : _dict.textDict;
+  var caseSensitive = ['title'];
+
+  var entries = src.map(function (entry) {
+    var bib = (0, _json2.default)(entry);
+    var properties = Object.keys(bib.properties).map(function (prop) {
+      var value = bib.properties[prop].replace(/[|<>~^\\{}]/g, function (match) {
+        return varBibTeXSyntaxTokens[match];
+      });
+      var delStart = value === parseInt(value).toString() ? '' : caseSensitive.includes(prop) ? '{{' : '{';
+      var delEnd = delStart.replace(/{/g, '}').split('').reverse().join('');
+
+      return '' + dict.li_start + prop + '=' + delStart + value + delEnd + ',' + dict.li_end;
+    }).join('');
+
+    return dict.en_start + '@' + bib.type + '{' + bib.label + ',' + dict.ul_start + properties + dict.ul_end + '}' + dict.en_end;
+  }).join('');
+
+  return '' + dict.wr_start + entries + dict.wr_end;
+};
+
+exports.default = getBibTeX;
+
+},{"../dict":347,"./json":342}],345:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+/**
+ * CSL pub type to BibTeX pub type
+ *
+ * @access protected
+ * @method fetchBibTeXType
+ *
+ * @param {String} pubType - CSL type
+ *
+ * @return {String} BibTeX type
+ */
+var fetchBibTeXType = function fetchBibTeXType(pubType) {
+  switch (pubType) {
+    case 'article':
+    case 'article-journal':
+    case 'article-magazine':
+    case 'article-newspaper':
+      return 'article';
+
+    case 'book':
+      return 'book';
+
+    case 'chapter':
+      return 'incollection';
+
+    case 'manuscript':
+      return 'unpublished';
+
+    case 'paper-conference':
+      return 'inproceedings';
+
+    case 'patent':
+      return 'patent';
+
+    case 'report':
+      return 'techreport';
+
+    case 'thesis':
+      return 'phdthesis';
+
+    case 'graphic':
+    case 'interview':
+    case 'motion_picture':
+    case 'personal_communication':
+    case 'webpage':
+      return 'misc';
+
+    default:
+      console.warn('CSL publication type not recognized: ' + pubType + '}. Interpreting as "misc".');
+      return 'misc';
+  }
+};
+
+exports.default = fetchBibTeXType;
+
+},{}],346:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; }();
+
+/**
+ * Convert a CSL date into human-readable format
+ *
+ * @access protected
+ * @function getDate
+ *
+ * @param {String[]} date - A date in CSL format
+ *
+ * @return {String} The string
+ */
+var getDate = function getDate(_ref) {
+  var _ref2 = _slicedToArray(_ref, 1),
+      date = _ref2[0]['date-parts'];
+
+  if (date.length === 3) {
+    return date[0].padStart(4, '0') + '-' + date[1].padStart(2, '0') + '-' + date[2].padStart(2, '0');
+  } else {
+    return '';
+  }
+};
+
+exports.default = getDate;
+
+},{}],347:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+/**
+ * Object containing HTML strings for building JSON and BibTeX. Made to match citeproc, for compatability.
+ *
+ * @access protected
+ * @constant varHTMLDict
+ * @default
+ */
+var htmlDict = {
+  wr_start: '<div class="csl-bib-body">',
+  wr_end: '</div>',
+  en_start: '<div class="csl-entry">',
+  en_end: '</div>',
+  ul_start: '<ul style="list-style-type:none">',
+  ul_end: '</ul>',
+  li_start: '<li>',
+  li_end: '</li>'
+};
+
+/**
+ * Object containing text strings for building JSON and BibTeX. Made to match citeproc, for compatability.
+ *
+ * @access protected
+ * @constant varHTMLDict
+ * @default
+ */
+var textDict = {
+  wr_start: '',
+  wr_end: '\n',
+  en_start: '',
+  en_end: '\n',
+  ul_start: '\n',
+  ul_end: '',
+  li_start: '\t',
+  li_end: '\n'
+};
+
+exports.htmlDict = htmlDict;
+exports.textDict = textDict;
+
+},{}],348:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.label = exports.name = exports.date = exports.json = exports.dict = exports.bibtex = undefined;
+
+var _index = require('./bibtex/index');
+
+var bibtex = _interopRequireWildcard(_index);
+
+var _dict = require('./dict');
+
+var dict = _interopRequireWildcard(_dict);
+
+var _json = require('./json');
+
+var _json2 = _interopRequireDefault(_json);
+
+var _date = require('./date');
+
+var _date2 = _interopRequireDefault(_date);
+
+var _name = require('./name');
+
+var _name2 = _interopRequireDefault(_name);
+
+var _label = require('./label');
+
+var _label2 = _interopRequireDefault(_label);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+
+exports.bibtex = bibtex;
+exports.dict = dict;
+exports.json = _json2.default;
+exports.date = _date2.default;
+exports.name = _name2.default;
+exports.label = _label2.default;
+
+},{"./bibtex/index":341,"./date":346,"./dict":347,"./json":349,"./label":350,"./name":351}],349:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
+var _dict = require('./dict');
+
+/**
+ * Convert a JSON array or object to HTML.
+ *
+ * @access protected
+ * @function getJSONObjectHTML
+ *
+ * @param {Object|Object[]|String[]|Number[]} src - The data
+ *
+ * @return {String} The html (in string form)
+ */
+var getJSONObjectHTML = function getJSONObjectHTML(src) {
+  if (Array.isArray(src)) {
+    var entries = src.map(function (entry) {
+      return '' + _dict.htmlDict.li_start + getJSONValueHTML(entry) + ',' + _dict.htmlDict.li_end;
+    });
+    return '[' + _dict.htmlDict.ul_start + entries + _dict.htmlDict.ul_end + ']';
+  } else {
+    var props = Object.keys(src).map(function (prop) {
+      return '' + _dict.htmlDict.li_start + prop + ': ' + getJSONValueHTML(src[prop]) + ',{dict.li_end}';
+    });
+    return '{' + _dict.htmlDict.ul_start + props + _dict.htmlDict.ul_end + '}';
+  }
+};
+
+/**
+ * Convert JSON to HTML.
+ *
+ * @access protected
+ * @function getJSONValueHTML
+ *
+ * @param {Object|String|Number|Object[]|String[]|Number[]} src - The data
+ *
+ * @return {String} The html (in string form)
+ */
+var getJSONValueHTML = function getJSONValueHTML(src) {
+  if ((typeof src === 'undefined' ? 'undefined' : _typeof(src)) === 'object' && src !== null) {
+    if (src.length === 0) {
+      return '[]';
+    } else if (Object.keys(src).length === 0) {
+      return '{}';
+    } else {
+      return getJSONObjectHTML(src);
+    }
+  } else {
+    return '<span class="string">' + JSON.stringify(src) + '}</span>';
+  }
+};
+
+/**
+ * Get a JSON HTML string from CSL
+ *
+ * @access protected
+ * @method getJSON
+ *
+ * @param {CSL[]} src - Input CSL
+ *
+ * @return {String} JSON HTML string
+ */
+var getJSON = function getJSON(src) {
+  var entries = src.map(function (entry, index, array) {
+    var comma = index < array.length - 1 ? ',' : '';
+    var props = Object.keys(entry).map(function (prop, index, array) {
+      var comma = index < array.length - 1 ? ',' : '';
+      return '' + _dict.htmlDict.li_start + prop + ': ' + getJSONValueHTML(entry[prop]) + comma + '{dict.li_end}';
+    }).join('');
+
+    return _dict.htmlDict.en_start + '{' + _dict.htmlDict.ul_start + props + _dict.htmlDict.ul_end + '}' + comma + _dict.htmlDict.en_end;
+  });
+
+  return _dict.htmlDict.wr_start + '[' + entries + ']' + _dict.htmlDict.wr_end;
+};
+
+exports.default = getJSON;
+
+},{"./dict":347}],350:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _label = require('./bibtex/label');
+
+var _label2 = _interopRequireDefault(_label);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+/**
+ * Get a label from CSL data
+ *
+ * @access protected
+ * @method getLabel
+ *
+ * @param {CSL} src - Input CSL
+ *
+ * @return {String} The label
+ */
+var getLabel = function getLabel(src) {
+  return (0, _label2.default)(src);
+};
+
+exports.default = getLabel;
+
+},{"./bibtex/label":343}],351:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+/**
+ * Get name from CSL
+ *
+ * @access protected
+ * @method getName
+ *
+ * @param {Object} obj - CSL input
+ *
+ * @return {String} Full name
+ */
+var getName = function getName(obj) {
+  var arr = ['dropping-particle', 'given', 'suffix', 'non-dropping-particle', 'family'];
+  return obj.literal || arr.map(function (entry) {
+    return obj[entry] || '';
+  }).filter(function (v) {
+    return !!v;
+  }).join(' ');
+};
+
+exports.default = getName;
+
+},{}],352:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _date = require('../date');
+
+var _date2 = _interopRequireDefault(_date);
+
+var _name = require('../name');
+
+var _name2 = _interopRequireDefault(_name);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+/**
+ * Forat ContentMine data
+ *
+ * @access protected
+ * @method parseContentMine
+ *
+ * @param {Object} data - The input data
+ *
+ * @return {CSL[]} The formatted input data
+ */
+var parseContentMine = function parseContentMine(data) {
+  var res = {
+    type: 'article-journal'
+  };
+
+  Object.keys(data).forEach(function (prop) {
+    res[prop] = data[prop].value[0];
+  });
+
+  if (res.hasOwnProperty('authors')) {
+    res.author = data.authors.value.map(_name2.default);
+  }
+  if (res.hasOwnProperty('firstpage')) {
+    res.page = res['page-first'] = res.firstpage;
+  }
+  if (res.hasOwnProperty('date')) {
+    res.issued = (0, _date2.default)(res.date);
+  }
+  if (res.hasOwnProperty('journal')) {
+    res['container-title'] = res.journal;
+  }
+  if (res.hasOwnProperty('doi')) {
+    res.id = res.DOI = res.doi;
+  }
+
+  return res;
+};
+
+exports.default = parseContentMine;
+
+},{"../date":358,"../name":366}],353:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _prop = require('./prop');
+
+var _prop2 = _interopRequireDefault(_prop);
+
+var _type = require('./type');
+
+var _type2 = _interopRequireDefault(_type);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+/**
+ * Format BibTeX JSON data
+ *
+ * @access protected
+ * @method parseBibTeXJSON
+ *
+ * @param {Object[]} data - The input data
+ *
+ * @return {CSL[]} The formatted input data
+ */
+var parseBibTeXJSON = function parseBibTeXJSON(data) {
+  return data.map(function (entry) {
+    var newEntry = {};
+
+    for (var prop in entry.properties) {
+      var oldValue = entry.properties[prop];
+      var newValue = (0, _prop2.default)(prop, oldValue);
+
+      if (newValue) {
+        newEntry[newValue[0]] = newValue[1];
+      }
+    }
+
+    newEntry.type = (0, _type2.default)(entry.type);
+    newEntry.id = entry.label;
+
+    return newEntry;
+  });
+};
+
+exports.default = parseBibTeXJSON;
+
+},{"./prop":354,"./type":357}],354:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _name = require('../name');
+
+var _name2 = _interopRequireDefault(_name);
+
+var _date = require('../date');
+
+var _date2 = _interopRequireDefault(_date);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+/**
+ * Transform property and value from BibTeX-JSON format to CSL-JSON
+ *
+ * @access protected
+ * @method parseBibTeXProp
+ *
+ * @param {String} prop - Property
+ * @param {String|Number} value - Value
+ *
+ * @return {String[]} Array with new prop and value
+ */
+var parseBibTeXProp = function parseBibTeXProp(prop, value) {
+  var rProp = prop;
+  var rValue = value;
+
+  switch (prop) {
+    // Address
+    case 'address':
+      rProp = 'publisher-place';
+      break;
+
+    // Author
+    case 'author':
+      rValue = value.split(' and ').map(_name2.default);
+      break;
+
+    // Book title
+    case 'booktitle':
+      rProp = 'container-title';
+      break;
+
+    // DOI
+    case 'doi':
+      rProp = 'DOI';
+      break;
+
+    // Edition/print
+    case 'edition':
+      // rValue = parseOrdinal(value)
+      break;
+
+    // Editor
+    case 'editor':
+      rValue = value.split(' and ').map(_name2.default);
+      break;
+
+    // ISBN
+    case 'isbn':
+      rProp = 'ISBN';
+      break;
+
+    // ISSN
+    case 'issn':
+      rProp = 'ISSN';
+      break;
+
+    // Issue
+    case 'issue':
+    case 'number':
+      rProp = 'issue';
+      rValue = value.toString();
+      break;
+
+    // Journal
+    case 'journal':
+      rProp = 'container-title';
+      break;
+
+    // Location
+    case 'location':
+      rProp = 'publisher-place';
+      break;
+
+    // Pages
+    case 'pages':
+      rProp = 'page';
+      rValue = value.replace(/[—–]/, '-');
+      break;
+
+    // Pubate
+    case 'date':
+      rProp = 'issued';
+      rValue = (0, _date2.default)(value);
+      break;
+
+    case 'year':
+      // Ignore for now
+      // rProp = 'issued-year'
+      break;
+
+    case 'month':
+      // Ignore for now
+      // rProp = 'issued-month'
+      break;
+
+    // Publisher
+    case 'publisher':
+      // Nothing necessary, as far as I know
+      break;
+
+    // Series
+    case 'series':
+      rProp = 'collection-title';
+      break;
+
+    // Title
+    case 'title':
+      rProp = 'title';
+      rValue = value.replace(/\.$/g, '');
+      break;
+
+    // URL
+    case 'url':
+      rProp = 'URL';
+      break;
+
+    // Volume
+    case 'volume':
+      rValue = value.toString();
+      break;
+
+    case 'crossref': // Crossref
+    case 'keywords': // Keywords
+    case 'language': // Language
+    case 'note': // Note
+    case 'pmid': // PMID
+    case 'numpages':
+      // Number of pages
+      // Property ignored
+      rProp = rValue = undefined;
+      break;
+
+    default:
+      console.info('[set]', 'Unknown property: ' + prop);
+      rProp = rValue = undefined;
+      break;
+  }
+
+  if (rProp !== undefined && rValue !== undefined) {
+    return [rProp, rValue];
+  } else {
+    return undefined;
+  }
+};
+
+exports.default = parseBibTeXProp;
+
+},{"../date":358,"../name":366}],355:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _regex = require('../regex');
+
+var _regex2 = _interopRequireDefault(_regex);
+
+var _tokens = require('./tokens.json');
+
+var _tokens2 = _interopRequireDefault(_tokens);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+/**
+ * Format BibTeX data
+ *
+ * @access protected
+ * @method parseBibTeX
+ *
+ * @param {String} str - The input data
+ *
+ * @return {CSL[]} The formatted input data
+ */
+var parseBibTeX = function parseBibTeX(str) {
+  var entries = void 0;
+
+  try {
+    entries = [];
+
+    var stack = str
+    // Clean weird commands
+    .replace(/{?(\\[`"'^~=]){?\\?([A-Za-z])}/g, '{$1$2}').replace(/{?(\\[a-z]){?\\?([A-Za-z])}/g, '{$1 $2}')
+    // Tokenize, with escaped characters in mind
+    .split(new RegExp('(?!^)(' +
+    // Escaped chars
+    '\\\\([#$%&~_^\\\\{}])|' +
+    // Regular commands
+    '\\{\\\\(?:' +
+    // Accented chars
+    // Vowel regular
+    '[`\'^~"=][AEIOUYaeiouy]|' +
+    // Consonant regular
+    '(?:[cv] |[\'])[CcDdGgKkLlNnRrSs]|' +
+    // A-E
+    '(?:[dkruv] )[Aa]|(?:[db] |\\.)[Bb]|[.^][Cc]|(?:[bd] |\\.)[Dd]|(?:[dkuv] |[.])[Ee]|' +
+    // F-J
+    '\\.[Ff]|(?:u |[=.^\'])[Gg]|(?:[cd] |[.^"])[Hh]|b h|[dv] [Ii]|=\\\\i|\\.I|(?:v |\\^)[Jj]|' +
+    // K-O
+    '(?:[bd] |\')[Kk]|[bd] [Ll]|[Ll] |(?:d |[.\'])[Mm]|(?:[bd] |[~.])[Nn]|[dHkuv] [Oo]|' +
+    // P-U
+    '[.\'][Pp]|(?:[bd] |[.])[Rr]|(?:d |[.^])[Ss]|(?:[bcdv] |[.])[Tt]|" t|[dHkruv] [Uu]|' +
+    // V-Z
+    '(?:d |[~])[Vv]|(?:d |[`".\'^])[Ww]|r w|[."][Xx]|(?:d |[.])[Yy]|r y|(?:[bdv] |[\'.^])[Zz]|' +
+    // No break space
+    '~|' +
+    // Commands
+    '\\w+' + ')\\}|' +
+    // Greek letters and other symbols
+    '\\$\\\\(?:[A-Z]?[a-z]+|\\#|%<)\\\\$|' +
+    // Subscript and superscript
+    '\\$[^_]\\{[0-9+-=()n]\\}\\$|' +
+    // --, ---, '', ''', ``, ```
+    '---|--|\'\'\'|\'\'|```|``|' +
+    // ?!, !!, !?
+    '\\?!|' + '!!|' + '!\\?\'|' +
+    // \url and \href
+    '\\\\(?:url|href)|' + '[\\s\\S]' + ')', 'g')).filter(function (v) {
+      return !!v;
+    });
+
+    var whitespace = _regex2.default.bibtex[1];
+    var syntax = _regex2.default.bibtex[2];
+    var dels = {
+      '"': '"',
+      '{': '}',
+      '"{': '}"',
+      '{{': '}}',
+      '': ''
+    };
+
+    var index = 0;
+    var curs = stack[index];
+
+    while (curs) {
+      var obj = void 0;
+
+      while (whitespace.test(curs)) {
+        curs = stack[++index];
+      }
+
+      if (!curs) {
+        break;
+      }
+
+      entries.push({ type: '', label: '', properties: {} });
+      obj = entries[entries.length - 1];
+
+      if (curs === '@') {
+        curs = stack[++index];
+      } else {
+        throw new SyntaxError('Unexpected token at index ' + index + '. Expected "@", got "' + curs + '".');
+      }
+
+      while (whitespace.test(curs)) {
+        curs = stack[++index];
+      }
+
+      while (!whitespace.test(curs) && !syntax.test(curs) || curs.length > 1) {
+        obj.type += curs;
+        curs = stack[++index];
+      }
+
+      obj.type = obj.type.toLowerCase();
+
+      while (whitespace.test(curs)) {
+        curs = stack[++index];
+      }
+
+      if (curs === '{') {
+        curs = stack[++index];
+      } else {
+        throw new SyntaxError('Unexpected token at index ' + index + '. Expected "{", got "' + curs + '".');
+      }
+
+      while (whitespace.test(curs)) {
+        curs = stack[++index];
+      }
+
+      while (!whitespace.test(curs) && !syntax.test(curs) || curs.length > 1) {
+        obj.label += curs;
+        curs = stack[++index];
+      }
+
+      while (whitespace.test(curs)) {
+        curs = stack[++index];
+      }
+
+      if (curs === ',') {
+        curs = stack[++index];
+      } else {
+        throw new SyntaxError('Unexpected token at index ' + index + '. Expected ",", got "' + curs + '".');
+      }
+
+      while (whitespace.test(curs)) {
+        curs = stack[++index];
+      }
+
+      var key, val, startDel, endDel, nexs;
+
+      while (curs !== '}') {
+        key = '';
+        val = '';
+        startDel = '';
+
+        while (curs && !whitespace.test(curs) && curs !== '=') {
+          key += curs;
+          curs = stack[++index];
+        }
+
+        while (whitespace.test(curs)) {
+          curs = stack[++index];
+        }
+
+        if (curs === '=') {
+          curs = stack[++index];
+        } else {
+          throw new SyntaxError('Unexpected token at index ' + index + '. Expected "=", got "' + curs + '".');
+        }
+
+        while (whitespace.test(curs)) {
+          curs = stack[++index];
+        }
+
+        while (syntax.test(curs)) {
+          startDel += curs;
+          curs = stack[++index];
+        }
+
+        if (!dels.hasOwnProperty(startDel)) {
+          throw new SyntaxError('Unexpected field delimiter at index ' + index + '. Expected ' + (Object.keys(dels).map(function (v) {
+            return '"' + v + '"';
+          }).join(', ') + ', got "' + startDel + '".'));
+        }
+
+        endDel = dels[startDel];
+        nexs = stack.slice(index + 1, index + (endDel.length ? endDel.length : 1)).reverse().join('');
+
+        while (curs && (endDel === '' ? curs !== ',' : curs + nexs !== endDel)) {
+          if (_tokens2.default.hasOwnProperty(curs)) {
+            val += _tokens2.default[curs];
+          } else if (curs.match(/^\\([#$%&~_^\\{}])$/)) {
+            val += curs.slice(1);
+          } else if (curs.length > 1) {
+            // "Soft", non-breaking error for now
+            // throw new SyntaxError( 'Escape sequence not recognized: ' + curs )
+            console.error('Escape sequence not recognized: ' + curs);
+          } else {
+            val += curs;
+          }
+
+          curs = stack[++index];
+          nexs = stack.slice(index + 1, index + (endDel.length ? endDel.length : 1)).reverse().join('');
+        }
+
+        key = key.trim().replace(/\s+/g, ' ').toLowerCase();
+
+        val = val.replace(/[{}]/g, '').trim().replace(/\s+/g, ' ');
+
+        obj.properties[key] = val;
+
+        endDel = endDel.split('');
+
+        while (endDel.pop()) {
+          curs = stack[++index];
+        }
+
+        while (whitespace.test(curs)) {
+          curs = stack[++index];
+        }
+
+        if (curs === '}') {
+          break;
+        } else if (curs === ',') {
+          curs = stack[++index];
+        } else {
+          throw new SyntaxError('Unexpected token at index ' + index + '. Expected ",", "}", got "' + curs + '".');
+        }
+
+        while (whitespace.test(curs)) {
+          curs = stack[++index];
+        }
+      }
+
+      if (curs === '}') {
+        curs = stack[++index];
+      } else {
+        throw new SyntaxError('Unexpected token at index ' + index + '. Expected "}", got "' + curs + '".');
+      }
+    }
+
+    return entries;
+  } catch (e) {
+    console.error('Uncaught SyntaxError: ' + e.message + ' Returning completed entries.');
+
+    // Remove last, incomplete entry
+    entries.pop();
+
+    return entries;
+  }
+};
+
+/**
+ * Mapping of BibTeX Escaped Chars to Unicode.
+ *
+ * From [Zotero's reversed mapping table](https://github.com/zotero/translators/blob/master/BibTeX.js#L2353)
+ * [REPO](https://github.com/zotero/translators)
+ *
+ * Accesed 11/09/2016
+ *
+ * @access protected
+ * @constant varBibTeXTokens
+ * @default
+ */
+exports.default = parseBibTeX;
+
+},{"../regex":367,"./tokens.json":356}],356:[function(require,module,exports){
+module.exports={
+  "\\url":"",                           "\\href":"",                            "{\\textexclamdown}":"\u00A1",          "{\\textcent}":"\u00A2",
+  "{\\textsterling}":"\u00A3",          "{\\textyen}":"\u00A5",                 "{\\textbrokenbar}":"\u00A6",           "{\\textsection}":"\u00A7",
+  "{\\textasciidieresis}":"\u00A8",     "{\\textcopyright}":"\u00A9",           "{\\textordfeminine}":"\u00AA",         "{\\guillemotleft}":"\u00AB",
+  "{\\textlnot}":"\u00AC",              "{\\textregistered}":"\u00AE",          "{\\textasciimacron}":"\u00AF",         "{\\textdegree}":"\u00B0",
+  "{\\textpm}":"\u00B1",                "{\\texttwosuperior}":"\u00B2",         "{\\textthreesuperior}":"\u00B3",       "{\\textasciiacute}":"\u00B4",
+  "{\\textmu}":"\u00B5",                "{\\textparagraph}":"\u00B6",           "{\\textperiodcentered}":"\u00B7",      "{\\c\\ }":"\u00B8",
+  "{\\textonesuperior}":"\u00B9",       "{\\textordmasculine}":"\u00BA",        "{\\guillemotright}":"\u00BB",          "{\\textonequarter}":"\u00BC",
+  "{\\textonehalf}":"\u00BD",           "{\\textthreequarters}":"\u00BE",       "{\\textquestiondown}":"\u00BF",        "{\\AE}":"\u00C6",
+  "{\\DH}":"\u00D0",                    "{\\texttimes}":"\u00D7",               "{\\O}":"\u00D8",                       "{\\TH}":"\u00DE",
+  "{\\ss}":"\u00DF",                    "{\\ae}":"\u00E6",                      "{\\dh}":"\u00F0",                      "{\\textdiv}":"\u00F7",
+  "{\\o}":"\u00F8",                     "{\\th}":"\u00FE",                      "{\\i}":"\u0131",                       "{\\NG}":"\u014A",
+  "{\\ng}":"\u014B",                    "{\\OE}":"\u0152",                      "{\\oe}":"\u0153",                      "{\\textasciicircum}":"\u02C6",
+  "{\\textacutedbl}":"\u02DD",          "$\\Gamma$":"\u0393",                   "$\\Delta$":"\u0394",                   "$\\Theta$":"\u0398",
+  "$\\Lambda$":"\u039B",                "$\\Xi$":"\u039E",                      "$\\Pi$":"\u03A0",                      "$\\Sigma$":"\u03A3",
+  "$\\Phi$":"\u03A6",                   "$\\Psi$":"\u03A8",                     "$\\Omega$":"\u03A9",                   "$\\alpha$":"\u03B1",
+  "$\\beta$":"\u03B2",                  "$\\gamma$":"\u03B3",                   "$\\delta$":"\u03B4",                   "$\\varepsilon$":"\u03B5",
+  "$\\zeta$":"\u03B6",                  "$\\eta$":"\u03B7",                     "$\\theta$":"\u03B8",                   "$\\iota$":"\u03B9",
+  "$\\kappa$":"\u03BA",                 "$\\lambda$":"\u03BB",                  "$\\mu$":"\u03BC",                      "$\\nu$":"\u03BD",
+  "$\\xi$":"\u03BE",                    "$\\pi$":"\u03C0",                      "$\\rho$":"\u03C1",                     "$\\varsigma$":"\u03C2",
+  "$\\sigma$":"\u03C3",                 "$\\tau$":"\u03C4",                     "$\\upsilon$":"\u03C5",                 "$\\varphi$":"\u03C6",
+  "$\\chi$":"\u03C7",                   "$\\psi$":"\u03C8",                     "$\\omega$":"\u03C9",                   "$\\vartheta$":"\u03D1",
+  "$\\Upsilon$":"\u03D2",               "$\\phi$":"\u03D5",                     "$\\varpi$":"\u03D6",                   "$\\varrho$":"\u03F1",
+  "$\\epsilon$":"\u03F5",               "{\\textendash}":"\u2013",              "{\\textemdash}":"\u2014",              "---":"\u2014",
+  "--":"\u2013",                        "{\\textbardbl}":"\u2016",              "{\\textunderscore}":"\u2017",          "{\\textquoteleft}":"\u2018",
+  "{\\textquoteright}":"\u2019",        "{\\quotesinglbase}":"\u201A",          "{\\textquotedblleft}":"\u201C",        "{\\textquotedblright}":"\u201D",
+  "{\\quotedblbase}":"\u201E",          "{\\textdagger}":"\u2020",              "{\\textdaggerdbl}":"\u2021",           "{\\textbullet}":"\u2022",
+  "{\\textellipsis}":"\u2026",          "{\\textperthousand}":"\u2030",         "'''":"\u2034",                         "''":"\u201D",
+  "``":"\u201C",                        "```":"\u2037",                         "{\\guilsinglleft}":"\u2039",           "{\\guilsinglright}":"\u203A",
+  "!!":"\u203C",                        "{\\textfractionsolidus}":"\u2044",     "?!":"\u2048",                          "!?":"\u2049",
+  "$^{0}$":"\u2070",                    "$^{4}$":"\u2074",                      "$^{5}$":"\u2075",                      "$^{6}$":"\u2076",
+  "$^{7}$":"\u2077",                    "$^{8}$":"\u2078",                      "$^{9}$":"\u2079",                      "$^{+}$":"\u207A",
+  "$^{-}$":"\u207B",                    "$^{=}$":"\u207C",                      "$^{(}$":"\u207D",                      "$^{)}$":"\u207E",
+  "$^{n}$":"\u207F",                    "$_{0}$":"\u2080",                      "$_{1}$":"\u2081",                      "$_{2}$":"\u2082",
+  "$_{3}$":"\u2083",                    "$_{4}$":"\u2084",                      "$_{5}$":"\u2085",                      "$_{6}$":"\u2086",
+  "$_{7}$":"\u2087",                    "$_{8}$":"\u2088",                      "$_{9}$":"\u2089",                      "$_{+}$":"\u208A",
+  "$_{-}$":"\u208B",                    "$_{=}$":"\u208C",                      "$_{(}$":"\u208D",                      "$_{)}$":"\u208E",
+  "{\\texteuro}":"\u20AC",              "{\\textcelsius}":"\u2103",             "{\\textnumero}":"\u2116",              "{\\textcircledP}":"\u2117",
+  "{\\textservicemark}":"\u2120",       "{TEL}":"\u2121",                       "{\\texttrademark}":"\u2122",           "{\\textohm}":"\u2126",
+  "{\\textestimated}":"\u212E",         "{\\`A}":"\u00C0",                      "{\\'A}":"\u00C1",                      "{\\^A}":"\u00C2",
+  "{\\~A}":"\u00C3",                    "{\\\"A}":"\u00C4",                     "{\\r A}":"\u00C5",                     "{\\c C}":"\u00C7",
+  "{\\`E}":"\u00C8",                    "{\\'E}":"\u00C9",                      "{\\^E}":"\u00CA",                      "{\\\"E}":"\u00CB",
+  "{\\`I}":"\u00CC",                    "{\\'I}":"\u00CD",                      "{\\^I}":"\u00CE",                      "{\\\"I}":"\u00CF",
+  "{\\~N}":"\u00D1",                    "{\\`O}":"\u00D2",                      "{\\'O}":"\u00D3",                      "{\\^O}":"\u00D4",
+  "{\\~O}":"\u00D5",                    "{\\\"O}":"\u00D6",                     "{\\`U}":"\u00D9",                      "{\\'U}":"\u00DA",
+  "{\\^U}":"\u00DB",                    "{\\\"U}":"\u00DC",                     "{\\'Y}":"\u00DD",                      "{\\`a}":"\u00E0",
+  "{\\'a}":"\u00E1",                    "{\\^a}":"\u00E2",                      "{\\~a}":"\u00E3",                      "{\\\"a}":"\u00E4",
+  "{\\r a}":"\u00E5",                   "{\\c c}":"\u00E7",                     "{\\`e}":"\u00E8",                      "{\\'e}":"\u00E9",
+  "{\\^e}":"\u00EA",                    "{\\\"e}":"\u00EB",                     "{\\`i}":"\u00EC",                      "{\\'i}":"\u00ED",
+  "{\\^i}":"\u00EE",                    "{\\\"i}":"\u00EF",                     "{\\~n}":"\u00F1",                      "{\\`o}":"\u00F2",
+  "{\\'o}":"\u00F3",                    "{\\^o}":"\u00F4",                      "{\\~o}":"\u00F5",                      "{\\\"o}":"\u00F6",
+  "{\\`u}":"\u00F9",                    "{\\'u}":"\u00FA",                      "{\\^u}":"\u00FB",                      "{\\\"u}":"\u00FC",
+  "{\\'y}":"\u00FD",                    "{\\\"y}":"\u00FF",                     "{\\=A}":"\u0100",                      "{\\=a}":"\u0101",
+  "{\\u A}":"\u0102",                   "{\\u a}":"\u0103",                     "{\\k A}":"\u0104",                     "{\\k a}":"\u0105",
+  "{\\'C}":"\u0106",                    "{\\'c}":"\u0107",                      "{\\^C}":"\u0108",                      "{\\^c}":"\u0109",
+  "{\\.C}":"\u010A",                    "{\\.c}":"\u010B",                      "{\\v C}":"\u010C",                     "{\\v c}":"\u010D",
+  "{\\v D}":"\u010E",                   "{\\v d}":"\u010F",                     "{\\=E}":"\u0112",                      "{\\=e}":"\u0113",
+  "{\\u E}":"\u0114",                   "{\\u e}":"\u0115",                     "{\\.E}":"\u0116",                      "{\\.e}":"\u0117",
+  "{\\k E}":"\u0118",                   "{\\k e}":"\u0119",                     "{\\v E}":"\u011A",                     "{\\v e}":"\u011B",
+  "{\\^G}":"\u011C",                    "{\\^g}":"\u011D",                      "{\\u G}":"\u011E",                     "{\\u g}":"\u011F",
+  "{\\.G}":"\u0120",                    "{\\.g}":"\u0121",                      "{\\c G}":"\u0122",                     "{\\c g}":"\u0123",
+  "{\\^H}":"\u0124",                    "{\\^h}":"\u0125",                      "{\\~I}":"\u0128",                      "{\\~i}":"\u0129",
+  "{\\=I}":"\u012A",                    "{\\=i}":"\u012B",                      "{\\=\\i}":"\u012B",                    "{\\u I}":"\u012C",
+  "{\\u i}":"\u012D",                   "{\\k I}":"\u012E",                     "{\\k i}":"\u012F",                     "{\\.I}":"\u0130",
+  "{\\^J}":"\u0134",                    "{\\^j}":"\u0135",                      "{\\c K}":"\u0136",                     "{\\c k}":"\u0137",
+  "{\\'L}":"\u0139",                    "{\\'l}":"\u013A",                      "{\\c L}":"\u013B",                     "{\\c l}":"\u013C",
+  "{\\v L}":"\u013D",                   "{\\v l}":"\u013E",                     "{\\L }":"\u0141",                      "{\\l }":"\u0142",
+  "{\\'N}":"\u0143",                    "{\\'n}":"\u0144",                      "{\\c N}":"\u0145",                     "{\\c n}":"\u0146",
+  "{\\v N}":"\u0147",                   "{\\v n}":"\u0148",                     "{\\=O}":"\u014C",                      "{\\=o}":"\u014D",
+  "{\\u O}":"\u014E",                   "{\\u o}":"\u014F",                     "{\\H O}":"\u0150",                     "{\\H o}":"\u0151",
+  "{\\'R}":"\u0154",                    "{\\'r}":"\u0155",                      "{\\c R}":"\u0156",                     "{\\c r}":"\u0157",
+  "{\\v R}":"\u0158",                   "{\\v r}":"\u0159",                     "{\\'S}":"\u015A",                      "{\\'s}":"\u015B",
+  "{\\^S}":"\u015C",                    "{\\^s}":"\u015D",                      "{\\c S}":"\u015E",                     "{\\c s}":"\u015F",
+  "{\\v S}":"\u0160",                   "{\\v s}":"\u0161",                     "{\\c T}":"\u0162",                     "{\\c t}":"\u0163",
+  "{\\v T}":"\u0164",                   "{\\v t}":"\u0165",                     "{\\~U}":"\u0168",                      "{\\~u}":"\u0169",
+  "{\\=U}":"\u016A",                    "{\\=u}":"\u016B",                      "{\\u U}":"\u016C",                     "{\\u u}":"\u016D",
+  "{\\r U}":"\u016E",                   "{\\r u}":"\u016F",                     "{\\H U}":"\u0170",                     "{\\H u}":"\u0171",
+  "{\\k U}":"\u0172",                   "{\\k u}":"\u0173",                     "{\\^W}":"\u0174",                      "{\\^w}":"\u0175",
+  "{\\^Y}":"\u0176",                    "{\\^y}":"\u0177",                      "{\\\"Y}":"\u0178",                     "{\\'Z}":"\u0179",
+  "{\\'z}":"\u017A",                    "{\\.Z}":"\u017B",                      "{\\.z}":"\u017C",                      "{\\v Z}":"\u017D",
+  "{\\v z}":"\u017E",                   "{\\v A}":"\u01CD",                     "{\\v a}":"\u01CE",                     "{\\v I}":"\u01CF",
+  "{\\v i}":"\u01D0",                   "{\\v O}":"\u01D1",                     "{\\v o}":"\u01D2",                     "{\\v U}":"\u01D3",
+  "{\\v u}":"\u01D4",                   "{\\v G}":"\u01E6",                     "{\\v g}":"\u01E7",                     "{\\v K}":"\u01E8",
+  "{\\v k}":"\u01E9",                   "{\\k O}":"\u01EA",                     "{\\k o}":"\u01EB",                     "{\\v j}":"\u01F0",
+  "{\\'G}":"\u01F4",                    "{\\'g}":"\u01F5",                      "{\\.B}":"\u1E02",                      "{\\.b}":"\u1E03",
+  "{\\d B}":"\u1E04",                   "{\\d b}":"\u1E05",                     "{\\b B}":"\u1E06",                     "{\\b b}":"\u1E07",
+  "{\\.D}":"\u1E0A",                    "{\\.d}":"\u1E0B",                      "{\\d D}":"\u1E0C",                     "{\\d d}":"\u1E0D",
+  "{\\b D}":"\u1E0E",                   "{\\b d}":"\u1E0F",                     "{\\c D}":"\u1E10",                     "{\\c d}":"\u1E11",
+  "{\\.F}":"\u1E1E",                    "{\\.f}":"\u1E1F",                      "{\\=G}":"\u1E20",                      "{\\=g}":"\u1E21",
+  "{\\.H}":"\u1E22",                    "{\\.h}":"\u1E23",                      "{\\d H}":"\u1E24",                     "{\\d h}":"\u1E25",
+  "{\\\"H}":"\u1E26",                   "{\\\"h}":"\u1E27",                     "{\\c H}":"\u1E28",                     "{\\c h}":"\u1E29",
+  "{\\'K}":"\u1E30",                    "{\\'k}":"\u1E31",                      "{\\d K}":"\u1E32",                     "{\\d k}":"\u1E33",
+  "{\\b K}":"\u1E34",                   "{\\b k}":"\u1E35",                     "{\\d L}":"\u1E36",                     "{\\d l}":"\u1E37",
+  "{\\b L}":"\u1E3A",                   "{\\b l}":"\u1E3B",                     "{\\'M}":"\u1E3E",                      "{\\'m}":"\u1E3F",
+  "{\\.M}":"\u1E40",                    "{\\.m}":"\u1E41",                      "{\\d M}":"\u1E42",                     "{\\d m}":"\u1E43",
+  "{\\.N}":"\u1E44",                    "{\\.n}":"\u1E45",                      "{\\d N}":"\u1E46",                     "{\\d n}":"\u1E47",
+  "{\\b N}":"\u1E48",                   "{\\b n}":"\u1E49",                     "{\\'P}":"\u1E54",                      "{\\'p}":"\u1E55",
+  "{\\.P}":"\u1E56",                    "{\\.p}":"\u1E57",                      "{\\.R}":"\u1E58",                      "{\\.r}":"\u1E59",
+  "{\\d R}":"\u1E5A",                   "{\\d r}":"\u1E5B",                     "{\\b R}":"\u1E5E",                     "{\\b r}":"\u1E5F",
+  "{\\.S}":"\u1E60",                    "{\\.s}":"\u1E61",                      "{\\d S}":"\u1E62",                     "{\\d s}":"\u1E63",
+  "{\\.T}":"\u1E6A",                    "{\\.t}":"\u1E6B",                      "{\\d T}":"\u1E6C",                     "{\\d t}":"\u1E6D",
+  "{\\b T}":"\u1E6E",                   "{\\b t}":"\u1E6F",                     "{\\~V}":"\u1E7C",                      "{\\~v}":"\u1E7D",
+  "{\\d V}":"\u1E7E",                   "{\\d v}":"\u1E7F",                     "{\\`W}":"\u1E80",                      "{\\`w}":"\u1E81",
+  "{\\'W}":"\u1E82",                    "{\\'w}":"\u1E83",                      "{\\\"W}":"\u1E84",                     "{\\\"w}":"\u1E85",
+  "{\\.W}":"\u1E86",                    "{\\.w}":"\u1E87",                      "{\\d W}":"\u1E88",                     "{\\d w}":"\u1E89",
+  "{\\.X}":"\u1E8A",                    "{\\.x}":"\u1E8B",                      "{\\\"X}":"\u1E8C",                     "{\\\"x}":"\u1E8D",
+  "{\\.Y}":"\u1E8E",                    "{\\.y}":"\u1E8F",                      "{\\^Z}":"\u1E90",                      "{\\^z}":"\u1E91",
+  "{\\d Z}":"\u1E92",                   "{\\d z}":"\u1E93",                     "{\\b Z}":"\u1E94",                     "{\\b z}":"\u1E95",
+  "{\\b h}":"\u1E96",                   "{\\\"t}":"\u1E97",                     "{\\r w}":"\u1E98",                     "{\\r y}":"\u1e99",
+  "{\\d A}":"\u1EA0",                   "{\\d a}":"\u1EA1",                     "{\\d E}":"\u1EB8",                     "{\\d e}":"\u1EB9",
+  "{\\~E}":"\u1EBC",                    "{\\~e}":"\u1EBD",                      "{\\d I}":"\u1ECA",                     "{\\d i}":"\u1ECB",
+  "{\\d O}":"\u1ECC",                   "{\\d o}":"\u1ECD",                     "{\\d U}":"\u1EE4",                     "{\\d u}":"\u1EE5",
+  "{\\`Y}":"\u1EF2",                    "{\\`y}":"\u1EF3",                      "{\\d Y}":"\u1EF4",                     "{\\d y}":"\u1EF5",
+  "{\\~Y}":"\u1EF8",                    "{\\~y}":"\u1EF9",                      "{\\~}":"\u223C",                       "~":"\u00A0" 
+}
+},{}],357:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+/**
+ * BibTeX pub type to CSL pub type
+ *
+ * @access protected
+ * @method parseBibTeXType
+ *
+ * @param {String} pubType - BibTeX type
+ *
+ * @return {String} CSL type
+ */
+var parseBibTeXType = function parseBibTeXType(pubType) {
+  switch (pubType) {
+    case 'article':
+      return 'article-journal';
+
+    case 'book':
+    case 'booklet':
+    case 'manual':
+    case 'misc':
+    case 'proceedings':
+      return 'book';
+
+    case 'inbook':
+    case 'incollection':
+      return 'chapter';
+
+    case 'conference':
+    case 'inproceedings':
+      return 'paper-conference';
+
+    case 'online':
+      return 'webpage';
+
+    case 'patent':
+      return 'patent';
+
+    case 'phdthesis':
+    case 'mastersthesis':
+      return 'thesis';
+
+    case 'techreport':
+      return 'report';
+
+    case 'unpublished':
+      return 'manuscript';
+
+    default:
+      console.warn('[set]', 'BibTeX publication type not recognized: ' + pubType + '. Interpreting as "book".');
+      return 'book';
+  }
+};
+
+exports.default = parseBibTeXType;
+
+},{}],358:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+/**
+ * Convert epoch to CSL date
+ *
+ * @access protected
+ * @function parseDate
+ *
+ * @param {Number|String} value - Epoch time or string in format "YYYY-MM-DD"
+ *
+ * @return {Object[]} Array of an object, containing the property "date-parts" with the value [ YYYY, MM, DD ]
+ */
+var parseDate = function parseDate(value) {
+  var date = new Date(value);
+  return [{
+    'date-parts': [date.getFullYear(), date.getMonth() + 1, date.getDate()]
+  }];
+};
+
+exports.default = parseDate;
+
+},{}],359:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.json = exports.name = exports.date = exports.bibjson = exports.wikidata = exports.input = undefined;
+
+var _index = require('./input/index');
+
+var input = _interopRequireWildcard(_index);
+
+var _index2 = require('./wikidata/index');
+
+var wikidata = _interopRequireWildcard(_index2);
+
+var _index3 = require('./bibjson/index');
+
+var _index4 = _interopRequireDefault(_index3);
+
+var _date = require('./date');
+
+var _date2 = _interopRequireDefault(_date);
+
+var _name = require('./name');
+
+var _name2 = _interopRequireDefault(_name);
+
+var _json = require('./json');
+
+var _json2 = _interopRequireDefault(_json);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+
+exports.input = input;
+exports.wikidata = wikidata;
+exports.bibjson = _index4.default;
+exports.date = _date2.default;
+exports.name = _name2.default;
+exports.json = _json2.default;
+
+},{"./bibjson/index":352,"./date":358,"./input/index":363,"./json":365,"./name":366,"./wikidata/index":368}],360:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _deepCopy = require('../../util/deepCopy');
+
+var _deepCopy2 = _interopRequireDefault(_deepCopy);
+
+var _type = require('./type');
+
+var _type2 = _interopRequireDefault(_type);
+
+var _data = require('./data');
+
+var _data2 = _interopRequireDefault(_data);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+/**
+ * Parse input until success.
+ *
+ * @access protected
+ * @method parseInput
+ *
+ * @param {String|String[]|Object|Object[]} input - The input data
+ *
+ * @return {CSL[]} The parsed input
+ */
+var parseInput = function parseInput(input) {
+  var output = input;
+  var type = (0, _type2.default)(output);
+
+  if (type.match(/^(array|object)\//)) {
+    output = (0, _deepCopy2.default)(output);
+  }
+
+  // TODO max recursion level
+  while (type !== 'array/csl') {
+    output = (0, _data2.default)(output, type);
+    type = (0, _type2.default)(output);
+  }
+
+  return output;
+};
+
+exports.default = parseInput;
+
+},{"../../util/deepCopy":374,"./data":362,"./type":364}],361:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _deepCopy = require('../../util/deepCopy');
+
+var _deepCopy2 = _interopRequireDefault(_deepCopy);
+
+var _type = require('./type');
+
+var _type2 = _interopRequireDefault(_type);
+
+var _data = require('./data');
+
+var _data2 = _interopRequireDefault(_data);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+/**
+ * Parse input once.
+ *
+ * @access protected
+ * @method parseInputChainLink
+ *
+ * @param {String|String[]|Object|Object[]} input - The input data
+ *
+ * @return {CSL[]} The parsed input
+ */
+var parseInputChainLink = function parseInputChainLink(input) {
+  var output = input;
+  var type = (0, _type2.default)(input);
+
+  if (type.match(/^(array|object)\//)) {
+    output = (0, _deepCopy2.default)(output);
+  }
+
+  return (0, _data2.default)(output, type);
+};
+
+exports.default = parseInputChainLink;
+
+},{"../../util/deepCopy":374,"./data":362,"./type":364}],362:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _regex = require('../regex');
+
+var _regex2 = _interopRequireDefault(_regex);
+
+var _fetchFile = require('../../util/fetchFile');
+
+var _fetchFile2 = _interopRequireDefault(_fetchFile);
+
+var _chain = require('./chain');
+
+var _chain2 = _interopRequireDefault(_chain);
+
+var _list = require('../wikidata/list');
+
+var _list2 = _interopRequireDefault(_list);
+
+var _json = require('../wikidata/json');
+
+var _json2 = _interopRequireDefault(_json);
+
+var _index = require('../bibjson/index');
+
+var _index2 = _interopRequireDefault(_index);
+
+var _text = require('../bibtex/text');
+
+var _text2 = _interopRequireDefault(_text);
+
+var _json3 = require('../bibtex/json');
+
+var _json4 = _interopRequireDefault(_json3);
+
+var _json5 = require('../json');
+
+var _json6 = _interopRequireDefault(_json5);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+/**
+ * Standardise input (internal use)
+ *
+ * @access protected
+ * @method parseInputData
+ *
+ * @param {String|String[]|Object|Object[]} input - The input data
+ * @param {String} type - The input type
+ *
+ * @return {CSL[]} The parsed input
+ */
+var parseInputData = function parseInputData(input, type) {
+  switch (type) {
+    case 'string/wikidata':
+      return (0, _list2.default)(input.match(_regex2.default.wikidata[0])[1]);
+
+    case 'list/wikidata':
+      return (0, _list2.default)(input.match(_regex2.default.wikidata[1])[1]);
+
+    case 'api/wikidata':
+      return (0, _fetchFile2.default)(input);
+
+    case 'url/wikidata':
+      return (0, _list2.default)(input.match(_regex2.default.wikidata[3])[1]);
+
+    case 'array/wikidata':
+      return (0, _list2.default)(input.join(','));
+
+    case 'url/else':
+      return (0, _fetchFile2.default)(input);
+
+    case 'jquery/else':
+      return input.val() || input.text() || input.html();
+
+    case 'html/else':
+      return input.value || input.textContent;
+
+    case 'string/json':
+      return (0, _json6.default)(input);
+
+    case 'string/bibtex':
+      return (0, _json4.default)((0, _text2.default)(input));
+
+    case 'object/wikidata':
+      return (0, _json2.default)(input);
+
+    case 'object/contentmine':
+      return (0, _index2.default)(input);
+
+    case 'array/else':
+      var output = [];
+      input.forEach(function (value) {
+        output = output.concat((0, _chain2.default)(value));
+      });
+      return output;
+
+    case 'object/csl':
+      return [input];
+
+    case 'array/csl':
+      return input;
+
+    case 'string/empty':
+    case 'string/whitespace':
+    case 'empty':
+    case 'invalid':
+    default:
+      return [];
+  }
+};
+
+exports.default = parseInputData;
+
+},{"../../util/fetchFile":375,"../bibjson/index":352,"../bibtex/json":353,"../bibtex/text":355,"../json":365,"../regex":367,"../wikidata/json":369,"../wikidata/list":370,"./chain":360}],363:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.chainLink = exports.chain = exports.data = exports.type = undefined;
+
+var _type = require('./type');
+
+var _type2 = _interopRequireDefault(_type);
+
+var _data = require('./data');
+
+var _data2 = _interopRequireDefault(_data);
+
+var _chain = require('./chain');
+
+var _chain2 = _interopRequireDefault(_chain);
+
+var _chainLink = require('./chainLink');
+
+var _chainLink2 = _interopRequireDefault(_chainLink);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+exports.type = _type2.default;
+exports.data = _data2.default;
+exports.chain = _chain2.default;
+exports.chainLink = _chainLink2.default;
+
+},{"./chain":360,"./chainLink":361,"./data":362,"./type":364}],364:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; /* global jQuery, HTMLElement */
+
+var _regex = require('../regex');
+
+var _regex2 = _interopRequireDefault(_regex);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+/**
+ * Determine input type (internal use)
+ *
+ * @access protected
+ * @method parseInputType
+ *
+ * @param {String|String[]|Object|Object[]} input - The input data
+ *
+ * @return {String} The input type
+ */
+var parseInputType = function parseInputType(input) {
+  switch (typeof input === 'undefined' ? 'undefined' : _typeof(input)) {
+    case 'string':
+      // Empty
+      if (input.length === 0) {
+        return 'string/empty';
+      } else if (/^\s+$/.test(input)) {
+        return 'string/whitespace';
+        // Wikidata ID
+      } else if (_regex2.default.wikidata[0].test(input)) {
+        return 'string/wikidata';
+        // Wikidata entity list
+      } else if (_regex2.default.wikidata[1].test(input)) {
+        return 'list/wikidata';
+        // Wikidata API URL
+      } else if (_regex2.default.wikidata[2].test(input)) {
+        return 'api/wikidata';
+        // Wikidata URL
+      } else if (_regex2.default.wikidata[3].test(input)) {
+        return 'url/wikidata';
+        // BibTeX
+      } else if (_regex2.default.bibtex[0].test(input)) {
+        return 'string/bibtex';
+        // JSON
+      } else if (/^\s*(\{|\[)/.test(input)) {
+        return 'string/json';
+        // Else URL
+      } else if (_regex2.default.url.test(input)) {
+        return 'url/} else';
+        // Else
+      } else {
+        console.warn('[set]', 'This format is not supported or recognised');
+        return 'invalid';
+      }
+
+    case 'object':
+      // Empty
+      if (input === null) {
+        return 'empty';
+        // jQuery
+      } else if (typeof jQuery !== 'undefined' && input instanceof jQuery) {
+        return 'jquery/else';
+        // HTML
+      } else if (typeof HTMLElement !== 'undefined' && input instanceof HTMLElement) {
+        return 'html/else';
+        // Array
+      } else if (Array.isArray(input)) {
+        // Empty array (counts as csl for parsing purposes)
+        if (input.length === 0) {
+          return 'array/csl';
+          // Array of Wikidata IDs
+        } else if (input.filter(function (v) {
+          return parseInputType(v) === 'string/wikidata';
+        }).length === input.length) {
+          return 'array/wikidata';
+          // Array of CSL-JSON
+        } else if (input.filter(function (v) {
+          return parseInputType(v) === 'object/csl';
+        }).length === input.length) {
+          return 'array/csl';
+          // Array of misc or multiple types
+        } else {
+          return 'array/else';
+        }
+        // Object
+      } else {
+        // Wikidata
+        if (input.hasOwnProperty('entities')) {
+          return 'object/wikidata';
+          // ContentMine
+        } else if (input.fulltext_html && Array.isArray(input.fulltext_html.value) || input.fulltext_xml && Array.isArray(input.fulltext_xml.value) || input.fulltext_pdf && Array.isArray(input.fulltext_pdf.value)) {
+          return 'object/contentmine';
+          // CSL-JSON
+        } else {
+          return 'object/csl';
+        }
+      }
+
+    case 'undefined':
+      // Empty
+      return 'empty';
+
+    default:
+      console.warn('[set]', 'This format is not supported or recognised');
+      return 'invalid';
+  }
+};
+
+exports.default = parseInputType;
+
+},{"../regex":367}],365:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; }();
+
+var _regex = require('./regex');
+
+var _regex2 = _interopRequireDefault(_regex);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+/**
+ * Parse (in)valid JSON
+ *
+ * @access protected
+ * @method parseJSON
+ *
+ * @param {String} str - The input string
+ *
+ * @return {Object|Object[]|String[]} The parsed object
+ */
+var parseJSON = function parseJSON(str) {
+  try {
+    return JSON.parse(str);
+  } catch (e) {
+    console.info('[set]', 'Input was not valid JSON, switching to experimental parser for invalid JSON');
+    try {
+      _regex2.default.json.forEach(function (_ref) {
+        var _ref2 = _slicedToArray(_ref, 2),
+            regex = _ref2[0],
+            subst = _ref2[1];
+
+        str = str.replace(regex, subst);
+      });
+      return JSON.parse(str);
+    } catch (e) {
+      console.error('[set]', 'Experimental parser failed. Please improve the JSON. If this is not JSON, please re-read the supported formats.');
+      return undefined;
+    }
+  }
+};
+
+exports.default = parseJSON;
+
+},{"./regex":367}],366:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; }();
+
+var _regex = require('./regex');
+
+var _regex2 = _interopRequireDefault(_regex);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+/**
+ * Get CSL from name
+ *
+ * @access protected
+ * @method parseName
+ *
+ * @param {String} name - string
+ *
+ * @return {Object} The CSL object
+ */
+var parseName = function parseName(name) {
+  var _ref = name.includes(', ') ? name.split(', ').reverse() : name.split(_regex2.default.name),
+      _ref2 = _slicedToArray(_ref, 2),
+      given = _ref2[0],
+      family = _ref2[1];
+
+  return {
+    given: given,
+    family: family
+  };
+};
+
+exports.default = parseName;
+
+},{"./regex":367}],367:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+/**
+ * Object containing several RegExp patterns, mostly used for parsing (*full of shame*) and recognizing data types
+ *
+ * @access protected
+ * @constant varRegex
+ * @default
+ */
+var regex = {
+  url: /^(https?:\/\/)?((([a-z\d]([a-z\d-]*[a-z\d])*)\.)+[a-z]{2,}|((\d{1,3}\.){3}\d{1,3})|localhost)(:\d+)?(\/[-a-z\d%_.~+:]*)*(\?[;&a-z\d%_.~+=-]*)?(#[-a-z\d_]*)?$/i,
+  bibtex: [/^(?:\s*@\s*[^@]+?\s*\{\s*[^@]+?\s*,\s*[^@]+\})+\s*$/, /^\s$/, /^[@{}"=,\\]$/],
+  wikidata: [/^\s*(Q\d+)\s*$/, /^\s*((?:Q\d+(?:\s+|,|))*Q\d+)\s*$/, /^(https?:\/\/(?:www\.)wikidata.org\/w\/api\.php(?:\?.*)?)$/, /\/(Q\d+)(?:[#?/]|\s*$)/],
+  json: [[/((?:\[|:|,)\s*)'((?:\\'|[^'])*?[^\\])?'(?=\s*(?:\]|}|,))/g, '$1"$2"'], [/((?:(?:"|]|}|\/[gmi]|\.|(?:\d|\.|-)*\d)\s*,|{)\s*)(?:"([^":\n]+?)"|'([^":\n]+?)'|([^":\n]+?))(\s*):/g, '$1"$2$3$4"$5:']],
+  name: / (?=(?:[a-z]+ )*(?:[A-Z][a-z]*[-])*(?:[A-Z][a-z]*)$)/
+};
+
+exports.default = regex;
+
+},{}],368:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.type = exports.prop = exports.json = exports.list = undefined;
+
+var _list = require('./list');
+
+var _list2 = _interopRequireDefault(_list);
+
+var _json = require('./json');
+
+var _json2 = _interopRequireDefault(_json);
+
+var _prop = require('./prop');
+
+var _prop2 = _interopRequireDefault(_prop);
+
+var _type = require('./type');
+
+var _type2 = _interopRequireDefault(_type);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+exports.list = _list2.default;
+exports.json = _json2.default;
+exports.prop = _prop2.default;
+exports.type = _type2.default;
+
+},{"./json":369,"./list":370,"./prop":371,"./type":372}],369:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; }();
+
+var _wikidataSdk = require('wikidata-sdk');
+
+var _wikidataSdk2 = _interopRequireDefault(_wikidataSdk);
+
+var _prop = require('./prop');
+
+var _prop2 = _interopRequireDefault(_prop);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+/**
+ * Format Wikidata data
+ *
+ * @access protected
+ * @method parseWikidataJSON
+ *
+ * @param {Object} data - The input data
+ *
+ * @return {CSL[]} The formatted input data
+ */
+var parseWikidataJSON = function parseWikidataJSON(data) {
+  return Object.keys(data.entities).map(function (entityKey) {
+    var _data$entities$entity = data.entities[entityKey],
+        labels = _data$entities$entity.labels,
+        claims = _data$entities$entity.claims;
+
+    var entity = _wikidataSdk2.default.simplifyClaims(claims, null, null, true);
+    var json = {
+      wikiId: entityKey,
+      id: entityKey
+    };
+
+    Object.keys(entity).forEach(function (prop) {
+      var value = entity[prop];
+
+      var _parseWikidataProp = (0, _prop2.default)(prop, value, 'en'),
+          _parseWikidataProp2 = _slicedToArray(_parseWikidataProp, 2),
+          resProp = _parseWikidataProp2[0],
+          resValue = _parseWikidataProp2[1];
+
+      if (resProp.length > 0) {
+        json[resProp] = resValue;
+      }
+    });
+
+    // It still has to combine authors from string value and numeric-id value :(
+    if (json.hasOwnProperty('authorQ') || json.hasOwnProperty('authorS')) {
+      if (json.hasOwnProperty('authorQ') && json.hasOwnProperty('authorS')) {
+        json.author = json.authorQ.concat(json.authorS);
+        delete json.authorQ;
+        delete json.authorS;
+      } else if (json.hasOwnProperty('authorQ')) {
+        json.author = json.authorQ;
+        delete json.authorQ;
+      } else if (json.hasOwnProperty('authorS')) {
+        json.author = json.authorS;
+        delete json.authorS;
+      }
+      json.author = json.author.sort(function (a, b) {
+        return a[1] - b[1];
+      }).map(function (v) {
+        return v[0];
+      });
+    }
+
+    if (!json.title) {
+      json.title = labels['en'].value;
+    }
+
+    return json;
+  });
+};
+
+exports.default = parseWikidataJSON;
+
+},{"./prop":371,"wikidata-sdk":318}],370:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _wikidataSdk = require('wikidata-sdk');
+
+var _wikidataSdk2 = _interopRequireDefault(_wikidataSdk);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+/**
+ * Get Wikidata JSON from Wikidata IDs
+ *
+ * @access protected
+ * @method parseWikidata
+ *
+ * @param {String} data - Wikidata IDs
+ *
+ * @return {Object} Wikidata JSON
+ */
+var parseWikidata = function parseWikidata(data) {
+  return [].concat(_wikidataSdk2.default.getEntities(data.split(/(?:\s+|,\s*)/g), ['en']));
+};
+
+exports.default = parseWikidata;
+
+},{"wikidata-sdk":318}],371:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _wikidataSdk = require('wikidata-sdk');
+
+var _wikidataSdk2 = _interopRequireDefault(_wikidataSdk);
+
+var _fetchFile = require('../../util/fetchFile');
+
+var _fetchFile2 = _interopRequireDefault(_fetchFile);
+
+var _type = require('./type');
+
+var _type2 = _interopRequireDefault(_type);
+
+var _date = require('../date');
+
+var _date2 = _interopRequireDefault(_date);
+
+var _name = require('../name');
+
+var _name2 = _interopRequireDefault(_name);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+/**
+ * Get the names of objects from Wikidata IDs
+ *
+ * @access protected
+ * @method fetchWikidataLabel
+ *
+ * @param {String|String[]} q - Wikidata IDs
+ * @param {String} lang - Language
+ *
+ * @return {String[]} Array with labels of each prop
+ */
+var fetchWikidataLabel = function fetchWikidataLabel(q, lang) {
+  var ids = Array.isArray(q) ? q : typeof q === 'string' ? q.split('|') : '';
+  var url = _wikidataSdk2.default.getEntities(ids, [lang], 'labels');
+  var entities = JSON.parse((0, _fetchFile2.default)(url)).entities || {};
+
+  return Object.keys(entities).map(function (entityKey) {
+    return (entities[entityKey].labels[lang] || {}).value;
+  });
+};
+
+/**
+ * Get series ordinal from qualifiers object
+ *
+ * @access protected
+ * @method parseWikidataProp
+ *
+ * @param {Object} qualifiers - qualifiers object
+ *
+ * @return {Number} series ordinal or -1
+ */
+var parseWikidataP1545 = function parseWikidataP1545(qualifiers) {
+  return qualifiers.P1545 ? parseInt(qualifiers.P1545[0]) : -1;
+};
+
+/**
+ * Transform property and value from Wikidata format to CSL
+ *
+ * @access protected
+ * @method parseWikidataProp
+ *
+ * @param {String} prop - Property
+ * @param {String|Number} value - Value
+ * @param {String} lang - Language
+ *
+ * @return {String[]} Array with new prop and value
+ */
+var parseWikidataProp = function parseWikidataProp(prop, value, lang) {
+  switch (prop) {
+    case 'P50':
+    case 'P2093':
+      value = value.slice();
+      break;
+
+    default:
+      value = value[0].value;
+      break;
+  }
+
+  var rProp = '';
+  var rValue = value;
+
+  switch (prop) {
+    // Author ( q )
+    case 'P50':
+      rProp = 'authorQ';
+      rValue = value.map(function (_ref) {
+        var value = _ref.value,
+            qualifiers = _ref.qualifiers;
+        return [(0, _name2.default)(fetchWikidataLabel(value, lang)[0]), parseWikidataP1545(qualifiers)];
+      });
+      break;
+
+    // Author ( s )
+    case 'P2093':
+      rProp = 'authorS';
+      rValue = value.map(function (_ref2) {
+        var value = _ref2.value,
+            qualifiers = _ref2.qualifiers;
+        return [(0, _name2.default)(value), parseWikidataP1545(qualifiers)];
+      });
+      break;
+
+    // Date
+    case 'P580':
+    case 'P585':
+      rProp = 'accessed';
+      rValue = (0, _date2.default)(value);
+      break;
+
+    // DOI
+    case 'P356':
+      rProp = 'DOI';
+      break;
+
+    // Instance of
+    case 'P31':
+      rProp = 'type';
+      rValue = (0, _type2.default)(value);
+
+      if (rValue === undefined) {
+        console.warn('[set]', 'This entry type is not recognized and therefore interpreted as \'article-journal\': ' + value);
+        rValue = 'article-journal';
+      }
+      break;
+
+    // ISBN 13 & 10
+    case 'P212':
+    case 'P957':
+      rProp = 'ISBN';
+      break;
+
+    // Issue
+    case 'P433':
+      rProp = 'issue';
+      break;
+
+    // Journal
+    case 'P1433':
+      rProp = 'container-title';
+      rValue = fetchWikidataLabel(value, lang)[0];
+      break;
+
+    // Pages
+    case 'P304':
+      rProp = 'page';
+      break;
+
+    // Print/edition
+    case 'P393':
+      rProp = 'edition';
+      break;
+
+    // Pubdate
+    case 'P577':
+      rProp = 'issued';
+      rValue = (0, _date2.default)(value);
+      break;
+
+    // Title
+    case 'P1476':
+      rProp = 'title';
+      break;
+
+    // URL
+    case 'P953':
+      // (full work available at)
+      rProp = 'URL';
+      break;
+
+    // Volume
+    case 'P478':
+      rProp = 'volume';
+      break;
+
+    case 'P2860': // Cites
+    case 'P921': // Main subject
+    case 'P3181': // OpenCitations bibliographic resource ID
+    case 'P364': // Original language of work
+    case 'P698': // PMID
+    case 'P932': // PMCID
+    case 'P1104':
+      // Number of pages
+      // Property ignored
+      break;
+
+    default:
+      console.info('[set]', 'Unknown property: ' + prop);
+      break;
+  }
+
+  return [rProp, rValue];
+};
+
+exports.default = parseWikidataProp;
+
+},{"../../util/fetchFile":375,"../date":358,"../name":366,"./type":372,"wikidata-sdk":318}],372:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+/**
+ * Object containing a list of Wikidata Instances and it's corresponding name as specified by the docs
+ *
+ * @access protected
+ * @constant varWikidataTypes
+ * @default
+ */
+var varWikidataTypes = {
+  Q13442814: 'article-journal',
+  Q18918145: 'article-journal',
+  Q191067: 'article',
+  Q3331189: 'book',
+  Q571: 'book'
+};
+
+/**
+ * Get CSL type from Wikidata type (P31)
+ *
+ * @access protected
+ * @method fetchWikidataType
+ *
+ * @param {String} value - Input P31 Wikidata ID
+ *
+ * @return {String} Output CSL type
+ */
+var fetchWikidataType = function fetchWikidataType(value) {
+  return varWikidataTypes[value];
+};
+
+exports.default = fetchWikidataType;
+
+},{}],373:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+/**
+ * Add data-* attribute to a HTML string
+ *
+ * @access protected
+ * @method getAttributedEntry
+ *
+ * @param {String} string - HTML string
+ * @param {String} name - attribute name
+ * @param {String} value - attribute value
+ *
+ * @return {String} HTML string with attribute
+ */
+var getAttributedEntry = function getAttributedEntry(string, name, value) {
+  return string.replace(/^\s*<[a-z]+/, function (match) {
+    return match + ' data-' + name + '="' + value + '"';
+  });
+};
+
+/**
+ * Add CSL identifiers to entry
+ *
+ * @access protected
+ * @method getPrefixedEntry
+ *
+ * @param {String} value - HTML string
+ * @param {Number} index - ID index
+ * @param {String[]} list - ID list
+ *
+ * @return {String} HTML string with CSL ID
+ */
+var getPrefixedEntry = function getPrefixedEntry(value, index, list) {
+  return getAttributedEntry(value, 'csl-entry-id', list[index]);
+};
+
+exports.getAttributedEntry = getAttributedEntry;
+exports.getPrefixedEntry = getPrefixedEntry;
+
+},{}],374:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+/**
+ * Duplicate objects to prevent Cite changing values outside of own scope
+ *
+ * @access protected
+ * @method deepCopy
+ *
+ * @param {Object} obj - Input object
+ *
+ * @return {Object} Duplicated object
+ */
+var deepCopy = function deepCopy(obj) {
+  return JSON.parse(JSON.stringify(obj));
+};
+
+exports.default = deepCopy;
+
+},{}],375:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _syncRequest = require('sync-request');
+
+var _syncRequest2 = _interopRequireDefault(_syncRequest);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+/**
+ * Fetch file
+ *
+ * @access protected
+ * @method fetchFile
+ *
+ * @param {String} url - The input url
+ *
+ * @return {String} The fetched string
+ */
+var fetchFile = function fetchFile(url) {
+  try {
+    return (0, _syncRequest2.default)('GET', url, { uri: url }).getBody('utf8');
+  } catch (e) {
+    console.error('[set]', 'File could not be fetched');
+    return undefined;
+  }
+};
+
+exports.default = fetchFile;
+
+},{"sync-request":309}],376:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+/**
+ * Generate ID
+ *
+ * @access protected
+ * @method fetchId
+ *
+ * @param {String[]} list - old ID list
+ * @param {String} prefix - ID prefix
+ *
+ * @return {String} CSL ID
+ */
+var fetchId = function fetchId(list, prefix) {
+  var id = void 0;
+
+  while (list.includes(id)) {
+    id = "" + prefix + Math.random().toString().slice(2);
+  }
+
+  return id;
+};
+
+exports.default = fetchId;
+
+},{}],377:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.fetchId = exports.fetchFile = exports.deepCopy = exports.attr = undefined;
+
+var _attr = require('./attr');
+
+var attr = _interopRequireWildcard(_attr);
+
+var _deepCopy = require('./deepCopy');
+
+var _deepCopy2 = _interopRequireDefault(_deepCopy);
+
+var _fetchFile = require('./fetchFile');
+
+var _fetchFile2 = _interopRequireDefault(_fetchFile);
+
+var _fetchId = require('./fetchId');
+
+var _fetchId2 = _interopRequireDefault(_fetchId);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+
+exports.attr = attr;
+exports.deepCopy = _deepCopy2.default;
+exports.fetchFile = _fetchFile2.default;
+exports.fetchId = _fetchId2.default;
+
+},{"./attr":373,"./deepCopy":374,"./fetchFile":375,"./fetchId":376}],378:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.citeproc = exports.cite = undefined;
+
+var _package = require('../package.json');
+
+var _citeproc = require('citeproc');
+
+var _citeproc2 = _interopRequireDefault(_citeproc);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var citeproc = _citeproc2.default.PROCESSOR_VERSION;
+
+exports.cite = _package.version;
+exports.citeproc = citeproc;
+
+},{"../package.json":329,"citeproc":2}],"citation-js":[function(require,module,exports){
 'use strict';
 
 require('babel-polyfill');
@@ -28605,4 +29737,5 @@ Object.assign(_index6.default, { parse: parse, get: get, CSL: CSL, util: util, v
 (0, _deepFreeze2.default)(_index6.default);
 
 module.exports = _index6.default;
-},{"./CSL/index":2,"./Cite/index":7,"./get/index":19,"./parse/index":30,"./util/index":48,"./version":49,"babel-polyfill":50,"deep-freeze":346}]},{},[]);
+
+},{"./CSL/index":331,"./Cite/index":336,"./get/index":348,"./parse/index":359,"./util/index":377,"./version":378,"babel-polyfill":1,"deep-freeze":297}]},{},[]);
