@@ -6,7 +6,7 @@
  *
  * Accesed 10/22/2016
  *
- * @access protected
+ * @access private
  * @constant varCSLLocales
  * @default
  */

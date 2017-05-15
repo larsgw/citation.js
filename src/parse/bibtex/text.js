@@ -8,7 +8,7 @@ import varRegex from '../regex'
  *
  * Accesed 11/09/2016
  *
- * @access protected
+ * @access private
  * @constant varBibTeXTokens
  * @default
  */

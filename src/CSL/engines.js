@@ -3,7 +3,7 @@ import CSL from 'citeproc'
 /**
  * Object containing CSL Engines
  *
- * @access protected
+ * @access private
  * @constant varCSLEngines
  * @default
  */

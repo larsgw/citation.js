@@ -3,4 +3,6 @@ import data from './data'
 import chain from './chain'
 import chainLink from './chainLink'
 
-export { type, data, chain, chainLink }
+import * as async from './async/index'
+
+export { type, data, chain, chainLink, async }

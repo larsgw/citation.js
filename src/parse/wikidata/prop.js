@@ -8,7 +8,7 @@ import parseName from '../name'
 /**
  * Get the names of objects from Wikidata IDs
  *
- * @access protected
+ * @access private
  * @method fetchWikidataLabel
  *
  * @param {String|String[]} q - Wikidata IDs
@@ -27,7 +27,7 @@ const fetchWikidataLabel = function (q, lang) {
 /**
  * Get series ordinal from qualifiers object
  *
- * @access protected
+ * @access private
  * @method parseWikidataProp
  *
  * @param {Object} qualifiers - qualifiers object

@@ -1,4 +1,4 @@
-/* global describe, require, it, expect */
+/* global describe, require, it, expect, beforeEach */
 
 const fs = require('fs')
 const path = require('path')
@@ -114,6 +114,46 @@ describe('Cite object', function () {
     it('returns a Cite object', function () {
       const test = new Cite()
       expect(test instanceof Cite).toBe(true)
+    })
+  })
+
+  describe('.async()', function () {
+    beforeEach(start => start())
+
+    describe('with callback', function () {
+      it('works', function (done) {
+        Cite.async(testInput.wd.url, test => {
+          expect(test instanceof Cite).toBe(true)
+          expect(test.data[0].wikiId).toBe(testOutput.wd.id)
+          done()
+        })
+      })
+
+      it('works with options', function (done) {
+        Cite.async([], {}, test => {
+          expect(test instanceof Cite).toBe(true)
+          expect(test.data.length).toBe(0)
+          done()
+        })
+      })
+    })
+
+    describe('with promise', function () {
+      it('works', function (done) {
+        Cite.async(testInput.wd.url).then(test => {
+          expect(test instanceof Cite).toBe(true)
+          expect(test.data[0].wikiId).toBe(testOutput.wd.id)
+          done()
+        })
+      })
+
+      it('works with options', function (done) {
+        Cite.async([], {}).then(test => {
+          expect(test instanceof Cite).toBe(true)
+          expect(test.data.length).toBe(0)
+          done()
+        })
+      })
     })
   })
 

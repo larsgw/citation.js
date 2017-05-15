@@ -9,7 +9,7 @@ import { htmlDict, textDict } from '../dict'
  *
  * Accesed 11/20/2016
  *
- * @access protected
+ * @access private
  * @constant varBibTeXSyntaxTokens
  * @default
  */

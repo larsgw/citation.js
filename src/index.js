@@ -1,10 +1,10 @@
 /**
- * @file Citation-0.2.js
+ * @file index.js
  *
  * @projectname Citationjs
  *
  * @author Lars Willighagen
- * @version 0.3.0-4
+ * @version 0.3.0-5
  * @license
  * Copyright (c) 2015-2017 Lars Willighagen
  *
@@ -35,6 +35,7 @@ import * as CSL from './CSL/index'
 import * as parse from './parse/index'
 import * as util from './util/index'
 import * as version from './version'
+import async from './async/index'
 import Cite from './Cite/index'
 
 /**
@@ -43,7 +44,7 @@ import Cite from './Cite/index'
  * @class CSL
  */
 
-Object.assign(Cite, {parse, get, CSL, util, version})
+Object.assign(Cite, {parse, get, CSL, util, version, async})
 deepFreeze(Cite)
 
 module.exports = Cite

@@ -1,0 +1,22 @@
+import 'isomorphic-fetch'
+
+/**
+ * Fetch file (async)
+ *
+ * @access protected
+ * @method fetchFileAsync
+ *
+ * @param {String} url - The input url
+ *
+ * @return {String} The fetched string
+ */
+const fetchFileAsync = async function (url) {
+  try {
+    return (await fetch(url)).text()
+  } catch (e) {
+    console.error('[set]', 'File could not be fetched')
+    return undefined
+  }
+}
+
+export default fetchFileAsync

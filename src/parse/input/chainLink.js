@@ -13,7 +13,7 @@ import parseInputData from './data'
  *
  * @return {CSL[]} The parsed input
  */
-var parseInputChainLink = function (input) {
+const parseInputChainLink = function (input) {
   let output = input
   const type = parseInputType(input)
 

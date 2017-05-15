@@ -30,7 +30,7 @@ define(String.prototype, "padRight", "".padEnd);
 });
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"core-js/fn/regexp/escape":3,"core-js/shim":296,"regenerator-runtime/runtime":307}],2:[function(require,module,exports){
+},{"core-js/fn/regexp/escape":3,"core-js/shim":296,"regenerator-runtime/runtime":308}],2:[function(require,module,exports){
 /*
  * Copyright (c) 2009-2016 Frank Bennett
  * 
@@ -23851,6 +23851,16 @@ Response.prototype.getBody = function (encoding) {
 },{}],299:[function(require,module,exports){
 'use strict';
 
+// the whatwg-fetch polyfill installs the fetch() function
+// on the global object (window or self)
+//
+// Return that as the export for use in Webpack, Browserify etc.
+require('whatwg-fetch');
+module.exports = self.fetch.bind(self);
+
+},{"whatwg-fetch":312}],300:[function(require,module,exports){
+'use strict';
+
 var replace = String.prototype.replace;
 var percentTwenties = /%20/g;
 
@@ -23868,7 +23878,7 @@ module.exports = {
     RFC3986: 'RFC3986'
 };
 
-},{}],300:[function(require,module,exports){
+},{}],301:[function(require,module,exports){
 'use strict';
 
 var stringify = require('./stringify');
@@ -23881,7 +23891,7 @@ module.exports = {
     stringify: stringify
 };
 
-},{"./formats":299,"./parse":301,"./stringify":302}],301:[function(require,module,exports){
+},{"./formats":300,"./parse":302,"./stringify":303}],302:[function(require,module,exports){
 'use strict';
 
 var utils = require('./utils');
@@ -24044,7 +24054,7 @@ module.exports = function (str, opts) {
     return utils.compact(obj);
 };
 
-},{"./utils":303}],302:[function(require,module,exports){
+},{"./utils":304}],303:[function(require,module,exports){
 'use strict';
 
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
@@ -24208,7 +24218,7 @@ module.exports = function (object, opts) {
     return keys.join(delimiter);
 };
 
-},{"./formats":299,"./utils":303}],303:[function(require,module,exports){
+},{"./formats":300,"./utils":304}],304:[function(require,module,exports){
 'use strict';
 
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
@@ -24393,7 +24403,7 @@ exports.isBuffer = function (obj) {
     return !!(obj.constructor && obj.constructor.isBuffer && obj.constructor.isBuffer(obj));
 };
 
-},{}],304:[function(require,module,exports){
+},{}],305:[function(require,module,exports){
 // Copyright Joyent, Inc. and other Node contributors.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a
@@ -24483,7 +24493,7 @@ var isArray = Array.isArray || function (xs) {
   return Object.prototype.toString.call(xs) === '[object Array]';
 };
 
-},{}],305:[function(require,module,exports){
+},{}],306:[function(require,module,exports){
 // Copyright Joyent, Inc. and other Node contributors.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a
@@ -24570,13 +24580,13 @@ var objectKeys = Object.keys || function (obj) {
   return res;
 };
 
-},{}],306:[function(require,module,exports){
+},{}],307:[function(require,module,exports){
 'use strict';
 
 exports.decode = exports.parse = require('./decode');
 exports.encode = exports.stringify = require('./encode');
 
-},{"./decode":304,"./encode":305}],307:[function(require,module,exports){
+},{"./decode":305,"./encode":306}],308:[function(require,module,exports){
 (function (global){
 "use strict";
 
@@ -25286,7 +25296,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 (typeof global === "undefined" ? "undefined" : _typeof(global)) === "object" ? global : (typeof window === "undefined" ? "undefined" : _typeof(window)) === "object" ? window : (typeof self === "undefined" ? "undefined" : _typeof(self)) === "object" ? self : undefined);
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{}],308:[function(require,module,exports){
+},{}],309:[function(require,module,exports){
 'use strict';
 
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
@@ -25501,7 +25511,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
     }
 })(undefined);
 
-},{}],309:[function(require,module,exports){
+},{}],310:[function(require,module,exports){
 'use strict';
 
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
@@ -25568,7 +25578,7 @@ function doRequest(method, url, options) {
   return new Response(xhr.status, headers, xhr.responseText);
 }
 
-},{"http-response-object":298,"then-request/lib/handle-qs.js":310}],310:[function(require,module,exports){
+},{"http-response-object":298,"then-request/lib/handle-qs.js":311}],311:[function(require,module,exports){
 'use strict';
 
 var parse = require('qs').parse;
@@ -25592,7 +25602,468 @@ function handleQs(url, query) {
   return start + qs + end;
 }
 
-},{"qs":300}],311:[function(require,module,exports){
+},{"qs":301}],312:[function(require,module,exports){
+'use strict';
+
+(function (self) {
+  'use strict';
+
+  if (self.fetch) {
+    return;
+  }
+
+  var support = {
+    searchParams: 'URLSearchParams' in self,
+    iterable: 'Symbol' in self && 'iterator' in Symbol,
+    blob: 'FileReader' in self && 'Blob' in self && function () {
+      try {
+        new Blob();
+        return true;
+      } catch (e) {
+        return false;
+      }
+    }(),
+    formData: 'FormData' in self,
+    arrayBuffer: 'ArrayBuffer' in self
+  };
+
+  if (support.arrayBuffer) {
+    var viewClasses = ['[object Int8Array]', '[object Uint8Array]', '[object Uint8ClampedArray]', '[object Int16Array]', '[object Uint16Array]', '[object Int32Array]', '[object Uint32Array]', '[object Float32Array]', '[object Float64Array]'];
+
+    var isDataView = function isDataView(obj) {
+      return obj && DataView.prototype.isPrototypeOf(obj);
+    };
+
+    var isArrayBufferView = ArrayBuffer.isView || function (obj) {
+      return obj && viewClasses.indexOf(Object.prototype.toString.call(obj)) > -1;
+    };
+  }
+
+  function normalizeName(name) {
+    if (typeof name !== 'string') {
+      name = String(name);
+    }
+    if (/[^a-z0-9\-#$%&'*+.\^_`|~]/i.test(name)) {
+      throw new TypeError('Invalid character in header field name');
+    }
+    return name.toLowerCase();
+  }
+
+  function normalizeValue(value) {
+    if (typeof value !== 'string') {
+      value = String(value);
+    }
+    return value;
+  }
+
+  // Build a destructive iterator for the value list
+  function iteratorFor(items) {
+    var iterator = {
+      next: function next() {
+        var value = items.shift();
+        return { done: value === undefined, value: value };
+      }
+    };
+
+    if (support.iterable) {
+      iterator[Symbol.iterator] = function () {
+        return iterator;
+      };
+    }
+
+    return iterator;
+  }
+
+  function Headers(headers) {
+    this.map = {};
+
+    if (headers instanceof Headers) {
+      headers.forEach(function (value, name) {
+        this.append(name, value);
+      }, this);
+    } else if (Array.isArray(headers)) {
+      headers.forEach(function (header) {
+        this.append(header[0], header[1]);
+      }, this);
+    } else if (headers) {
+      Object.getOwnPropertyNames(headers).forEach(function (name) {
+        this.append(name, headers[name]);
+      }, this);
+    }
+  }
+
+  Headers.prototype.append = function (name, value) {
+    name = normalizeName(name);
+    value = normalizeValue(value);
+    var oldValue = this.map[name];
+    this.map[name] = oldValue ? oldValue + ',' + value : value;
+  };
+
+  Headers.prototype['delete'] = function (name) {
+    delete this.map[normalizeName(name)];
+  };
+
+  Headers.prototype.get = function (name) {
+    name = normalizeName(name);
+    return this.has(name) ? this.map[name] : null;
+  };
+
+  Headers.prototype.has = function (name) {
+    return this.map.hasOwnProperty(normalizeName(name));
+  };
+
+  Headers.prototype.set = function (name, value) {
+    this.map[normalizeName(name)] = normalizeValue(value);
+  };
+
+  Headers.prototype.forEach = function (callback, thisArg) {
+    for (var name in this.map) {
+      if (this.map.hasOwnProperty(name)) {
+        callback.call(thisArg, this.map[name], name, this);
+      }
+    }
+  };
+
+  Headers.prototype.keys = function () {
+    var items = [];
+    this.forEach(function (value, name) {
+      items.push(name);
+    });
+    return iteratorFor(items);
+  };
+
+  Headers.prototype.values = function () {
+    var items = [];
+    this.forEach(function (value) {
+      items.push(value);
+    });
+    return iteratorFor(items);
+  };
+
+  Headers.prototype.entries = function () {
+    var items = [];
+    this.forEach(function (value, name) {
+      items.push([name, value]);
+    });
+    return iteratorFor(items);
+  };
+
+  if (support.iterable) {
+    Headers.prototype[Symbol.iterator] = Headers.prototype.entries;
+  }
+
+  function consumed(body) {
+    if (body.bodyUsed) {
+      return Promise.reject(new TypeError('Already read'));
+    }
+    body.bodyUsed = true;
+  }
+
+  function fileReaderReady(reader) {
+    return new Promise(function (resolve, reject) {
+      reader.onload = function () {
+        resolve(reader.result);
+      };
+      reader.onerror = function () {
+        reject(reader.error);
+      };
+    });
+  }
+
+  function readBlobAsArrayBuffer(blob) {
+    var reader = new FileReader();
+    var promise = fileReaderReady(reader);
+    reader.readAsArrayBuffer(blob);
+    return promise;
+  }
+
+  function readBlobAsText(blob) {
+    var reader = new FileReader();
+    var promise = fileReaderReady(reader);
+    reader.readAsText(blob);
+    return promise;
+  }
+
+  function readArrayBufferAsText(buf) {
+    var view = new Uint8Array(buf);
+    var chars = new Array(view.length);
+
+    for (var i = 0; i < view.length; i++) {
+      chars[i] = String.fromCharCode(view[i]);
+    }
+    return chars.join('');
+  }
+
+  function bufferClone(buf) {
+    if (buf.slice) {
+      return buf.slice(0);
+    } else {
+      var view = new Uint8Array(buf.byteLength);
+      view.set(new Uint8Array(buf));
+      return view.buffer;
+    }
+  }
+
+  function Body() {
+    this.bodyUsed = false;
+
+    this._initBody = function (body) {
+      this._bodyInit = body;
+      if (!body) {
+        this._bodyText = '';
+      } else if (typeof body === 'string') {
+        this._bodyText = body;
+      } else if (support.blob && Blob.prototype.isPrototypeOf(body)) {
+        this._bodyBlob = body;
+      } else if (support.formData && FormData.prototype.isPrototypeOf(body)) {
+        this._bodyFormData = body;
+      } else if (support.searchParams && URLSearchParams.prototype.isPrototypeOf(body)) {
+        this._bodyText = body.toString();
+      } else if (support.arrayBuffer && support.blob && isDataView(body)) {
+        this._bodyArrayBuffer = bufferClone(body.buffer);
+        // IE 10-11 can't handle a DataView body.
+        this._bodyInit = new Blob([this._bodyArrayBuffer]);
+      } else if (support.arrayBuffer && (ArrayBuffer.prototype.isPrototypeOf(body) || isArrayBufferView(body))) {
+        this._bodyArrayBuffer = bufferClone(body);
+      } else {
+        throw new Error('unsupported BodyInit type');
+      }
+
+      if (!this.headers.get('content-type')) {
+        if (typeof body === 'string') {
+          this.headers.set('content-type', 'text/plain;charset=UTF-8');
+        } else if (this._bodyBlob && this._bodyBlob.type) {
+          this.headers.set('content-type', this._bodyBlob.type);
+        } else if (support.searchParams && URLSearchParams.prototype.isPrototypeOf(body)) {
+          this.headers.set('content-type', 'application/x-www-form-urlencoded;charset=UTF-8');
+        }
+      }
+    };
+
+    if (support.blob) {
+      this.blob = function () {
+        var rejected = consumed(this);
+        if (rejected) {
+          return rejected;
+        }
+
+        if (this._bodyBlob) {
+          return Promise.resolve(this._bodyBlob);
+        } else if (this._bodyArrayBuffer) {
+          return Promise.resolve(new Blob([this._bodyArrayBuffer]));
+        } else if (this._bodyFormData) {
+          throw new Error('could not read FormData body as blob');
+        } else {
+          return Promise.resolve(new Blob([this._bodyText]));
+        }
+      };
+
+      this.arrayBuffer = function () {
+        if (this._bodyArrayBuffer) {
+          return consumed(this) || Promise.resolve(this._bodyArrayBuffer);
+        } else {
+          return this.blob().then(readBlobAsArrayBuffer);
+        }
+      };
+    }
+
+    this.text = function () {
+      var rejected = consumed(this);
+      if (rejected) {
+        return rejected;
+      }
+
+      if (this._bodyBlob) {
+        return readBlobAsText(this._bodyBlob);
+      } else if (this._bodyArrayBuffer) {
+        return Promise.resolve(readArrayBufferAsText(this._bodyArrayBuffer));
+      } else if (this._bodyFormData) {
+        throw new Error('could not read FormData body as text');
+      } else {
+        return Promise.resolve(this._bodyText);
+      }
+    };
+
+    if (support.formData) {
+      this.formData = function () {
+        return this.text().then(decode);
+      };
+    }
+
+    this.json = function () {
+      return this.text().then(JSON.parse);
+    };
+
+    return this;
+  }
+
+  // HTTP methods whose capitalization should be normalized
+  var methods = ['DELETE', 'GET', 'HEAD', 'OPTIONS', 'POST', 'PUT'];
+
+  function normalizeMethod(method) {
+    var upcased = method.toUpperCase();
+    return methods.indexOf(upcased) > -1 ? upcased : method;
+  }
+
+  function Request(input, options) {
+    options = options || {};
+    var body = options.body;
+
+    if (input instanceof Request) {
+      if (input.bodyUsed) {
+        throw new TypeError('Already read');
+      }
+      this.url = input.url;
+      this.credentials = input.credentials;
+      if (!options.headers) {
+        this.headers = new Headers(input.headers);
+      }
+      this.method = input.method;
+      this.mode = input.mode;
+      if (!body && input._bodyInit != null) {
+        body = input._bodyInit;
+        input.bodyUsed = true;
+      }
+    } else {
+      this.url = String(input);
+    }
+
+    this.credentials = options.credentials || this.credentials || 'omit';
+    if (options.headers || !this.headers) {
+      this.headers = new Headers(options.headers);
+    }
+    this.method = normalizeMethod(options.method || this.method || 'GET');
+    this.mode = options.mode || this.mode || null;
+    this.referrer = null;
+
+    if ((this.method === 'GET' || this.method === 'HEAD') && body) {
+      throw new TypeError('Body not allowed for GET or HEAD requests');
+    }
+    this._initBody(body);
+  }
+
+  Request.prototype.clone = function () {
+    return new Request(this, { body: this._bodyInit });
+  };
+
+  function decode(body) {
+    var form = new FormData();
+    body.trim().split('&').forEach(function (bytes) {
+      if (bytes) {
+        var split = bytes.split('=');
+        var name = split.shift().replace(/\+/g, ' ');
+        var value = split.join('=').replace(/\+/g, ' ');
+        form.append(decodeURIComponent(name), decodeURIComponent(value));
+      }
+    });
+    return form;
+  }
+
+  function parseHeaders(rawHeaders) {
+    var headers = new Headers();
+    rawHeaders.split(/\r?\n/).forEach(function (line) {
+      var parts = line.split(':');
+      var key = parts.shift().trim();
+      if (key) {
+        var value = parts.join(':').trim();
+        headers.append(key, value);
+      }
+    });
+    return headers;
+  }
+
+  Body.call(Request.prototype);
+
+  function Response(bodyInit, options) {
+    if (!options) {
+      options = {};
+    }
+
+    this.type = 'default';
+    this.status = 'status' in options ? options.status : 200;
+    this.ok = this.status >= 200 && this.status < 300;
+    this.statusText = 'statusText' in options ? options.statusText : 'OK';
+    this.headers = new Headers(options.headers);
+    this.url = options.url || '';
+    this._initBody(bodyInit);
+  }
+
+  Body.call(Response.prototype);
+
+  Response.prototype.clone = function () {
+    return new Response(this._bodyInit, {
+      status: this.status,
+      statusText: this.statusText,
+      headers: new Headers(this.headers),
+      url: this.url
+    });
+  };
+
+  Response.error = function () {
+    var response = new Response(null, { status: 0, statusText: '' });
+    response.type = 'error';
+    return response;
+  };
+
+  var redirectStatuses = [301, 302, 303, 307, 308];
+
+  Response.redirect = function (url, status) {
+    if (redirectStatuses.indexOf(status) === -1) {
+      throw new RangeError('Invalid status code');
+    }
+
+    return new Response(null, { status: status, headers: { location: url } });
+  };
+
+  self.Headers = Headers;
+  self.Request = Request;
+  self.Response = Response;
+
+  self.fetch = function (input, init) {
+    return new Promise(function (resolve, reject) {
+      var request = new Request(input, init);
+      var xhr = new XMLHttpRequest();
+
+      xhr.onload = function () {
+        var options = {
+          status: xhr.status,
+          statusText: xhr.statusText,
+          headers: parseHeaders(xhr.getAllResponseHeaders() || '')
+        };
+        options.url = 'responseURL' in xhr ? xhr.responseURL : options.headers.get('X-Request-URL');
+        var body = 'response' in xhr ? xhr.response : xhr.responseText;
+        resolve(new Response(body, options));
+      };
+
+      xhr.onerror = function () {
+        reject(new TypeError('Network request failed'));
+      };
+
+      xhr.ontimeout = function () {
+        reject(new TypeError('Network request failed'));
+      };
+
+      xhr.open(request.method, request.url, true);
+
+      if (request.credentials === 'include') {
+        xhr.withCredentials = true;
+      }
+
+      if ('responseType' in xhr && support.blob) {
+        xhr.responseType = 'blob';
+      }
+
+      request.headers.forEach(function (value, name) {
+        xhr.setRequestHeader(name, value);
+      });
+
+      xhr.send(typeof request._bodyInit === 'undefined' ? null : request._bodyInit);
+    });
+  };
+  self.fetch.polyfill = true;
+})(typeof self !== 'undefined' ? self : undefined);
+
+},{}],313:[function(require,module,exports){
 'use strict';
 
 var toDateObject = require('./wikidata_time_to_date_object');
@@ -25645,7 +26116,7 @@ helpers.wikidataTimeToISOString = bestEffort(toISOString);
 
 module.exports = helpers;
 
-},{"./wikidata_time_to_date_object":317}],312:[function(require,module,exports){
+},{"./wikidata_time_to_date_object":319}],314:[function(require,module,exports){
 'use strict';
 
 var _require = require('./helpers'),
@@ -25710,7 +26181,7 @@ module.exports = function (datatype, datavalue, options) {
   return claimParsers[datatype](datavalue, options);
 };
 
-},{"./helpers":311}],313:[function(require,module,exports){
+},{"./helpers":313}],315:[function(require,module,exports){
 'use strict';
 
 var simplifyEntity = require('./simplify_entity');
@@ -25730,7 +26201,7 @@ module.exports = {
   }
 };
 
-},{"./simplify_entity":315}],314:[function(require,module,exports){
+},{"./simplify_entity":317}],316:[function(require,module,exports){
 'use strict';
 
 var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; }();
@@ -25835,7 +26306,7 @@ var parseOptions = function parseOptions(options) {
 
 module.exports = { simplifyClaims: simplifyClaims, simplifyPropertyClaims: simplifyPropertyClaims, simplifyClaim: simplifyClaim };
 
-},{"./parse_claim":312}],315:[function(require,module,exports){
+},{"./parse_claim":314}],317:[function(require,module,exports){
 'use strict';
 
 var _require = require('./simplify_claims'),
@@ -25856,7 +26327,7 @@ module.exports = function (entity) {
   };
 };
 
-},{"./simplify_claims":314,"./simplify_text_attributes":316}],316:[function(require,module,exports){
+},{"./simplify_claims":316,"./simplify_text_attributes":318}],318:[function(require,module,exports){
 'use strict';
 
 var simplifyTextAttributes = function simplifyTextAttributes(multivalue, attribute) {
@@ -25883,7 +26354,7 @@ module.exports = {
   sitelinks: simplifyTextAttributes(false, 'title')
 };
 
-},{}],317:[function(require,module,exports){
+},{}],319:[function(require,module,exports){
 'use strict';
 
 module.exports = function (wikidataTime) {
@@ -25919,7 +26390,7 @@ var parseInvalideDate = function parseInvalideDate(sign, rest) {
   return fullDateData(sign, year);
 };
 
-},{}],318:[function(require,module,exports){
+},{}],320:[function(require,module,exports){
 'use strict';
 
 var wdk = module.exports = {};
@@ -25951,7 +26422,7 @@ wdk.getWikidataIdsFromWikipediaTitles = wdk.getWikidataIdsFromSitelinks;
 
 Object.assign(wdk, require('./helpers/helpers'));
 
-},{"../lib/helpers/simplify_entity":315,"../lib/helpers/simplify_text_attributes":316,"./helpers/helpers":311,"./helpers/parse_responses":313,"./helpers/simplify_claims":314,"./queries/get_entities":319,"./queries/get_many_entities":320,"./queries/get_reverse_claims":321,"./queries/get_wikidata_ids_from_sitelinks":322,"./queries/search_entities":323,"./queries/simplify_sparql_results":324,"./queries/sparql_query":325}],319:[function(require,module,exports){
+},{"../lib/helpers/simplify_entity":317,"../lib/helpers/simplify_text_attributes":318,"./helpers/helpers":313,"./helpers/parse_responses":315,"./helpers/simplify_claims":316,"./queries/get_entities":321,"./queries/get_many_entities":322,"./queries/get_reverse_claims":323,"./queries/get_wikidata_ids_from_sitelinks":324,"./queries/search_entities":325,"./queries/simplify_sparql_results":326,"./queries/sparql_query":327}],321:[function(require,module,exports){
 'use strict';
 
 var buildUrl = require('../utils/build_url');
@@ -26003,7 +26474,7 @@ module.exports = function (ids, languages, props, format) {
   return buildUrl(query);
 };
 
-},{"../utils/build_url":326,"../utils/utils":328}],320:[function(require,module,exports){
+},{"../utils/build_url":328,"../utils/utils":330}],322:[function(require,module,exports){
 'use strict';
 
 var _templateObject = _taggedTemplateLiteral(['getManyEntities expects an array of ids'], ['getManyEntities expects an array of ids']);
@@ -26043,7 +26514,7 @@ var getIdsGroups = function getIdsGroups(ids) {
   return groups;
 };
 
-},{"../utils/utils":328,"./get_entities":319}],321:[function(require,module,exports){
+},{"../utils/utils":330,"./get_entities":321}],323:[function(require,module,exports){
 'use strict';
 
 var helpers = require('../helpers/helpers');
@@ -26080,7 +26551,7 @@ function caseInsensitiveValueQuery(property, value, limit) {
   return 'SELECT ?subject WHERE {\n    ?subject wdt:' + property + ' ?value .\n    FILTER (lcase(?value) = ' + value.toLowerCase() + ')\n  }\n  LIMIT ' + limit;
 }
 
-},{"../helpers/helpers":311,"./sparql_query":325}],322:[function(require,module,exports){
+},{"../helpers/helpers":313,"./sparql_query":327}],324:[function(require,module,exports){
 'use strict';
 
 var buildUrl = require('../utils/build_url');
@@ -26138,7 +26609,7 @@ var parseSite = function parseSite(site) {
   return site.length === 2 ? site + 'wiki' : site;
 };
 
-},{"../utils/build_url":326,"../utils/utils":328}],323:[function(require,module,exports){
+},{"../utils/build_url":328,"../utils/utils":330}],325:[function(require,module,exports){
 'use strict';
 
 var buildUrl = require('../utils/build_url');
@@ -26175,7 +26646,7 @@ module.exports = function (search, language, limit, format, uselang) {
   });
 };
 
-},{"../utils/build_url":326,"../utils/utils":328}],324:[function(require,module,exports){
+},{"../utils/build_url":328,"../utils/utils":330}],326:[function(require,module,exports){
 'use strict';
 
 var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; }();
@@ -26352,7 +26823,7 @@ var getSimplifiedResult = function getSimplifiedResult(varsWithLabel, varsWithou
   };
 };
 
-},{}],325:[function(require,module,exports){
+},{}],327:[function(require,module,exports){
 'use strict';
 
 var _require = require('../utils/utils'),
@@ -26363,7 +26834,7 @@ module.exports = function (sparql) {
   return 'https://query.wikidata.org/sparql?format=json&query=' + query;
 };
 
-},{"../utils/utils":328}],326:[function(require,module,exports){
+},{"../utils/utils":330}],328:[function(require,module,exports){
 'use strict';
 
 var wikidataApiRoot = 'https://www.wikidata.org/w/api.php';
@@ -26377,7 +26848,7 @@ module.exports = function (queryObj) {
   return wikidataApiRoot + '?' + qs.stringify(queryObj);
 };
 
-},{"./querystring_lite":327,"querystring":306}],327:[function(require,module,exports){
+},{"./querystring_lite":329,"querystring":307}],329:[function(require,module,exports){
 'use strict';
 
 module.exports = {
@@ -26398,7 +26869,7 @@ module.exports = {
   }
 };
 
-},{}],328:[function(require,module,exports){
+},{}],330:[function(require,module,exports){
 'use strict';
 
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
@@ -26433,7 +26904,7 @@ var encodeCharacter = function encodeCharacter(c) {
   return '%' + c.charCodeAt(0).toString(16);
 };
 
-},{}],329:[function(require,module,exports){
+},{}],331:[function(require,module,exports){
 module.exports={
   "name": "citation-js",
   "version": "0.3.0-5",
@@ -26462,6 +26933,7 @@ module.exports={
     "citeproc": "^2.0.2",
     "commander": "~2.9.0",
     "deep-freeze": "0.0.1",
+    "isomorphic-fetch": "^2.2.1",
     "striptags": "^3.0.1",
     "sync-request": "^4.0.3",
     "wikidata-sdk": "^5.1.4"
@@ -26477,7 +26949,8 @@ module.exports={
     "browserify": "^14.3.0",
     "jasmine-node": "^1.14.5",
     "jsdoc": "^3.4.2",
-    "standard": "^10.0.2"
+    "standard": "^10.0.2",
+    "uglify-es": "^3.0.4"
   },
   "babel": {
     "presets": [
@@ -26498,14 +26971,24 @@ module.exports={
     ]
   },
   "scripts": {
-    "lint": "standard \"src/**/*.js\" \"test/**/*.js\"",
+    "--0--": "test",
+    "lint": "standard \"src/**/*.js\" \"test/**/*.js\" \"tools/*.js\"",
     "test": "node_modules/jasmine-node/bin/jasmine-node test/citation.spec.js",
     "babel": "babel src -d lib --copy-files",
-    "dev:test": "npm run babel && npm run test",
-    "dev:test-browser": "npm run babel && npm run test && npm run build && npm run build-test",
-    "build":      "browserify -r ./src/index.js:citation-js -o build/citation.js      -g [ babelify --ignore=citeproc --presets [ env ] ]         && cp build/citation.js      docs/src/citation.js",
+    "--1--": "build",
+    "build": "     browserify -r ./src/index.js:citation-js -o build/citation.js      -g [ babelify --ignore=citeproc --presets [ env ] ]         && cp build/citation.js      docs/src/citation.js",
     "build-test": "browserify -e test/citation.spec.js      -o build/test.citation.js -g [ babelify --ignore=citeproc --presets [ env ] ] -t brfs && cp build/test.citation.js docs/src/test.citation.js",
-    "build-docs": "jsdoc ./src README.md -c docs/conf.json"
+    "minify": "     uglifyjs build/citation.js      --ie8 -c -o build/citation.min.js      && cp build/citation.min.js      docs/src/citation.min.js",
+    "minify-test": "uglifyjs build/test.citation.js --ie8 -c -o build/test.citation.min.js && cp build/test.citation.min.js docs/src/test.citation.min.js",
+    "--2--": "miscs",
+    "build-docs": "jsdoc ./src README.md -c docs/conf.json",
+    "build-disc": "browserify -e test/citation.spec.js      -o build/tmp/citation.js  -g [ babelify --ignore=citeproc --presets [ env ] ] -t brfs --full-paths && node tools/disc.js",
+    "--3--": "combo",
+    "build-all": "npm run build-files && npm run build-docs && npm run build-disc",
+    "build-files": "npm run build && npm run build-test && npm run minify && npm run minify-test",
+    "--4--": "dev",
+    "dev:test": "npm run babel && npm run test",
+    "dev:test-browser": "npm run babel && npm run test && npm run build && npm run build-test"
   },
   "author": "Lars Willighagen (https://larsgw.github.io)",
   "license": "MIT",
@@ -26520,7 +27003,7 @@ module.exports={
   "homepage": "https://larsgw.github.com/citation.js/"
 }
 
-},{}],330:[function(require,module,exports){
+},{}],332:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -26536,7 +27019,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 /**
  * Object containing CSL Engines
  *
- * @access protected
+ * @access private
  * @constant varCSLEngines
  * @default
  */
@@ -26584,7 +27067,7 @@ var fetchCSLEngine = function fetchCSLEngine(style, lang, template, retrieveItem
 
 exports.default = fetchCSLEngine;
 
-},{"citeproc":2}],331:[function(require,module,exports){
+},{"citeproc":2}],333:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -26615,7 +27098,7 @@ exports.locale = _locales2.default;
 exports.engine = _engines2.default;
 exports.item = _items2.default;
 
-},{"./engines":330,"./items":332,"./locales":333,"./styles":334}],332:[function(require,module,exports){
+},{"./engines":332,"./items":334,"./locales":335,"./styles":336}],334:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -26643,7 +27126,7 @@ var fetchCSLItemCallback = function fetchCSLItemCallback(data) {
 
 exports.default = fetchCSLItemCallback;
 
-},{}],333:[function(require,module,exports){
+},{}],335:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -26657,7 +27140,7 @@ Object.defineProperty(exports, "__esModule", {
  *
  * Accesed 10/22/2016
  *
- * @access protected
+ * @access private
  * @constant varCSLLocales
  * @default
  */
@@ -26689,7 +27172,7 @@ var fetchCSLLocale = function fetchCSLLocale(lang) {
 
 exports.default = fetchCSLLocale;
 
-},{}],334:[function(require,module,exports){
+},{}],336:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -26703,7 +27186,7 @@ Object.defineProperty(exports, "__esModule", {
  *
  * Accesed 10/22/2016
  *
- * @access protected
+ * @access private
  * @constant varCSLStyles
  * @default
  */
@@ -26729,7 +27212,7 @@ var fetchCSLStyle = function fetchCSLStyle(style) {
 
 exports.default = fetchCSLStyle;
 
-},{}],335:[function(require,module,exports){
+},{}],337:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -26904,7 +27387,7 @@ var get = function get(options) {
 exports.getIds = getIds;
 exports.get = get;
 
-},{"../CSL/engines":330,"../CSL/items":332,"../CSL/locales":333,"../CSL/styles":334,"../get/bibtex/json":342,"../get/bibtex/text":344,"../get/json":349,"../util/attr.js":373,"../util/deepCopy":374,"striptags":308}],336:[function(require,module,exports){
+},{"../CSL/engines":332,"../CSL/items":334,"../CSL/locales":335,"../CSL/styles":336,"../get/bibtex/json":345,"../get/bibtex/text":347,"../get/json":352,"../util/attr.js":383,"../util/deepCopy":384,"striptags":309}],338:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -26994,7 +27477,7 @@ Object.assign(Cite.prototype, log, options, set, sort, get);
 
 exports.default = Cite;
 
-},{"./get":335,"./log":337,"./options":338,"./set":339,"./sort":340}],337:[function(require,module,exports){
+},{"./get":337,"./log":339,"./options":340,"./set":341,"./sort":342}],339:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -27100,7 +27583,7 @@ exports.retrieveLastVersion = retrieveLastVersion;
 exports.undo = undo;
 exports.save = save;
 
-},{"./index":336}],338:[function(require,module,exports){
+},{"./index":338}],340:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -27130,7 +27613,7 @@ var options = function options(_options, log) {
 
 exports.options = options;
 
-},{}],339:[function(require,module,exports){
+},{}],341:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -27227,7 +27710,7 @@ exports.add = add;
 exports.set = set;
 exports.reset = reset;
 
-},{"../parse/input/chain":360,"../util/fetchId":376}],340:[function(require,module,exports){
+},{"../parse/input/chain":367,"../util/fetchId":387}],342:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -27269,7 +27752,95 @@ var sort = function sort(log) {
 
 exports.sort = sort;
 
-},{"../get/label":350}],341:[function(require,module,exports){
+},{"../get/label":353}],343:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _chain = require('../parse/input/async/chain');
+
+var _chain2 = _interopRequireDefault(_chain);
+
+var _index = require('../Cite/index');
+
+var _index2 = _interopRequireDefault(_index);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { step("next", value); }, function (err) { step("throw", err); }); } } return step("next"); }); }; }
+
+/**
+ * @callback Cite~asyncCite
+ *
+ * @param {Cite} data - Cite object
+ */
+
+/**
+ * @access private
+ * @method asyncCite
+ *
+ * @param {Promise} promise - promise returning parsed input
+ * @param {Object} options - The options for the output. See [input options](../#citation.cite.in.options).
+ * @return {Promise} promise returning Cite object
+ */
+var asyncCite = function () {
+  var _ref = _asyncToGenerator(regeneratorRuntime.mark(function _callee(promise, options) {
+    return regeneratorRuntime.wrap(function _callee$(_context) {
+      while (1) {
+        switch (_context.prev = _context.next) {
+          case 0:
+            _context.t0 = _index2.default;
+            _context.next = 3;
+            return promise;
+
+          case 3:
+            _context.t1 = _context.sent;
+            _context.t2 = options;
+            return _context.abrupt('return', new _context.t0(_context.t1, _context.t2));
+
+          case 6:
+          case 'end':
+            return _context.stop();
+        }
+      }
+    }, _callee, this);
+  }));
+
+  return function asyncCite(_x, _x2) {
+    return _ref.apply(this, arguments);
+  };
+}();
+
+/**
+ * @method async
+ *
+ * @param {String|CSL|Object|String[]|CSL[]|Object[]} data - Input data.
+ * @param {Object} [options={}] - The options for the output. See [input options](../#citation.cite.in.options).
+ * @param {Cite~asyncCite} callback - if not give, function returns promise.
+ * @return {Promise} If callback is not given, it returns a Promise. Else returns undefined.
+ */
+var async = function async(data, options, callback) {
+  var promise = (0, _chain2.default)(data);
+
+  if (typeof options === 'function' && !callback) {
+    callback = options;
+  }
+
+  if (typeof callback === 'function') {
+    promise.then(function (data) {
+      return callback(new _index2.default(data, options));
+    });
+    return undefined;
+  } else {
+    return asyncCite(promise, options);
+  }
+};
+
+exports.default = async;
+
+},{"../Cite/index":338,"../parse/input/async/chain":363}],344:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -27300,7 +27871,7 @@ exports.text = _text2.default;
 exports.label = _label2.default;
 exports.type = _type2.default;
 
-},{"./json":342,"./label":343,"./text":344,"./type":345}],342:[function(require,module,exports){
+},{"./json":345,"./label":346,"./text":347,"./type":348}],345:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -27401,7 +27972,7 @@ var getBibTeXJSON = function getBibTeXJSON(src) {
 
 exports.default = getBibTeXJSON;
 
-},{"../date":346,"../name":351,"./label":343,"./type":345}],343:[function(require,module,exports){
+},{"../date":349,"../name":354,"./label":346,"./type":348}],346:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -27447,7 +28018,7 @@ var getBibTeXLabel = function getBibTeXLabel() {
 
 exports.default = getBibTeXLabel;
 
-},{}],344:[function(require,module,exports){
+},{}],347:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -27470,7 +28041,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
  *
  * Accesed 11/20/2016
  *
- * @access protected
+ * @access private
  * @constant varBibTeXSyntaxTokens
  * @default
  */
@@ -27521,7 +28092,7 @@ var getBibTeX = function getBibTeX(src, html) {
 
 exports.default = getBibTeX;
 
-},{"../dict":347,"./json":342}],345:[function(require,module,exports){
+},{"../dict":350,"./json":345}],348:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -27581,7 +28152,7 @@ var fetchBibTeXType = function fetchBibTeXType(pubType) {
 
 exports.default = fetchBibTeXType;
 
-},{}],346:[function(require,module,exports){
+},{}],349:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -27613,7 +28184,7 @@ var getDate = function getDate(_ref) {
 
 exports.default = getDate;
 
-},{}],347:[function(require,module,exports){
+},{}],350:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -27658,7 +28229,7 @@ var textDict = {
 exports.htmlDict = htmlDict;
 exports.textDict = textDict;
 
-},{}],348:[function(require,module,exports){
+},{}],351:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -27701,7 +28272,7 @@ exports.date = _date2.default;
 exports.name = _name2.default;
 exports.label = _label2.default;
 
-},{"./bibtex/index":341,"./date":346,"./dict":347,"./json":349,"./label":350,"./name":351}],349:[function(require,module,exports){
+},{"./bibtex/index":344,"./date":349,"./dict":350,"./json":352,"./label":353,"./name":354}],352:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -27715,7 +28286,7 @@ var _dict = require('./dict');
 /**
  * Convert a JSON array or object to HTML.
  *
- * @access protected
+ * @access private
  * @function getJSONObjectHTML
  *
  * @param {Object|Object[]|String[]|Number[]} src - The data
@@ -27739,7 +28310,7 @@ var getJSONObjectHTML = function getJSONObjectHTML(src) {
 /**
  * Convert JSON to HTML.
  *
- * @access protected
+ * @access private
  * @function getJSONValueHTML
  *
  * @param {Object|String|Number|Object[]|String[]|Number[]} src - The data
@@ -27786,7 +28357,7 @@ var getJSON = function getJSON(src) {
 
 exports.default = getJSON;
 
-},{"./dict":347}],350:[function(require,module,exports){
+},{"./dict":350}],353:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -27815,7 +28386,7 @@ var getLabel = function getLabel(src) {
 
 exports.default = getLabel;
 
-},{"./bibtex/label":343}],351:[function(require,module,exports){
+},{"./bibtex/label":346}],354:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -27842,7 +28413,7 @@ var getName = function getName(obj) {
 
 exports.default = getName;
 
-},{}],352:[function(require,module,exports){
+},{}],355:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -27899,7 +28470,7 @@ var parseContentMine = function parseContentMine(data) {
 
 exports.default = parseContentMine;
 
-},{"../date":358,"../name":366}],353:[function(require,module,exports){
+},{"../date":361,"../name":373}],356:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -27948,7 +28519,7 @@ var parseBibTeXJSON = function parseBibTeXJSON(data) {
 
 exports.default = parseBibTeXJSON;
 
-},{"./prop":354,"./type":357}],354:[function(require,module,exports){
+},{"./prop":357,"./type":360}],357:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -28112,7 +28683,7 @@ var parseBibTeXProp = function parseBibTeXProp(prop, value) {
 
 exports.default = parseBibTeXProp;
 
-},{"../date":358,"../name":366}],355:[function(require,module,exports){
+},{"../date":361,"../name":373}],358:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -28375,13 +28946,13 @@ var parseBibTeX = function parseBibTeX(str) {
  *
  * Accesed 11/09/2016
  *
- * @access protected
+ * @access private
  * @constant varBibTeXTokens
  * @default
  */
 exports.default = parseBibTeX;
 
-},{"../regex":367,"./tokens.json":356}],356:[function(require,module,exports){
+},{"../regex":374,"./tokens.json":359}],359:[function(require,module,exports){
 module.exports={
   "\\url":"",                           "\\href":"",                            "{\\textexclamdown}":"\u00A1",          "{\\textcent}":"\u00A2",
   "{\\textsterling}":"\u00A3",          "{\\textyen}":"\u00A5",                 "{\\textbrokenbar}":"\u00A6",           "{\\textsection}":"\u00A7",
@@ -28497,7 +29068,7 @@ module.exports={
   "{\\`Y}":"\u1EF2",                    "{\\`y}":"\u1EF3",                      "{\\d Y}":"\u1EF4",                     "{\\d y}":"\u1EF5",
   "{\\~Y}":"\u1EF8",                    "{\\~y}":"\u1EF9",                      "{\\~}":"\u223C",                       "~":"\u00A0" 
 }
-},{}],357:[function(require,module,exports){
+},{}],360:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -28557,7 +29128,7 @@ var parseBibTeXType = function parseBibTeXType(pubType) {
 
 exports.default = parseBibTeXType;
 
-},{}],358:[function(require,module,exports){
+},{}],361:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -28582,7 +29153,7 @@ var parseDate = function parseDate(value) {
 
 exports.default = parseDate;
 
-},{}],359:[function(require,module,exports){
+},{}],362:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -28625,7 +29196,272 @@ exports.date = _date2.default;
 exports.name = _name2.default;
 exports.json = _json2.default;
 
-},{"./bibjson/index":352,"./date":358,"./input/index":363,"./json":365,"./name":366,"./wikidata/index":368}],360:[function(require,module,exports){
+},{"./bibjson/index":355,"./date":361,"./input/index":370,"./json":372,"./name":373,"./wikidata/index":378}],363:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _deepCopy = require('../../../util/deepCopy');
+
+var _deepCopy2 = _interopRequireDefault(_deepCopy);
+
+var _data = require('../async/data');
+
+var _data2 = _interopRequireDefault(_data);
+
+var _type = require('../type');
+
+var _type2 = _interopRequireDefault(_type);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { step("next", value); }, function (err) { step("throw", err); }); } } return step("next"); }); }; }
+
+/**
+ * Parse input until success. (async)
+ *
+ * @access protected
+ * @method parseInputAsync
+ *
+ * @param {String|String[]|Object|Object[]} input - The input data
+ *
+ * @return {Promise} The parsed input
+ */
+var parseInputAsync = function () {
+  var _ref = _asyncToGenerator(regeneratorRuntime.mark(function _callee(input) {
+    var output, type;
+    return regeneratorRuntime.wrap(function _callee$(_context) {
+      while (1) {
+        switch (_context.prev = _context.next) {
+          case 0:
+            output = input;
+            type = (0, _type2.default)(output);
+
+
+            if (type.match(/^(array|object)\//)) {
+              output = (0, _deepCopy2.default)(output);
+            }
+
+            // TODO max recursion level
+
+          case 3:
+            if (!(type !== 'array/csl')) {
+              _context.next = 10;
+              break;
+            }
+
+            _context.next = 6;
+            return (0, _data2.default)(output, type);
+
+          case 6:
+            output = _context.sent;
+
+            type = (0, _type2.default)(output);
+            _context.next = 3;
+            break;
+
+          case 10:
+            return _context.abrupt('return', output);
+
+          case 11:
+          case 'end':
+            return _context.stop();
+        }
+      }
+    }, _callee, this);
+  }));
+
+  return function parseInputAsync(_x) {
+    return _ref.apply(this, arguments);
+  };
+}();
+
+exports.default = parseInputAsync;
+
+},{"../../../util/deepCopy":384,"../async/data":365,"../type":371}],364:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _deepCopy = require('../../../util/deepCopy');
+
+var _deepCopy2 = _interopRequireDefault(_deepCopy);
+
+var _data = require('../async/data');
+
+var _data2 = _interopRequireDefault(_data);
+
+var _type = require('../type');
+
+var _type2 = _interopRequireDefault(_type);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { step("next", value); }, function (err) { step("throw", err); }); } } return step("next"); }); }; }
+
+/**
+ * Parse input once. (async)
+ *
+ * @access protected
+ * @method parseInputChainLinkAsync
+ *
+ * @param {String|String[]|Object|Object[]} input - The input data
+ *
+ * @return {Promise} The parsed input
+ */
+var parseInputChainLinkAsync = function () {
+  var _ref = _asyncToGenerator(regeneratorRuntime.mark(function _callee(input) {
+    var output, type;
+    return regeneratorRuntime.wrap(function _callee$(_context) {
+      while (1) {
+        switch (_context.prev = _context.next) {
+          case 0:
+            output = input;
+            type = (0, _type2.default)(input);
+
+
+            if (type.match(/^(array|object)\//)) {
+              output = (0, _deepCopy2.default)(output);
+            }
+
+            return _context.abrupt('return', (0, _data2.default)(output, type));
+
+          case 4:
+          case 'end':
+            return _context.stop();
+        }
+      }
+    }, _callee, this);
+  }));
+
+  return function parseInputChainLinkAsync(_x) {
+    return _ref.apply(this, arguments);
+  };
+}();
+
+exports.default = parseInputChainLinkAsync;
+
+},{"../../../util/deepCopy":384,"../async/data":365,"../type":371}],365:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _chain = require('../async/chain');
+
+var _chain2 = _interopRequireDefault(_chain);
+
+var _data = require('../data');
+
+var _data2 = _interopRequireDefault(_data);
+
+var _fetchFileAsync = require('../../../util/fetchFileAsync');
+
+var _fetchFileAsync2 = _interopRequireDefault(_fetchFileAsync);
+
+var _json = require('../../wikidata/async/json');
+
+var _json2 = _interopRequireDefault(_json);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { step("next", value); }, function (err) { step("throw", err); }); } } return step("next"); }); }; }
+
+/**
+ * Standardise input (internal use)
+ *
+ * @access protected
+ * @method parseInputDataAsync
+ *
+ * @param {String|String[]|Object|Object[]} input - The input data
+ * @param {String} type - The input type
+ *
+ * @return {CSL[]} The parsed input
+ */
+var parseInputDataAsync = function () {
+  var _ref = _asyncToGenerator(regeneratorRuntime.mark(function _callee(input, type) {
+    var output;
+    return regeneratorRuntime.wrap(function _callee$(_context) {
+      while (1) {
+        switch (_context.prev = _context.next) {
+          case 0:
+            _context.t0 = type;
+            _context.next = _context.t0 === 'api/wikidata' ? 3 : _context.t0 === 'object/wikidata' ? 4 : _context.t0 === 'url/else' ? 5 : _context.t0 === 'array/else' ? 6 : 11;
+            break;
+
+          case 3:
+            return _context.abrupt('return', (0, _fetchFileAsync2.default)(input));
+
+          case 4:
+            return _context.abrupt('return', (0, _json2.default)(input));
+
+          case 5:
+            return _context.abrupt('return', (0, _fetchFileAsync2.default)(input));
+
+          case 6:
+            _context.next = 8;
+            return Promise.all(input.map(function (value) {
+              return (0, _chain2.default)(value);
+            }));
+
+          case 8:
+            _context.t1 = function (a, b) {
+              return [].concat(a, b);
+            };
+
+            output = _context.sent.reduce(_context.t1);
+            return _context.abrupt('return', output);
+
+          case 11:
+            return _context.abrupt('return', (0, _data2.default)(input, type));
+
+          case 12:
+          case 'end':
+            return _context.stop();
+        }
+      }
+    }, _callee, this);
+  }));
+
+  return function parseInputDataAsync(_x, _x2) {
+    return _ref.apply(this, arguments);
+  };
+}();
+
+exports.default = parseInputDataAsync;
+
+},{"../../../util/fetchFileAsync":386,"../../wikidata/async/json":376,"../async/chain":363,"../data":369}],366:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.chainLink = exports.chain = exports.data = undefined;
+
+var _data = require('./data');
+
+var _data2 = _interopRequireDefault(_data);
+
+var _chain = require('./chain');
+
+var _chain2 = _interopRequireDefault(_chain);
+
+var _chainLink = require('./chainLink');
+
+var _chainLink2 = _interopRequireDefault(_chainLink);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+exports.data = _data2.default;
+exports.chain = _chain2.default;
+exports.chainLink = _chainLink2.default;
+
+},{"./chain":363,"./chainLink":364,"./data":365}],367:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -28675,7 +29511,7 @@ var parseInput = function parseInput(input) {
 
 exports.default = parseInput;
 
-},{"../../util/deepCopy":374,"./data":362,"./type":364}],361:[function(require,module,exports){
+},{"../../util/deepCopy":384,"./data":369,"./type":371}],368:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -28719,7 +29555,7 @@ var parseInputChainLink = function parseInputChainLink(input) {
 
 exports.default = parseInputChainLink;
 
-},{"../../util/deepCopy":374,"./data":362,"./type":364}],362:[function(require,module,exports){
+},{"../../util/deepCopy":384,"./data":369,"./type":371}],369:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -28837,13 +29673,13 @@ var parseInputData = function parseInputData(input, type) {
 
 exports.default = parseInputData;
 
-},{"../../util/fetchFile":375,"../bibjson/index":352,"../bibtex/json":353,"../bibtex/text":355,"../json":365,"../regex":367,"../wikidata/json":369,"../wikidata/list":370,"./chain":360}],363:[function(require,module,exports){
+},{"../../util/fetchFile":385,"../bibjson/index":355,"../bibtex/json":356,"../bibtex/text":358,"../json":372,"../regex":374,"../wikidata/json":379,"../wikidata/list":380,"./chain":367}],370:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.chainLink = exports.chain = exports.data = exports.type = undefined;
+exports.async = exports.chainLink = exports.chain = exports.data = exports.type = undefined;
 
 var _type = require('./type');
 
@@ -28861,14 +29697,21 @@ var _chainLink = require('./chainLink');
 
 var _chainLink2 = _interopRequireDefault(_chainLink);
 
+var _index = require('./async/index');
+
+var async = _interopRequireWildcard(_index);
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 exports.type = _type2.default;
 exports.data = _data2.default;
 exports.chain = _chain2.default;
 exports.chainLink = _chainLink2.default;
+exports.async = async;
 
-},{"./chain":360,"./chainLink":361,"./data":362,"./type":364}],364:[function(require,module,exports){
+},{"./async/index":366,"./chain":367,"./chainLink":368,"./data":369,"./type":371}],371:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -28983,7 +29826,7 @@ var parseInputType = function parseInputType(input) {
 
 exports.default = parseInputType;
 
-},{"../regex":367}],365:[function(require,module,exports){
+},{"../regex":374}],372:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -29031,7 +29874,7 @@ var parseJSON = function parseJSON(str) {
 
 exports.default = parseJSON;
 
-},{"./regex":367}],366:[function(require,module,exports){
+},{"./regex":374}],373:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -29070,7 +29913,7 @@ var parseName = function parseName(name) {
 
 exports.default = parseName;
 
-},{"./regex":367}],367:[function(require,module,exports){
+},{"./regex":374}],374:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -29093,13 +29936,422 @@ var regex = {
 
 exports.default = regex;
 
-},{}],368:[function(require,module,exports){
+},{}],375:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.type = exports.prop = exports.json = exports.list = undefined;
+exports.prop = exports.json = undefined;
+
+var _json = require('./json');
+
+var _json2 = _interopRequireDefault(_json);
+
+var _prop = require('./prop');
+
+var _prop2 = _interopRequireDefault(_prop);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+exports.json = _json2.default;
+exports.prop = _prop2.default;
+
+},{"./json":376,"./prop":377}],376:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; }();
+
+var _wikidataSdk = require('wikidata-sdk');
+
+var _wikidataSdk2 = _interopRequireDefault(_wikidataSdk);
+
+var _prop = require('./prop');
+
+var _prop2 = _interopRequireDefault(_prop);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { step("next", value); }, function (err) { step("throw", err); }); } } return step("next"); }); }; }
+
+/**
+ * Format Wikidata data (async)
+ *
+ * @access protected
+ * @method parseWikidataJSONAsync
+ *
+ * @param {Object} data - The input data
+ *
+ * @return {CSL[]} The formatted input data
+ */
+var parseWikidataJSONAsync = function () {
+  var _ref = _asyncToGenerator(regeneratorRuntime.mark(function _callee2(data) {
+    return regeneratorRuntime.wrap(function _callee2$(_context2) {
+      while (1) {
+        switch (_context2.prev = _context2.next) {
+          case 0:
+            return _context2.abrupt('return', Promise.all(Object.keys(data.entities).map(function () {
+              var _ref2 = _asyncToGenerator(regeneratorRuntime.mark(function _callee(entityKey) {
+                var _data$entities$entity, labels, claims, entity, json, props;
+
+                return regeneratorRuntime.wrap(function _callee$(_context) {
+                  while (1) {
+                    switch (_context.prev = _context.next) {
+                      case 0:
+                        _data$entities$entity = data.entities[entityKey], labels = _data$entities$entity.labels, claims = _data$entities$entity.claims;
+                        entity = _wikidataSdk2.default.simplifyClaims(claims, null, null, true);
+                        json = {
+                          wikiId: entityKey,
+                          id: entityKey
+                        };
+                        _context.next = 5;
+                        return Promise.all(Object.keys(entity).map(function (prop) {
+                          return (0, _prop2.default)(prop, entity[prop], 'en');
+                        }));
+
+                      case 5:
+                        props = _context.sent;
+
+                        props.forEach(function (_ref3) {
+                          var _ref4 = _slicedToArray(_ref3, 2),
+                              resProp = _ref4[0],
+                              resValue = _ref4[1];
+
+                          if (resProp.length > 0) {
+                            json[resProp] = resValue;
+                          }
+                        });
+
+                        // It still has to combine authors from string value and numeric-id value :(
+                        if (json.hasOwnProperty('authorQ') || json.hasOwnProperty('authorS')) {
+                          if (json.hasOwnProperty('authorQ') && json.hasOwnProperty('authorS')) {
+                            json.author = json.authorQ.concat(json.authorS);
+                            delete json.authorQ;
+                            delete json.authorS;
+                          } else if (json.hasOwnProperty('authorQ')) {
+                            json.author = json.authorQ;
+                            delete json.authorQ;
+                          } else if (json.hasOwnProperty('authorS')) {
+                            json.author = json.authorS;
+                            delete json.authorS;
+                          }
+                          json.author = json.author.sort(function (a, b) {
+                            return a[1] - b[1];
+                          }).map(function (v) {
+                            return v[0];
+                          });
+                        }
+
+                        if (!json.title) {
+                          json.title = labels['en'].value;
+                        }
+
+                        return _context.abrupt('return', json);
+
+                      case 10:
+                      case 'end':
+                        return _context.stop();
+                    }
+                  }
+                }, _callee, this);
+              }));
+
+              return function (_x2) {
+                return _ref2.apply(this, arguments);
+              };
+            }())));
+
+          case 1:
+          case 'end':
+            return _context2.stop();
+        }
+      }
+    }, _callee2, this);
+  }));
+
+  return function parseWikidataJSONAsync(_x) {
+    return _ref.apply(this, arguments);
+  };
+}();
+
+exports.default = parseWikidataJSONAsync;
+
+},{"./prop":377,"wikidata-sdk":320}],377:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _wikidataSdk = require('wikidata-sdk');
+
+var _wikidataSdk2 = _interopRequireDefault(_wikidataSdk);
+
+var _fetchFileAsync = require('../../../util/fetchFileAsync');
+
+var _fetchFileAsync2 = _interopRequireDefault(_fetchFileAsync);
+
+var _type = require('../type');
+
+var _type2 = _interopRequireDefault(_type);
+
+var _date = require('../../date');
+
+var _date2 = _interopRequireDefault(_date);
+
+var _name = require('../../name');
+
+var _name2 = _interopRequireDefault(_name);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { step("next", value); }, function (err) { step("throw", err); }); } } return step("next"); }); }; }
+
+/**
+ * Get the names of objects from Wikidata IDs (async)
+ *
+ * @access private
+ * @method fetchWikidataLabelAsync
+ *
+ * @param {String|String[]} q - Wikidata IDs
+ * @param {String} lang - Language
+ *
+ * @return {String[]} Array with labels of each prop
+ */
+var fetchWikidataLabelAsync = function () {
+  var _ref = _asyncToGenerator(regeneratorRuntime.mark(function _callee(q, lang) {
+    var ids, url, entities;
+    return regeneratorRuntime.wrap(function _callee$(_context) {
+      while (1) {
+        switch (_context.prev = _context.next) {
+          case 0:
+            ids = Array.isArray(q) ? q : typeof q === 'string' ? q.split('|') : '';
+            url = _wikidataSdk2.default.getEntities(ids, [lang], 'labels');
+            _context.t1 = JSON;
+            _context.next = 5;
+            return (0, _fetchFileAsync2.default)(url);
+
+          case 5:
+            _context.t2 = _context.sent;
+            _context.t0 = _context.t1.parse.call(_context.t1, _context.t2).entities;
+
+            if (_context.t0) {
+              _context.next = 9;
+              break;
+            }
+
+            _context.t0 = {};
+
+          case 9:
+            entities = _context.t0;
+            return _context.abrupt('return', Object.keys(entities).map(function (entityKey) {
+              return (entities[entityKey].labels[lang] || {}).value;
+            }));
+
+          case 11:
+          case 'end':
+            return _context.stop();
+        }
+      }
+    }, _callee, this);
+  }));
+
+  return function fetchWikidataLabelAsync(_x, _x2) {
+    return _ref.apply(this, arguments);
+  };
+}();
+
+var parseWikidataP1545 = function parseWikidataP1545(qualifiers) {
+  return qualifiers.P1545 ? parseInt(qualifiers.P1545[0]) : -1;
+};
+
+/**
+ * Transform property and value from Wikidata format to CSL (async)
+ *
+ * @access protected
+ * @method parseWikidataPropAsync
+ *
+ * @param {String} prop - Property
+ * @param {String|Number} value - Value
+ * @param {String} lang - Language
+ *
+ * @return {String[]} Array with new prop and value
+ */
+var parseWikidataPropAsync = function () {
+  var _ref2 = _asyncToGenerator(regeneratorRuntime.mark(function _callee3(prop, value, lang) {
+    var rProp, rValue;
+    return regeneratorRuntime.wrap(function _callee3$(_context3) {
+      while (1) {
+        switch (_context3.prev = _context3.next) {
+          case 0:
+            _context3.t0 = prop;
+            _context3.next = _context3.t0 === 'P50' ? 3 : _context3.t0 === 'P2093' ? 3 : 5;
+            break;
+
+          case 3:
+            value = value.slice();
+            return _context3.abrupt('break', 7);
+
+          case 5:
+            value = value[0].value;
+            return _context3.abrupt('break', 7);
+
+          case 7:
+            rProp = '';
+            rValue = value;
+            _context3.t1 = prop;
+            _context3.next = _context3.t1 === 'P50' ? 12 : _context3.t1 === 'P2093' ? 17 : _context3.t1 === 'P580' ? 20 : _context3.t1 === 'P585' ? 20 : _context3.t1 === 'P356' ? 23 : _context3.t1 === 'P31' ? 25 : _context3.t1 === 'P212' ? 29 : _context3.t1 === 'P957' ? 29 : _context3.t1 === 'P433' ? 31 : _context3.t1 === 'P1433' ? 33 : _context3.t1 === 'P304' ? 38 : _context3.t1 === 'P393' ? 40 : _context3.t1 === 'P577' ? 42 : _context3.t1 === 'P1476' ? 45 : _context3.t1 === 'P953' ? 47 : _context3.t1 === 'P478' ? 49 : _context3.t1 === 'P2860' ? 51 : _context3.t1 === 'P921' ? 51 : _context3.t1 === 'P3181' ? 51 : _context3.t1 === 'P364' ? 51 : _context3.t1 === 'P698' ? 51 : _context3.t1 === 'P932' ? 51 : _context3.t1 === 'P1104' ? 51 : 52;
+            break;
+
+          case 12:
+            rProp = 'authorQ';
+            _context3.next = 15;
+            return Promise.all(value.map(function () {
+              var _ref4 = _asyncToGenerator(regeneratorRuntime.mark(function _callee2(_ref3) {
+                var value = _ref3.value,
+                    qualifiers = _ref3.qualifiers;
+                return regeneratorRuntime.wrap(function _callee2$(_context2) {
+                  while (1) {
+                    switch (_context2.prev = _context2.next) {
+                      case 0:
+                        _context2.t0 = _name2.default;
+                        _context2.next = 3;
+                        return fetchWikidataLabelAsync(value, lang)[0];
+
+                      case 3:
+                        _context2.t1 = _context2.sent;
+                        _context2.t2 = (0, _context2.t0)(_context2.t1);
+                        _context2.t3 = parseWikidataP1545(qualifiers);
+                        return _context2.abrupt('return', [_context2.t2, _context2.t3]);
+
+                      case 7:
+                      case 'end':
+                        return _context2.stop();
+                    }
+                  }
+                }, _callee2, this);
+              }));
+
+              return function (_x6) {
+                return _ref4.apply(this, arguments);
+              };
+            }()));
+
+          case 15:
+            rValue = _context3.sent;
+            return _context3.abrupt('break', 54);
+
+          case 17:
+            rProp = 'authorS';
+            rValue = value.map(function (_ref5) {
+              var value = _ref5.value,
+                  qualifiers = _ref5.qualifiers;
+              return [(0, _name2.default)(value), parseWikidataP1545(qualifiers)];
+            });
+            return _context3.abrupt('break', 54);
+
+          case 20:
+            rProp = 'accessed';
+            rValue = (0, _date2.default)(value);
+            return _context3.abrupt('break', 54);
+
+          case 23:
+            rProp = 'DOI';
+            return _context3.abrupt('break', 54);
+
+          case 25:
+            rProp = 'type';
+            rValue = (0, _type2.default)(value);
+
+            if (rValue === undefined) {
+              console.warn('[set]', 'This entry type is not recognized and therefore interpreted as \'article-journal\': ' + value);
+              rValue = 'article-journal';
+            }
+            return _context3.abrupt('break', 54);
+
+          case 29:
+            rProp = 'ISBN';
+            return _context3.abrupt('break', 54);
+
+          case 31:
+            rProp = 'issue';
+            return _context3.abrupt('break', 54);
+
+          case 33:
+            rProp = 'container-title';
+            _context3.next = 36;
+            return fetchWikidataLabelAsync(value, lang)[0];
+
+          case 36:
+            rValue = _context3.sent;
+            return _context3.abrupt('break', 54);
+
+          case 38:
+            rProp = 'page';
+            return _context3.abrupt('break', 54);
+
+          case 40:
+            rProp = 'edition';
+            return _context3.abrupt('break', 54);
+
+          case 42:
+            rProp = 'issued';
+            rValue = (0, _date2.default)(value);
+            return _context3.abrupt('break', 54);
+
+          case 45:
+            rProp = 'title';
+            return _context3.abrupt('break', 54);
+
+          case 47:
+            // (full work available at)
+            rProp = 'URL';
+            return _context3.abrupt('break', 54);
+
+          case 49:
+            rProp = 'volume';
+            return _context3.abrupt('break', 54);
+
+          case 51:
+            return _context3.abrupt('break', 54);
+
+          case 52:
+            console.info('[set]', 'Unknown property: ' + prop);
+            return _context3.abrupt('break', 54);
+
+          case 54:
+            return _context3.abrupt('return', [rProp, rValue]);
+
+          case 55:
+          case 'end':
+            return _context3.stop();
+        }
+      }
+    }, _callee3, this);
+  }));
+
+  return function parseWikidataPropAsync(_x3, _x4, _x5) {
+    return _ref2.apply(this, arguments);
+  };
+}();
+
+exports.default = parseWikidataPropAsync;
+
+},{"../../../util/fetchFileAsync":386,"../../date":361,"../../name":373,"../type":382,"wikidata-sdk":320}],378:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.async = exports.type = exports.prop = exports.json = exports.list = undefined;
+
+var _index = require('./async/index');
+
+var async = _interopRequireWildcard(_index);
 
 var _list = require('./list');
 
@@ -29119,12 +30371,15 @@ var _type2 = _interopRequireDefault(_type);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+
 exports.list = _list2.default;
 exports.json = _json2.default;
 exports.prop = _prop2.default;
 exports.type = _type2.default;
+exports.async = async;
 
-},{"./json":369,"./list":370,"./prop":371,"./type":372}],369:[function(require,module,exports){
+},{"./async/index":375,"./json":379,"./list":380,"./prop":381,"./type":382}],379:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -29208,7 +30463,7 @@ var parseWikidataJSON = function parseWikidataJSON(data) {
 
 exports.default = parseWikidataJSON;
 
-},{"./prop":371,"wikidata-sdk":318}],370:[function(require,module,exports){
+},{"./prop":381,"wikidata-sdk":320}],380:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -29237,7 +30492,7 @@ var parseWikidata = function parseWikidata(data) {
 
 exports.default = parseWikidata;
 
-},{"wikidata-sdk":318}],371:[function(require,module,exports){
+},{"wikidata-sdk":320}],381:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -29269,7 +30524,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 /**
  * Get the names of objects from Wikidata IDs
  *
- * @access protected
+ * @access private
  * @method fetchWikidataLabel
  *
  * @param {String|String[]} q - Wikidata IDs
@@ -29290,7 +30545,7 @@ var fetchWikidataLabel = function fetchWikidataLabel(q, lang) {
 /**
  * Get series ordinal from qualifiers object
  *
- * @access protected
+ * @access private
  * @method parseWikidataProp
  *
  * @param {Object} qualifiers - qualifiers object
@@ -29442,7 +30697,7 @@ var parseWikidataProp = function parseWikidataProp(prop, value, lang) {
 
 exports.default = parseWikidataProp;
 
-},{"../../util/fetchFile":375,"../date":358,"../name":366,"./type":372,"wikidata-sdk":318}],372:[function(require,module,exports){
+},{"../../util/fetchFile":385,"../date":361,"../name":373,"./type":382,"wikidata-sdk":320}],382:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -29451,7 +30706,7 @@ Object.defineProperty(exports, "__esModule", {
 /**
  * Object containing a list of Wikidata Instances and it's corresponding name as specified by the docs
  *
- * @access protected
+ * @access private
  * @constant varWikidataTypes
  * @default
  */
@@ -29479,7 +30734,7 @@ var fetchWikidataType = function fetchWikidataType(value) {
 
 exports.default = fetchWikidataType;
 
-},{}],373:[function(require,module,exports){
+},{}],383:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -29522,7 +30777,7 @@ var getPrefixedEntry = function getPrefixedEntry(value, index, list) {
 exports.getAttributedEntry = getAttributedEntry;
 exports.getPrefixedEntry = getPrefixedEntry;
 
-},{}],374:[function(require,module,exports){
+},{}],384:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -29544,7 +30799,7 @@ var deepCopy = function deepCopy(obj) {
 
 exports.default = deepCopy;
 
-},{}],375:[function(require,module,exports){
+},{}],385:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -29578,7 +30833,63 @@ var fetchFile = function fetchFile(url) {
 
 exports.default = fetchFile;
 
-},{"sync-request":309}],376:[function(require,module,exports){
+},{"sync-request":310}],386:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+require('isomorphic-fetch');
+
+function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { step("next", value); }, function (err) { step("throw", err); }); } } return step("next"); }); }; }
+
+/**
+ * Fetch file (async)
+ *
+ * @access protected
+ * @method fetchFileAsync
+ *
+ * @param {String} url - The input url
+ *
+ * @return {String} The fetched string
+ */
+var fetchFileAsync = function () {
+  var _ref = _asyncToGenerator(regeneratorRuntime.mark(function _callee(url) {
+    return regeneratorRuntime.wrap(function _callee$(_context) {
+      while (1) {
+        switch (_context.prev = _context.next) {
+          case 0:
+            _context.prev = 0;
+            _context.next = 3;
+            return fetch(url);
+
+          case 3:
+            return _context.abrupt('return', _context.sent.text());
+
+          case 6:
+            _context.prev = 6;
+            _context.t0 = _context['catch'](0);
+
+            console.error('[set]', 'File could not be fetched');
+            return _context.abrupt('return', undefined);
+
+          case 10:
+          case 'end':
+            return _context.stop();
+        }
+      }
+    }, _callee, this, [[0, 6]]);
+  }));
+
+  return function fetchFileAsync(_x) {
+    return _ref.apply(this, arguments);
+  };
+}();
+
+exports.default = fetchFileAsync;
+
+},{"isomorphic-fetch":299}],387:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -29607,13 +30918,13 @@ var fetchId = function fetchId(list, prefix) {
 
 exports.default = fetchId;
 
-},{}],377:[function(require,module,exports){
+},{}],388:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.fetchId = exports.fetchFile = exports.deepCopy = exports.attr = undefined;
+exports.fetchId = exports.fetchFileAsync = exports.fetchFile = exports.deepCopy = exports.attr = undefined;
 
 var _attr = require('./attr');
 
@@ -29627,6 +30938,10 @@ var _fetchFile = require('./fetchFile');
 
 var _fetchFile2 = _interopRequireDefault(_fetchFile);
 
+var _fetchFileAsync = require('./fetchFileAsync');
+
+var _fetchFileAsync2 = _interopRequireDefault(_fetchFileAsync);
+
 var _fetchId = require('./fetchId');
 
 var _fetchId2 = _interopRequireDefault(_fetchId);
@@ -29638,9 +30953,10 @@ function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj;
 exports.attr = attr;
 exports.deepCopy = _deepCopy2.default;
 exports.fetchFile = _fetchFile2.default;
+exports.fetchFileAsync = _fetchFileAsync2.default;
 exports.fetchId = _fetchId2.default;
 
-},{"./attr":373,"./deepCopy":374,"./fetchFile":375,"./fetchId":376}],378:[function(require,module,exports){
+},{"./attr":383,"./deepCopy":384,"./fetchFile":385,"./fetchFileAsync":386,"./fetchId":387}],389:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -29661,7 +30977,7 @@ var citeproc = _citeproc2.default.PROCESSOR_VERSION;
 exports.cite = _package.version;
 exports.citeproc = citeproc;
 
-},{"../package.json":329,"citeproc":2}],"citation-js":[function(require,module,exports){
+},{"../package.json":331,"citeproc":2}],"citation-js":[function(require,module,exports){
 'use strict';
 
 require('babel-polyfill');
@@ -29690,9 +31006,13 @@ var _version = require('./version');
 
 var version = _interopRequireWildcard(_version);
 
-var _index5 = require('./Cite/index');
+var _index5 = require('./async/index');
 
 var _index6 = _interopRequireDefault(_index5);
+
+var _index7 = require('./Cite/index');
+
+var _index8 = _interopRequireDefault(_index7);
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
@@ -29704,38 +31024,37 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
  * @class CSL
  */
 
-/**
- * @file Citation-0.2.js
- *
- * @projectname Citationjs
- *
- * @author Lars Willighagen
- * @version 0.3.0-4
- * @license
- * Copyright (c) 2015-2017 Lars Willighagen
- *
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
- *
- * The above copyright notice and this permission notice shall be included in all
- * copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
- * SOFTWARE.
- */
+Object.assign(_index8.default, { parse: parse, get: get, CSL: CSL, util: util, version: version, async: _index6.default }); /**
+                                                                                                                             * @file index.js
+                                                                                                                             *
+                                                                                                                             * @projectname Citationjs
+                                                                                                                             *
+                                                                                                                             * @author Lars Willighagen
+                                                                                                                             * @version 0.3.0-5
+                                                                                                                             * @license
+                                                                                                                             * Copyright (c) 2015-2017 Lars Willighagen
+                                                                                                                             *
+                                                                                                                             * Permission is hereby granted, free of charge, to any person obtaining a copy
+                                                                                                                             * of this software and associated documentation files (the "Software"), to deal
+                                                                                                                             * in the Software without restriction, including without limitation the rights
+                                                                                                                             * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+                                                                                                                             * copies of the Software, and to permit persons to whom the Software is
+                                                                                                                             * furnished to do so, subject to the following conditions:
+                                                                                                                             *
+                                                                                                                             * The above copyright notice and this permission notice shall be included in all
+                                                                                                                             * copies or substantial portions of the Software.
+                                                                                                                             *
+                                                                                                                             * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+                                                                                                                             * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+                                                                                                                             * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+                                                                                                                             * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+                                                                                                                             * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+                                                                                                                             * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+                                                                                                                             * SOFTWARE.
+                                                                                                                             */
 
-Object.assign(_index6.default, { parse: parse, get: get, CSL: CSL, util: util, version: version });
-(0, _deepFreeze2.default)(_index6.default);
+(0, _deepFreeze2.default)(_index8.default);
 
-module.exports = _index6.default;
+module.exports = _index8.default;
 
-},{"./CSL/index":331,"./Cite/index":336,"./get/index":348,"./parse/index":359,"./util/index":377,"./version":378,"babel-polyfill":1,"deep-freeze":297}]},{},[]);
+},{"./CSL/index":333,"./Cite/index":338,"./async/index":343,"./get/index":351,"./parse/index":362,"./util/index":388,"./version":389,"babel-polyfill":1,"deep-freeze":297}]},{},[]);
