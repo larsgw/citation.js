@@ -8,11 +8,14 @@ Citation.js converts formats like BibTeX, Wikidata JSON and ContentMine JSON to 
 ##### Table of Contents
 
 * [Citation.js](#citation)
+  * [Get Started](#citation.starting)
+    * [Install](#citation.install)
+      * [Node.js](#citation.starting.install.node)
+        * [Dependencies](#citation.starting.install.node.dependencies)
+      * [Browser](#citation.starting.install.browser)
+        * [Dependencies](#citation.starting.install.browser.dependencies)
+    * [Example](#citation.starting.example)
   * [Use](#citation.use)
-    * [Node.js](#citation.use.node)
-      * [Dependencies](#citation.use.node.dependencies)
-    * [Browser](#citation.use.browser)
-      * [Dependencies](#citation.use.browser.dependencies)
     * [Cite](#citation.cite)
       * [Input](#citation.cite.in)
         * [Input types](#citation.cite.in.type)
@@ -23,6 +26,7 @@ Citation.js converts formats like BibTeX, Wikidata JSON and ContentMine JSON to 
         * [CSL Templates](#citation.cite.out.templates)
         * [CSL Locales](#citation.cite.out.locales)
       * [Misc](#citation.cite.misc)
+    * [Async](#citation.async)
 * [jquery.Citation.js](#jquery)
   * [Use](#jquery.use)
     * [jQueryCite](#jquery.cite)
@@ -39,9 +43,11 @@ Citation.js converts formats like BibTeX, Wikidata JSON and ContentMine JSON to 
 
 # <a id="citation" href="#citation">Citation.js</a>
 
-## <a id="citation.use" href="#citation.use">Use</a>
+## <a id="citation.starting" href="#citation.starting">Get Started</a>
 
-### <a id="citation.use.node" href="#citation.use.node">Node.js</a>
+### <a id="citation.starting.install" href="#citation.starting.install">Install</a>
+
+#### <a id="citation.starting.install.node" href="#citation.starting.install.node">Node.js</a>
 
 Install the package ([citation-js](https://www.npmjs.org/package/citation-js)) like this:
 
@@ -73,7 +79,7 @@ To use the [`Cite`](#citation.cite) constructor, `require()` the module like thi
 var Cite = require('citation-js')
 ```
 
-#### <a id="citation.use.node.dependencies" href="#citation.use.node.dependencies">Dependencies</a>
+##### <a id="citation.starting.install.node.dependencies" href="#citation.starting.install.node.dependencies">Dependencies</a>
 
 * [babel-polyfill](https://www.npmjs.com/package/babel-polyfill)
 * [citeproc](https://www.npmjs.com/package/citeproc)
@@ -83,7 +89,7 @@ var Cite = require('citation-js')
 * [sync-request](https://www.npmjs.com/package/sync-request)
 * [wikidata-sdk](https://www.npmjs.com/package/wikidata-sdk)
 
-### <a id="citation.use.browser" href="#citation.use.browser">Browser</a>
+#### <a id="citation.starting.install.browser" href="#citation.starting.install.browser">Browser</a>
 
 With the following code, you can `require('citation-js')` to get the [`Cite`](#citation.cite) contructor.
 
@@ -91,9 +97,28 @@ With the following code, you can `require('citation-js')` to get the [`Cite`](#c
 <script src="path/to/browser.js" type="text/javascript"></script>
 ```
 
-#### <a id="citation.use.browser.dependencies" href="#citation.use.browser.dependencies">Dependencies</a>
+##### <a id="citation.starting.install.browser.dependencies" href="#citation.starting.install.browser.dependencies">Dependencies</a>
 
 Dependencies are the same as the ones above, with the exception of `commander`. They are all included in `citation.js`.
+
+### <a id="citation.starting.example" href="#citation.starting.example">Example</a>
+
+```js
+var Cite = require('citation-js@0.3.0-6')
+ 
+var data = new Cite('Q21972834', {
+  format: 'string',
+  type: 'html',
+  style: 'citation-apa',
+  lang: 'en-US'
+})
+ 
+data.get() // Should implicitly display 
+```
+
+To test this code, go to [RunKit](https://runkit.com/larsgw/591b5651bd9b40001113931c).
+
+## <a id="citation.use" href="#citation.use">Use</a>
 
 ### <a id="citation.cite" href="#citation.cite">Cite</a>
 
@@ -221,18 +246,21 @@ data.get({
 `Cite` holds all internal functions, too. These are documentated [here](https://larsgw.github.io/citation.js/api/global.html) and can be accessed like this:
 
 ```js
-{ [Function: Cite]
+{
+  async: [Function: async],
   parse: 
    { input: 
       { type: [Function: parseInputType],
         data: [Function: parseInputData],
         chain: [Function: parseInput],
-        chainLink: [Function: parseInputChainLink] },
+        chainLink: [Function: parseInputChainLink],
+        async: [Object] },
      wikidata: 
       { list: [Function: parseWikidata],
         json: [Function: parseWikidataJSON],
         prop: [Function: parseWikidataProp],
-        type: [Function: fetchWikidataType] },
+        type: [Function: fetchWikidataType],
+        async: [Object] },
      bibjson: [Function: parseContentMine],
      date: [Function: parseDate],
      name: [Function: parseName],
@@ -259,9 +287,35 @@ data.get({
         getPrefixedEntry: [Function: getPrefixedEntry] },
      deepCopy: [Function: deepCopy],
      fetchFile: [Function: fetchFile],
-     fetchId: [Function: fetchId] },
-  version: { cite: '0.3.0-4', citeproc: '1.1.161' } }
+     fetchFileAsync: [Function: fetchFileAsync],
+     fetchId: [Function: fetchId] } }
 ```
+
+### <a id="citation.async" href="#citation.async">Async</a>
+
+Use the async api (recommended for Wikidata, URL, and DOI input) like this (with callback):
+
+```js
+Cite.async(<DATA>, <OPTIONS>, function (data) {
+  data // instance of Cite
+  
+  // Further manipulations...
+  console.log(data.get())
+})
+```
+
+Or with a promise, like this:
+
+```js
+Cite.async(<DATA>, <OPTIONS>).then(function (data) {
+  data // instance of Cite
+  
+  // Further manipulations...
+  console.log(data.get())
+})
+```
+
+Where `<DATA>` is the input data and `<OPTIONS>` is the input options. `<OPTIONS>` is optional in both examples.
 
 # <a id="jquery" href="#jquery">jquery.Citation.js</a>
 

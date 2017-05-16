@@ -101,69 +101,7 @@
 
         
             
-<h4 class="name" id="varHTMLDict"><span class="type-signature">(protected, constant) </span>varHTMLDict<span class="type-signature"></span></h4>
-
-
-
-
-<div class="description">
-    <p>Object containing text strings for building JSON and BibTeX. Made to match citeproc, for compatability.</p>
-</div>
-
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="get_dict.js.html">get/dict.js</a>, <a href="get_dict.js.html#line19">line 19</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-        
-            
-<h4 class="name" id="varHTMLDict"><span class="type-signature">(protected, constant) </span>varHTMLDict<span class="type-signature"></span></h4>
+<h4 class="name" id="htmlDict"><span class="type-signature">(protected, constant) </span>htmlDict<span class="type-signature"></span></h4>
 
 
 
@@ -207,7 +145,69 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="get_dict.js.html">get/dict.js</a>, <a href="get_dict.js.html#line1">line 1</a>
+        <a href="get_dict.js.html">get/dict.js</a>, <a href="get_dict.js.html#line6">line 6</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+        
+            
+<h4 class="name" id="textDict"><span class="type-signature">(protected, constant) </span>textDict<span class="type-signature"></span></h4>
+
+
+
+
+<div class="description">
+    <p>Object containing text strings for building JSON and BibTeX. Made to match citeproc, for compatability.</p>
+</div>
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="get_dict.js.html">get/dict.js</a>, <a href="get_dict.js.html#line24">line 24</a>
     </li></ul></dd>
     
 
@@ -269,7 +269,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="parse_regex.js.html">parse/regex.js</a>, <a href="parse_regex.js.html#line1">line 1</a>
+        <a href="parse_regex.js.html">parse/regex.js</a>, <a href="parse_regex.js.html#line6">line 6</a>
     </li></ul></dd>
     
 
@@ -290,6 +290,260 @@
 
     
         <h3 class="subsection-title">Methods</h3>
+
+        
+            
+
+    
+
+    <h4 class="name" id="async"><span class="type-signature"></span>async<span class="signature">(data, options<span class="signature-attributes">opt</span>, callback)</span><span class="type-signature"> &rarr; {Promise}</span></h4>
+
+    
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+        <th>Default</th>
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>data</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+|
+
+<span class="param-type"><a href="CSL.html">CSL</a></span>
+|
+
+<span class="param-type">Object</span>
+|
+
+<span class="param-type">Array.&lt;String></span>
+|
+
+<span class="param-type">Array.&lt;<a href="CSL.html">CSL</a>></span>
+|
+
+<span class="param-type">Array.&lt;Object></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last"><p>Input data.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>options</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    {}
+                
+                </td>
+            
+
+            <td class="description last"><p>The options for the output. See <a href="../#citation.cite.in.options">input options</a>.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>callback</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="Cite.html#~asyncCite">Cite~asyncCite</a></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last"><p>if not give, function returns promise.</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="async_index.js.html">async/index.js</a>, <a href="async_index.js.html#line61">line 61</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    <p>If callback is not given, it returns a Promise. Else returns undefined.</p>
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Promise</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
 
         
             
@@ -396,7 +650,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="util_deepCopy.js.html">util/deepCopy.js</a>, <a href="util_deepCopy.js.html#line1">line 1</a>
+        <a href="util_deepCopy.js.html">util/deepCopy.js</a>, <a href="util_deepCopy.js.html#line6">line 6</a>
     </li></ul></dd>
     
 
@@ -549,7 +803,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="get_bibtex_type.js.html">get/bibtex/type.js</a>, <a href="get_bibtex_type.js.html#line1">line 1</a>
+        <a href="get_bibtex_type.js.html">get/bibtex/type.js</a>, <a href="get_bibtex_type.js.html#line6">line 6</a>
     </li></ul></dd>
     
 
@@ -794,7 +1048,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="CSL_engines.js.html">CSL/engines.js</a>, <a href="CSL_engines.js.html#line24">line 24</a>
+        <a href="CSL_engines.js.html">CSL/engines.js</a>, <a href="CSL_engines.js.html#line34">line 34</a>
     </li></ul></dd>
     
 
@@ -896,7 +1150,7 @@
             <td class="type">
             
                 
-<span class="param-type">Array.&lt;CSL></span>
+<span class="param-type">Array.&lt;<a href="CSL.html">CSL</a>></span>
 
 
             
@@ -947,7 +1201,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="CSL_items.js.html">CSL/items.js</a>, <a href="CSL_items.js.html#line1">line 1</a>
+        <a href="CSL_items.js.html">CSL/items.js</a>, <a href="CSL_items.js.html#line6">line 6</a>
     </li></ul></dd>
     
 
@@ -1100,7 +1354,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="CSL_locales.js.html">CSL/locales.js</a>, <a href="CSL_locales.js.html#line35">line 35</a>
+        <a href="CSL_locales.js.html">CSL/locales.js</a>, <a href="CSL_locales.js.html#line30">line 30</a>
     </li></ul></dd>
     
 
@@ -1273,7 +1527,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="CSL_styles.js.html">CSL/styles.js</a>, <a href="CSL_styles.js.html#line25">line 25</a>
+        <a href="CSL_styles.js.html">CSL/styles.js</a>, <a href="CSL_styles.js.html#line24">line 24</a>
     </li></ul></dd>
     
 
@@ -1426,7 +1680,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="util_fetchFile.js.html">util/fetchFile.js</a>, <a href="util_fetchFile.js.html#line3">line 3</a>
+        <a href="util_fetchFile.js.html">util/fetchFile.js</a>, <a href="util_fetchFile.js.html#line13">line 13</a>
     </li></ul></dd>
     
 
@@ -1579,7 +1833,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="util_fetchFileAsync.js.html">util/fetchFileAsync.js</a>, <a href="util_fetchFileAsync.js.html#line3">line 3</a>
+        <a href="util_fetchFileAsync.js.html">util/fetchFileAsync.js</a>, <a href="util_fetchFileAsync.js.html#line11">line 11</a>
     </li></ul></dd>
     
 
@@ -1755,7 +2009,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="util_fetchId.js.html">util/fetchId.js</a>, <a href="util_fetchId.js.html#line1">line 1</a>
+        <a href="util_fetchId.js.html">util/fetchId.js</a>, <a href="util_fetchId.js.html#line6">line 6</a>
     </li></ul></dd>
     
 
@@ -1908,7 +2162,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="parse_wikidata_type.js.html">parse/wikidata/type.js</a>, <a href="parse_wikidata_type.js.html#line16">line 16</a>
+        <a href="parse_wikidata_type.js.html">parse/wikidata/type.js</a>, <a href="parse_wikidata_type.js.html#line21">line 21</a>
     </li></ul></dd>
     
 
@@ -2107,7 +2361,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="util_attr.js.html">util/attr.js</a>, <a href="util_attr.js.html#line1">line 1</a>
+        <a href="util_attr.js.html">util/attr.js</a>, <a href="util_attr.js.html#line6">line 6</a>
     </li></ul></dd>
     
 
@@ -2209,7 +2463,7 @@
             <td class="type">
             
                 
-<span class="param-type">Array.&lt;CSL></span>
+<span class="param-type">Array.&lt;<a href="CSL.html">CSL</a>></span>
 
 
             
@@ -2283,7 +2537,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="get_bibtex_text.js.html">get/bibtex/text.js</a>, <a href="get_bibtex_text.js.html#line28">line 28</a>
+        <a href="get_bibtex_text.js.html">get/bibtex/text.js</a>, <a href="get_bibtex_text.js.html#line39">line 39</a>
     </li></ul></dd>
     
 
@@ -2385,7 +2639,7 @@
             <td class="type">
             
                 
-<span class="param-type">CSL</span>
+<span class="param-type"><a href="CSL.html">CSL</a></span>
 
 
             
@@ -2436,7 +2690,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="get_bibtex_json.js.html">get/bibtex/json.js</a>, <a href="get_bibtex_json.js.html#line6">line 6</a>
+        <a href="get_bibtex_json.js.html">get/bibtex/json.js</a>, <a href="get_bibtex_json.js.html#line25">line 25</a>
     </li></ul></dd>
     
 
@@ -2538,7 +2792,7 @@
             <td class="type">
             
                 
-<span class="param-type">CSL</span>
+<span class="param-type"><a href="CSL.html">CSL</a></span>
 
 
             
@@ -2589,7 +2843,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="get_bibtex_label.js.html">get/bibtex/label.js</a>, <a href="get_bibtex_label.js.html#line1">line 1</a>
+        <a href="get_bibtex_label.js.html">get/bibtex/label.js</a>, <a href="get_bibtex_label.js.html#line6">line 6</a>
     </li></ul></dd>
     
 
@@ -2742,7 +2996,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="get_date.js.html">get/date.js</a>, <a href="get_date.js.html#line1">line 1</a>
+        <a href="get_date.js.html">get/date.js</a>, <a href="get_date.js.html#line9">line 9</a>
     </li></ul></dd>
     
 
@@ -2844,7 +3098,7 @@
             <td class="type">
             
                 
-<span class="param-type">Array.&lt;CSL></span>
+<span class="param-type">Array.&lt;<a href="CSL.html">CSL</a>></span>
 
 
             
@@ -2895,7 +3149,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="get_json.js.html">get/json.js</a>, <a href="get_json.js.html#line47">line 47</a>
+        <a href="get_json.js.html">get/json.js</a>, <a href="get_json.js.html#line59">line 59</a>
     </li></ul></dd>
     
 
@@ -2997,7 +3251,7 @@
             <td class="type">
             
                 
-<span class="param-type">CSL</span>
+<span class="param-type"><a href="CSL.html">CSL</a></span>
 
 
             
@@ -3048,7 +3302,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="get_label.js.html">get/label.js</a>, <a href="get_label.js.html#line3">line 3</a>
+        <a href="get_label.js.html">get/label.js</a>, <a href="get_label.js.html#line13">line 13</a>
     </li></ul></dd>
     
 
@@ -3201,7 +3455,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="get_name.js.html">get/name.js</a>, <a href="get_name.js.html#line1">line 1</a>
+        <a href="get_name.js.html">get/name.js</a>, <a href="get_name.js.html#line6">line 6</a>
     </li></ul></dd>
     
 
@@ -3400,7 +3654,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="util_attr.js.html">util/attr.js</a>, <a href="util_attr.js.html#line15">line 15</a>
+        <a href="util_attr.js.html">util/attr.js</a>, <a href="util_attr.js.html#line24">line 24</a>
     </li></ul></dd>
     
 
@@ -3453,7 +3707,7 @@
 
     
 
-    <h4 class="name" id="parseBibTeX"><span class="type-signature">(protected) </span>parseBibTeX<span class="signature">(str)</span><span class="type-signature"> &rarr; {Array.&lt;CSL>}</span></h4>
+    <h4 class="name" id="parseBibTeX"><span class="type-signature">(protected) </span>parseBibTeX<span class="signature">(str)</span><span class="type-signature"> &rarr; {Array.&lt;<a href="CSL.html">CSL</a>>}</span></h4>
 
     
 
@@ -3591,7 +3845,7 @@
     </dt>
     <dd>
         
-<span class="param-type">Array.&lt;CSL></span>
+<span class="param-type">Array.&lt;<a href="CSL.html">CSL</a>></span>
 
 
     </dd>
@@ -3606,7 +3860,7 @@
 
     
 
-    <h4 class="name" id="parseBibTeXJSON"><span class="type-signature">(protected) </span>parseBibTeXJSON<span class="signature">(data)</span><span class="type-signature"> &rarr; {Array.&lt;CSL>}</span></h4>
+    <h4 class="name" id="parseBibTeXJSON"><span class="type-signature">(protected) </span>parseBibTeXJSON<span class="signature">(data)</span><span class="type-signature"> &rarr; {Array.&lt;<a href="CSL.html">CSL</a>>}</span></h4>
 
     
 
@@ -3706,7 +3960,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="parse_bibtex_json.js.html">parse/bibtex/json.js</a>, <a href="parse_bibtex_json.js.html#line4">line 4</a>
+        <a href="parse_bibtex_json.js.html">parse/bibtex/json.js</a>, <a href="parse_bibtex_json.js.html#line17">line 17</a>
     </li></ul></dd>
     
 
@@ -3744,7 +3998,7 @@
     </dt>
     <dd>
         
-<span class="param-type">Array.&lt;CSL></span>
+<span class="param-type">Array.&lt;<a href="CSL.html">CSL</a>></span>
 
 
     </dd>
@@ -3885,7 +4139,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="parse_bibtex_prop.js.html">parse/bibtex/prop.js</a>, <a href="parse_bibtex_prop.js.html#line4">line 4</a>
+        <a href="parse_bibtex_prop.js.html">parse/bibtex/prop.js</a>, <a href="parse_bibtex_prop.js.html#line17">line 17</a>
     </li></ul></dd>
     
 
@@ -4038,7 +4292,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="parse_bibtex_type.js.html">parse/bibtex/type.js</a>, <a href="parse_bibtex_type.js.html#line1">line 1</a>
+        <a href="parse_bibtex_type.js.html">parse/bibtex/type.js</a>, <a href="parse_bibtex_type.js.html#line6">line 6</a>
     </li></ul></dd>
     
 
@@ -4091,7 +4345,7 @@
 
     
 
-    <h4 class="name" id="parseContentMine"><span class="type-signature">(protected) </span>parseContentMine<span class="signature">(data)</span><span class="type-signature"> &rarr; {Array.&lt;CSL>}</span></h4>
+    <h4 class="name" id="parseContentMine"><span class="type-signature">(protected) </span>parseContentMine<span class="signature">(data)</span><span class="type-signature"> &rarr; {Array.&lt;<a href="CSL.html">CSL</a>>}</span></h4>
 
     
 
@@ -4191,7 +4445,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="parse_bibjson_index.js.html">parse/bibjson/index.js</a>, <a href="parse_bibjson_index.js.html#line4">line 4</a>
+        <a href="parse_bibjson_index.js.html">parse/bibjson/index.js</a>, <a href="parse_bibjson_index.js.html#line17">line 17</a>
     </li></ul></dd>
     
 
@@ -4229,7 +4483,7 @@
     </dt>
     <dd>
         
-<span class="param-type">Array.&lt;CSL></span>
+<span class="param-type">Array.&lt;<a href="CSL.html">CSL</a>></span>
 
 
     </dd>
@@ -4347,7 +4601,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="parse_date.js.html">parse/date.js</a>, <a href="parse_date.js.html#line1">line 1</a>
+        <a href="parse_date.js.html">parse/date.js</a>, <a href="parse_date.js.html#line6">line 6</a>
     </li></ul></dd>
     
 
@@ -4400,7 +4654,7 @@
 
     
 
-    <h4 class="name" id="parseInput"><span class="type-signature">(protected) </span>parseInput<span class="signature">(input)</span><span class="type-signature"> &rarr; {Array.&lt;CSL>}</span></h4>
+    <h4 class="name" id="parseInput"><span class="type-signature">(protected) </span>parseInput<span class="signature">(input)</span><span class="type-signature"> &rarr; {Array.&lt;<a href="CSL.html">CSL</a>>}</span></h4>
 
     
 
@@ -4509,7 +4763,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="parse_input_chain.js.html">parse/input/chain.js</a>, <a href="parse_input_chain.js.html#line6">line 6</a>
+        <a href="parse_input_chain.js.html">parse/input/chain.js</a>, <a href="parse_input_chain.js.html#line21">line 21</a>
     </li></ul></dd>
     
 
@@ -4547,7 +4801,7 @@
     </dt>
     <dd>
         
-<span class="param-type">Array.&lt;CSL></span>
+<span class="param-type">Array.&lt;<a href="CSL.html">CSL</a>></span>
 
 
     </dd>
@@ -4671,7 +4925,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="parse_input_async_chain.js.html">parse/input/async/chain.js</a>, <a href="parse_input_async_chain.js.html#line6">line 6</a>
+        <a href="parse_input_async_chain.js.html">parse/input/async/chain.js</a>, <a href="parse_input_async_chain.js.html#line23">line 23</a>
     </li></ul></dd>
     
 
@@ -4724,7 +4978,7 @@
 
     
 
-    <h4 class="name" id="parseInputChainLink"><span class="type-signature">(protected) </span>parseInputChainLink<span class="signature">(input)</span><span class="type-signature"> &rarr; {Array.&lt;CSL>}</span></h4>
+    <h4 class="name" id="parseInputChainLink"><span class="type-signature">(protected) </span>parseInputChainLink<span class="signature">(input)</span><span class="type-signature"> &rarr; {Array.&lt;<a href="CSL.html">CSL</a>>}</span></h4>
 
     
 
@@ -4833,7 +5087,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="parse_input_chainLink.js.html">parse/input/chainLink.js</a>, <a href="parse_input_chainLink.js.html#line6">line 6</a>
+        <a href="parse_input_chainLink.js.html">parse/input/chainLink.js</a>, <a href="parse_input_chainLink.js.html#line21">line 21</a>
     </li></ul></dd>
     
 
@@ -4871,7 +5125,7 @@
     </dt>
     <dd>
         
-<span class="param-type">Array.&lt;CSL></span>
+<span class="param-type">Array.&lt;<a href="CSL.html">CSL</a>></span>
 
 
     </dd>
@@ -4995,7 +5249,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="parse_input_async_chainLink.js.html">parse/input/async/chainLink.js</a>, <a href="parse_input_async_chainLink.js.html#line6">line 6</a>
+        <a href="parse_input_async_chainLink.js.html">parse/input/async/chainLink.js</a>, <a href="parse_input_async_chainLink.js.html#line23">line 23</a>
     </li></ul></dd>
     
 
@@ -5048,7 +5302,7 @@
 
     
 
-    <h4 class="name" id="parseInputData"><span class="type-signature">(protected) </span>parseInputData<span class="signature">(input, type)</span><span class="type-signature"> &rarr; {Array.&lt;CSL>}</span></h4>
+    <h4 class="name" id="parseInputData"><span class="type-signature">(protected) </span>parseInputData<span class="signature">(input, type)</span><span class="type-signature"> &rarr; {Array.&lt;<a href="CSL.html">CSL</a>>}</span></h4>
 
     
 
@@ -5180,7 +5434,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="parse_input_data.js.html">parse/input/data.js</a>, <a href="parse_input_data.js.html#line12">line 12</a>
+        <a href="parse_input_data.js.html">parse/input/data.js</a>, <a href="parse_input_data.js.html#line45">line 45</a>
     </li></ul></dd>
     
 
@@ -5218,7 +5472,7 @@
     </dt>
     <dd>
         
-<span class="param-type">Array.&lt;CSL></span>
+<span class="param-type">Array.&lt;<a href="CSL.html">CSL</a>></span>
 
 
     </dd>
@@ -5233,7 +5487,7 @@
 
     
 
-    <h4 class="name" id="parseInputDataAsync"><span class="type-signature">(protected) </span>parseInputDataAsync<span class="signature">(input, type)</span><span class="type-signature"> &rarr; {Array.&lt;CSL>}</span></h4>
+    <h4 class="name" id="parseInputDataAsync"><span class="type-signature">(protected) </span>parseInputDataAsync<span class="signature">(input, type)</span><span class="type-signature"> &rarr; {Array.&lt;<a href="CSL.html">CSL</a>>}</span></h4>
 
     
 
@@ -5365,7 +5619,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="parse_input_async_data.js.html">parse/input/async/data.js</a>, <a href="parse_input_async_data.js.html#line7">line 7</a>
+        <a href="parse_input_async_data.js.html">parse/input/async/data.js</a>, <a href="parse_input_async_data.js.html#line27">line 27</a>
     </li></ul></dd>
     
 
@@ -5403,7 +5657,7 @@
     </dt>
     <dd>
         
-<span class="param-type">Array.&lt;CSL></span>
+<span class="param-type">Array.&lt;<a href="CSL.html">CSL</a>></span>
 
 
     </dd>
@@ -5527,7 +5781,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="parse_input_type.js.html">parse/input/type.js</a>, <a href="parse_input_type.js.html#line5">line 5</a>
+        <a href="parse_input_type.js.html">parse/input/type.js</a>, <a href="parse_input_type.js.html#line15">line 15</a>
     </li></ul></dd>
     
 
@@ -5680,7 +5934,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="parse_json.js.html">parse/json.js</a>, <a href="parse_json.js.html#line3">line 3</a>
+        <a href="parse_json.js.html">parse/json.js</a>, <a href="parse_json.js.html#line15">line 15</a>
     </li></ul></dd>
     
 
@@ -5839,7 +6093,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="parse_name.js.html">parse/name.js</a>, <a href="parse_name.js.html#line3">line 3</a>
+        <a href="parse_name.js.html">parse/name.js</a>, <a href="parse_name.js.html#line15">line 15</a>
     </li></ul></dd>
     
 
@@ -5992,7 +6246,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="parse_wikidata_list.js.html">parse/wikidata/list.js</a>, <a href="parse_wikidata_list.js.html#line3">line 3</a>
+        <a href="parse_wikidata_list.js.html">parse/wikidata/list.js</a>, <a href="parse_wikidata_list.js.html#line13">line 13</a>
     </li></ul></dd>
     
 
@@ -6045,7 +6299,7 @@
 
     
 
-    <h4 class="name" id="parseWikidataJSON"><span class="type-signature">(protected) </span>parseWikidataJSON<span class="signature">(data)</span><span class="type-signature"> &rarr; {Array.&lt;CSL>}</span></h4>
+    <h4 class="name" id="parseWikidataJSON"><span class="type-signature">(protected) </span>parseWikidataJSON<span class="signature">(data)</span><span class="type-signature"> &rarr; {Array.&lt;<a href="CSL.html">CSL</a>>}</span></h4>
 
     
 
@@ -6145,7 +6399,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="parse_wikidata_json.js.html">parse/wikidata/json.js</a>, <a href="parse_wikidata_json.js.html#line4">line 4</a>
+        <a href="parse_wikidata_json.js.html">parse/wikidata/json.js</a>, <a href="parse_wikidata_json.js.html#line19">line 19</a>
     </li></ul></dd>
     
 
@@ -6183,7 +6437,7 @@
     </dt>
     <dd>
         
-<span class="param-type">Array.&lt;CSL></span>
+<span class="param-type">Array.&lt;<a href="CSL.html">CSL</a>></span>
 
 
     </dd>
@@ -6198,7 +6452,7 @@
 
     
 
-    <h4 class="name" id="parseWikidataJSONAsync"><span class="type-signature">(protected) </span>parseWikidataJSONAsync<span class="signature">(data)</span><span class="type-signature"> &rarr; {Array.&lt;CSL>}</span></h4>
+    <h4 class="name" id="parseWikidataJSONAsync"><span class="type-signature">(protected) </span>parseWikidataJSONAsync<span class="signature">(data)</span><span class="type-signature"> &rarr; {Array.&lt;<a href="CSL.html">CSL</a>>}</span></h4>
 
     
 
@@ -6298,7 +6552,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="parse_wikidata_async_json.js.html">parse/wikidata/async/json.js</a>, <a href="parse_wikidata_async_json.js.html#line4">line 4</a>
+        <a href="parse_wikidata_async_json.js.html">parse/wikidata/async/json.js</a>, <a href="parse_wikidata_async_json.js.html#line21">line 21</a>
     </li></ul></dd>
     
 
@@ -6336,7 +6590,7 @@
     </dt>
     <dd>
         
-<span class="param-type">Array.&lt;CSL></span>
+<span class="param-type">Array.&lt;<a href="CSL.html">CSL</a>></span>
 
 
     </dd>
@@ -6500,7 +6754,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="parse_wikidata_prop.js.html">parse/wikidata/prop.js</a>, <a href="parse_wikidata_prop.js.html#line39">line 39</a>
+        <a href="parse_wikidata_prop.js.html">parse/wikidata/prop.js</a>, <a href="parse_wikidata_prop.js.html#line64">line 64</a>
     </li></ul></dd>
     
 
@@ -6702,7 +6956,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="parse_wikidata_async_prop.js.html">parse/wikidata/async/prop.js</a>, <a href="parse_wikidata_async_prop.js.html#line29">line 29</a>
+        <a href="parse_wikidata_async_prop.js.html">parse/wikidata/async/prop.js</a>, <a href="parse_wikidata_async_prop.js.html#line89">line 89</a>
     </li></ul></dd>
     
 
@@ -6766,13 +7020,13 @@
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Cite.html">Cite</a></li></ul><h3>Global</h3><ul><li><a href="global.html#deepCopy">deepCopy</a></li><li><a href="global.html#fetchBibTeXType">fetchBibTeXType</a></li><li><a href="global.html#fetchCSLEngine">fetchCSLEngine</a></li><li><a href="global.html#fetchCSLItemCallback">fetchCSLItemCallback</a></li><li><a href="global.html#fetchCSLLocale">fetchCSLLocale</a></li><li><a href="global.html#fetchCSLStyle">fetchCSLStyle</a></li><li><a href="global.html#fetchFile">fetchFile</a></li><li><a href="global.html#fetchFileAsync">fetchFileAsync</a></li><li><a href="global.html#fetchId">fetchId</a></li><li><a href="global.html#fetchWikidataType">fetchWikidataType</a></li><li><a href="global.html#getAttributedEntry">getAttributedEntry</a></li><li><a href="global.html#getBibTeX">getBibTeX</a></li><li><a href="global.html#getBibTeXJSON">getBibTeXJSON</a></li><li><a href="global.html#getBibTeXLabel">getBibTeXLabel</a></li><li><a href="global.html#getDate">getDate</a></li><li><a href="global.html#getJSON">getJSON</a></li><li><a href="global.html#getLabel">getLabel</a></li><li><a href="global.html#getName">getName</a></li><li><a href="global.html#getPrefixedEntry">getPrefixedEntry</a></li><li><a href="global.html#parseBibTeX">parseBibTeX</a></li><li><a href="global.html#parseBibTeXJSON">parseBibTeXJSON</a></li><li><a href="global.html#parseBibTeXProp">parseBibTeXProp</a></li><li><a href="global.html#parseBibTeXType">parseBibTeXType</a></li><li><a href="global.html#parseContentMine">parseContentMine</a></li><li><a href="global.html#parseDate">parseDate</a></li><li><a href="global.html#parseInput">parseInput</a></li><li><a href="global.html#parseInputAsync">parseInputAsync</a></li><li><a href="global.html#parseInputChainLink">parseInputChainLink</a></li><li><a href="global.html#parseInputChainLinkAsync">parseInputChainLinkAsync</a></li><li><a href="global.html#parseInputData">parseInputData</a></li><li><a href="global.html#parseInputDataAsync">parseInputDataAsync</a></li><li><a href="global.html#parseInputType">parseInputType</a></li><li><a href="global.html#parseJSON">parseJSON</a></li><li><a href="global.html#parseName">parseName</a></li><li><a href="global.html#parseWikidata">parseWikidata</a></li><li><a href="global.html#parseWikidataJSON">parseWikidataJSON</a></li><li><a href="global.html#parseWikidataJSONAsync">parseWikidataJSONAsync</a></li><li><a href="global.html#parseWikidataProp">parseWikidataProp</a></li><li><a href="global.html#parseWikidataPropAsync">parseWikidataPropAsync</a></li><li><a href="global.html#varHTMLDict">varHTMLDict</a></li><li><a href="global.html#varRegex">varRegex</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Cite.html">Cite</a></li><li><a href="CSL.html">CSL</a></li></ul><h3>Global</h3><ul><li><a href="global.html#async">async</a></li><li><a href="global.html#deepCopy">deepCopy</a></li><li><a href="global.html#fetchBibTeXType">fetchBibTeXType</a></li><li><a href="global.html#fetchCSLEngine">fetchCSLEngine</a></li><li><a href="global.html#fetchCSLItemCallback">fetchCSLItemCallback</a></li><li><a href="global.html#fetchCSLLocale">fetchCSLLocale</a></li><li><a href="global.html#fetchCSLStyle">fetchCSLStyle</a></li><li><a href="global.html#fetchFile">fetchFile</a></li><li><a href="global.html#fetchFileAsync">fetchFileAsync</a></li><li><a href="global.html#fetchId">fetchId</a></li><li><a href="global.html#fetchWikidataType">fetchWikidataType</a></li><li><a href="global.html#getAttributedEntry">getAttributedEntry</a></li><li><a href="global.html#getBibTeX">getBibTeX</a></li><li><a href="global.html#getBibTeXJSON">getBibTeXJSON</a></li><li><a href="global.html#getBibTeXLabel">getBibTeXLabel</a></li><li><a href="global.html#getDate">getDate</a></li><li><a href="global.html#getJSON">getJSON</a></li><li><a href="global.html#getLabel">getLabel</a></li><li><a href="global.html#getName">getName</a></li><li><a href="global.html#getPrefixedEntry">getPrefixedEntry</a></li><li><a href="global.html#htmlDict">htmlDict</a></li><li><a href="global.html#parseBibTeX">parseBibTeX</a></li><li><a href="global.html#parseBibTeXJSON">parseBibTeXJSON</a></li><li><a href="global.html#parseBibTeXProp">parseBibTeXProp</a></li><li><a href="global.html#parseBibTeXType">parseBibTeXType</a></li><li><a href="global.html#parseContentMine">parseContentMine</a></li><li><a href="global.html#parseDate">parseDate</a></li><li><a href="global.html#parseInput">parseInput</a></li><li><a href="global.html#parseInputAsync">parseInputAsync</a></li><li><a href="global.html#parseInputChainLink">parseInputChainLink</a></li><li><a href="global.html#parseInputChainLinkAsync">parseInputChainLinkAsync</a></li><li><a href="global.html#parseInputData">parseInputData</a></li><li><a href="global.html#parseInputDataAsync">parseInputDataAsync</a></li><li><a href="global.html#parseInputType">parseInputType</a></li><li><a href="global.html#parseJSON">parseJSON</a></li><li><a href="global.html#parseName">parseName</a></li><li><a href="global.html#parseWikidata">parseWikidata</a></li><li><a href="global.html#parseWikidataJSON">parseWikidataJSON</a></li><li><a href="global.html#parseWikidataJSONAsync">parseWikidataJSONAsync</a></li><li><a href="global.html#parseWikidataProp">parseWikidataProp</a></li><li><a href="global.html#parseWikidataPropAsync">parseWikidataPropAsync</a></li><li><a href="global.html#textDict">textDict</a></li><li><a href="global.html#varRegex">varRegex</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a> on Mon May 15 2017 20:50:56 GMT+0200 (CEST)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a> on Tue May 16 2017 21:52:57 GMT+0200 (CEST)
 </footer>
 
 <script> prettyPrint(); </script>

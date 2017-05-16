@@ -77,7 +77,7 @@
 ]<!--
       --></div>
     <h4>BibTeX:</h4>
-    <div id="bib-in" data-type="bib" class="in bibtex" contenteditable="true" spellcheck="false"><!--
+    <div id="bibx-in" data-type="bib" class="in bibtex" contenteditable="true" spellcheck="false"><!--
 -->@article{Steinbeck2003,
   author = {Steinbeck, Christoph and Han, Yongquan and Kuhn, Stefan and Horlacher, Oliver and Luttmann, Edgar and Willighagen, Egon},
   year = {2003},
@@ -96,12 +96,12 @@
     </div>
     <h4>Wikidata/URL:</h4>
     <p><b style="font-size:12px;">Note that Citation.js parses input via chaining. The data the URL points at is captured an re-parsed, so if the URL points to a text file containing an URL pointing to the first URL, you get an infinite loop. However, URL's pointing to itself are accounted for.</b></p>
-    <div id="url-in" data-type="url" class="in url" contenteditable="true" spellcheck="false"><!--
+    <div id="wiki-in" data-type="url" class="in url" contenteditable="true" spellcheck="false"><!--
       -->https://www.wikidata.org/wiki/Q21972834<!--
     --></div>
-    <h4>ContentMine/JSON:</h4>
-    <p><b style="font-size:12px;">This is the JSON scheme <a href="http://contentmine.org/">ContentMine</a>'s <a href="https://github.com/ContentMine/quickscrape">quickscrape</a> uses. Some properties are omitted to improve readability.</b></p>
-    <div id="cm-in" data-type="json" class="in javascript" contenteditable="true" spellcheck="false"><!--
+    <h4>BibJSON:</h4>
+    <p><b style="font-size:12px;">More coming soon.</b></p>
+    <div id="bibj-in" data-type="json" class="in javascript" contenteditable="true" spellcheck="false"><!--
 -->{
   "publisher": {
     "value": [
@@ -201,12 +201,12 @@
     <h4>From JSON input:</h4>
     <div id="json-out" data-type="json" class="out"></div>
     <h4>From BibTeX input:</h4>
-    <div id="bib-out" data-type="bib" class="out"></div>
+    <div id="bibx-out" data-type="bib" class="out"></div>
     <h4>From Wikidata/URL input:</h4>
     <!--p><b style="font-size:12px;">Note that Citation.js can't parse every Wikidata property. This would require many calls to the database, since properties often have numeric-id's instead of values.</b></p-->
-    <div id="url-out" data-type="url" class="out"></div>
+    <div id="wiki-out" data-type="url" class="out"></div>
     <h4>From ContentMine input:</h4>
-    <div id="cm-out" data-type="cm" class="out"></div>
+    <div id="bibj-out" data-type="cm" class="out"></div>
     <h2>Live code:</h2>
     <pre><code data-type="js" class="javascript"></code></pre>
     <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
@@ -274,59 +274,60 @@
     <script class="code" type="text/javascript">
 var Cite = require('citation-js')
 
-// Set variable to store data
-var jsondata = new Cite()
-  ,  bibdata = new Cite()
-  ,  urldata = new Cite()
-  ,   cmdata = new Cite()
-  
+// Set variables
+var cite = new Cite()
+var opt = {
+  format: 'string'
+}
+
+// Make shorter ref to function
+var parseAsync = Cite.parse.input.async.chain
+
+// Make a factory for callback
+var callbackFactory = function (out) {
+  return function (data) {
+    out.html(cite.set(data).get(opt))
+  }
+}
+
 $(function(){
+  // jQuery elements
+  var $json_in = $('#json-in'),
+      $bibx_in = $('#bibx-in'),
+      $wiki_in = $('#wiki-in'),
+      $bibj_in = $('#bibj-in'),
+      $type = $('select.type'),
+      $styl = $('select.style'),
+      $lang = $('select.lang')
+  
+  // Callbacks
+  var jsonCb = callbackFactory($('#json-out')),
+      bibxCb = callbackFactory($('#bibx-out')),
+      wikiCb = callbackFactory($('#wiki-out')),
+      bibjCb = callbackFactory($('#bibj-out'))
   
   // Declare function to update the output
   function update() {
+    // Get user options
+    opt.type = $type.val()
+    opt.style = $styl.val()
+    opt.lang = $lang.val()
     
-    // Set data
-    jsondata.set( $( '#json-in' ).text() )
-     bibdata.set( $(  '#bib-in' ).text() )
-     urldata.set( $(  '#url-in' ).text() )
-      cmdata.set( $(   '#cm-in' ).text() )
-    
-    // Get options
-    var opt = {
-      format: 'string',
-      type  : $( 'select.type'  ).val(),
-      style : $( 'select.style' ).val(),
-      lang  : $( 'select.lang'  ).val()
-    }
-    
-    // Set options
-    jsondata.options( opt )
-     bibdata.options( opt )
-     urldata.options( opt )
-      cmdata.options( opt )
-    
-    // Get data
-    $( '#json-out' ).html( jsondata.get() )
-    $(  '#bib-out' ).html(  bibdata.get() )
-    $(  '#url-out' ).html(  urldata.get() )
-    $(   '#cm-out' ).html(   cmdata.get() )
-    
-  }
-  
-  // Declare function to execute code async, to prevent page lagging
-  function asyncUpdate () {
-    setTimeout( update, 0 )
+    // Set data (explicit parsing only recommended for async) and set html element to get output
+    parseAsync($json_in).then(jsonCb)
+    parseAsync($bibx_in).then(bibxCb)
+    parseAsync($wiki_in).then(wikiCb)
+    parseAsync($bibj_in).then(bibjCb)
   }
   
   // Make output update when input is defocussed...
-  $( '.in' ).on( 'blur', asyncUpdate )
+  $('.in').on('blur', update)
   // ... or a select tag has changed
-  $( 'select' ).on( 'change', asyncUpdate )
+  $('select').on('change', update)
   
   // Trigger update
-  asyncUpdate()
-  
-});
+  update()
+})
     </script>
     <script type="text/javascript">
       $(window).on('load',function(){

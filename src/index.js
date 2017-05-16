@@ -44,7 +44,7 @@ import Cite from './Cite/index'
  * @class CSL
  */
 
-Object.assign(Cite, {parse, get, CSL, util, version, async})
+Object.assign(Cite, {async, parse, get, CSL, util, version})
 deepFreeze(Cite)
 
 module.exports = Cite

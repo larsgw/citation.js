@@ -1311,7 +1311,7 @@ Object.defineProperty(exports, "__esModule", {
  * Object containing HTML strings for building JSON and BibTeX. Made to match citeproc, for compatability.
  *
  * @access protected
- * @constant varHTMLDict
+ * @constant htmlDict
  * @default
  */
 var htmlDict = {
@@ -1329,7 +1329,7 @@ var htmlDict = {
  * Object containing text strings for building JSON and BibTeX. Made to match citeproc, for compatability.
  *
  * @access protected
- * @constant varHTMLDict
+ * @constant textDict
  * @default
  */
 var textDict = {
@@ -1609,7 +1609,7 @@ function _interopRequireDefault(obj) {
  * @class CSL
  */
 
-Object.assign(_index8.default, { parse: parse, get: get, CSL: CSL, util: util, version: version, async: _index6.default }); /**
+Object.assign(_index8.default, { async: _index6.default, parse: parse, get: get, CSL: CSL, util: util, version: version }); /**
                                                                                                                              * @file index.js
                                                                                                                              *
                                                                                                                              * @projectname Citationjs
@@ -31841,7 +31841,7 @@ var encodeCharacter = function encodeCharacter(c) {
 },{}],392:[function(require,module,exports){
 module.exports={
   "name": "citation-js",
-  "version": "0.3.0-5",
+  "version": "0.3.0-6",
   "description": "Citation.js converts formats like BibTeX, Wikidata JSON and ContentMine JSON to CSL-JSON to convert to other formats like APA, Vancouver and back to BibTeX.",
   "main": "lib/index.js",
   "directories": {
@@ -31883,6 +31883,7 @@ module.exports={
     "browserify": "^14.3.0",
     "jasmine-node": "^1.14.5",
     "jsdoc": "^3.4.2",
+    "jsdoc-babel": "^0.3.0",
     "standard": "^10.0.2",
     "uglify-es": "^3.0.4"
   },
@@ -31922,7 +31923,8 @@ module.exports={
     "build-files": "npm run build && npm run build-test && npm run minify && npm run minify-test",
     "--4--": "dev",
     "dev:test": "npm run babel && npm run test",
-    "dev:test-browser": "npm run babel && npm run test && npm run build && npm run build-test"
+    "dev:test-browser": "npm run babel && npm run build && npm run build-test",
+    "dev:test-all": "npm run dev:test && npm run build && npm run build-test"
   },
   "author": "Lars Willighagen (https://larsgw.github.io)",
   "license": "MIT",

@@ -1,5 +1,5 @@
 {
-  "plugins": ["plugins/markdown"],
+  "plugins": ["plugins/markdown", "node_modules/jsdoc-babel"],
   "tags": {
     "allowUnknownTags": true,
     "dictionaries": ["jsdoc", "closure"]
