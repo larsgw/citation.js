@@ -76,7 +76,7 @@
     "minify-test": "uglifyjs build/test.citation.js --ie8 -c -o build/test.citation.min.js && cp build/test.citation.min.js docs/src/test.citation.min.js",
     "--2--": "miscs",
     "build-docs": "jsdoc ./src README.md -c docs/conf.json",
-    "build-disc": "browserify -e test/citation.spec.js      -o build/tmp/citation.js  -g [ babelify --ignore=citeproc --presets [ env ] ] -t brfs --full-paths && node tools/disc.js",
+    "build-disc": "browserify -e test/citation.spec.js      -o build/tmp/citation.js  -g [ babelify --ignore=citeproc --presets [ env ] ] -t brfs --full-paths && node tools/disc.js && rm build/tmp/*",
     "--3--": "combo",
     "build-all": "npm run build-files && npm run build-docs && npm run build-disc",
     "build-files": "npm run build && npm run build-test && npm run minify && npm run minify-test",
