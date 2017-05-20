@@ -4,6 +4,15 @@ This is a branch where you can quickly access different versions of Citation.js.
 
 ## Citation.js
 
+* [`v0.3.0-6`](https://github.com/larsgw/citation.js/tree/archive/citation.js/citation-0.3.0-6.js)
+* [`v0.3.0-5`](https://github.com/larsgw/citation.js/tree/archive/citation.js/citation-0.3.0-5.js)
+* [`v0.3.0-4`](https://github.com/larsgw/citation.js/tree/archive/citation.js/citation-0.3.0-4.js)
+* [`v0.3.0-3`](https://github.com/larsgw/citation.js/tree/archive/citation.js/citation-0.3.0-3.js)
+* (`v0.3.0-1` - `0.3.0-2` are irrelevant fixes)
+* [`v0.3.0-0`](https://github.com/larsgw/citation.js/tree/archive/citation.js/citation-0.3.0-0.js)
+
+The following versions globally define and export Cite.
+
 * [`v0.2.15`](https://github.com/larsgw/citation.js/tree/archive/citation.js/citation-0.2.15.js)
 * [`v0.2.14`](https://github.com/larsgw/citation.js/tree/archive/citation.js/citation-0.2.14.js)
 * [`v0.2.13`](https://github.com/larsgw/citation.js/tree/archive/citation.js/citation-0.2.13.js)
@@ -24,8 +33,8 @@ There was no semver before `v0.2`, so version numbering is improvised:
 * [`v0.1.1`](https://github.com/larsgw/citation.js/tree/archive/citation.js/citation-0.1.1.js)
 * [`v0.1.0`](https://github.com/larsgw/citation.js/tree/archive/citation.js/citation-0.1.0.js)
 
-## jquery.Citation.js
+## Citation.min.js
 
-* [`v0.2.1`](https://github.com/larsgw/citation.js/tree/archive/jquery.citation.js/jquery.citation-0.2.1.js) ([css](https://github.com/larsgw/citation.js/tree/archive/jquery.citation.js/jquery.citation-0.2.1.css))
-* [`v0.2.0`](https://github.com/larsgw/citation.js/tree/archive/jquery.citation.js/jquery.citation-0.2.0.js) ([css](https://github.com/larsgw/citation.js/tree/archive/jquery.citation.js/jquery.citation-0.2.0.css), `v0.2.x` depends on Citation.js `v0.2`)
-* [`v0.1.0`](https://github.com/larsgw/citation.js/tree/archive/jquery.citation.js/jquery.citation-0.1.0.js) (`v0.1.x` depends on Citation.js `v0.1`)
+Only since `v0.3.0-6`.
+
+* [`v0.3.0-6`](https://github.com/larsgw/citation.js/tree/archive/citation.js/citation-0.3.0-6.min.js)
