@@ -6,6 +6,7 @@ import parseWikidata from '../wikidata/list'
 import parseWikidataJSON from '../wikidata/json'
 import parseContentMine from '../bibjson/index'
 import parseBibTeX from '../bibtex/text'
+import { text as parseBibTxt } from '../bibtxt'
 import parseBibTeXJSON from '../bibtex/json'
 import parseJSON from '../json'
 
@@ -51,6 +52,9 @@ const parseInputData = function (input, type) {
 
     case 'string/bibtex':
       return parseBibTeXJSON(parseBibTeX(input))
+
+    case 'string/bibtxt':
+      return parseBibTeXJSON(parseBibTxt(input))
 
     case 'object/wikidata':
       return parseWikidataJSON(input)

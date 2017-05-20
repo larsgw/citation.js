@@ -25,7 +25,7 @@ const parseBibTeXJSON = function (data) {
     }
 
     newEntry.type = parseBibTeXType(entry.type)
-    newEntry.id = entry.label
+    newEntry.id = newEntry.label = entry.label
 
     return newEntry
   })

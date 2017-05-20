@@ -35,12 +35,15 @@ var parseInputType = function (input) {
       // BibTeX
       } else if (varRegex.bibtex[0].test(input)) {
         return 'string/bibtex'
+      // Bib.TXT
+      } else if (varRegex.bibtxt.test(input)) {
+        return 'string/bibtxt'
       // JSON
       } else if (/^\s*(\{|\[)/.test(input)) {
         return 'string/json'
       // Else URL
       } else if (varRegex.url.test(input)) {
-        return 'url/} else'
+        return 'url/else'
       // Else
       } else {
         console.warn('[set]', 'This format is not supported or recognised')

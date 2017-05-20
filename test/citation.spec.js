@@ -18,11 +18,31 @@ const testOutput = {
     ]
   },
   bibtex: {
-    simple: [{'type': 'article-journal', 'author': [{'given': 'Christoph', 'family': 'Steinbeck'}, {'given': 'Yongquan', 'family': 'Han'}, {'given': 'Stefan', 'family': 'Kuhn'}, {'given': 'Oliver', 'family': 'Horlacher'}, {'given': 'Edgar', 'family': 'Luttmann'}, {'given': 'Egon', 'family': 'Willighagen'}], 'year': '2003', 'title': 'The Chemistry Development Kit (CDK): an open-source Java library for Chemo- and Bioinformatics', 'container-title': 'Journal of chemical information and computer sciences', 'volume': '43', 'issue': '2', 'page': '493-500', 'DOI': '10.1021/ci025584y', 'ISBN': '2214707786', 'ISSN': '0095-2338', 'URL': 'http://www.ncbi.nlm.nih.gov/pubmed/12653513', 'id': 'Steinbeck2003'}],
-    whitespace: [{'type': 'paper-conference', 'author': [{'given': 'Michael D.', 'family': 'Ekstrand'}, {'given': 'John T.', 'family': 'Riedl'}], 'title': 'rv you\'re dumb: Identifying Discarded Work in Wiki Article History', 'container-title': 'Proceedings of the 5th International Symposium on Wikis and Open Collaboration', 'collection-title': 'WikiSym \'09', 'year': '2009', 'ISBN': '978-1-60558-730-1', 'publisher-place': 'New York, NY, USA', 'page': '4:1-4:10', 'URL': 'https://dx.doi.org/10.1145/1641309.1641317', 'DOI': '10.1145/1641309.1641317', 'publisher': 'ACM', 'id': 'Ekstrand:2009:RYD'}],
+    simple: [{'label': 'Steinbeck2003', 'type': 'article-journal', 'author': [{'given': 'Christoph', 'family': 'Steinbeck'}, {'given': 'Yongquan', 'family': 'Han'}, {'given': 'Stefan', 'family': 'Kuhn'}, {'given': 'Oliver', 'family': 'Horlacher'}, {'given': 'Edgar', 'family': 'Luttmann'}, {'given': 'Egon', 'family': 'Willighagen'}], 'year': '2003', 'title': 'The Chemistry Development Kit (CDK): an open-source Java library for Chemo- and Bioinformatics', 'container-title': 'Journal of chemical information and computer sciences', 'volume': '43', 'issue': '2', 'page': '493-500', 'DOI': '10.1021/ci025584y', 'ISBN': '2214707786', 'ISSN': '0095-2338', 'URL': 'http://www.ncbi.nlm.nih.gov/pubmed/12653513', 'id': 'Steinbeck2003'}],
+    whitespace: [{'label': 'Ekstrand:2009:RYD', 'type': 'paper-conference', 'author': [{'given': 'Michael D.', 'family': 'Ekstrand'}, {'given': 'John T.', 'family': 'Riedl'}], 'title': 'rv you\'re dumb: Identifying Discarded Work in Wiki Article History', 'container-title': 'Proceedings of the 5th International Symposium on Wikis and Open Collaboration', 'collection-title': 'WikiSym \'09', 'year': '2009', 'ISBN': '978-1-60558-730-1', 'publisher-place': 'New York, NY, USA', 'page': '4:1-4:10', 'URL': 'https://dx.doi.org/10.1145/1641309.1641317', 'DOI': '10.1145/1641309.1641317', 'publisher': 'ACM', 'id': 'Ekstrand:2009:RYD'}],
 
     plain: '@article{Hall1957Correlation, author={H. K. Hall}, doi={10.1021/ja01577a030}, journal={Journal of the American Chemical Society}, issue=20, pages={5441--5444}, title={{Correlation of the Base Strengths of Amines 1}}, volume=79, year=1957, }',
-    json: [{'label': 'Hall1957Correlation', 'type': 'article', 'properties': {'author': 'H. K. Hall', 'doi': '10.1021/ja01577a030', 'journal': 'Journal of the American Chemical Society', 'issue': '20', 'pages': '5441--5444', 'title': 'Correlation of the Base Strengths of Amines 1', 'volume': '79', 'year': '1957'}}]
+    json: [{'label': 'Hall1957Correlation', 'type': 'article', 'properties': {'author': 'H. K. Hall', 'doi': '10.1021/ja01577a030', 'journal': 'Journal of the American Chemical Society', 'issue': '20', 'pages': '5441--5444', 'title': 'Correlation of the Base Strengths of Amines 1', 'volume': '79', 'year': '1957'}}],
+    bibtxt: `[Hall1957Correlation]
+\ttype: article
+\tauthor: H. K. Hall
+\tdoi: 10.1021/ja01577a030
+\tjournal: Journal of the American Chemical Society
+\tissue: 20
+\tpages: 5441--5444
+\ttitle: Correlation of the Base Strengths of Amines 1
+\tvolume: 79
+\tyear: 1957`
+  },
+  bibtxt: {
+    author: [{given: 'J.W.', family: 'Goethe'}],
+    title: 'Faust. Der Tragödie Erster Teil',
+    publisher: 'Reclam',
+    year: '1986',
+    'publisher-place': 'Stuttgart',
+    type: 'book',
+    id: 'Fau86',
+    label: 'Fau86'
   },
   bibjson: {
     simple: [{'publisher': 'BioMed Central', 'journal': 'Journal of Ethnobiology and Ethnomedicine', 'title': 'Gitksan medicinal plants-cultural choice and efficacy', 'authors': 'Leslie Main Johnson', 'date': '2006-06-21', 'doi': '10.1186/1746-4269-2-29', 'volume': '2', 'issue': '1', 'firstpage': '1', 'fulltext_html': 'http://ethnobiomed.biomedcentral.com/articles/10.1186/1746-4269-2-29', 'fulltext_pdf': 'http://ethnobiomed.biomedcentral.com/track/pdf/10.1186/1746-4269-2-29?site=http://ethnobiomed.biomedcentral.com', 'license': 'This article is published under license to BioMed Central Ltd. This is an Open Access article distributed under the terms of the Creative Commons Attribution License (http://creativecommons.org/licenses/by/2.0), which permits unrestricted use, distribution, and reproduction in any medium, provided the original work is properly cited.', 'copyright': '2006 Johnson; licensee BioMed Central Ltd.', 'type': 'article-journal', 'author': [{'given': 'Leslie Main', 'family': 'Johnson'}], 'page-first': '1', 'page': '1', 'issued': [{'date-parts': [2006, 6, 21]}], 'container-title': 'Journal of Ethnobiology and Ethnomedicine', 'id': '10.1186/1746-4269-2-29', 'DOI': '10.1186/1746-4269-2-29'}]
@@ -32,20 +52,17 @@ const testOutput = {
     vancouver: '1. Hall HK. Correlation of the Base Strengths of Amines 1. Journal of the American Chemical Society. 79(20):5441–4.',
     title: 'Correlation of the Base Strengths of Amines 1',
     html: {
-      apa:
-'<div class="csl-bib-body">\n' +
-'  <div data-csl-entry-id="Q23571040" class="csl-entry">Hall, H. K. Correlation of the Base Strengths of Amines 1. <i>Journal of the American Chemical Society</i>, <i>79</i>(20), 5441–5444. https://doi.org/10.1021/ja01577a030</div>\n' +
-'</div>',
-      vancouver:
-'<div class="csl-bib-body">\n' +
-'  <div data-csl-entry-id="Q23571040" class="csl-entry">\n' +
-'    <div class="csl-left-margin">1. </div><div class="csl-right-inline">Hall HK. Correlation of the Base Strengths of Amines 1. Journal of the American Chemical Society. 79(20):5441–4.</div>\n' +
-'   </div>\n' +
-'</div>',
-      title:
-'<div class="csl-bib-body">\n' +
-'  <div data-csl-entry-id="Q23571040" class="csl-entry">Correlation of the Base Strengths of Amines 1</div>\n' +
-'</div>'
+      apa: `<div class="csl-bib-body">
+  <div data-csl-entry-id="Q23571040" class="csl-entry">Hall, H. K. Correlation of the Base Strengths of Amines 1. <i>Journal of the American Chemical Society</i>, <i>79</i>(20), 5441–5444. https://doi.org/10.1021/ja01577a030</div>
+</div>`,
+      vancouver: `<div class="csl-bib-body">
+  <div data-csl-entry-id="Q23571040" class="csl-entry">
+    <div class="csl-left-margin">1. </div><div class="csl-right-inline">Hall HK. Correlation of the Base Strengths of Amines 1. Journal of the American Chemical Society. 79(20):5441–4.</div>
+   </div>
+</div>`,
+      title: `<div class="csl-bib-body">
+  <div data-csl-entry-id="Q23571040" class="csl-entry">Correlation of the Base Strengths of Amines 1</div>
+</div>`
     }
   }
 }
@@ -64,6 +81,44 @@ const testInput = {
   bibtex: {
     simple: '@article{Steinbeck2003, author = {Steinbeck, Christoph and Han, Yongquan and Kuhn, Stefan and Horlacher, Oliver and Luttmann, Edgar and Willighagen, Egon}, year = {2003}, title = {{The Chemistry Development Kit (CDK): an open-source Java library for Chemo- and Bioinformatics.}}, journal = {Journal of chemical information and computer sciences}, volume = {43}, number = {2}, pages = {493--500}, doi = {10.1021/ci025584y}, isbn = {2214707786}, issn = {0095-2338}, pmid = {12653513}, url = {http://www.ncbi.nlm.nih.gov/pubmed/12653513} }',
     whitespace: '@inproceedings{Ekstrand:2009:RYD,\n author = {Michael D. Ekstrand and John T. Riedl},\n title = {rv you\'re dumb: Identifying Discarded Work in Wiki Article History},\n booktitle = {Proceedings of the 5th International Symposium on Wikis and Open Collaboration},\n series = {WikiSym \'09},\n year = {2009},\n isbn = {978-1-60558-730-1},\n location = {Orlando, Florida},\n pages = {4:1--4:10},\n articleno = {4},\n numpages = {10},\n url = {https://dx.doi.org/10.1145/1641309.1641317},\n doi = {10.1145/1641309.1641317},\n acmid = {1641317},\n publisher = {ACM},\n address = {New York, NY, USA},\n keywords = {Wiki, Wikipedia, article history, visualization},\n}\n'
+  },
+  bibtxt: {
+    simple: `[Fau86]
+  author:    J.W. Goethe
+  title:     Faust. Der Tragödie Erster Teil
+  publisher: Reclam
+  year:      1986
+  address:   Stuttgart`,
+    multiple: `[Fau86]
+  author:    J.W. Goethe
+  title:     Faust. Der Tragödie Erster Teil
+  publisher: Reclam
+  year:      1986
+  address:   Stuttgart
+
+[Steinbeck2003]
+  type: article
+  author: Christoph Steinbeck and Yongquan Han and Stefan Kuhn and Oliver Horlacher and Edgar Luttmann and Egon Willighagen
+  doi: 10.1021/ci025584y
+  isbn: 2214707786
+  issn: 0095-2338
+  journal: Journal of chemical information and computer sciences
+  issue: 2
+  pages: 493-500
+  title: The Chemistry Development Kit (CDK): an open-source Java library for Chemo- and Bioinformatics
+  volume: 43
+  year: 2003
+  url: http://www.ncbi.nlm.nih.gov/pubmed/12653513`,
+    whitespace: `[Fau86]  
+    
+  author:    J.W. Goethe
+  title:     Faust. Der Tragödie Erster Teil
+  
+
+  publisher: Reclam
+  year:      1986
+  address:   Stuttgart
+`
   },
   bibjson: {
     simple: { 'publisher': { 'value': [ 'BioMed Central' ] }, 'journal': { 'value': [ 'Journal of Ethnobiology and Ethnomedicine' ] }, 'title': { 'value': [ 'Gitksan medicinal plants-cultural choice and efficacy' ] }, 'authors': { 'value': [ 'Leslie Main Johnson' ] }, 'date': { 'value': [ '2006-06-21' ] }, 'doi': { 'value': [ '10.1186/1746-4269-2-29' ] }, 'volume': { 'value': [ '2' ] }, 'issue': { 'value': [ '1' ] }, 'firstpage': { 'value': [ '1' ] }, 'fulltext_html': { 'value': [ 'http://ethnobiomed.biomedcentral.com/articles/10.1186/1746-4269-2-29' ] }, 'fulltext_pdf': { 'value': [ 'http://ethnobiomed.biomedcentral.com/track/pdf/10.1186/1746-4269-2-29?site=http://ethnobiomed.biomedcentral.com' ] }, 'license': { 'value': [ 'This article is published under license to BioMed Central Ltd. This is an Open Access article distributed under the terms of the Creative Commons Attribution License (http://creativecommons.org/licenses/by/2.0), which permits unrestricted use, distribution, and reproduction in any medium, provided the original work is properly cited.' ] }, 'copyright': { 'value': [ '2006 Johnson; licensee BioMed Central Ltd.' ] } }
@@ -99,15 +154,14 @@ const testInput = {
   }
 }
 
-const customTemplate =
-  '<?xml version="1.0" encoding="utf-8"?>' +
-    '<style xmlns="http://purl.org/net/xbiblio/csl" class="in-text" version="1.0" demote-non-dropping-particle="sort-only" page-range-format="minimal">' +
-      '<bibliography>' +
-        '<layout>' +
-          '<text variable="title"/>' +
-        '</layout>' +
-      '</bibliography>' +
-  '</style>'
+const customTemplate = `<?xml version="1.0" encoding="utf-8"?>
+<style xmlns="http://purl.org/net/xbiblio/csl" class="in-text" version="1.0" demote-non-dropping-particle="sort-only" page-range-format="minimal">
+  <bibliography>
+    <layout>
+      <text variable="title"/>
+    </layout>
+  </bibliography>
+</style>`
 
 describe('Cite object', function () {
   describe('initialisation', function () {
@@ -425,6 +479,39 @@ describe('Cite object', function () {
       })
     })
 
+    describe('Bib.TXT string', function () {
+      it('handles input type', function () {
+        expect(Cite.parse.input.type(testInput.bibtxt.simple)).toBe('string/bibtxt')
+      })
+
+      it('parses input correctly', function () {
+        const test = new Cite(testInput.bibtxt.simple)
+        expect(test.data).toEqual([testOutput.bibtxt])
+      })
+
+      describe('with multiple entries', function () {
+        it('handles input type', function () {
+          expect(Cite.parse.input.type(testInput.bibtxt.multiple)).toBe('string/bibtxt')
+        })
+
+        it('parses input correctly', function () {
+          const test = new Cite(testInput.bibtxt.multiple)
+          expect(test.data).toEqual([testOutput.bibtxt, testOutput.bibtex.simple[0]])
+        })
+      })
+
+      describe('with whitespace', function () {
+        it('handles input type', function () {
+          expect(Cite.parse.input.type(testInput.bibtxt.whitespace)).toBe('string/bibtxt')
+        })
+
+        it('parses input correctly', function () {
+          const test = new Cite(testInput.bibtxt.whitespace)
+          expect(test.data).toEqual([testOutput.bibtxt])
+        })
+      })
+    })
+
     describe('CSL-JSON', function () {
       const test = new Cite(testInput.csl.simple[0])
 
@@ -668,6 +755,18 @@ describe('Cite object', function () {
 
         it('outputs correctly', function () {
           expect(out).toEqual(testOutput.bibtex.json)
+        })
+      })
+
+      describe('Bib.TXT', function () {
+        const out = test.get({
+          format: 'string',
+          type: 'string',
+          style: 'bibtxt'
+        }).trim()
+
+        it('outputs correctly', function () {
+          expect(out).toBe(testOutput.bibtex.bibtxt)
         })
       })
     })

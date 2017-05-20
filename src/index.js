@@ -38,13 +38,7 @@ import * as version from './version'
 import async from './async/index'
 import Cite from './Cite/index'
 
-/**
- * [CSL](https://citeproc-js.readthedocs.io/en/latest/csl-json/markup.html#csl-json-items) object
- *
- * @class CSL
- */
-
-Object.assign(Cite, {async, parse, get, CSL, util, version})
+Object.assign(Cite, {async: async, get, CSL, parse, util, version})
 deepFreeze(Cite)
 
 module.exports = Cite

@@ -11,12 +11,14 @@ import { htmlDict as dict } from './dict'
  * @return {String} The html (in string form)
  */
 const getJSONObjectHTML = function (src) {
+  const join = `,${dict.li_end}${dict.li_start}`
+
   if (Array.isArray(src)) {
-    const entries = src.map((entry) => `${dict.li_start}${getJSONValueHTML(entry)},${dict.li_end}`)
-    return `[${dict.ul_start}${entries}${dict.ul_end}]`
+    const entries = src.map(entry => getJSONValueHTML(entry))
+    return `[${dict.ul_start}${dict.li_start}${entries.join(join)}${dict.li_end}${dict.ul_end}]`
   } else {
-    const props = Object.keys(src).map((prop) => `${dict.li_start}${prop}: ${getJSONValueHTML(src[prop])},{dict.li_end}`)
-    return `{${dict.ul_start}${props}${dict.ul_end}}`
+    const props = Object.keys(src).map(prop => `"${prop}": ${getJSONValueHTML(src[prop])}`)
+    return `{${dict.ul_start}${dict.li_start}${props.join(join)}${dict.li_end}${dict.ul_end}}`
   }
 }
 
@@ -40,7 +42,7 @@ const getJSONValueHTML = function (src) {
       return getJSONObjectHTML(src)
     }
   } else {
-    return `<span class="string">${JSON.stringify(src)}}</span>`
+    return `<span class="string">${JSON.stringify(src)}</span>`
   }
 }
 
@@ -59,7 +61,7 @@ const getJSON = function (src) {
     const comma = index < array.length - 1 ? ',' : ''
     const props = Object.keys(entry).map((prop, index, array) => {
       const comma = index < array.length - 1 ? ',' : ''
-      return `${dict.li_start}${prop}: ${getJSONValueHTML(entry[prop])}${comma}{dict.li_end}`
+      return `${dict.li_start}${prop}: ${getJSONValueHTML(entry[prop])}${comma}${dict.li_end}`
     }).join('')
 
     return `${dict.en_start}{${dict.ul_start}${props}${dict.ul_end}}${comma}${dict.en_end}`

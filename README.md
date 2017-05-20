@@ -127,6 +127,7 @@ Input type doesn't have to be specified. The identifiers below are used by inter
 
 ##### <a id="cite.in.type.bibtex" href="#cite.in.type.bibtex">BibTeX</a>
 * `string/bibtex`: [BibTeX](http://www.bibtex.org/) string. Parses the data
+* `string/bibtxt`: [Bib.TXT](http://bibtxt.github.io) string. Parses the data
 
 ##### <a id="cite.in.type.bibjson" href="#cite.in.type.bibjson">BibJSON</a>
 * `json/contentmine`: Actually BibJSON, all references to ContentMine will be removed when the parser is fully done. Parses the data
@@ -228,6 +229,23 @@ data.get({
 ```js
 {
   async: [Function: async],
+  get: 
+   { bibtex: 
+      { json: [Function: getBibTeXJSON],
+        text: [Function: getBibTeX],
+        label: [Function: getBibTeXLabel],
+        type: [Function: fetchBibTeXType] },
+     bibtxt: [Function: getBibTxt],
+     dict: { htmlDict: [Object], textDict: [Object] },
+     json: [Function: getJSON],
+     date: [Function: getDate],
+     name: [Function: getName],
+     label: [Function: getLabel] },
+  CSL: 
+   { style: [Function: fetchCSLStyle],
+     locale: [Function: fetchCSLLocale],
+     engine: [Function: fetchCSLEngine],
+     item: [Function: fetchCSLItemCallback] },
   parse: 
    { input: 
       { type: [Function: parseInputType],
@@ -241,26 +259,18 @@ data.get({
         prop: [Function: parseWikidataProp],
         type: [Function: fetchWikidataType],
         async: [Object] },
+     bibtex: 
+      { json: [Function: parseBibTeXJSON],
+        text: [Function: parseBibTeX],
+        prop: [Function: parseBibTeXProp],
+        type: [Function: parseBibTeXType] },
+     bibtxt: 
+      { text: [Function: parseBibTxt],
+        textEntry: [Function: parseBibTxtEntry] },
      bibjson: [Function: parseContentMine],
      date: [Function: parseDate],
      name: [Function: parseName],
      json: [Function: parseJSON] },
-  get: 
-   { bibtex: 
-      { json: [Function: getBibTeXJSON],
-        text: [Function: getBibTeX],
-        label: [Function: getBibTeXLabel],
-        type: [Function: fetchBibTeXType] },
-     dict: { htmlDict: [Object], textDict: [Object] },
-     json: [Function: getJSON],
-     date: [Function: getDate],
-     name: [Function: getName],
-     label: [Function: getLabel] },
-  CSL: 
-   { style: [Function: fetchCSLStyle],
-     locale: [Function: fetchCSLLocale],
-     engine: [Function: fetchCSLEngine],
-     item: [Function: fetchCSLItemCallback] },
   util: 
    { attr: 
       { getAttributedEntry: [Function: getAttributedEntry],

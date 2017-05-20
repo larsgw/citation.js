@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>Source: Cite/options.js - Docs - Citation.js</title>
+    <title>Source: objects.docs.js - Docs - Citation.js</title>
     
     <meta name="theme-color" content="#FFC107">
     <link rel="shortcut icon" type="image/png" href="../favicon.png"/>
@@ -22,7 +22,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Source: Cite/options.js</h1>
+    <h1 class="page-title">Source: objects.docs.js</h1>
 
     
 
@@ -32,28 +32,14 @@
     <section>
         <article>
             <pre class="prettyprint source linenums"><code>/**
- * Change the default options of a `Cite` object.
- *
- * @method options
- * @memberof Cite
- * @this Cite
- *
- * @param {Object} options - The options for the output. See [input options](../#citation.cite.in.options)
- * @param {Boolean} log - Show this call in the log
- *
- * @return {Cite} The updated parent object
+ * Small file to instantiate classes with descriptions for special objects in the code.
  */
-const options = function (options, log) {
-  if (log) {
-    this.save()
-  }
 
-  Object.assign(this._options, options)
-
-  return this
-}
-
-export { options }
+/**
+ * [CSL](https://citeproc-js.readthedocs.io/en/latest/csl-json/markup.html#csl-json-items) object
+ *
+ * @class CSL
+ */
 </code></pre>
         </article>
     </section>

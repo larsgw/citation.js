@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>Source: Cite/options.js - Docs - Citation.js</title>
+    <title>Source: parse/bibtxt.js - Docs - Citation.js</title>
     
     <meta name="theme-color" content="#FFC107">
     <link rel="shortcut icon" type="image/png" href="../favicon.png"/>
@@ -22,7 +22,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Source: Cite/options.js</h1>
+    <h1 class="page-title">Source: parse/bibtxt.js</h1>
 
     
 
@@ -32,28 +32,67 @@
     <section>
         <article>
             <pre class="prettyprint source linenums"><code>/**
- * Change the default options of a `Cite` object.
  *
- * @method options
- * @memberof Cite
- * @this Cite
- *
- * @param {Object} options - The options for the output. See [input options](../#citation.cite.in.options)
- * @param {Boolean} log - Show this call in the log
- *
- * @return {Cite} The updated parent object
+ * @access private
+ * @constant bibTxtRegex
+ * @default
  */
-const options = function (options, log) {
-  if (log) {
-    this.save()
-  }
-
-  Object.assign(this._options, options)
-
-  return this
+const bibTxtRegex = {
+  splitEntries: /\n\s*(?=\[)/g,
+  parseEntry: /^\[(.+?)\]\s*(?:\n([\s\S]+))?$/,
+  splitPairs: /((?=.)\s)*\n\s*/g,
+  parsePair: /^(.+?)\s*:\s*(.+)$/
 }
 
-export { options }
+/**
+ * Parse single Bib.TXT entry
+ *
+ * @access protected
+ * @method parseBibTxtEntry
+ *
+ * @param {String} entry - The input data
+ *
+ * @return {Object} Array of BibTeX-JSON
+ */
+const parseBibTxtEntry = entry => {
+  const [, label, pairs] = entry.match(bibTxtRegex.parseEntry) || []
+
+  if (!label || !pairs) {
+    return {}
+  } else {
+    const out = {
+      label,
+      properties: {}
+    }
+
+    pairs.trim().split(bibTxtRegex.splitPairs).filter(v => v).forEach(pair => {
+      const [, key, value] = pair.match(bibTxtRegex.parsePair) || []
+      if (key) {
+        if (key === 'type') {
+          out.type = value
+        } else {
+          out.properties[key] = value
+        }
+      }
+    })
+
+    return out
+  }
+}
+
+/**
+ * Format Bib.TXT data
+ *
+ * @access protected
+ * @method parseBibTxt
+ *
+ * @param {String} src - The input data
+ *
+ * @return {Object[]} Array of BibTeX-JSON
+ */
+const parseBibTxt = src => src.trim().split(bibTxtRegex.splitEntries).map(parseBibTxtEntry)
+
+export {parseBibTxt as text, parseBibTxtEntry as textEntry}
 </code></pre>
         </article>
     </section>

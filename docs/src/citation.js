@@ -26983,7 +26983,7 @@ module.exports={
     "minify-test": "uglifyjs build/test.citation.js --ie8 -c -o build/test.citation.min.js && cp build/test.citation.min.js docs/src/test.citation.min.js",
     "--2--": "miscs",
     "build-docs": "jsdoc ./src README.md -c docs/conf.json",
-    "build-disc": "browserify -e test/citation.spec.js      -o build/tmp/citation.js  -g [ babelify --ignore=citeproc --presets [ env ] ] -t brfs --full-paths && node tools/disc.js",
+    "build-disc": "browserify -e test/citation.spec.js      -o build/tmp/citation.js  -g [ babelify --ignore=citeproc --presets [ env ] ] -t brfs --full-paths && node tools/disc.js && rm build/tmp/*",
     "--3--": "combo",
     "build-all": "npm run build-files && npm run build-docs && npm run build-disc",
     "build-files": "npm run build && npm run build-test && npm run minify && npm run minify-test",
@@ -27242,6 +27242,10 @@ var _text = require('../get/bibtex/text');
 
 var _text2 = _interopRequireDefault(_text);
 
+var _bibtxt = require('../get/bibtxt');
+
+var _bibtxt2 = _interopRequireDefault(_bibtxt);
+
 var _json3 = require('../get/json');
 
 var _json4 = _interopRequireDefault(_json3);
@@ -27348,6 +27352,14 @@ var get = function get(options) {
       result = (0, _text2.default)(_data, false);
       break;
 
+    case 'html,bibtxt':
+      result = (0, _bibtxt2.default)(_data, true);
+      break;
+
+    case 'string,bibtxt':
+      result = (0, _bibtxt2.default)(_data, false);
+      break;
+
     case 'string,citation':
       result = (0, _striptags2.default)(this.get(Object.assign({}, options, { type: 'html' })));
       break;
@@ -27361,6 +27373,7 @@ var get = function get(options) {
       break;
 
     case 'json,bibtex':
+    case 'json,bibtxt':
       result = JSON.stringify(_data.map(_json2.default));
       break;
 
@@ -27389,7 +27402,7 @@ var get = function get(options) {
 exports.getIds = getIds;
 exports.get = get;
 
-},{"../CSL/engines":332,"../CSL/items":334,"../CSL/locales":335,"../CSL/styles":336,"../get/bibtex/json":345,"../get/bibtex/text":347,"../get/json":352,"../util/attr.js":383,"../util/deepCopy":384,"striptags":309}],338:[function(require,module,exports){
+},{"../CSL/engines":332,"../CSL/items":334,"../CSL/locales":335,"../CSL/styles":336,"../get/bibtex/json":345,"../get/bibtex/text":347,"../get/bibtxt":349,"../get/json":353,"../util/attr.js":386,"../util/deepCopy":387,"striptags":309}],338:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -27712,7 +27725,7 @@ exports.add = add;
 exports.set = set;
 exports.reset = reset;
 
-},{"../parse/input/chain":367,"../util/fetchId":387}],342:[function(require,module,exports){
+},{"../parse/input/chain":370,"../util/fetchId":390}],342:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -27754,7 +27767,7 @@ var sort = function sort(log) {
 
 exports.sort = sort;
 
-},{"../get/label":353}],343:[function(require,module,exports){
+},{"../get/label":354}],343:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -27842,7 +27855,7 @@ var async = function async(data, options, callback) {
 
 exports.default = async;
 
-},{"../Cite/index":338,"../parse/input/async/chain":363}],344:[function(require,module,exports){
+},{"../Cite/index":338,"../parse/input/async/chain":366}],344:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -27963,8 +27976,10 @@ var getBibTeXJSON = function getBibTeXJSON(src) {
   if (src.hasOwnProperty('volume')) {
     props.volume = src.volume.toString();
   }
-  if (src.hasOwnProperty('issued') && Array.isArray(src.issued) && src.issued[0]['date-parts'].length === 3) {
+  if (Array.isArray(src.issued) && src.issued[0]['date-parts'].length === 3) {
     props.year = src.issued[0]['date-parts'][0].toString();
+  } else if (src.hasOwnProperty('year')) {
+    props.year = src.year;
   }
 
   res.properties = props;
@@ -27974,7 +27989,7 @@ var getBibTeXJSON = function getBibTeXJSON(src) {
 
 exports.default = getBibTeXJSON;
 
-},{"../date":349,"../name":354,"./label":346,"./type":348}],346:[function(require,module,exports){
+},{"../date":350,"../name":355,"./label":346,"./type":348}],346:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -28094,7 +28109,7 @@ var getBibTeX = function getBibTeX(src, html) {
 
 exports.default = getBibTeX;
 
-},{"../dict":350,"./json":345}],348:[function(require,module,exports){
+},{"../dict":351,"./json":345}],348:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -28161,6 +28176,49 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
+var _json = require('./bibtex/json');
+
+var _json2 = _interopRequireDefault(_json);
+
+var _dict = require('./dict');
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+/**
+ * Get a Bib.TXT (HTML) string from CSL
+ *
+ * @access protected
+ * @method getBibTxt
+ *
+ * @param {CSL[]} src - Input CSL
+ * @param {Boolean} html - Output as HTML string (instead of plain text)
+ *
+ * @return {String} BibTeX (HTML) string
+ */
+var getBibTxt = function getBibTxt(src, html) {
+  var dict = html ? _dict.htmlDict : _dict.textDict;
+
+  var entries = src.map(function (entry) {
+    var bib = (0, _json2.default)(entry);
+    var properties = Object.keys(bib.properties).map(function (prop) {
+      return '' + dict.li_start + prop + ': ' + bib.properties[prop] + dict.li_end;
+    }).join('');
+
+    return dict.en_start + '[' + bib.label + ']' + dict.ul_start + dict.li_start + 'type: ' + bib.type + dict.li_end + properties + dict.ul_end + dict.en_end;
+  }).join('\n');
+
+  return '' + dict.wr_start + entries + dict.wr_end;
+};
+
+exports.default = getBibTxt;
+
+},{"./bibtex/json":345,"./dict":351}],350:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
 var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; }();
 
 /**
@@ -28186,7 +28244,7 @@ var getDate = function getDate(_ref) {
 
 exports.default = getDate;
 
-},{}],350:[function(require,module,exports){
+},{}],351:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -28231,17 +28289,21 @@ var textDict = {
 exports.htmlDict = htmlDict;
 exports.textDict = textDict;
 
-},{}],351:[function(require,module,exports){
+},{}],352:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.label = exports.name = exports.date = exports.json = exports.dict = exports.bibtex = undefined;
+exports.label = exports.name = exports.date = exports.json = exports.dict = exports.bibtxt = exports.bibtex = undefined;
 
 var _index = require('./bibtex/index');
 
 var bibtex = _interopRequireWildcard(_index);
+
+var _bibtxt = require('./bibtxt');
+
+var _bibtxt2 = _interopRequireDefault(_bibtxt);
 
 var _dict = require('./dict');
 
@@ -28268,13 +28330,14 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
 exports.bibtex = bibtex;
+exports.bibtxt = _bibtxt2.default;
 exports.dict = dict;
 exports.json = _json2.default;
 exports.date = _date2.default;
 exports.name = _name2.default;
 exports.label = _label2.default;
 
-},{"./bibtex/index":344,"./date":349,"./dict":350,"./json":352,"./label":353,"./name":354}],352:[function(require,module,exports){
+},{"./bibtex/index":344,"./bibtxt":349,"./date":350,"./dict":351,"./json":353,"./label":354,"./name":355}],353:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -28296,16 +28359,18 @@ var _dict = require('./dict');
  * @return {String} The html (in string form)
  */
 var getJSONObjectHTML = function getJSONObjectHTML(src) {
+  var join = ',' + _dict.htmlDict.li_end + _dict.htmlDict.li_start;
+
   if (Array.isArray(src)) {
     var entries = src.map(function (entry) {
-      return '' + _dict.htmlDict.li_start + getJSONValueHTML(entry) + ',' + _dict.htmlDict.li_end;
+      return getJSONValueHTML(entry);
     });
-    return '[' + _dict.htmlDict.ul_start + entries + _dict.htmlDict.ul_end + ']';
+    return '[' + _dict.htmlDict.ul_start + _dict.htmlDict.li_start + entries.join(join) + _dict.htmlDict.li_end + _dict.htmlDict.ul_end + ']';
   } else {
     var props = Object.keys(src).map(function (prop) {
-      return '' + _dict.htmlDict.li_start + prop + ': ' + getJSONValueHTML(src[prop]) + ',{dict.li_end}';
+      return '"' + prop + '": ' + getJSONValueHTML(src[prop]);
     });
-    return '{' + _dict.htmlDict.ul_start + props + _dict.htmlDict.ul_end + '}';
+    return '{' + _dict.htmlDict.ul_start + _dict.htmlDict.li_start + props.join(join) + _dict.htmlDict.li_end + _dict.htmlDict.ul_end + '}';
   }
 };
 
@@ -28329,7 +28394,7 @@ var getJSONValueHTML = function getJSONValueHTML(src) {
       return getJSONObjectHTML(src);
     }
   } else {
-    return '<span class="string">' + JSON.stringify(src) + '}</span>';
+    return '<span class="string">' + JSON.stringify(src) + '</span>';
   }
 };
 
@@ -28348,7 +28413,7 @@ var getJSON = function getJSON(src) {
     var comma = index < array.length - 1 ? ',' : '';
     var props = Object.keys(entry).map(function (prop, index, array) {
       var comma = index < array.length - 1 ? ',' : '';
-      return '' + _dict.htmlDict.li_start + prop + ': ' + getJSONValueHTML(entry[prop]) + comma + '{dict.li_end}';
+      return '' + _dict.htmlDict.li_start + prop + ': ' + getJSONValueHTML(entry[prop]) + comma + _dict.htmlDict.li_end;
     }).join('');
 
     return _dict.htmlDict.en_start + '{' + _dict.htmlDict.ul_start + props + _dict.htmlDict.ul_end + '}' + comma + _dict.htmlDict.en_end;
@@ -28359,7 +28424,7 @@ var getJSON = function getJSON(src) {
 
 exports.default = getJSON;
 
-},{"./dict":350}],353:[function(require,module,exports){
+},{"./dict":351}],354:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -28388,7 +28453,7 @@ var getLabel = function getLabel(src) {
 
 exports.default = getLabel;
 
-},{"./bibtex/label":346}],354:[function(require,module,exports){
+},{"./bibtex/label":346}],355:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -28415,7 +28480,7 @@ var getName = function getName(obj) {
 
 exports.default = getName;
 
-},{}],355:[function(require,module,exports){
+},{}],356:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -28472,7 +28537,38 @@ var parseContentMine = function parseContentMine(data) {
 
 exports.default = parseContentMine;
 
-},{"../date":361,"../name":373}],356:[function(require,module,exports){
+},{"../date":364,"../name":376}],357:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.type = exports.prop = exports.text = exports.json = undefined;
+
+var _text = require('./text');
+
+var _text2 = _interopRequireDefault(_text);
+
+var _json = require('./json');
+
+var _json2 = _interopRequireDefault(_json);
+
+var _prop = require('./prop');
+
+var _prop2 = _interopRequireDefault(_prop);
+
+var _type = require('./type');
+
+var _type2 = _interopRequireDefault(_type);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+exports.json = _json2.default;
+exports.text = _text2.default;
+exports.prop = _prop2.default;
+exports.type = _type2.default;
+
+},{"./json":358,"./prop":359,"./text":360,"./type":362}],358:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -28513,7 +28609,7 @@ var parseBibTeXJSON = function parseBibTeXJSON(data) {
     }
 
     newEntry.type = (0, _type2.default)(entry.type);
-    newEntry.id = entry.label;
+    newEntry.id = newEntry.label = entry.label;
 
     return newEntry;
   });
@@ -28521,7 +28617,7 @@ var parseBibTeXJSON = function parseBibTeXJSON(data) {
 
 exports.default = parseBibTeXJSON;
 
-},{"./prop":357,"./type":360}],357:[function(require,module,exports){
+},{"./prop":359,"./type":362}],359:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -28685,7 +28781,7 @@ var parseBibTeXProp = function parseBibTeXProp(prop, value) {
 
 exports.default = parseBibTeXProp;
 
-},{"../date":361,"../name":373}],358:[function(require,module,exports){
+},{"../date":364,"../name":376}],360:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -28954,7 +29050,7 @@ var parseBibTeX = function parseBibTeX(str) {
  */
 exports.default = parseBibTeX;
 
-},{"../regex":374,"./tokens.json":359}],359:[function(require,module,exports){
+},{"../regex":377,"./tokens.json":361}],361:[function(require,module,exports){
 module.exports={
   "\\url":"",                           "\\href":"",                            "{\\textexclamdown}":"\u00A1",          "{\\textcent}":"\u00A2",
   "{\\textsterling}":"\u00A3",          "{\\textyen}":"\u00A5",                 "{\\textbrokenbar}":"\u00A6",           "{\\textsection}":"\u00A7",
@@ -29070,7 +29166,7 @@ module.exports={
   "{\\`Y}":"\u1EF2",                    "{\\`y}":"\u1EF3",                      "{\\d Y}":"\u1EF4",                     "{\\d y}":"\u1EF5",
   "{\\~Y}":"\u1EF8",                    "{\\~y}":"\u1EF9",                      "{\\~}":"\u223C",                       "~":"\u00A0" 
 }
-},{}],360:[function(require,module,exports){
+},{}],362:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -29130,7 +29226,91 @@ var parseBibTeXType = function parseBibTeXType(pubType) {
 
 exports.default = parseBibTeXType;
 
-},{}],361:[function(require,module,exports){
+},{}],363:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; }();
+
+/**
+ *
+ * @access private
+ * @constant bibTxtRegex
+ * @default
+ */
+var bibTxtRegex = {
+  splitEntries: /\n\s*(?=\[)/g,
+  parseEntry: /^\[(.+?)\]\s*(?:\n([\s\S]+))?$/,
+  splitPairs: /((?=.)\s)*\n\s*/g,
+  parsePair: /^(.+?)\s*:\s*(.+)$/
+};
+
+/**
+ * Parse single Bib.TXT entry
+ *
+ * @access protected
+ * @method parseBibTxtEntry
+ *
+ * @param {String} entry - The input data
+ *
+ * @return {Object} Array of BibTeX-JSON
+ */
+var parseBibTxtEntry = function parseBibTxtEntry(entry) {
+  var _ref = entry.match(bibTxtRegex.parseEntry) || [],
+      _ref2 = _slicedToArray(_ref, 3),
+      label = _ref2[1],
+      pairs = _ref2[2];
+
+  if (!label || !pairs) {
+    return {};
+  } else {
+    var out = {
+      label: label,
+      properties: {}
+    };
+
+    pairs.trim().split(bibTxtRegex.splitPairs).filter(function (v) {
+      return v;
+    }).forEach(function (pair) {
+      var _ref3 = pair.match(bibTxtRegex.parsePair) || [],
+          _ref4 = _slicedToArray(_ref3, 3),
+          key = _ref4[1],
+          value = _ref4[2];
+
+      if (key) {
+        if (key === 'type') {
+          out.type = value;
+        } else {
+          out.properties[key] = value;
+        }
+      }
+    });
+
+    return out;
+  }
+};
+
+/**
+ * Format Bib.TXT data
+ *
+ * @access protected
+ * @method parseBibTxt
+ *
+ * @param {String} src - The input data
+ *
+ * @return {Object[]} Array of BibTeX-JSON
+ */
+var parseBibTxt = function parseBibTxt(src) {
+  return src.trim().split(bibTxtRegex.splitEntries).map(parseBibTxtEntry);
+};
+
+exports.text = parseBibTxt;
+exports.textEntry = parseBibTxtEntry;
+
+},{}],364:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -29155,13 +29335,13 @@ var parseDate = function parseDate(value) {
 
 exports.default = parseDate;
 
-},{}],362:[function(require,module,exports){
+},{}],365:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.json = exports.name = exports.date = exports.bibjson = exports.wikidata = exports.input = undefined;
+exports.json = exports.name = exports.date = exports.bibjson = exports.bibtxt = exports.bibtex = exports.wikidata = exports.input = undefined;
 
 var _index = require('./input/index');
 
@@ -29171,9 +29351,17 @@ var _index2 = require('./wikidata/index');
 
 var wikidata = _interopRequireWildcard(_index2);
 
-var _index3 = require('./bibjson/index');
+var _index3 = require('./bibtex/index');
 
-var _index4 = _interopRequireDefault(_index3);
+var bibtex = _interopRequireWildcard(_index3);
+
+var _bibtxt = require('./bibtxt');
+
+var bibtxt = _interopRequireWildcard(_bibtxt);
+
+var _index4 = require('./bibjson/index');
+
+var _index5 = _interopRequireDefault(_index4);
 
 var _date = require('./date');
 
@@ -29193,12 +29381,14 @@ function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj;
 
 exports.input = input;
 exports.wikidata = wikidata;
-exports.bibjson = _index4.default;
+exports.bibtex = bibtex;
+exports.bibtxt = bibtxt;
+exports.bibjson = _index5.default;
 exports.date = _date2.default;
 exports.name = _name2.default;
 exports.json = _json2.default;
 
-},{"./bibjson/index":355,"./date":361,"./input/index":370,"./json":372,"./name":373,"./wikidata/index":378}],363:[function(require,module,exports){
+},{"./bibjson/index":356,"./bibtex/index":357,"./bibtxt":363,"./date":364,"./input/index":373,"./json":375,"./name":376,"./wikidata/index":381}],366:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -29282,7 +29472,7 @@ var parseInputAsync = function () {
 
 exports.default = parseInputAsync;
 
-},{"../../../util/deepCopy":384,"../async/data":365,"../type":371}],364:[function(require,module,exports){
+},{"../../../util/deepCopy":387,"../async/data":368,"../type":374}],367:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -29347,7 +29537,7 @@ var parseInputChainLinkAsync = function () {
 
 exports.default = parseInputChainLinkAsync;
 
-},{"../../../util/deepCopy":384,"../async/data":365,"../type":371}],365:[function(require,module,exports){
+},{"../../../util/deepCopy":387,"../async/data":368,"../type":374}],368:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -29437,7 +29627,7 @@ var parseInputDataAsync = function () {
 
 exports.default = parseInputDataAsync;
 
-},{"../../../util/fetchFileAsync":386,"../../wikidata/async/json":376,"../async/chain":363,"../data":369}],366:[function(require,module,exports){
+},{"../../../util/fetchFileAsync":389,"../../wikidata/async/json":379,"../async/chain":366,"../data":372}],369:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -29463,7 +29653,7 @@ exports.data = _data2.default;
 exports.chain = _chain2.default;
 exports.chainLink = _chainLink2.default;
 
-},{"./chain":363,"./chainLink":364,"./data":365}],367:[function(require,module,exports){
+},{"./chain":366,"./chainLink":367,"./data":368}],370:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -29513,7 +29703,7 @@ var parseInput = function parseInput(input) {
 
 exports.default = parseInput;
 
-},{"../../util/deepCopy":384,"./data":369,"./type":371}],368:[function(require,module,exports){
+},{"../../util/deepCopy":387,"./data":372,"./type":374}],371:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -29557,7 +29747,7 @@ var parseInputChainLink = function parseInputChainLink(input) {
 
 exports.default = parseInputChainLink;
 
-},{"../../util/deepCopy":384,"./data":369,"./type":371}],369:[function(require,module,exports){
+},{"../../util/deepCopy":387,"./data":372,"./type":374}],372:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -29591,6 +29781,8 @@ var _index2 = _interopRequireDefault(_index);
 var _text = require('../bibtex/text');
 
 var _text2 = _interopRequireDefault(_text);
+
+var _bibtxt = require('../bibtxt');
 
 var _json3 = require('../bibtex/json');
 
@@ -29645,6 +29837,9 @@ var parseInputData = function parseInputData(input, type) {
     case 'string/bibtex':
       return (0, _json4.default)((0, _text2.default)(input));
 
+    case 'string/bibtxt':
+      return (0, _json4.default)((0, _bibtxt.text)(input));
+
     case 'object/wikidata':
       return (0, _json2.default)(input);
 
@@ -29675,7 +29870,7 @@ var parseInputData = function parseInputData(input, type) {
 
 exports.default = parseInputData;
 
-},{"../../util/fetchFile":385,"../bibjson/index":355,"../bibtex/json":356,"../bibtex/text":358,"../json":372,"../regex":374,"../wikidata/json":379,"../wikidata/list":380,"./chain":367}],370:[function(require,module,exports){
+},{"../../util/fetchFile":388,"../bibjson/index":356,"../bibtex/json":358,"../bibtex/text":360,"../bibtxt":363,"../json":375,"../regex":377,"../wikidata/json":382,"../wikidata/list":383,"./chain":370}],373:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -29713,7 +29908,7 @@ exports.chain = _chain2.default;
 exports.chainLink = _chainLink2.default;
 exports.async = async;
 
-},{"./async/index":366,"./chain":367,"./chainLink":368,"./data":369,"./type":371}],371:[function(require,module,exports){
+},{"./async/index":369,"./chain":370,"./chainLink":371,"./data":372,"./type":374}],374:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -29761,12 +29956,15 @@ var parseInputType = function parseInputType(input) {
         // BibTeX
       } else if (_regex2.default.bibtex[0].test(input)) {
         return 'string/bibtex';
+        // Bib.TXT
+      } else if (_regex2.default.bibtxt.test(input)) {
+        return 'string/bibtxt';
         // JSON
       } else if (/^\s*(\{|\[)/.test(input)) {
         return 'string/json';
         // Else URL
       } else if (_regex2.default.url.test(input)) {
-        return 'url/} else';
+        return 'url/else';
         // Else
       } else {
         console.warn('[set]', 'This format is not supported or recognised');
@@ -29828,7 +30026,7 @@ var parseInputType = function parseInputType(input) {
 
 exports.default = parseInputType;
 
-},{"../regex":374}],372:[function(require,module,exports){
+},{"../regex":377}],375:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -29876,7 +30074,7 @@ var parseJSON = function parseJSON(str) {
 
 exports.default = parseJSON;
 
-},{"./regex":374}],373:[function(require,module,exports){
+},{"./regex":377}],376:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -29915,7 +30113,7 @@ var parseName = function parseName(name) {
 
 exports.default = parseName;
 
-},{"./regex":374}],374:[function(require,module,exports){
+},{"./regex":377}],377:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -29931,6 +30129,7 @@ Object.defineProperty(exports, "__esModule", {
 var regex = {
   url: /^(https?:\/\/)?((([a-z\d]([a-z\d-]*[a-z\d])*)\.)+[a-z]{2,}|((\d{1,3}\.){3}\d{1,3})|localhost)(:\d+)?(\/[-a-z\d%_.~+:]*)*(\?[;&a-z\d%_.~+=-]*)?(#[-a-z\d_]*)?$/i,
   bibtex: [/^(?:\s*@\s*[^@]+?\s*\{\s*[^@]+?\s*,\s*[^@]+\})+\s*$/, /^\s$/, /^[@{}"=,\\]$/],
+  bibtxt: /^\s*(\[.*?\]\s*(\n\s*[^[]((?!:)\S)+\s*:\s*.+?\s*)*\s*)+$/,
   wikidata: [/^\s*(Q\d+)\s*$/, /^\s*((?:Q\d+(?:\s+|,|))*Q\d+)\s*$/, /^(https?:\/\/(?:www\.)wikidata.org\/w\/api\.php(?:\?.*)?)$/, /\/(Q\d+)(?:[#?/]|\s*$)/],
   json: [[/((?:\[|:|,)\s*)'((?:\\'|[^'])*?[^\\])?'(?=\s*(?:\]|}|,))/g, '$1"$2"'], [/((?:(?:"|]|}|\/[gmi]|\.|(?:\d|\.|-)*\d)\s*,|{)\s*)(?:"([^":\n]+?)"|'([^":\n]+?)'|([^":\n]+?))(\s*):/g, '$1"$2$3$4"$5:']],
   name: / (?=(?:[a-z]+ )*(?:[A-Z][a-z]*[-])*(?:[A-Z][a-z]*)$)/
@@ -29938,7 +30137,7 @@ var regex = {
 
 exports.default = regex;
 
-},{}],375:[function(require,module,exports){
+},{}],378:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -29959,7 +30158,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 exports.json = _json2.default;
 exports.prop = _prop2.default;
 
-},{"./json":376,"./prop":377}],376:[function(require,module,exports){
+},{"./json":379,"./prop":380}],379:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -30082,7 +30281,7 @@ var parseWikidataJSONAsync = function () {
 
 exports.default = parseWikidataJSONAsync;
 
-},{"./prop":377,"wikidata-sdk":320}],377:[function(require,module,exports){
+},{"./prop":380,"wikidata-sdk":320}],380:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -30343,7 +30542,7 @@ var parseWikidataPropAsync = function () {
 
 exports.default = parseWikidataPropAsync;
 
-},{"../../../util/fetchFileAsync":386,"../../date":361,"../../name":373,"../type":382,"wikidata-sdk":320}],378:[function(require,module,exports){
+},{"../../../util/fetchFileAsync":389,"../../date":364,"../../name":376,"../type":385,"wikidata-sdk":320}],381:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -30381,7 +30580,7 @@ exports.prop = _prop2.default;
 exports.type = _type2.default;
 exports.async = async;
 
-},{"./async/index":375,"./json":379,"./list":380,"./prop":381,"./type":382}],379:[function(require,module,exports){
+},{"./async/index":378,"./json":382,"./list":383,"./prop":384,"./type":385}],382:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -30465,7 +30664,7 @@ var parseWikidataJSON = function parseWikidataJSON(data) {
 
 exports.default = parseWikidataJSON;
 
-},{"./prop":381,"wikidata-sdk":320}],380:[function(require,module,exports){
+},{"./prop":384,"wikidata-sdk":320}],383:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -30494,7 +30693,7 @@ var parseWikidata = function parseWikidata(data) {
 
 exports.default = parseWikidata;
 
-},{"wikidata-sdk":320}],381:[function(require,module,exports){
+},{"wikidata-sdk":320}],384:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -30699,7 +30898,7 @@ var parseWikidataProp = function parseWikidataProp(prop, value, lang) {
 
 exports.default = parseWikidataProp;
 
-},{"../../util/fetchFile":385,"../date":361,"../name":373,"./type":382,"wikidata-sdk":320}],382:[function(require,module,exports){
+},{"../../util/fetchFile":388,"../date":364,"../name":376,"./type":385,"wikidata-sdk":320}],385:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -30736,7 +30935,7 @@ var fetchWikidataType = function fetchWikidataType(value) {
 
 exports.default = fetchWikidataType;
 
-},{}],383:[function(require,module,exports){
+},{}],386:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -30779,7 +30978,7 @@ var getPrefixedEntry = function getPrefixedEntry(value, index, list) {
 exports.getAttributedEntry = getAttributedEntry;
 exports.getPrefixedEntry = getPrefixedEntry;
 
-},{}],384:[function(require,module,exports){
+},{}],387:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -30801,7 +31000,7 @@ var deepCopy = function deepCopy(obj) {
 
 exports.default = deepCopy;
 
-},{}],385:[function(require,module,exports){
+},{}],388:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -30835,7 +31034,7 @@ var fetchFile = function fetchFile(url) {
 
 exports.default = fetchFile;
 
-},{"sync-request":310}],386:[function(require,module,exports){
+},{"sync-request":310}],389:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -30845,6 +31044,8 @@ Object.defineProperty(exports, "__esModule", {
 require('isomorphic-fetch');
 
 function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { step("next", value); }, function (err) { step("throw", err); }); } } return step("next"); }); }; }
+
+/* global fetch */
 
 /**
  * Fetch file (async)
@@ -30891,7 +31092,7 @@ var fetchFileAsync = function () {
 
 exports.default = fetchFileAsync;
 
-},{"isomorphic-fetch":299}],387:[function(require,module,exports){
+},{"isomorphic-fetch":299}],390:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -30920,7 +31121,7 @@ var fetchId = function fetchId(list, prefix) {
 
 exports.default = fetchId;
 
-},{}],388:[function(require,module,exports){
+},{}],391:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -30958,7 +31159,7 @@ exports.fetchFile = _fetchFile2.default;
 exports.fetchFileAsync = _fetchFileAsync2.default;
 exports.fetchId = _fetchId2.default;
 
-},{"./attr":383,"./deepCopy":384,"./fetchFile":385,"./fetchFileAsync":386,"./fetchId":387}],389:[function(require,module,exports){
+},{"./attr":386,"./deepCopy":387,"./fetchFile":388,"./fetchFileAsync":389,"./fetchId":390}],392:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -31020,13 +31221,7 @@ function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj;
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-/**
- * [CSL](https://citeproc-js.readthedocs.io/en/latest/csl-json/markup.html#csl-json-items) object
- *
- * @class CSL
- */
-
-Object.assign(_index8.default, { async: _index6.default, parse: parse, get: get, CSL: CSL, util: util, version: version }); /**
+Object.assign(_index8.default, { async: _index6.default, get: get, CSL: CSL, parse: parse, util: util, version: version }); /**
                                                                                                                              * @file index.js
                                                                                                                              *
                                                                                                                              * @projectname Citationjs
@@ -31059,4 +31254,4 @@ Object.assign(_index8.default, { async: _index6.default, parse: parse, get: get,
 
 module.exports = _index8.default;
 
-},{"./CSL/index":333,"./Cite/index":338,"./async/index":343,"./get/index":351,"./parse/index":362,"./util/index":388,"./version":389,"babel-polyfill":1,"deep-freeze":297}]},{},[]);
+},{"./CSL/index":333,"./Cite/index":338,"./async/index":343,"./get/index":352,"./parse/index":365,"./util/index":391,"./version":392,"babel-polyfill":1,"deep-freeze":297}]},{},[]);

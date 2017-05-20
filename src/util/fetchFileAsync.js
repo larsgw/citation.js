@@ -1,5 +1,7 @@
 import 'isomorphic-fetch'
 
+/* global fetch */
+
 /**
  * Fetch file (async)
  *

@@ -36,10 +36,10 @@ const getBibTeXJSON = function (src) {
   if (src.hasOwnProperty('title')) { props.title = src['title'] }
   if (src.hasOwnProperty('url')) { props.url = src.url }
   if (src.hasOwnProperty('volume')) { props.volume = src.volume.toString() }
-  if (src.hasOwnProperty('issued') &&
-      Array.isArray(src.issued) &&
-      src.issued[0]['date-parts'].length === 3) {
+  if (Array.isArray(src.issued) && src.issued[0]['date-parts'].length === 3) {
     props.year = src.issued[0]['date-parts'][0].toString()
+  } else if (src.hasOwnProperty('year')) {
+    props.year = src.year
   }
 
   res.properties = props

@@ -11,7 +11,7 @@
       h1,h2,h3 {width:100%;text-align:center;}
       div.in                  {height:300px;border:1px solid #888;overflow-y:auto;margin-top:20px;background:white;font-family:monospace;white-space:pre;}
       div.in[data-type="url"] {height:2em;line-height:2em;}
-      div.out {overflow-x:auto;}
+      div.out {overflow-x:auto;white-space:pre-wrap;}
       fieldset {border:0 none transparent;padding-left:0;display:inline-block;}
       
       /* Highlight */
@@ -175,6 +175,7 @@
       <legend>HTML or plain text:</legend>
       <select class="type">
 	<option value="html">HTML</option>
+        <option value="json">JSON</option>
 	<option value="string">Plain text</option>
       </select>
     </fieldset>
@@ -184,8 +185,9 @@
 	<option value="citation-apa">APA</option>
 	<option value="citation-vancouver">Vancouver</option>
 	<option value="citation-harvard1">Harvard</option>
-	<option value="csl">JSON</option>
+	<option value="csl">CSL-JSON</option>
 	<option value="bibtex">BibTeX</option>
+        <option value="bibtxt">Bib.TXT</option>
       </select>
     </fieldset>
     <fieldset>

@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>Source: Cite/options.js - Docs - Citation.js</title>
+    <title>Source: get/bibtxt.js - Docs - Citation.js</title>
     
     <meta name="theme-color" content="#FFC107">
     <link rel="shortcut icon" type="image/png" href="../favicon.png"/>
@@ -22,7 +22,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Source: Cite/options.js</h1>
+    <h1 class="page-title">Source: get/bibtxt.js</h1>
 
     
 
@@ -31,29 +31,36 @@
     
     <section>
         <article>
-            <pre class="prettyprint source linenums"><code>/**
- * Change the default options of a `Cite` object.
+            <pre class="prettyprint source linenums"><code>import getBibTeXJSON from './bibtex/json'
+import { htmlDict, textDict } from './dict'
+
+/**
+ * Get a Bib.TXT (HTML) string from CSL
  *
- * @method options
- * @memberof Cite
- * @this Cite
+ * @access protected
+ * @method getBibTxt
  *
- * @param {Object} options - The options for the output. See [input options](../#citation.cite.in.options)
- * @param {Boolean} log - Show this call in the log
+ * @param {CSL[]} src - Input CSL
+ * @param {Boolean} html - Output as HTML string (instead of plain text)
  *
- * @return {Cite} The updated parent object
+ * @return {String} BibTeX (HTML) string
  */
-const options = function (options, log) {
-  if (log) {
-    this.save()
-  }
+const getBibTxt = function (src, html) {
+  const dict = html ? htmlDict : textDict
 
-  Object.assign(this._options, options)
+  const entries = src.map(entry => {
+    const bib = getBibTeXJSON(entry)
+    const properties = Object.keys(bib.properties).map(prop =>
+      `${dict.li_start}${prop}: ${bib.properties[prop]}${dict.li_end}`
+    ).join('')
 
-  return this
+    return `${dict.en_start}[${bib.label}]${dict.ul_start}${dict.li_start}type: ${bib.type}${dict.li_end}${properties}${dict.ul_end}${dict.en_end}`
+  }).join('\n')
+
+  return `${dict.wr_start}${entries}${dict.wr_end}`
 }
 
-export { options }
+export default getBibTxt
 </code></pre>
         </article>
     </section>

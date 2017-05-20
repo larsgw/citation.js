@@ -5,6 +5,7 @@ import deepCopy from '../util/deepCopy'
 
 import getBibTeXJSON from '../get/bibtex/json'
 import getBibTeX from '../get/bibtex/text'
+import getBibTxt from '../get/bibtxt'
 import getJSON from '../get/json'
 
 import fetchCSLEngine from '../CSL/engines'
@@ -80,6 +81,14 @@ const get = function (options) {
       result = getBibTeX(_data, false)
       break
 
+    case 'html,bibtxt':
+      result = getBibTxt(_data, true)
+      break
+
+    case 'string,bibtxt':
+      result = getBibTxt(_data, false)
+      break
+
     case 'string,citation':
       result = striptags(this.get(Object.assign({}, options, {type: 'html'})))
       break
@@ -93,6 +102,7 @@ const get = function (options) {
       break
 
     case 'json,bibtex':
+    case 'json,bibtxt':
       result = JSON.stringify(_data.map(getBibTeXJSON))
       break
 
