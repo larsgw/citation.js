@@ -1,4 +1,4 @@
-# Citation.js
+![Citation.js](https://larsgw.github.io/citation.js/static/img/banner.png)
 
 Citation.js converts formats like BibTeX, Wikidata JSON and ContentMine JSON to CSL-JSON to convert to other formats like APA, Vancouver and back to BibTeX.
 
@@ -311,7 +311,7 @@ Where `<DATA>` is the input data and `<OPTIONS>` is the input options. `<OPTIONS
 
 ## <a id="more.docs" href="#more.docs">More Docs</a>
 
-Further explanation can be found [here](https://larsgw.github.io/citation.js/api/). The explanation of the jQuery plugin can be found there too.
+Further explanation can be found [here](https://larsgw.github.io/citation.js/api/).
 
 ## <a id="more.demo" href="#more.demo">Demo</a>
 
@@ -334,4 +334,5 @@ data.get() // Should implicitly display
 
 ### <a id="more.demo.browser" href="#more.demo.browser">Browser Demos</a>
 
-* [Normal demo](https://larsgw.github.io/citation.js/demo/demo.html)
+* [Normal demo](https://larsgw.github.io/citation.js/demo/)
+* [Bib.TXT demo](https://larsgw.github.io/citation.js/demo/bibtxt.html)

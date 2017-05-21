@@ -1,0 +1,771 @@
+<pre>
+<section><code data-type="js">
+/** 
+ * @file Citation-0.2.js
+ * 
+ * @projectname Citationjs
+ * 
+ * @author Lars Willighagen
+ * @version 0.2
+ * @license
+ * Copyright (c) 2015-2016 Lars Willighagen  
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:  
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.  
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
+
+/**
+ * [CSL](https://citeproc-js.readthedocs.io/en/latest/csl-json/markup.html#csl-json-items) element
+ * 
+ * @class CSL
+ */
+
+var Cite = ( function ( modules, nodejsMode, browserMode ) {
+
+var CSL = modules.CSL
+  , striptags = modules.striptags
+  , request = modules.request
+  , window = modules.window
+  , wdk = modules.wdk
+
+if ( !nodejsMode &amp;&amp; !browserMode )
+  throw new Error( 'Code executed in invalid environment' )
+
+console.info( '[init]', nodejsMode ? 'Node.js' : browserMode ? 'Browser' : '', 'mode' )
+
+/**
+ * Object containing several RegExp patterns, mostly used for parsing (*full of shame*) and recognizing data types
+ * 
+ * @access private
+ * @constant varRegex
+ * @default
+ */
+var varRegex = {
+  url:/^(https?:\/\/)?((([a-z\d]([a-z\d-]*[a-z\d])*)\.)+[a-z]{2,}|((\d{1,3}\.){3}\d{1,3})|localhost)(\:\d+)?(\/[-a-z\d%_.~+:]*)*(\?[;&amp;a-z\d%_.~+=-]*)?(\#[-a-z\d_]*)?$/i
+, bibtex: [
+    /^(?:\s*@\s*[^@]+?\s*\{\s*[^@]+?\s*,\s*[^@]+\})+\s*$/
+  , /^\s$/
+  ]
+, wikidata: [
+    /(?:\/|^)(Q\d+)$/
+  , /(Q\d+)/
+  , /^(?:Q\d+(?:\s+|,))*(?:Q\d+)(?:\s+|,)?$/
+  ]
+, json:[
+    [ /((?:\[|:|,)\s*)'((?:\\'|[^'])*?[^\\])?'(?=\s*(?:\]|}|,))/g
+    , '$1"$2"' ]
+  ]
+, name: / (?=(?:[a-z]+ )*(?:[A-Z][a-z]*[-])*(?:[A-Z][a-z]*)$)/
+}
+
+/**
+ * Mapping of BibTeX syntax chars to BibTeX Escaped Chars.
+ * 
+ * From [Zoteros alwaysMap object](https://github.com/zotero/translators/blob/master/BibTeX.js#L225)
+ * [REPO](https://github.com/zotero/translators)
+ * 
+ * Accesed 11/20/2016
+ * 
+ * @access private
+ * @constant varBibTeXSyntaxTokens
+ * @default
+ */
+var varBibTeXSyntaxTokens = {
+  "|":"{\\textbar}",
+  "&lt;":"{\\textless}",
+  ">":"{\\textgreater}",
+  "~":"{\\textasciitilde}",
+  "^":"{\\textasciicircum}",
+  "\\":"{\\textbackslash}",
+  // See http://tex.stackexchange.com/questions/230750/open-brace-in-bibtex-fields/230754
+  "{" : "\\{\\vphantom{\\}}",
+  "}" : "\\vphantom{\\{}\\}"
+}
+
+/**
+ * Mapping of BibTeX Escaped Chars to Unicode.
+ * 
+ * From [Zoteros reversed mapping table](https://github.com/zotero/translators/blob/master/BibTeX.js#L2353)
+ * [REPO](https://github.com/zotero/translators)
+ * 
+ * Accesed 11/09/2016
+ * 
+ * @access private
+ * @constant varBibTeXTokens
+ * @default
+ */
+var varBibTeXTokens = {
+  "\\url":"",                           "\\href":"",                            "{\\textexclamdown}":"\u00A1",          "{\\textcent}":"\u00A2",
+  "{\\textsterling}":"\u00A3",          "{\\textyen}":"\u00A5",                 "{\\textbrokenbar}":"\u00A6",           "{\\textsection}":"\u00A7",
+  "{\\textasciidieresis}":"\u00A8",     "{\\textcopyright}":"\u00A9",           "{\\textordfeminine}":"\u00AA",         "{\\guillemotleft}":"\u00AB",
+  "{\\textlnot}":"\u00AC",              "{\\textregistered}":"\u00AE",          "{\\textasciimacron}":"\u00AF",         "{\\textdegree}":"\u00B0",
+  "{\\textpm}":"\u00B1",                "{\\texttwosuperior}":"\u00B2",         "{\\textthreesuperior}":"\u00B3",       "{\\textasciiacute}":"\u00B4",
+  "{\\textmu}":"\u00B5",                "{\\textparagraph}":"\u00B6",           "{\\textperiodcentered}":"\u00B7",      "{\\c\\ }":"\u00B8",
+  "{\\textonesuperior}":"\u00B9",       "{\\textordmasculine}":"\u00BA",        "{\\guillemotright}":"\u00BB",          "{\\textonequarter}":"\u00BC",
+  "{\\textonehalf}":"\u00BD",           "{\\textthreequarters}":"\u00BE",       "{\\textquestiondown}":"\u00BF",        "{\\AE}":"\u00C6",
+  "{\\DH}":"\u00D0",                    "{\\texttimes}":"\u00D7",               "{\\O}":"\u00D8",                       "{\\TH}":"\u00DE",
+  "{\\ss}":"\u00DF",                    "{\\ae}":"\u00E6",                      "{\\dh}":"\u00F0",                      "{\\textdiv}":"\u00F7",
+  "{\\o}":"\u00F8",                     "{\\th}":"\u00FE",                      "{\\i}":"\u0131",                       "{\\NG}":"\u014A",
+  "{\\ng}":"\u014B",                    "{\\OE}":"\u0152",                      "{\\oe}":"\u0153",                      "{\\textasciicircum}":"\u02C6",
+  "{\\textacutedbl}":"\u02DD",          "$\\Gamma$":"\u0393",                   "$\\Delta$":"\u0394",                   "$\\Theta$":"\u0398",
+  "$\\Lambda$":"\u039B",                "$\\Xi$":"\u039E",                      "$\\Pi$":"\u03A0",                      "$\\Sigma$":"\u03A3",
+  "$\\Phi$":"\u03A6",                   "$\\Psi$":"\u03A8",                     "$\\Omega$":"\u03A9",                   "$\\alpha$":"\u03B1",
+  "$\\beta$":"\u03B2",                  "$\\gamma$":"\u03B3",                   "$\\delta$":"\u03B4",                   "$\\varepsilon$":"\u03B5",
+  "$\\zeta$":"\u03B6",                  "$\\eta$":"\u03B7",                     "$\\theta$":"\u03B8",                   "$\\iota$":"\u03B9",
+  "$\\kappa$":"\u03BA",                 "$\\lambda$":"\u03BB",                  "$\\mu$":"\u03BC",                      "$\\nu$":"\u03BD",
+  "$\\xi$":"\u03BE",                    "$\\pi$":"\u03C0",                      "$\\rho$":"\u03C1",                     "$\\varsigma$":"\u03C2",
+  "$\\sigma$":"\u03C3",                 "$\\tau$":"\u03C4",                     "$\\upsilon$":"\u03C5",                 "$\\varphi$":"\u03C6",
+  "$\\chi$":"\u03C7",                   "$\\psi$":"\u03C8",                     "$\\omega$":"\u03C9",                   "$\\vartheta$":"\u03D1",
+  "$\\Upsilon$":"\u03D2",               "$\\phi$":"\u03D5",                     "$\\varpi$":"\u03D6",                   "$\\varrho$":"\u03F1",
+  "$\\epsilon$":"\u03F5",               "{\\textendash}":"\u2013",              "{\\textemdash}":"\u2014",              "---":"\u2014",
+  "--":"\u2013",                        "{\\textbardbl}":"\u2016",              "{\\textunderscore}":"\u2017",          "{\\textquoteleft}":"\u2018",
+  "{\\textquoteright}":"\u2019",        "{\\quotesinglbase}":"\u201A",          "{\\textquotedblleft}":"\u201C",        "{\\textquotedblright}":"\u201D",
+  "{\\quotedblbase}":"\u201E",          "{\\textdagger}":"\u2020",              "{\\textdaggerdbl}":"\u2021",           "{\\textbullet}":"\u2022",
+  "{\\textellipsis}":"\u2026",          "{\\textperthousand}":"\u2030"
+}
+
+/**
+ * Object containing a list of Wikidata Instances and its corresponding name as specified by the docs
+ * 
+ * @access private
+ * @constant varWikidataTypes
+ * @default
+ */
+var varWikidataTypes = {
+  Q13442814: 'article-journal'
+, Q18918145: 'article-journal'
+, Q191067  : 'article'
+, Q3331189 : 'book'
+, Q571     : 'book'
+}
+
+/**
+ * Object containing CSL Engines
+ * 
+ * @access private
+ * @constant varCSLEngines
+ * @default
+ */
+var varCSLEngines = {}
+
+/**
+ * Object containing HTML strings for building JSON and BibTeX. Made to match citeproc, for compatability.
+ * 
+ * @access private
+ * @constant varHTMLDict
+ * @default
+ */
+var varHTMLDict = {
+  wr_start : '&lt;div class="csl-bib-body">'
+, wr_end   : '&lt;/div>'
+, en_start : '&lt;div class="csl-entry">'
+, en_end   : '&lt;/div>'
+, ul_start : '&lt;ul style="list-style-type:none">'
+, ul_end   : '&lt;/ul>'
+, li_start : '&lt;li>'
+, li_end   : '&lt;/li>'
+}
+
+/**
+ * Convert a CSL date into human-readable format
+ * 
+ * @access private
+ * @function getDate
+ * 
+ * @param {String[]} date - A date in CSL format
+ * 
+ * @return {String} The string
+ */
+var getDate = function ( date ) {
+  var res  = ''
+    , date = date[ 0 ][ 'date-parts' ]
+  
+  if ( date.length === 3 )
+    res += [
+      ('000'+ date[ 0 ] ).slice( -4 )
+    , ( '0' + date[ 1 ] ).slice( -2 )
+    , ( '0' + date[ 2 ] ).slice( -2 )
+    ].join( '-' )
+  
+  return res
+}
+
+/**
+ * Convert epoch to CSL date
+ * 
+ * @access private
+ * @function parseDate
+ * 
+ * @param {Number|String} value - Epoch time or string in format "YYYY-MM-DD"
+ * 
+ * @return {Object[]} Array of an object, containing the property "date-parts" with the value [ YYYY, MM, DD ]
+ */
+var parseDate = function ( value ) {
+  var rValue
+    , date = new Date( value )
+  
+  rValue = [
+    date.getFullYear()
+  , date.getMonth   () + 1
+  , date.getDate    ()
+  ]
+  
+  return [ { 'date-parts': rValue } ]
+}
+
+/**
+ * Get name from CSL
+ * 
+ * @access private
+ * @method getName
+ * 
+ * @param {Object} obj - CSL input
+ * 
+ * @return {String} Full name
+ */
+var getName = function ( obj ) {
+  var arr = [ 'dropping-particle', 'given', 'suffix', 'non-dropping-particle', 'family' ]
+    , res = ''
+  
+  for ( var i = 0; i &lt; arr.length; i++ ) {
+    if ( obj.hasOwnProperty( arr[ i ] ) )
+      res += obj[ arr[ i ] ] + ' '
+  }
+  
+  if ( res.length )
+    res = res.slice( 0, -1 )
+  else if ( res.hasOwnProperty( 'literal' ) )
+    res = obj.literal
+  
+  return res
+}
+</code>
+</section>
+<section><code data-type="js">
+/**
+ * Get CSL from name
+ * 
+ * @access private
+ * @method parseName
+ * 
+ * @param {String} str - string 
+ * 
+ * @return {Object} The CSL object
+ */
+var parseName = function ( str ) {
+  
+  if ( str.indexOf( ', ' ) > -1 )
+    var arr = str.split( ', ' ).reverse()
+  else
+    var arr = str.split( varRegex.name )
+  
+  var obj = {
+    given : arr[ 0 ]
+  , family: arr[ 1 ]
+  }
+  
+  return obj
+}
+
+/**
+ * Add data-* attribute to a HTML string
+ * 
+ * @access private
+ * @method getAttributedEntry
+ * 
+ * @param {String} string - HTML string
+ * @param {String} name - attribute name
+ * @param {String} value - attribute value
+ * 
+ * @return {String} HTML string with attribute
+ */
+var getAttributedEntry = function ( string, name, value ) {
+  return string.replace( /^\s*&lt;[a-z]+/, function ( match ) {
+    return `${match} data-${name}="${value}"`
+  } )
+}
+
+/**
+ * Add CSL identifiers to entry
+ * 
+ * @access private
+ * @method getPrefixedEntry
+ * 
+ * @param {String} value - HTML string
+ * @param {Number} index - ID index
+ * @param {String[]} list - ID list
+ * 
+ * @return {String} HTML string with CSL ID
+ */
+var getPrefixedEntry = function ( value, index, list ) {
+  var id = list[ index ]
+  return getAttributedEntry( value, 'csl-entry-id', id )
+}
+
+/**
+ * Generate ID
+ * 
+ * @access private
+ * @method fetchId
+ * 
+ * @param {String[]} list - old ID list
+ * @param {Number} index - current ID index
+ * @param {String} prefix - ID prefix
+ * 
+ * @return {String} CSL ID
+ */
+var fetchId = function ( list, index, prefix ) {
+  var arr = list.slice()
+    , id  = arr[ index ]
+    , del = ','
+  
+  while ( true ) {
+    arr[ index ] = id = prefix + Math.random().toString().slice( 2 )
+    
+    if (
+      typeof id === 'string' &amp;&amp;
+      ( arr.join( del ).match( `(?:^|${del})${id}(?:$|${del})` ) || [] ).length === 1
+    ) break
+  }
+  
+  return id
+}
+
+/**
+ * CSL pub type to BibTeX pub type
+ * 
+ * @access private
+ * @method fetchBibTeXType
+ * 
+ * @param {String} pubType - CSL type
+ * 
+ * @return {String} BibTeX type
+ */
+var fetchBibTeXType = function ( pubType ) {
+  
+  switch ( pubType ) {
+    case 'article':
+    case 'article-journal':
+    case 'article-magazine':
+    case 'article-newspaper':
+      return 'article';
+      break;
+    
+    case 'book':
+      return 'book';
+      break;
+    
+    case 'chapter':
+      return 'incollection';
+      break;
+    
+    case 'manuscript':
+      return 'unpublished';
+      break;
+    
+    case 'paper-conference':
+      return 'inproceedings';
+      break;
+    
+    case 'patent':
+      return 'patent';
+      break;
+    
+    case 'report':
+      return 'techreport';
+      break;
+    
+    case 'thesis':
+      return 'phdthesis'
+      break;
+    
+    case 'graphic':
+    case 'interview':
+    case 'motion_picture':
+    case 'personal_communication':
+    case 'webpage':
+      return 'misc';
+      break;
+    
+    default:
+      console.warn( 'CSL publication type not recognized: ' + pubType + '. Interpreting as "misc".' )
+      return 'misc';
+      break;
+  }
+}
+
+/**
+ * BibTeX pub type to CSL pub type
+ * 
+ * @access private
+ * @method parseBibTeXType
+ * 
+ * @param {String} pubType - BibTeX type
+ * 
+ * @return {String} CSL type
+ */
+var parseBibTeXType = function ( pubType ) {
+  switch ( pubType ) {
+    
+    case 'article':
+      return 'article-journal';
+      break;
+    
+    case 'book':
+    case 'booklet':
+    case 'manual':
+    case 'misc':
+    case 'proceedings':
+      return 'book';
+      break;
+    
+    case 'inbook':
+    case 'incollection':
+      return 'chapter';
+      break;
+    
+    case 'conference':
+    case 'inproceedings':
+      return 'paper-conference';
+      break;
+    
+    case 'online':
+      return 'webpage'
+      break;
+    
+    case 'patent':
+      return 'patent';
+      break;
+    
+    case 'phdthesis':
+    case 'mastersthesis':
+      return 'thesis';
+      break;
+    
+    case 'techreport':
+      return 'report';
+      break;
+    
+    case 'unpublished':
+      return 'manuscript';
+      break;
+    
+    default:
+      console.warn( 'BibTeX publication type not recognized: ' + pubType + '. Interpreting as "book".' )
+      return 'book';
+      break;
+  }
+}
+
+/**
+ * Get a BibTeX label from CSL data
+ * 
+ * @access private
+ * @method getBibTeXLabel
+ * 
+ * @param {CSL} src - Input CSL
+ * 
+ * @return {String} The label
+ */
+var getBibTeXLabel = function ( src ) {
+  var res = ''
+  
+  if ( src.hasOwnProperty( 'author' ) &amp;&amp; Array.isArray( src.author ) &amp;&amp; src.author.length > 0 )
+    res += src.author[ 0 ].family || src.author[ 0 ].literal
+  
+  if ( src.hasOwnProperty( 'year' ) )
+    res += src.year
+  else if ( src.issued &amp;&amp; src.issued[ 0 ] &amp;&amp; src.issued[ 0 ][ 'date-parts' ] )
+    res += src.issued[ 0 ][ 'date-parts' ][ 0 ]
+  
+  if ( src.hasOwnProperty( 'title' ) )
+    res += src.title.replace(/^(the|a|an) /i,'').split(' ')[ 0 ]
+  
+  return res
+}
+
+/**
+ * Get BibTeX-JSON from CSL(-JSON)
+ * 
+ * @access private
+ * @method getBibTeXJSON
+ * 
+ * @param {CSL} src - Input CSL
+ * 
+ * @return {Object} Output BibTeX-JSON
+ */
+var getBibTeXJSON = function ( src ) {
+  var src = JSON.parse( JSON.stringify( src ) )
+    , res = {}
+    , props = {}
+  
+  res.label = src.label || getBibTeXLabel( src )
+  res.type  = fetchBibTeXType( src.type )
+  
+  if ( src.hasOwnProperty( 'author'    ) ) props.author    = src.author.slice().map( getName ).join( ' and ' )
+  if ( src.hasOwnProperty( 'event'     ) ) props.organization = src.event
+  if ( src.hasOwnProperty( 'accessed'  ) ) props.note      = '[Online; accesed ' + getDate( src.accessed ) + ']'
+  if ( src.hasOwnProperty( 'DOI'       ) ) props.doi       = src.DOI
+  if ( src.hasOwnProperty( 'editor'    ) ) props.editor    = src.editor.slice().map( getName ).join( ' and ' )
+  if ( src.hasOwnProperty( 'ISBN'      ) ) props.isbn      = src.ISBN
+  if ( src.hasOwnProperty( 'ISSN'      ) ) props.issn      = src.ISSN
+  if ( src.hasOwnProperty( 'container-title' ) ) props.journal = src[ 'container-title' ]
+  if ( src.hasOwnProperty( 'issue'     ) ) props.issue     = src.issue.toString()
+  if ( src.hasOwnProperty( 'page'      ) ) props.pages     = src.page.replace( '-', '--' )
+  if ( src.hasOwnProperty( 'publisher-place' ) ) props.address = src[ 'publisher-place' ]
+  if ( src.hasOwnProperty( 'edition'   ) ) props.edition   = src.edition.toString()
+  if ( src.hasOwnProperty( 'publisher' ) ) props.publisher = src.publisher
+  if ( src.hasOwnProperty( 'title'     ) ) props.title     = src[ 'title' ]
+  if ( src.hasOwnProperty( 'url'       ) ) props.url       = src.url
+  if ( src.hasOwnProperty( 'volume'    ) ) props.volume    = src.volume.toString()
+  if ( src.hasOwnProperty( 'issued'    )
+    &amp;&amp; Array.isArray( src.issued )
+    &amp;&amp; src.issued[ 0 ][ 'date-parts' ].length === 3
+                                         ) props.year      = src.issued[ 0 ][ 'date-parts' ][ 0 ].toString()
+  
+  res.properties = props
+  
+  return res
+}
+
+/**
+ * Get a BibTeX (HTML) string from CSL
+ * 
+ * @access private
+ * @method getBibTeX
+ * 
+ * @param {CSL[]} src - Input CSL
+ * @param {Boolean} html - Output as HTML string (instead of plain text)
+ * 
+ * @return {String} BibTeX (HTML) string
+ */
+var getBibTeX = function ( src, html ) {
+  var res = ''
+    , dict= varHTMLDict
+  
+  if ( html )
+    res += dict.wr_start
+  
+  for ( var i = 0; i &lt; src.length; i++ ) {
+    var entry = src[ i ]
+      , bib   = getBibTeXJSON( entry )
+    
+    if ( html )
+      res += dict.en_start
+    
+    res += '@' + bib.type + '{' + bib.label + ','
+    
+    if ( html )
+      res += dict.ul_start,
+      res += dict.li_start
+    else
+      res += '\n'
+    
+    var props = Object.keys( bib.properties )
+    
+    for ( var propIndex = 0; propIndex &lt; props.length; propIndex++ ) {
+      var prop = props[ propIndex ]
+        , value= bib.properties[ prop ].replace( /[|&lt;>~^\\{}]/g, function ( match ) {
+            return varBibTeXSyntaxTokens[ match ]
+          } )
+        , del_start=
+        
+          // Number
+          value == parseInt( value ).toString() ? '' :
+          // Title or other capital-related fields
+          prop === 'title' ? '{{' :
+          // Default
+          '{'
+          
+        , del_end= del_start.replace( /{/g, '}' ).split( '' ).reverse().join( '' )
+      
+      if ( !html )
+        res += '\t'
+      
+      res += prop + '=' + del_start + value + del_end + ','
+      
+      if ( propIndex + 1 &lt; props.length ) {
+      
+        if ( html )
+          res += dict.li_end,
+          res += dict.li_start
+        
+      }
+      
+      if ( !html )
+        res += '\n'
+    }
+    
+    if ( html )
+      res += dict.li_end,
+      res += dict.ul_end
+    
+    res += '}'
+    
+    if ( html )
+      res += dict.en_end
+  }
+  
+  if ( html )
+    res += dict.wr_end
+  else
+    res += '\n'
+  
+  return res
+}
+
+/**
+ * Get a label from CSL data
+ * 
+ * @access private
+ * @method getLabel
+ * 
+ * @param {CSL} src - Input CSL
+ * 
+ * @return {String} The label
+ */
+var getLabel = function ( src ) {
+  return getBibTeXLabel( src )
+}
+
+/**
+ * Retrieve CSL locale
+ * 
+ * @access private
+ * @method fetchCSLLocale
+ * 
+ * @param {String} lang - lang code
+ * 
+ * @return {String} CSL locale
+ */
+var fetchCSLLocale = function ( lang ) {
+  return varCSLLocales[ lang ]
+}
+
+/**
+ * Retrieve CSL style
+ * 
+ * @access private
+ * @method fetchCSLStyle
+ * 
+ * @param {String} [style="apa"] - style name
+ * 
+ * @return {String} CSL style
+ */
+var fetchCSLStyle = function ( style ) {
+  return varCSLStyles.hasOwnProperty( style || '' ) ? varCSLStyles[ style ] : varCSLStyles[ 'apa' ]
+}
+
+/**
+ * @callback Cite~retrieveItem
+ * @param {String} id - Citation id
+ * @return {CSL} CSL Citation object
+ */
+
+/**
+ * @callback Cite~retrieveLocale
+ * @param {String} lang - Language code
+ * @return {String} CSL Locale
+ */
+
+/**
+ * Retrieve CSL parsing engine
+ * 
+ * @access private
+ * @method fetchCSLEngine
+ * 
+ * @param {String} style - CSL style id
+ * @param {String} lang - Language code
+ * @param {String} template - CSL XML template
+ * @param {Cite~retrieveItem} retrieveItem - Code to retreive item
+ * @param {Cite~retrieveLocale} retrieveLocale - Code to retreive locale
+ * 
+ * @return {Object} CSL Engine
+ */
+var fetchCSLEngine = function ( style, lang, template, retrieveItem, retrieveLocale ) {
+  var prop = style + '|' + lang
+    , engine
+  
+  if ( varCSLEngines.hasOwnProperty( prop ) )
+    engine = varCSLEngines[ prop ],
+    engine.sys.retrieveItem = retrieveItem
+  else
+    engine = varCSLEngines[ prop ] = new CSL.Engine( { retrieveLocale: retrieveLocale, retrieveItem: retrieveItem }, template, lang, true )
+  
+  return engine
+}
+
+/**
+ * Retrieve CSL item callback function
+ * 
+ * @access private
+ * @method fetchCSLItemCallback
+ * 
+ * @param {CSL[]} data - CSL array
+ * 
+ * @return {Cite~retrieveItem} Code to retreive item
+ */
+var fetchCSLItemCallback = function ( data ) {
+  var _data = data
+  var fetchCSLItem = function ( id ) {
+    var res
+    
+    for ( var entryIndex = 0; entryIndex &lt; _data.length; entryIndex++ ) {
+      var entry = _data[ entryIndex ]
+      
+      if ( entry.id === id )
+        res = entry
+    }
+    
+    if ( !res &amp;&amp; parseInt( id ) + 1 )
+      res = _data[ id ]
+    
+    return res
+  }
+  return fetchCSLItem
+}
+
+
+/**
+ * Fetch file
+ * 
+ * @access private
+ * @method fetchFile
+ * 
+ * @param {String} url - The input url
+ * 
+ * @return {String} The fetched string
+ */
+var fetchFile = function ( url ) {
+  var result
+    , url = typeof encodeURI === 'function' ? encodeURI( url ) : url
+  
+  try {
+    result  = request( 'GET', url ).getBody( 'utf8' )
+  } catch (e) {
+    return console.error( '[set]', 'File could not be fetched' )
+  }
+  
+  if ( result === url )
+    return console.error( '[set]', 'Infinite chaining loop detected' )
+  
+  else
+    return result
+}
+</code></section>
+</pre>

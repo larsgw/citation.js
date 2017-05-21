@@ -1,0 +1,7 @@
+body {margin:0 auto;width:60%;max-width:750px;font-family:'Helvetica Neue', Helvetica, Arial, sans-serif;}
+div, p {width:100%;}
+h1,h2,h3 {width:100%;text-align:center;}
+div.in                  {height:300px;border:1px solid #888;overflow-y:auto;margin-top:20px;background:white;font-family:monospace;white-space:pre;}
+div.in[data-type="url"] {height:2em;line-height:2em;}
+div.out {overflow-x:auto;white-space:pre-wrap;}
+fieldset {border:0 none transparent;padding-left:0;display:inline-block;}

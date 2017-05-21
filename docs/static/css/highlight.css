@@ -1,0 +1,30 @@
+/* Highlight */
+.javascript,.bibtex,.url {white-space:pre;font-family:monospace;}
+pre {background-color:#f0f0f0;overflow-x:auto;}
+  /* JavaScript/JSON */
+    .javascript span.default {font-weight:normal;color:#000000;}
+    .javascript span.important {text-decoration:underline}
+    .javascript span.key {font-weight:normal;color:#0057ae;}
+    .javascript span.function {font-weight:normal;color:#644a9b;}
+    .javascript span.native {font-weight:bold;color:#000;}
+    .javascript span.object {font-weight:normal;color:#006e28;}
+    .javascript span.comment,
+    .javascript span.comment span {font-weight:normal;color:#888;}
+    .javascript span.string ,
+    .javascript span.string span {font-weight:normal;color:#bf0303;}
+    .javascript span.digit {font-weight:normal;color:#b08000;}
+    .javascript span.normal {font-weight:normal;color:#000;}
+    .javascript span.delimiter:after,
+    .javascript span.delimiter:before {content:' '}
+  /* BibTeX */
+    .bibtex span.default {font-weight:normal;color:#000000;}
+    .bibtex span.entrytype {font-weight:bold;color:#000000;}
+    .bibtex span.label {font-weight:bold;color:#006e28;}
+    .bibtex span.property {font-weight:normal;color:#0057ae;}
+    .bibtex span.string {font-weight:normal;color:#bf0303;}
+    .bibtex span.digit {font-weight:normal;color:#b08000;}
+  /* URL */
+    .url span.protocol {color:#888;}
+    .url span.domain {color:#000}
+    .url span.path {color:#888;}
+    .url span.parameters {color:#888;}
