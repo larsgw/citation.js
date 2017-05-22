@@ -66,7 +66,7 @@
   },
   "scripts": {
     "--0--": "test",
-    "lint": "standard \"src/**/*.js\" \"test/**/*.js\" \"tools/*.js\"",
+    "lint": "standard \"src/**/*.js\" \"test/**/*.js\" \"tools/*.js\" \"bin/cmd.js\"",
     "test": "node_modules/jasmine-node/bin/jasmine-node test/citation.spec.js",
     "babel": "babel src -d lib --copy-files",
     "--1--": "build",

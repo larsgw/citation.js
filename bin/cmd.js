@@ -1,24 +1,24 @@
 #!/usr/bin/env node
 
-/** 
+/**
  * @file cmd.js
- * 
+ *
  * @projectname Citation.js
- * 
+ *
  * @author Lars Willighagen
- * @version 0.2.15
+ * @version 0.3.0-7
  * @license
- * Copyright (c) 2016 Lars Willighagen  
+ * Copyright (c) 2016-2017 Lars Willighagen
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:  
+ * furnished to do so, subject to the following conditions:
  *
  * The above copyright notice and this permission notice shall be included in all
- * copies or substantial portions of the Software.  
+ * copies or substantial portions of the Software.
  *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
@@ -29,101 +29,92 @@
  * SOFTWARE.
  */
 
-var program = require( 'commander'       )
-  , fs      = require( 'fs'              )
-  , path    = require( 'path'            )
-  , cjs     = require( '../package.json' )
-  , Cite    = require( path.join('..', cjs.main) )
+var program = require('commander')
+var fs = require('fs')
+var path = require('path')
+var cjs = require(path.join('..', 'package.json'))
+var Cite = require(path.join('..', cjs.main))
 
-console.debug = console.log
-
-/*-------- Program ---------*/
+/* -------- Program --------- */
 program
-  .version( cjs.version )
-  .usage  ( '[options]' )
-  
-  .option ( '-i, --input <path>',
-            'Input file')
-  .option ( '-u, --url <url>',
-            'Input url')
-  .option ( '-t, --text <string>',
-            'Input text')
-  
-  .option ( '-o, --output <path>',
-            'Output file (omit file extension)')
-  
-  .option ( '-R, --output-non-real',
-            'Do not output the file in its mime type, but as a string',
-            false )
-  .option ( '-f, --output-type <option>',
-            'Output structure type: string, html, json',
-            'json' )
-  .option ( '-s, --output-style <option>',
-            'Ouput scheme. A combination of --output-format json and --output-style citation-* is considered invalid. ' +
-            'Options: csl (Citation Style Lanugage JSON), bibtex, citation-* (where * is any formatting style)',
-            'csl' )
-  .option ( '-l, --output-language <option>',
-            'Output language. [RFC 5646](https://tools.ietf.org/html/rfc5646) codes',
-            'en-US' )
-  
-  .parse  ( process.argv )
+  .version(cjs.version)
+  .usage('[options]')
 
-if ( !process.argv.slice(2).length )
+  .option('-i, --input <path>',
+          'Input file')
+  .option('-t, --text <string>',
+          'Input text')
+  .option('-u, --url <string>',
+          'Deprecated in favor of -t, --text')
+
+  .option('-o, --output <path>',
+          'Output file (omit file extension). If this option is omitted, the output is written to stdout.')
+
+  .option('-R, --output-non-real',
+          'Output as a text file',
+            false)
+  .option('-f, --output-type <option>',
+          'Output structure type: string, html, json',
+          'json')
+  .option('-s, --output-style <option>',
+          'Ouput scheme. A combination of --output-format json and --output-style citation-* is considered invalid. ' +
+          'Options: csl (Citation Style Lanugage JSON), bibtex, citation-* (where * is any formatting style)',
+          'csl')
+  .option('-l, --output-language <option>',
+          'Output language. [RFC 5646](https://tools.ietf.org/html/rfc5646) codes',
+          'en-US')
+
+  .parse(process.argv)
+
+if (process.argv.length <= 2) {
   program.help()
-/*--------------------------*/
+}
+/* -------------------------- */
 
-/*-- Validating arguments --*/
-if ( !( program.input || program.url || program.text ) ) {
-  console.log( 'Please give argument input file, url or text' )
-  process.exit( 1 ) }
+/* -- Validating arguments -- */
+if (!(program.input || program.text || program.url)) {
+  throw new Error('Please give argument input file, url or text')
+}
 
-if ( !program.output ) {
-  console.log( 'Please give argument output' )
-  process.exit( 1 ) }
+if (!fs.existsSync(program.input)) {
+  throw new Error('Input file does not exist: ' + program.input)
+}
+/* -------------------------- */
 
-if ( !fs.existsSync( program.input ) && program.input ) {
-  console.log( 'Input file does not exist: ' + program.input )
-  process.exit( 1 ) }
-/*--------------------------*/
+/* ---------- Input --------- */
+var input = program.input ? fs.readFileSync(program.input, 'utf8') : program.url || program.text
+var options = {
+  format: 'string',
+  type: program.outputType,
+  style: program.outputStyle,
+  lang: program.outputLanguage
+}
+/* -------------------------- */
 
-/*---------- Input ---------*/
-var input
+/* -------- Extension ------- */
+var extension = program.outputStyle === 'bibtex' && program.outputType === 'string'
+  ? 'bib'
+  : program.outputNonReal
+  ? 'txt'
+  : {string: 'txt', html: 'html', json: 'json'}[program.outputType]
+/* -------------------------- */
 
-if ( program.input )
-  input = fs.readFileSync( program.input, 'utf8' )
-else if ( program.url || program.text )
-  input = program.url || program.text
-/*--------------------------*/
+/* --------- Output --------- */
+Cite.async(input, options, function (data) {
+  var output = data.get()
 
-/*--------- Output ---------*/
-var data = new Cite( input )
-  , options = {
-    format: 'string' ,
-    type: program.outputType,
-    style: program.outputStyle,
-    lan: program.outputLanguage
+  if (!program.outputNonReal && program.outputType === 'html') {
+    output = '<!DOCTYPE html><html><head><meta charset="UTF-8"></head><body>' + output + '</body></html>'
   }
-  , output = data.get( options )
 
-if ( !program.outputNonReal && program.outputType === 'html' )
-  output = '<!DOCTYPE html><html><head><meta charset="UTF-8"></head><body>' + output + '</body></html>'
-/*--------------------------*/
-
-/*-------- Extension -------*/
-var extension
-
-if ( program.outputStyle === 'bibtex' && program.outputType === 'string' )
-  extension = '.bib'
-
-else if ( program.outputNonReal )
-  extension = '.txt'
-
-else
-  extension = ( '.' + {
-    string: 'txt',
-    html: 'html',
-    json: 'json'
-  }[ program.outputType ] )
-/*--------------------------*/
-
-fs.writeFileSync( program.output + extension, output )
+  if (!program.output) {
+    process.stdout.write(output)
+  } else {
+    fs.writeFile(program.output + extension, output, function (err) {
+      if (err) {
+        throw err
+      }
+    })
+  }
+})
+/* -------------------------- */
