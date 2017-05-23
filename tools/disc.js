@@ -8,6 +8,8 @@ const cb = function (err, html) {
   } else {
     fs.writeFileSync('docs/disc/index.html', html)
   }
+
+  fs.unlinkSync('build/tmp/citation.js')
 }
 
 const title = '<title>Build Size Disc - Citation.js</title>'
