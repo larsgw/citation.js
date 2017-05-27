@@ -1,0 +1,39 @@
+import request from 'sync-request'
+
+/**
+ * Fetch DOI API results
+ *
+ * @access private
+ * @method fetchDoiApi
+ *
+ * @param {String} url - The input url
+ *
+ * @return {CSL} The fetched JSON
+ */
+const fetchDoiApi = function (url) {
+  try {
+    return JSON.parse(request('GET', url, {
+      headers: {
+        Accept: 'application/vnd.citationstyles.csl+json'
+      },
+      allowRedirectHeaders: ['Accept']
+    }).getBody('utf8'))
+  } catch (e) {
+    console.error('[set]', 'File could not be fetched')
+    return {}
+  }
+}
+
+/**
+ * Get CSL JSON from DOI API URLs.
+ *
+ * @access protected
+ * @method parseDoiApi
+ *
+ * @param {String|String[]} data - Wikidata DOIs
+ *
+ * @return {CSL[]} Array of CSL
+ */
+const parseDoiApi = data => [].concat(data).map(fetchDoiApi)
+
+export default parseDoiApi

@@ -68,24 +68,23 @@
   },
   "scripts": {
     "--0--": "test",
-    "lint": "standard \"src/**/*.js\" \"test/**/*.js\" \"tools/*.js\"",
     "test": "jasmine-node test/citation.spec.js",
     "babel": "babel src -d lib --copy-files",
     "--1--": "build",
-    "build": "     browserify -r ./src/index.js:citation-js -o build/citation.js      -g [ babelify --ignore=citeproc --presets [ env ] ]         && copyfiles -u 1 build/citation.js      docs/src",
-    "build-test": "browserify -e test/citation.spec.js      -o build/test.citation.js -g [ babelify --ignore=citeproc --presets [ env ] ] -t brfs && copyfiles -u 1 build/test.citation.js docs/src/",
+    "build": "     browserify -r ./src/index.js:citation-js  -o build/citation.js      -g [ babelify --ignore=citeproc --presets [ env ] ]         && copyfiles -u 1 build/citation.js      docs/src",
+    "build-test": "browserify -e test/citation.spec.js       -o build/test.citation.js -g [ babelify --ignore=citeproc --presets [ env ] ] -t brfs && copyfiles -u 1 build/test.citation.js docs/src/",
     "minify": "     uglifyjs build/citation.js      --ie8 -c -o build/citation.min.js      && copyfiles -u 1 build/citation.min.js      docs/src/",
     "minify-test": "uglifyjs build/test.citation.js --ie8 -c -o build/test.citation.min.js && copyfiles -u 1 build/test.citation.min.js docs/src/",
     "--2--": "miscs",
     "build-docs": "jsdoc ./src README.md -c docs/conf.json",
-    "build-disc": "browserify -e test/citation.spec.js      -o build/tmp/citation.js  -g [ babelify --ignore=citeproc --presets [ env ] ] -t brfs --full-paths && node tools/disc.js && rm build/tmp/*",
+    "build-disc": "browserify -e test/citation.spec.js       -o build/tmp/citation.js  -g [ babelify --ignore=citeproc --presets [ env ] ] -t brfs --full-paths && node tools/disc.js",
     "--3--": "combo",
     "build-all": "npm run build-files && npm run build-docs && npm run build-disc",
     "build-files": "npm run build && npm run build-test && npm run minify && npm run minify-test",
     "--4--": "dev",
     "dev:test": "npm run babel && npm run test",
     "dev:test-browser": "npm run babel && npm run build && npm run build-test",
-    "dev:test-all": "npm run dev:test && npm run build && npm run build-test"
+    "dev:test-all": "npm run dev:test  && npm run build && npm run build-test"
   },
   "author": "Lars Willighagen (https://larsgw.github.io)",
   "license": "MIT",
@@ -97,5 +96,5 @@
   "engines": {
     "node": ">=6.0.0"
   },
-  "homepage": "https://larsgw.github.com/citation.js/"
+  "homepage": "https://larsgw.github.io/citation.js/"
 }

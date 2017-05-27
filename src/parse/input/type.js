@@ -18,8 +18,18 @@ var parseInputType = function (input) {
       // Empty
       if (input.length === 0) {
         return 'string/empty'
+      // Only whitespace
       } else if (/^\s+$/.test(input)) {
         return 'string/whitespace'
+      // DOI API URL
+      } else if (varRegex.doi[0].test(input)) {
+        return 'api/doi'
+      // DOI ID
+      } else if (varRegex.doi[1].test(input)) {
+        return 'string/doi'
+      // DOI ID list
+      } else if (varRegex.doi[2].test(input)) {
+        return 'list/doi'
       // Wikidata ID
       } else if (varRegex.wikidata[0].test(input)) {
         return 'string/wikidata'
@@ -66,10 +76,13 @@ var parseInputType = function (input) {
         if (input.length === 0) {
           return 'array/csl'
         // Array of Wikidata IDs
-        } else if (input.filter(v => parseInputType(v) === 'string/wikidata').length === input.length) {
+        } else if (input.every(v => parseInputType(v) === 'string/wikidata')) {
           return 'array/wikidata'
+        // Array of DOI IDs
+        } else if (input.every(v => parseInputType(v) === 'string/doi')) {
+          return 'array/doi'
         // Array of CSL-JSON
-        } else if (input.filter(v => parseInputType(v) === 'object/csl').length === input.length) {
+        } else if (input.every(v => parseInputType(v) === 'object/csl')) {
           return 'array/csl'
         // Array of misc or multiple types
         } else {

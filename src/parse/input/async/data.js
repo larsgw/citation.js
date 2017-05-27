@@ -3,6 +3,7 @@ import parseInputData from '../data'
 
 import fetchFileAsync from '../../../util/fetchFileAsync'
 import parseWikidataJSONAsync from '../../wikidata/async/json'
+import parseDoiApiAsync from '../../doi/async/api'
 
 /**
  * Standardise input (internal use)
@@ -22,6 +23,9 @@ const parseInputDataAsync = async function (input, type) {
 
     case 'object/wikidata':
       return parseWikidataJSONAsync(input)
+
+    case 'api/doi':
+      return parseDoiApiAsync(input)
 
     case 'url/else':
       return fetchFileAsync(input)

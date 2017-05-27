@@ -12,7 +12,7 @@ import request from 'sync-request'
  */
 const fetchFile = function (url) {
   try {
-    return request('GET', url, {uri: url}).getBody('utf8')
+    return request('GET', url).getBody('utf8')
   } catch (e) {
     console.error('[set]', 'File could not be fetched')
     return undefined

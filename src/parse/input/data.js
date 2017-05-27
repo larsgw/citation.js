@@ -4,6 +4,8 @@ import fetchFile from '../../util/fetchFile'
 import parseInput from './chain'
 import parseWikidata from '../wikidata/list'
 import parseWikidataJSON from '../wikidata/json'
+import parseDoi from '../doi/id'
+import parseDoiApi from '../doi/api'
 import parseContentMine from '../bibjson/index'
 import parseBibTeX from '../bibtex/text'
 import { text as parseBibTxt } from '../bibtxt'
@@ -37,6 +39,18 @@ const parseInputData = function (input, type) {
 
     case 'array/wikidata':
       return parseWikidata(input.join(','))
+
+    case 'api/doi':
+      return parseDoiApi(input)
+
+    case 'string/doi':
+      return parseDoi(input)
+
+    case 'list/doi':
+      return parseDoi(input)
+
+    case 'array/doi':
+      return parseDoi(input.join('\n'))
 
     case 'url/else':
       return fetchFile(input)
