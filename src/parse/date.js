@@ -11,7 +11,7 @@
 const parseDate = function (value) {
   const date = new Date(value)
   return [{
-    'date-parts': [date.getFullYear(), date.getMonth() + 1, date.getDate()]
+    'date-parts': date.getFullYear() ? [date.getFullYear(), date.getMonth() + 1, date.getDate()] : []
   }]
 }
 

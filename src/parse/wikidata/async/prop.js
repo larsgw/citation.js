@@ -46,7 +46,7 @@ const parseWikidataPropAsync = async function (prop, value, lang) {
       break
 
     default:
-      value = value[ 0 ].value
+      value = value.length ? value[0].value : undefined
       break
   }
 
