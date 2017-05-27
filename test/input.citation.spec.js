@@ -30,6 +30,10 @@ const wikidataTestCaseOptions = {
   link: true
 }
 
+const doiTestCaseOptions = {
+  link: true
+}
+
 module.exports = {
   async: function () {
     beforeEach(start => start())
@@ -93,6 +97,20 @@ module.exports = {
 
       describe('with linked authors',
         testCaseGenerator(test.input.wd.author, 'object/wikidata', test.output.wd.author))
+    })
+
+    describe('DOI ID', testCaseGenerator(
+      test.input.doi.id, 'string/doi', test.output.doi.api[0], doiTestCaseOptions))
+
+    describe('DOI URL', testCaseGenerator(
+      test.input.doi.url, 'api/doi', test.output.doi.simple, doiTestCaseOptions))
+
+    describe('DOI ID list', function () {
+      describe('separated by spaces', testCaseGenerator(
+        test.input.doi.list.space, 'list/doi', test.output.doi.api[1], doiTestCaseOptions))
+
+      describe('separated by newlines', testCaseGenerator(
+        test.input.doi.list.newline, 'list/doi', test.output.doi.api[1], doiTestCaseOptions))
     })
 
     describe('BibTeX string', function () {
