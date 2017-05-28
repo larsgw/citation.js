@@ -63,4 +63,8 @@ function Cite (data, options) {
 
 Object.assign(Cite.prototype, log, options, set, sort, get)
 
+Cite.prototype[Symbol.iterator] = function * () {
+  yield * this.data
+}
+
 export default Cite

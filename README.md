@@ -25,6 +25,8 @@ Citation.js converts formats like BibTeX, Wikidata JSON and ContentMine JSON to 
       * [CSL Templates](#cite.out.templates)
       * [CSL Locales](#cite.out.locales)
     * [Misc](#cite.misc)
+      * [Iterator](#cite.misc.iterator)
+  * [Internal functions](#internal)
   * [Async](#async)
 * [More](#more)
   * [More Docs](#more.docs)
@@ -223,6 +225,23 @@ data.get({
 * `.undo(<number>)`: Restore the n to last version (default: `1`)
 * `.save()`: Save the current object
 * `.sort()`: Sort all entries on basis of their BibTeX label
+
+#### <a id="cite.misc.iterator" href="#cite.misc.iterator">Iterator</a>
+
+Every `Cite` instance is an Iterator, so you can loop over an instance with `for of`:
+
+```js
+const data = new Cite([{id: 1}, {id: 2}, {id: 3}])
+let array = []
+
+for (let {id} of data) {
+  array.push(id)
+}
+
+array // [1, 2, 3]
+```
+
+## <a id="cite.internal" href="#cite.internal">Internal functions</a>
 
 `Cite` holds all internal functions, too. These are documentated [here](https://larsgw.github.io/citation.js/api/global.html) and can be accessed like this:
 
