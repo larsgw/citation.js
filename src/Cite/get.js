@@ -55,10 +55,10 @@ const get = function (options) {
 
   switch ([type, styleType].join()) {
     case 'html,citation':
-      const cbLocale = locale ? () => locale : fetchCSLLocale
-      const cbItem = fetchCSLItemCallback(_data)
-      const useTemplate = template || fetchCSLStyle(styleFormat)
       const useLang = fetchCSLLocale(lang) ? lang : 'en-US'
+      const useTemplate = template || fetchCSLStyle(styleFormat)
+      const cbItem = fetchCSLItemCallback(_data)
+      const cbLocale = locale ? () => locale : fetchCSLLocale
 
       const citeproc = fetchCSLEngine(styleFormat, useLang, useTemplate, cbItem, cbLocale)
       const sortedIds = citeproc.updateItems(this.getIds())
@@ -118,10 +118,10 @@ const get = function (options) {
   if (format === 'real') {
     if (type === 'json') {
       result = JSON.parse(result)
-    } else if (document && document.createElement && type === 'html') {
-      var tmp = document.createElement('div')
+    } else if (type === 'html' && typeof document !== 'undefined' && document.createElement) {
+      const tmp = document.createElement('div')
       tmp.innerHTML = result
-      result = result.childNodes
+      result = tmp.childNodes
     }
   }
 
