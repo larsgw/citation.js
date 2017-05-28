@@ -42,7 +42,7 @@ const getJSONValueHTML = function (src) {
       return getJSONObjectHTML(src)
     }
   } else {
-    return `<span class="string">${JSON.stringify(src)}</span>`
+    return JSON.stringify(src) + ''
   }
 }
 
@@ -61,7 +61,7 @@ const getJSON = function (src) {
     const comma = index < array.length - 1 ? ',' : ''
     const props = Object.keys(entry).map((prop, index, array) => {
       const comma = index < array.length - 1 ? ',' : ''
-      return `${dict.li_start}${prop}: ${getJSONValueHTML(entry[prop])}${comma}${dict.li_end}`
+      return `${dict.li_start}"${prop}": ${getJSONValueHTML(entry[prop])}${comma}${dict.li_end}`
     }).join('')
 
     return `${dict.en_start}{${dict.ul_start}${props}${dict.ul_end}}${comma}${dict.en_end}`
