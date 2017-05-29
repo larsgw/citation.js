@@ -125,6 +125,9 @@ module.exports = {
         testCaseGenerator(test.input.bibtex.whitespace, 'string/bibtex', test.output.bibtex.whitespace))
     })
 
+    describe('BibTeX JSON', testCaseGenerator(
+      test.input.bibtex.json, 'object/bibtex', test.output.bibtex.simple))
+
     describe('Bib.TXT string', function () {
       testCaseGenerator(test.input.bibtxt.simple, 'string/bibtxt', [test.output.bibtxt])()
 
