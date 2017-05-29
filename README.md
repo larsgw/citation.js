@@ -115,7 +115,7 @@ var example = new Cite( <data>, <options> )
 ```
 
 1. In the first parameter you pass the input data. [Input types](#cite.in.type)
-2. In the second parameter you pass the [options]().
+2. In the second parameter you pass the [options](#cite.in.options).
 
 #### <a id="cite.in.type" href="#cite.in.type">Input types</a>
 Input type doesn't have to be specified. The identifiers below are used by internal functions.
@@ -125,17 +125,18 @@ Input type doesn't have to be specified. The identifiers below are used by inter
 * `list/wikidata`: List of Wikidata Entity IDs, separated by spaces, newlines or commas. Gets and parses the entity data
 * `string/wikidata`: Single Wikidata Entity ID. Gets and parses the entity data
 * `api/wikidata`: Wikidata API URL. Gets and parses the entity data
-* `json/wikidata`: Wikidata Entity data. Parses the entity data
+* `object/wikidata`: Wikidata Entity data. Parses the entity data
 
 ##### <a id="cite.in.type.bibtex" href="#cite.in.type.bibtex">BibTeX</a>
 * `string/bibtex`: [BibTeX](http://www.bibtex.org/) string. Parses the data
+* `object/bibtex`: BibTeX JSON string. Nothing special, or standardised. Parses the data
 * `string/bibtxt`: [Bib.TXT](http://bibtxt.github.io) string. Parses the data
 
 ##### <a id="cite.in.type.bibjson" href="#cite.in.type.bibjson">BibJSON</a>
-* `json/contentmine`: Actually BibJSON, all references to ContentMine will be removed when the parser is fully done. Parses the data
+* `object/contentmine`: Actually BibJSON, all references to ContentMine will be removed when the parser is fully done. Parses the data
 
 ##### <a id="cite.in.type.csl" href="#cite.in.type.csl">CSL-JSON</a>
-* `json/csl`: [CSL-JSON](https://github.com/citation-style-language/schema#csl-json-schema). Adds the data
+* `object/csl`: [CSL-JSON](https://github.com/citation-style-language/schema#csl-json-schema). Adds the data
 * `array/csl`: Array of CSL-JSON. Adds the data
 
 ##### <a id="cite.in.type.inter" href="#cite.in.type.inter">Intermediary formats</a>

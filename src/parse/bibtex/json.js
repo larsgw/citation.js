@@ -7,15 +7,15 @@ import parseBibTeXType from './type'
  * @access protected
  * @method parseBibTeXJSON
  *
- * @param {Object[]} data - The input data
+ * @param {Object|Object[]} data - The input data
  *
  * @return {CSL[]} The formatted input data
  */
 const parseBibTeXJSON = function (data) {
-  return data.map(entry => {
+  return [].concat(data).map(entry => {
     const newEntry = {}
 
-    for (var prop in entry.properties) {
+    for (let prop in entry.properties) {
       const oldValue = entry.properties[prop]
       const newValue = parseBibTeXProp(prop, oldValue)
 

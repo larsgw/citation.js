@@ -28,6 +28,7 @@ const parseBibTxtEntry = entry => {
     return {}
   } else {
     const out = {
+      type: 'book',
       label,
       properties: {}
     }

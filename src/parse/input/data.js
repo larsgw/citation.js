@@ -51,10 +51,13 @@ const parseInputData = function (input, type) {
       return parseJSON(input)
 
     case 'string/bibtex':
-      return parseBibTeXJSON(parseBibTeX(input))
+      return parseBibTeX(input)
 
     case 'string/bibtxt':
-      return parseBibTeXJSON(parseBibTxt(input))
+      return parseBibTxt(input)
+
+    case 'object/bibtex':
+      return parseBibTeXJSON(input)
 
     case 'object/wikidata':
       return parseWikidataJSON(input)

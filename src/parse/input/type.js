@@ -81,10 +81,11 @@ var parseInputType = function (input) {
         if (input.hasOwnProperty('entities')) {
           return 'object/wikidata'
         // ContentMine
-        } else if ((input.fulltext_html && Array.isArray(input.fulltext_html.value)) ||
-                   (input.fulltext_xml && Array.isArray(input.fulltext_xml.value)) ||
-                   (input.fulltext_pdf && Array.isArray(input.fulltext_pdf.value))) {
+        } else if (['fulltext_html', 'fulltext_xml', 'fulltext_pdf'].some(prop => input[prop] && Array.isArray(input[prop].value))) {
           return 'object/contentmine'
+        // BibTeX JSON
+        } else if (['type', 'label', 'properties'].every(prop => input.hasOwnProperty(prop))) {
+          return 'object/bibtex'
         // CSL-JSON
         } else {
           return 'object/csl'
