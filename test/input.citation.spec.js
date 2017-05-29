@@ -30,8 +30,13 @@ const wikidataTestCaseOptions = {
   link: true
 }
 
-const doiTestCaseOptions = {
+const doiLinkTestCaseOptions = {
   link: true
+}
+
+const doiTestCaseOptions = {
+  link: true,
+  callback: ({title}) => title
 }
 
 module.exports = {
@@ -100,17 +105,17 @@ module.exports = {
     })
 
     describe('DOI ID', testCaseGenerator(
-      test.input.doi.id, 'string/doi', test.output.doi.api[0], doiTestCaseOptions))
+      test.input.doi.id, 'string/doi', test.output.doi.api[0], doiLinkTestCaseOptions))
 
     describe('DOI URL', testCaseGenerator(
-      test.input.doi.url, 'api/doi', test.output.doi.simple, doiTestCaseOptions))
+      test.input.doi.url, 'api/doi', test.output.doi.simple.title, doiTestCaseOptions))
 
     describe('DOI ID list', function () {
       describe('separated by spaces', testCaseGenerator(
-        test.input.doi.list.space, 'list/doi', test.output.doi.api[1], doiTestCaseOptions))
+        test.input.doi.list.space, 'list/doi', test.output.doi.api[1], doiLinkTestCaseOptions))
 
       describe('separated by newlines', testCaseGenerator(
-        test.input.doi.list.newline, 'list/doi', test.output.doi.api[1], doiTestCaseOptions))
+        test.input.doi.list.newline, 'list/doi', test.output.doi.api[1], doiLinkTestCaseOptions))
     })
 
     describe('BibTeX string', function () {
