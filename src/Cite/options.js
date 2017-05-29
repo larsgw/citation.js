@@ -6,7 +6,7 @@
  * @this Cite
  *
  * @param {Object} options - The options for the output. See [input options](../#citation.cite.in.options)
- * @param {Boolean} log - Show this call in the log
+ * @param {Boolean} [log=false] - Show this call in the log
  *
  * @return {Cite} The updated parent object
  */
