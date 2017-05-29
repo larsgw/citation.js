@@ -13,3 +13,10 @@
  * @param {String} lang - Language code
  * @return {String} CSL Locale
  */
+
+/**
+ * @callback Cite~sort
+ * @param {CSL} a - element a
+ * @param {CSL} b - element b
+ * @return {Number} positive for a > b, negative for b > a, zero for a = b
+ */
