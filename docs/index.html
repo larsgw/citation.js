@@ -33,16 +33,25 @@
 
     <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
       <header class="mdl-layout__header">
-        <nav class="mdl-layout__header-row">
+        <div class="mdl-layout__header-row">
           <span class="mdl-layout-title">Citation.js</span>
           <div class="mdl-layout-spacer"></div>
-          <div class="mdl-navigation">
+          <nav class="mdl-navigation">
             <a class="mdl-navigation__link" href="https://github.com/larsgw/citation.js/tree/master#starting">Get started</a>
             <a class="mdl-navigation__link" href="demo/">Demo</a>
             <a class="mdl-navigation__link" href="api/">Docs</a>
-            <a class="mdl-navigation__link" href="test/">Build test</a>
-          </div>
-        </nav>
+            <a class="mdl-navigation__link" href="#" id="more">More</a>
+          </nav>
+          
+          <ul class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect" for="more">
+            <li class="mdl-menu__item">
+              <a target="_blank" class="mdl-navigation__link" href="test/">Build test</a>
+            </li>
+            <li class="mdl-menu__item">
+              <a target="_blank" class="mdl-navigation__link" href="disc/">Build disc</a>
+            </li>
+          </ul>
+        </div>
       </header>
       
       <div class="mdl-layout__drawer">
@@ -128,7 +137,8 @@
                   <li><a href="https://github.com/larsgw/citation.js-showdown">citation.js-showdown</a>
                       , an extension to the <a href="https://github.com/showdownjs/showdown">Showdown</a>
                       markdown parser.</li>
-                  <li>Coming soon: <b>citation.js-replacer</b>, a tool to use citation.js to format citations
+                  <li><a href="https://github.com/larsgw/citation.js-replacer">citation.js-replacer</a>
+                      , a simple HTML API for <b>Citation.js</b>, to use citation.js to format citations
                       on your page as easy as possible.</li>
                 </ul>
               </div>
