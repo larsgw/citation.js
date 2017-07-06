@@ -76,7 +76,7 @@ if (!(program.input || program.text || program.url)) {
   throw new Error('Please give argument input file, url or text')
 }
 
-if (!fs.existsSync(program.input)) {
+if (program.input && !fs.existsSync(program.input)) {
   throw new Error('Input file does not exist: ' + program.input)
 }
 /* -------------------------- */
