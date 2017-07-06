@@ -59,7 +59,7 @@ const parseWikidataPropAsync = async function (prop, value, lang) {
       rProp = 'authorQ'
       rValue = await Promise.all(value.map(async function ({value, qualifiers}) {
         return [
-          parseName(await fetchWikidataLabelAsync(value, lang)[0]),
+          parseName((await fetchWikidataLabelAsync(value, lang))[0]),
           parseWikidataP1545(qualifiers)
         ]
       }))
@@ -108,7 +108,7 @@ const parseWikidataPropAsync = async function (prop, value, lang) {
     // Journal
     case 'P1433':
       rProp = 'container-title'
-      rValue = await fetchWikidataLabelAsync(value, lang)[0]
+      rValue = (await fetchWikidataLabelAsync(value, lang))[0]
       break
 
     // Pages

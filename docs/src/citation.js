@@ -56,7 +56,7 @@ define(String.prototype, "padRight", "".padEnd);
  *     <http://www.gnu.org/licenses/> respectively.
  */
 var CSL = {
-    PROCESSOR_VERSION: "1.1.161",
+    PROCESSOR_VERSION: "1.1.168",
     CONDITION_LEVEL_TOP: 1,
     CONDITION_LEVEL_BOTTOM: 2,
     PLAIN_HYPHEN_REGEX: /(?:[^\\]-|\u2013)/,
@@ -3829,6 +3829,10 @@ CSL.Output.Queue.prototype.append = function (str, tokname, notSerious, ignorePr
         this.state.parallel.AppendBlobPointer(curr);
     }
     if ("string" === typeof str) {
+        if ("string" === typeof blob.blobs && [':', '!', '?', '.', ',', ';'].indexOf(blob.blobs.slice(0, 1)) > -1) {
+            blob.strings.prefix = blob.strings.prefix + blob.blobs.slice(0, 1);
+            blob.blobs = blob.blobs.slice(1);
+        }
         if (blob.strings["text-case"]) {
             blob.blobs = CSL.Output.Formatters[blob.strings["text-case"]](this.state, str);
         }
@@ -8791,11 +8795,11 @@ CSL.NameOutput.prototype._runDisambigNames = function (lst, pos) {
         }
         chk = this.state.tmp.disambig_settings.givens[pos][i];
         if ("undefined" === typeof chk) {
-            myform = this.state.inheritOpt(this.name, "form", "name-form", "long");
+            myform = this.state.inheritOpt(this.name, "form", "name-form");
             param = this.state.registry.namereg.evalname("" + this.Item.id, lst[i], i, 0, myform, myinitials);
             this.state.tmp.disambig_settings.givens[pos].push(param);
         }
-        myform = this.state.inheritOpt(this.name, "form", "name-form", "long");
+        myform = this.state.inheritOpt(this.name, "form", "name-form");
         paramx = this.state.registry.namereg.evalname("" + this.Item.id, lst[i], i, 0, myform, myinitials);
         if (this.state.tmp.disambig_request) {
             var val = this.state.tmp.disambig_settings.givens[pos][i];
@@ -8807,7 +8811,7 @@ CSL.NameOutput.prototype._runDisambigNames = function (lst, pos) {
             }
             param = val;
             if (this.state.opt["disambiguate-add-givenname"] && lst[i].given) {
-                param = this.state.registry.namereg.evalname("" + this.Item.id, lst[i], i, param, this.state.inheritOpt(this.name, "form", "name-form", "long"), this.state.inheritOpt(this.name, "initialize-with"));
+                param = this.state.registry.namereg.evalname("" + this.Item.id, lst[i], i, param, this.state.inheritOpt(this.name, "form", "name-form"), this.state.inheritOpt(this.name, "initialize-with"));
             }
         } else {
             param = paramx;
@@ -14644,19 +14648,32 @@ CSL.Util.FlipFlopper = function(state) {
         }
     }
     function _doppelString(str) {
+        var forcedSpaces = [];
         str = str.replace(/(<span)\s+(style=\"font-variant:)\s*(small-caps);?\"[^>]*(>)/g, "$1 $2$3;\"$4");
         str = str.replace(/(<span)\s+(class=\"no(?:case|decor)\")[^>]*(>)/g, "$1 $2$3");
         var match = str.match(_tagRex.matchAll);
         if (!match) {
             return {
                 tags: [],
-                strings: [str]
+                strings: [str],
+                forcedSpaces: []
             };
         }
         var split = str.split(_tagRex.splitAll);
+        for (var i=0,ilen=match.length-1;i<ilen;i++) {
+            if (_nestingData[match[i]]) {
+                if (split[i+1] === "" && ["\"", "'"].indexOf(match[i+1]) > -1) {
+                    match[i+1] = " " + match[i+1]
+                    forcedSpaces.push(true);
+                } else {
+                    forcedSpaces.push(false);
+                }
+            }
+        }
         return {
             tags: match,
-            strings: split
+            strings: split,
+            forcedSpaces: forcedSpaces
         }
     }
     function _undoppelString(obj) {
@@ -14722,7 +14739,7 @@ CSL.Util.FlipFlopper = function(state) {
         }
         return false;
     }
-    function _undoppelToQueue(blob, doppel) {
+    function _undoppelToQueue(blob, doppel, leadingSpace) {
         var TOP = blob;
         var firstString = true;
         var tagReg = new _TagReg(blob);
@@ -14730,7 +14747,7 @@ CSL.Util.FlipFlopper = function(state) {
         function Stack (blob) {
             this.stack = [blob];
             this.latest = blob;
-            this.addStyling = function(str, decor) {
+            this.addStyling = function(str, decor, forcedSpace) {
                 if (firstString) {
                     if (str.slice(0, 1) === " ") {
                         str = str.slice(1);
@@ -14800,7 +14817,11 @@ CSL.Util.FlipFlopper = function(state) {
         };
         var stack = new Stack(blob);
         if (doppel.strings.length) {
-            stack.addStyling(doppel.strings[0]);
+            var str = doppel.strings[0];
+            if (leadingSpace) {
+                str = " " + str;
+            }
+            stack.addStyling(str);
         }
         for (var i=0,ilen=doppel.tags.length;i<ilen;i++) {
             var tag = doppel.tags[i];
@@ -14816,7 +14837,12 @@ CSL.Util.FlipFlopper = function(state) {
         }
     }
     function processTags(blob) {
-        var str = " " + blob.blobs;
+        var str = blob.blobs;
+        var leadingSpace = false;
+        if (str.slice(0, 1) === " " && !str.match(/^\s+[\'\"]/)) {
+            leadingSpace = true;
+        }
+        var str = " " + str;
         var doppel = _doppelString(str);
         if (doppel.tags.length === 0) return;
         var quoteFormSeen = false;
@@ -14841,7 +14867,11 @@ CSL.Util.FlipFlopper = function(state) {
                                 doppel.strings[i+1] = "\u2019" + doppel.strings[i+1];
                                 doppel.tags[i] = "";
                             } else {
-                                doppel.strings[tagInfo.fixtag+1] = doppel.tags[tagInfo.fixtag] + doppel.strings[tagInfo.fixtag+1];
+                                var failedTag = doppel.tags[tagInfo.fixtag];
+                                if (doppel.forcedSpaces[tagInfo.fixtag-1]) {
+                                    failedTag = failedTag.slice(1);
+                                }
+                                doppel.strings[tagInfo.fixtag+1] = failedTag + doppel.strings[tagInfo.fixtag+1];
                                 doppel.tags[tagInfo.fixtag] = "";
                             }
                             if (_nestingState.length > 0) {
@@ -14871,11 +14901,10 @@ CSL.Util.FlipFlopper = function(state) {
             var tag = doppel.tags[tagPos];
             if (tag === " \'" || tag === "\'") {
                 doppel.strings[tagPos+1] = " \u2019" + doppel.strings[tagPos+1];
-                doppel.tags[tagPos] = "";
             } else {
                 doppel.strings[tagPos+1] = doppel.tags[tagPos] + doppel.strings[tagPos+1];
-                doppel.tags[tagPos] = "";
             }
+            doppel.tags[tagPos] = "";
             _nestingState.pop();
         }
         for (var i=doppel.tags.length-1;i>-1;i--) {
@@ -14887,15 +14916,18 @@ CSL.Util.FlipFlopper = function(state) {
         }
         for (var i=0,ilen=doppel.tags.length;i<ilen;i++) {
             var tag = doppel.tags[i];
-            if ([" \"", " \'", "(\""].indexOf(tag) > -1) {
+            var forcedSpace = doppel.forcedSpaces[i-1];
+            if ([" \"", " \'", "(\"", "(\'"].indexOf(tag) > -1) {
                 if (!quoteFormSeen) {
                     _setOuterQuoteForm(tag);
                     quoteFormSeen = true;
                 }
-                doppel.strings[i] += tag.slice(0, 1);
+                if (!forcedSpace) {
+                    doppel.strings[i] += tag.slice(0, 1);
+                }
             }
         }
-        _undoppelToQueue(blob, doppel);
+        _undoppelToQueue(blob, doppel, leadingSpace);
     }
 }
 CSL.Output.Formatters = new function () {
@@ -14906,7 +14938,7 @@ CSL.Output.Formatters = new function () {
     this.title = title;
     this["capitalize-first"] = capitalizeFirst;
     this["capitalize-all"] = capitalizeAll;
-    var rexStr = "(?:\u2018|\u2019|\u201C|\u201D| \"| \'|\"|\'|[-\/.,;?!:]|\\[|\\]|\\(|\\)|<span style=\"font-variant: small-caps;\">|<span class=\"no(?:case|decor)\">|<\/span>|<\/?(?:i|sc|b|sub|sup)>)";
+    var rexStr = "(?:\u2018|\u2019|\u201C|\u201D| \"| \'|\"|\'|[-\–\—\/.,;?!:]|\\[|\\]|\\(|\\)|<span style=\"font-variant: small-caps;\">|<span class=\"no(?:case|decor)\">|<\/span>|<\/?(?:i|sc|b|sub|sup)>)";
     tagDoppel = new CSL.Doppeler(rexStr, function(str) {
         return str.replace(/(<span)\s+(class=\"no(?:case|decor)\")[^>]*(>)/g, "$1 $2$3").replace(/(<span)\s+(style=\"font-variant:)\s*(small-caps);?(\")[^>]*(>)/g, "$1 $2 $3;$4$5");
     });
@@ -26907,7 +26939,7 @@ var encodeCharacter = function encodeCharacter(c) {
 },{}],331:[function(require,module,exports){
 module.exports={
   "name": "citation-js",
-  "version": "0.3.0-6",
+  "version": "0.3.0-9",
   "description": "Citation.js converts formats like BibTeX, Wikidata JSON and ContentMine JSON to CSL-JSON to convert to other formats like APA, Vancouver and back to BibTeX.",
   "main": "lib/index.js",
   "directories": {
@@ -26947,6 +26979,8 @@ module.exports={
     "babelify": "^7.3.0",
     "brfs": "^1.4.3",
     "browserify": "^14.3.0",
+    "copyfiles": "^1.2.0",
+    "disc": "^1.3.2",
     "jasmine-node": "^1.14.5",
     "jsdoc": "^3.4.2",
     "jsdoc-babel": "^0.3.0",
@@ -26974,13 +27008,13 @@ module.exports={
   "scripts": {
     "--0--": "test",
     "lint": "standard \"src/**/*.js\" \"test/**/*.js\" \"tools/*.js\"",
-    "test": "node_modules/jasmine-node/bin/jasmine-node test/citation.spec.js",
+    "test": "jasmine-node test/citation.spec.js",
     "babel": "babel src -d lib --copy-files",
     "--1--": "build",
-    "build": "     browserify -r ./src/index.js:citation-js -o build/citation.js      -g [ babelify --ignore=citeproc --presets [ env ] ]         && cp build/citation.js      docs/src/citation.js",
-    "build-test": "browserify -e test/citation.spec.js      -o build/test.citation.js -g [ babelify --ignore=citeproc --presets [ env ] ] -t brfs && cp build/test.citation.js docs/src/test.citation.js",
-    "minify": "     uglifyjs build/citation.js      --ie8 -c -o build/citation.min.js      && cp build/citation.min.js      docs/src/citation.min.js",
-    "minify-test": "uglifyjs build/test.citation.js --ie8 -c -o build/test.citation.min.js && cp build/test.citation.min.js docs/src/test.citation.min.js",
+    "build": "     browserify -r ./src/index.js:citation-js -o build/citation.js      -g [ babelify --ignore=citeproc --presets [ env ] ]         && copyfiles -u 1 build/citation.js      docs/src",
+    "build-test": "browserify -e test/citation.spec.js      -o build/test.citation.js -g [ babelify --ignore=citeproc --presets [ env ] ] -t brfs && copyfiles -u 1 build/test.citation.js docs/src/",
+    "minify": "     uglifyjs build/citation.js      --ie8 -c -o build/citation.min.js      && copyfiles -u 1 build/citation.min.js      docs/src/",
+    "minify-test": "uglifyjs build/test.citation.js --ie8 -c -o build/test.citation.min.js && copyfiles -u 1 build/test.citation.min.js docs/src/",
     "--2--": "miscs",
     "build-docs": "jsdoc ./src README.md -c docs/conf.json",
     "build-disc": "browserify -e test/citation.spec.js      -o build/tmp/citation.js  -g [ babelify --ignore=citeproc --presets [ env ] ] -t brfs --full-paths && node tools/disc.js && rm build/tmp/*",
@@ -27316,12 +27350,12 @@ var get = function get(options) {
 
   switch ([type, styleType].join()) {
     case 'html,citation':
+      var useLang = (0, _locales2.default)(lang) ? lang : 'en-US';
+      var useTemplate = template || (0, _styles2.default)(styleFormat);
+      var cbItem = (0, _items2.default)(_data);
       var cbLocale = locale ? function () {
         return locale;
       } : _locales2.default;
-      var cbItem = (0, _items2.default)(_data);
-      var useTemplate = template || (0, _styles2.default)(styleFormat);
-      var useLang = (0, _locales2.default)(lang) ? lang : 'en-US';
 
       var citeproc = (0, _engines2.default)(styleFormat, useLang, useTemplate, cbItem, cbLocale);
       var sortedIds = citeproc.updateItems(this.getIds());
@@ -27389,10 +27423,10 @@ var get = function get(options) {
   if (format === 'real') {
     if (type === 'json') {
       result = JSON.parse(result);
-    } else if (document && document.createElement && type === 'html') {
+    } else if (type === 'html' && typeof document !== 'undefined' && document.createElement) {
       var tmp = document.createElement('div');
       tmp.innerHTML = result;
-      result = result.childNodes;
+      result = tmp.firstChild;
     }
   }
 
@@ -27489,6 +27523,21 @@ function Cite(data, options) {
 }
 
 Object.assign(Cite.prototype, log, options, set, sort, get);
+
+Cite.prototype[Symbol.iterator] = regeneratorRuntime.mark(function _callee() {
+  return regeneratorRuntime.wrap(function _callee$(_context) {
+    while (1) {
+      switch (_context.prev = _context.next) {
+        case 0:
+          return _context.delegateYield(this.data, 't0', 1);
+
+        case 1:
+        case 'end':
+          return _context.stop();
+      }
+    }
+  }, _callee, this);
+});
 
 exports.default = Cite;
 
@@ -27612,7 +27661,7 @@ Object.defineProperty(exports, "__esModule", {
  * @this Cite
  *
  * @param {Object} options - The options for the output. See [input options](../#citation.cite.in.options)
- * @param {Boolean} log - Show this call in the log
+ * @param {Boolean} [log=false] - Show this call in the log
  *
  * @return {Cite} The updated parent object
  */
@@ -27654,7 +27703,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
  * @this Cite
  *
  * @param {String|CSL|Object|String[]|CSL[]|Object[]} data - The data to add to your object
- * @param {Boolean} log - Show this call in the log
+ * @param {Boolean} [log=false] - Show this call in the log
  *
  * @return {Cite} The updated parent object
  */
@@ -27684,7 +27733,7 @@ var add = function add(data, log) {
  * @this Cite
  *
  * @param {String|CSL|Object|String[]|CSL[]|Object[]} data - The data to replace the data in your object
- * @param {Boolean} log - Show this call in the log
+ * @param {Boolean} [log=false] - Show this call in the log
  *
  * @return {Cite} The updated parent object
  */
@@ -27706,7 +27755,7 @@ var set = function set(data, log) {
  * @memberof Cite
  * @this Cite
  *
- * @param {Boolean} log - Show this call in the log
+ * @param {Boolean} [log=false] - Show this call in the log
  *
  * @return {Cite} The updated, empty parent object (except the log, the log lives)
  */
@@ -27737,37 +27786,136 @@ var _label = require('../get/label');
 
 var _label2 = _interopRequireDefault(_label);
 
+var _name = require('../get/name');
+
+var _name2 = _interopRequireDefault(_name);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
+
 /**
- * Sort the datasets alphabetically, on basis of it's BibTeX label
+ * Get value for comparing
+ *
+ * @access private
+ * @method getComparisonValue
+ *
+ * @param {CSL} obj - obj
+ * @param {String} prop - The prop in question
+ * @param {Boolean} label - Prop is label
+ *
+ * @return {String|Number} something to compare
+ */
+var getComparisonValue = function getComparisonValue(obj, prop) {
+  var label = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : prop === 'label';
+
+  var value = label ? (0, _label2.default)(obj) : obj[prop];
+
+  switch (prop) {
+    case 'author':
+    case 'editor':
+      return value.map(function (name) {
+        return name.literal || name.family || (0, _name2.default)(name);
+      });
+
+    case 'accessed':
+    case 'issued':
+      return value[0]['date-parts'];
+
+    case 'page':
+      return value.split('-').map(function (num) {
+        return parseInt(num);
+      });
+
+    case 'edition':
+    case 'issue':
+    case 'volume':
+      value = parseInt(value);
+      return !isNaN(value) ? value : -Infinity;
+
+    default:
+      return value || -Infinity;
+  }
+};
+
+/**
+ * Compares props
+ *
+ * @access private
+ * @method compareProp
+ *
+ * @param {CSL} a - Object a
+ * @param {CSL} b - Object b
+ * @param {String} prop - The prop in question. Prepend ! to sort the other way around.
+ * @param {Boolean} flip - Override flip
+ *
+ * @return {Number} positive for a > b, negative for b > a, zero for a = b (flips if prop has !)
+ */
+var compareProp = function compareProp(a, b, prop) {
+  var flip = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : /^!/.test(prop);
+
+  prop = prop.replace(/^!/, '');
+  var valueA = getComparisonValue(a, prop);
+  var valueB = getComparisonValue(b, prop);
+
+  return valueA === valueB ? 0 : flip !== valueA > valueB ? 1 : -1;
+};
+
+/**
+ * Generates a sorting callback based on props.
+ *
+ * @access private
+ * @method getSortCallback
+ *
+ * @param {...String} props - How to sort
+ *
+ * @return {Cite~sort} sorting callback
+ */
+var getSortCallback = function getSortCallback() {
+  for (var _len = arguments.length, props = Array(_len), _key = 0; _key < _len; _key++) {
+    props[_key] = arguments[_key];
+  }
+
+  return function (a, b) {
+    var keys = props.slice();
+    var output = 0;
+
+    while (!output && keys.length) {
+      output = compareProp(a, b, keys.shift());
+    }
+
+    return output;
+  };
+};
+
+/**
+ * Sort the dataset
  *
  * @method sort
  * @memberof Cite
  * @this Cite
  *
- * @param {Boolean} log - Show this call in the log
+ * @param {Cite~sort|String[]} [method=[]] - How to sort
+ * @param {Boolean} [log=false] - Show this call in the log
  *
  * @return {Cite} The updated parent object
  */
-var sort = function sort(log) {
+var sort = function sort() {
+  var method = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
+  var log = arguments[1];
+
   if (log) {
     this.save();
   }
 
-  this.data.sort(function (a, b) {
-    var labelA = (0, _label2.default)(a);
-    var labelB = (0, _label2.default)(b);
-
-    return labelA !== labelB ? labelA > labelB ? 1 : -1 : 0;
-  });
+  this.data.sort(typeof method === 'function' ? method : getSortCallback.apply(undefined, _toConsumableArray(method).concat(['label'])));
 
   return this;
 };
 
 exports.sort = sort;
 
-},{"../get/label":354}],343:[function(require,module,exports){
+},{"../get/label":354,"../get/name":355}],343:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -27926,59 +28074,60 @@ var getBibTeXJSON = function getBibTeXJSON(src) {
     label: src.label || (0, _label2.default)(src),
     type: (0, _type2.default)(src.type)
   };
+
   var props = {};
 
-  if (src.hasOwnProperty('author')) {
+  if (Array.isArray(src.author)) {
     props.author = src.author.map(_name2.default).join(' and ');
   }
-  if (src.hasOwnProperty('event')) {
+  if (src.event) {
     props.organization = src.event;
   }
-  if (src.hasOwnProperty('accessed')) {
+  if (Array.isArray(src.accessed)) {
     props.note = '[Online; accesed ' + (0, _date2.default)(src.accessed) + ']';
   }
-  if (src.hasOwnProperty('DOI')) {
+  if (src.DOI) {
     props.doi = src.DOI;
   }
-  if (src.hasOwnProperty('editor')) {
+  if (Array.isArray(src.editor)) {
     props.editor = src.editor.map(_name2.default).join(' and ');
   }
-  if (src.hasOwnProperty('ISBN')) {
+  if (src.ISBN) {
     props.isbn = src.ISBN;
   }
-  if (src.hasOwnProperty('ISSN')) {
+  if (src.ISSN) {
     props.issn = src.ISSN;
   }
-  if (src.hasOwnProperty('container-title')) {
+  if (src['container-title']) {
     props.journal = src['container-title'];
   }
-  if (src.hasOwnProperty('issue')) {
+  if (src.issue || src.issue === 0) {
     props.issue = src.issue.toString();
   }
-  if (src.hasOwnProperty('page')) {
+  if (typeof src.page === 'string') {
     props.pages = src.page.replace('-', '--');
   }
-  if (src.hasOwnProperty('publisher-place')) {
+  if (src['publisher-place']) {
     props.address = src['publisher-place'];
   }
-  if (src.hasOwnProperty('edition')) {
+  if (src.edition || src.edition === 0) {
     props.edition = src.edition.toString();
   }
-  if (src.hasOwnProperty('publisher')) {
+  if (src.publisher) {
     props.publisher = src.publisher;
   }
-  if (src.hasOwnProperty('title')) {
+  if (src.title) {
     props.title = src['title'];
   }
-  if (src.hasOwnProperty('url')) {
+  if (src.url) {
     props.url = src.url;
   }
-  if (src.hasOwnProperty('volume')) {
+  if (src.volume || src.volume === 0) {
     props.volume = src.volume.toString();
   }
   if (Array.isArray(src.issued) && src.issued[0]['date-parts'].length === 3) {
     props.year = src.issued[0]['date-parts'][0].toString();
-  } else if (src.hasOwnProperty('year')) {
+  } else if (src.year || src.year === 0) {
     props.year = src.year;
   }
 
@@ -28394,7 +28543,7 @@ var getJSONValueHTML = function getJSONValueHTML(src) {
       return getJSONObjectHTML(src);
     }
   } else {
-    return '<span class="string">' + JSON.stringify(src) + '</span>';
+    return JSON.stringify(src) + '';
   }
 };
 
@@ -28413,7 +28562,7 @@ var getJSON = function getJSON(src) {
     var comma = index < array.length - 1 ? ',' : '';
     var props = Object.keys(entry).map(function (prop, index, array) {
       var comma = index < array.length - 1 ? ',' : '';
-      return '' + _dict.htmlDict.li_start + prop + ': ' + getJSONValueHTML(entry[prop]) + comma + _dict.htmlDict.li_end;
+      return _dict.htmlDict.li_start + '"' + prop + '": ' + getJSONValueHTML(entry[prop]) + comma + _dict.htmlDict.li_end;
     }).join('');
 
     return _dict.htmlDict.en_start + '{' + _dict.htmlDict.ul_start + props + _dict.htmlDict.ul_end + '}' + comma + _dict.htmlDict.en_end;
@@ -28591,12 +28740,12 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
  * @access protected
  * @method parseBibTeXJSON
  *
- * @param {Object[]} data - The input data
+ * @param {Object|Object[]} data - The input data
  *
  * @return {CSL[]} The formatted input data
  */
 var parseBibTeXJSON = function parseBibTeXJSON(data) {
-  return data.map(function (entry) {
+  return [].concat(data).map(function (entry) {
     var newEntry = {};
 
     for (var prop in entry.properties) {
@@ -29268,6 +29417,7 @@ var parseBibTxtEntry = function parseBibTxtEntry(entry) {
     return {};
   } else {
     var out = {
+      type: 'book',
       label: label,
       properties: {}
     };
@@ -29329,7 +29479,7 @@ Object.defineProperty(exports, "__esModule", {
 var parseDate = function parseDate(value) {
   var date = new Date(value);
   return [{
-    'date-parts': [date.getFullYear(), date.getMonth() + 1, date.getDate()]
+    'date-parts': date.getFullYear() ? [date.getFullYear(), date.getMonth() + 1, date.getDate()] : []
   }];
 };
 
@@ -29835,10 +29985,13 @@ var parseInputData = function parseInputData(input, type) {
       return (0, _json6.default)(input);
 
     case 'string/bibtex':
-      return (0, _json4.default)((0, _text2.default)(input));
+      return (0, _text2.default)(input);
 
     case 'string/bibtxt':
-      return (0, _json4.default)((0, _bibtxt.text)(input));
+      return (0, _bibtxt.text)(input);
+
+    case 'object/bibtex':
+      return (0, _json4.default)(input);
 
     case 'object/wikidata':
       return (0, _json2.default)(input);
@@ -30006,8 +30159,15 @@ var parseInputType = function parseInputType(input) {
         if (input.hasOwnProperty('entities')) {
           return 'object/wikidata';
           // ContentMine
-        } else if (input.fulltext_html && Array.isArray(input.fulltext_html.value) || input.fulltext_xml && Array.isArray(input.fulltext_xml.value) || input.fulltext_pdf && Array.isArray(input.fulltext_pdf.value)) {
+        } else if (['fulltext_html', 'fulltext_xml', 'fulltext_pdf'].some(function (prop) {
+          return input[prop] && Array.isArray(input[prop].value);
+        })) {
           return 'object/contentmine';
+          // BibTeX JSON
+        } else if (['type', 'label', 'properties'].every(function (prop) {
+          return input.hasOwnProperty(prop);
+        })) {
+          return 'object/bibtex';
           // CSL-JSON
         } else {
           return 'object/csl';
@@ -30398,7 +30558,7 @@ var parseWikidataPropAsync = function () {
             return _context3.abrupt('break', 7);
 
           case 5:
-            value = value[0].value;
+            value = value.length ? value[0].value : undefined;
             return _context3.abrupt('break', 7);
 
           case 7:
@@ -30421,10 +30581,10 @@ var parseWikidataPropAsync = function () {
                       case 0:
                         _context2.t0 = _name2.default;
                         _context2.next = 3;
-                        return fetchWikidataLabelAsync(value, lang)[0];
+                        return fetchWikidataLabelAsync(value, lang);
 
                       case 3:
-                        _context2.t1 = _context2.sent;
+                        _context2.t1 = _context2.sent[0];
                         _context2.t2 = (0, _context2.t0)(_context2.t1);
                         _context2.t3 = parseWikidataP1545(qualifiers);
                         return _context2.abrupt('return', [_context2.t2, _context2.t3]);
@@ -30485,10 +30645,10 @@ var parseWikidataPropAsync = function () {
           case 33:
             rProp = 'container-title';
             _context3.next = 36;
-            return fetchWikidataLabelAsync(value, lang)[0];
+            return fetchWikidataLabelAsync(value, lang);
 
           case 36:
-            rValue = _context3.sent;
+            rValue = _context3.sent[0];
             return _context3.abrupt('break', 54);
 
           case 38:
@@ -30777,7 +30937,7 @@ var parseWikidataProp = function parseWikidataProp(prop, value, lang) {
       break;
 
     default:
-      value = value[0].value;
+      value = value.length ? value[0].value : undefined;
       break;
   }
 
