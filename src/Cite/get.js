@@ -121,7 +121,7 @@ const get = function (options) {
     } else if (type === 'html' && typeof document !== 'undefined' && document.createElement) {
       const tmp = document.createElement('div')
       tmp.innerHTML = result
-      result = tmp.childNodes
+      result = tmp.firstChild
     }
   }
 

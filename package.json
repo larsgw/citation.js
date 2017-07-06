@@ -1,6 +1,6 @@
 {
   "name": "citation-js",
-  "version": "0.3.0-7",
+  "version": "0.3.0-8",
   "description": "Citation.js converts formats like BibTeX, Wikidata JSON and ContentMine JSON to CSL-JSON to convert to other formats like APA, Vancouver and back to BibTeX.",
   "main": "lib/index.js",
   "directories": {
@@ -68,16 +68,10 @@
   },
   "scripts": {
     "--0--": "test",
-    "lint": "standard \"src/**/*.js\" \"test/**/*.js\" \"tools/*.js\" \"bin/cmd.js\"",
-    "test": "node_modules/jasmine-node/bin/jasmine-node test/citation.spec.js",
     "lint": "standard \"src/**/*.js\" \"test/**/*.js\" \"tools/*.js\"",
     "test": "jasmine-node test/citation.spec.js",
     "babel": "babel src -d lib --copy-files",
     "--1--": "build",
-    "build": "     browserify -r ./src/index.js:citation-js -o build/citation.js      -g [ babelify --ignore=citeproc --presets [ env ] ]         && cp build/citation.js      docs/src/citation.js",
-    "build-test": "browserify -e test/citation.spec.js      -o build/test.citation.js -g [ babelify --ignore=citeproc --presets [ env ] ] -t brfs && cp build/test.citation.js docs/src/test.citation.js",
-    "minify": "     uglifyjs build/citation.js      --ie8 -c -o build/citation.min.js      && cp build/citation.min.js      docs/src/citation.min.js",
-    "minify-test": "uglifyjs build/test.citation.js --ie8 -c -o build/test.citation.min.js && cp build/test.citation.min.js docs/src/test.citation.min.js",
     "build": "     browserify -r ./src/index.js:citation-js -o build/citation.js      -g [ babelify --ignore=citeproc --presets [ env ] ]         && copyfiles -u 1 build/citation.js      docs/src",
     "build-test": "browserify -e test/citation.spec.js      -o build/test.citation.js -g [ babelify --ignore=citeproc --presets [ env ] ] -t brfs && copyfiles -u 1 build/test.citation.js docs/src/",
     "minify": "     uglifyjs build/citation.js      --ie8 -c -o build/citation.min.js      && copyfiles -u 1 build/citation.min.js      docs/src/",
