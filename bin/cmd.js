@@ -35,20 +35,19 @@ var path = require('path')
 var cjs = require(path.join('..', 'package.json'))
 var Cite = require(path.join('..', cjs.main))
 
-/* -------- Program --------- */
 program
   .version(cjs.version)
   .usage('[options]')
 
   .option('-i, --input <path>',
-          'Input file')
+          'Input file. If all input options are omitted, it uses stdin')
   .option('-t, --text <string>',
-          'Input text')
+          'Input text. If all input options are omitted, it uses stdin')
   .option('-u, --url <string>',
-          'Deprecated in favor of -t, --text')
+          'Deprecated in favor of -t, --text. If all input options are omitted, it uses stdin')
 
   .option('-o, --output <path>',
-          'Output file (omit file extension). If this option is omitted, the output is written to stdout.')
+          'Output file (omit file extension). If this option is omitted, the output is written to stdout')
 
   .option('-R, --output-non-real',
           'Output as a text file',
@@ -69,38 +68,25 @@ program
 if (process.argv.length <= 2) {
   program.help()
 }
-/* -------------------------- */
-
-/* -- Validating arguments -- */
-if (!(program.input || program.text || program.url)) {
-  throw new Error('Please give argument input file, url or text')
-}
 
 if (program.input && !fs.existsSync(program.input)) {
   throw new Error('Input file does not exist: ' + program.input)
 }
-/* -------------------------- */
 
-/* ---------- Input --------- */
-var input = program.input ? fs.readFileSync(program.input, 'utf8') : program.url || program.text
 var options = {
   format: 'string',
   type: program.outputType,
   style: program.outputStyle,
   lang: program.outputLanguage
 }
-/* -------------------------- */
 
-/* -------- Extension ------- */
 var extension = program.outputStyle === 'bibtex' && program.outputType === 'string'
   ? 'bib'
   : program.outputNonReal
   ? 'txt'
   : {string: 'txt', html: 'html', json: 'json'}[program.outputType]
-/* -------------------------- */
 
-/* --------- Output --------- */
-Cite.async(input, options, function (data) {
+var saveOutput = function (data) {
   var output = data.get()
 
   if (!program.outputNonReal && program.outputType === 'html') {
@@ -116,5 +102,22 @@ Cite.async(input, options, function (data) {
       }
     })
   }
-})
-/* -------------------------- */
+}
+
+if (program.input || program.text || program.url) {
+  var input = program.input ? fs.readFileSync(program.input, 'utf8') : program.url || program.text
+  Cite.async(input, options, saveOutput)
+} else {
+  var input = ''
+
+  process.stdin.setEncoding('utf8')
+  process.stdin.on('readable', function () {
+    var chunk = process.stdin.read()
+    if (chunk !== null) {
+      input += chunk
+    }
+  })
+  process.stdin.on('end', function () {
+    Cite.async(input, options, saveOutput)
+  })
+}
