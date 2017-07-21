@@ -8,6 +8,8 @@ import getBibTeX from '../get/bibtex/text'
 import getBibTxt from '../get/bibtxt'
 import getJSON from '../get/json'
 
+import parseCsl from '../parse/csl'
+
 import fetchCSLEngine from '../CSL/engines'
 import fetchCSLStyle from '../CSL/styles'
 import fetchCSLLocale from '../CSL/locales'
@@ -40,7 +42,7 @@ const getIds = function () {
  * @return {String|Object[]} The formatted data
  */
 const get = function (options) {
-  const _data = deepCopy(this.data)
+  const _data = parseCsl(this.data)
 
   let result
 

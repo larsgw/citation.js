@@ -4,7 +4,7 @@
  * @access protected
  * @method parseDoi
  *
- * @param {String} data - Wikidata DOIs
+ * @param {String} data - DOIs
  *
  * @return {String[]} DOI URLs
  */

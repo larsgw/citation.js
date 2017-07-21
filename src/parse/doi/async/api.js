@@ -1,4 +1,5 @@
 import 'isomorphic-fetch'
+import parseDoiJson from '../json'
 
 /* global fetch, Headers */
 
@@ -29,10 +30,13 @@ const fetchDoiApiAsync = async function (url) {
  * @access protected
  * @method parseDoiApiAsync
  *
- * @param {String|String[]} data - Wikidata DOIs
+ * @param {String|String[]} data - DOIs
  *
  * @return {CSL[]} Array of CSL
  */
-const parseDoiApiAsync = data => Promise.all([].concat(data).map(fetchDoiApiAsync))
+const parseDoiApiAsync = async function (data) {
+  const doiJsonList = await Promise.all([].concat(data).map(fetchDoiApiAsync))
+  return doiJsonList.map(parseDoiJson)
+}
 
 export default parseDoiApiAsync

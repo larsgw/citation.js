@@ -1,4 +1,5 @@
 import request from 'sync-request'
+import parseDoiJson from './json'
 
 /**
  * Fetch DOI API results
@@ -30,10 +31,10 @@ const fetchDoiApi = function (url) {
  * @access protected
  * @method parseDoiApi
  *
- * @param {String|String[]} data - Wikidata DOIs
+ * @param {String|String[]} data - DOIs
  *
  * @return {CSL[]} Array of CSL
  */
-const parseDoiApi = data => [].concat(data).map(fetchDoiApi)
+const parseDoiApi = data => [].concat(data).map(fetchDoiApi).map(parseDoiJson)
 
 export default parseDoiApi

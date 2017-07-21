@@ -10,13 +10,14 @@ import varRegex from './regex'
  *
  * @return {Object} The CSL object
  */
-const parseName = function (name) {
+const parseName = function (name = '') {
+  if (typeof name !== 'string') {
+    name = name + ''
+  }
+
   const [given, family] = name.includes(', ') ? name.split(', ').reverse() : name.split(varRegex.name)
 
-  return {
-    given,
-    family
-  }
+  return family ? {given, family} : {literal: given}
 }
 
 export default parseName
