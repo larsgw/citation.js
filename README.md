@@ -120,16 +120,25 @@ var example = new Cite( <data>, <options> )
 #### <a id="cite.in.type" href="#cite.in.type">Input types</a>
 Input type doesn't have to be specified. The identifiers below are used by internal functions.
 
+##### <a id="cite.in.type.doi" href="#cite.in.type.doi">DOI</a>
+* `api/doi`: URL in the form of `http[s]://doi.org/$DOI` where `$DOI` is the [DOI](https://www.doi.org/)
+* `string/doi`: A DOI surrounded by whitespace
+* `list/doi`: A whitespace-separated list of DOIs
+* `array/doi`: An array of strings of type `string/doi`
+* There's no `url/doi`, because that's equivalent to `api/doi` through [DOI Content Negotiation](https://citation.crosscite.org/docs.html)
+* There's no `object/doi`, because the API output is CSL-JSON (it currently does need some minor changes, see [CrossRef/rest-api-doc#222](https://github.com/CrossRef/rest-api-doc/issues/222)).
+
 ##### <a id="cite.in.type.wikidata" href="#cite.in.type.wikidata">Wikidata</a>
 * `url/wikidata`: URL with [Wikidata](https://www.wikidata.org/) [Entity ID](https://www.wikidata.org/wiki/Wikidata:Glossary#Entities.2C_items.2C_properties_and_queries). Gets and parses the entity data
 * `list/wikidata`: List of Wikidata Entity IDs, separated by spaces, newlines or commas. Gets and parses the entity data
 * `string/wikidata`: Single Wikidata Entity ID. Gets and parses the entity data
+* `array/wikidata`: Array of strings of type `string/wikidata`
 * `api/wikidata`: Wikidata API URL. Gets and parses the entity data
 * `object/wikidata`: Wikidata Entity data. Parses the entity data
 
 ##### <a id="cite.in.type.bibtex" href="#cite.in.type.bibtex">BibTeX</a>
 * `string/bibtex`: [BibTeX](http://www.bibtex.org/) string. Parses the data
-* `object/bibtex`: BibTeX JSON string. Nothing special, or standardised. Parses the data
+* `object/bibtex`: BibTeX JSON. Nothing special, or standardised. Parses the data
 * `string/bibtxt`: [Bib.TXT](http://bibtxt.github.io) string. Parses the data
 
 ##### <a id="cite.in.type.bibjson" href="#cite.in.type.bibjson">BibJSON</a>
@@ -244,7 +253,9 @@ array // [1, 2, 3]
 
 ## <a id="cite.internal" href="#cite.internal">Internal functions</a>
 
-`Cite` holds all internal functions, too. These are documentated [here](https://larsgw.github.io/citation.js/api/global.html) and can be accessed like this:
+`Cite` holds all internal functions, too. These are documented [here](https://larsgw.github.io/citation.js/api/global.html) and can be accessed like this:
+
+Note that most `get*` functions expect CSL-JSON normalised with `Cite.parse.csl: [Function: parseCsl]`.
 
 ```js
 {
@@ -272,13 +283,18 @@ array // [1, 2, 3]
         data: [Function: parseInputData],
         chain: [Function: parseInput],
         chainLink: [Function: parseInputChainLink],
-        async: [Object] },
+        async: 
+         { data: [Function: parseInputDataAsync],
+           chain: [Function: parseInputAsync],
+           chainLink: [Function: parseInputChainLinkAsync] } },
      wikidata: 
       { list: [Function: parseWikidata],
         json: [Function: parseWikidataJSON],
         prop: [Function: parseWikidataProp],
         type: [Function: fetchWikidataType],
-        async: [Object] },
+        async: 
+         { json: [Function: parseWikidataJSONAsync],
+           prop: [Function: parseWikidataPropAsync] } },
      bibtex: 
       { json: [Function: parseBibTeXJSON],
         text: [Function: parseBibTeX],
@@ -288,9 +304,14 @@ array // [1, 2, 3]
       { text: [Function: parseBibTxt],
         textEntry: [Function: parseBibTxtEntry] },
      bibjson: [Function: parseContentMine],
+     doi: 
+      { id: [Function: parseDoi],
+        api: [Function: parseDoiApi],
+        async: { api: [Function: parseDoiApiAsync] } },
      date: [Function: parseDate],
      name: [Function: parseName],
-     json: [Function: parseJSON] },
+     json: [Function: parseJSON],
+     csl: [Function: parseCsl] },
   util: 
    { attr: 
       { getAttributedEntry: [Function: getAttributedEntry],
