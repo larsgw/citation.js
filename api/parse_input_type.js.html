@@ -51,8 +51,18 @@ var parseInputType = function (input) {
       // Empty
       if (input.length === 0) {
         return 'string/empty'
+      // Only whitespace
       } else if (/^\s+$/.test(input)) {
         return 'string/whitespace'
+      // DOI API URL
+      } else if (varRegex.doi[0].test(input)) {
+        return 'api/doi'
+      // DOI ID
+      } else if (varRegex.doi[1].test(input)) {
+        return 'string/doi'
+      // DOI ID list
+      } else if (varRegex.doi[2].test(input)) {
+        return 'list/doi'
       // Wikidata ID
       } else if (varRegex.wikidata[0].test(input)) {
         return 'string/wikidata'
@@ -99,10 +109,13 @@ var parseInputType = function (input) {
         if (input.length === 0) {
           return 'array/csl'
         // Array of Wikidata IDs
-        } else if (input.filter(v => parseInputType(v) === 'string/wikidata').length === input.length) {
+        } else if (input.every(v => parseInputType(v) === 'string/wikidata')) {
           return 'array/wikidata'
+        // Array of DOI IDs
+        } else if (input.every(v => parseInputType(v) === 'string/doi')) {
+          return 'array/doi'
         // Array of CSL-JSON
-        } else if (input.filter(v => parseInputType(v) === 'object/csl').length === input.length) {
+        } else if (input.every(v => parseInputType(v) === 'object/csl')) {
           return 'array/csl'
         // Array of misc or multiple types
         } else {
@@ -114,10 +127,11 @@ var parseInputType = function (input) {
         if (input.hasOwnProperty('entities')) {
           return 'object/wikidata'
         // ContentMine
-        } else if ((input.fulltext_html &amp;&amp; Array.isArray(input.fulltext_html.value)) ||
-                   (input.fulltext_xml &amp;&amp; Array.isArray(input.fulltext_xml.value)) ||
-                   (input.fulltext_pdf &amp;&amp; Array.isArray(input.fulltext_pdf.value))) {
+        } else if (['fulltext_html', 'fulltext_xml', 'fulltext_pdf'].some(prop => input[prop] &amp;&amp; Array.isArray(input[prop].value))) {
           return 'object/contentmine'
+        // BibTeX JSON
+        } else if (['type', 'label', 'properties'].every(prop => input.hasOwnProperty(prop))) {
+          return 'object/bibtex'
         // CSL-JSON
         } else {
           return 'object/csl'
@@ -145,13 +159,13 @@ export default parseInputType
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Cite.html">Cite</a></li><li><a href="CSL.html">CSL</a></li></ul><h3>Global</h3><ul><li><a href="global.html#async">async</a></li><li><a href="global.html#deepCopy">deepCopy</a></li><li><a href="global.html#fetchBibTeXType">fetchBibTeXType</a></li><li><a href="global.html#fetchCSLEngine">fetchCSLEngine</a></li><li><a href="global.html#fetchCSLItemCallback">fetchCSLItemCallback</a></li><li><a href="global.html#fetchCSLLocale">fetchCSLLocale</a></li><li><a href="global.html#fetchCSLStyle">fetchCSLStyle</a></li><li><a href="global.html#fetchFile">fetchFile</a></li><li><a href="global.html#fetchFileAsync">fetchFileAsync</a></li><li><a href="global.html#fetchId">fetchId</a></li><li><a href="global.html#fetchWikidataType">fetchWikidataType</a></li><li><a href="global.html#getAttributedEntry">getAttributedEntry</a></li><li><a href="global.html#getBibTeX">getBibTeX</a></li><li><a href="global.html#getBibTeXJSON">getBibTeXJSON</a></li><li><a href="global.html#getBibTeXLabel">getBibTeXLabel</a></li><li><a href="global.html#getBibTxt">getBibTxt</a></li><li><a href="global.html#getDate">getDate</a></li><li><a href="global.html#getJSON">getJSON</a></li><li><a href="global.html#getLabel">getLabel</a></li><li><a href="global.html#getName">getName</a></li><li><a href="global.html#getPrefixedEntry">getPrefixedEntry</a></li><li><a href="global.html#htmlDict">htmlDict</a></li><li><a href="global.html#parseBibTeX">parseBibTeX</a></li><li><a href="global.html#parseBibTeXJSON">parseBibTeXJSON</a></li><li><a href="global.html#parseBibTeXProp">parseBibTeXProp</a></li><li><a href="global.html#parseBibTeXType">parseBibTeXType</a></li><li><a href="global.html#parseBibTxt">parseBibTxt</a></li><li><a href="global.html#parseBibTxtEntry">parseBibTxtEntry</a></li><li><a href="global.html#parseContentMine">parseContentMine</a></li><li><a href="global.html#parseDate">parseDate</a></li><li><a href="global.html#parseInput">parseInput</a></li><li><a href="global.html#parseInputAsync">parseInputAsync</a></li><li><a href="global.html#parseInputChainLink">parseInputChainLink</a></li><li><a href="global.html#parseInputChainLinkAsync">parseInputChainLinkAsync</a></li><li><a href="global.html#parseInputData">parseInputData</a></li><li><a href="global.html#parseInputDataAsync">parseInputDataAsync</a></li><li><a href="global.html#parseInputType">parseInputType</a></li><li><a href="global.html#parseJSON">parseJSON</a></li><li><a href="global.html#parseName">parseName</a></li><li><a href="global.html#parseWikidata">parseWikidata</a></li><li><a href="global.html#parseWikidataJSON">parseWikidataJSON</a></li><li><a href="global.html#parseWikidataJSONAsync">parseWikidataJSONAsync</a></li><li><a href="global.html#parseWikidataProp">parseWikidataProp</a></li><li><a href="global.html#parseWikidataPropAsync">parseWikidataPropAsync</a></li><li><a href="global.html#textDict">textDict</a></li><li><a href="global.html#varRegex">varRegex</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Cite.html">Cite</a></li><li><a href="CSL.html">CSL</a></li></ul><h3>Global</h3><ul><li><a href="global.html#async">async</a></li><li><a href="global.html#deepCopy">deepCopy</a></li><li><a href="global.html#fetchBibTeXType">fetchBibTeXType</a></li><li><a href="global.html#fetchCSLEngine">fetchCSLEngine</a></li><li><a href="global.html#fetchCSLItemCallback">fetchCSLItemCallback</a></li><li><a href="global.html#fetchCSLLocale">fetchCSLLocale</a></li><li><a href="global.html#fetchCSLStyle">fetchCSLStyle</a></li><li><a href="global.html#fetchFile">fetchFile</a></li><li><a href="global.html#fetchFileAsync">fetchFileAsync</a></li><li><a href="global.html#fetchId">fetchId</a></li><li><a href="global.html#getAttributedEntry">getAttributedEntry</a></li><li><a href="global.html#getBibTeXJSON">getBibTeXJSON</a></li><li><a href="global.html#getBibTeXLabel">getBibTeXLabel</a></li><li><a href="global.html#getBibTxt">getBibTxt</a></li><li><a href="global.html#getDate">getDate</a></li><li><a href="global.html#getJSON">getJSON</a></li><li><a href="global.html#getLabel">getLabel</a></li><li><a href="global.html#getName">getName</a></li><li><a href="global.html#getPrefixedEntry">getPrefixedEntry</a></li><li><a href="global.html#htmlDict">htmlDict</a></li><li><a href="global.html#parseBibTeX">parseBibTeX</a></li><li><a href="global.html#parseBibTeXJSON">parseBibTeXJSON</a></li><li><a href="global.html#parseBibTeXProp">parseBibTeXProp</a></li><li><a href="global.html#parseBibTeXType">parseBibTeXType</a></li><li><a href="global.html#parseBibTxt">parseBibTxt</a></li><li><a href="global.html#parseContentMine">parseContentMine</a></li><li><a href="global.html#parseCsl">parseCsl</a></li><li><a href="global.html#parseDate">parseDate</a></li><li><a href="global.html#parseDoi">parseDoi</a></li><li><a href="global.html#parseDoiApi">parseDoiApi</a></li><li><a href="global.html#parseDoiApiAsync">parseDoiApiAsync</a></li><li><a href="global.html#parseDoiJson">parseDoiJson</a></li><li><a href="global.html#parseInput">parseInput</a></li><li><a href="global.html#parseInputAsync">parseInputAsync</a></li><li><a href="global.html#parseInputChainLink">parseInputChainLink</a></li><li><a href="global.html#parseInputChainLinkAsync">parseInputChainLinkAsync</a></li><li><a href="global.html#parseInputData">parseInputData</a></li><li><a href="global.html#parseInputDataAsync">parseInputDataAsync</a></li><li><a href="global.html#parseInputType">parseInputType</a></li><li><a href="global.html#parseJSON">parseJSON</a></li><li><a href="global.html#parseName">parseName</a></li><li><a href="global.html#parseWikidata">parseWikidata</a></li><li><a href="global.html#parseWikidataJSON">parseWikidataJSON</a></li><li><a href="global.html#parseWikidataJSONAsync">parseWikidataJSONAsync</a></li><li><a href="global.html#parseWikidataProp">parseWikidataProp</a></li><li><a href="global.html#parseWikidataPropAsync">parseWikidataPropAsync</a></li><li><a href="global.html#varRegex">varRegex</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a> on Sat May 20 2017 15:12:47 GMT+0200 (CEST)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.3</a> on Sat Jul 22 2017 17:03:02 GMT+0200 (CEST)
 </footer>
 
 <script> prettyPrint(); </script>

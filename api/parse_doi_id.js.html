@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>Source: async/index.js - Docs - Citation.js</title>
+    <title>Source: parse/doi/id.js - Docs - Citation.js</title>
     
     <meta name="theme-color" content="#FFC107">
     <link rel="shortcut icon" type="image/png" href="../favicon.png"/>
@@ -22,7 +22,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Source: async/index.js</h1>
+    <h1 class="page-title">Source: parse/doi/id.js</h1>
 
     
 
@@ -31,51 +31,19 @@
     
     <section>
         <article>
-            <pre class="prettyprint source linenums"><code>import parseInputAsync from '../parse/input/async/chain'
-import Cite from '../Cite/index'
-
-/**
- * @callback Cite~asyncCite
+            <pre class="prettyprint source linenums"><code>/**
+ * Get DOI API URLs from DOI ID.
  *
- * @param {Cite} data - Cite object
- */
-
-/**
- * @access private
- * @method asyncCite
+ * @access protected
+ * @method parseDoi
  *
- * @param {Promise} promise - promise returning parsed input
- * @param {Object} options - The options for the output. See [input options](../#citation.cite.in.options).
- * @return {Promise} promise returning Cite object
- */
-const asyncCite = async function (promise, options) {
-  return new Cite(await promise, options)
-}
-
-/**
- * @method async
+ * @param {String} data - DOIs
  *
- * @param {String|CSL|Object|String[]|CSL[]|Object[]} data - Input data.
- * @param {Object} [options={}] - The options for the output. See [input options](../#citation.cite.in.options).
- * @param {Cite~asyncCite} callback - if not give, function returns promise.
- * @return {Promise} If callback is not given, it returns a Promise. Else returns undefined.
+ * @return {String[]} DOI URLs
  */
-const async = function (data, options, callback) {
-  const promise = parseInputAsync(data)
+const parseDoi = data => data.split(/(?:\s+)/g).map(doi => `https://doi.org/${doi.trim()}`)
 
-  if (typeof options === 'function' &amp;&amp; !callback) {
-    callback = options
-  }
-
-  if (typeof callback === 'function') {
-    promise.then(data => callback(new Cite(data, options)))
-    return undefined
-  } else {
-    return asyncCite(promise, options)
-  }
-}
-
-export default async
+export default parseDoi
 </code></pre>
         </article>
     </section>

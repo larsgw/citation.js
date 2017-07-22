@@ -140,16 +140,25 @@ data.get() // Should implicitly display</code></pre><p>To test this code, go to 
 <li>In the second parameter you pass the <a href="#cite.in.options">options</a>.</li>
 </ol>
 <h4><a id="cite.in.type" href="#cite.in.type">Input types</a></h4><p>Input type doesn't have to be specified. The identifiers below are used by internal functions.</p>
+<h5><a id="cite.in.type.doi" href="#cite.in.type.doi">DOI</a></h5><ul>
+<li><code>api/doi</code>: URL in the form of <code>http[s]://doi.org/$DOI</code> where <code>$DOI</code> is the <a href="https://www.doi.org/">DOI</a></li>
+<li><code>string/doi</code>: A DOI surrounded by whitespace</li>
+<li><code>list/doi</code>: A whitespace-separated list of DOIs</li>
+<li><code>array/doi</code>: An array of strings of type <code>string/doi</code></li>
+<li>There's no <code>url/doi</code>, because that's equivalent to <code>api/doi</code> through <a href="https://citation.crosscite.org/docs.html">DOI Content Negotiation</a></li>
+<li>There's no <code>object/doi</code>, because the API output is CSL-JSON (it currently does need some minor changes, see <a href="https://github.com/CrossRef/rest-api-doc/issues/222">CrossRef/rest-api-doc#222</a>).</li>
+</ul>
 <h5><a id="cite.in.type.wikidata" href="#cite.in.type.wikidata">Wikidata</a></h5><ul>
 <li><code>url/wikidata</code>: URL with <a href="https://www.wikidata.org/">Wikidata</a> <a href="https://www.wikidata.org/wiki/Wikidata:Glossary#Entities.2C_items.2C_properties_and_queries">Entity ID</a>. Gets and parses the entity data</li>
 <li><code>list/wikidata</code>: List of Wikidata Entity IDs, separated by spaces, newlines or commas. Gets and parses the entity data</li>
 <li><code>string/wikidata</code>: Single Wikidata Entity ID. Gets and parses the entity data</li>
+<li><code>array/wikidata</code>: Array of strings of type <code>string/wikidata</code></li>
 <li><code>api/wikidata</code>: Wikidata API URL. Gets and parses the entity data</li>
 <li><code>object/wikidata</code>: Wikidata Entity data. Parses the entity data</li>
 </ul>
 <h5><a id="cite.in.type.bibtex" href="#cite.in.type.bibtex">BibTeX</a></h5><ul>
 <li><code>string/bibtex</code>: <a href="http://www.bibtex.org/">BibTeX</a> string. Parses the data</li>
-<li><code>object/bibtex</code>: BibTeX JSON string. Nothing special, or standardised. Parses the data</li>
+<li><code>object/bibtex</code>: BibTeX JSON. Nothing special, or standardised. Parses the data</li>
 <li><code>string/bibtxt</code>: <a href="http://bibtxt.github.io">Bib.TXT</a> string. Parses the data</li>
 </ul>
 <h5><a id="cite.in.type.bibjson" href="#cite.in.type.bibjson">BibJSON</a></h5><ul>
@@ -232,7 +241,8 @@ for (let {id} of data) {
   array.push(id)
 }
 
-array // [1, 2, 3]</code></pre><h2><a id="cite.internal" href="#cite.internal">Internal functions</a></h2><p><code>Cite</code> holds all internal functions, too. These are documentated <a href="https://larsgw.github.io/citation.js/api/global.html">here</a> and can be accessed like this:</p>
+array // [1, 2, 3]</code></pre><h2><a id="cite.internal" href="#cite.internal">Internal functions</a></h2><p><code>Cite</code> holds all internal functions, too. These are documented <a href="https://larsgw.github.io/citation.js/api/global.html">here</a> and can be accessed like this:</p>
+<p>Note that most <code>get*</code> functions expect CSL-JSON normalised with <code>Cite.parse.csl: [Function: parseCsl]</code>.</p>
 <pre class="prettyprint source lang-js"><code>{
   async: [Function: async],
   get: 
@@ -258,13 +268,18 @@ array // [1, 2, 3]</code></pre><h2><a id="cite.internal" href="#cite.internal">I
         data: [Function: parseInputData],
         chain: [Function: parseInput],
         chainLink: [Function: parseInputChainLink],
-        async: [Object] },
+        async: 
+         { data: [Function: parseInputDataAsync],
+           chain: [Function: parseInputAsync],
+           chainLink: [Function: parseInputChainLinkAsync] } },
      wikidata: 
       { list: [Function: parseWikidata],
         json: [Function: parseWikidataJSON],
         prop: [Function: parseWikidataProp],
         type: [Function: fetchWikidataType],
-        async: [Object] },
+        async: 
+         { json: [Function: parseWikidataJSONAsync],
+           prop: [Function: parseWikidataPropAsync] } },
      bibtex: 
       { json: [Function: parseBibTeXJSON],
         text: [Function: parseBibTeX],
@@ -274,9 +289,14 @@ array // [1, 2, 3]</code></pre><h2><a id="cite.internal" href="#cite.internal">I
       { text: [Function: parseBibTxt],
         textEntry: [Function: parseBibTxtEntry] },
      bibjson: [Function: parseContentMine],
+     doi: 
+      { id: [Function: parseDoi],
+        api: [Function: parseDoiApi],
+        async: { api: [Function: parseDoiApiAsync] } },
      date: [Function: parseDate],
      name: [Function: parseName],
-     json: [Function: parseJSON] },
+     json: [Function: parseJSON],
+     csl: [Function: parseCsl] },
   util: 
    { attr: 
       { getAttributedEntry: [Function: getAttributedEntry],
@@ -423,7 +443,9 @@ SOFTWARE.</li></ul></dd>
 
     
 
-     
+    
+
+    
 
     
 
@@ -444,13 +466,13 @@ SOFTWARE.</li></ul></dd>
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Cite.html">Cite</a></li><li><a href="CSL.html">CSL</a></li></ul><h3>Global</h3><ul><li><a href="global.html#async">async</a></li><li><a href="global.html#deepCopy">deepCopy</a></li><li><a href="global.html#fetchBibTeXType">fetchBibTeXType</a></li><li><a href="global.html#fetchCSLEngine">fetchCSLEngine</a></li><li><a href="global.html#fetchCSLItemCallback">fetchCSLItemCallback</a></li><li><a href="global.html#fetchCSLLocale">fetchCSLLocale</a></li><li><a href="global.html#fetchCSLStyle">fetchCSLStyle</a></li><li><a href="global.html#fetchFile">fetchFile</a></li><li><a href="global.html#fetchFileAsync">fetchFileAsync</a></li><li><a href="global.html#fetchId">fetchId</a></li><li><a href="global.html#fetchWikidataType">fetchWikidataType</a></li><li><a href="global.html#getAttributedEntry">getAttributedEntry</a></li><li><a href="global.html#getBibTeX">getBibTeX</a></li><li><a href="global.html#getBibTeXJSON">getBibTeXJSON</a></li><li><a href="global.html#getBibTeXLabel">getBibTeXLabel</a></li><li><a href="global.html#getBibTxt">getBibTxt</a></li><li><a href="global.html#getDate">getDate</a></li><li><a href="global.html#getJSON">getJSON</a></li><li><a href="global.html#getLabel">getLabel</a></li><li><a href="global.html#getName">getName</a></li><li><a href="global.html#getPrefixedEntry">getPrefixedEntry</a></li><li><a href="global.html#htmlDict">htmlDict</a></li><li><a href="global.html#parseBibTeX">parseBibTeX</a></li><li><a href="global.html#parseBibTeXJSON">parseBibTeXJSON</a></li><li><a href="global.html#parseBibTeXProp">parseBibTeXProp</a></li><li><a href="global.html#parseBibTeXType">parseBibTeXType</a></li><li><a href="global.html#parseBibTxt">parseBibTxt</a></li><li><a href="global.html#parseBibTxtEntry">parseBibTxtEntry</a></li><li><a href="global.html#parseContentMine">parseContentMine</a></li><li><a href="global.html#parseDate">parseDate</a></li><li><a href="global.html#parseDoi">parseDoi</a></li><li><a href="global.html#parseDoiApi">parseDoiApi</a></li><li><a href="global.html#parseDoiApiAsync">parseDoiApiAsync</a></li><li><a href="global.html#parseInput">parseInput</a></li><li><a href="global.html#parseInputAsync">parseInputAsync</a></li><li><a href="global.html#parseInputChainLink">parseInputChainLink</a></li><li><a href="global.html#parseInputChainLinkAsync">parseInputChainLinkAsync</a></li><li><a href="global.html#parseInputData">parseInputData</a></li><li><a href="global.html#parseInputDataAsync">parseInputDataAsync</a></li><li><a href="global.html#parseInputType">parseInputType</a></li><li><a href="global.html#parseJSON">parseJSON</a></li><li><a href="global.html#parseName">parseName</a></li><li><a href="global.html#parseWikidata">parseWikidata</a></li><li><a href="global.html#parseWikidataJSON">parseWikidataJSON</a></li><li><a href="global.html#parseWikidataJSONAsync">parseWikidataJSONAsync</a></li><li><a href="global.html#parseWikidataProp">parseWikidataProp</a></li><li><a href="global.html#parseWikidataPropAsync">parseWikidataPropAsync</a></li><li><a href="global.html#textDict">textDict</a></li><li><a href="global.html#varRegex">varRegex</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Cite.html">Cite</a></li><li><a href="CSL.html">CSL</a></li></ul><h3>Global</h3><ul><li><a href="global.html#async">async</a></li><li><a href="global.html#deepCopy">deepCopy</a></li><li><a href="global.html#fetchBibTeXType">fetchBibTeXType</a></li><li><a href="global.html#fetchCSLEngine">fetchCSLEngine</a></li><li><a href="global.html#fetchCSLItemCallback">fetchCSLItemCallback</a></li><li><a href="global.html#fetchCSLLocale">fetchCSLLocale</a></li><li><a href="global.html#fetchCSLStyle">fetchCSLStyle</a></li><li><a href="global.html#fetchFile">fetchFile</a></li><li><a href="global.html#fetchFileAsync">fetchFileAsync</a></li><li><a href="global.html#fetchId">fetchId</a></li><li><a href="global.html#getAttributedEntry">getAttributedEntry</a></li><li><a href="global.html#getBibTeXJSON">getBibTeXJSON</a></li><li><a href="global.html#getBibTeXLabel">getBibTeXLabel</a></li><li><a href="global.html#getBibTxt">getBibTxt</a></li><li><a href="global.html#getDate">getDate</a></li><li><a href="global.html#getJSON">getJSON</a></li><li><a href="global.html#getLabel">getLabel</a></li><li><a href="global.html#getName">getName</a></li><li><a href="global.html#getPrefixedEntry">getPrefixedEntry</a></li><li><a href="global.html#htmlDict">htmlDict</a></li><li><a href="global.html#parseBibTeX">parseBibTeX</a></li><li><a href="global.html#parseBibTeXJSON">parseBibTeXJSON</a></li><li><a href="global.html#parseBibTeXProp">parseBibTeXProp</a></li><li><a href="global.html#parseBibTeXType">parseBibTeXType</a></li><li><a href="global.html#parseBibTxt">parseBibTxt</a></li><li><a href="global.html#parseContentMine">parseContentMine</a></li><li><a href="global.html#parseCsl">parseCsl</a></li><li><a href="global.html#parseDate">parseDate</a></li><li><a href="global.html#parseDoi">parseDoi</a></li><li><a href="global.html#parseDoiApi">parseDoiApi</a></li><li><a href="global.html#parseDoiApiAsync">parseDoiApiAsync</a></li><li><a href="global.html#parseDoiJson">parseDoiJson</a></li><li><a href="global.html#parseInput">parseInput</a></li><li><a href="global.html#parseInputAsync">parseInputAsync</a></li><li><a href="global.html#parseInputChainLink">parseInputChainLink</a></li><li><a href="global.html#parseInputChainLinkAsync">parseInputChainLinkAsync</a></li><li><a href="global.html#parseInputData">parseInputData</a></li><li><a href="global.html#parseInputDataAsync">parseInputDataAsync</a></li><li><a href="global.html#parseInputType">parseInputType</a></li><li><a href="global.html#parseJSON">parseJSON</a></li><li><a href="global.html#parseName">parseName</a></li><li><a href="global.html#parseWikidata">parseWikidata</a></li><li><a href="global.html#parseWikidataJSON">parseWikidataJSON</a></li><li><a href="global.html#parseWikidataJSONAsync">parseWikidataJSONAsync</a></li><li><a href="global.html#parseWikidataProp">parseWikidataProp</a></li><li><a href="global.html#parseWikidataPropAsync">parseWikidataPropAsync</a></li><li><a href="global.html#varRegex">varRegex</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a> on Mon May 29 2017 19:58:06 GMT+0200 (CEST)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.3</a> on Sat Jul 22 2017 17:03:02 GMT+0200 (CEST)
 </footer>
 
 <script> prettyPrint(); </script>

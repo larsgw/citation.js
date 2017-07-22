@@ -32,29 +32,108 @@
     <section>
         <article>
             <pre class="prettyprint source linenums"><code>import getLabel from '../get/label'
+import getName from '../get/name'
 
 /**
- * Sort the datasets alphabetically, on basis of it's BibTeX label
+ * Get value for comparing
+ *
+ * @access private
+ * @method getComparisonValue
+ *
+ * @param {CSL} obj - obj
+ * @param {String} prop - The prop in question
+ * @param {Boolean} label - Prop is label
+ *
+ * @return {String|Number} something to compare
+ */
+const getComparisonValue = function (obj, prop, label = prop === 'label') {
+  let value = label ? getLabel(obj) : obj[prop]
+
+  switch (prop) {
+    case 'author':
+    case 'editor':
+      return value.map(name => name.literal || name.family || getName(name))
+
+    case 'accessed':
+    case 'issued':
+      return value[0]['date-parts']
+
+    case 'page':
+      return value.split('-').map(num => parseInt(num))
+
+    case 'edition':
+    case 'issue':
+    case 'volume':
+      value = parseInt(value)
+      return !isNaN(value) ? value : -Infinity
+
+    default:
+      return value || -Infinity
+  }
+}
+
+/**
+ * Compares props
+ *
+ * @access private
+ * @method compareProp
+ *
+ * @param {CSL} a - Object a
+ * @param {CSL} b - Object b
+ * @param {String} prop - The prop in question. Prepend ! to sort the other way around.
+ * @param {Boolean} flip - Override flip
+ *
+ * @return {Number} positive for a > b, negative for b > a, zero for a = b (flips if prop has !)
+ */
+const compareProp = function (a, b, prop, flip = /^!/.test(prop)) {
+  prop = prop.replace(/^!/, '')
+  const valueA = getComparisonValue(a, prop)
+  const valueB = getComparisonValue(b, prop)
+
+  return valueA === valueB ? 0 : flip !== (valueA > valueB) ? 1 : -1
+}
+
+/**
+ * Generates a sorting callback based on props.
+ *
+ * @access private
+ * @method getSortCallback
+ *
+ * @param {...String} props - How to sort
+ *
+ * @return {Cite~sort} sorting callback
+ */
+const getSortCallback = function (...props) {
+  return (a, b) => {
+    const keys = props.slice()
+    let output = 0
+
+    while (!output &amp;&amp; keys.length) {
+      output = compareProp(a, b, keys.shift())
+    }
+
+    return output
+  }
+}
+
+/**
+ * Sort the dataset
  *
  * @method sort
  * @memberof Cite
  * @this Cite
  *
- * @param {Boolean} log - Show this call in the log
+ * @param {Cite~sort|String[]} [method=[]] - How to sort
+ * @param {Boolean} [log=false] - Show this call in the log
  *
  * @return {Cite} The updated parent object
  */
-const sort = function (log) {
+const sort = function (method = [], log) {
   if (log) {
     this.save()
   }
 
-  this.data.sort((a, b) => {
-    const labelA = getLabel(a)
-    const labelB = getLabel(b)
-
-    return labelA !== labelB ? (labelA > labelB ? 1 : -1) : 0
-  })
+  this.data.sort(typeof method === 'function' ? method : getSortCallback(...method, 'label'))
 
   return this
 }
@@ -70,13 +149,13 @@ export { sort }
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Cite.html">Cite</a></li><li><a href="CSL.html">CSL</a></li></ul><h3>Global</h3><ul><li><a href="global.html#async">async</a></li><li><a href="global.html#deepCopy">deepCopy</a></li><li><a href="global.html#fetchBibTeXType">fetchBibTeXType</a></li><li><a href="global.html#fetchCSLEngine">fetchCSLEngine</a></li><li><a href="global.html#fetchCSLItemCallback">fetchCSLItemCallback</a></li><li><a href="global.html#fetchCSLLocale">fetchCSLLocale</a></li><li><a href="global.html#fetchCSLStyle">fetchCSLStyle</a></li><li><a href="global.html#fetchFile">fetchFile</a></li><li><a href="global.html#fetchFileAsync">fetchFileAsync</a></li><li><a href="global.html#fetchId">fetchId</a></li><li><a href="global.html#fetchWikidataType">fetchWikidataType</a></li><li><a href="global.html#getAttributedEntry">getAttributedEntry</a></li><li><a href="global.html#getBibTeX">getBibTeX</a></li><li><a href="global.html#getBibTeXJSON">getBibTeXJSON</a></li><li><a href="global.html#getBibTeXLabel">getBibTeXLabel</a></li><li><a href="global.html#getBibTxt">getBibTxt</a></li><li><a href="global.html#getDate">getDate</a></li><li><a href="global.html#getJSON">getJSON</a></li><li><a href="global.html#getLabel">getLabel</a></li><li><a href="global.html#getName">getName</a></li><li><a href="global.html#getPrefixedEntry">getPrefixedEntry</a></li><li><a href="global.html#htmlDict">htmlDict</a></li><li><a href="global.html#parseBibTeX">parseBibTeX</a></li><li><a href="global.html#parseBibTeXJSON">parseBibTeXJSON</a></li><li><a href="global.html#parseBibTeXProp">parseBibTeXProp</a></li><li><a href="global.html#parseBibTeXType">parseBibTeXType</a></li><li><a href="global.html#parseBibTxt">parseBibTxt</a></li><li><a href="global.html#parseBibTxtEntry">parseBibTxtEntry</a></li><li><a href="global.html#parseContentMine">parseContentMine</a></li><li><a href="global.html#parseDate">parseDate</a></li><li><a href="global.html#parseInput">parseInput</a></li><li><a href="global.html#parseInputAsync">parseInputAsync</a></li><li><a href="global.html#parseInputChainLink">parseInputChainLink</a></li><li><a href="global.html#parseInputChainLinkAsync">parseInputChainLinkAsync</a></li><li><a href="global.html#parseInputData">parseInputData</a></li><li><a href="global.html#parseInputDataAsync">parseInputDataAsync</a></li><li><a href="global.html#parseInputType">parseInputType</a></li><li><a href="global.html#parseJSON">parseJSON</a></li><li><a href="global.html#parseName">parseName</a></li><li><a href="global.html#parseWikidata">parseWikidata</a></li><li><a href="global.html#parseWikidataJSON">parseWikidataJSON</a></li><li><a href="global.html#parseWikidataJSONAsync">parseWikidataJSONAsync</a></li><li><a href="global.html#parseWikidataProp">parseWikidataProp</a></li><li><a href="global.html#parseWikidataPropAsync">parseWikidataPropAsync</a></li><li><a href="global.html#textDict">textDict</a></li><li><a href="global.html#varRegex">varRegex</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Cite.html">Cite</a></li><li><a href="CSL.html">CSL</a></li></ul><h3>Global</h3><ul><li><a href="global.html#async">async</a></li><li><a href="global.html#deepCopy">deepCopy</a></li><li><a href="global.html#fetchBibTeXType">fetchBibTeXType</a></li><li><a href="global.html#fetchCSLEngine">fetchCSLEngine</a></li><li><a href="global.html#fetchCSLItemCallback">fetchCSLItemCallback</a></li><li><a href="global.html#fetchCSLLocale">fetchCSLLocale</a></li><li><a href="global.html#fetchCSLStyle">fetchCSLStyle</a></li><li><a href="global.html#fetchFile">fetchFile</a></li><li><a href="global.html#fetchFileAsync">fetchFileAsync</a></li><li><a href="global.html#fetchId">fetchId</a></li><li><a href="global.html#getAttributedEntry">getAttributedEntry</a></li><li><a href="global.html#getBibTeXJSON">getBibTeXJSON</a></li><li><a href="global.html#getBibTeXLabel">getBibTeXLabel</a></li><li><a href="global.html#getBibTxt">getBibTxt</a></li><li><a href="global.html#getDate">getDate</a></li><li><a href="global.html#getJSON">getJSON</a></li><li><a href="global.html#getLabel">getLabel</a></li><li><a href="global.html#getName">getName</a></li><li><a href="global.html#getPrefixedEntry">getPrefixedEntry</a></li><li><a href="global.html#htmlDict">htmlDict</a></li><li><a href="global.html#parseBibTeX">parseBibTeX</a></li><li><a href="global.html#parseBibTeXJSON">parseBibTeXJSON</a></li><li><a href="global.html#parseBibTeXProp">parseBibTeXProp</a></li><li><a href="global.html#parseBibTeXType">parseBibTeXType</a></li><li><a href="global.html#parseBibTxt">parseBibTxt</a></li><li><a href="global.html#parseContentMine">parseContentMine</a></li><li><a href="global.html#parseCsl">parseCsl</a></li><li><a href="global.html#parseDate">parseDate</a></li><li><a href="global.html#parseDoi">parseDoi</a></li><li><a href="global.html#parseDoiApi">parseDoiApi</a></li><li><a href="global.html#parseDoiApiAsync">parseDoiApiAsync</a></li><li><a href="global.html#parseDoiJson">parseDoiJson</a></li><li><a href="global.html#parseInput">parseInput</a></li><li><a href="global.html#parseInputAsync">parseInputAsync</a></li><li><a href="global.html#parseInputChainLink">parseInputChainLink</a></li><li><a href="global.html#parseInputChainLinkAsync">parseInputChainLinkAsync</a></li><li><a href="global.html#parseInputData">parseInputData</a></li><li><a href="global.html#parseInputDataAsync">parseInputDataAsync</a></li><li><a href="global.html#parseInputType">parseInputType</a></li><li><a href="global.html#parseJSON">parseJSON</a></li><li><a href="global.html#parseName">parseName</a></li><li><a href="global.html#parseWikidata">parseWikidata</a></li><li><a href="global.html#parseWikidataJSON">parseWikidataJSON</a></li><li><a href="global.html#parseWikidataJSONAsync">parseWikidataJSONAsync</a></li><li><a href="global.html#parseWikidataProp">parseWikidataProp</a></li><li><a href="global.html#parseWikidataPropAsync">parseWikidataPropAsync</a></li><li><a href="global.html#varRegex">varRegex</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a> on Sat May 20 2017 15:12:47 GMT+0200 (CEST)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.3</a> on Sat Jul 22 2017 17:03:02 GMT+0200 (CEST)
 </footer>
 
 <script> prettyPrint(); </script>

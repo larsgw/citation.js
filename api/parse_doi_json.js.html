@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>Source: async/index.js - Docs - Citation.js</title>
+    <title>Source: parse/doi/json.js - Docs - Citation.js</title>
     
     <meta name="theme-color" content="#FFC107">
     <link rel="shortcut icon" type="image/png" href="../favicon.png"/>
@@ -22,7 +22,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Source: async/index.js</h1>
+    <h1 class="page-title">Source: parse/doi/json.js</h1>
 
     
 
@@ -31,51 +31,40 @@
     
     <section>
         <article>
-            <pre class="prettyprint source linenums"><code>import parseInputAsync from '../parse/input/async/chain'
-import Cite from '../Cite/index'
+            <pre class="prettyprint source linenums"><code>import fetchDoiType from './type'
 
 /**
- * @callback Cite~asyncCite
+ * Format CrossRef JSON
  *
- * @param {Cite} data - Cite object
- */
-
-/**
- * @access private
- * @method asyncCite
+ * @access protected
+ * @method parseDoiJson
  *
- * @param {Promise} promise - promise returning parsed input
- * @param {Object} options - The options for the output. See [input options](../#citation.cite.in.options).
- * @return {Promise} promise returning Cite object
- */
-const asyncCite = async function (promise, options) {
-  return new Cite(await promise, options)
-}
-
-/**
- * @method async
+ * @param {Object} data - The input data
  *
- * @param {String|CSL|Object|String[]|CSL[]|Object[]} data - Input data.
- * @param {Object} [options={}] - The options for the output. See [input options](../#citation.cite.in.options).
- * @param {Cite~asyncCite} callback - if not give, function returns promise.
- * @return {Promise} If callback is not given, it returns a Promise. Else returns undefined.
+ * @return {CSL} The formatted input data
  */
-const async = function (data, options, callback) {
-  const promise = parseInputAsync(data)
-
-  if (typeof options === 'function' &amp;&amp; !callback) {
-    callback = options
+const parseDoiJson = function (data) {
+  const res = {
+    type: fetchDoiType(data.type)
   }
 
-  if (typeof callback === 'function') {
-    promise.then(data => callback(new Cite(data, options)))
-    return undefined
-  } else {
-    return asyncCite(promise, options)
-  }
+  // TODO because of conflicting implementation of citeproc-js; this is actually *not* CrossRefs 'fault'
+  const dateFields = ['submitted', 'issued', 'event-date', 'original-date', 'container', 'accessed']
+  dateFields.forEach(field => {
+    if (data[field]) {
+      const dateParts = data[field]['date-parts']
+      if (dateParts) {
+        res[field] = [{
+          'date-parts': typeof dateParts[0] === 'number' ? dateParts : dateParts[0]
+        }]
+      }
+    }
+  })
+
+  return Object.assign({}, data, res)
 }
 
-export default async
+export default parseDoiJson
 </code></pre>
         </article>
     </section>

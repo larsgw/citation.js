@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>Source: async/index.js - Docs - Citation.js</title>
+    <title>Source: parse/doi/async/api.js - Docs - Citation.js</title>
     
     <meta name="theme-color" content="#FFC107">
     <link rel="shortcut icon" type="image/png" href="../favicon.png"/>
@@ -22,7 +22,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Source: async/index.js</h1>
+    <h1 class="page-title">Source: parse/doi/async/api.js</h1>
 
     
 
@@ -31,51 +31,48 @@
     
     <section>
         <article>
-            <pre class="prettyprint source linenums"><code>import parseInputAsync from '../parse/input/async/chain'
-import Cite from '../Cite/index'
+            <pre class="prettyprint source linenums"><code>import 'isomorphic-fetch'
+import parseDoiJson from '../json'
+
+/* global fetch, Headers */
 
 /**
- * @callback Cite~asyncCite
+ * Fetch DOI API results
  *
- * @param {Cite} data - Cite object
- */
-
-/**
  * @access private
- * @method asyncCite
+ * @method fetchDoiApiAsync
  *
- * @param {Promise} promise - promise returning parsed input
- * @param {Object} options - The options for the output. See [input options](../#citation.cite.in.options).
- * @return {Promise} promise returning Cite object
+ * @param {String} url - The input url
+ *
+ * @return {CSL} The fetched JSON
  */
-const asyncCite = async function (promise, options) {
-  return new Cite(await promise, options)
+const fetchDoiApiAsync = async function (url) {
+  try {
+    const headers = new Headers()
+    headers.append('Accept', 'application/vnd.citationstyles.csl+json')
+    return (await fetch(url, {headers})).json()
+  } catch (e) {
+    console.error('[set]', 'File could not be fetched')
+    return {}
+  }
 }
 
 /**
- * @method async
+ * Get CSL JSON from DOI API URLs.
  *
- * @param {String|CSL|Object|String[]|CSL[]|Object[]} data - Input data.
- * @param {Object} [options={}] - The options for the output. See [input options](../#citation.cite.in.options).
- * @param {Cite~asyncCite} callback - if not give, function returns promise.
- * @return {Promise} If callback is not given, it returns a Promise. Else returns undefined.
+ * @access protected
+ * @method parseDoiApiAsync
+ *
+ * @param {String|String[]} data - DOIs
+ *
+ * @return {CSL[]} Array of CSL
  */
-const async = function (data, options, callback) {
-  const promise = parseInputAsync(data)
-
-  if (typeof options === 'function' &amp;&amp; !callback) {
-    callback = options
-  }
-
-  if (typeof callback === 'function') {
-    promise.then(data => callback(new Cite(data, options)))
-    return undefined
-  } else {
-    return asyncCite(promise, options)
-  }
+const parseDoiApiAsync = async function (data) {
+  const doiJsonList = await Promise.all([].concat(data).map(fetchDoiApiAsync))
+  return doiJsonList.map(parseDoiJson)
 }
 
-export default async
+export default parseDoiApiAsync
 </code></pre>
         </article>
     </section>
