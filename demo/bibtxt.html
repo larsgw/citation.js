@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>API Demo - Citation.js</title>
+    <meta charset="UTF-8">
+    <link rel="shortcut icon" type="image/png" href="../favicon.png"/>
+    <link rel="icon" type="image/png" href="../favicon.png"/>
+    <link rel="stylesheet" type="text/css" href="../static/css/highlight.css" />
+    <link rel="stylesheet" type="text/css" href="../static/css/demo.css" />
+  </head>
+  <body>
+    <h1>Citation.js - demo</h1>
+    <h2>Input:</h2>
+    <h4><a href="http://bibtxt.github.io">Bib.TXT</a>:</h4>
+    <div id="in" class="in" contenteditable="true" spellcheck="false"><!--
+-->[Fau86]
+  author:    J.W. Goethe
+  title:     Faust. Der Tragödie Erster Teil
+  publisher: Reclam
+  year:      1986
+  address:   Stuttgart<!--
+      --></div>
+    <h2>Output:</h2>
+    <fieldset>
+      <legend>HTML or plain text:</legend>
+      <select class="type">
+        <option value="html">HTML</option>
+        <option value="json">JSON</option>
+        <option value="string">Plain text</option>
+      </select>
+    </fieldset>
+    <fieldset>
+      <legend>Style:</legend>
+      <select class="style">
+        <option value="citation-apa">APA</option>
+        <option value="citation-vancouver">Vancouver</option>
+        <option value="citation-harvard1">Harvard</option>
+        <option value="csl">CSL-JSON</option>
+        <option value="bibtex">BibTeX</option>
+        <option value="bibtxt">Bib.TXT</option>
+      </select>
+    </fieldset>
+    <fieldset>
+      <legend>Language:</legend>
+      <select class="lang">
+        <option value="en-US">English</option>
+        <option value="fr-FR">French</option>
+        <option value="es-ES">Spanish</option>
+        <option value="de-DE">German</option>
+        <option value="nl-NL">Dutch</option>
+      </select>
+    </fieldset>
+    <div id="out"></div>
+    <h2>Live code:</h2>
+    <pre><code data-type="js" class="javascript"></code></pre>
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+    <script type="text/javascript" src="../src/citation.js"></script>
+    <script type="text/javascript" src="../static/js/highlight.js"></script>
+    <script class="code" type="text/javascript">
+// Set variables
+var cite = new require('citation-js')(),
+    opt = {format: 'string'}
+
+$(function () {
+  function update () {
+    // Get user options
+    opt.type = $('select.type').val()
+    opt.style = $('select.style').val()
+    opt.lang = $('select.lang').val()
+
+    // Update output
+    cite.set($('#in'))
+    $('#out').html(cite.get(opt))
+  }
+  
+  $('.in').on('blur', update)
+  $('select').on('change', update)
+  update()
+})
+    </script>
+    <script type="text/javascript">
+      $(window).on('load',function(){
+        // Insert live code, directly from the script element (!)
+        $('pre code.javascript').html($('.code').html());       
+        
+        // Highlight all code
+        $('.javascript,.in').highlight();
+        
+        // Remove and re-add highlighting on focus and blur
+        $('.in').focus(function(){$(this).find('span').each(function(){$(this).after(this.textContent);$(this).remove();});});
+        $('.in').blur(function(){$(this).highlight()});
+      });
+    </script>
+  </body>
+</html>
