@@ -1,5 +1,8 @@
 npm-debug.log
 npm-debug.log.*
-node_modules/*
-dev/api
-build/tmp/*
+node_modules/
+dev/api/
+build/
+docs/src/
+docs/api/
+docs/disc/
