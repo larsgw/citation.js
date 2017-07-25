@@ -1,0 +1,21 @@
+{
+  "plugins": ["plugins/markdown"],
+  "tags": {
+    "allowUnknownTags": true,
+    "dictionaries": ["jsdoc", "closure"]
+  },
+  "opts": {
+    "template": "templates/default",
+    "encoding": "utf8",
+    "destination": "docs/api",
+    "recurse": true
+  },
+  "templates": {
+    "default": {
+      "layoutFile": ".jsdoc.tmpl",
+      "includeDate": false
+    },
+    "cleverLinks": false,
+    "monospaceLinks": false
+  }
+} 
