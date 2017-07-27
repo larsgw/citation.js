@@ -6,3 +6,8 @@ language: node_js
 node_js:
   - "node"
 sudo: false
+install:
+  - npm install -g codecov
+script:
+  - cross-env NODE_ENV=test nyc npm test
+  - codecov

@@ -1,6 +1,6 @@
 /* global require, module, describe, it, expect */
 
-const Cite = require('../lib/index.js')
+const Cite = require('../src/index.js')
 const test = require('./output.json')
 
 const customTemplate = `<?xml version="1.0" encoding="utf-8"?>

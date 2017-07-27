@@ -3,6 +3,10 @@ npm-debug.log.*
 node_modules/
 dev/api/
 build/
+coverage/
 docs/src/
 docs/api/
 docs/disc/
+.nyc_output/
+.directory
+

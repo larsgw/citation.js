@@ -3,3 +3,7 @@ dev/
 debug.html
 npm-debug.log
 build/
+coverage/
+.nyc_output/
+.directory
+

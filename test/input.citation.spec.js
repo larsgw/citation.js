@@ -1,6 +1,6 @@
-/* global require, module, describe, it, expect, beforeEach */
+/* global require, module, describe, it, expect */
 
-const Cite = require('../lib/index.js')
+const Cite = require('../src/index.js')
 
 const test = require('./input.json')
 test.input.wd.simple = require('./Q21972834.json')
@@ -41,41 +41,39 @@ const doiTestCaseOptions = {
 
 module.exports = {
   async: function () {
-    beforeEach(start => start())
-
     describe('with callback', function () {
-      it('works', function (done) {
-        Cite.async(test.input.wd.url, data => {
-          expect(data instanceof Cite).toBe(true)
-          expect(data.data[0].wikiId).toBe(test.output.wd.id)
-          done()
+      it('works', function () {
+        return new Promise(resolve => {
+          Cite.async(test.input.wd.url, data => {
+            expect(data instanceof Cite).toBe(true)
+            expect(data.data[0].wikiId).toBe(test.output.wd.id)
+            resolve()
+          })
         })
       })
 
-      it('works with options', function (done) {
-        Cite.async([], {}, data => {
-          expect(data instanceof Cite).toBe(true)
-          expect(data.data.length).toBe(0)
-          done()
+      it('works with options', function () {
+        return new Promise(resolve => {
+          Cite.async([], {}, data => {
+            expect(data instanceof Cite).toBe(true)
+            expect(data.data.length).toBe(0)
+            resolve()
+          })
         })
       })
     })
 
     describe('with promise', function () {
-      it('works', function (done) {
-        Cite.async(test.input.wd.url).then(data => {
-          expect(data instanceof Cite).toBe(true)
-          expect(data.data[0].wikiId).toBe(test.output.wd.id)
-          done()
-        })
+      it('works', async function () {
+        const data = await Cite.async(test.input.wd.url)
+        expect(data instanceof Cite).toBe(true)
+        expect(data.data[0].wikiId).toBe(test.output.wd.id)
       })
 
-      it('works with options', function (done) {
-        Cite.async([], {}).then(data => {
-          expect(data instanceof Cite).toBe(true)
-          expect(data.data.length).toBe(0)
-          done()
-        })
+      it('works with options', async function () {
+        const data = await Cite.async([], {})
+        expect(data instanceof Cite).toBe(true)
+        expect(data.data.length).toBe(0)
       })
     })
   },
