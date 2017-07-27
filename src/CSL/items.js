@@ -8,10 +8,6 @@
  *
  * @return {Cite~retrieveItem} Code to retreive item
  */
-const fetchCSLItemCallback = function (data) {
-  var _data = data
-
-  return (id) => _data.find(entry => entry.id === id)
-}
+const fetchCSLItemCallback = data => id => data.find(entry => entry.id === id)
 
 export default fetchCSLItemCallback

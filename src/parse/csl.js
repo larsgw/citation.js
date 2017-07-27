@@ -162,7 +162,6 @@ const correctField = function (fieldName, value, bestGuessConversions = true) {
     case 'composer':
     case 'collection-editor':
       return correctNameList(value, bestGuessConversions)
-      break
 
     case 'submitted':
     case 'issued':
@@ -171,7 +170,6 @@ const correctField = function (fieldName, value, bestGuessConversions = true) {
     case 'container':
     case 'accessed':
       return correctDate(value, bestGuessConversions)
-      break
   }
 
   const fieldType = [].concat(fieldTypes[fieldName])

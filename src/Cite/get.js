@@ -1,7 +1,6 @@
 import striptags from 'striptags'
 
 import { getPrefixedEntry } from '../util/attr.js'
-import deepCopy from '../util/deepCopy'
 
 import getBibTeXJSON from '../get/bibtex/json'
 import getBibTeX from '../get/bibtex/text'
@@ -35,60 +34,50 @@ const getIds = function () {
  * @memberof Cite
  * @this Cite
  *
- * @param {Object} options - The options for the output. See [input options](../#citation.cite.in.options)
- * @param {String} [options.locale] - Custom CSL locale for citeproc
- * @param {String} [options.template] - Custom CSL style template for citeproc
+ * @param {Object} [options={}] - The options for the output. See [input options](../#citation.cite.in.options)
  *
  * @return {String|Object[]} The formatted data
  */
-const get = function (options) {
-  const _data = parseCsl(this.data)
-
-  let result
-
-  const {format, type, style, lang, locale, template} = Object.assign(
-    {format: 'real', type: 'json', style: 'csl', lang: 'en-US'},
-    this._options,
-    {locale: '', template: ''},
-    options
-  )
-
+const get = function (options = {}) {
+  const {format, type, style, lang} = Object.assign({}, this.defaultOptions, this._options, options)
   const [, styleType, styleFormat] = style.match(/^([^-]+)(?:-(.+))?$/)
+
+  const data = parseCsl(this.data)
+  let result
 
   switch ([type, styleType].join()) {
     case 'html,citation':
       const useLang = fetchCSLLocale(lang) ? lang : 'en-US'
-      const useTemplate = template || fetchCSLStyle(styleFormat)
-      const cbItem = fetchCSLItemCallback(_data)
-      const cbLocale = locale ? () => locale : fetchCSLLocale
+      const useTemplate = fetchCSLStyle(styleFormat)
+      const cbItem = fetchCSLItemCallback(data)
 
-      const citeproc = fetchCSLEngine(styleFormat, useLang, useTemplate, cbItem, cbLocale)
+      const citeproc = fetchCSLEngine(styleFormat, useLang, useTemplate, cbItem, fetchCSLLocale)
       const sortedIds = citeproc.updateItems(this.getIds())
 
       let [{bibstart: bibStart, bibend: bibEnd}, bibBody] = citeproc.makeBibliography()
-      bibBody = bibBody.map((element, index) => getPrefixedEntry(element, index, sortedIds))
+      bibBody = bibBody.map((element, index) => getPrefixedEntry(element, sortedIds[index]))
 
       result = `${bibStart}${bibBody.join('<br />')}${bibEnd}`
       break
 
     case 'html,csl':
-      result = getJSON(_data)
+      result = getJSON(data)
       break
 
     case 'html,bibtex':
-      result = getBibTeX(_data, true)
+      result = getBibTeX(data, true)
       break
 
     case 'string,bibtex':
-      result = getBibTeX(_data, false)
+      result = getBibTeX(data, false)
       break
 
     case 'html,bibtxt':
-      result = getBibTxt(_data, true)
+      result = getBibTxt(data, true)
       break
 
     case 'string,bibtxt':
-      result = getBibTxt(_data, false)
+      result = getBibTxt(data, false)
       break
 
     case 'string,citation':
@@ -96,16 +85,16 @@ const get = function (options) {
       break
 
     case 'string,csl':
-      result = JSON.stringify(_data)
+      result = JSON.stringify(data)
       break
 
     case 'json,csl':
-      result = JSON.stringify(_data)
+      result = JSON.stringify(data)
       break
 
     case 'json,bibtex':
     case 'json,bibtxt':
-      result = JSON.stringify(_data.map(getBibTeXJSON))
+      result = JSON.stringify(data.map(getBibTeXJSON))
       break
 
     case 'json,citation':

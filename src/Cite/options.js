@@ -1,3 +1,6 @@
+// TODO docs
+const defaultOptions = {format: 'real', type: 'json', style: 'csl', lang: 'en-US'}
+
 /**
  * Change the default options of a `Cite` object.
  *
@@ -20,4 +23,4 @@ const options = function (options, log) {
   return this
 }
 
-export { options }
+export { options, defaultOptions }

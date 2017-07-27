@@ -1,3 +1,5 @@
+import { getTemplate as getCustomStyle, hasTemplate as hasCustomStyle } from './register'
+
 /**
  * Object containing CSL templates
  *
@@ -22,7 +24,10 @@ import varCSLStyles from './styles.json'
  *
  * @return {String} CSL style
  */
-const fetchCSLStyle = style =>
-  varCSLStyles.hasOwnProperty(style || '') ? varCSLStyles[style] : varCSLStyles['apa']
+const fetchCSLStyle = style => hasCustomStyle(style)
+  ? getCustomStyle(style)
+  : varCSLStyles.hasOwnProperty(style)
+  ? varCSLStyles[style]
+  : varCSLStyles['apa']
 
 export default fetchCSLStyle

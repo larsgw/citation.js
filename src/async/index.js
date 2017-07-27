@@ -20,6 +20,7 @@ const asyncCite = async function (promise, options) {
 }
 
 /**
+ * @access public
  * @method async
  *
  * @param {String|CSL|Object|String[]|CSL[]|Object[]} data - Input data.

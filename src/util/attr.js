@@ -19,11 +19,10 @@ const getAttributedEntry = (string, name, value) => string.replace(/^\s*<[a-z]+/
  * @method getPrefixedEntry
  *
  * @param {String} value - HTML string
- * @param {Number} index - ID index
- * @param {String[]} list - ID list
+ * @param {String|Number} id - ID
  *
  * @return {String} HTML string with CSL ID
  */
-var getPrefixedEntry = (value, index, list) => getAttributedEntry(value, 'csl-entry-id', list[index])
+const getPrefixedEntry = (value, id) => getAttributedEntry(value, 'csl-entry-id', id)
 
 export { getAttributedEntry, getPrefixedEntry }

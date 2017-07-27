@@ -1,3 +1,5 @@
+import { getLocale as getCustomLocale, hasLocale as hasCustomLocale } from './register'
+
 /**
  * Object containing CSL locales
  *
@@ -18,10 +20,14 @@ import varCSLLocales from './locales.json'
  * @access protected
  * @method fetchCSLLocale
  *
- * @param {String} lang - lang code
+ * @param {String} [lang="en-US"] - lang code
  *
  * @return {String} CSL locale
  */
-const fetchCSLLocale = lang => varCSLLocales[lang]
+const fetchCSLLocale = lang => hasCustomLocale(lang)
+  ? getCustomLocale(lang)
+  : varCSLLocales.hasOwnProperty(lang)
+  ? varCSLLocales[lang]
+  : varCSLLocales['en-US']
 
 export default fetchCSLLocale

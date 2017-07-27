@@ -183,42 +183,55 @@ When using the `.get()` function, your output depends on the options you pass. I
 
 #### <a id="cite.out.templates" href="#cite.out.templates">CSL Templates</a>
 
-Currently, the following CSL Templates are suppported in Citation.js.
+Currently, the following CSL Templates are built-in in Citation.js:
 
 * `apa`
 * `vancouver`
 * `harvard1`
 
-Different [CSL Templates](https://github.com/citation-style-language/styles) can be used by passing an XML string to `.get()` with the option `template:<string>`. E.g.
+Different [CSL Templates](https://github.com/citation-style-language/styles) can be registered like this:
 
 ```js
-var data = new Cite(...)
+var templateName = 'custom'
+var template = '<?xml version="1.0" encoding="utf-8"?><style ...>...</style>' // The actual XML file
 
+Cite.CSL.register.addTemplate(templateName, template)
+
+var data = new Cite(...)
 data.get({
   format: 'string',
   type: 'html',
-  style: 'citation-<TEMPLATE NAME>',
-  lang: 'en-US',
-  
-  template: '...' // XML String
+  style: 'citation-' + templateName,
+  lang: 'en-US'
 })
 ```
 
-Replace `<TEMPLATE NAME>` with the template name you want to use. After calling `.get()` with these options once, you can omit the template property, if you use the same locale.
+Replace `templateName` with the template name you want to use.
 
 #### <a id="cite.out.locales" href="#cite.out.locales">CSL Locales</a>
 
-If you want different languages than the standard, you can pass a [CSL Locale](https://github.com/citation-style-language/locales) as an XML string to `.get()` with the option `locale:<string>`. E.g.
+Currently, the following CSL Locales are built-in in Citation.js:
+
+* `en-US`
+* `es-ES`
+* `de-DE`
+* `fr-FR`
+* `nl-NL`
+
+Different [CSL Locales](https://github.com/citation-style-language/locales) can be registered like this:
 
 ```js
-var data = new Cite(...)
+var language = 'en-GB'
+var locale = '<?xml version="1.0" encoding="utf-8"?><locale ...>...</locale>' // The actual XML file
 
+Cite.CSL.register.addLocale(language, locale)
+
+var data = new Cite(...)
 data.get({
   format: 'string',
   type: 'html',
   style: 'citation-apa',
-  
-  locale: '...' // XML String
+  lang: language
 })
 ```
 ### <a id="cite.misc" href="#cite.misc">Misc</a>
@@ -253,7 +266,7 @@ array // [1, 2, 3]
 
 ## <a id="cite.internal" href="#cite.internal">Internal functions</a>
 
-`Cite` holds all internal functions, too. These are documented [here](https://larsgw.github.io/citation.js/api/global.html) and can be accessed like this:
+`Cite` holds most internal functions, too. These are documented [here](https://larsgw.github.io/citation.js/api/global.html) and can be accessed like this:
 
 Note that most `get*` functions expect CSL-JSON normalised with `Cite.parse.csl: [Function: parseCsl]`.
 
@@ -276,7 +289,14 @@ Note that most `get*` functions expect CSL-JSON normalised with `Cite.parse.csl:
    { style: [Function: fetchCSLStyle],
      locale: [Function: fetchCSLLocale],
      engine: [Function: fetchCSLEngine],
-     item: [Function: fetchCSLItemCallback] },
+     item: [Function: fetchCSLItemCallback],
+     register: 
+      { addTemplate: [Function: addTemplate],
+        addLocale: [Function: addLocale],
+        getTemplate: [Function: getTemplate],
+        getLocale: [Function: getLocale],
+        hasTemplate: [Function: hasTemplate],
+        hasLocale: [Function: hasLocale] } },
   parse: 
    { input: 
       { type: [Function: parseInputType],

@@ -11,6 +11,23 @@ const customTemplate = `<?xml version="1.0" encoding="utf-8"?>
     </layout>
   </bibliography>
 </style>`
+const customLocale = `<?xml version="1.0" encoding="utf-8"?>
+<locale xmlns="http://purl.org/net/xbiblio/csl" version="1.0" xml:lang="custom">
+  <style-options punctuation-in-quote="true"/>
+  <date form="text">
+    <date-part name="month" suffix=" "/>
+    <date-part name="day" suffix=", "/>
+    <date-part name="year"/>
+  </date>
+  <date form="numeric">
+    <date-part name="month" form="numeric-leading-zeros" suffix="/"/>
+    <date-part name="day" form="numeric-leading-zeros" suffix="/"/>
+    <date-part name="year"/>
+  </date>
+  <terms>
+    <term name="no date" form="short">custom</term>
+  </terms>
+</locale>`
 
 const testCaseGenerator = function (data, options, output, {
   callback = v => v,
@@ -29,7 +46,7 @@ const testCaseGenerator = function (data, options, output, {
 module.exports = function () {
   const data = new Cite(test.input.csl.simple)
 
-  describe('Formatted CSL', function () {
+  describe('formatted CSL', function () {
     describe('html', function () {
       describe('default built-in template (APA)', testCaseGenerator(data, {
         format: 'string',
@@ -44,18 +61,36 @@ module.exports = function () {
       }, test.output.csl.html.vancouver))
 
       describe('custom template', function () {
-        testCaseGenerator(data, {
-          format: 'string',
-          type: 'html',
-          style: 'citation-custom',
-          template: customTemplate
-        }, test.output.csl.html.title)()
+        const reg = Cite.CSL.register
+        reg.addTemplate('custom', customTemplate)
+
+        it('registers the template', function () {
+          expect(reg.hasTemplate('custom')).toBe(true)
+          expect(reg.getTemplate('custom')).toBe(customTemplate)
+        })
 
         testCaseGenerator(data, {
           format: 'string',
           type: 'html',
           style: 'citation-custom'
-        }, test.output.csl.html.title, {msg: 'registers for subsequent calls'})()
+        }, test.output.csl.html.title, {msg: 'uses the template'})()
+      })
+
+      describe('custom locale', function () {
+        const reg = Cite.CSL.register
+        reg.addLocale('custom', customLocale)
+
+        it('registers the locale', function () {
+          expect(reg.hasLocale('custom')).toBe(true)
+          expect(reg.getLocale('custom')).toBe(customLocale)
+        })
+
+        testCaseGenerator(new Cite({id: 'a', type: 'article-journal'}), {
+          format: 'string',
+          type: 'html',
+          style: 'citation-apa',
+          lang: 'custom'
+        }, test.output.csl.html.locale, {msg: 'uses the locale'})()
       })
     })
 
@@ -73,18 +108,36 @@ module.exports = function () {
       }, test.output.csl.vancouver))
 
       describe('custom template', function () {
-        testCaseGenerator(data, {
-          format: 'string',
-          type: 'string',
-          style: 'citation-custom',
-          template: customTemplate
-        }, test.output.csl.title)()
+        const reg = Cite.CSL.register
+        reg.addTemplate('custom', customTemplate)
+
+        it('registers the template', function () {
+          expect(reg.hasTemplate('custom')).toBe(true)
+          expect(reg.getTemplate('custom')).toBe(customTemplate)
+        })
 
         testCaseGenerator(data, {
           format: 'string',
           type: 'string',
           style: 'citation-custom'
-        }, test.output.csl.title, {msg: 'registers for subsequent calls'})()
+        }, test.output.csl.title, {msg: 'uses the template'})()
+      })
+
+      describe('custom locale', function () {
+        const reg = Cite.CSL.register
+        reg.addLocale('custom', customLocale)
+
+        it('registers the locale', function () {
+          expect(reg.hasLocale('custom')).toBe(true)
+          expect(reg.getLocale('custom')).toBe(customLocale)
+        })
+
+        testCaseGenerator(new Cite({id: 'a', type: 'article-journal'}), {
+          format: 'string',
+          type: 'string',
+          style: 'citation-apa',
+          lang: 'custom'
+        }, '(custom).', {msg: 'uses the locale'})()
       })
     })
   })
