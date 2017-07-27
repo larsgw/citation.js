@@ -1,6 +1,6 @@
 const fs = require('fs')
 const disc = require('disc')
-const file = fs.readFileSync('build/tmp/citation.js', 'utf8')
+const file = fs.readFileSync('build/tmp.js', 'utf8')
 
 const cb = function (err, html) {
   if (err) {
@@ -9,7 +9,7 @@ const cb = function (err, html) {
     fs.writeFileSync('docs/disc/index.html', html)
   }
 
-  fs.unlinkSync('build/tmp/citation.js')
+  fs.unlinkSync('build/tmp.js')
 }
 
 const title = '<title>Build Size Disc - Citation.js</title>'

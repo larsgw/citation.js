@@ -104,11 +104,13 @@ var saveOutput = function (data) {
   }
 }
 
+var input
+
 if (program.input || program.text || program.url) {
-  var input = program.input ? fs.readFileSync(program.input, 'utf8') : program.url || program.text
+  input = program.input ? fs.readFileSync(program.input, 'utf8') : program.url || program.text
   Cite.async(input, options, saveOutput)
 } else {
-  var input = ''
+  input = ''
 
   process.stdin.setEncoding('utf8')
   process.stdin.on('readable', function () {
