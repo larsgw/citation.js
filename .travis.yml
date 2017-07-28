@@ -10,5 +10,4 @@ install:
   - npm install
   - npm install -g codecov
 script:
-  - cross-env NODE_ENV=test nyc npm test
-  - npm run coverage:report
+  - npm run coverage
