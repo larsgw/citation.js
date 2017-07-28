@@ -4,11 +4,11 @@
  * @access protected
  * @function getDate
  *
- * @param {String[]} date - A date in CSL format
+ * @param {Object} date - A date in CSL format
  *
  * @return {String} The string
  */
-const getDate = function ([{'date-parts': date}]) {
+const getDate = function ({'date-parts': [date]}) {
   if (date.length === 3) {
     return `${date[0].padStart(4, '0')}-${date[1].padStart(2, '0')}-${date[2].padStart(2, '0')}`
   } else {

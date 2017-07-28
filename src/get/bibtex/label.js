@@ -8,19 +8,15 @@
  *
  * @return {String} The label
  */
-const getBibTeXLabel = function ({author = [], year, issued = [], title} = {}) {
+const getBibTeXLabel = function ({author, issued, title} = {}) {
   let res = ''
 
-  if (author.length > 0) {
+  if (author) {
     res += author[0].family || author[0].literal
   }
-
-  if (year) {
-    res += year
-  } else if (issued.length > 0 && issued[0]['date-parts']) {
-    res += issued[0]['date-parts'][0]
+  if (issued && issued['date-parts'][0]) {
+    res += issued['date-parts'][0][0]
   }
-
   if (title) {
     res += title.match(/^(?:(?:the|a|an)\s+)?(\S+)/i)[1]
   }

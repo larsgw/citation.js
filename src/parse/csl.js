@@ -121,15 +121,27 @@ const correctNameList = function (nameList, bestGuessConversions = true) {
  * @return {Array<Object>|undefined} returns the (corrected) value if possible, otherwise undefined
  */
 const correctDate = function (date, bestGuessConversions = true) {
-  if (date instanceof Array && date[0]['date-parts'] instanceof Array) {
-    if (date[0]['date-parts'].every(datePart => typeof datePart === 'number')) {
-      return date.slice(0, 1)
+  const dp = 'date-parts'
+
+  // "{'date-parts': [[2000, 1, 1], ...]}"
+  if (date && date[dp] instanceof Array && date[dp].every(part => part instanceof Array)) {
+    if (date[dp].every(part => part.every(datePart => typeof datePart === 'number'))) {
+      return {[dp]: date[dp].map(part => part.slice())}
     } else if (!bestGuessConversions) {
       return undefined
-    } else if (date[0]['date-parts'].every(datePart => typeof datePart === 'string')) {
-      const newDate = date.slice(0, 1)
-      newDate[0]['date-parts'] = newDate[0]['date-parts'].map(parseFloat)
-      return newDate
+    } else if (date[dp].every(part => part.every(datePart => typeof datePart === 'string'))) {
+      return {[dp]: date[dp].map(part => part.map(parseFloat))}
+    }
+
+  // LEGACY support
+  // "[{'date-parts': [2000, 1, 1]}, ...]"
+  } else if (date && date instanceof Array && date[0][dp] instanceof Array) {
+    if (date[0][dp].every(datePart => typeof datePart === 'number')) {
+      return {[dp]: [date[0][dp].slice()]}
+    } else if (!bestGuessConversions) {
+      return undefined
+    } else if (date[0][dp].every(datePart => typeof datePart === 'number')) {
+      return {[dp]: [date[0][dp].map(parseFloat)]}
     }
   }
 }
@@ -184,8 +196,6 @@ const correctField = function (fieldName, value, bestGuessConversions = true) {
     return value.toString()
   } else if (Array.isArray(value) && value.length) {
     return correctField(fieldName, value[0])
-  } else {
-    return undefined
   }
 }
 
