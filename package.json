@@ -1,6 +1,6 @@
 {
   "name": "citation-js",
-  "version": "0.3.0-10",
+  "version": "0.3.0-11",
   "description": "Citation.js converts formats like BibTeX, Wikidata JSON and ContentMine JSON to CSL-JSON to convert to other formats like APA, Vancouver and back to BibTeX.",
   "main": "lib/index.js",
   "directories": {
