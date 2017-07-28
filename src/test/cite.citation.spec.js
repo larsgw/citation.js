@@ -1,6 +1,6 @@
 /* global require, module, describe, it, expect */
 
-const Cite = require('../src/index')
+const Cite = require('./cite')
 const testInput = {csl: require('./cite.json')}
 
 module.exports = function () {

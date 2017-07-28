@@ -1,6 +1,6 @@
 /* global require, module, describe, it, expect */
 
-const Cite = require('../src/index.js')
+const Cite = require('./cite')
 
 const test = require('./input.json')
 test.input.wd.simple = require('./Q21972834.json')

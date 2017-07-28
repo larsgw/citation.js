@@ -1,0 +1,508 @@
+{
+  "input": {
+    "wd": {
+      "id": "Q21972834",
+      "url": "https://www.wikidata.org/wiki/Q21972834",
+      "list": {
+        "space": "Q21972834 Q27795847",
+        "newline": "Q21972834\nQ27795847",
+        "comma": "Q21972834,Q27795847"
+      }
+    },
+    "doi": {
+      "id": "10.1021/ja01577a030",
+      "url": "https://doi.org/10.1021/ja01577a030",
+      "list": {
+        "space": "10.1021/ja01577a030 10.1021/ci025584y",
+        "newline": "10.1021/ja01577a030\n10.1021/ci025584y"
+      }
+    },
+    "bibtex": {
+      "simple": "@article{Steinbeck2003, author = {Steinbeck, Christoph and Han, Yongquan and Kuhn, Stefan and Horlacher, Oliver and Luttmann, Edgar and Willighagen, Egon}, year = {2003}, title = {{The Chemistry Development Kit (CDK): an open-source Java library for Chemo- and Bioinformatics.}}, journal = {Journal of chemical information and computer sciences}, volume = {43}, number = {2}, pages = {493--500}, doi = {10.1021/ci025584y}, isbn = {2214707786}, issn = {0095-2338}, pmid = {12653513}, url = {http://www.ncbi.nlm.nih.gov/pubmed/12653513} }",
+      "whitespace": "@inproceedings{Ekstrand:2009:RYD,\n author = {Michael D. Ekstrand and John T. Riedl},\n title = {rv you're dumb: Identifying Discarded Work in Wiki Article History},\n booktitle = {Proceedings of the 5th International Symposium on Wikis and Open Collaboration},\n series = {WikiSym '09},\n year = {2009},\n isbn = {978-1-60558-730-1},\n location = {Orlando, Florida},\n pages = {4:1--4:10},\n articleno = {4},\n numpages = {10},\n url = {https://dx.doi.org/10.1145/1641309.1641317},\n doi = {10.1145/1641309.1641317},\n acmid = {1641317},\n publisher = {ACM},\n address = {New York, NY, USA},\n keywords = {Wiki, Wikipedia, article history, visualization},\n}\n",
+      "json": {
+        "type": "article",
+        "label": "Steinbeck2003",
+        "properties": {
+          "author": "Christoph Steinbeck and Yongquan Han and Stefan Kuhn and Oliver Horlacher and Edgar Luttmann and Egon Willighagen",
+          "doi": "10.1021/ci025584y",
+          "isbn": "2214707786",
+          "issn": "0095-2338",
+          "journal": "Journal of chemical information and computer sciences",
+          "issue": "2",
+          "pages": "493-500",
+          "title": "The Chemistry Development Kit (CDK): an open-source Java library for Chemo- and Bioinformatics",
+          "volume": "43",
+          "year": "2003",
+          "url": "http://www.ncbi.nlm.nih.gov/pubmed/12653513"
+        }
+      }
+    },
+    "bibtxt": {
+      "simple": "[Fau86]\n    author:    J.W. Goethe\n    title:     Faust. Der Tragödie Erster Teil\n    publisher: Reclam\n    year:      1986\n    address:   Stuttgart",
+      "multiple": "[Fau86]\n    author:    J.W. Goethe\n    title:     Faust. Der Tragödie Erster Teil\n    publisher: Reclam\n    year:      1986\n    address:   Stuttgart\n\n  [Steinbeck2003]\n    type: article\n    author: Christoph Steinbeck and Yongquan Han and Stefan Kuhn and Oliver Horlacher and Edgar Luttmann and Egon Willighagen\n    doi: 10.1021/ci025584y\n    isbn: 2214707786\n    issn: 0095-2338\n    journal: Journal of chemical information and computer sciences\n    issue: 2\n    pages: 493-500\n    title: The Chemistry Development Kit (CDK): an open-source Java library for Chemo- and Bioinformatics\n    volume: 43\n    year: 2003\n    url: http://www.ncbi.nlm.nih.gov/pubmed/12653513",
+      "whitespace": "[Fau86]  \n      \n    author:    J.W. Goethe\n    title:     Faust. Der Tragödie Erster Teil\n    \n\n    publisher: Reclam\n    year:      1986  \n    address:   Stuttgart\n  "
+    },
+    "bibjson": {
+      "simple": {
+        "publisher": {
+          "value": [
+            "BioMed Central"
+          ]
+        },
+        "journal": {
+          "value": [
+            "Journal of Ethnobiology and Ethnomedicine"
+          ]
+        },
+        "title": {
+          "value": [
+            "Gitksan medicinal plants-cultural choice and efficacy"
+          ]
+        },
+        "authors": {
+          "value": [
+            "Leslie Main Johnson"
+          ]
+        },
+        "date": {
+          "value": [
+            "2006-06-21"
+          ]
+        },
+        "doi": {
+          "value": [
+            "10.1186/1746-4269-2-29"
+          ]
+        },
+        "volume": {
+          "value": [
+            "2"
+          ]
+        },
+        "issue": {
+          "value": [
+            "1"
+          ]
+        },
+        "firstpage": {
+          "value": [
+            "1"
+          ]
+        },
+        "fulltext_html": {
+          "value": [
+            "http://ethnobiomed.biomedcentral.com/articles/10.1186/1746-4269-2-29"
+          ]
+        },
+        "fulltext_pdf": {
+          "value": [
+            "http://ethnobiomed.biomedcentral.com/track/pdf/10.1186/1746-4269-2-29?site=http://ethnobiomed.biomedcentral.com"
+          ]
+        },
+        "license": {
+          "value": [
+            "This article is published under license to BioMed Central Ltd. This is an Open Access article distributed under the terms of the Creative Commons Attribution License (http://creativecommons.org/licenses/by/2.0), which permits unrestricted use, distribution, and reproduction in any medium, provided the original work is properly cited."
+          ]
+        },
+        "copyright": {
+          "value": [
+            "2006 Johnson; licensee BioMed Central Ltd."
+          ]
+        }
+      }
+    },
+    "csl": [
+      {
+        "id": "Q23571040",
+        "type": "article-journal",
+        "title": "Correlation of the Base Strengths of Amines 1",
+        "DOI": "10.1021/ja01577a030",
+        "author": [
+          {
+            "given": "H. K.",
+            "family": "Hall"
+          }
+        ],
+        "issued": [
+          {
+            "date-parts": [
+              "1957",
+              "1",
+              "1"
+            ]
+          }
+        ],
+        "container-title": "Journal of the American Chemical Society",
+        "volume": "79",
+        "issue": "20",
+        "page": "5441-5444"
+      }
+    ]
+  },
+  "output": {
+    "wd": {
+      "id": "Q21972834",
+      "simple": [
+        {
+          "wikiId": "Q21972834",
+          "id": "Q21972834",
+          "type": "article-journal",
+          "title": "Assembling the 20 Gb white spruce (Picea glauca) genome from whole-genome shotgun sequencing data",
+          "volume": "29",
+          "issue": "12",
+          "issued": {
+            "date-parts": [[
+              2013,
+              6,
+              15
+            ]]
+          },
+          "page": "1492-7",
+          "container-title": "Bioinformatics",
+          "DOI": "10.1093/BIOINFORMATICS/BTT178",
+          "author": [
+            {
+              "given": "Inanc",
+              "family": "Birol"
+            },
+            {
+              "given": "Anthony",
+              "family": "Raymond"
+            },
+            {
+              "given": "Shaun D",
+              "family": "Jackman"
+            },
+            {
+              "given": "Stephen",
+              "family": "Pleasance"
+            },
+            {
+              "given": "Robin",
+              "family": "Coope"
+            },
+            {
+              "given": "Greg A",
+              "family": "Taylor"
+            },
+            {
+              "given": "Macaire Man Saint",
+              "family": "Yuen"
+            },
+            {
+              "given": "Christopher I",
+              "family": "Keeling"
+            },
+            {
+              "given": "Dana",
+              "family": "Brand"
+            },
+            {
+              "given": "Benjamin P",
+              "family": "Vandervalk"
+            },
+            {
+              "given": "Heather",
+              "family": "Kirk"
+            },
+            {
+              "given": "Pawan",
+              "family": "Pandoh"
+            },
+            {
+              "given": "Richard A",
+              "family": "Moore"
+            },
+            {
+              "given": "Yongjun",
+              "family": "Zhao"
+            },
+            {
+              "given": "Andrew J",
+              "family": "Mungall"
+            },
+            {
+              "given": "Barry",
+              "family": "Jaquish"
+            },
+            {
+              "given": "Alvin",
+              "family": "Yanchuk"
+            },
+            {
+              "given": "Carol",
+              "family": "Ritland"
+            },
+            {
+              "given": "Brian",
+              "family": "Boyle"
+            },
+            {
+              "given": "Jean",
+              "family": "Bousquet"
+            },
+            {
+              "given": "Kermit",
+              "family": "Ritland"
+            },
+            {
+              "given": "John",
+              "family": "Mackay"
+            },
+            {
+              "given": "Jörg",
+              "family": "Bohlmann"
+            },
+            {
+              "given": "Steven J M",
+              "family": "Jones"
+            }
+          ]
+        }
+      ],
+      "author": [
+        {
+          "wikiId": "Q27795847",
+          "id": "Q27795847",
+          "type": "article-journal",
+          "issued": {
+            "date-parts": [[
+              2016,
+              11,
+              8
+            ]]
+          },
+          "title": "SPLASH, a hashed identifier for mass spectra",
+          "volume": "34",
+          "page": "1099–1101",
+          "container-title": "Nature Biotechnology",
+          "URL": "http://rdcu.be/msZj",
+          "DOI": "10.1038/NBT.3689",
+          "author": [
+            {
+              "given": "Gert",
+              "family": "Wohlgemuth"
+            },
+            {
+              "given": "Sajjan S",
+              "family": "Mehta"
+            },
+            {
+              "given": "Ramon F",
+              "family": "Mejia"
+            },
+            {
+              "given": "Steffen",
+              "family": "Neumann"
+            },
+            {
+              "given": "Diego",
+              "family": "Pedrosa"
+            },
+            {
+              "given": "Tomáš",
+              "family": "Pluskal"
+            },
+            {
+              "given": "Emma",
+              "family": "Schymanski"
+            },
+            {
+              "given": "Egon",
+              "family": "Willighagen"
+            },
+            {
+              "given": "Michael",
+              "family": "Wilson"
+            },
+            {
+              "given": "David S",
+              "family": "Wishart"
+            },
+            {
+              "given": "Masanori",
+              "family": "Arita"
+            },
+            {
+              "given": "Pieter C",
+              "family": "Dorrestein"
+            },
+            {
+              "given": "Nuno",
+              "family": "Bandeira"
+            },
+            {
+              "given": "Mingxun",
+              "family": "Wang"
+            },
+            {
+              "given": "Tobias",
+              "family": "Schulze"
+            },
+            {
+              "given": "Reza M",
+              "family": "Salek"
+            },
+            {
+              "given": "Christoph",
+              "family": "Steinbeck"
+            },
+            {
+              "given": "Venkata Chandrasekhar",
+              "family": "Nainala"
+            },
+            {
+              "given": "Robert",
+              "family": "Mistrik"
+            },
+            {
+              "given": "Takaaki",
+              "family": "Nishioka"
+            },
+            {
+              "given": "Oliver",
+              "family": "Fiehn"
+            }
+          ]
+        }
+      ],
+      "api": [
+        "https://www.wikidata.org/w/api.php?action=wbgetentities&ids=Q21972834&format=json&languages=en",
+        "https://www.wikidata.org/w/api.php?action=wbgetentities&ids=Q21972834%7CQ27795847&format=json&languages=en"
+      ]
+    },
+    "doi": {
+      "simple": [{"indexed":{"date-parts":[[2017,5,10]],"date-time":"2017-05-10T11:14:56Z","timestamp":1494414896320},"reference-count":0,"publisher":"American Chemical Society (ACS)","issue":"20","content-domain":{"domain":[],"crossmark-restriction":false},"short-container-title":["J. Am. Chem. Soc."],"published-print":{"date-parts":[[1957,10]]},"DOI":"10.1021\/ja01577a030","type":"journal-article","created":{"date-parts":[[2005,3,10]],"date-time":"2005-03-10T14:51:56Z","timestamp":1110466316000},"page":"5441-5444","source":"Crossref","is-referenced-by-count":0,"title":"Correlation of the Base Strengths of Amines1","prefix":"10.1021","volume":"79","author":[{"suffix":"Jr.","given":"H. K.","family":"Hall","affiliation":[]}],"member":"316","container-title":"Journal of the American Chemical Society","original-title":[],"deposited":{"date-parts":[[2016,9,7]],"date-time":"2016-09-07T14:19:33Z","timestamp":1473257973000},"score":1.0,"subtitle":[],"short-title":[],"issued":{"date-parts":[[1957,10]]},"references-count":0,"alternative-id":["10.1021\/ja01577a030"],"URL":"http:\/\/dx.doi.org\/10.1021\/ja01577a030","relation":{},"ISSN":["0002-7863","1520-5126"],"issn-type":[{"value":"0002-7863","type":"print"},{"value":"1520-5126","type":"electronic"}],"subject":["Colloid and Surface Chemistry","Biochemistry","Chemistry(all)","Catalysis"]}],
+      "api": [
+        ["https://doi.org/10.1021/ja01577a030"],
+        ["https://doi.org/10.1021/ja01577a030", "https://doi.org/10.1021/ci025584y"]
+      ]
+    },
+    "bibtex": {
+      "simple": [
+        {
+          "label": "Steinbeck2003",
+          "type": "article-journal",
+          "author": [
+            {
+              "given": "Christoph",
+              "family": "Steinbeck"
+            },
+            {
+              "given": "Yongquan",
+              "family": "Han"
+            },
+            {
+              "given": "Stefan",
+              "family": "Kuhn"
+            },
+            {
+              "given": "Oliver",
+              "family": "Horlacher"
+            },
+            {
+              "given": "Edgar",
+              "family": "Luttmann"
+            },
+            {
+              "given": "Egon",
+              "family": "Willighagen"
+            }
+          ],
+          "year": "2003",
+          "title": "The Chemistry Development Kit (CDK): an open-source Java library for Chemo- and Bioinformatics",
+          "container-title": "Journal of chemical information and computer sciences",
+          "volume": "43",
+          "issue": "2",
+          "page": "493-500",
+          "DOI": "10.1021/ci025584y",
+          "ISBN": "2214707786",
+          "ISSN": "0095-2338",
+          "URL": "http://www.ncbi.nlm.nih.gov/pubmed/12653513",
+          "id": "Steinbeck2003"
+        }
+      ],
+      "whitespace": [
+        {
+          "label": "Ekstrand:2009:RYD",
+          "type": "paper-conference",
+          "author": [
+            {
+              "given": "Michael D.",
+              "family": "Ekstrand"
+            },
+            {
+              "given": "John T.",
+              "family": "Riedl"
+            }
+          ],
+          "title": "rv you're dumb: Identifying Discarded Work in Wiki Article History",
+          "container-title": "Proceedings of the 5th International Symposium on Wikis and Open Collaboration",
+          "collection-title": "WikiSym '09",
+          "year": "2009",
+          "ISBN": "978-1-60558-730-1",
+          "publisher-place": "New York, NY, USA",
+          "page": "4:1-4:10",
+          "URL": "https://dx.doi.org/10.1145/1641309.1641317",
+          "DOI": "10.1145/1641309.1641317",
+          "publisher": "ACM",
+          "id": "Ekstrand:2009:RYD"
+        }
+      ]
+    },
+    "bibtxt": {
+      "author": [
+        {
+          "given": "J.W.",
+          "family": "Goethe"
+        }
+      ],
+      "title": "Faust. Der Tragödie Erster Teil",
+      "publisher": "Reclam",
+      "year": "1986",
+      "publisher-place": "Stuttgart",
+      "type": "book",
+      "id": "Fau86",
+      "label": "Fau86"
+    },
+    "bibjson": {
+      "simple": [
+        {
+          "publisher": "BioMed Central",
+          "journal": "Journal of Ethnobiology and Ethnomedicine",
+          "title": "Gitksan medicinal plants-cultural choice and efficacy",
+          "authors": "Leslie Main Johnson",
+          "date": "2006-06-21",
+          "doi": "10.1186/1746-4269-2-29",
+          "volume": "2",
+          "issue": "1",
+          "firstpage": "1",
+          "fulltext_html": "http://ethnobiomed.biomedcentral.com/articles/10.1186/1746-4269-2-29",
+          "fulltext_pdf": "http://ethnobiomed.biomedcentral.com/track/pdf/10.1186/1746-4269-2-29?site=http://ethnobiomed.biomedcentral.com",
+          "license": "This article is published under license to BioMed Central Ltd. This is an Open Access article distributed under the terms of the Creative Commons Attribution License (http://creativecommons.org/licenses/by/2.0), which permits unrestricted use, distribution, and reproduction in any medium, provided the original work is properly cited.",
+          "copyright": "2006 Johnson; licensee BioMed Central Ltd.",
+          "type": "article-journal",
+          "author": [
+            {
+              "given": "Leslie Main",
+              "family": "Johnson"
+            }
+          ],
+          "page-first": "1",
+          "page": "1",
+          "issued": {
+            "date-parts": [[
+              2006,
+              6,
+              21
+            ]]
+          },
+          "container-title": "Journal of Ethnobiology and Ethnomedicine",
+          "id": "10.1186/1746-4269-2-29",
+          "DOI": "10.1186/1746-4269-2-29"
+        }
+      ]
+    }
+  }
+}
