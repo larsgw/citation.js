@@ -68,7 +68,7 @@
     "--2--": "test",
     "test": "cross-env JASMINE_CONFIG_PATH=test/jasmine.json jasmine",
     "coverage:test": "cross-env NODE_ENV=test nyc npm test",
-    "coverage:report": "nyc report",
+    "coverage:report": "nyc report --reporter=lcov > coverage.lcov && codecov",
     "--3--": "build",
     "babel": "babel src -d lib --copy-files",
     "--4--": "distributions",
