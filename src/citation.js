@@ -26986,7 +26986,7 @@ var encodeCharacter = function encodeCharacter(c) {
 },{}],332:[function(require,module,exports){
 module.exports={
   "name": "citation-js",
-  "version": "0.3.0-9",
+  "version": "0.3.0-10",
   "description": "Citation.js converts formats like BibTeX, Wikidata JSON and ContentMine JSON to CSL-JSON to convert to other formats like APA, Vancouver and back to BibTeX.",
   "main": "lib/index.js",
   "directories": {
@@ -27010,67 +27010,68 @@ module.exports={
   "dependencies": {
     "babel-polyfill": "^6.23.0",
     "citeproc": "^2.0.2",
-    "commander": "~2.9.0",
+    "commander": "~2.11.0",
     "deep-freeze": "0.0.1",
     "isomorphic-fetch": "^2.2.1",
     "striptags": "^3.0.1",
-    "sync-request": "^4.0.3",
-    "wikidata-sdk": "^5.1.4"
+    "sync-request": "^4.1.0",
+    "wikidata-sdk": "^5.2.2"
   },
   "devDependencies": {
     "babel-cli": "^6.24.1",
-    "babel-core": "^6.24.1",
+    "babel-core": "^6.25.0",
+    "babel-plugin-istanbul": "^4.1.4",
     "babel-preset-env": "^1.4.0",
     "babel-preset-es2015": "^6.24.1",
     "babel-preset-stage-0": "^6.24.1",
     "babelify": "^7.3.0",
     "brfs": "^1.4.3",
     "browserify": "^14.3.0",
-    "copyfiles": "^1.2.0",
+    "cross-env": "^5.0.1",
     "disc": "^1.3.2",
-    "jasmine-node": "^1.14.5",
-    "jsdoc": "^3.4.2",
-    "jsdoc-babel": "^0.3.0",
+    "jasmine-es6": "^0.4.0",
+    "jsdoc": "^3.5.3",
+    "npm-run-all": "^4.0.2",
+    "nyc": "^11.0.3",
     "standard": "^10.0.2",
     "uglify-es": "^3.0.4"
   },
-  "babel": {
-    "presets": [
-      "es2015",
-      "stage-0",
-      [
-        "env",
-        {
-          "targets": {
-            "browser": [
-              "> 1%",
-              "last 10 versions",
-              "ie > 7"
-            ]
-          }
-        }
-      ]
-    ]
+  "nyc": {
+    "require": [
+      "babel-register"
+    ],
+    "sourceMap": false,
+    "instrument": false
   },
   "scripts": {
-    "--0--": "test",
-    "test": "jasmine-node test/citation.spec.js",
-    "babel": "babel src -d lib --copy-files",
-    "--1--": "build",
-    "build": "     browserify -r ./src/index.js:citation-js  -o build/citation.js      -g [ babelify --ignore=citeproc --presets [ env ] ]         && copyfiles -u 1 build/citation.js      docs/src",
-    "build-test": "browserify -e test/citation.spec.js       -o build/test.citation.js -g [ babelify --ignore=citeproc --presets [ env ] ] -t brfs && copyfiles -u 1 build/test.citation.js docs/src/",
-    "minify": "     uglifyjs build/citation.js      --ie8 -c -o build/citation.min.js      && copyfiles -u 1 build/citation.min.js      docs/src/",
-    "minify-test": "uglifyjs build/test.citation.js --ie8 -c -o build/test.citation.min.js && copyfiles -u 1 build/test.citation.min.js docs/src/",
-    "--2--": "miscs",
-    "build-docs": "jsdoc ./src README.md -c docs/conf.json",
-    "build-disc": "browserify -e test/citation.spec.js       -o build/tmp/citation.js  -g [ babelify --ignore=citeproc --presets [ env ] ] -t brfs --full-paths && node tools/disc.js",
-    "--3--": "combo",
-    "build-all": "npm run build-files && npm run build-docs && npm run build-disc",
-    "build-files": "npm run build && npm run build-test && npm run minify && npm run minify-test",
-    "--4--": "dev",
-    "dev:test": "npm run babel && npm run test",
-    "dev:test-browser": "npm run babel && npm run build && npm run build-test",
-    "dev:test-all": "npm run dev:test  && npm run build && npm run build-test"
+    "--1--": "lint",
+    "lint:src": "standard \"src/async/**/*.js\" \"src/Cite/**/*.js\" \"src/CSL/**/*.js\" \"src/get/**/*.js\" \"src/parse/**/*.js\" \"src/util/**/*.js\" \"*.js\"",
+    "lint:test": "standard \"src/test/**/*.js\"",
+    "lint:tools": "standard \"tools/**/*.js\"",
+    "lint:bin": "standard \"bin/**/*.js\"",
+    "lint": "npm-run-all lint:*",
+    "--2--": "test",
+    "test": "cross-env JASMINE_CONFIG_PATH=src/test/jasmine.json jasmine",
+    "coverage:test": "cross-env NODE_ENV=test nyc npm test",
+    "coverage:report": "nyc report --reporter=lcov > coverage.lcov && codecov",
+    "coverage": "npm-run-all coverage:*",
+    "--3--": "compile",
+    "compile:test": "babel src/test -d lib/test --copy-files",
+    "compile": "babel src -d lib --copy-files",
+    "--4--": "distributions",
+    "dist:regular": "browserify -r ./src/index.js:citation-js -o build/citation.js -g [ babelify --ignore=citeproc --presets [ env ] ]",
+    "dist:regular-test": "browserify -e lib/test/citation.spec.js -o build/test.citation.js -g [ babelify --ignore=citeproc --presets [ es2015 env ] ] -t brfs",
+    "dist:minify": "uglifyjs build/citation.js --ie8 -c -o build/citation.min.js",
+    "dist:minify-test": "uglifyjs build/test.citation.js --ie8 -c -o build/test.citation.min.js",
+    "--5--": "generate",
+    "generate:files": "npm-run-all dist:*",
+    "generate:docs": "jsdoc ./src README.md -c .jsdoc.json",
+    "generate:disc": "browserify -e test/citation.spec.js -o build/tmp.js -t brfs --full-paths && node tools/disc.js",
+    "generate": "npm-run-all generate:*",
+    "--6--": "dev",
+    "dev:test": "npm run compile && npm run test",
+    "dev:test-browser": "npm-run-all dist:regular*",
+    "dev": "npm-run-all dev:*"
   },
   "author": "Lars Willighagen (https://larsgw.github.io)",
   "license": "MIT",
@@ -27143,7 +27144,7 @@ exports.default = fetchCSLEngine;
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.item = exports.engine = exports.locale = exports.style = undefined;
+exports.register = exports.item = exports.engine = exports.locale = exports.style = undefined;
 
 var _styles = require('./styles');
 
@@ -27161,14 +27162,21 @@ var _items = require('./items');
 
 var _items2 = _interopRequireDefault(_items);
 
+var _register = require('./register');
+
+var register = _interopRequireWildcard(_register);
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 exports.style = _styles2.default;
 exports.locale = _locales2.default;
 exports.engine = _engines2.default;
 exports.item = _items2.default;
+exports.register = register;
 
-},{"./engines":333,"./items":335,"./locales":337,"./styles":339}],335:[function(require,module,exports){
+},{"./engines":333,"./items":335,"./locales":337,"./register":338,"./styles":340}],335:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -27185,10 +27193,8 @@ Object.defineProperty(exports, "__esModule", {
  * @return {Cite~retrieveItem} Code to retreive item
  */
 var fetchCSLItemCallback = function fetchCSLItemCallback(data) {
-  var _data = data;
-
   return function (id) {
-    return _data.find(function (entry) {
+    return data.find(function (entry) {
       return entry.id === id;
     });
   };
@@ -27211,6 +27217,8 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
+var _register = require('./register');
+
 var _locales = require('./locales.json');
 
 var _locales2 = _interopRequireDefault(_locales);
@@ -27223,38 +27231,151 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
  * @access protected
  * @method fetchCSLLocale
  *
- * @param {String} lang - lang code
+ * @param {String} [lang="en-US"] - lang code
  *
  * @return {String} CSL locale
  */
 var fetchCSLLocale = function fetchCSLLocale(lang) {
-  return _locales2.default[lang];
-}; /**
-    * Object containing CSL locales
-    *
-    * Locales from the [CSL Project](http://citationstyles.org/)<br>
-    * [REPO](https://github.com/citation-style-language/locales)
-    *
-    * Accesed 10/22/2016
-    *
-    * @access private
-    * @constant varCSLLocales
-    * @default
-    */
+  return (0, _register.hasLocale)(lang) ? (0, _register.getLocale)(lang) : _locales2.default.hasOwnProperty(lang) ? _locales2.default[lang] : _locales2.default['en-US'];
+};
+
+/**
+ * Object containing CSL locales
+ *
+ * Locales from the [CSL Project](http://citationstyles.org/)<br>
+ * [REPO](https://github.com/citation-style-language/locales)
+ *
+ * Accesed 10/22/2016
+ *
+ * @access private
+ * @constant varCSLLocales
+ * @default
+ */
 exports.default = fetchCSLLocale;
 
-},{"./locales.json":336}],338:[function(require,module,exports){
+},{"./locales.json":336,"./register":338}],338:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+/**
+ * Internal custom templates register.
+ *
+ * @access private
+ * @constant templates
+ * @default {}
+ */
+var templates = {};
+
+/**
+ * Add a template to the register.
+ *
+ * @access public
+ * @method addTemplate
+ *
+ * @param {String} templateName - template name (used as 'citation-NAME' in Cite#get() style options)
+ * @param {String} template - CSL template string
+ */
+var addTemplate = function addTemplate(templateName, template) {
+  templates[templateName] = template;
+};
+
+/**
+ * Get a template from the register.
+ *
+ * @access protected
+ * @method getTemplate
+ *
+ * @param {String} templateName - template name (used as 'citation-NAME' in Cite#get() style options)
+ * @return {String} CSL template string
+ */
+var getTemplate = function getTemplate(templateName) {
+  return templates[templateName];
+};
+
+/**
+ * Check if the register has a template (identified by name).
+ *
+ * @access protected
+ * @method hasTemplate
+ *
+ * @param {String} templateName - template name (used as 'citation-NAME' in Cite#get() style options)
+ * @return {Boolean} true if register has template
+ */
+var hasTemplate = function hasTemplate(templateName) {
+  return templates.hasOwnProperty(templateName);
+};
+
+/**
+ * Internal custom locales register.
+ *
+ * @access private
+ * @constant locales
+ * @default {}
+ */
+var locales = {};
+
+/**
+ * Add a locale to the register.
+ *
+ * @access public
+ * @method addLocale
+ *
+ * @param {String} localeName - locale name (used as lang in Cite#get() options)
+ * @param {String} locale - CSL locale string
+ */
+var addLocale = function addLocale(localeName, locale) {
+  locales[localeName] = locale;
+};
+
+/**
+ * Get a locale from the register.
+ *
+ * @access protected
+ * @method getLocale
+ *
+ * @param {String} localeName - locale name (used as lang in Cite#get() options)
+ * @return {String} CSL locale string
+ */
+var getLocale = function getLocale(localeName) {
+  return locales[localeName];
+};
+
+/**
+ * Check if the register has a locale (identified by name).
+ *
+ * @access protected
+ * @method hasLocale
+ *
+ * @param {String} localeName - locale name (used as lang in Cite#get() options)
+ * @return {Boolean} true if register has locale
+ */
+var hasLocale = function hasLocale(localeName) {
+  return locales.hasOwnProperty(localeName);
+};
+
+exports.addTemplate = addTemplate;
+exports.addLocale = addLocale;
+exports.getTemplate = getTemplate;
+exports.getLocale = getLocale;
+exports.hasTemplate = hasTemplate;
+exports.hasLocale = hasLocale;
+
+},{}],339:[function(require,module,exports){
 module.exports={
   "apa": "<?xml version=\"1.0\" encoding=\"utf-8\"?><style xmlns=\"http://purl.org/net/xbiblio/csl\" class=\"in-text\" version=\"1.0\" demote-non-dropping-particle=\"never\"><info><title>American Psychological Association 6th edition</title><title-short>APA</title-short><id>http://www.zotero.org/styles/apa</id><link href=\"http://www.zotero.org/styles/apa\" rel=\"self\"/><link href=\"http://owl.english.purdue.edu/owl/resource/560/01/\" rel=\"documentation\"/><author><name>Simon Kornblith</name><email>simon@simonster.com</email></author><contributor><name>Bruce D'Arcus</name></contributor><contributor><name>Curtis M. Humphrey</name></contributor><contributor><name>Richard Karnesky</name><email>karnesky+zotero@gmail.com</email><uri>http://arc.nucapt.northwestern.edu/Richard_Karnesky</uri></contributor><contributor><name>Sebastian Karcher</name></contributor><contributor><name> Brenton M. Wiernik</name><email>zotero@wiernik.org</email></contributor><category citation-format=\"author-date\"/><category field=\"psychology\"/><category field=\"generic-base\"/><updated>2016-05-25T09:01:49+00:00</updated><rights license=\"http://creativecommons.org/licenses/by-sa/3.0/\">This work is licensed under a Creative Commons Attribution-ShareAlike 3.0 License</rights></info><locale xml:lang=\"en\"><terms><term name=\"editortranslator\" form=\"short\"><single>ed. &amp; trans.</single><multiple>eds. &amp; trans.</multiple></term><term name=\"translator\" form=\"short\"><single>trans.</single><multiple>trans.</multiple></term></terms></locale><macro name=\"container-contributors\"><choose><if type=\"chapter paper-conference entry-dictionary entry-encyclopedia\" match=\"any\"><group delimiter=\", \"><names variable=\"container-author\" delimiter=\", \"><name and=\"symbol\" initialize-with=\". \" delimiter=\", \"/><label form=\"short\" prefix=\" (\" text-case=\"title\" suffix=\")\"/></names><names variable=\"editor translator\" delimiter=\", \"><name and=\"symbol\" initialize-with=\". \" delimiter=\", \"/><label form=\"short\" prefix=\" (\" text-case=\"title\" suffix=\")\"/></names></group></if></choose></macro><macro name=\"secondary-contributors\"><choose><if type=\"article-journal chapter paper-conference entry-dictionary entry-encyclopedia\" match=\"none\"><group delimiter=\", \" prefix=\" (\" suffix=\")\"><names variable=\"container-author\" delimiter=\", \"><name and=\"symbol\" initialize-with=\". \" delimiter=\", \"/><label form=\"short\" prefix=\", \" text-case=\"title\"/></names><names variable=\"editor translator\" delimiter=\", \"><name and=\"symbol\" initialize-with=\". \" delimiter=\", \"/><label form=\"short\" prefix=\", \" text-case=\"title\"/></names></group></if></choose></macro><macro name=\"author\"><names variable=\"author\"><name name-as-sort-order=\"all\" and=\"symbol\" sort-separator=\", \" initialize-with=\". \" delimiter=\", \" delimiter-precedes-last=\"always\"/><label form=\"short\" prefix=\" (\" suffix=\")\" text-case=\"capitalize-first\"/><substitute><names variable=\"editor\"/><names variable=\"translator\"/><choose><if type=\"report\"><text variable=\"publisher\"/><text macro=\"title\"/></if><else><text macro=\"title\"/></else></choose></substitute></names></macro><macro name=\"author-short\"><names variable=\"author\"><name form=\"short\" and=\"symbol\" delimiter=\", \" initialize-with=\". \"/><substitute><names variable=\"editor\"/><names variable=\"translator\"/><choose><if type=\"report\"><text variable=\"publisher\"/><text variable=\"title\" form=\"short\" font-style=\"italic\"/></if><else-if type=\"legal_case\"><text variable=\"title\" font-style=\"italic\"/></else-if><else-if type=\"bill book graphic legislation motion_picture song\" match=\"any\"><text variable=\"title\" form=\"short\" font-style=\"italic\"/></else-if><else-if variable=\"reviewed-author\"><choose><if variable=\"reviewed-title\" match=\"none\"><text variable=\"title\" form=\"short\" font-style=\"italic\" prefix=\"Review of \"/></if><else><text variable=\"title\" form=\"short\" quotes=\"true\"/></else></choose></else-if><else><text variable=\"title\" form=\"short\" quotes=\"true\"/></else></choose></substitute></names></macro><macro name=\"access\"><choose><if type=\"thesis report\" match=\"any\"><choose><if variable=\"DOI\" match=\"any\">\n<text variable=\"DOI\" prefix=\"https://doi.org/\"/></if><else-if variable=\"archive\" match=\"any\"><group><text term=\"retrieved\" text-case=\"capitalize-first\" suffix=\" \"/><text term=\"from\" suffix=\" \"/><text variable=\"archive\" suffix=\".\"/><text variable=\"archive_location\" prefix=\" (\" suffix=\")\"/></group></else-if><else><group><text term=\"retrieved\" text-case=\"capitalize-first\" suffix=\" \"/><text term=\"from\" suffix=\" \"/><text variable=\"URL\"/></group></else></choose></if><else><choose><if variable=\"DOI\"><text variable=\"DOI\" prefix=\"https://doi.org/\"/></if><else><choose><if type=\"webpage\"><group delimiter=\" \"><text term=\"retrieved\" text-case=\"capitalize-first\" suffix=\" \"/><group><date variable=\"accessed\" form=\"text\" suffix=\", \"/></group><text term=\"from\"/><text variable=\"URL\"/></group></if><else><group><text term=\"retrieved\" text-case=\"capitalize-first\" suffix=\" \"/><text term=\"from\" suffix=\" \"/><text variable=\"URL\"/></group></else></choose></else></choose></else></choose></macro><macro name=\"title\"><choose><if type=\"book graphic manuscript motion_picture report song speech thesis\" match=\"any\"><choose><if variable=\"version\" type=\"book\" match=\"all\"><text variable=\"title\"/></if><else><text variable=\"title\" font-style=\"italic\"/></else></choose></if><else-if variable=\"reviewed-author\"><choose><if variable=\"reviewed-title\"><group delimiter=\" \"><text variable=\"title\"/><group delimiter=\", \" prefix=\"[\" suffix=\"]\"><text variable=\"reviewed-title\" font-style=\"italic\" prefix=\"Review of \"/><names variable=\"reviewed-author\" delimiter=\", \"><label form=\"verb-short\" suffix=\" \"/><name and=\"symbol\" initialize-with=\". \" delimiter=\", \"/></names></group></group></if><else><group delimiter=\", \" prefix=\"[\" suffix=\"]\"><text variable=\"title\" font-style=\"italic\" prefix=\"Review of \"/><names variable=\"reviewed-author\" delimiter=\", \"><label form=\"verb-short\" suffix=\" \"/><name and=\"symbol\" initialize-with=\". \" delimiter=\", \"/></names></group></else></choose></else-if><else><text variable=\"title\"/></else></choose></macro><macro name=\"title-plus-extra\"><text macro=\"title\"/><choose><if type=\"report thesis\" match=\"any\"><group prefix=\" (\" suffix=\")\" delimiter=\", \"><group delimiter=\" \"><choose><if variable=\"genre\" match=\"any\"><text variable=\"genre\"/></if><else><text variable=\"collection-title\"/></else></choose><text variable=\"number\" prefix=\"No. \"/></group><group delimiter=\" \"><text term=\"version\" text-case=\"capitalize-first\"/><text variable=\"version\"/></group><text macro=\"edition\"/></group></if><else-if type=\"post-weblog webpage\" match=\"any\"><text variable=\"genre\" prefix=\" [\" suffix=\"]\"/></else-if><else-if variable=\"version\"><group delimiter=\" \" prefix=\" (\" suffix=\")\"><text term=\"version\" text-case=\"capitalize-first\"/><text variable=\"version\"/></group></else-if></choose><text macro=\"format\" prefix=\" [\" suffix=\"]\"/></macro><macro name=\"format\"><choose><if match=\"any\" variable=\"medium\"><text variable=\"medium\" text-case=\"capitalize-first\"/></if><else-if type=\"dataset\" match=\"any\"><text value=\"Data set\"/></else-if></choose></macro><macro name=\"publisher\"><choose><if type=\"report\" match=\"any\"><group delimiter=\": \"><text variable=\"publisher-place\"/><text variable=\"publisher\"/></group></if><else-if type=\"thesis\" match=\"any\"><group delimiter=\", \"><text variable=\"publisher\"/><text variable=\"publisher-place\"/></group></else-if><else-if type=\"post-weblog webpage\" match=\"none\"><group delimiter=\", \"><choose><if variable=\"event version\" type=\"speech motion_picture\" match=\"none\"><text variable=\"genre\"/></if></choose><choose><if type=\"article-journal article-magazine\" match=\"none\"><group delimiter=\": \"><choose><if variable=\"publisher-place\"><text variable=\"publisher-place\"/></if><else><text variable=\"event-place\"/></else></choose><text variable=\"publisher\"/></group></if></choose></group></else-if></choose></macro><macro name=\"event\"><choose><if variable=\"container-title\" match=\"none\"><choose><if variable=\"event\"><choose><if variable=\"genre\" match=\"none\"><text term=\"presented at\" text-case=\"capitalize-first\" suffix=\" \"/><text variable=\"event\"/></if><else>\n<group delimiter=\" \"><text variable=\"genre\" text-case=\"capitalize-first\"/><text term=\"presented at\"/><text variable=\"event\"/></group></else></choose></if><else-if type=\"speech\"><text variable=\"genre\" text-case=\"capitalize-first\"/></else-if></choose></if></choose></macro><macro name=\"issued\"><choose><if type=\"bill legal_case legislation\" match=\"none\"><choose><if variable=\"issued\"><group prefix=\" (\" suffix=\")\"><date variable=\"issued\"><date-part name=\"year\"/></date><text variable=\"year-suffix\"/><choose><if type=\"speech\" match=\"any\"><date variable=\"issued\"><date-part prefix=\", \" name=\"month\"/></date></if><else-if type=\"article-journal bill book chapter graphic legal_case legislation motion_picture paper-conference report song dataset\" match=\"none\"><date variable=\"issued\"><date-part prefix=\", \" name=\"month\"/><date-part prefix=\" \" name=\"day\"/></date></else-if></choose></group></if><else-if variable=\"status\"><group prefix=\" (\" suffix=\")\"><text variable=\"status\"/><text variable=\"year-suffix\" prefix=\"-\"/></group></else-if><else><group prefix=\" (\" suffix=\")\"><text term=\"no date\" form=\"short\"/><text variable=\"year-suffix\" prefix=\"-\"/></group></else></choose></if></choose></macro><macro name=\"issued-sort\"><choose><if type=\"article-journal bill book chapter graphic legal_case legislation motion_picture paper-conference report song dataset\" match=\"none\"><date variable=\"issued\"><date-part name=\"year\"/><date-part name=\"month\"/><date-part name=\"day\"/></date></if><else><date variable=\"issued\"><date-part name=\"year\"/></date></else></choose></macro><macro name=\"issued-year\"><choose><if variable=\"issued\"><group delimiter=\"/\"><date variable=\"original-date\" form=\"text\"/><group><date variable=\"issued\"><date-part name=\"year\"/></date><text variable=\"year-suffix\"/></group></group></if><else-if variable=\"status\"><text variable=\"status\"/><text variable=\"year-suffix\" prefix=\"-\"/></else-if><else><text term=\"no date\" form=\"short\"/><text variable=\"year-suffix\" prefix=\"-\"/></else></choose></macro><macro name=\"edition\"><choose><if is-numeric=\"edition\"><group delimiter=\" \"><number variable=\"edition\" form=\"ordinal\"/><text term=\"edition\" form=\"short\"/></group></if><else><text variable=\"edition\"/></else></choose></macro><macro name=\"locators\"><choose><if type=\"article-journal article-magazine\" match=\"any\"><group prefix=\", \" delimiter=\", \"><group><text variable=\"volume\" font-style=\"italic\"/><text variable=\"issue\" prefix=\"(\" suffix=\")\"/></group><text variable=\"page\"/></group><choose><if variable=\"issued\"><choose><if variable=\"page issue\" match=\"none\"><text variable=\"status\" prefix=\". \"/></if></choose></if></choose></if><else-if type=\"article-newspaper\"><group delimiter=\" \" prefix=\", \"><label variable=\"page\" form=\"short\"/><text variable=\"page\"/></group></else-if><else-if type=\"book graphic motion_picture report song chapter paper-conference entry-encyclopedia entry-dictionary\" match=\"any\"><group prefix=\" (\" suffix=\")\" delimiter=\", \"><choose><if type=\"report\" match=\"none\"><text macro=\"edition\"/></if></choose><choose><if variable=\"volume\" match=\"any\"><group><text term=\"volume\" form=\"short\" text-case=\"capitalize-first\" suffix=\" \"/><number variable=\"volume\" form=\"numeric\"/></group></if><else><group><text term=\"volume\" form=\"short\" plural=\"true\" text-case=\"capitalize-first\" suffix=\" \"/><number variable=\"number-of-volumes\" form=\"numeric\" prefix=\"1&#8211;\"/></group></else></choose><group><label variable=\"page\" form=\"short\" suffix=\" \"/><text variable=\"page\"/></group></group></else-if><else-if type=\"legal_case\"><group prefix=\" (\" suffix=\")\" delimiter=\" \"><text variable=\"authority\"/><date variable=\"issued\" form=\"text\"/></group></else-if><else-if type=\"bill legislation\" match=\"any\"><date variable=\"issued\" prefix=\" (\" suffix=\")\"><date-part name=\"year\"/></date></else-if></choose></macro><macro name=\"citation-locator\"><group><choose><if locator=\"chapter\"><label variable=\"locator\" form=\"long\" text-case=\"capitalize-first\"/></if><else><label variable=\"locator\" form=\"short\"/></else></choose><text variable=\"locator\" prefix=\" \"/></group></macro>\n<macro name=\"container\"><choose><if type=\"post-weblog webpage\" match=\"none\"><group><choose><if type=\"chapter paper-conference entry-encyclopedia\" match=\"any\"><text term=\"in\" text-case=\"capitalize-first\" suffix=\" \"/></if></choose><group delimiter=\", \"><text macro=\"container-contributors\"/><text macro=\"secondary-contributors\"/><text macro=\"container-title\"/></group></group></if></choose></macro><macro name=\"container-title\"><choose><if type=\"article article-journal article-magazine article-newspaper\" match=\"any\"><text variable=\"container-title\" font-style=\"italic\" text-case=\"title\"/></if><else-if type=\"bill legal_case legislation\" match=\"none\"><text variable=\"container-title\" font-style=\"italic\"/></else-if></choose></macro><macro name=\"legal-cites\"><choose><if type=\"bill legal_case legislation\" match=\"any\"><group delimiter=\" \" prefix=\", \"><choose><if variable=\"container-title\"><text variable=\"volume\"/><text variable=\"container-title\"/><group delimiter=\" \"><text term=\"section\" form=\"symbol\"/><text variable=\"section\"/></group><text variable=\"page\"/></if><else><choose><if type=\"legal_case\"><text variable=\"number\" prefix=\"No. \"/></if><else><text variable=\"number\" prefix=\"Pub. L. No. \"/><group delimiter=\" \"><text term=\"section\" form=\"symbol\"/><text variable=\"section\"/></group></else></choose></else></choose></group></if></choose></macro><macro name=\"original-date\"><choose><if variable=\"original-date\"><group prefix=\"(\" suffix=\")\" delimiter=\" \"><text value=\"Original work published\"/><date variable=\"original-date\" form=\"text\"/></group></if></choose></macro><citation et-al-min=\"6\" et-al-use-first=\"1\" et-al-subsequent-min=\"3\" et-al-subsequent-use-first=\"1\" disambiguate-add-year-suffix=\"true\" disambiguate-add-names=\"true\" disambiguate-add-givenname=\"true\" collapse=\"year\" givenname-disambiguation-rule=\"primary-name\"><sort><key macro=\"author\"/><key macro=\"issued-sort\"/></sort><layout prefix=\"(\" suffix=\")\" delimiter=\"; \"><group delimiter=\", \"><text macro=\"author-short\"/><text macro=\"issued-year\"/><text macro=\"citation-locator\"/></group></layout></citation><bibliography hanging-indent=\"true\" et-al-min=\"8\" et-al-use-first=\"6\" et-al-use-last=\"true\" entry-spacing=\"0\" line-spacing=\"2\"><sort><key macro=\"author\"/><key macro=\"issued-sort\" sort=\"ascending\"/><key macro=\"title\"/></sort><layout><group suffix=\".\"><group delimiter=\". \"><text macro=\"author\"/><text macro=\"issued\"/><text macro=\"title-plus-extra\"/><text macro=\"container\"/></group><text macro=\"legal-cites\"/><text macro=\"locators\"/><group delimiter=\", \" prefix=\". \"><text macro=\"event\"/><text macro=\"publisher\"/></group></group><text macro=\"access\" prefix=\" \"/><text macro=\"original-date\" prefix=\" \"/></layout></bibliography></style>",
   "vancouver": "<?xml version=\"1.0\" encoding=\"utf-8\"?><style xmlns=\"http://purl.org/net/xbiblio/csl\" class=\"in-text\" version=\"1.0\" demote-non-dropping-particle=\"sort-only\" page-range-format=\"minimal\"><info><title>Vancouver</title><id>http://www.zotero.org/styles/vancouver</id><link href=\"http://www.zotero.org/styles/vancouver\" rel=\"self\"/><link href=\"http://www.nlm.nih.gov/bsd/uniform_requirements.html\" rel=\"documentation\"/><author><name>Michael Berkowitz</name><email>mberkowi@gmu.edu</email></author><contributor><name>Sean Takats</name><email>stakats@gmu.edu</email></contributor><contributor><name>Sebastian Karcher</name></contributor><category citation-format=\"numeric\"/><category field=\"medicine\"/><summary>Vancouver style as outlined by International Committee of Medical Journal Editors Uniform Requirements for Manuscripts Submitted to Biomedical Journals: Sample References</summary><updated>2014-09-06T16:03:01+00:00</updated><rights license=\"http://creativecommons.org/licenses/by-sa/3.0/\">This work is licensed under a Creative Commons Attribution-ShareAlike 3.0 License</rights></info><locale xml:lang=\"en\"><date form=\"text\" delimiter=\" \"><date-part name=\"year\"/><date-part name=\"month\" form=\"short\" strip-periods=\"true\"/><date-part name=\"day\"/></date><terms><term name=\"collection-editor\" form=\"long\"><single>editor</single><multiple>editors</multiple></term><term name=\"presented at\">presented at</term><term name=\"available at\">available from</term><term name=\"section\" form=\"short\">sect.</term></terms></locale><locale xml:lang=\"fr\"><date form=\"text\" delimiter=\" \"><date-part name=\"day\"/><date-part name=\"month\" form=\"short\" strip-periods=\"true\"/><date-part name=\"year\"/></date></locale><macro name=\"author\"><names variable=\"author\"><name sort-separator=\" \" initialize-with=\"\" name-as-sort-order=\"all\" delimiter=\", \" delimiter-precedes-last=\"always\"/><label form=\"long\" prefix=\", \"/><substitute><names variable=\"editor\"/></substitute></names></macro><macro name=\"editor\"><names variable=\"editor\" suffix=\".\"><name sort-separator=\" \" initialize-with=\"\" name-as-sort-order=\"all\" delimiter=\", \" delimiter-precedes-last=\"always\"/><label form=\"long\" prefix=\", \"/></names></macro><macro name=\"chapter-marker\"><choose><if type=\"chapter paper-conference entry-dictionary entry-encyclopedia\" match=\"any\"><text term=\"in\" text-case=\"capitalize-first\"/></if></choose></macro><macro name=\"publisher\"><choose><if type=\"article-journal article-magazine article-newspaper\" match=\"none\"><group delimiter=\": \" suffix=\";\"><choose><if type=\"thesis\"><text variable=\"publisher-place\" prefix=\"[\" suffix=\"]\"/></if><else-if type=\"speech\"/><else><text variable=\"publisher-place\"/></else></choose><text variable=\"publisher\"/></group></if></choose></macro><macro name=\"access\"><choose><if variable=\"URL\"><group delimiter=\": \"><text term=\"available at\" text-case=\"capitalize-first\"/><text variable=\"URL\"/></group></if></choose></macro><macro name=\"accessed-date\"><choose><if variable=\"URL\"><group prefix=\"[\" suffix=\"]\" delimiter=\" \"><text term=\"cited\" text-case=\"lowercase\"/><date variable=\"accessed\" form=\"text\"/></group></if></choose></macro><macro name=\"container-title\"><choose><if type=\"article-journal article-magazine chapter paper-conference article-newspaper review review-book entry-dictionary entry-encyclopedia\" match=\"any\"><group suffix=\".\" delimiter=\" \"><choose><if type=\"article-journal review review-book\" match=\"any\"><text variable=\"container-title\" form=\"short\" strip-periods=\"true\"/></if><else><text variable=\"container-title\" strip-periods=\"true\"/></else></choose><choose><if variable=\"URL\"><text term=\"internet\" prefix=\"[\" suffix=\"]\" text-case=\"capitalize-first\"/></if></choose></group><text macro=\"edition\" prefix=\" \"/></if><else-if type=\"bill legislation\" match=\"any\"><group delimiter=\", \"><group delimiter=\". \"><text variable=\"container-title\"/><group delimiter=\" \"><text term=\"section\" form=\"short\" text-case=\"capitalize-first\"/><text variable=\"section\"/></group></group><text variable=\"number\"/></group></else-if><else-if type=\"speech\">\n<group delimiter=\": \" suffix=\";\"><group delimiter=\" \"><text variable=\"genre\" text-case=\"capitalize-first\"/><text term=\"presented at\"/></group><text variable=\"event\"/></group></else-if><else><group delimiter=\", \" suffix=\".\"><choose><if variable=\"collection-title\" match=\"none\"><group delimiter=\" \"><label variable=\"volume\" form=\"short\" text-case=\"capitalize-first\"/><text variable=\"volume\"/></group></if></choose><text variable=\"container-title\"/></group></else></choose></macro><macro name=\"title\"><text variable=\"title\"/><choose><if type=\"article-journal article-magazine chapter paper-conference article-newspaper review review-book entry-dictionary entry-encyclopedia\" match=\"none\"><choose><if variable=\"URL\"><text term=\"internet\" prefix=\" [\" suffix=\"]\" text-case=\"capitalize-first\"/></if></choose><text macro=\"edition\" prefix=\". \"/></if></choose><choose><if type=\"thesis\"><text variable=\"genre\" prefix=\" [\" suffix=\"]\"/></if></choose></macro><macro name=\"edition\"><choose><if is-numeric=\"edition\"><group delimiter=\" \"><number variable=\"edition\" form=\"ordinal\"/><text term=\"edition\" form=\"short\"/></group></if><else><text variable=\"edition\" suffix=\".\"/></else></choose></macro><macro name=\"date\"><choose><if type=\"article-journal article-magazine article-newspaper review review-book\" match=\"any\"><group suffix=\";\" delimiter=\" \"><date variable=\"issued\" form=\"text\"/><text macro=\"accessed-date\"/></group></if><else-if type=\"bill legislation\" match=\"any\"><group delimiter=\", \"><date variable=\"issued\" delimiter=\" \"><date-part name=\"month\" form=\"short\" strip-periods=\"true\"/><date-part name=\"day\"/></date><date variable=\"issued\"><date-part name=\"year\"/></date></group></else-if><else-if type=\"report\"><date variable=\"issued\" delimiter=\" \"><date-part name=\"year\"/><date-part name=\"month\" form=\"short\" strip-periods=\"true\"/></date><text macro=\"accessed-date\" prefix=\" \"/></else-if><else-if type=\"patent\"><group suffix=\".\"><group delimiter=\", \"><text variable=\"number\"/><date variable=\"issued\"><date-part name=\"year\"/></date></group><text macro=\"accessed-date\" prefix=\" \"/></group></else-if><else-if type=\"speech\"><group delimiter=\"; \"><group delimiter=\" \"><date variable=\"issued\" delimiter=\" \"><date-part name=\"year\"/><date-part name=\"month\" form=\"short\" strip-periods=\"true\"/><date-part name=\"day\"/></date><text macro=\"accessed-date\"/></group><text variable=\"event-place\"/></group></else-if><else><group suffix=\".\"><date variable=\"issued\"><date-part name=\"year\"/></date><text macro=\"accessed-date\" prefix=\" \"/></group></else></choose></macro><macro name=\"pages\"><choose><if type=\"article-journal article-magazine article-newspaper review review-book\" match=\"any\"><text variable=\"page\" prefix=\":\"/></if><else-if type=\"book\" match=\"any\"><text variable=\"number-of-pages\" prefix=\" \"/><choose><if is-numeric=\"number-of-pages\"><label variable=\"number-of-pages\" form=\"short\" prefix=\" \" plural=\"never\"/></if></choose></else-if><else><group prefix=\" \" delimiter=\" \"><label variable=\"page\" form=\"short\" plural=\"never\"/><text variable=\"page\"/></group></else></choose></macro><macro name=\"journal-location\"><choose><if type=\"article-journal article-magazine review review-book\" match=\"any\"><text variable=\"volume\"/><text variable=\"issue\" prefix=\"(\" suffix=\")\"/></if></choose></macro><macro name=\"collection-details\"><choose><if type=\"article-journal article-magazine article-newspaper review review-book\" match=\"none\"><choose><if variable=\"collection-title\"><group delimiter=\" \" prefix=\"(\" suffix=\")\"><names variable=\"collection-editor\" suffix=\".\"><name sort-separator=\" \" initialize-with=\"\" name-as-sort-order=\"all\" delimiter=\", \" delimiter-precedes-last=\"always\"/><label form=\"long\" prefix=\", \"/></names><group delimiter=\"; \"><text variable=\"collection-title\"/><group delimiter=\" \"><label variable=\"volume\" form=\"short\"/><text variable=\"volume\"/></group></group></group></if></choose></if></choose></macro><macro name=\"report-details\"><choose><if type=\"report\"><text variable=\"number\" prefix=\"Report No.: \"/></if></choose></macro><citation collapse=\"citation-number\">\n<sort><key variable=\"citation-number\"/></sort><layout prefix=\"(\" suffix=\")\" delimiter=\",\"><text variable=\"citation-number\"/></layout></citation><bibliography et-al-min=\"7\" et-al-use-first=\"6\" second-field-align=\"flush\"><layout><text variable=\"citation-number\" suffix=\". \"/><group delimiter=\". \" suffix=\". \"><text macro=\"author\"/><text macro=\"title\"/></group><group delimiter=\" \" suffix=\". \"><group delimiter=\": \"><text macro=\"chapter-marker\"/><group delimiter=\" \"><text macro=\"editor\"/><text macro=\"container-title\"/></group></group><text macro=\"publisher\"/><group><text macro=\"date\"/><text macro=\"journal-location\"/><text macro=\"pages\"/></group></group><text macro=\"collection-details\" suffix=\". \"/><text macro=\"report-details\" suffix=\". \"/><text macro=\"access\"/></layout></bibliography></style>",
   "harvard1": "<?xml version=\"1.0\" encoding=\"utf-8\"?><style xmlns=\"http://purl.org/net/xbiblio/csl\" class=\"in-text\" version=\"1.0\" demote-non-dropping-particle=\"sort-only\"><info><title>Harvard Reference format 1 (author-date)</title><id>http://www.zotero.org/styles/harvard1</id><link href=\"http://www.zotero.org/styles/harvard1\" rel=\"self\"/><link href=\"http://libweb.anglia.ac.uk/referencing/harvard.htm\" rel=\"documentation\"/><author><name>Julian Onions</name><email>julian.onions@gmail.com</email></author><category citation-format=\"author-date\"/><category field=\"generic-base\"/><summary>The Harvard author-date style</summary><updated>2012-09-27T22:06:38+00:00</updated><rights license=\"http://creativecommons.org/licenses/by-sa/3.0/\">This work is licensed under a Creative Commons Attribution-ShareAlike 3.0 License</rights></info><macro name=\"editor\"><names variable=\"editor\" delimiter=\", \"><name and=\"symbol\" initialize-with=\". \" delimiter=\", \"/><label form=\"short\" prefix=\", \" text-case=\"lowercase\"/></names></macro><macro name=\"anon\"><text term=\"anonymous\" form=\"short\" text-case=\"capitalize-first\" strip-periods=\"true\"/></macro><macro name=\"author\"><names variable=\"author\"><name name-as-sort-order=\"all\" and=\"symbol\" sort-separator=\", \" initialize-with=\".\" delimiter-precedes-last=\"never\" delimiter=\", \"/><label form=\"short\" prefix=\" \" text-case=\"lowercase\"/><substitute><names variable=\"editor\"/><text macro=\"anon\"/></substitute></names></macro><macro name=\"author-short\"><names variable=\"author\"><name form=\"short\" and=\"symbol\" delimiter=\", \" delimiter-precedes-last=\"never\" initialize-with=\". \"/><substitute><names variable=\"editor\"/><names variable=\"translator\"/><text macro=\"anon\"/></substitute></names></macro><macro name=\"access\"><choose><if variable=\"URL\"><text value=\"Available at:\" suffix=\" \"/><text variable=\"URL\"/><group prefix=\" [\" suffix=\"]\"><text term=\"accessed\" text-case=\"capitalize-first\" suffix=\" \"/><date variable=\"accessed\"><date-part name=\"month\" suffix=\" \"/><date-part name=\"day\" suffix=\", \"/><date-part name=\"year\"/></date></group></if></choose></macro><macro name=\"title\"><choose><if type=\"bill book graphic legal_case legislation motion_picture report song thesis\" match=\"any\"><text variable=\"title\" font-style=\"italic\"/></if><else><text variable=\"title\"/></else></choose></macro><macro name=\"publisher\"><group delimiter=\": \"><text variable=\"publisher-place\"/><text variable=\"publisher\"/></group></macro><macro name=\"year-date\"><choose><if variable=\"issued\"><date variable=\"issued\"><date-part name=\"year\"/></date></if><else><text term=\"no date\" form=\"short\"/></else></choose></macro><macro name=\"edition\"><choose><if is-numeric=\"edition\"><group delimiter=\" \"><number variable=\"edition\" form=\"ordinal\"/><text term=\"edition\" form=\"short\"/></group></if><else><text variable=\"edition\" suffix=\".\"/></else></choose></macro><macro name=\"pages\"><group><label variable=\"page\" form=\"short\" suffix=\" \"/><text variable=\"page\"/></group></macro><citation et-al-min=\"3\" et-al-use-first=\"1\" disambiguate-add-year-suffix=\"true\" disambiguate-add-names=\"true\" disambiguate-add-givenname=\"true\"><layout prefix=\"(\" suffix=\")\" delimiter=\"; \"><group delimiter=\", \"><group delimiter=\" \"><text macro=\"author-short\"/><text macro=\"year-date\"/></group><group><label variable=\"locator\" form=\"short\"/><text variable=\"locator\"/></group></group></layout></citation><bibliography hanging-indent=\"true\" et-al-min=\"4\" et-al-use-first=\"1\"><sort><key macro=\"author\"/><key variable=\"title\"/></sort><layout><text macro=\"author\" suffix=\",\"/><date variable=\"issued\" prefix=\" \" suffix=\".\"><date-part name=\"year\"/></date><choose><if type=\"bill book graphic legal_case legislation motion_picture report song\" match=\"any\"><group prefix=\" \" delimiter=\" \" suffix=\",\"><text macro=\"title\"/><text macro=\"edition\"/><text macro=\"editor\"/></group><text prefix=\" \" suffix=\".\" macro=\"publisher\"/></if><else-if type=\"chapter paper-conference\" match=\"any\"><text macro=\"title\" prefix=\" \" suffix=\".\"/><group prefix=\" \" delimiter=\" \"><text term=\"in\" text-case=\"capitalize-first\"/>\n<text macro=\"editor\"/><text variable=\"container-title\" font-style=\"italic\" suffix=\".\"/><text variable=\"collection-title\" suffix=\".\"/><text variable=\"event\" suffix=\".\"/><group suffix=\".\" delimiter=\", \"><text macro=\"publisher\" prefix=\" \"/><text macro=\"pages\"/></group></group></else-if><else-if type=\"thesis\"><group prefix=\" \" suffix=\".\" delimiter=\". \"><text macro=\"title\"/><text variable=\"genre\"/><text macro=\"publisher\"/></group></else-if><else><group suffix=\".\"><text macro=\"title\" prefix=\" \"/><text macro=\"editor\" prefix=\" \"/></group><group prefix=\" \" suffix=\".\"><text variable=\"container-title\" font-style=\"italic\"/><group prefix=\", \"><text variable=\"volume\"/><text variable=\"issue\" prefix=\"(\" suffix=\")\"/></group><group prefix=\", \"><label variable=\"page\" form=\"short\"/><text variable=\"page\"/></group></group></else></choose><text prefix=\" \" macro=\"access\" suffix=\".\"/></layout></bibliography></style>"
 }
-},{}],339:[function(require,module,exports){
+},{}],340:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
+
+var _register = require('./register');
 
 var _styles = require('./styles.json');
 
@@ -27273,22 +27394,24 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
  * @return {String} CSL style
  */
 var fetchCSLStyle = function fetchCSLStyle(style) {
-  return _styles2.default.hasOwnProperty(style || '') ? _styles2.default[style] : _styles2.default['apa'];
-}; /**
-    * Object containing CSL templates
-    *
-    * Templates from the [CSL Project](http://citationstyles.org/)<br>
-    * [REPO](https://github.com/citation-style-language/styles), [LICENSE](https://creativecommons.org/licenses/by-sa/3.0/)
-    *
-    * Accesed 10/22/2016
-    *
-    * @access private
-    * @constant varCSLStyles
-    * @default
-    */
+  return (0, _register.hasTemplate)(style) ? (0, _register.getTemplate)(style) : _styles2.default.hasOwnProperty(style) ? _styles2.default[style] : _styles2.default['apa'];
+};
+
+/**
+ * Object containing CSL templates
+ *
+ * Templates from the [CSL Project](http://citationstyles.org/)<br>
+ * [REPO](https://github.com/citation-style-language/styles), [LICENSE](https://creativecommons.org/licenses/by-sa/3.0/)
+ *
+ * Accesed 10/22/2016
+ *
+ * @access private
+ * @constant varCSLStyles
+ * @default
+ */
 exports.default = fetchCSLStyle;
 
-},{"./styles.json":338}],340:[function(require,module,exports){
+},{"./register":338,"./styles.json":339}],341:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -27303,10 +27426,6 @@ var _striptags = require('striptags');
 var _striptags2 = _interopRequireDefault(_striptags);
 
 var _attr = require('../util/attr.js');
-
-var _deepCopy = require('../util/deepCopy');
-
-var _deepCopy2 = _interopRequireDefault(_deepCopy);
 
 var _json = require('../get/bibtex/json');
 
@@ -27368,40 +27487,34 @@ var getIds = function getIds() {
  * @memberof Cite
  * @this Cite
  *
- * @param {Object} options - The options for the output. See [input options](../#citation.cite.in.options)
- * @param {String} [options.locale] - Custom CSL locale for citeproc
- * @param {String} [options.template] - Custom CSL style template for citeproc
+ * @param {Object} [options={}] - The options for the output. See [input options](../#citation.cite.in.options)
  *
  * @return {String|Object[]} The formatted data
  */
-var get = function get(options) {
-  var _data = (0, _csl2.default)(this.data);
+var get = function get() {
+  var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
 
-  var result = void 0;
-
-  var _Object$assign = Object.assign({ format: 'real', type: 'json', style: 'csl', lang: 'en-US' }, this._options, { locale: '', template: '' }, options),
+  var _Object$assign = Object.assign({}, this.defaultOptions, this._options, options),
       format = _Object$assign.format,
       type = _Object$assign.type,
       style = _Object$assign.style,
-      lang = _Object$assign.lang,
-      locale = _Object$assign.locale,
-      template = _Object$assign.template;
+      lang = _Object$assign.lang;
 
   var _style$match = style.match(/^([^-]+)(?:-(.+))?$/),
       _style$match2 = _slicedToArray(_style$match, 3),
       styleType = _style$match2[1],
       styleFormat = _style$match2[2];
 
+  var data = (0, _csl2.default)(this.data);
+  var result = void 0;
+
   switch ([type, styleType].join()) {
     case 'html,citation':
       var useLang = (0, _locales2.default)(lang) ? lang : 'en-US';
-      var useTemplate = template || (0, _styles2.default)(styleFormat);
-      var cbItem = (0, _items2.default)(_data);
-      var cbLocale = locale ? function () {
-        return locale;
-      } : _locales2.default;
+      var useTemplate = (0, _styles2.default)(styleFormat);
+      var cbItem = (0, _items2.default)(data);
 
-      var citeproc = (0, _engines2.default)(styleFormat, useLang, useTemplate, cbItem, cbLocale);
+      var citeproc = (0, _engines2.default)(styleFormat, useLang, useTemplate, cbItem, _locales2.default);
       var sortedIds = citeproc.updateItems(this.getIds());
 
       var _citeproc$makeBibliog = citeproc.makeBibliography(),
@@ -27412,30 +27525,30 @@ var get = function get(options) {
           bibBody = _citeproc$makeBibliog2[1];
 
       bibBody = bibBody.map(function (element, index) {
-        return (0, _attr.getPrefixedEntry)(element, index, sortedIds);
+        return (0, _attr.getPrefixedEntry)(element, sortedIds[index]);
       });
 
       result = '' + bibStart + bibBody.join('<br />') + bibEnd;
       break;
 
     case 'html,csl':
-      result = (0, _json4.default)(_data);
+      result = (0, _json4.default)(data);
       break;
 
     case 'html,bibtex':
-      result = (0, _text2.default)(_data, true);
+      result = (0, _text2.default)(data, true);
       break;
 
     case 'string,bibtex':
-      result = (0, _text2.default)(_data, false);
+      result = (0, _text2.default)(data, false);
       break;
 
     case 'html,bibtxt':
-      result = (0, _bibtxt2.default)(_data, true);
+      result = (0, _bibtxt2.default)(data, true);
       break;
 
     case 'string,bibtxt':
-      result = (0, _bibtxt2.default)(_data, false);
+      result = (0, _bibtxt2.default)(data, false);
       break;
 
     case 'string,citation':
@@ -27443,16 +27556,16 @@ var get = function get(options) {
       break;
 
     case 'string,csl':
-      result = JSON.stringify(_data);
+      result = JSON.stringify(data);
       break;
 
     case 'json,csl':
-      result = JSON.stringify(_data);
+      result = JSON.stringify(data);
       break;
 
     case 'json,bibtex':
     case 'json,bibtxt':
-      result = JSON.stringify(_data.map(_json2.default));
+      result = JSON.stringify(data.map(_json2.default));
       break;
 
     case 'json,citation':
@@ -27480,7 +27593,7 @@ var get = function get(options) {
 exports.getIds = getIds;
 exports.get = get;
 
-},{"../CSL/engines":333,"../CSL/items":335,"../CSL/locales":337,"../CSL/styles":339,"../get/bibtex/json":348,"../get/bibtex/text":350,"../get/bibtxt":352,"../get/json":356,"../parse/csl":367,"../util/attr.js":397,"../util/deepCopy":398,"striptags":309}],341:[function(require,module,exports){
+},{"../CSL/engines":333,"../CSL/items":335,"../CSL/locales":337,"../CSL/styles":340,"../get/bibtex/json":349,"../get/bibtex/text":351,"../get/bibtxt":353,"../get/json":357,"../parse/csl":368,"../util/attr.js":398,"striptags":309}],342:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -27585,7 +27698,7 @@ Cite.prototype[Symbol.iterator] = regeneratorRuntime.mark(function _callee() {
 
 exports.default = Cite;
 
-},{"./get":340,"./log":342,"./options":343,"./set":344,"./sort":345}],342:[function(require,module,exports){
+},{"./get":341,"./log":343,"./options":344,"./set":345,"./sort":346}],343:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -27691,25 +27804,28 @@ exports.retrieveLastVersion = retrieveLastVersion;
 exports.undo = undo;
 exports.save = save;
 
-},{"./index":341}],343:[function(require,module,exports){
-"use strict";
+},{"./index":342}],344:[function(require,module,exports){
+'use strict';
 
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-/**
- * Change the default options of a `Cite` object.
- *
- * @method options
- * @memberof Cite
- * @this Cite
- *
- * @param {Object} options - The options for the output. See [input options](../#citation.cite.in.options)
- * @param {Boolean} [log=false] - Show this call in the log
- *
- * @return {Cite} The updated parent object
- */
-var options = function options(_options, log) {
+// TODO docs
+var defaultOptions = { format: 'real', type: 'json', style: 'csl', lang: 'en-US'
+
+  /**
+   * Change the default options of a `Cite` object.
+   *
+   * @method options
+   * @memberof Cite
+   * @this Cite
+   *
+   * @param {Object} options - The options for the output. See [input options](../#citation.cite.in.options)
+   * @param {Boolean} [log=false] - Show this call in the log
+   *
+   * @return {Cite} The updated parent object
+   */
+};var options = function options(_options, log) {
   if (log) {
     this.save();
   }
@@ -27720,8 +27836,9 @@ var options = function options(_options, log) {
 };
 
 exports.options = options;
+exports.defaultOptions = defaultOptions;
 
-},{}],344:[function(require,module,exports){
+},{}],345:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -27818,7 +27935,7 @@ exports.add = add;
 exports.set = set;
 exports.reset = reset;
 
-},{"../parse/input/chain":381,"../util/fetchId":401}],345:[function(require,module,exports){
+},{"../parse/input/chain":382,"../util/fetchId":402}],346:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -27959,7 +28076,7 @@ var sort = function sort() {
 
 exports.sort = sort;
 
-},{"../get/label":357,"../get/name":358}],346:[function(require,module,exports){
+},{"../get/label":358,"../get/name":359}],347:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -28021,6 +28138,7 @@ var asyncCite = function () {
 }();
 
 /**
+ * @access public
  * @method async
  *
  * @param {String|CSL|Object|String[]|CSL[]|Object[]} data - Input data.
@@ -28047,7 +28165,7 @@ var async = function async(data, options, callback) {
 
 exports.default = async;
 
-},{"../Cite/index":341,"../parse/input/async/chain":377}],347:[function(require,module,exports){
+},{"../Cite/index":342,"../parse/input/async/chain":378}],348:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -28078,7 +28196,7 @@ exports.text = _text2.default;
 exports.label = _label2.default;
 exports.type = _type2.default;
 
-},{"./json":348,"./label":349,"./text":350,"./type":351}],348:[function(require,module,exports){
+},{"./json":349,"./label":350,"./text":351,"./type":352}],349:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -28115,25 +28233,25 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
  */
 var getBibTeXJSON = function getBibTeXJSON(src) {
   var res = {
-    label: src.label || (0, _label2.default)(src),
+    label: (0, _label2.default)(src),
     type: (0, _type2.default)(src.type)
   };
 
   var props = {};
 
-  if (Array.isArray(src.author)) {
+  if (src.author) {
     props.author = src.author.map(_name2.default).join(' and ');
   }
   if (src.event) {
     props.organization = src.event;
   }
-  if (Array.isArray(src.accessed)) {
+  if (src.accessed) {
     props.note = '[Online; accesed ' + (0, _date2.default)(src.accessed) + ']';
   }
   if (src.DOI) {
     props.doi = src.DOI;
   }
-  if (Array.isArray(src.editor)) {
+  if (src.editor) {
     props.editor = src.editor.map(_name2.default).join(' and ');
   }
   if (src.ISBN) {
@@ -28148,7 +28266,7 @@ var getBibTeXJSON = function getBibTeXJSON(src) {
   if (src.issue || src.issue === 0) {
     props.issue = src.issue.toString();
   }
-  if (typeof src.page === 'string') {
+  if (src.page) {
     props.pages = src.page.replace('-', '--');
   }
   if (src['publisher-place']) {
@@ -28169,10 +28287,8 @@ var getBibTeXJSON = function getBibTeXJSON(src) {
   if (src.volume || src.volume === 0) {
     props.volume = src.volume.toString();
   }
-  if (Array.isArray(src.issued) && src.issued[0]['date-parts'].length === 3) {
-    props.year = src.issued[0]['date-parts'][0].toString();
-  } else if (src.year || src.year === 0) {
-    props.year = src.year;
+  if (src.issued && src.issued['date-parts'][0].length === 3) {
+    props.year = src.issued['date-parts'][0][0].toString();
   }
 
   res.properties = props;
@@ -28182,7 +28298,7 @@ var getBibTeXJSON = function getBibTeXJSON(src) {
 
 exports.default = getBibTeXJSON;
 
-},{"../date":353,"../name":358,"./label":349,"./type":351}],349:[function(require,module,exports){
+},{"../date":354,"../name":359,"./label":350,"./type":352}],350:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -28200,25 +28316,18 @@ Object.defineProperty(exports, "__esModule", {
  */
 var getBibTeXLabel = function getBibTeXLabel() {
   var _ref = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
-      _ref$author = _ref.author,
-      author = _ref$author === undefined ? [] : _ref$author,
-      year = _ref.year,
-      _ref$issued = _ref.issued,
-      issued = _ref$issued === undefined ? [] : _ref$issued,
+      author = _ref.author,
+      issued = _ref.issued,
       title = _ref.title;
 
   var res = '';
 
-  if (author.length > 0) {
+  if (author) {
     res += author[0].family || author[0].literal;
   }
-
-  if (year) {
-    res += year;
-  } else if (issued.length > 0 && issued[0]['date-parts']) {
-    res += issued[0]['date-parts'][0];
+  if (issued && issued['date-parts'][0]) {
+    res += issued['date-parts'][0][0];
   }
-
   if (title) {
     res += title.match(/^(?:(?:the|a|an)\s+)?(\S+)/i)[1];
   }
@@ -28228,7 +28337,7 @@ var getBibTeXLabel = function getBibTeXLabel() {
 
 exports.default = getBibTeXLabel;
 
-},{}],350:[function(require,module,exports){
+},{}],351:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -28301,7 +28410,7 @@ var varBibTeXSyntaxTokens = {
 
 exports.default = getBibTeX;
 
-},{"../dict":354,"./json":348}],351:[function(require,module,exports){
+},{"../dict":355,"./json":349}],352:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -28361,7 +28470,7 @@ var fetchBibTeXType = function fetchBibTeXType(pubType) {
 
 exports.default = fetchBibTeXType;
 
-},{}],352:[function(require,module,exports){
+},{}],353:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -28404,7 +28513,7 @@ var getBibTxt = function getBibTxt(src, html) {
 
 exports.default = getBibTxt;
 
-},{"./bibtex/json":348,"./dict":354}],353:[function(require,module,exports){
+},{"./bibtex/json":349,"./dict":355}],354:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -28419,13 +28528,13 @@ var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = [
  * @access protected
  * @function getDate
  *
- * @param {String[]} date - A date in CSL format
+ * @param {Object} date - A date in CSL format
  *
  * @return {String} The string
  */
 var getDate = function getDate(_ref) {
-  var _ref2 = _slicedToArray(_ref, 1),
-      date = _ref2[0]['date-parts'];
+  var _ref$dateParts = _slicedToArray(_ref['date-parts'], 1),
+      date = _ref$dateParts[0];
 
   if (date.length === 3) {
     return date[0].padStart(4, '0') + '-' + date[1].padStart(2, '0') + '-' + date[2].padStart(2, '0');
@@ -28436,7 +28545,7 @@ var getDate = function getDate(_ref) {
 
 exports.default = getDate;
 
-},{}],354:[function(require,module,exports){
+},{}],355:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -28480,7 +28589,7 @@ var htmlDict = {
 exports.htmlDict = htmlDict;
 exports.textDict = textDict;
 
-},{}],355:[function(require,module,exports){
+},{}],356:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -28528,7 +28637,7 @@ exports.date = _date2.default;
 exports.name = _name2.default;
 exports.label = _label2.default;
 
-},{"./bibtex/index":347,"./bibtxt":352,"./date":353,"./dict":354,"./json":356,"./label":357,"./name":358}],356:[function(require,module,exports){
+},{"./bibtex/index":348,"./bibtxt":353,"./date":354,"./dict":355,"./json":357,"./label":358,"./name":359}],357:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -28615,7 +28724,7 @@ var getJSON = function getJSON(src) {
 
 exports.default = getJSON;
 
-},{"./dict":354}],357:[function(require,module,exports){
+},{"./dict":355}],358:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -28644,7 +28753,7 @@ var getLabel = function getLabel(src) {
 
 exports.default = getLabel;
 
-},{"./bibtex/label":349}],358:[function(require,module,exports){
+},{"./bibtex/label":350}],359:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -28671,7 +28780,7 @@ var getName = function getName(obj) {
 
 exports.default = getName;
 
-},{}],359:[function(require,module,exports){
+},{}],360:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -28728,7 +28837,7 @@ var parseContentMine = function parseContentMine(data) {
 
 exports.default = parseContentMine;
 
-},{"../date":368,"../name":387}],360:[function(require,module,exports){
+},{"../date":369,"../name":388}],361:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -28759,7 +28868,7 @@ exports.text = _text2.default;
 exports.prop = _prop2.default;
 exports.type = _type2.default;
 
-},{"./json":361,"./prop":362,"./text":363,"./type":365}],361:[function(require,module,exports){
+},{"./json":362,"./prop":363,"./text":364,"./type":366}],362:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -28808,7 +28917,7 @@ var parseBibTeXJSON = function parseBibTeXJSON(data) {
 
 exports.default = parseBibTeXJSON;
 
-},{"./prop":362,"./type":365}],362:[function(require,module,exports){
+},{"./prop":363,"./type":366}],363:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -28972,7 +29081,7 @@ var parseBibTeXProp = function parseBibTeXProp(prop, value) {
 
 exports.default = parseBibTeXProp;
 
-},{"../date":368,"../name":387}],363:[function(require,module,exports){
+},{"../date":369,"../name":388}],364:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -29241,7 +29350,7 @@ var parseBibTeX = function parseBibTeX(str) {
  */
 exports.default = parseBibTeX;
 
-},{"../regex":388,"./tokens.json":364}],364:[function(require,module,exports){
+},{"../regex":389,"./tokens.json":365}],365:[function(require,module,exports){
 module.exports={
   "\\url":"",                           "\\href":"",                            "{\\textexclamdown}":"\u00A1",          "{\\textcent}":"\u00A2",
   "{\\textsterling}":"\u00A3",          "{\\textyen}":"\u00A5",                 "{\\textbrokenbar}":"\u00A6",           "{\\textsection}":"\u00A7",
@@ -29357,7 +29466,7 @@ module.exports={
   "{\\`Y}":"\u1EF2",                    "{\\`y}":"\u1EF3",                      "{\\d Y}":"\u1EF4",                     "{\\d y}":"\u1EF5",
   "{\\~Y}":"\u1EF8",                    "{\\~y}":"\u1EF9",                      "{\\~}":"\u223C",                       "~":"\u00A0" 
 }
-},{}],365:[function(require,module,exports){
+},{}],366:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -29417,7 +29526,7 @@ var parseBibTeXType = function parseBibTeXType(pubType) {
 
 exports.default = parseBibTeXType;
 
-},{}],366:[function(require,module,exports){
+},{}],367:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -29501,7 +29610,7 @@ var parseBibTxt = function parseBibTxt(src) {
 exports.text = parseBibTxt;
 exports.textEntry = parseBibTxtEntry;
 
-},{}],367:[function(require,module,exports){
+},{}],368:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -29515,6 +29624,8 @@ var _name = require('./name');
 var _name2 = _interopRequireDefault(_name);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
 /**
  * Object containing types for CSL-JSON fields.
@@ -29644,19 +29755,45 @@ var correctNameList = function correctNameList(nameList) {
 var correctDate = function correctDate(date) {
   var bestGuessConversions = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : true;
 
-  if (date instanceof Array && date[0]['date-parts'] instanceof Array) {
-    if (date[0]['date-parts'].every(function (datePart) {
-      return typeof datePart === 'number';
+  var dp = 'date-parts';
+
+  // "{'date-parts': [[2000, 1, 1], ...]}"
+  if (date && date[dp] instanceof Array && date[dp].every(function (part) {
+    return part instanceof Array;
+  })) {
+    if (date[dp].every(function (part) {
+      return part.every(function (datePart) {
+        return typeof datePart === 'number';
+      });
     })) {
-      return date.slice(0, 1);
+      return _defineProperty({}, dp, date[dp].map(function (part) {
+        return part.slice();
+      }));
     } else if (!bestGuessConversions) {
       return undefined;
-    } else if (date[0]['date-parts'].every(function (datePart) {
+    } else if (date[dp].every(function (part) {
+      return part.every(function (datePart) {
+        return typeof datePart === 'string';
+      });
+    })) {
+      return _defineProperty({}, dp, date[dp].map(function (part) {
+        return part.map(parseFloat);
+      }));
+    }
+
+    // LEGACY support
+    // "[{'date-parts': [2000, 1, 1]}, ...]"
+  } else if (date && date instanceof Array && date[0][dp] instanceof Array) {
+    if (date[0][dp].every(function (datePart) {
+      return typeof datePart === 'number';
+    })) {
+      return _defineProperty({}, dp, [date[0][dp].slice()]);
+    } else if (!bestGuessConversions) {
+      return undefined;
+    } else if (date[0][dp].every(function (datePart) {
       return typeof datePart === 'string';
     })) {
-      var newDate = date.slice(0, 1);
-      newDate[0]['date-parts'] = newDate[0]['date-parts'].map(parseFloat);
-      return newDate;
+      return _defineProperty({}, dp, [date[0][dp].map(parseFloat)]);
     }
   }
 };
@@ -29691,7 +29828,6 @@ var correctField = function correctField(fieldName, value) {
     case 'composer':
     case 'collection-editor':
       return correctNameList(value, bestGuessConversions);
-      break;
 
     case 'submitted':
     case 'issued':
@@ -29700,7 +29836,6 @@ var correctField = function correctField(fieldName, value) {
     case 'container':
     case 'accessed':
       return correctDate(value, bestGuessConversions);
-      break;
   }
 
   var fieldType = [].concat(fieldTypes[fieldName]);
@@ -29715,8 +29850,6 @@ var correctField = function correctField(fieldName, value) {
     return value.toString();
   } else if (Array.isArray(value) && value.length) {
     return correctField(fieldName, value[0]);
-  } else {
-    return undefined;
   }
 };
 
@@ -29747,7 +29880,7 @@ var parseCsl = function parseCsl(data) {
 
 exports.default = parseCsl;
 
-},{"./name":387}],368:[function(require,module,exports){
+},{"./name":388}],369:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -29761,18 +29894,18 @@ Object.defineProperty(exports, "__esModule", {
  *
  * @param {Number|String} value - Epoch time or string in format "YYYY-MM-DD"
  *
- * @return {Object[]} Array of an object, containing the property "date-parts" with the value [ YYYY, MM, DD ]
+ * @return {Object} Object with property "date-parts" with the value [[ YYYY, MM, DD ]]
  */
 var parseDate = function parseDate(value) {
   var date = new Date(value);
-  return [{
-    'date-parts': date.getFullYear() ? [date.getFullYear(), date.getMonth() + 1, date.getDate()] : []
-  }];
+  return {
+    'date-parts': [date.getFullYear() ? [date.getFullYear(), date.getMonth() + 1, date.getDate()] : []]
+  };
 };
 
 exports.default = parseDate;
 
-},{}],369:[function(require,module,exports){
+},{}],370:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -29829,7 +29962,7 @@ var parseDoiApi = function parseDoiApi(data) {
 
 exports.default = parseDoiApi;
 
-},{"./json":374,"sync-request":310}],370:[function(require,module,exports){
+},{"./json":375,"sync-request":310}],371:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -29934,7 +30067,7 @@ var parseDoiApiAsync = function () {
 
 exports.default = parseDoiApiAsync;
 
-},{"../json":374,"isomorphic-fetch":299}],371:[function(require,module,exports){
+},{"../json":375,"isomorphic-fetch":299}],372:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -29950,7 +30083,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 exports.api = _api2.default;
 
-},{"./api":370}],372:[function(require,module,exports){
+},{"./api":371}],373:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -29974,7 +30107,7 @@ var parseDoi = function parseDoi(data) {
 
 exports.default = parseDoi;
 
-},{}],373:[function(require,module,exports){
+},{}],374:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -30002,7 +30135,7 @@ exports.id = _id2.default;
 exports.api = _api2.default;
 exports.async = async;
 
-},{"./api":369,"./async/index":371,"./id":372}],374:[function(require,module,exports){
+},{"./api":370,"./async/index":372,"./id":373}],375:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -30028,17 +30161,12 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 var parseDoiJson = function parseDoiJson(data) {
   var res = {
     type: (0, _type2.default)(data.type)
+  };
 
-    // TODO because of conflicting implementation of citeproc-js; this is actually *not* CrossRefs 'fault'
-  };var dateFields = ['submitted', 'issued', 'event-date', 'original-date', 'container', 'accessed'];
+  var dateFields = ['submitted', 'issued', 'event-date', 'original-date', 'container', 'accessed'];
   dateFields.forEach(function (field) {
-    if (data[field]) {
-      var dateParts = data[field]['date-parts'];
-      if (dateParts) {
-        res[field] = [{
-          'date-parts': typeof dateParts[0] === 'number' ? dateParts : dateParts[0]
-        }];
-      }
+    if (data[field] && typeof data[field]['date-parts'][0] === 'number') {
+      data[field]['date-parts'] = [data[field]['date-parts']];
     }
   });
 
@@ -30047,7 +30175,7 @@ var parseDoiJson = function parseDoiJson(data) {
 
 exports.default = parseDoiJson;
 
-},{"./type":375}],375:[function(require,module,exports){
+},{"./type":376}],376:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -30085,7 +30213,7 @@ var varDoiTypes = {
 
 exports.default = fetchDoiType;
 
-},{}],376:[function(require,module,exports){
+},{}],377:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -30148,7 +30276,7 @@ exports.name = _name2.default;
 exports.json = _json2.default;
 exports.csl = _csl2.default;
 
-},{"./bibjson/index":359,"./bibtex/index":360,"./bibtxt":366,"./csl":367,"./date":368,"./doi/index":373,"./input/index":384,"./json":386,"./name":387,"./wikidata/index":392}],377:[function(require,module,exports){
+},{"./bibjson/index":360,"./bibtex/index":361,"./bibtxt":367,"./csl":368,"./date":369,"./doi/index":374,"./input/index":385,"./json":387,"./name":388,"./wikidata/index":393}],378:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -30232,7 +30360,7 @@ var parseInputAsync = function () {
 
 exports.default = parseInputAsync;
 
-},{"../../../util/deepCopy":398,"../async/data":379,"../type":385}],378:[function(require,module,exports){
+},{"../../../util/deepCopy":399,"../async/data":380,"../type":386}],379:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -30297,7 +30425,7 @@ var parseInputChainLinkAsync = function () {
 
 exports.default = parseInputChainLinkAsync;
 
-},{"../../../util/deepCopy":398,"../async/data":379,"../type":385}],379:[function(require,module,exports){
+},{"../../../util/deepCopy":399,"../async/data":380,"../type":386}],380:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -30394,7 +30522,7 @@ var parseInputDataAsync = function () {
 
 exports.default = parseInputDataAsync;
 
-},{"../../../util/fetchFileAsync":400,"../../doi/async/api":370,"../../wikidata/async/json":390,"../async/chain":377,"../data":383}],380:[function(require,module,exports){
+},{"../../../util/fetchFileAsync":401,"../../doi/async/api":371,"../../wikidata/async/json":391,"../async/chain":378,"../data":384}],381:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -30420,7 +30548,7 @@ exports.data = _data2.default;
 exports.chain = _chain2.default;
 exports.chainLink = _chainLink2.default;
 
-},{"./chain":377,"./chainLink":378,"./data":379}],381:[function(require,module,exports){
+},{"./chain":378,"./chainLink":379,"./data":380}],382:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -30470,7 +30598,7 @@ var parseInput = function parseInput(input) {
 
 exports.default = parseInput;
 
-},{"../../util/deepCopy":398,"./data":383,"./type":385}],382:[function(require,module,exports){
+},{"../../util/deepCopy":399,"./data":384,"./type":386}],383:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -30514,7 +30642,7 @@ var parseInputChainLink = function parseInputChainLink(input) {
 
 exports.default = parseInputChainLink;
 
-},{"../../util/deepCopy":398,"./data":383,"./type":385}],383:[function(require,module,exports){
+},{"../../util/deepCopy":399,"./data":384,"./type":386}],384:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -30660,7 +30788,7 @@ var parseInputData = function parseInputData(input, type) {
 
 exports.default = parseInputData;
 
-},{"../../util/fetchFile":399,"../bibjson/index":359,"../bibtex/json":361,"../bibtex/text":363,"../bibtxt":366,"../doi/api":369,"../doi/id":372,"../json":386,"../regex":388,"../wikidata/json":393,"../wikidata/list":394,"./chain":381}],384:[function(require,module,exports){
+},{"../../util/fetchFile":400,"../bibjson/index":360,"../bibtex/json":362,"../bibtex/text":364,"../bibtxt":367,"../doi/api":370,"../doi/id":373,"../json":387,"../regex":389,"../wikidata/json":394,"../wikidata/list":395,"./chain":382}],385:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -30698,7 +30826,7 @@ exports.chain = _chain2.default;
 exports.chainLink = _chainLink2.default;
 exports.async = async;
 
-},{"./async/index":380,"./chain":381,"./chainLink":382,"./data":383,"./type":385}],385:[function(require,module,exports){
+},{"./async/index":381,"./chain":382,"./chainLink":383,"./data":384,"./type":386}],386:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -30838,7 +30966,7 @@ var parseInputType = function parseInputType(input) {
 
 exports.default = parseInputType;
 
-},{"../regex":388}],386:[function(require,module,exports){
+},{"../regex":389}],387:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -30886,7 +31014,7 @@ var parseJSON = function parseJSON(str) {
 
 exports.default = parseJSON;
 
-},{"./regex":388}],387:[function(require,module,exports){
+},{"./regex":389}],388:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -30928,7 +31056,7 @@ var parseName = function parseName() {
 
 exports.default = parseName;
 
-},{"./regex":388}],388:[function(require,module,exports){
+},{"./regex":389}],389:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -30953,7 +31081,7 @@ var regex = {
 
 exports.default = regex;
 
-},{}],389:[function(require,module,exports){
+},{}],390:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -30974,7 +31102,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 exports.json = _json2.default;
 exports.prop = _prop2.default;
 
-},{"./json":390,"./prop":391}],390:[function(require,module,exports){
+},{"./json":391,"./prop":392}],391:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -31097,7 +31225,7 @@ var parseWikidataJSONAsync = function () {
 
 exports.default = parseWikidataJSONAsync;
 
-},{"./prop":391,"wikidata-sdk":320}],391:[function(require,module,exports){
+},{"./prop":392,"wikidata-sdk":320}],392:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -31358,7 +31486,7 @@ var parseWikidataPropAsync = function () {
 
 exports.default = parseWikidataPropAsync;
 
-},{"../../../util/fetchFileAsync":400,"../../date":368,"../../name":387,"../type":396,"wikidata-sdk":320}],392:[function(require,module,exports){
+},{"../../../util/fetchFileAsync":401,"../../date":369,"../../name":388,"../type":397,"wikidata-sdk":320}],393:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -31396,7 +31524,7 @@ exports.prop = _prop2.default;
 exports.type = _type2.default;
 exports.async = async;
 
-},{"./async/index":389,"./json":393,"./list":394,"./prop":395,"./type":396}],393:[function(require,module,exports){
+},{"./async/index":390,"./json":394,"./list":395,"./prop":396,"./type":397}],394:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -31480,7 +31608,7 @@ var parseWikidataJSON = function parseWikidataJSON(data) {
 
 exports.default = parseWikidataJSON;
 
-},{"./prop":395,"wikidata-sdk":320}],394:[function(require,module,exports){
+},{"./prop":396,"wikidata-sdk":320}],395:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -31509,7 +31637,7 @@ var parseWikidata = function parseWikidata(data) {
 
 exports.default = parseWikidata;
 
-},{"wikidata-sdk":320}],395:[function(require,module,exports){
+},{"wikidata-sdk":320}],396:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -31714,7 +31842,7 @@ var parseWikidataProp = function parseWikidataProp(prop, value, lang) {
 
 exports.default = parseWikidataProp;
 
-},{"../../util/fetchFile":399,"../date":368,"../name":387,"./type":396,"wikidata-sdk":320}],396:[function(require,module,exports){
+},{"../../util/fetchFile":400,"../date":369,"../name":388,"./type":397,"wikidata-sdk":320}],397:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -31750,7 +31878,7 @@ var varWikidataTypes = {
 
 exports.default = fetchWikidataType;
 
-},{}],397:[function(require,module,exports){
+},{}],398:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -31781,19 +31909,18 @@ var getAttributedEntry = function getAttributedEntry(string, name, value) {
  * @method getPrefixedEntry
  *
  * @param {String} value - HTML string
- * @param {Number} index - ID index
- * @param {String[]} list - ID list
+ * @param {String|Number} id - ID
  *
  * @return {String} HTML string with CSL ID
  */
-var getPrefixedEntry = function getPrefixedEntry(value, index, list) {
-  return getAttributedEntry(value, 'csl-entry-id', list[index]);
+var getPrefixedEntry = function getPrefixedEntry(value, id) {
+  return getAttributedEntry(value, 'csl-entry-id', id);
 };
 
 exports.getAttributedEntry = getAttributedEntry;
 exports.getPrefixedEntry = getPrefixedEntry;
 
-},{}],398:[function(require,module,exports){
+},{}],399:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -31815,7 +31942,7 @@ var deepCopy = function deepCopy(obj) {
 
 exports.default = deepCopy;
 
-},{}],399:[function(require,module,exports){
+},{}],400:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -31849,7 +31976,7 @@ var fetchFile = function fetchFile(url) {
 
 exports.default = fetchFile;
 
-},{"sync-request":310}],400:[function(require,module,exports){
+},{"sync-request":310}],401:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -31907,7 +32034,7 @@ var fetchFileAsync = function () {
 
 exports.default = fetchFileAsync;
 
-},{"isomorphic-fetch":299}],401:[function(require,module,exports){
+},{"isomorphic-fetch":299}],402:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -31936,7 +32063,7 @@ var fetchId = function fetchId(list, prefix) {
 
 exports.default = fetchId;
 
-},{}],402:[function(require,module,exports){
+},{}],403:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -31974,7 +32101,7 @@ exports.fetchFile = _fetchFile2.default;
 exports.fetchFileAsync = _fetchFileAsync2.default;
 exports.fetchId = _fetchId2.default;
 
-},{"./attr":397,"./deepCopy":398,"./fetchFile":399,"./fetchFileAsync":400,"./fetchId":401}],403:[function(require,module,exports){
+},{"./attr":398,"./deepCopy":399,"./fetchFile":400,"./fetchFileAsync":401,"./fetchId":402}],404:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -32069,4 +32196,4 @@ Object.assign(_index8.default, { async: _index6.default, get: get, CSL: CSL, par
 
 module.exports = _index8.default;
 
-},{"./CSL/index":334,"./Cite/index":341,"./async/index":346,"./get/index":355,"./parse/index":376,"./util/index":402,"./version":403,"babel-polyfill":1,"deep-freeze":297}]},{},[]);
+},{"./CSL/index":334,"./Cite/index":342,"./async/index":347,"./get/index":356,"./parse/index":377,"./util/index":403,"./version":404,"babel-polyfill":1,"deep-freeze":297}]},{},[]);
