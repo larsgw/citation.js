@@ -1,5 +1,6 @@
-/* global require, module, describe, it, expect */
+/* global require, module, describe, it */
 
+const expect = require('expect.js')
 const Cite = require('./cite')
 const test = require('./output.json')
 
@@ -38,7 +39,7 @@ const testCaseGenerator = function (data, options, output, {
     out = typeof out === 'string' ? out.trim() : out
 
     it(msg, function () {
-      expect(out)[typeof out === 'object' ? 'toEqual' : 'toBe'](output)
+      expect(out).to[typeof out === 'object' ? 'eql' : 'be'](output)
     })
   }
 }
@@ -65,8 +66,8 @@ module.exports = function () {
         reg.addTemplate('custom', customTemplate)
 
         it('registers the template', function () {
-          expect(reg.hasTemplate('custom')).toBe(true)
-          expect(reg.getTemplate('custom')).toBe(customTemplate)
+          expect(reg.hasTemplate('custom')).to.be(true)
+          expect(reg.getTemplate('custom')).to.be(customTemplate)
         })
 
         testCaseGenerator(data, {
@@ -81,8 +82,8 @@ module.exports = function () {
         reg.addLocale('custom', customLocale)
 
         it('registers the locale', function () {
-          expect(reg.hasLocale('custom')).toBe(true)
-          expect(reg.getLocale('custom')).toBe(customLocale)
+          expect(reg.hasLocale('custom')).to.be(true)
+          expect(reg.getLocale('custom')).to.be(customLocale)
         })
 
         testCaseGenerator(new Cite({id: 'a', type: 'article-journal'}), {
@@ -112,8 +113,8 @@ module.exports = function () {
         reg.addTemplate('custom', customTemplate)
 
         it('registers the template', function () {
-          expect(reg.hasTemplate('custom')).toBe(true)
-          expect(reg.getTemplate('custom')).toBe(customTemplate)
+          expect(reg.hasTemplate('custom')).to.be(true)
+          expect(reg.getTemplate('custom')).to.be(customTemplate)
         })
 
         testCaseGenerator(data, {
@@ -128,8 +129,8 @@ module.exports = function () {
         reg.addLocale('custom', customLocale)
 
         it('registers the locale', function () {
-          expect(reg.hasLocale('custom')).toBe(true)
-          expect(reg.getLocale('custom')).toBe(customLocale)
+          expect(reg.hasLocale('custom')).to.be(true)
+          expect(reg.getLocale('custom')).to.be(customLocale)
         })
 
         testCaseGenerator(new Cite({id: 'a', type: 'article-journal'}), {

@@ -1,5 +1,6 @@
-/* global require, module, describe, it, expect */
+/* global require, module, describe, it */
 
+const expect = require('expect.js')
 const Cite = require('./cite')
 
 const test = require('./input.json')
@@ -15,11 +16,11 @@ const testCaseGenerator = function (input, type, output, {
     const test = link ? Cite.parse.input.chainLink(input) : (new Cite(input)).data
 
     it('handles input type', function () {
-      expect(Cite.parse.input.type(input)).toBe(type)
+      expect(Cite.parse.input.type(input)).to.be(type)
     })
 
     it('parses input correctly', function () {
-      expect(callback(test))[exact ? 'toBe' : 'toEqual'](output)
+      expect(callback(test)).to[exact ? 'be' : 'eql'](output)
     })
   }
 }
@@ -45,8 +46,8 @@ module.exports = {
       it('works', function () {
         return new Promise(resolve => {
           Cite.async(test.input.wd.url, data => {
-            expect(data instanceof Cite).toBe(true)
-            expect(data.data[0].wikiId).toBe(test.output.wd.id)
+            expect(data).to.be.a(Cite)
+            expect(data.data[0].wikiId).to.be(test.output.wd.id)
             resolve()
           })
         })
@@ -55,8 +56,8 @@ module.exports = {
       it('works with options', function () {
         return new Promise(resolve => {
           Cite.async([], {}, data => {
-            expect(data instanceof Cite).toBe(true)
-            expect(data.data.length).toBe(0)
+            expect(data).to.be.a(Cite)
+            expect(data.data.length).to.be(0)
             resolve()
           })
         })
@@ -66,14 +67,14 @@ module.exports = {
     describe('with promise', function () {
       it('works', async function () {
         const data = await Cite.async(test.input.wd.url)
-        expect(data instanceof Cite).toBe(true)
-        expect(data.data[0].wikiId).toBe(test.output.wd.id)
+        expect(data).to.be.a(Cite)
+        expect(data.data[0].wikiId).to.be(test.output.wd.id)
       })
 
       it('works with options', async function () {
         const data = await Cite.async([], {})
-        expect(data instanceof Cite).toBe(true)
-        expect(data.data.length).toBe(0)
+        expect(data).to.be.a(Cite)
+        expect(data.data.length).to.be(0)
       })
     })
   },
@@ -145,7 +146,7 @@ module.exports = {
 
       testCaseGenerator(objs, 'array/csl', objs)()
       it('duplicates objects', function () {
-        expect((new Cite(objs)).data).not.toBe(objs)
+        expect((new Cite(objs)).data).not.to.be(objs)
       })
 
       describe('nested', function () {
@@ -155,8 +156,8 @@ module.exports = {
         it('duplicates objects', function () {
           const test = new Cite(data).data
 
-          expect(test[0]).not.toBe(objs[0])
-          expect(test[1]).not.toBe(objs[1])
+          expect(test[0]).not.to.be(objs[0])
+          expect(test[1]).not.to.be(objs[1])
         })
       })
     })
