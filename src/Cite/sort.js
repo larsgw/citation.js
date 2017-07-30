@@ -23,7 +23,7 @@ const getComparisonValue = function (obj, prop, label = prop === 'label') {
 
     case 'accessed':
     case 'issued':
-      return value[0]['date-parts']
+      return value['date-parts'][0]
 
     case 'page':
       return value.split('-').map(num => parseInt(num))
