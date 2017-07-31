@@ -10,4 +10,4 @@ install:
   - npm install
   - npm install -g codecov
 script:
-  - npm run coverage
+  - npm run coverage && codecov
