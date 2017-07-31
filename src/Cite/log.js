@@ -19,14 +19,12 @@ const currentVersion = function () {
  * @memberof Cite
  * @this Cite
  *
- * @param {Number} versnum - The number of the version you want to retrieve. Illegel numbers: numbers under zero, floats, numbers above the current version of the object.
+ * @param {Number} [versnum=1] - The number of the version you want to retrieve. Illegel numbers: numbers under or equal to zero, floats, numbers above the current version of the object.
  *
  * @return {Cite} The version of the object with the version number passed. `undefined` if an illegal number is passed.
  */
-const retrieveVersion = function (versnum) {
-  versnum = versnum <= 0 ? 1 : versnum
-
-  if (versnum > this.currentVersion()) {
+const retrieveVersion = function (versnum = 1) {
+  if (versnum <= 0 || versnum > this.currentVersion()) {
     return null
   } else {
     const [data, options] = this.log[versnum - 1]
