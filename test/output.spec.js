@@ -1,0 +1,139 @@
+/* global describe, it */
+
+import expect from 'expect.js'
+import Cite from './cite'
+import {input, output} from './output.json'
+
+const customTemplate = `<?xml version="1.0" encoding="utf-8"?>
+<style xmlns="http://purl.org/net/xbiblio/csl" class="in-text" version="1.0" demote-non-dropping-particle="sort-only" page-range-format="minimal">
+  <bibliography>
+    <layout>
+      <text variable="title"/>
+    </layout>
+  </bibliography>
+</style>`
+const customLocale = `<?xml version="1.0" encoding="utf-8"?>
+<locale xmlns="http://purl.org/net/xbiblio/csl" version="1.0" xml:lang="custom">
+  <style-options punctuation-in-quote="true"/>
+  <date form="text">
+    <date-part name="month" suffix=" "/>
+    <date-part name="day" suffix=", "/>
+    <date-part name="year"/>
+  </date>
+  <date form="numeric">
+    <date-part name="month" form="numeric-leading-zeros" suffix="/"/>
+    <date-part name="day" form="numeric-leading-zeros" suffix="/"/>
+    <date-part name="year"/>
+  </date>
+  <terms>
+    <term name="no date" form="short">custom</term>
+  </terms>
+</locale>`
+
+const testCaseGenerator = function (data, options, output, {
+  callback = v => v,
+  msg = 'outputs correctly'
+} = {}) {
+  return () => {
+    let out = callback(data.get(options))
+    out = typeof out === 'string' ? out.trim() : out
+
+    it(msg, () => expect(out).to[typeof out === 'object' ? 'eql' : 'be'](output))
+  }
+}
+
+const defaultOpts = Cite.prototype.defaultOptions
+const opts = (format, type, style, lang = defaultOpts.lang) => ({format, type, style, lang})
+
+describe('output', () => {
+  const data = new Cite(input.csl.simple)
+
+  describe('formatted CSL', () => {
+    describe('html', () => {
+      describe('default built-in template (APA)',
+        testCaseGenerator(data, opts('string', 'html', 'citation-apa'), output.csl.html.apa))
+
+      describe('non-default built-in template (Vancouver)',
+        testCaseGenerator(data, opts('string', 'html', 'citation-vancouver'), output.csl.html.vancouver))
+
+      describe('non-existent template',
+        testCaseGenerator(data, opts('string', 'html', 'citation-larsgw'), output.csl.html.apa))
+
+      describe('non-existent locale',
+        testCaseGenerator(data, opts('string', 'html', 'citation-apa', 'larsgw'), output.csl.html.apa))
+
+      describe('custom template', () => {
+        Cite.CSL.register.addTemplate('custom', customTemplate)
+
+        it('registers the template', () => {
+          expect(Cite.CSL.register.hasTemplate('custom')).to.be(true)
+          expect(Cite.CSL.register.getTemplate('custom')).to.be(customTemplate)
+        })
+
+        testCaseGenerator(data, opts('string', 'html', 'citation-custom'), output.csl.html.title)()
+      })
+
+      describe('custom locale', () => {
+        const data = new Cite(input.csl.locale)
+        Cite.CSL.register.addLocale('custom', customLocale)
+
+        it('registers the locale', () => {
+          expect(Cite.CSL.register.hasLocale('custom')).to.be(true)
+          expect(Cite.CSL.register.getLocale('custom')).to.be(customLocale)
+        })
+
+        testCaseGenerator(data, opts('string', 'html', 'citation-apa', 'custom'), output.csl.html.locale)()
+      })
+    })
+
+    describe('plain text', () => {
+      describe('default built-in template (APA)',
+        testCaseGenerator(data, opts('string', 'string', 'citation-apa'), output.csl.apa))
+
+      describe('non-default built-in template (Vancouver)',
+        testCaseGenerator(data, opts('string', 'string', 'citation-vancouver'), output.csl.vancouver))
+
+      describe('non-existent template',
+        testCaseGenerator(data, opts('string', 'string', 'citation-larsgw'), output.csl.apa))
+
+      describe('non-existent locale',
+        testCaseGenerator(data, opts('string', 'string', 'citation-apa', 'larsgw'), output.csl.apa))
+
+      describe('custom template', () => {
+        Cite.CSL.register.addTemplate('custom', customTemplate)
+
+        it('registers the template', () => {
+          expect(Cite.CSL.register.hasTemplate('custom')).to.be(true)
+          expect(Cite.CSL.register.getTemplate('custom')).to.be(customTemplate)
+        })
+
+        testCaseGenerator(data, opts('string', 'string', 'citation-custom'), output.csl.title)()
+      })
+
+      describe('custom locale', () => {
+        const data = new Cite(input.csl.locale)
+        Cite.CSL.register.addLocale('custom', customLocale)
+
+        it('registers the locale', () => {
+          expect(Cite.CSL.register.hasLocale('custom')).to.be(true)
+          expect(Cite.CSL.register.getLocale('custom')).to.be(customLocale)
+        })
+
+        testCaseGenerator(data, opts('string', 'string', 'citation-apa', 'custom'), '(custom).')()
+      })
+    })
+  })
+
+  describe('CSL-JSON', () => {
+    describe('plain text', testCaseGenerator(data, {format: 'string'}, input.csl.simple, { callback: JSON.parse }))
+    describe('object', testCaseGenerator(data, undefined, input.csl.simple))
+  })
+
+  describe('BibTeX', () => {
+    describe('plain text', testCaseGenerator(data, opts('string', 'string', 'bibtex'), output.bibtex.plain, { callback: v => v.replace(/\s+/g, ' ') }))
+
+    describe('JSON', testCaseGenerator(data, {style: 'bibtex'}, output.bibtex.json))
+
+    describe('Bib.TXT', testCaseGenerator(data, opts('string', 'string', 'bibtxt'), output.bibtex.bibtxt))
+  })
+})

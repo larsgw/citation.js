@@ -19,7 +19,8 @@
           "issue": "20",
           "page": "5441-5444"
         }
-      ]
+      ],
+      "locale": [{"id": "a", "type": "article-journal"}]
     }
   },
   "output": {

@@ -75,7 +75,7 @@
     "compile": "babel src -d lib --copy-files",
     "--4--": "distributions",
     "dist:regular": "browserify -r ./src/index.js:citation-js -o build/citation.js -g [ babelify --ignore=citeproc --presets [ env ] ]",
-    "dist:regular-test": "browserify -r expect.js -e test/citation.spec.js -x expect.js -o build/test.citation.js -g [ babelify --ignore=citeproc --presets [ es2015 env ] ]",
+    "dist:regular-test": "browserify -r expect.js -e test/wrapper.js -x expect.js -o build/test.citation.js -g [ babelify --ignore=citeproc --presets [ es2015 env ] ]",
     "dist:minify": "uglifyjs build/citation.js --ie8 -c -o build/citation.min.js",
     "dist:minify-test": "uglifyjs build/test.citation.js --ie8 -c -o build/test.citation.min.js",
     "--5--": "generate",
