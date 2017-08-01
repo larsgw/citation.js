@@ -1,4 +1,4 @@
-import varRegex from '../regex'
+import TokenStack from '../../util/stack'
 
 /**
  * Mapping of BibTeX Escaped Chars to Unicode.
@@ -15,6 +15,50 @@ import varRegex from '../regex'
 import varBibTeXTokens from './tokens.json'
 
 /**
+ * Match any BibTeX token.
+ *
+ *     new RegExp(
+ *       // word commands
+ *       '\\\\url|\\\\href|' +
+ *       '{\\\\[a-zA-Z]+}|\\$\\\\[a-zA-Z]+\\$|' +
+ *       // math
+ *       '\\$[_^]{[0-9()+\\-=n]}\\$|'+
+ *       // symbols
+ *       '`{2,3}|\'{2,3}|-{2,3}|[!?]!|!\\?|{\\\\~}|' +
+ *       // escaped symbols
+ *       '\\\\[#$%&~_^\\{}]|' +
+ *       // diacritics
+ *       '{\\\\(?:[a-z] |[`"\'^~=.])\\\\?[a-zA-Z]}|' +
+ *       // non-breaking space
+ *       '[\\s\\S]', 'g')
+ *
+ * @access private
+ * @constant tokenPattern
+ * @default
+ */
+const tokenPattern = /\\url|\\href|{\\[a-zA-Z]+}|\$\\[a-zA-Z]+\$|\$[_^]{[0-9()+=\-n]}\$|`{2,3}|'{2,3}|-{2,3}|[!?]!|!\?|{\\~}|\\[#$%&~_^\{}]|{\\(?:[a-z] |[`"'^~=.])\\?[a-zA-Z]}|[\s\S]/g
+
+/**
+ * Tokenize a BibTeX string
+ *
+ * @access private
+ * @method getTokenizedBibtex
+ *
+ * @param {String} str - Input BibTeX
+ *
+ * @return {String[]} list of tokens
+ */
+const getTokenizedBibtex = function (str) {
+  // Substitute command of form "\X{X}" into "{\X X}"
+  str = str
+    .replace(/{?(\\[`"'^~=.]){?\\?([A-Za-z])}/g, '{$1$2}')
+    .replace(/{?(\\[a-z]){?\\?([A-Za-z])}/g, '{$1 $2}')
+
+  // Tokenize, with escaped characters in mind
+  return str.match(tokenPattern)
+}
+
+/**
  * Format BibTeX data
  *
  * @access protected
@@ -25,230 +69,112 @@ import varBibTeXTokens from './tokens.json'
  * @return {CSL[]} The formatted input data
  */
 const parseBibTeX = function (str) {
-  let entries
+  const whitespace = /^\s$/
+  const syntax = /^[@{}"=,\\]$/
+  const delimiters = {
+    '"': '"',
+    '"{': '}"',
+    '{': '}',
+    '{{': '}}',
+    '': ''
+  }
+
+  const tokens = getTokenizedBibtex(str)
+  const stack = new TokenStack(tokens)
+  const entries = []
 
   try {
-    entries = []
+    stack.consume(whitespace)
 
-    const stack = str
-        // Clean weird commands
-        .replace(/{?(\\[`"'^~=]){?\\?([A-Za-z])}/g, '{$1$2}')
-        .replace(/{?(\\[a-z]){?\\?([A-Za-z])}/g, '{$1 $2}')
-        // Tokenize, with escaped characters in mind
-        .split(new RegExp('(?!^)(' +
-          // Escaped chars
-          '\\\\([#$%&~_^\\\\{}])|' +
-          // Regular commands
-          '\\{\\\\(?:' +
-          // Accented chars
-            // Vowel regular
-            '[`\'^~"=][AEIOUYaeiouy]|' +
-            // Consonant regular
-            '(?:[cv] |[\'])[CcDdGgKkLlNnRrSs]|' +
-            // A-E
-            '(?:[dkruv] )[Aa]|(?:[db] |\\.)[Bb]|[.^][Cc]|(?:[bd] |\\.)[Dd]|(?:[dkuv] |[.])[Ee]|' +
-            // F-J
-            '\\.[Ff]|(?:u |[=.^\'])[Gg]|(?:[cd] |[.^"])[Hh]|b h|[dv] [Ii]|=\\\\i|\\.I|(?:v |\\^)[Jj]|' +
-            // K-O
-            '(?:[bd] |\')[Kk]|[bd] [Ll]|[Ll] |(?:d |[.\'])[Mm]|(?:[bd] |[~.])[Nn]|[dHkuv] [Oo]|' +
-            // P-U
-            '[.\'][Pp]|(?:[bd] |[.])[Rr]|(?:d |[.^])[Ss]|(?:[bcdv] |[.])[Tt]|" t|[dHkruv] [Uu]|' +
-            // V-Z
-            '(?:d |[~])[Vv]|(?:d |[`".\'^])[Ww]|r w|[."][Xx]|(?:d |[.])[Yy]|r y|(?:[bdv] |[\'.^])[Zz]|' +
-          // No break space
-            '~|' +
-          // Commands
-            '\\w+' +
-          ')\\}|' +
-          // Greek letters and other symbols
-          '\\$\\\\(?:[A-Z]?[a-z]+|\\#|%<)\\\\$|' +
-          // Subscript and superscript
-          '\\$[^_]\\{[0-9+-=()n]\\}\\$|' +
-          // --, ---, '', ''', ``, ```
-          '---|--|\'\'\'|\'\'|```|``|' +
-          // ?!, !!, !?
-          '\\?!|' + '!!|' + '!\\?\'|' +
-          // \url and \href
-          '\\\\(?:url|href)|' +
-          '[\\s\\S]' +
-        ')', 'g'))
-        .filter(v => !!v)
+    while (stack.tokensLeft()) {
+      stack.consumeToken('@')
+      stack.consume(whitespace)
 
-    const whitespace = varRegex.bibtex[ 1 ]
-    const syntax = varRegex.bibtex[ 2 ]
-    const dels = {
-      '"': '"',
-      '{': '}',
-      '"{': '}"',
-      '{{': '}}',
-      '': ''
-    }
+      const type = stack.consume([whitespace, syntax], {inverse: true}).toLowerCase()
 
-    let index = 0
-    let curs = stack[index]
+      stack.consume(whitespace)
+      stack.consumeToken('{')
+      stack.consume(whitespace)
 
-    while (curs) {
-      let obj
+      const label = stack.consume([whitespace, syntax], {inverse: true})
 
-      while (whitespace.test(curs)) { curs = stack[ ++index ] }
+      stack.consume(whitespace)
+      stack.consumeToken(',')
+      stack.consume(whitespace)
 
-      if (!curs) { break }
+      const properties = {}
 
-      entries.push({type: '', label: '', properties: {}})
-      obj = entries[ entries.length - 1 ]
+      while (stack.tokensLeft()) {
+        const key = stack.consume([whitespace, '='], {inverse: true}).toLowerCase()
 
-      if (curs === '@') {
-        curs = stack[ ++index ]
-      } else {
-        throw new SyntaxError(`Unexpected token at index ${index}. Expected "@", got "${curs}".`)
-      }
+        stack.consume(whitespace)
+        stack.consumeToken('=')
+        stack.consume(whitespace)
 
-      while (whitespace.test(curs)) { curs = stack[ ++index ] }
+        const startDelimiter = stack.consume(syntax)
 
-      while ((!whitespace.test(curs) && !syntax.test(curs)) || curs.length > 1) {
-        obj.type += curs
-        curs = stack[ ++index ]
-      }
-
-      obj.type = obj.type.toLowerCase()
-
-      while (whitespace.test(curs)) { curs = stack[ ++index ] }
-
-      if (curs === '{') {
-        curs = stack[ ++index ]
-      } else {
-        throw new SyntaxError(`Unexpected token at index ${index}. Expected "{", got "${curs}".`)
-      }
-
-      while (whitespace.test(curs)) { curs = stack[ ++index ] }
-
-      while ((!whitespace.test(curs) && !syntax.test(curs)) || curs.length > 1) {
-        obj.label += curs
-        curs = stack[ ++index ]
-      }
-
-      while (whitespace.test(curs)) { curs = stack[ ++index ] }
-
-      if (curs === ',') {
-        curs = stack[ ++index ]
-      } else {
-        throw new SyntaxError(`Unexpected token at index ${index}. Expected ",", got "${curs}".`)
-      }
-
-      while (whitespace.test(curs)) { curs = stack[ ++index ] }
-
-      var
-        key,
-        val,
-
-        startDel,
-        endDel,
-
-        nexs
-
-      while (curs !== '}') {
-        key = ''
-        val = ''
-        startDel = ''
-
-        while (curs && !whitespace.test(curs) && curs !== '=') {
-          key += curs
-          curs = stack[ ++index ]
-        }
-
-        while (whitespace.test(curs)) { curs = stack[ ++index ] }
-
-        if (curs === '=') {
-          curs = stack[ ++index ]
-        } else {
-          throw new SyntaxError(`Unexpected token at index ${index}. Expected "=", got "${curs}".`)
-        }
-
-        while (whitespace.test(curs)) { curs = stack[ ++index ] }
-
-        while (syntax.test(curs)) {
-          startDel += curs
-          curs = stack[ ++index ]
-        }
-
-        if (!dels.hasOwnProperty(startDel)) {
+        if (!delimiters.hasOwnProperty(startDelimiter)) {
           throw new SyntaxError(
-            `Unexpected field delimiter at index ${index}. Expected ` +
-            `${Object.keys(dels).map(function (v) { return `"${v}"` }).join(', ')}, got "${startDel}".`
+            `Unexpected field delimiter at index ${stack.index}. Expected ` +
+            `${Object.keys(delimiters).map(function (v) { return `"${v}"` }).join(', ')}; got "${startDelimiter}"`
           )
         }
 
-        endDel = dels[ startDel ]
-        nexs = stack
-          .slice(index + 1, index + (endDel.length ? endDel.length : 1))
-          .reverse()
-          .join('')
+        const endDelimiter = delimiters[startDelimiter]
 
-        while (curs && (endDel === '' ? curs !== ',' : (curs + nexs) !== endDel)) {
-          if (varBibTeXTokens.hasOwnProperty(curs)) {
-            val += varBibTeXTokens[ curs ]
-          } else if (curs.match(/^\\([#$%&~_^\\{}])$/)) {
-            val += curs.slice(1)
-          } else if (curs.length > 1) {
-            // "Soft", non-breaking error for now
-            // throw new SyntaxError( 'Escape sequence not recognized: ' + curs )
-            console.error('Escape sequence not recognized: ' + curs)
+        const tokenMap = token => {
+          if (varBibTeXTokens.hasOwnProperty(token)) {
+            return varBibTeXTokens[token]
+          } else if (token.match(/^\\[#$%&~_^\\{}]$/)) {
+            return token.slice(1)
+          } else if (token.length > 1) {
+            throw new SyntaxError(`Escape sequence not recognized: ${token}`)
           } else {
-            val += curs
+            return token
           }
-
-          curs = stack[ ++index ]
-          nexs = stack
-            .slice(index + 1, index + (endDel.length ? endDel.length : 1))
-            .reverse()
-            .join('')
         }
+        const tokenFilter = token => !/^[{}]$/.test(token)
 
-        key = key
-          .trim()
-          .replace(/\s+/g, ' ')
-          .toLowerCase()
+        const val = stack.consume((_, index) => {
+          if (stack.tokensLeft() < endDelimiter.length) {
+            throw new SyntaxError(`Unmatched delimiter at index ${stack.index}: Expected ${endDelimiter}`)
+          } else if (!endDelimiter.length) {
+            const token = _
+            return ![whitespace, syntax].some(rgx => rgx.test(token))
+          } else {
+            const token = stack.stack.slice(index, index + endDelimiter.length).join('')
+            return token !== endDelimiter
+          }
+        }, {tokenMap, tokenFilter})
 
-        val = val
-          .replace(/[{}]/g, '')
-          .trim()
-          .replace(/\s+/g, ' ')
+        properties[key] = val
 
-        obj.properties[ key ] = val
+        stack.consumeN(endDelimiter.length)
+        stack.consume(whitespace)
 
-        endDel = endDel.split('')
+        // Last entry (no trailing comma)
+        if (stack.matches('}')) { break }
 
-        while (endDel.pop()) { curs = stack[ ++index ] }
+        stack.consumeToken(',')
+        stack.consume(whitespace)
 
-        while (whitespace.test(curs)) { curs = stack[ ++index ] }
-
-        if (curs === '}') {
-          break
-        } else if (curs === ',') {
-          curs = stack[ ++index ]
-        } else {
-          throw new SyntaxError(`Unexpected token at index ${index}. Expected ",", "}", got "${curs}".`)
-        }
-
-        while (whitespace.test(curs)) { curs = stack[ ++index ] }
+        // Last entry (trailing comma)
+        if (stack.matches('}')) { break }
       }
 
-      if (curs === '}') {
-        curs = stack[ ++index ]
-      } else {
-        throw new SyntaxError(`Unexpected token at index ${index}. Expected "}", got "${curs}".`)
-      }
+      stack.consumeToken('}')
+      stack.consume(whitespace)
+
+      entries.push({type, label, properties})
     }
-
-    return entries
   } catch (e) {
-    console.error(`Uncaught SyntaxError: ${e.message} Returning completed entries.`)
+    console.error(`Uncaught SyntaxError: ${e.message}. Returning completed entries.`)
 
-    // Remove last, incomplete entry
+    // Remove last, possibly incomplete entry
     entries.pop()
-
-    return entries
   }
+
+  return entries
 }
 
 export default parseBibTeX

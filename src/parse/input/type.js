@@ -43,7 +43,7 @@ var parseInputType = function (input) {
       } else if (varRegex.wikidata[3].test(input)) {
         return 'url/wikidata'
       // BibTeX
-      } else if (varRegex.bibtex[0].test(input)) {
+      } else if (varRegex.bibtex.test(input)) {
         return 'string/bibtex'
       // Bib.TXT
       } else if (varRegex.bibtxt.test(input)) {
