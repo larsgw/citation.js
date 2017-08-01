@@ -20,3 +20,21 @@
  * @param {CSL} b - element b
  * @return {Number} positive for a > b, negative for b > a, zero for a = b
  */
+
+/**
+ * @callback TokenStack~match
+ * @param {String} token - token
+ * @return {Boolean} match or not
+ */
+
+/**
+ * @callback TokenStack~tokenMap
+ * @param {String} token - token
+ * @return {String} new token
+ */
+
+/**
+ * @callback TokenStack~tokenFilter
+ * @param {String} token - token
+ * @return {Boolean} keep or not
+ */

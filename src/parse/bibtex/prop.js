@@ -2,147 +2,145 @@ import parseName from '../name'
 import parseDate from '../date'
 
 /**
+ * Parse date into list of CSL date object.
+ *
+ * @access private
+ * @method parseBibtexDate
+ *
+ * @param {String} value - date
+ * @return {Object} CSL date object
+ */
+const parseBibtexDate = function (value) {
+  if (/{|}/.test(value)) {
+    return {literal: value}
+  } else {
+    return parseDate(value)
+  }
+}
+
+/**
+ * Parse name into CSL name objects.
+ *
+ * @access private
+ * @method parseBibtexName
+ *
+ * @param {String} name - name
+ * @return {Object} CSL name object
+ */
+const parseBibtexName = function (name) {
+  if (/{|}/.test(name)) {
+    return {literal: name}
+  } else {
+    return parseName(name)
+  }
+}
+
+/**
+ * Parse list of names into list of CSL name objects.
+ *
+ * @access private
+ * @method parseBibtexNameList
+ *
+ * @param {String} list - list of names separated by ' and '
+ * @return {Object[]} array of CSL name objects
+ */
+const parseBibtexNameList = function (list) {
+  const literals = []
+  list = list.replace(/%/g, '%0').replace(/{.*?}/g, m => `%[${literals.push(m) - 1}]`)
+  return list.split(' and ').map(name => {
+    name = name.replace(/%[(\d+)]/, (_, i) => literals[+i]).replace(/%0/g, '%%')
+    return parseBibtexName(name)
+  })
+}
+
+/**
+ * Map holding information on BibTeX-JSON fields.
+ *
+ *  * If true, field name should stay the same
+ *  * If false, field should be ignored
+ *  * If string, use as field name
+ *  * Special strings are used to merge into complex objects
+ *
+ * @access private
+ * @constant propMap
+ * @default
+ */
+const propMap = {
+  address: 'publisher-place',
+  author: true,
+  booktitle: 'container-title',
+  doi: 'DOI',
+  date: 'issued',
+  edition: true,
+  editor: true,
+  isbn: 'ISBN',
+  issn: 'ISSN',
+  issue: 'issue',
+  journal: 'container-title',
+  location: 'publisher-place',
+  number: 'issue',
+  pages: 'page',
+  publisher: true,
+  series: 'collection-title',
+  title: true,
+  url: 'URL',
+  volume: true,
+
+  // prepare for merge
+  year: 'issued:date-parts.0.0',
+  month: 'issued:date-parts.0.1',
+
+  // ignore
+  crossref: false,
+  keywords: false,
+  language: false,
+  note: false,
+  numpages: false,
+  pmid: false
+}
+
+/**
  * Transform property and value from BibTeX-JSON format to CSL-JSON
  *
  * @access protected
  * @method parseBibTeXProp
  *
- * @param {String} prop - Property
- * @param {String|Number} value - Value
+ * @param {String} name - Field name
+ * @param {String} value - Field value
  *
- * @return {String[]} Array with new prop and value
+ * @return {String[]} Array with new name and value
  */
-const parseBibTeXProp = function (prop, value) {
-  let rProp = prop
-  let rValue = value
-
-  switch (prop) {
-    // Address
-    case 'address':
-      rProp = 'publisher-place'
-      break
-
-    // Author
-    case 'author':
-      rValue = value.split(' and ').map(parseName)
-      break
-
-    // Book title
-    case 'booktitle':
-      rProp = 'container-title'
-      break
-
-    // DOI
-    case 'doi':
-      rProp = 'DOI'
-      break
-
-    // Edition/print
-    case 'edition':
-      // rValue = parseOrdinal(value)
-      break
-
-    // Editor
-    case 'editor':
-      rValue = value.split(' and ').map(parseName)
-      break
-
-    // ISBN
-    case 'isbn':
-      rProp = 'ISBN'
-      break
-
-    // ISSN
-    case 'issn':
-      rProp = 'ISSN'
-      break
-
-    // Issue
-    case 'issue':
-    case 'number':
-      rProp = 'issue'
-      rValue = value.toString()
-      break
-
-    // Journal
-    case 'journal':
-      rProp = 'container-title'
-      break
-
-    // Location
-    case 'location':
-      rProp = 'publisher-place'
-      break
-
-    // Pages
-    case 'pages':
-      rProp = 'page'
-      rValue = value.replace(/[—–]/, '-')
-      break
-
-    // Pubate
-    case 'date':
-      rProp = 'issued'
-      rValue = parseDate(value)
-      break
-
-    case 'year' :
-      // Ignore for now
-      // rProp = 'issued-year'
-      break
-
-    case 'month' :
-      // Ignore for now
-      // rProp = 'issued-month'
-      break
-
-    // Publisher
-    case 'publisher':
-      // Nothing necessary, as far as I know
-      break
-
-    // Series
-    case 'series':
-      rProp = 'collection-title'
-      break
-
-    // Title
-    case 'title':
-      rProp = 'title'
-      rValue = value.replace(/\.$/g, '')
-      break
-
-    // URL
-    case 'url':
-      rProp = 'URL'
-      break
-
-    // Volume
-    case 'volume':
-      rValue = value.toString()
-      break
-
-    case 'crossref': // Crossref
-    case 'keywords': // Keywords
-    case 'language': // Language
-    case 'note': // Note
-    case 'pmid': // PMID
-    case 'numpages': // Number of pages
-      // Property ignored
-      rProp = rValue = undefined
-      break
-
-    default:
-      console.info('[set]', `Unknown property: ${prop}`)
-      rProp = rValue = undefined
-      break
-  }
-
-  if (rProp !== undefined && rValue !== undefined) {
-    return [rProp, rValue]
-  } else {
+const parseBibTeXProp = function (name, value) {
+  if (!propMap.hasOwnProperty(name)) {
+    console.info('[set]', `Unknown property: ${name}`)
+    return undefined
+  } else if (propMap[name] === false) {
     return undefined
   }
+
+  const cslProp = propMap[name] === true ? name : propMap[name]
+  const cslValue = ((name, value) => {
+    switch (name) {
+      case 'author':
+      case 'editor':
+        return parseBibtexNameList(value)
+
+      case 'date':
+        return parseBibtexDate(value)
+
+      case 'edition':
+        // return parseOrdinal(value)
+        return value
+
+      case 'page':
+        return value.replace(/[—–]/, '-')
+
+      default:
+        return value.replace(/[{}]/g, '')
+    }
+  })(cslProp, value)
+
+  return [cslProp, cslValue]
 }
 
 export default parseBibTeXProp

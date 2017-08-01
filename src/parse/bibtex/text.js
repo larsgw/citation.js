@@ -26,7 +26,7 @@ import varBibTeXTokens from './tokens.json'
  *       // symbols
  *       '`{2,3}|\'{2,3}|-{2,3}|[!?]!|!\\?|{\\\\~}|' +
  *       // escaped symbols
- *       '\\\\[#$%&~_^\\{}]|' +
+ *       '\\\\[#$%&~_^\\\\{}]|' +
  *       // diacritics
  *       '{\\\\(?:[a-z] |[`"\'^~=.])\\\\?[a-zA-Z]}|' +
  *       // non-breaking space
@@ -36,7 +36,15 @@ import varBibTeXTokens from './tokens.json'
  * @constant tokenPattern
  * @default
  */
-const tokenPattern = /\\url|\\href|{\\[a-zA-Z]+}|\$\\[a-zA-Z]+\$|\$[_^]{[0-9()+=\-n]}\$|`{2,3}|'{2,3}|-{2,3}|[!?]!|!\?|{\\~}|\\[#$%&~_^\{}]|{\\(?:[a-z] |[`"'^~=.])\\?[a-zA-Z]}|[\s\S]/g
+const tokenPattern = /\\url|\\href|{\\[a-zA-Z]+}|\$\\[a-zA-Z]+\$|\$[_^]{[0-9()+=\-n]}\$|`{2,3}|'{2,3}|-{2,3}|[!?]!|!\?|{\\~}|\\[#$%&~_^\\{}]|{\\(?:[a-z] |[`"'^~=.])\\?[a-zA-Z]}|[\s\S]/g
+
+const whitespace = /^\s$/
+const syntax = /^[@{}"=,\\]$/
+const delimiters = {
+  '"': '"',
+  '{': '}',
+  '': ''
+}
 
 /**
  * Tokenize a BibTeX string
@@ -69,19 +77,9 @@ const getTokenizedBibtex = function (str) {
  * @return {CSL[]} The formatted input data
  */
 const parseBibTeX = function (str) {
-  const whitespace = /^\s$/
-  const syntax = /^[@{}"=,\\]$/
-  const delimiters = {
-    '"': '"',
-    '"{': '}"',
-    '{': '}',
-    '{{': '}}',
-    '': ''
-  }
-
+  const entries = []
   const tokens = getTokenizedBibtex(str)
   const stack = new TokenStack(tokens)
-  const entries = []
 
   try {
     stack.consume(whitespace)
@@ -111,13 +109,11 @@ const parseBibTeX = function (str) {
         stack.consumeToken('=')
         stack.consume(whitespace)
 
-        const startDelimiter = stack.consume(syntax)
+        const startDelimiter = stack.consume(/^({|"|)$/g)
 
         if (!delimiters.hasOwnProperty(startDelimiter)) {
-          throw new SyntaxError(
-            `Unexpected field delimiter at index ${stack.index}. Expected ` +
-            `${Object.keys(delimiters).map(function (v) { return `"${v}"` }).join(', ')}; got "${startDelimiter}"`
-          )
+          throw new SyntaxError(`Unexpected field delimiter at index ${stack.index}. Expected ` +
+            `${Object.keys(delimiters).map(function (v) { return `"${v}"` }).join(', ')}; got "${startDelimiter}"`)
         }
 
         const endDelimiter = delimiters[startDelimiter]
@@ -133,19 +129,25 @@ const parseBibTeX = function (str) {
             return token
           }
         }
-        const tokenFilter = token => !/^[{}]$/.test(token)
 
-        const val = stack.consume((_, index) => {
+        let openBrackets = 0
+        const val = stack.consume((token, index) => {
+          if (token === '{') {
+            openBrackets++
+          }
+
           if (stack.tokensLeft() < endDelimiter.length) {
             throw new SyntaxError(`Unmatched delimiter at index ${stack.index}: Expected ${endDelimiter}`)
           } else if (!endDelimiter.length) {
-            const token = _
             return ![whitespace, syntax].some(rgx => rgx.test(token))
+          } else if (token === '}' && openBrackets) {
+            openBrackets--
+            return true
           } else {
-            const token = stack.stack.slice(index, index + endDelimiter.length).join('')
+            token = stack.stack.slice(index, index + endDelimiter.length).join('')
             return token !== endDelimiter
           }
-        }, {tokenMap, tokenFilter})
+        }, {tokenMap})
 
         properties[key] = val
 
