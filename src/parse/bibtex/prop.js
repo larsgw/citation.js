@@ -12,7 +12,7 @@ import parseDate from '../date'
  */
 const parseBibtexDate = function (value) {
   if (/{|}/.test(value)) {
-    return {literal: value}
+    return {literal: value.replace(/[{}]/g, '')}
   } else {
     return parseDate(value)
   }
@@ -29,7 +29,7 @@ const parseBibtexDate = function (value) {
  */
 const parseBibtexName = function (name) {
   if (/{|}/.test(name)) {
-    return {literal: name}
+    return {literal: name.replace(/[{}]/g, '')}
   } else {
     return parseName(name)
   }
@@ -48,7 +48,7 @@ const parseBibtexNameList = function (list) {
   const literals = []
   list = list.replace(/%/g, '%0').replace(/{.*?}/g, m => `%[${literals.push(m) - 1}]`)
   return list.split(' and ').map(name => {
-    name = name.replace(/%[(\d+)]/, (_, i) => literals[+i]).replace(/%0/g, '%%')
+    name = name.replace(/%\[(\d+)\]/, (_, i) => literals[+i]).replace(/%0/g, '%%')
     return parseBibtexName(name)
   })
 }
@@ -125,7 +125,7 @@ const parseBibTeXProp = function (name, value) {
       case 'editor':
         return parseBibtexNameList(value)
 
-      case 'date':
+      case 'issued':
         return parseBibtexDate(value)
 
       case 'edition':

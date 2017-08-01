@@ -40,20 +40,20 @@ describe('input', () => {
     input.wd.url, 'url/wikidata', output.wd.api[0], wikidataTestCaseOptions))
 
   describe('Wikidata ID list', () => {
-    describe('separated by spaces', testCaseGenerator(
+    context('separated by spaces', testCaseGenerator(
       input.wd.list.space, 'list/wikidata', output.wd.api[1], wikidataTestCaseOptions))
 
-    describe('separated by newlines', testCaseGenerator(
+    context('separated by newlines', testCaseGenerator(
       input.wd.list.newline, 'list/wikidata', output.wd.api[1], wikidataTestCaseOptions))
 
-    describe('separated by commas', testCaseGenerator(
+    context('separated by commas', testCaseGenerator(
       input.wd.list.comma, 'list/wikidata', output.wd.api[1], wikidataTestCaseOptions))
   })
 
   describe('Wikidata JSON', () => {
     testCaseGenerator(input.wd.simple, 'object/wikidata', output.wd.simple)()
 
-    describe('with linked authors',
+    context('with linked authors',
       testCaseGenerator(input.wd.author, 'object/wikidata', output.wd.author))
   })
 
@@ -61,18 +61,22 @@ describe('input', () => {
   describe('DOI URL', testCaseGenerator(input.doi.url, 'api/doi', output.doi.simple.title, doiTestCaseOptions))
 
   describe('DOI ID list', () => {
-    describe('separated by spaces', testCaseGenerator(
+    context('separated by spaces', testCaseGenerator(
       input.doi.list.space, 'list/doi', output.doi.api[1], doiLinkTestCaseOptions))
 
-    describe('separated by newlines', testCaseGenerator(
+    context('separated by newlines', testCaseGenerator(
       input.doi.list.newline, 'list/doi', output.doi.api[1], doiLinkTestCaseOptions))
   })
 
   describe('BibTeX string', () => {
     testCaseGenerator(input.bibtex.simple, 'string/bibtex', output.bibtex.simple)()
 
-    describe('with whitespace and unknown fields',
+    context('with whitespace and unknown fields',
       testCaseGenerator(input.bibtex.whitespace, 'string/bibtex', output.bibtex.whitespace))
+
+    context('with literals', testCaseGenerator(input.bibtex.literals, 'string/bibtex', output.bibtex.literals))
+    context('with year and month without date', testCaseGenerator(input.bibtex.yearMonthNeeded, 'string/bibtex', output.bibtex.yearMonthNeeded))
+    context('with year and month with date', testCaseGenerator(input.bibtex.yearMonth, 'string/bibtex', output.bibtex.yearMonth))
   })
 
   describe('BibTeX JSON', testCaseGenerator(
@@ -81,10 +85,10 @@ describe('input', () => {
   describe('Bib.TXT string', () => {
     testCaseGenerator(input.bibtxt.simple, 'string/bibtxt', [output.bibtxt])()
 
-    describe('with multiple entries',
+    context('with multiple entries',
       testCaseGenerator(input.bibtxt.multiple, 'string/bibtxt', [output.bibtxt, output.bibtex.simple[0]]))
 
-    describe('with whitespace',
+    context('with whitespace',
       testCaseGenerator(input.bibtxt.whitespace, 'string/bibtxt', [output.bibtxt]))
   })
 

@@ -36,7 +36,10 @@
           "year": "2003",
           "url": "http://www.ncbi.nlm.nih.gov/pubmed/12653513"
         }
-      }
+      },
+      "literals": "@a{b,author={{a and b} and c and D E},date={{13th Century}}}",
+      "yearMonthNeeded": "@a{b,year=2017,month=8}",
+      "yearMonth": "@a{b,date={2016-12-13},year=2017,month=8}"
     },
     "bibtxt": {
       "simple": "[Fau86]\n    author:    J.W. Goethe\n    title:     Faust. Der Tragödie Erster Teil\n    publisher: Reclam\n    year:      1986\n    address:   Stuttgart",
@@ -222,7 +225,36 @@
           "publisher": "ACM",
           "id": "Ekstrand:2009:RYD"
         }
-      ]
+      ],
+      "literals": [{
+        "label": "b",
+        "id": "b",
+        "type": "book",
+        "author": [
+          {"literal": "a and b"},
+          {"literal": "c"},
+          {"given": "D", "family": "E"}
+        ],
+        "issued": {
+          "literal": "13th Century"
+        }
+      }],
+      "yearMonthNeeded": [{
+        "label": "b",
+        "id": "b",
+        "type": "book",
+        "issued": {
+          "date-parts": [["2017", "8"]]
+        }
+      }],
+      "yearMonth": [{
+        "label": "b",
+        "id": "b",
+        "type": "book",
+        "issued": {
+          "date-parts": [[2016, 12, 13]]
+        }
+      }]
     },
     "bibtxt": {
       "author": [
