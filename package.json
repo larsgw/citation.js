@@ -85,7 +85,7 @@
     "generate": "npm-run-all generate:*",
     "--6--": "dev",
     "dev:test": "npm run compile && npm run test",
-    "dev:test-browser": "npm-run-all dist:regular*",
+    "dev:test-browser": "npm run compile && npm run dist:regular",
     "dev": "npm-run-all dev:*"
   },
   "author": "Lars Willighagen (https://larsgw.github.io)",
