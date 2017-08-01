@@ -34,7 +34,6 @@
             <pre class="prettyprint source linenums"><code>import striptags from 'striptags'
 
 import { getPrefixedEntry } from '../util/attr.js'
-import deepCopy from '../util/deepCopy'
 
 import getBibTeXJSON from '../get/bibtex/json'
 import getBibTeX from '../get/bibtex/text'
@@ -68,60 +67,50 @@ const getIds = function () {
  * @memberof Cite
  * @this Cite
  *
- * @param {Object} options - The options for the output. See [input options](../#citation.cite.in.options)
- * @param {String} [options.locale] - Custom CSL locale for citeproc
- * @param {String} [options.template] - Custom CSL style template for citeproc
+ * @param {Object} [options={}] - The options for the output. See [input options](../#citation.cite.in.options)
  *
  * @return {String|Object[]} The formatted data
  */
-const get = function (options) {
-  const _data = parseCsl(this.data)
-
-  let result
-
-  const {format, type, style, lang, locale, template} = Object.assign(
-    {format: 'real', type: 'json', style: 'csl', lang: 'en-US'},
-    this._options,
-    {locale: '', template: ''},
-    options
-  )
-
+const get = function (options = {}) {
+  const {format, type, style, lang} = Object.assign({}, this.defaultOptions, this._options, options)
   const [, styleType, styleFormat] = style.match(/^([^-]+)(?:-(.+))?$/)
+
+  const data = parseCsl(this.data)
+  let result
 
   switch ([type, styleType].join()) {
     case 'html,citation':
       const useLang = fetchCSLLocale(lang) ? lang : 'en-US'
-      const useTemplate = template || fetchCSLStyle(styleFormat)
-      const cbItem = fetchCSLItemCallback(_data)
-      const cbLocale = locale ? () => locale : fetchCSLLocale
+      const useTemplate = fetchCSLStyle(styleFormat)
+      const cbItem = fetchCSLItemCallback(data)
 
-      const citeproc = fetchCSLEngine(styleFormat, useLang, useTemplate, cbItem, cbLocale)
+      const citeproc = fetchCSLEngine(styleFormat, useLang, useTemplate, cbItem, fetchCSLLocale)
       const sortedIds = citeproc.updateItems(this.getIds())
 
       let [{bibstart: bibStart, bibend: bibEnd}, bibBody] = citeproc.makeBibliography()
-      bibBody = bibBody.map((element, index) => getPrefixedEntry(element, index, sortedIds))
+      bibBody = bibBody.map((element, index) => getPrefixedEntry(element, sortedIds[index]))
 
       result = `${bibStart}${bibBody.join('&lt;br />')}${bibEnd}`
       break
 
     case 'html,csl':
-      result = getJSON(_data)
+      result = getJSON(data)
       break
 
     case 'html,bibtex':
-      result = getBibTeX(_data, true)
+      result = getBibTeX(data, true)
       break
 
     case 'string,bibtex':
-      result = getBibTeX(_data, false)
+      result = getBibTeX(data, false)
       break
 
     case 'html,bibtxt':
-      result = getBibTxt(_data, true)
+      result = getBibTxt(data, true)
       break
 
     case 'string,bibtxt':
-      result = getBibTxt(_data, false)
+      result = getBibTxt(data, false)
       break
 
     case 'string,citation':
@@ -129,16 +118,16 @@ const get = function (options) {
       break
 
     case 'string,csl':
-      result = JSON.stringify(_data)
+      result = JSON.stringify(data)
       break
 
     case 'json,csl':
-      result = JSON.stringify(_data)
+      result = JSON.stringify(data)
       break
 
     case 'json,bibtex':
     case 'json,bibtxt':
-      result = JSON.stringify(_data.map(getBibTeXJSON))
+      result = JSON.stringify(data.map(getBibTeXJSON))
       break
 
     case 'json,citation':
@@ -174,13 +163,13 @@ export { getIds, get }
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Cite.html">Cite</a></li><li><a href="CSL.html">CSL</a></li></ul><h3>Global</h3><ul><li><a href="global.html#async">async</a></li><li><a href="global.html#deepCopy">deepCopy</a></li><li><a href="global.html#fetchBibTeXType">fetchBibTeXType</a></li><li><a href="global.html#fetchCSLEngine">fetchCSLEngine</a></li><li><a href="global.html#fetchCSLItemCallback">fetchCSLItemCallback</a></li><li><a href="global.html#fetchCSLLocale">fetchCSLLocale</a></li><li><a href="global.html#fetchCSLStyle">fetchCSLStyle</a></li><li><a href="global.html#fetchFile">fetchFile</a></li><li><a href="global.html#fetchFileAsync">fetchFileAsync</a></li><li><a href="global.html#fetchId">fetchId</a></li><li><a href="global.html#getAttributedEntry">getAttributedEntry</a></li><li><a href="global.html#getBibTeXJSON">getBibTeXJSON</a></li><li><a href="global.html#getBibTeXLabel">getBibTeXLabel</a></li><li><a href="global.html#getBibTxt">getBibTxt</a></li><li><a href="global.html#getDate">getDate</a></li><li><a href="global.html#getJSON">getJSON</a></li><li><a href="global.html#getLabel">getLabel</a></li><li><a href="global.html#getName">getName</a></li><li><a href="global.html#getPrefixedEntry">getPrefixedEntry</a></li><li><a href="global.html#htmlDict">htmlDict</a></li><li><a href="global.html#parseBibTeX">parseBibTeX</a></li><li><a href="global.html#parseBibTeXJSON">parseBibTeXJSON</a></li><li><a href="global.html#parseBibTeXProp">parseBibTeXProp</a></li><li><a href="global.html#parseBibTeXType">parseBibTeXType</a></li><li><a href="global.html#parseBibTxt">parseBibTxt</a></li><li><a href="global.html#parseContentMine">parseContentMine</a></li><li><a href="global.html#parseCsl">parseCsl</a></li><li><a href="global.html#parseDate">parseDate</a></li><li><a href="global.html#parseDoi">parseDoi</a></li><li><a href="global.html#parseDoiApi">parseDoiApi</a></li><li><a href="global.html#parseDoiApiAsync">parseDoiApiAsync</a></li><li><a href="global.html#parseDoiJson">parseDoiJson</a></li><li><a href="global.html#parseInput">parseInput</a></li><li><a href="global.html#parseInputAsync">parseInputAsync</a></li><li><a href="global.html#parseInputChainLink">parseInputChainLink</a></li><li><a href="global.html#parseInputChainLinkAsync">parseInputChainLinkAsync</a></li><li><a href="global.html#parseInputData">parseInputData</a></li><li><a href="global.html#parseInputDataAsync">parseInputDataAsync</a></li><li><a href="global.html#parseInputType">parseInputType</a></li><li><a href="global.html#parseJSON">parseJSON</a></li><li><a href="global.html#parseName">parseName</a></li><li><a href="global.html#parseWikidata">parseWikidata</a></li><li><a href="global.html#parseWikidataJSON">parseWikidataJSON</a></li><li><a href="global.html#parseWikidataJSONAsync">parseWikidataJSONAsync</a></li><li><a href="global.html#parseWikidataProp">parseWikidataProp</a></li><li><a href="global.html#parseWikidataPropAsync">parseWikidataPropAsync</a></li><li><a href="global.html#varRegex">varRegex</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Cite.html">Cite</a></li><li><a href="CSL.html">CSL</a></li><li><a href="TokenStack.html">TokenStack</a></li></ul><h3>Global</h3><ul><li><a href="global.html#addLocale">addLocale</a></li><li><a href="global.html#addTemplate">addTemplate</a></li><li><a href="global.html#async">async</a></li><li><a href="global.html#deepCopy">deepCopy</a></li><li><a href="global.html#fetchBibTeXType">fetchBibTeXType</a></li><li><a href="global.html#fetchCSLEngine">fetchCSLEngine</a></li><li><a href="global.html#fetchCSLItemCallback">fetchCSLItemCallback</a></li><li><a href="global.html#fetchCSLLocale">fetchCSLLocale</a></li><li><a href="global.html#fetchCSLStyle">fetchCSLStyle</a></li><li><a href="global.html#fetchDoiType">fetchDoiType</a></li><li><a href="global.html#fetchFile">fetchFile</a></li><li><a href="global.html#fetchFileAsync">fetchFileAsync</a></li><li><a href="global.html#fetchId">fetchId</a></li><li><a href="global.html#fetchWikidataType">fetchWikidataType</a></li><li><a href="global.html#getAttributedEntry">getAttributedEntry</a></li><li><a href="global.html#getBibTeX">getBibTeX</a></li><li><a href="global.html#getBibTeXJSON">getBibTeXJSON</a></li><li><a href="global.html#getBibTeXLabel">getBibTeXLabel</a></li><li><a href="global.html#getBibTxt">getBibTxt</a></li><li><a href="global.html#getDate">getDate</a></li><li><a href="global.html#getJSON">getJSON</a></li><li><a href="global.html#getLabel">getLabel</a></li><li><a href="global.html#getLocale">getLocale</a></li><li><a href="global.html#getName">getName</a></li><li><a href="global.html#getPrefixedEntry">getPrefixedEntry</a></li><li><a href="global.html#getTemplate">getTemplate</a></li><li><a href="global.html#hasLocale">hasLocale</a></li><li><a href="global.html#hasTemplate">hasTemplate</a></li><li><a href="global.html#htmlDict">htmlDict</a></li><li><a href="global.html#parseBibTeX">parseBibTeX</a></li><li><a href="global.html#parseBibTeXJSON">parseBibTeXJSON</a></li><li><a href="global.html#parseBibTeXProp">parseBibTeXProp</a></li><li><a href="global.html#parseBibTeXType">parseBibTeXType</a></li><li><a href="global.html#parseBibTxt">parseBibTxt</a></li><li><a href="global.html#parseBibTxtEntry">parseBibTxtEntry</a></li><li><a href="global.html#parseContentMine">parseContentMine</a></li><li><a href="global.html#parseCsl">parseCsl</a></li><li><a href="global.html#parseDate">parseDate</a></li><li><a href="global.html#parseDoi">parseDoi</a></li><li><a href="global.html#parseDoiApi">parseDoiApi</a></li><li><a href="global.html#parseDoiApiAsync">parseDoiApiAsync</a></li><li><a href="global.html#parseDoiJson">parseDoiJson</a></li><li><a href="global.html#parseInput">parseInput</a></li><li><a href="global.html#parseInputAsync">parseInputAsync</a></li><li><a href="global.html#parseInputChainLink">parseInputChainLink</a></li><li><a href="global.html#parseInputChainLinkAsync">parseInputChainLinkAsync</a></li><li><a href="global.html#parseInputData">parseInputData</a></li><li><a href="global.html#parseInputDataAsync">parseInputDataAsync</a></li><li><a href="global.html#parseInputType">parseInputType</a></li><li><a href="global.html#parseJSON">parseJSON</a></li><li><a href="global.html#parseName">parseName</a></li><li><a href="global.html#parseWikidata">parseWikidata</a></li><li><a href="global.html#parseWikidataJSON">parseWikidataJSON</a></li><li><a href="global.html#parseWikidataJSONAsync">parseWikidataJSONAsync</a></li><li><a href="global.html#parseWikidataProp">parseWikidataProp</a></li><li><a href="global.html#parseWikidataPropAsync">parseWikidataPropAsync</a></li><li><a href="global.html#textDict">textDict</a></li><li><a href="global.html#varRegex">varRegex</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.3</a> on Sat Jul 22 2017 17:03:02 GMT+0200 (CEST)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.3</a>
 </footer>
 
 <script> prettyPrint(); </script>

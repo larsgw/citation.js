@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Source: util/stack.js - Docs - Citation.js</title>
+    
+    <meta name="theme-color" content="#FFC107">
+    <link rel="shortcut icon" type="image/png" href="../favicon.png"/>
+    <link rel="icon" type="image/png" href="../favicon.png"/>
+    
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+    <link type="text/css" rel="stylesheet" href="../static/css/api.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: util/stack.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * Create a TokenStack for parsing strings with complex escape sequences.
+ *
+ * @access protected
+ * @class TokenStack
+ *
+ * @param {String[]} array - list of tokens
+ */
+class TokenStack {
+  constructor (array) {
+    this.stack = array
+    this.index = 0
+    this.current = this.stack[this.index]
+  }
+
+  /**
+   * Get string representation of pattern.
+   *
+   * @access protected
+   * @method getPatternText
+   * @static
+   * @memberof TokenStack
+   *
+   * @param {String|RegExp} pattern - pattern
+   *
+   * @return {String} string representation
+   */
+  static getPatternText (pattern) {
+    return `"${pattern instanceof RegExp ? pattern.source : pattern}"`
+  }
+
+  /**
+   * Get a single callback to match a token against one or several patterns.
+   *
+   * @access protected
+   * @method getMatchCallback
+   * @static
+   * @memberof TokenStack
+   *
+   * @param {String|RegExp|TokenStack~match|Array} pattern - pattern
+   *
+   * @return {TokenStack~match} Match callback
+   */
+  static getMatchCallback (pattern) {
+    if (Array.isArray(pattern)) {
+      const matches = pattern.map(TokenStack.getMatchCallback)
+      return token => matches.some(matchCallback => matchCallback(token))
+    } else if (pattern instanceof Function) {
+      return pattern
+    } else if (pattern instanceof RegExp) {
+      return token => pattern.test(token)
+    } else {
+      return token => pattern === token
+    }
+  }
+
+  /**
+   * Get a number representing the number of tokens that are left.
+   *
+   * @method tokensLeft
+   * @memberof TokenStack
+   *
+   * @return {Number} tokens left
+   */
+  tokensLeft () {
+    return this.stack.length - this.index
+  }
+
+  /**
+   * Match current token against pattern.
+   *
+   * @method matches
+   * @memberof TokenStack
+   *
+   * @return {Boolean} match
+   */
+  matches (pattern) {
+    return TokenStack.getMatchCallback(pattern)(this.current, this.index, this.stack)
+  }
+
+  /**
+   * Consume a single token if possible, and throw if not.
+   *
+   * @method consumeToken
+   * @memberof TokenStack
+   *
+   * @param {String|RegExp|TokenStack~match|Array} [pattern=/^[\s\S]$/g] - pattern
+   * @param {Object} options
+   * @param {Boolean} [options.inverse=false] - invert pattern
+   *
+   * @return {String} token
+   * @throws {SyntaxError} Unexpected token at index: Expected pattern, got token
+   */
+  consumeToken (pattern = /^[\s\S]$/, {inverse = false} = {}) {
+    const token = this.current
+    const match = TokenStack.getMatchCallback(pattern)(token, this.index, this.stack)
+    if (match) {
+      this.current = this.stack[++this.index]
+    } else {
+      throw new SyntaxError(`Unexpected token at index ${this.index}: Expected ${TokenStack.getPatternText(pattern)}, got "${token}"`)
+    }
+    return token
+  }
+
+  /**
+   * Consume n tokens. Throws if not enough tokens left
+   *
+   * @method consumeN
+   * @memberof TokenStack
+   *
+   * @param {Number} length - number of tokens
+   *
+   * @return {String} consumed tokens
+   * @throws {SyntaxError} Not enough tokens left
+   */
+  consumeN (length) {
+    if (this.tokensLeft() &lt; length) {
+      throw new SyntaxError('Not enough tokens left')
+    }
+    const start = this.index
+    while (length--) {
+      this.current = this.stack[++this.index]
+    }
+    return this.stack.slice(start, this.index).join('')
+  }
+
+  /**
+   * Consumes all consecutive tokens matching pattern. Throws if number of matched tokens not within range min-max.
+   *
+   * @method consume
+   * @memberof TokenStack
+   *
+   * @param {String|RegExp|TokenStack~match|Array} [pattern=/^[\s\S]$/g] - pattern
+   * @param {Object} options
+   * @param {Boolean} [options.inverse=false] - invert pattern
+   * @param {Number} [options.min=0] - mininum number of consumed tokens
+   * @param {Number} [options.max=Infinity] - maximum number of matched tokens
+   * @param {TokenStack~tokenMap} [options.tokenMap] - map tokens before returning
+   * @param {TokenStack~tokenFilter} [options.tokenFilter] - filter tokens before returning
+   *
+   * @return {String} consumed tokens
+   * @throws {SyntaxError} Not enough tokens
+   * @throws {SyntaxError} Too many tokens
+   */
+  consume (pattern = /^[\s\S]$/, {
+    min = 0,
+    max = Infinity,
+    inverse = false,
+    tokenMap,
+    tokenFilter
+  } = {}) {
+    const start = this.index
+    const match = TokenStack.getMatchCallback(pattern)
+
+    while (match(this.current, this.index, this.stack) !== inverse) {
+      this.current = this.stack[++this.index]
+    }
+
+    let consumed = this.stack.slice(start, this.index)
+
+    if (consumed.length &lt; min) {
+      throw new SyntaxError(`Not enough ${TokenStack.getPatternText(pattern)}`)
+    } else if (consumed.length > max) {
+      throw new SyntaxError(`Too many ${TokenStack.getPatternText(pattern)}`)
+    }
+
+    if (tokenMap) {
+      consumed = consumed.map(tokenMap)
+    }
+    if (tokenFilter) {
+      consumed = consumed.filter(tokenFilter)
+    }
+
+    return consumed.join('')
+  }
+}
+
+export default TokenStack
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Cite.html">Cite</a></li><li><a href="CSL.html">CSL</a></li><li><a href="TokenStack.html">TokenStack</a></li></ul><h3>Global</h3><ul><li><a href="global.html#addLocale">addLocale</a></li><li><a href="global.html#addTemplate">addTemplate</a></li><li><a href="global.html#async">async</a></li><li><a href="global.html#deepCopy">deepCopy</a></li><li><a href="global.html#fetchBibTeXType">fetchBibTeXType</a></li><li><a href="global.html#fetchCSLEngine">fetchCSLEngine</a></li><li><a href="global.html#fetchCSLItemCallback">fetchCSLItemCallback</a></li><li><a href="global.html#fetchCSLLocale">fetchCSLLocale</a></li><li><a href="global.html#fetchCSLStyle">fetchCSLStyle</a></li><li><a href="global.html#fetchDoiType">fetchDoiType</a></li><li><a href="global.html#fetchFile">fetchFile</a></li><li><a href="global.html#fetchFileAsync">fetchFileAsync</a></li><li><a href="global.html#fetchId">fetchId</a></li><li><a href="global.html#fetchWikidataType">fetchWikidataType</a></li><li><a href="global.html#getAttributedEntry">getAttributedEntry</a></li><li><a href="global.html#getBibTeX">getBibTeX</a></li><li><a href="global.html#getBibTeXJSON">getBibTeXJSON</a></li><li><a href="global.html#getBibTeXLabel">getBibTeXLabel</a></li><li><a href="global.html#getBibTxt">getBibTxt</a></li><li><a href="global.html#getDate">getDate</a></li><li><a href="global.html#getJSON">getJSON</a></li><li><a href="global.html#getLabel">getLabel</a></li><li><a href="global.html#getLocale">getLocale</a></li><li><a href="global.html#getName">getName</a></li><li><a href="global.html#getPrefixedEntry">getPrefixedEntry</a></li><li><a href="global.html#getTemplate">getTemplate</a></li><li><a href="global.html#hasLocale">hasLocale</a></li><li><a href="global.html#hasTemplate">hasTemplate</a></li><li><a href="global.html#htmlDict">htmlDict</a></li><li><a href="global.html#parseBibTeX">parseBibTeX</a></li><li><a href="global.html#parseBibTeXJSON">parseBibTeXJSON</a></li><li><a href="global.html#parseBibTeXProp">parseBibTeXProp</a></li><li><a href="global.html#parseBibTeXType">parseBibTeXType</a></li><li><a href="global.html#parseBibTxt">parseBibTxt</a></li><li><a href="global.html#parseBibTxtEntry">parseBibTxtEntry</a></li><li><a href="global.html#parseContentMine">parseContentMine</a></li><li><a href="global.html#parseCsl">parseCsl</a></li><li><a href="global.html#parseDate">parseDate</a></li><li><a href="global.html#parseDoi">parseDoi</a></li><li><a href="global.html#parseDoiApi">parseDoiApi</a></li><li><a href="global.html#parseDoiApiAsync">parseDoiApiAsync</a></li><li><a href="global.html#parseDoiJson">parseDoiJson</a></li><li><a href="global.html#parseInput">parseInput</a></li><li><a href="global.html#parseInputAsync">parseInputAsync</a></li><li><a href="global.html#parseInputChainLink">parseInputChainLink</a></li><li><a href="global.html#parseInputChainLinkAsync">parseInputChainLinkAsync</a></li><li><a href="global.html#parseInputData">parseInputData</a></li><li><a href="global.html#parseInputDataAsync">parseInputDataAsync</a></li><li><a href="global.html#parseInputType">parseInputType</a></li><li><a href="global.html#parseJSON">parseJSON</a></li><li><a href="global.html#parseName">parseName</a></li><li><a href="global.html#parseWikidata">parseWikidata</a></li><li><a href="global.html#parseWikidataJSON">parseWikidataJSON</a></li><li><a href="global.html#parseWikidataJSONAsync">parseWikidataJSONAsync</a></li><li><a href="global.html#parseWikidataProp">parseWikidataProp</a></li><li><a href="global.html#parseWikidataPropAsync">parseWikidataPropAsync</a></li><li><a href="global.html#textDict">textDict</a></li><li><a href="global.html#varRegex">varRegex</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.3</a>
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

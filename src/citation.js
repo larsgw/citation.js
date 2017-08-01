@@ -26986,7 +26986,7 @@ var encodeCharacter = function encodeCharacter(c) {
 },{}],332:[function(require,module,exports){
 module.exports={
   "name": "citation-js",
-  "version": "0.3.0-10",
+  "version": "0.3.0-12",
   "description": "Citation.js converts formats like BibTeX, Wikidata JSON and ContentMine JSON to CSL-JSON to convert to other formats like APA, Vancouver and back to BibTeX.",
   "main": "lib/index.js",
   "directories": {
@@ -27024,13 +27024,14 @@ module.exports={
     "babel-preset-env": "^1.4.0",
     "babel-preset-es2015": "^6.24.1",
     "babel-preset-stage-0": "^6.24.1",
+    "babel-register": "^6.24.1",
     "babelify": "^7.3.0",
-    "brfs": "^1.4.3",
     "browserify": "^14.3.0",
     "cross-env": "^5.0.1",
     "disc": "^1.3.2",
-    "jasmine-es6": "^0.4.0",
+    "expect.js": "^0.3.1",
     "jsdoc": "^3.5.3",
+    "mocha": "^3.4.2",
     "npm-run-all": "^4.0.2",
     "nyc": "^11.0.3",
     "standard": "^10.0.2",
@@ -27045,32 +27046,32 @@ module.exports={
   },
   "scripts": {
     "--1--": "lint",
-    "lint:src": "standard \"src/async/**/*.js\" \"src/Cite/**/*.js\" \"src/CSL/**/*.js\" \"src/get/**/*.js\" \"src/parse/**/*.js\" \"src/util/**/*.js\" \"*.js\"",
-    "lint:test": "standard \"src/test/**/*.js\"",
+    "lint:src": "standard \"src/**/*.js\"",
+    "lint:test": "standard \"test/**/*.js\"",
     "lint:tools": "standard \"tools/**/*.js\"",
     "lint:bin": "standard \"bin/**/*.js\"",
     "lint": "npm-run-all lint:*",
     "--2--": "test",
-    "test": "cross-env JASMINE_CONFIG_PATH=src/test/jasmine.json jasmine",
+    "test": "cross-env MOCHA=1 mocha --check-leaks -r babel-register -R dot test/*.spec.js",
     "coverage:test": "cross-env NODE_ENV=test nyc npm test",
-    "coverage:report": "nyc report --reporter=lcov > coverage.lcov && codecov",
+    "coverage:report": "nyc report --reporter=lcov > coverage.lcov",
     "coverage": "npm-run-all coverage:*",
     "--3--": "compile",
     "compile:test": "babel src/test -d lib/test --copy-files",
     "compile": "babel src -d lib --copy-files",
     "--4--": "distributions",
     "dist:regular": "browserify -r ./src/index.js:citation-js -o build/citation.js -g [ babelify --ignore=citeproc --presets [ env ] ]",
-    "dist:regular-test": "browserify -e lib/test/citation.spec.js -o build/test.citation.js -g [ babelify --ignore=citeproc --presets [ es2015 env ] ] -t brfs",
+    "dist:regular-test": "browserify -r expect.js -e test/wrapper.js -x expect.js -o build/test.citation.js -g [ babelify --ignore=citeproc --presets [ es2015 env ] ]",
     "dist:minify": "uglifyjs build/citation.js --ie8 -c -o build/citation.min.js",
     "dist:minify-test": "uglifyjs build/test.citation.js --ie8 -c -o build/test.citation.min.js",
     "--5--": "generate",
     "generate:files": "npm-run-all dist:*",
     "generate:docs": "jsdoc ./src README.md -c .jsdoc.json",
-    "generate:disc": "browserify -e test/citation.spec.js -o build/tmp.js -t brfs --full-paths && node tools/disc.js",
+    "generate:disc": "browserify -e ./src/index.js -o build/tmp.js --full-paths -g [ babelify --ignore=citeproc --presets [ env ] ] && node tools/disc.js",
     "generate": "npm-run-all generate:*",
     "--6--": "dev",
     "dev:test": "npm run compile && npm run test",
-    "dev:test-browser": "npm-run-all dist:regular*",
+    "dev:test-browser": "npm run compile && npm run dist:regular",
     "dev": "npm-run-all dev:*"
   },
   "author": "Lars Willighagen (https://larsgw.github.io)",
@@ -27733,14 +27734,14 @@ var currentVersion = function currentVersion() {
  * @memberof Cite
  * @this Cite
  *
- * @param {Number} versnum - The number of the version you want to retrieve. Illegel numbers: numbers under zero, floats, numbers above the current version of the object.
+ * @param {Number} [versnum=1] - The number of the version you want to retrieve. Illegel numbers: numbers under or equal to zero, floats, numbers above the current version of the object.
  *
  * @return {Cite} The version of the object with the version number passed. `undefined` if an illegal number is passed.
  */
-var retrieveVersion = function retrieveVersion(versnum) {
-  versnum = versnum <= 0 ? 1 : versnum;
+var retrieveVersion = function retrieveVersion() {
+  var versnum = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 1;
 
-  if (versnum > this.currentVersion()) {
+  if (versnum <= 0 || versnum > this.currentVersion()) {
     return null;
   } else {
     var _log = _slicedToArray(this.log[versnum - 1], 2),
@@ -27981,7 +27982,7 @@ var getComparisonValue = function getComparisonValue(obj, prop) {
 
     case 'accessed':
     case 'issued':
-      return value[0]['date-parts'];
+      return value['date-parts'][0];
 
     case 'page':
       return value.split('-').map(function (num) {
@@ -28875,9 +28876,11 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _prop = require('./prop');
+var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; }();
 
-var _prop2 = _interopRequireDefault(_prop);
+var _prop2 = require('./prop');
+
+var _prop3 = _interopRequireDefault(_prop2);
 
 var _type = require('./type');
 
@@ -28898,18 +28901,41 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 var parseBibTeXJSON = function parseBibTeXJSON(data) {
   return [].concat(data).map(function (entry) {
     var newEntry = {};
+    var toMerge = [];
 
     for (var prop in entry.properties) {
       var oldValue = entry.properties[prop];
-      var newValue = (0, _prop2.default)(prop, oldValue);
 
-      if (newValue) {
-        newEntry[newValue[0]] = newValue[1];
+      var _ref = (0, _prop3.default)(prop, oldValue) || [],
+          _ref2 = _slicedToArray(_ref, 2),
+          cslField = _ref2[0],
+          cslValue = _ref2[1];
+
+      if (cslField) {
+        if (/^[^:\s]+?:[^.\s]+(\.[^.\s]+)*$/.test(cslField)) {
+          toMerge.push([cslField, cslValue]);
+        } else {
+          newEntry[cslField] = cslValue;
+        }
       }
     }
 
     newEntry.type = (0, _type2.default)(entry.type);
     newEntry.id = newEntry.label = entry.label;
+
+    toMerge.forEach(function (_ref3) {
+      var _ref4 = _slicedToArray(_ref3, 2),
+          cslField = _ref4[0],
+          value = _ref4[1];
+
+      var props = cslField.split(/:|\./g);
+      var cursor = newEntry;
+
+      while (props.length > 0) {
+        var _prop = props.shift();
+        cursor = cursor[_prop] || (cursor[_prop] = !props.length ? value : isNaN(+props[0]) ? {} : []);
+      }
+    });
 
     return newEntry;
   });
@@ -28935,148 +28961,148 @@ var _date2 = _interopRequireDefault(_date);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 /**
- * Transform property and value from BibTeX-JSON format to CSL-JSON
+ * Parse date into list of CSL date object.
  *
- * @access protected
- * @method parseBibTeXProp
+ * @access private
+ * @method parseBibtexDate
  *
- * @param {String} prop - Property
- * @param {String|Number} value - Value
- *
- * @return {String[]} Array with new prop and value
+ * @param {String} value - date
+ * @return {Object} CSL date object
  */
-var parseBibTeXProp = function parseBibTeXProp(prop, value) {
-  var rProp = prop;
-  var rValue = value;
-
-  switch (prop) {
-    // Address
-    case 'address':
-      rProp = 'publisher-place';
-      break;
-
-    // Author
-    case 'author':
-      rValue = value.split(' and ').map(_name2.default);
-      break;
-
-    // Book title
-    case 'booktitle':
-      rProp = 'container-title';
-      break;
-
-    // DOI
-    case 'doi':
-      rProp = 'DOI';
-      break;
-
-    // Edition/print
-    case 'edition':
-      // rValue = parseOrdinal(value)
-      break;
-
-    // Editor
-    case 'editor':
-      rValue = value.split(' and ').map(_name2.default);
-      break;
-
-    // ISBN
-    case 'isbn':
-      rProp = 'ISBN';
-      break;
-
-    // ISSN
-    case 'issn':
-      rProp = 'ISSN';
-      break;
-
-    // Issue
-    case 'issue':
-    case 'number':
-      rProp = 'issue';
-      rValue = value.toString();
-      break;
-
-    // Journal
-    case 'journal':
-      rProp = 'container-title';
-      break;
-
-    // Location
-    case 'location':
-      rProp = 'publisher-place';
-      break;
-
-    // Pages
-    case 'pages':
-      rProp = 'page';
-      rValue = value.replace(/[—–]/, '-');
-      break;
-
-    // Pubate
-    case 'date':
-      rProp = 'issued';
-      rValue = (0, _date2.default)(value);
-      break;
-
-    case 'year':
-      // Ignore for now
-      // rProp = 'issued-year'
-      break;
-
-    case 'month':
-      // Ignore for now
-      // rProp = 'issued-month'
-      break;
-
-    // Publisher
-    case 'publisher':
-      // Nothing necessary, as far as I know
-      break;
-
-    // Series
-    case 'series':
-      rProp = 'collection-title';
-      break;
-
-    // Title
-    case 'title':
-      rProp = 'title';
-      rValue = value.replace(/\.$/g, '');
-      break;
-
-    // URL
-    case 'url':
-      rProp = 'URL';
-      break;
-
-    // Volume
-    case 'volume':
-      rValue = value.toString();
-      break;
-
-    case 'crossref': // Crossref
-    case 'keywords': // Keywords
-    case 'language': // Language
-    case 'note': // Note
-    case 'pmid': // PMID
-    case 'numpages':
-      // Number of pages
-      // Property ignored
-      rProp = rValue = undefined;
-      break;
-
-    default:
-      console.info('[set]', 'Unknown property: ' + prop);
-      rProp = rValue = undefined;
-      break;
-  }
-
-  if (rProp !== undefined && rValue !== undefined) {
-    return [rProp, rValue];
+var parseBibtexDate = function parseBibtexDate(value) {
+  if (/{|}/.test(value)) {
+    return { literal: value.replace(/[{}]/g, '') };
   } else {
+    return (0, _date2.default)(value);
+  }
+};
+
+/**
+ * Parse name into CSL name objects.
+ *
+ * @access private
+ * @method parseBibtexName
+ *
+ * @param {String} name - name
+ * @return {Object} CSL name object
+ */
+var parseBibtexName = function parseBibtexName(name) {
+  if (/{|}/.test(name)) {
+    return { literal: name.replace(/[{}]/g, '') };
+  } else {
+    return (0, _name2.default)(name);
+  }
+};
+
+/**
+ * Parse list of names into list of CSL name objects.
+ *
+ * @access private
+ * @method parseBibtexNameList
+ *
+ * @param {String} list - list of names separated by ' and '
+ * @return {Object[]} array of CSL name objects
+ */
+var parseBibtexNameList = function parseBibtexNameList(list) {
+  var literals = [];
+  list = list.replace(/%/g, '%0').replace(/{.*?}/g, function (m) {
+    return '%[' + (literals.push(m) - 1) + ']';
+  });
+  return list.split(' and ').map(function (name) {
+    name = name.replace(/%\[(\d+)\]/, function (_, i) {
+      return literals[+i];
+    }).replace(/%0/g, '%%');
+    return parseBibtexName(name);
+  });
+};
+
+/**
+ * Map holding information on BibTeX-JSON fields.
+ *
+ *  * If true, field name should stay the same
+ *  * If false, field should be ignored
+ *  * If string, use as field name
+ *  * Special strings are used to merge into complex objects
+ *
+ * @access private
+ * @constant propMap
+ * @default
+ */
+var propMap = {
+  address: 'publisher-place',
+  author: true,
+  booktitle: 'container-title',
+  doi: 'DOI',
+  date: 'issued',
+  edition: true,
+  editor: true,
+  isbn: 'ISBN',
+  issn: 'ISSN',
+  issue: 'issue',
+  journal: 'container-title',
+  location: 'publisher-place',
+  number: 'issue',
+  pages: 'page',
+  publisher: true,
+  series: 'collection-title',
+  title: true,
+  url: 'URL',
+  volume: true,
+
+  // prepare for merge
+  year: 'issued:date-parts.0.0',
+  month: 'issued:date-parts.0.1',
+
+  // ignore
+  crossref: false,
+  keywords: false,
+  language: false,
+  note: false,
+  numpages: false,
+  pmid: false
+
+  /**
+   * Transform property and value from BibTeX-JSON format to CSL-JSON
+   *
+   * @access protected
+   * @method parseBibTeXProp
+   *
+   * @param {String} name - Field name
+   * @param {String} value - Field value
+   *
+   * @return {String[]} Array with new name and value
+   */
+};var parseBibTeXProp = function parseBibTeXProp(name, value) {
+  if (!propMap.hasOwnProperty(name)) {
+    console.info('[set]', 'Unknown property: ' + name);
+    return undefined;
+  } else if (propMap[name] === false) {
     return undefined;
   }
+
+  var cslProp = propMap[name] === true ? name : propMap[name];
+  var cslValue = function (name, value) {
+    switch (name) {
+      case 'author':
+      case 'editor':
+        return parseBibtexNameList(value);
+
+      case 'issued':
+        return parseBibtexDate(value);
+
+      case 'edition':
+        // return parseOrdinal(value)
+        return value;
+
+      case 'page':
+        return value.replace(/[—–]/, '-');
+
+      default:
+        return value.replace(/[{}]/g, '');
+    }
+  }(cslProp, value);
+
+  return [cslProp, cslValue];
 };
 
 exports.default = parseBibTeXProp;
@@ -29088,9 +29114,9 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _regex = require('../regex');
+var _stack = require('../../util/stack');
 
-var _regex2 = _interopRequireDefault(_regex);
+var _stack2 = _interopRequireDefault(_stack);
 
 var _tokens = require('./tokens.json');
 
@@ -29099,242 +29125,28 @@ var _tokens2 = _interopRequireDefault(_tokens);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 /**
- * Format BibTeX data
+ * Match any BibTeX token.
  *
- * @access protected
- * @method parseBibTeX
+ *     new RegExp(
+ *       // word commands
+ *       '\\\\url|\\\\href|' +
+ *       '{\\\\[a-zA-Z]+}|\\$\\\\[a-zA-Z]+\\$|' +
+ *       // math
+ *       '\\$[_^]{[0-9()+\\-=n]}\\$|'+
+ *       // symbols
+ *       '`{2,3}|\'{2,3}|-{2,3}|[!?]!|!\\?|{\\\\~}|' +
+ *       // escaped symbols
+ *       '\\\\[#$%&~_^\\\\{}]|' +
+ *       // diacritics
+ *       '{\\\\(?:[a-z] |[`"\'^~=.])\\\\?[a-zA-Z]}|' +
+ *       // non-breaking space
+ *       '[\\s\\S]', 'g')
  *
- * @param {String} str - The input data
- *
- * @return {CSL[]} The formatted input data
+ * @access private
+ * @constant tokenPattern
+ * @default
  */
-var parseBibTeX = function parseBibTeX(str) {
-  var entries = void 0;
-
-  try {
-    entries = [];
-
-    var stack = str
-    // Clean weird commands
-    .replace(/{?(\\[`"'^~=]){?\\?([A-Za-z])}/g, '{$1$2}').replace(/{?(\\[a-z]){?\\?([A-Za-z])}/g, '{$1 $2}')
-    // Tokenize, with escaped characters in mind
-    .split(new RegExp('(?!^)(' +
-    // Escaped chars
-    '\\\\([#$%&~_^\\\\{}])|' +
-    // Regular commands
-    '\\{\\\\(?:' +
-    // Accented chars
-    // Vowel regular
-    '[`\'^~"=][AEIOUYaeiouy]|' +
-    // Consonant regular
-    '(?:[cv] |[\'])[CcDdGgKkLlNnRrSs]|' +
-    // A-E
-    '(?:[dkruv] )[Aa]|(?:[db] |\\.)[Bb]|[.^][Cc]|(?:[bd] |\\.)[Dd]|(?:[dkuv] |[.])[Ee]|' +
-    // F-J
-    '\\.[Ff]|(?:u |[=.^\'])[Gg]|(?:[cd] |[.^"])[Hh]|b h|[dv] [Ii]|=\\\\i|\\.I|(?:v |\\^)[Jj]|' +
-    // K-O
-    '(?:[bd] |\')[Kk]|[bd] [Ll]|[Ll] |(?:d |[.\'])[Mm]|(?:[bd] |[~.])[Nn]|[dHkuv] [Oo]|' +
-    // P-U
-    '[.\'][Pp]|(?:[bd] |[.])[Rr]|(?:d |[.^])[Ss]|(?:[bcdv] |[.])[Tt]|" t|[dHkruv] [Uu]|' +
-    // V-Z
-    '(?:d |[~])[Vv]|(?:d |[`".\'^])[Ww]|r w|[."][Xx]|(?:d |[.])[Yy]|r y|(?:[bdv] |[\'.^])[Zz]|' +
-    // No break space
-    '~|' +
-    // Commands
-    '\\w+' + ')\\}|' +
-    // Greek letters and other symbols
-    '\\$\\\\(?:[A-Z]?[a-z]+|\\#|%<)\\\\$|' +
-    // Subscript and superscript
-    '\\$[^_]\\{[0-9+-=()n]\\}\\$|' +
-    // --, ---, '', ''', ``, ```
-    '---|--|\'\'\'|\'\'|```|``|' +
-    // ?!, !!, !?
-    '\\?!|' + '!!|' + '!\\?\'|' +
-    // \url and \href
-    '\\\\(?:url|href)|' + '[\\s\\S]' + ')', 'g')).filter(function (v) {
-      return !!v;
-    });
-
-    var whitespace = _regex2.default.bibtex[1];
-    var syntax = _regex2.default.bibtex[2];
-    var dels = {
-      '"': '"',
-      '{': '}',
-      '"{': '}"',
-      '{{': '}}',
-      '': ''
-    };
-
-    var index = 0;
-    var curs = stack[index];
-
-    while (curs) {
-      var obj = void 0;
-
-      while (whitespace.test(curs)) {
-        curs = stack[++index];
-      }
-
-      if (!curs) {
-        break;
-      }
-
-      entries.push({ type: '', label: '', properties: {} });
-      obj = entries[entries.length - 1];
-
-      if (curs === '@') {
-        curs = stack[++index];
-      } else {
-        throw new SyntaxError('Unexpected token at index ' + index + '. Expected "@", got "' + curs + '".');
-      }
-
-      while (whitespace.test(curs)) {
-        curs = stack[++index];
-      }
-
-      while (!whitespace.test(curs) && !syntax.test(curs) || curs.length > 1) {
-        obj.type += curs;
-        curs = stack[++index];
-      }
-
-      obj.type = obj.type.toLowerCase();
-
-      while (whitespace.test(curs)) {
-        curs = stack[++index];
-      }
-
-      if (curs === '{') {
-        curs = stack[++index];
-      } else {
-        throw new SyntaxError('Unexpected token at index ' + index + '. Expected "{", got "' + curs + '".');
-      }
-
-      while (whitespace.test(curs)) {
-        curs = stack[++index];
-      }
-
-      while (!whitespace.test(curs) && !syntax.test(curs) || curs.length > 1) {
-        obj.label += curs;
-        curs = stack[++index];
-      }
-
-      while (whitespace.test(curs)) {
-        curs = stack[++index];
-      }
-
-      if (curs === ',') {
-        curs = stack[++index];
-      } else {
-        throw new SyntaxError('Unexpected token at index ' + index + '. Expected ",", got "' + curs + '".');
-      }
-
-      while (whitespace.test(curs)) {
-        curs = stack[++index];
-      }
-
-      var key, val, startDel, endDel, nexs;
-
-      while (curs !== '}') {
-        key = '';
-        val = '';
-        startDel = '';
-
-        while (curs && !whitespace.test(curs) && curs !== '=') {
-          key += curs;
-          curs = stack[++index];
-        }
-
-        while (whitespace.test(curs)) {
-          curs = stack[++index];
-        }
-
-        if (curs === '=') {
-          curs = stack[++index];
-        } else {
-          throw new SyntaxError('Unexpected token at index ' + index + '. Expected "=", got "' + curs + '".');
-        }
-
-        while (whitespace.test(curs)) {
-          curs = stack[++index];
-        }
-
-        while (syntax.test(curs)) {
-          startDel += curs;
-          curs = stack[++index];
-        }
-
-        if (!dels.hasOwnProperty(startDel)) {
-          throw new SyntaxError('Unexpected field delimiter at index ' + index + '. Expected ' + (Object.keys(dels).map(function (v) {
-            return '"' + v + '"';
-          }).join(', ') + ', got "' + startDel + '".'));
-        }
-
-        endDel = dels[startDel];
-        nexs = stack.slice(index + 1, index + (endDel.length ? endDel.length : 1)).reverse().join('');
-
-        while (curs && (endDel === '' ? curs !== ',' : curs + nexs !== endDel)) {
-          if (_tokens2.default.hasOwnProperty(curs)) {
-            val += _tokens2.default[curs];
-          } else if (curs.match(/^\\([#$%&~_^\\{}])$/)) {
-            val += curs.slice(1);
-          } else if (curs.length > 1) {
-            // "Soft", non-breaking error for now
-            // throw new SyntaxError( 'Escape sequence not recognized: ' + curs )
-            console.error('Escape sequence not recognized: ' + curs);
-          } else {
-            val += curs;
-          }
-
-          curs = stack[++index];
-          nexs = stack.slice(index + 1, index + (endDel.length ? endDel.length : 1)).reverse().join('');
-        }
-
-        key = key.trim().replace(/\s+/g, ' ').toLowerCase();
-
-        val = val.replace(/[{}]/g, '').trim().replace(/\s+/g, ' ');
-
-        obj.properties[key] = val;
-
-        endDel = endDel.split('');
-
-        while (endDel.pop()) {
-          curs = stack[++index];
-        }
-
-        while (whitespace.test(curs)) {
-          curs = stack[++index];
-        }
-
-        if (curs === '}') {
-          break;
-        } else if (curs === ',') {
-          curs = stack[++index];
-        } else {
-          throw new SyntaxError('Unexpected token at index ' + index + '. Expected ",", "}", got "' + curs + '".');
-        }
-
-        while (whitespace.test(curs)) {
-          curs = stack[++index];
-        }
-      }
-
-      if (curs === '}') {
-        curs = stack[++index];
-      } else {
-        throw new SyntaxError('Unexpected token at index ' + index + '. Expected "}", got "' + curs + '".');
-      }
-    }
-
-    return entries;
-  } catch (e) {
-    console.error('Uncaught SyntaxError: ' + e.message + ' Returning completed entries.');
-
-    // Remove last, incomplete entry
-    entries.pop();
-
-    return entries;
-  }
-};
+var tokenPattern = /\\url|\\href|{\\[a-zA-Z]+}|\$\\[a-zA-Z]+\$|\$[_^]{[0-9()+=\-n]}\$|`{2,3}|'{2,3}|-{2,3}|[!?]!|!\?|{\\~}|\\[#$%&~_^\\{}]|{\\(?:[a-z] |[`"'^~=.])\\?[a-zA-Z]}|[\s\S]/g;
 
 /**
  * Mapping of BibTeX Escaped Chars to Unicode.
@@ -29348,9 +29160,162 @@ var parseBibTeX = function parseBibTeX(str) {
  * @constant varBibTeXTokens
  * @default
  */
+
+
+var whitespace = /^\s$/;
+var syntax = /^[@{}"=,\\]$/;
+var delimiters = {
+  '"': '"',
+  '{': '}',
+  '': ''
+
+  /**
+   * Tokenize a BibTeX string
+   *
+   * @access private
+   * @method getTokenizedBibtex
+   *
+   * @param {String} str - Input BibTeX
+   *
+   * @return {String[]} list of tokens
+   */
+};var getTokenizedBibtex = function getTokenizedBibtex(str) {
+  // Substitute command of form "\X{X}" into "{\X X}"
+  str = str.replace(/{?(\\[`"'^~=.]){?\\?([A-Za-z])}/g, '{$1$2}').replace(/{?(\\[a-z]){?\\?([A-Za-z])}/g, '{$1 $2}');
+
+  // Tokenize, with escaped characters in mind
+  return str.match(tokenPattern);
+};
+
+/**
+ * Format BibTeX data
+ *
+ * @access protected
+ * @method parseBibTeX
+ *
+ * @param {String} str - The input data
+ *
+ * @return {CSL[]} The formatted input data
+ */
+var parseBibTeX = function parseBibTeX(str) {
+  var entries = [];
+  var tokens = getTokenizedBibtex(str);
+  var stack = new _stack2.default(tokens);
+
+  try {
+    stack.consume(whitespace);
+
+    while (stack.tokensLeft()) {
+      stack.consumeToken('@');
+      stack.consume(whitespace);
+
+      var type = stack.consume([whitespace, syntax], { inverse: true }).toLowerCase();
+
+      stack.consume(whitespace);
+      stack.consumeToken('{');
+      stack.consume(whitespace);
+
+      var label = stack.consume([whitespace, syntax], { inverse: true });
+
+      stack.consume(whitespace);
+      stack.consumeToken(',');
+      stack.consume(whitespace);
+
+      var properties = {};
+
+      var _loop = function _loop() {
+        var key = stack.consume([whitespace, '='], { inverse: true }).toLowerCase();
+
+        stack.consume(whitespace);
+        stack.consumeToken('=');
+        stack.consume(whitespace);
+
+        var startDelimiter = stack.consume(/^({|"|)$/g);
+
+        if (!delimiters.hasOwnProperty(startDelimiter)) {
+          throw new SyntaxError('Unexpected field delimiter at index ' + stack.index + '. Expected ' + (Object.keys(delimiters).map(function (v) {
+            return '"' + v + '"';
+          }).join(', ') + '; got "' + startDelimiter + '"'));
+        }
+
+        var endDelimiter = delimiters[startDelimiter];
+
+        var tokenMap = function tokenMap(token) {
+          if (_tokens2.default.hasOwnProperty(token)) {
+            return _tokens2.default[token];
+          } else if (token.match(/^\\[#$%&~_^\\{}]$/)) {
+            return token.slice(1);
+          } else if (token.length > 1) {
+            throw new SyntaxError('Escape sequence not recognized: ' + token);
+          } else {
+            return token;
+          }
+        };
+
+        var openBrackets = 0;
+        var val = stack.consume(function (token, index) {
+          if (token === '{') {
+            openBrackets++;
+          }
+
+          if (stack.tokensLeft() < endDelimiter.length) {
+            throw new SyntaxError('Unmatched delimiter at index ' + stack.index + ': Expected ' + endDelimiter);
+          } else if (!endDelimiter.length) {
+            return ![whitespace, syntax].some(function (rgx) {
+              return rgx.test(token);
+            });
+          } else if (token === '}' && openBrackets) {
+            openBrackets--;
+            return true;
+          } else {
+            token = stack.stack.slice(index, index + endDelimiter.length).join('');
+            return token !== endDelimiter;
+          }
+        }, { tokenMap: tokenMap });
+
+        properties[key] = val;
+
+        stack.consumeN(endDelimiter.length);
+        stack.consume(whitespace);
+
+        // Last entry (no trailing comma)
+        if (stack.matches('}')) {
+          return 'break';
+        }
+
+        stack.consumeToken(',');
+        stack.consume(whitespace);
+
+        // Last entry (trailing comma)
+        if (stack.matches('}')) {
+          return 'break';
+        }
+      };
+
+      while (stack.tokensLeft()) {
+        var _ret = _loop();
+
+        if (_ret === 'break') break;
+      }
+
+      stack.consumeToken('}');
+      stack.consume(whitespace);
+
+      entries.push({ type: type, label: label, properties: properties });
+    }
+  } catch (e) {
+    console.error('Uncaught SyntaxError: ' + e.message + '. Returning completed entries.');
+
+    // Remove last, possibly incomplete entry
+    entries.pop();
+  }
+
+  return entries;
+};
+
 exports.default = parseBibTeX;
 
-},{"../regex":389,"./tokens.json":365}],365:[function(require,module,exports){
+},{"../../util/stack":404,"./tokens.json":365}],365:[function(require,module,exports){
 module.exports={
   "\\url":"",                           "\\href":"",                            "{\\textexclamdown}":"\u00A1",          "{\\textcent}":"\u00A2",
   "{\\textsterling}":"\u00A3",          "{\\textyen}":"\u00A5",                 "{\\textbrokenbar}":"\u00A6",           "{\\textsection}":"\u00A7",
@@ -30882,7 +30847,7 @@ var parseInputType = function parseInputType(input) {
       } else if (_regex2.default.wikidata[3].test(input)) {
         return 'url/wikidata';
         // BibTeX
-      } else if (_regex2.default.bibtex[0].test(input)) {
+      } else if (_regex2.default.bibtex.test(input)) {
         return 'string/bibtex';
         // Bib.TXT
       } else if (_regex2.default.bibtxt.test(input)) {
@@ -31071,8 +31036,8 @@ Object.defineProperty(exports, "__esModule", {
  */
 var regex = {
   url: /^(https?:\/\/)?((([a-z\d]([a-z\d-]*[a-z\d])*)\.)+[a-z]{2,}|((\d{1,3}\.){3}\d{1,3})|localhost)(:\d+)?(\/[-a-z\d%_.~+:]*)*(\?[;&a-z\d%_.~+=-]*)?(#[-a-z\d_]*)?$/i,
-  bibtex: [/^(?:\s*@\s*[^@]+?\s*\{\s*[^@]+?\s*,\s*[^@]+\})+\s*$/, /^\s$/, /^[@{}"=,\\]$/],
   bibtxt: /^\s*(\[.*?\]\s*(\n\s*[^[]((?!:)\S)+\s*:\s*.+?\s*)*\s*)+$/,
+  bibtex: /^(?:\s*@\s*[^@]+?\s*\{\s*[^@]+?\s*,\s*[^@]+\})+\s*$/,
   wikidata: [/^\s*(Q\d+)\s*$/, /^\s*((?:Q\d+(?:\s+|,|))*Q\d+)\s*$/, /^(https?:\/\/(?:www\.)wikidata.org\/w\/api\.php(?:\?.*)?)$/, /\/(Q\d+)(?:[#?/]|\s*$)/],
   json: [[/((?:\[|:|,)\s*)'((?:\\'|[^'])*?[^\\])?'(?=\s*(?:\]|}|,))/g, '$1"$2"'], [/((?:(?:"|]|}|\/[gmi]|\.|(?:\d|\.|-)*\d)\s*,|{)\s*)(?:"([^":\n]+?)"|'([^":\n]+?)'|([^":\n]+?))(\s*):/g, '$1"$2$3$4"$5:']],
   doi: [/^\s*(https?:\/\/(?:dx\.)?doi\.org\/(10.\d{4,9}\/[-._;()/:A-Z0-9]+))\s*$/i, /^\s*(10.\d{4,9}\/[-._;()/:A-Z0-9]+)\s*$/i, /^\s*(?:(?:10.\d{4,9}\/[-._;()/:A-Z0-9]+)\s*)+$/i],
@@ -32069,7 +32034,7 @@ exports.default = fetchId;
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.fetchId = exports.fetchFileAsync = exports.fetchFile = exports.deepCopy = exports.attr = undefined;
+exports.TokenStack = exports.fetchId = exports.fetchFileAsync = exports.fetchFile = exports.deepCopy = exports.attr = undefined;
 
 var _attr = require('./attr');
 
@@ -32091,6 +32056,10 @@ var _fetchId = require('./fetchId');
 
 var _fetchId2 = _interopRequireDefault(_fetchId);
 
+var _stack = require('./stack');
+
+var _stack2 = _interopRequireDefault(_stack);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
@@ -32100,8 +32069,246 @@ exports.deepCopy = _deepCopy2.default;
 exports.fetchFile = _fetchFile2.default;
 exports.fetchFileAsync = _fetchFileAsync2.default;
 exports.fetchId = _fetchId2.default;
+exports.TokenStack = _stack2.default;
 
-},{"./attr":398,"./deepCopy":399,"./fetchFile":400,"./fetchFileAsync":401,"./fetchId":402}],404:[function(require,module,exports){
+},{"./attr":398,"./deepCopy":399,"./fetchFile":400,"./fetchFileAsync":401,"./fetchId":402,"./stack":404}],404:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+/**
+ * Create a TokenStack for parsing strings with complex escape sequences.
+ *
+ * @access protected
+ * @class TokenStack
+ *
+ * @param {String[]} array - list of tokens
+ */
+var TokenStack = function () {
+  function TokenStack(array) {
+    _classCallCheck(this, TokenStack);
+
+    this.stack = array;
+    this.index = 0;
+    this.current = this.stack[this.index];
+  }
+
+  /**
+   * Get string representation of pattern.
+   *
+   * @access protected
+   * @method getPatternText
+   * @static
+   * @memberof TokenStack
+   *
+   * @param {String|RegExp} pattern - pattern
+   *
+   * @return {String} string representation
+   */
+
+
+  _createClass(TokenStack, [{
+    key: 'tokensLeft',
+
+
+    /**
+     * Get a number representing the number of tokens that are left.
+     *
+     * @method tokensLeft
+     * @memberof TokenStack
+     *
+     * @return {Number} tokens left
+     */
+    value: function tokensLeft() {
+      return this.stack.length - this.index;
+    }
+
+    /**
+     * Match current token against pattern.
+     *
+     * @method matches
+     * @memberof TokenStack
+     *
+     * @return {Boolean} match
+     */
+
+  }, {
+    key: 'matches',
+    value: function matches(pattern) {
+      return TokenStack.getMatchCallback(pattern)(this.current, this.index, this.stack);
+    }
+
+    /**
+     * Consume a single token if possible, and throw if not.
+     *
+     * @method consumeToken
+     * @memberof TokenStack
+     *
+     * @param {String|RegExp|TokenStack~match|Array} [pattern=/^[\s\S]$/g] - pattern
+     * @param {Object} options
+     * @param {Boolean} [options.inverse=false] - invert pattern
+     *
+     * @return {String} token
+     * @throws {SyntaxError} Unexpected token at index: Expected pattern, got token
+     */
+
+  }, {
+    key: 'consumeToken',
+    value: function consumeToken() {
+      var pattern = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : /^[\s\S]$/;
+
+      var _ref = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {},
+          _ref$inverse = _ref.inverse,
+          inverse = _ref$inverse === undefined ? false : _ref$inverse;
+
+      var token = this.current;
+      var match = TokenStack.getMatchCallback(pattern)(token, this.index, this.stack);
+      if (match) {
+        this.current = this.stack[++this.index];
+      } else {
+        throw new SyntaxError('Unexpected token at index ' + this.index + ': Expected ' + TokenStack.getPatternText(pattern) + ', got "' + token + '"');
+      }
+      return token;
+    }
+
+    /**
+     * Consume n tokens. Throws if not enough tokens left
+     *
+     * @method consumeN
+     * @memberof TokenStack
+     *
+     * @param {Number} length - number of tokens
+     *
+     * @return {String} consumed tokens
+     * @throws {SyntaxError} Not enough tokens left
+     */
+
+  }, {
+    key: 'consumeN',
+    value: function consumeN(length) {
+      if (this.tokensLeft() < length) {
+        throw new SyntaxError('Not enough tokens left');
+      }
+      var start = this.index;
+      while (length--) {
+        this.current = this.stack[++this.index];
+      }
+      return this.stack.slice(start, this.index).join('');
+    }
+
+    /**
+     * Consumes all consecutive tokens matching pattern. Throws if number of matched tokens not within range min-max.
+     *
+     * @method consume
+     * @memberof TokenStack
+     *
+     * @param {String|RegExp|TokenStack~match|Array} [pattern=/^[\s\S]$/g] - pattern
+     * @param {Object} options
+     * @param {Boolean} [options.inverse=false] - invert pattern
+     * @param {Number} [options.min=0] - mininum number of consumed tokens
+     * @param {Number} [options.max=Infinity] - maximum number of matched tokens
+     * @param {TokenStack~tokenMap} [options.tokenMap] - map tokens before returning
+     * @param {TokenStack~tokenFilter} [options.tokenFilter] - filter tokens before returning
+     *
+     * @return {String} consumed tokens
+     * @throws {SyntaxError} Not enough tokens
+     * @throws {SyntaxError} Too many tokens
+     */
+
+  }, {
+    key: 'consume',
+    value: function consume() {
+      var pattern = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : /^[\s\S]$/;
+
+      var _ref2 = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {},
+          _ref2$min = _ref2.min,
+          min = _ref2$min === undefined ? 0 : _ref2$min,
+          _ref2$max = _ref2.max,
+          max = _ref2$max === undefined ? Infinity : _ref2$max,
+          _ref2$inverse = _ref2.inverse,
+          inverse = _ref2$inverse === undefined ? false : _ref2$inverse,
+          tokenMap = _ref2.tokenMap,
+          tokenFilter = _ref2.tokenFilter;
+
+      var start = this.index;
+      var match = TokenStack.getMatchCallback(pattern);
+
+      while (match(this.current, this.index, this.stack) !== inverse) {
+        this.current = this.stack[++this.index];
+      }
+
+      var consumed = this.stack.slice(start, this.index);
+
+      if (consumed.length < min) {
+        throw new SyntaxError('Not enough ' + TokenStack.getPatternText(pattern));
+      } else if (consumed.length > max) {
+        throw new SyntaxError('Too many ' + TokenStack.getPatternText(pattern));
+      }
+
+      if (tokenMap) {
+        consumed = consumed.map(tokenMap);
+      }
+      if (tokenFilter) {
+        consumed = consumed.filter(tokenFilter);
+      }
+
+      return consumed.join('');
+    }
+  }], [{
+    key: 'getPatternText',
+    value: function getPatternText(pattern) {
+      return '"' + (pattern instanceof RegExp ? pattern.source : pattern) + '"';
+    }
+
+    /**
+     * Get a single callback to match a token against one or several patterns.
+     *
+     * @access protected
+     * @method getMatchCallback
+     * @static
+     * @memberof TokenStack
+     *
+     * @param {String|RegExp|TokenStack~match|Array} pattern - pattern
+     *
+     * @return {TokenStack~match} Match callback
+     */
+
+  }, {
+    key: 'getMatchCallback',
+    value: function getMatchCallback(pattern) {
+      if (Array.isArray(pattern)) {
+        var matches = pattern.map(TokenStack.getMatchCallback);
+        return function (token) {
+          return matches.some(function (matchCallback) {
+            return matchCallback(token);
+          });
+        };
+      } else if (pattern instanceof Function) {
+        return pattern;
+      } else if (pattern instanceof RegExp) {
+        return function (token) {
+          return pattern.test(token);
+        };
+      } else {
+        return function (token) {
+          return pattern === token;
+        };
+      }
+    }
+  }]);
+
+  return TokenStack;
+}();
+
+exports.default = TokenStack;
+
+},{}],405:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -32196,4 +32403,4 @@ Object.assign(_index8.default, { async: _index6.default, get: get, CSL: CSL, par
 
 module.exports = _index8.default;
 
-},{"./CSL/index":334,"./Cite/index":342,"./async/index":347,"./get/index":356,"./parse/index":377,"./util/index":403,"./version":404,"babel-polyfill":1,"deep-freeze":297}]},{},[]);
+},{"./CSL/index":334,"./Cite/index":342,"./async/index":347,"./get/index":356,"./parse/index":377,"./util/index":403,"./version":405,"babel-polyfill":1,"deep-freeze":297}]},{},[]);

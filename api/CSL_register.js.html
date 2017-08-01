@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>Source: index.js - Docs - Citation.js</title>
+    <title>Source: CSL/register.js - Docs - Citation.js</title>
     
     <meta name="theme-color" content="#FFC107">
     <link rel="shortcut icon" type="image/png" href="../favicon.png"/>
@@ -22,7 +22,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Source: index.js</h1>
+    <h1 class="page-title">Source: CSL/register.js</h1>
 
     
 
@@ -32,49 +32,90 @@
     <section>
         <article>
             <pre class="prettyprint source linenums"><code>/**
- * @file index.js
+ * Internal custom templates register.
  *
- * @projectname Citationjs
- *
- * @author Lars Willighagen
- * @version 0.3.0-5
- * @license
- * Copyright (c) 2015-2017 Lars Willighagen
- *
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
- *
- * The above copyright notice and this permission notice shall be included in all
- * copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
- * SOFTWARE.
+ * @access private
+ * @constant templates
+ * @default {}
  */
+const templates = {}
 
-import 'babel-polyfill'
-import deepFreeze from 'deep-freeze'
+/**
+ * Add a template to the register.
+ *
+ * @access public
+ * @method addTemplate
+ *
+ * @param {String} templateName - template name (used as 'citation-NAME' in Cite#get() style options)
+ * @param {String} template - CSL template string
+ */
+const addTemplate = (templateName, template) => { templates[templateName] = template }
 
-import * as get from './get/index'
-import * as CSL from './CSL/index'
-import * as parse from './parse/index'
-import * as util from './util/index'
-import * as version from './version'
-import async from './async/index'
-import Cite from './Cite/index'
+/**
+ * Get a template from the register.
+ *
+ * @access protected
+ * @method getTemplate
+ *
+ * @param {String} templateName - template name (used as 'citation-NAME' in Cite#get() style options)
+ * @return {String} CSL template string
+ */
+const getTemplate = templateName => templates[templateName]
 
-Object.assign(Cite, {async: async, get, CSL, parse, util, version})
-deepFreeze(Cite)
+/**
+ * Check if the register has a template (identified by name).
+ *
+ * @access protected
+ * @method hasTemplate
+ *
+ * @param {String} templateName - template name (used as 'citation-NAME' in Cite#get() style options)
+ * @return {Boolean} true if register has template
+ */
+const hasTemplate = templateName => templates.hasOwnProperty(templateName)
 
-module.exports = Cite
+/**
+ * Internal custom locales register.
+ *
+ * @access private
+ * @constant locales
+ * @default {}
+ */
+const locales = {}
+
+/**
+ * Add a locale to the register.
+ *
+ * @access public
+ * @method addLocale
+ *
+ * @param {String} localeName - locale name (used as lang in Cite#get() options)
+ * @param {String} locale - CSL locale string
+ */
+const addLocale = (localeName, locale) => { locales[localeName] = locale }
+
+/**
+ * Get a locale from the register.
+ *
+ * @access protected
+ * @method getLocale
+ *
+ * @param {String} localeName - locale name (used as lang in Cite#get() options)
+ * @return {String} CSL locale string
+ */
+const getLocale = localeName => locales[localeName]
+
+/**
+ * Check if the register has a locale (identified by name).
+ *
+ * @access protected
+ * @method hasLocale
+ *
+ * @param {String} localeName - locale name (used as lang in Cite#get() options)
+ * @return {Boolean} true if register has locale
+ */
+const hasLocale = localeName => locales.hasOwnProperty(localeName)
+
+export {addTemplate, addLocale, getTemplate, getLocale, hasTemplate, hasLocale}
 </code></pre>
         </article>
     </section>

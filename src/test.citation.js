@@ -2058,215 +2058,93 @@ module.exports={"entities":{"Q27795847":{"pageid":29511090,"ns":0,"title":"Q2779
 },{}],7:[function(require,module,exports){
 'use strict';
 
-/* global require, describe */
-describe('Cite object', require('./cite.citation.spec'));
+var _expect = require('expect.js');
 
-var inputTests = require('./input.citation.spec');
-describe('.async()', inputTests.async);
-describe('input', inputTests.input);
+var _expect2 = _interopRequireDefault(_expect);
 
-describe('output', require('./output.citation.spec'));
+var _cite = require('./cite');
 
-},{"./cite.citation.spec":8,"./input.citation.spec":11,"./output.citation.spec":13}],8:[function(require,module,exports){
-'use strict';
+var _cite2 = _interopRequireDefault(_cite);
 
-/* global require, module, describe, it */
+var _input = require('./input.json');
 
-var expect = require('expect.js');
-var Cite = require('./cite');
-var testInput = { csl: require('./cite.json') };
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-module.exports = function () {
-  describe('initialisation', function () {
-    it('returns a Cite object', function () {
-      var test = new Cite();
-      expect(test instanceof Cite).to.be(true);
+function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { step("next", value); }, function (err) { step("throw", err); }); } } return step("next"); }); }; } /* global context, describe, it */
+
+describe('.async()', function () {
+  context('with callback', function () {
+    it('works', function () {
+      return new Promise(function (resolve) {
+        _cite2.default.async(_input.input.wd.url, function (data) {
+          (0, _expect2.default)(data).to.be.a(_cite2.default);
+          (0, _expect2.default)(data.data[0].wikiId).to.be(_input.output.wd.id);
+          resolve();
+        });
+      });
+    });
+
+    it('works with options', function () {
+      return new Promise(function (resolve) {
+        _cite2.default.async([], {}, function (data) {
+          (0, _expect2.default)(data).to.be.a(_cite2.default);
+          (0, _expect2.default)(data.data.length).to.be(0);
+          resolve();
+        });
+      });
     });
   });
 
-  describe('function', function () {
-    describe('add()', function () {
-      var test = new Cite(testInput.csl.empty);
-      test.add(testInput.csl.empty, true);
+  context('as promise', function () {
+    it('works', _asyncToGenerator(regeneratorRuntime.mark(function _callee() {
+      var data;
+      return regeneratorRuntime.wrap(function _callee$(_context) {
+        while (1) {
+          switch (_context.prev = _context.next) {
+            case 0:
+              _context.next = 2;
+              return _cite2.default.async(_input.input.wd.url);
 
-      it('works', function () {
-        expect(test.data.length).to.be(2);
-        expect(test.log.length).to.be(2);
-      });
-    });
+            case 2:
+              data = _context.sent;
 
-    describe('set()', function () {
-      var test = new Cite(testInput.csl.empty);
-      test.set(testInput.csl.empty, true);
+              (0, _expect2.default)(data).to.be.a(_cite2.default);
+              (0, _expect2.default)(data.data[0].wikiId).to.be(_input.output.wd.id);
 
-      it('works', function () {
-        expect(test.data.length).to.be(1);
-        expect(test.log.length).to.be(2);
-      });
-    });
+            case 5:
+            case 'end':
+              return _context.stop();
+          }
+        }
+      }, _callee, undefined);
+    })));
 
-    describe('reset()', function () {
-      var test = new Cite(testInput.csl.empty);
-      test.reset(true);
+    it('works with options', _asyncToGenerator(regeneratorRuntime.mark(function _callee2() {
+      var data;
+      return regeneratorRuntime.wrap(function _callee2$(_context2) {
+        while (1) {
+          switch (_context2.prev = _context2.next) {
+            case 0:
+              _context2.next = 2;
+              return _cite2.default.async([], {});
 
-      it('works', function () {
-        expect(test.data.length).to.be(0);
-        expect(test.log.length).to.be(2);
-      });
-    });
+            case 2:
+              data = _context2.sent;
 
-    describe('options()', function () {
-      var test = new Cite();
-      test.options({ format: 'string' }, true);
+              (0, _expect2.default)(data).to.be.a(_cite2.default);
+              (0, _expect2.default)(data.data.length).to.be(0);
 
-      it('works', function () {
-        expect(test._options.format).to.be('string');
-        expect(test.log.length).to.be(2);
-      });
-    });
-
-    describe('currentVersion()', function () {
-      var test = new Cite(testInput.csl.empty);
-
-      it('works', function () {
-        expect(test.currentVersion()).to.be(1);
-        test.add(testInput.csl.empty, true);
-        expect(test.currentVersion()).to.be(2);
-      });
-    });
-
-    describe('retrieveVersion()', function () {
-      var test = new Cite(testInput.csl.empty);
-
-      it('works', function () {
-        expect(test.log.length).to.be(1);
-        expect(test.data.length).to.be(1);
-
-        test.add(testInput.csl.empty, true);
-
-        expect(test.log.length).to.be(2);
-        expect(test.data.length).to.be(2);
-
-        var test2 = test.retrieveVersion(1);
-
-        expect(test2.log.length).to.be(1);
-        expect(test2.data.length).to.be(1);
-      });
-
-      it('doesn\'t change parent data', function () {
-        expect(test.log.length).to.be(2);
-        expect(test.data.length).to.be(2);
-      });
-    });
-
-    describe('undo()', function () {
-      var test = new Cite(testInput.csl.empty);
-
-      it('works', function () {
-        expect(test.log.length).to.be(1);
-        expect(test.data.length).to.be(1);
-
-        test.add(testInput.csl.empty, true).save();
-
-        expect(test.log.length).to.be(3);
-        expect(test.data.length).to.be(2);
-
-        var test2 = test.undo();
-
-        expect(test2.log.length).to.be(2);
-        expect(test2.data.length).to.be(1);
-      });
-
-      it('doesn\'t change parent data', function () {
-        expect(test.log.length).to.be(3);
-        expect(test.data.length).to.be(2);
-      });
-    });
-
-    describe('retrieveLastVersion()', function () {
-      var test = new Cite(testInput.csl.empty);
-
-      it('works', function () {
-        expect(test.log.length).to.be(1);
-        expect(test.data.length).to.be(1);
-
-        test.add(testInput.csl.empty, true);
-
-        expect(test.log.length).to.be(2);
-        expect(test.data.length).to.be(2);
-
-        var test2 = test.retrieveLastVersion();
-
-        expect(test2.log.length).to.be(2);
-        expect(test2.data.length).to.be(1);
-      });
-
-      it('doesn\'t change parent data', function () {
-        expect(test.log.length).to.be(2);
-        expect(test.data.length).to.be(2);
-      });
-    });
-
-    describe('save()', function () {
-      var test = new Cite(testInput.csl.empty);
-
-      it('works', function () {
-        expect(test.log.length).to.be(1);
-        expect(test.data.length).to.be(1);
-
-        test.save().add(testInput.csl.empty).save();
-
-        expect(test.log.length).to.be(3);
-        expect(test.data.length).to.be(2);
-
-        var test2 = test.undo();
-
-        expect(test2.log.length).to.be(2);
-        expect(test2.data.length).to.be(1);
-      });
-
-      it('doesn\'t change parent data', function () {
-        expect(test.log.length).to.be(3);
-        expect(test.data.length).to.be(2);
-      });
-    });
-
-    describe('sort()', function () {
-      var test = new Cite(testInput.csl.sort);
-
-      it('works', function () {
-        expect(test.data[0].author[0].family).to.be('b');
-        expect(test.data[1].author[0].family).to.be('a');
-
-        test.sort();
-
-        expect(test.data[0].author[0].family).to.be('a');
-        expect(test.data[1].author[0].family).to.be('b');
-      });
-    });
-
-    describe('getIds()', function () {
-      var test = new Cite(testInput.csl.ids);
-
-      it('works', function () {
-        expect(test.data[0].id).to.be('b');
-        expect(test.data[1].id).to.be('a');
-
-        var out = test.getIds();
-
-        expect(out[0]).to.be('b');
-        expect(out[1]).to.be('a');
-      });
-
-      it('doesn\'t change parent data', function () {
-        expect(test.log.length).to.be(1);
-        expect(test.data.length).to.be(2);
-      });
-    });
+            case 5:
+            case 'end':
+              return _context2.stop();
+          }
+        }
+      }, _callee2, undefined);
+    })));
   });
-};
+});
 
-},{"./cite":10,"./cite.json":9,"expect.js":"expect.js"}],9:[function(require,module,exports){
+},{"./cite":9,"./input.json":11,"expect.js":"expect.js"}],8:[function(require,module,exports){
 module.exports={
   "empty": {},
   "sort": [
@@ -2296,230 +2174,278 @@ module.exports={
     }
   ]
 }
-},{}],10:[function(require,module,exports){
+},{}],9:[function(require,module,exports){
 (function (process){
 'use strict';
 
 module.exports = require(process.env.MOCHA === '1' ? '../src/index' : 'citation-js');
 
 }).call(this,require('_process'))
-},{"_process":4}],11:[function(require,module,exports){
+},{"_process":4}],10:[function(require,module,exports){
 'use strict';
 
-var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; }();
+var _expect = require('expect.js');
 
-function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { step("next", value); }, function (err) { step("throw", err); }); } } return step("next"); }); }; }
+var _expect2 = _interopRequireDefault(_expect);
 
-/* global require, module, describe, it */
+var _cite = require('./cite');
 
-var expect = require('expect.js');
-var Cite = require('./cite');
+var _cite2 = _interopRequireDefault(_cite);
 
-var test = require('./input.json');
-test.input.wd.simple = require('./Q21972834.json');
-test.input.wd.author = require('./Q27795847.json');
+var _cite3 = require('./cite.json');
 
-var testCaseGenerator = function testCaseGenerator(input, type, output) {
-  var _ref = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : {},
-      _ref$exact = _ref.exact,
-      exact = _ref$exact === undefined ? false : _ref$exact,
-      _ref$callback = _ref.callback,
-      callback = _ref$callback === undefined ? function (v) {
-    return v;
-  } : _ref$callback,
-      _ref$link = _ref.link,
-      link = _ref$link === undefined ? false : _ref$link;
+var _cite4 = _interopRequireDefault(_cite3);
 
-  return function () {
-    var test = link ? Cite.parse.input.chainLink(input) : new Cite(input).data;
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-    it('handles input type', function () {
-      expect(Cite.parse.input.type(input)).to.be(type);
+function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } } /* global describe, context, it, beforeEach */
+
+describe('Cite instance', function () {
+  describe('initialisation', function () {
+    it('returns a Cite object', function () {
+      return (0, _expect2.default)(new _cite2.default()).to.be.a(_cite2.default);
+    });
+    context('via function', function () {
+      return it('returns a Cite object', function () {
+        return (0, _expect2.default)((0, _cite2.default)()).to.be.a(_cite2.default);
+      });
+    });
+  });
+
+  describe('iteration', function () {
+    return it('works', function () {
+      (0, _expect2.default)(new _cite2.default()[Symbol.iterator]).to.be.a('function');
+      (0, _expect2.default)([].concat(_toConsumableArray(new _cite2.default(_cite4.default.ids)))).to.eql(_cite4.default.ids);
+    });
+  });
+
+  describe('function', function () {
+    var test = void 0;
+    beforeEach(function () {
+      test = new _cite2.default(_cite4.default.empty);
     });
 
-    it('parses input correctly', function () {
-      expect(callback(test)).to[exact ? 'be' : 'eql'](output);
-    });
-  };
-};
-
-var wikidataTestCaseOptions = {
-  exact: true,
-  callback: function callback(_ref2) {
-    var _ref3 = _slicedToArray(_ref2, 1),
-        data = _ref3[0];
-
-    return data.replace(/[&?]origin=\*/, '');
-  },
-  link: true
-};
-
-var doiLinkTestCaseOptions = {
-  link: true
-};
-
-var doiTestCaseOptions = {
-  link: true,
-  callback: function callback(_ref4) {
-    var title = _ref4.title;
-    return title;
-  }
-};
-
-module.exports = {
-  async: function async() {
-    describe('with callback', function () {
+    describe('add()', function () {
       it('works', function () {
-        return new Promise(function (resolve) {
-          Cite.async(test.input.wd.url, function (data) {
-            expect(data).to.be.a(Cite);
-            expect(data.data[0].wikiId).to.be(test.output.wd.id);
-            resolve();
-          });
-        });
+        test.add(_cite4.default.empty);
+        (0, _expect2.default)(test.data).to.have.length(2);
+        (0, _expect2.default)(test.log).to.have.length(1);
       });
 
-      it('works with options', function () {
-        return new Promise(function (resolve) {
-          Cite.async([], {}, function (data) {
-            expect(data).to.be.a(Cite);
-            expect(data.data.length).to.be(0);
-            resolve();
-          });
-        });
+      it('saves', function () {
+        test.add(_cite4.default.empty, true);
+        (0, _expect2.default)(test.data).to.have.length(2);
+        (0, _expect2.default)(test.log).to.have.length(2);
       });
     });
 
-    describe('with promise', function () {
-      it('works', _asyncToGenerator(regeneratorRuntime.mark(function _callee() {
-        var data;
-        return regeneratorRuntime.wrap(function _callee$(_context) {
-          while (1) {
-            switch (_context.prev = _context.next) {
-              case 0:
-                _context.next = 2;
-                return Cite.async(test.input.wd.url);
-
-              case 2:
-                data = _context.sent;
-
-                expect(data).to.be.a(Cite);
-                expect(data.data[0].wikiId).to.be(test.output.wd.id);
-
-              case 5:
-              case 'end':
-                return _context.stop();
-            }
-          }
-        }, _callee, this);
-      })));
-
-      it('works with options', _asyncToGenerator(regeneratorRuntime.mark(function _callee2() {
-        var data;
-        return regeneratorRuntime.wrap(function _callee2$(_context2) {
-          while (1) {
-            switch (_context2.prev = _context2.next) {
-              case 0:
-                _context2.next = 2;
-                return Cite.async([], {});
-
-              case 2:
-                data = _context2.sent;
-
-                expect(data).to.be.a(Cite);
-                expect(data.data.length).to.be(0);
-
-              case 5:
-              case 'end':
-                return _context2.stop();
-            }
-          }
-        }, _callee2, this);
-      })));
-    });
-  },
-  input: function input() {
-    describe('Wikidata ID', testCaseGenerator(test.input.wd.id, 'string/wikidata', test.output.wd.api[0], wikidataTestCaseOptions));
-
-    describe('Wikidata URL', testCaseGenerator(test.input.wd.url, 'url/wikidata', test.output.wd.api[0], wikidataTestCaseOptions));
-
-    describe('Wikidata ID list', function () {
-      describe('separated by spaces', testCaseGenerator(test.input.wd.list.space, 'list/wikidata', test.output.wd.api[1], wikidataTestCaseOptions));
-
-      describe('separated by newlines', testCaseGenerator(test.input.wd.list.newline, 'list/wikidata', test.output.wd.api[1], wikidataTestCaseOptions));
-
-      describe('separated by commas', testCaseGenerator(test.input.wd.list.comma, 'list/wikidata', test.output.wd.api[1], wikidataTestCaseOptions));
-    });
-
-    describe('Wikidata JSON', function () {
-      testCaseGenerator(test.input.wd.simple, 'object/wikidata', test.output.wd.simple)();
-
-      describe('with linked authors', testCaseGenerator(test.input.wd.author, 'object/wikidata', test.output.wd.author));
-    });
-
-    describe('DOI ID', testCaseGenerator(test.input.doi.id, 'string/doi', test.output.doi.api[0], doiLinkTestCaseOptions));
-
-    describe('DOI URL', testCaseGenerator(test.input.doi.url, 'api/doi', test.output.doi.simple.title, doiTestCaseOptions));
-
-    describe('DOI ID list', function () {
-      describe('separated by spaces', testCaseGenerator(test.input.doi.list.space, 'list/doi', test.output.doi.api[1], doiLinkTestCaseOptions));
-
-      describe('separated by newlines', testCaseGenerator(test.input.doi.list.newline, 'list/doi', test.output.doi.api[1], doiLinkTestCaseOptions));
-    });
-
-    describe('BibTeX string', function () {
-      testCaseGenerator(test.input.bibtex.simple, 'string/bibtex', test.output.bibtex.simple)();
-
-      describe('with whitespace and unknown fields', testCaseGenerator(test.input.bibtex.whitespace, 'string/bibtex', test.output.bibtex.whitespace));
-    });
-
-    describe('BibTeX JSON', testCaseGenerator(test.input.bibtex.json, 'object/bibtex', test.output.bibtex.simple));
-
-    describe('Bib.TXT string', function () {
-      testCaseGenerator(test.input.bibtxt.simple, 'string/bibtxt', [test.output.bibtxt])();
-
-      describe('with multiple entries', testCaseGenerator(test.input.bibtxt.multiple, 'string/bibtxt', [test.output.bibtxt, test.output.bibtex.simple[0]]));
-
-      describe('with whitespace', testCaseGenerator(test.input.bibtxt.whitespace, 'string/bibtxt', [test.output.bibtxt]));
-    });
-
-    describe('CSL-JSON', testCaseGenerator(test.input.csl[0], 'object/csl', test.input.csl));
-    describe('ContentMine JSON', testCaseGenerator(test.input.bibjson.simple, 'object/contentmine', test.output.bibjson.simple));
-
-    describe('Array', function () {
-      var objs = [{ id: 'a' }, { id: 'b' }];
-
-      testCaseGenerator(objs, 'array/csl', objs)();
-      it('duplicates objects', function () {
-        expect(new Cite(objs).data).not.to.be(objs);
+    describe('set()', function () {
+      it('works', function () {
+        test.set(_cite4.default.ids);
+        (0, _expect2.default)(test.data).to.have.length(2);
+        (0, _expect2.default)(test.data).to.eql(_cite4.default.ids);
+        (0, _expect2.default)(test.log).to.have.length(1);
       });
 
-      describe('nested', function () {
-        var data = [[objs[0]], objs[1]];
-
-        testCaseGenerator(data, 'array/else', objs)();
-        it('duplicates objects', function () {
-          var test = new Cite(data).data;
-
-          expect(test[0]).not.to.be(objs[0]);
-          expect(test[1]).not.to.be(objs[1]);
-        });
+      it('saves', function () {
+        test.set(_cite4.default.empty, true);
+        (0, _expect2.default)(test.data).to.have.length(1);
+        (0, _expect2.default)(test.log).to.have.length(2);
       });
     });
 
-    describe('Empty', function () {
-      describe('string', function () {
-        describe('empty', testCaseGenerator('', 'string/empty', []));
-        describe('whitespace', testCaseGenerator('   \t\n \r  ', 'string/whitespace', []));
+    describe('reset()', function () {
+      it('works', function () {
+        test.reset();
+        (0, _expect2.default)(test.data).to.have.length(0);
+        (0, _expect2.default)(test.log).to.have.length(1);
       });
 
-      describe('null', testCaseGenerator(null, 'empty', []));
-      describe('undefined', testCaseGenerator(undefined, 'empty', []));
+      it('saves', function () {
+        test.add(_cite4.default.empty);
+        test.reset(true);
+        (0, _expect2.default)(test.data).to.have.length(0);
+        (0, _expect2.default)(test.log).to.have.length(2);
+      });
     });
-  }
-};
 
-},{"./Q21972834.json":5,"./Q27795847.json":6,"./cite":10,"./input.json":12,"expect.js":"expect.js"}],12:[function(require,module,exports){
+    describe('options()', function () {
+      it('works', function () {
+        test.options({ format: '1' });
+        (0, _expect2.default)(test._options.format).to.be('1');
+        (0, _expect2.default)(test.log).to.have.length(1);
+      });
+
+      it('saves', function () {
+        test.options({ format: '2' }, true);
+        (0, _expect2.default)(test._options.format).to.be('2');
+        (0, _expect2.default)(test.log).to.have.length(2);
+      });
+    });
+
+    describe('currentVersion()', function () {
+      it('works', function () {
+        (0, _expect2.default)(test.currentVersion()).to.be(1);
+        test.add(_cite4.default.empty, true);
+        (0, _expect2.default)(test.currentVersion()).to.be(2);
+      });
+    });
+
+    describe('retrieveVersion()', function () {
+      it('works', function () {
+        (0, _expect2.default)(test.log).to.have.length(1);
+        test.add(_cite4.default.empty, true);
+        (0, _expect2.default)(test.log).to.have.length(2);
+
+        var test2 = test.retrieveVersion(1);
+
+        (0, _expect2.default)(test2.log).to.have.length(1);
+        (0, _expect2.default)(test2.data).to.have.length(1);
+      });
+
+      it('doesn\'t change origin data', function () {
+        (0, _expect2.default)(test.log).to.have.length(1);
+        test.add(_cite4.default.empty, true);
+        (0, _expect2.default)(test.log).to.have.length(2);
+
+        var test2 = test.retrieveVersion(1);
+
+        (0, _expect2.default)(test2.log).to.have.length(1);
+        (0, _expect2.default)(test2.data).to.have.length(1);
+        (0, _expect2.default)(test.log).to.have.length(2);
+        (0, _expect2.default)(test.data).to.have.length(2);
+      });
+
+      it('handles empty input', function () {
+        test.add(_cite4.default.empty, true);
+        var image = test.retrieveVersion();
+        (0, _expect2.default)(image.data).to.have.length(1);
+        (0, _expect2.default)(image.log).to.have.length(1);
+      });
+      it('handles invalid input', function () {
+        (0, _expect2.default)(test.retrieveVersion(50)).to.be(null);
+        (0, _expect2.default)(test.retrieveVersion(-1)).to.be(null);
+      });
+    });
+
+    describe('undo()', function () {
+      it('works', function () {
+        (0, _expect2.default)(test.log).to.have.length(1);
+        test.add(_cite4.default.empty, true).save();
+        (0, _expect2.default)(test.log).to.have.length(3);
+
+        var test2 = test.undo();
+
+        (0, _expect2.default)(test2.log).to.have.length(2);
+        (0, _expect2.default)(test2.data).to.have.length(1);
+      });
+
+      it('doesn\'t change origin data', function () {
+        (0, _expect2.default)(test.log).to.have.length(1);
+        test.add(_cite4.default.empty, true).save();
+        (0, _expect2.default)(test.log).to.have.length(3);
+
+        var test2 = test.undo();
+
+        (0, _expect2.default)(test.log).to.have.length(3);
+        (0, _expect2.default)(test.data).to.have.length(2);
+        (0, _expect2.default)(test2.log).to.have.length(2);
+        (0, _expect2.default)(test2.data).to.have.length(1);
+      });
+    });
+
+    describe('retrieveLastVersion()', function () {
+      it('works', function () {
+        (0, _expect2.default)(test.log).to.have.length(1);
+        test.add(_cite4.default.empty, true);
+        (0, _expect2.default)(test.log).to.have.length(2);
+
+        var test2 = test.retrieveLastVersion();
+
+        (0, _expect2.default)(test2.log).to.have.length(2);
+        (0, _expect2.default)(test2.data).to.have.length(1);
+      });
+
+      it('doesn\'t change origin data', function () {
+        (0, _expect2.default)(test.log).to.have.length(1);
+        test.add(_cite4.default.empty, true);
+        (0, _expect2.default)(test.log).to.have.length(2);
+
+        var test2 = test.retrieveLastVersion();
+
+        (0, _expect2.default)(test.log).to.have.length(2);
+        (0, _expect2.default)(test.data).to.have.length(2);
+        (0, _expect2.default)(test2.log).to.have.length(2);
+        (0, _expect2.default)(test2.data).to.have.length(1);
+      });
+    });
+
+    describe('save()', function () {
+      it('works', function () {
+        (0, _expect2.default)(test.log).to.have.length(1);
+        test.save().add(_cite4.default.empty).save();
+        (0, _expect2.default)(test.log).to.have.length(3);
+
+        var test2 = test.undo();
+
+        (0, _expect2.default)(test2.log).to.have.length(2);
+        (0, _expect2.default)(test2.data).to.have.length(1);
+      });
+
+      it('doesn\'t change origin data', function () {
+        (0, _expect2.default)(test.log).to.have.length(1);
+        test.save().add(_cite4.default.empty).save();
+        (0, _expect2.default)(test.log).to.have.length(3);
+
+        var test2 = test.undo();
+
+        (0, _expect2.default)(test.log).to.have.length(3);
+        (0, _expect2.default)(test.data).to.have.length(2);
+        (0, _expect2.default)(test2.log).to.have.length(2);
+        (0, _expect2.default)(test2.data).to.have.length(1);
+      });
+    });
+
+    describe('sort()', function () {
+      it('works', function () {
+        test.set(_cite4.default.sort);
+        (0, _expect2.default)(test.data[0].author[0].family).to.be('b');
+        (0, _expect2.default)(test.data[1].author[0].family).to.be('a');
+
+        test.sort();
+        (0, _expect2.default)(test.data[0].author[0].family).to.be('a');
+        (0, _expect2.default)(test.data[1].author[0].family).to.be('b');
+        (0, _expect2.default)(test.log).to.have.length(1);
+      });
+
+      it('saves', function () {
+        test.set(_cite4.default.sort);
+        (0, _expect2.default)(test.data[0].author[0].family).to.be('b');
+        (0, _expect2.default)(test.data[1].author[0].family).to.be('a');
+
+        test.sort([], true);
+        (0, _expect2.default)(test.data[0].author[0].family).to.be('a');
+        (0, _expect2.default)(test.data[1].author[0].family).to.be('b');
+        (0, _expect2.default)(test.log).to.have.length(2);
+      });
+    });
+
+    describe('getIds()', function () {
+      it('works', function () {
+        test.set(_cite4.default.ids);
+        (0, _expect2.default)(test.data[0].id).to.be('b');
+        (0, _expect2.default)(test.data[1].id).to.be('a');
+
+        var out = test.getIds();
+
+        (0, _expect2.default)(out[0]).to.be('b');
+        (0, _expect2.default)(out[1]).to.be('a');
+      });
+    });
+  });
+});
+
+},{"./cite":9,"./cite.json":8,"expect.js":"expect.js"}],11:[function(require,module,exports){
 module.exports={
   "input": {
     "wd": {
@@ -2553,114 +2479,55 @@ module.exports={
           "journal": "Journal of chemical information and computer sciences",
           "issue": "2",
           "pages": "493-500",
-          "title": "The Chemistry Development Kit (CDK): an open-source Java library for Chemo- and Bioinformatics",
+          "title": "The Chemistry Development Kit (CDK): an open-source Java library for Chemo- and Bioinformatics.",
           "volume": "43",
           "year": "2003",
           "url": "http://www.ncbi.nlm.nih.gov/pubmed/12653513"
         }
-      }
+      },
+      "literals": "@a{b,author={{a and b} and c and D E},date={{13th Century}}}",
+      "yearMonthNeeded": "@a{b,year=2017,month=8}",
+      "yearMonth": "@a{b,date={2016-12-13},year=2017,month=8}"
     },
     "bibtxt": {
       "simple": "[Fau86]\n    author:    J.W. Goethe\n    title:     Faust. Der Tragödie Erster Teil\n    publisher: Reclam\n    year:      1986\n    address:   Stuttgart",
-      "multiple": "[Fau86]\n    author:    J.W. Goethe\n    title:     Faust. Der Tragödie Erster Teil\n    publisher: Reclam\n    year:      1986\n    address:   Stuttgart\n\n  [Steinbeck2003]\n    type: article\n    author: Christoph Steinbeck and Yongquan Han and Stefan Kuhn and Oliver Horlacher and Edgar Luttmann and Egon Willighagen\n    doi: 10.1021/ci025584y\n    isbn: 2214707786\n    issn: 0095-2338\n    journal: Journal of chemical information and computer sciences\n    issue: 2\n    pages: 493-500\n    title: The Chemistry Development Kit (CDK): an open-source Java library for Chemo- and Bioinformatics\n    volume: 43\n    year: 2003\n    url: http://www.ncbi.nlm.nih.gov/pubmed/12653513",
+      "multiple": "[Fau86]\n    author:    J.W. Goethe\n    title:     Faust. Der Tragödie Erster Teil\n    publisher: Reclam\n    year:      1986\n    address:   Stuttgart\n\n  [Steinbeck2003]\n    type: article\n    author: Christoph Steinbeck and Yongquan Han and Stefan Kuhn and Oliver Horlacher and Edgar Luttmann and Egon Willighagen\n    doi: 10.1021/ci025584y\n    isbn: 2214707786\n    issn: 0095-2338\n    journal: Journal of chemical information and computer sciences\n    issue: 2\n    pages: 493-500\n    title: The Chemistry Development Kit (CDK): an open-source Java library for Chemo- and Bioinformatics.\n    volume: 43\n    year: 2003\n    url: http://www.ncbi.nlm.nih.gov/pubmed/12653513",
       "whitespace": "[Fau86]  \n      \n    author:    J.W. Goethe\n    title:     Faust. Der Tragödie Erster Teil\n    \n\n    publisher: Reclam\n    year:      1986  \n    address:   Stuttgart\n  "
     },
     "bibjson": {
       "simple": {
-        "publisher": {
-          "value": [
-            "BioMed Central"
-          ]
-        },
-        "journal": {
-          "value": [
-            "Journal of Ethnobiology and Ethnomedicine"
-          ]
-        },
-        "title": {
-          "value": [
-            "Gitksan medicinal plants-cultural choice and efficacy"
-          ]
-        },
-        "authors": {
-          "value": [
-            "Leslie Main Johnson"
-          ]
-        },
-        "date": {
-          "value": [
-            "2006-06-21"
-          ]
-        },
-        "doi": {
-          "value": [
-            "10.1186/1746-4269-2-29"
-          ]
-        },
-        "volume": {
-          "value": [
-            "2"
-          ]
-        },
-        "issue": {
-          "value": [
-            "1"
-          ]
-        },
-        "firstpage": {
-          "value": [
-            "1"
-          ]
-        },
-        "fulltext_html": {
-          "value": [
-            "http://ethnobiomed.biomedcentral.com/articles/10.1186/1746-4269-2-29"
-          ]
-        },
-        "fulltext_pdf": {
-          "value": [
-            "http://ethnobiomed.biomedcentral.com/track/pdf/10.1186/1746-4269-2-29?site=http://ethnobiomed.biomedcentral.com"
-          ]
-        },
-        "license": {
-          "value": [
-            "This article is published under license to BioMed Central Ltd. This is an Open Access article distributed under the terms of the Creative Commons Attribution License (http://creativecommons.org/licenses/by/2.0), which permits unrestricted use, distribution, and reproduction in any medium, provided the original work is properly cited."
-          ]
-        },
-        "copyright": {
-          "value": [
-            "2006 Johnson; licensee BioMed Central Ltd."
-          ]
-        }
+        "publisher": {"value": ["BioMed Central"]},
+        "journal": {"value": ["Journal of Ethnobiology and Ethnomedicine"]},
+        "title": {"value": ["Gitksan medicinal plants-cultural choice and efficacy"]},
+        "authors": {"value": ["Leslie Main Johnson"]},
+        "date": {"value": ["2006-06-21"]},
+        "doi": {"value": ["10.1186/1746-4269-2-29"]},
+        "volume": {"value": ["2"]},
+        "issue": {"value": ["1"]},
+        "firstpage": {"value": ["1"]},
+        "fulltext_html": {"value": ["http://ethnobiomed.biomedcentral.com/articles/10.1186/1746-4269-2-29"]},
+        "fulltext_pdf": {"value": ["http://ethnobiomed.biomedcentral.com/track/pdf/10.1186/1746-4269-2-29?site=http://ethnobiomed.biomedcentral.com"]},
+        "license": {"value": ["This article is published under license to BioMed Central Ltd. This is an Open Access article distributed under the terms of the Creative Commons Attribution License (http://creativecommons.org/licenses/by/2.0), which permits unrestricted use, distribution, and reproduction in any medium, provided the original work is properly cited."]},
+        "copyright": {"value": ["2006 Johnson; licensee BioMed Central Ltd."]}
       }
     },
-    "csl": [
-      {
+    "csl": {
+      "simple": {
         "id": "Q23571040",
         "type": "article-journal",
         "title": "Correlation of the Base Strengths of Amines 1",
         "DOI": "10.1021/ja01577a030",
         "author": [
-          {
-            "given": "H. K.",
-            "family": "Hall"
-          }
+          {"given": "H. K.", "family": "Hall"}
         ],
-        "issued": [
-          {
-            "date-parts": [
-              "1957",
-              "1",
-              "1"
-            ]
-          }
-        ],
+        "issued": [{"date-parts": ["1957", "1", "1"]}],
         "container-title": "Journal of the American Chemical Society",
         "volume": "79",
         "issue": "20",
         "page": "5441-5444"
-      }
-    ]
+      },
+      "string": "[\n  {\n    id: \"Q23571040\",\n    type: \"article-journal\",\n    title: \"Correlation of the Base Strengths of Amines 1\",\n    DOI: \"10.1021/ja01577a030\",\n    author: [\n      {\n\tgiven: \"H. K.\",\n\tfamily: \"Hall\"\n      }\n    ],\n    issued: [\n      {\n\tdate-parts: [ \"1957\", \"1\", \"1\" ]\n      }\n    ],\n    container-title: \"Journal of the American Chemical Society\",\n    volume: \"79\",\n    issue: \"20\",\n    page: \"5441-5444\"\n  }\n]"
+    }
   },
   "output": {
     "wd": {
@@ -2673,113 +2540,35 @@ module.exports={
           "title": "Assembling the 20 Gb white spruce (Picea glauca) genome from whole-genome shotgun sequencing data",
           "volume": "29",
           "issue": "12",
-          "issued": {
-            "date-parts": [[
-              2013,
-              6,
-              15
-            ]]
-          },
+          "issued": {"date-parts": [[2013, 6, 15]]},
           "page": "1492-7",
           "container-title": "Bioinformatics",
           "DOI": "10.1093/BIOINFORMATICS/BTT178",
           "author": [
-            {
-              "given": "Inanc",
-              "family": "Birol"
-            },
-            {
-              "given": "Anthony",
-              "family": "Raymond"
-            },
-            {
-              "given": "Shaun D",
-              "family": "Jackman"
-            },
-            {
-              "given": "Stephen",
-              "family": "Pleasance"
-            },
-            {
-              "given": "Robin",
-              "family": "Coope"
-            },
-            {
-              "given": "Greg A",
-              "family": "Taylor"
-            },
-            {
-              "given": "Macaire Man Saint",
-              "family": "Yuen"
-            },
-            {
-              "given": "Christopher I",
-              "family": "Keeling"
-            },
-            {
-              "given": "Dana",
-              "family": "Brand"
-            },
-            {
-              "given": "Benjamin P",
-              "family": "Vandervalk"
-            },
-            {
-              "given": "Heather",
-              "family": "Kirk"
-            },
-            {
-              "given": "Pawan",
-              "family": "Pandoh"
-            },
-            {
-              "given": "Richard A",
-              "family": "Moore"
-            },
-            {
-              "given": "Yongjun",
-              "family": "Zhao"
-            },
-            {
-              "given": "Andrew J",
-              "family": "Mungall"
-            },
-            {
-              "given": "Barry",
-              "family": "Jaquish"
-            },
-            {
-              "given": "Alvin",
-              "family": "Yanchuk"
-            },
-            {
-              "given": "Carol",
-              "family": "Ritland"
-            },
-            {
-              "given": "Brian",
-              "family": "Boyle"
-            },
-            {
-              "given": "Jean",
-              "family": "Bousquet"
-            },
-            {
-              "given": "Kermit",
-              "family": "Ritland"
-            },
-            {
-              "given": "John",
-              "family": "Mackay"
-            },
-            {
-              "given": "Jörg",
-              "family": "Bohlmann"
-            },
-            {
-              "given": "Steven J M",
-              "family": "Jones"
-            }
+            {"given": "Inanc", "family": "Birol"},
+            {"given": "Anthony", "family": "Raymond"},
+            {"given": "Shaun D", "family": "Jackman"},
+            {"given": "Stephen", "family": "Pleasance"},
+            {"given": "Robin", "family": "Coope"},
+            {"given": "Greg A", "family": "Taylor"},
+            {"given": "Macaire Man Saint", "family": "Yuen"},
+            {"given": "Christopher I", "family": "Keeling"},
+            {"given": "Dana", "family": "Brand"},
+            {"given": "Benjamin P", "family": "Vandervalk"},
+            {"given": "Heather", "family": "Kirk"},
+            {"given": "Pawan", "family": "Pandoh"},
+            {"given": "Richard A", "family": "Moore"},
+            {"given": "Yongjun", "family": "Zhao"},
+            {"given": "Andrew J", "family": "Mungall"},
+            {"given": "Barry", "family": "Jaquish"},
+            {"given": "Alvin", "family": "Yanchuk"},
+            {"given": "Carol", "family": "Ritland"},
+            {"given": "Brian", "family": "Boyle"},
+            {"given": "Jean", "family": "Bousquet"},
+            {"given": "Kermit", "family": "Ritland"},
+            {"given": "John", "family": "Mackay"},
+            {"given": "Jörg", "family": "Bohlmann"},
+            {"given": "Steven J M", "family": "Jones"}
           ]
         }
       ],
@@ -2802,90 +2591,27 @@ module.exports={
           "URL": "http://rdcu.be/msZj",
           "DOI": "10.1038/NBT.3689",
           "author": [
-            {
-              "given": "Gert",
-              "family": "Wohlgemuth"
-            },
-            {
-              "given": "Sajjan S",
-              "family": "Mehta"
-            },
-            {
-              "given": "Ramon F",
-              "family": "Mejia"
-            },
-            {
-              "given": "Steffen",
-              "family": "Neumann"
-            },
-            {
-              "given": "Diego",
-              "family": "Pedrosa"
-            },
-            {
-              "given": "Tomáš",
-              "family": "Pluskal"
-            },
-            {
-              "given": "Emma",
-              "family": "Schymanski"
-            },
-            {
-              "given": "Egon",
-              "family": "Willighagen"
-            },
-            {
-              "given": "Michael",
-              "family": "Wilson"
-            },
-            {
-              "given": "David S",
-              "family": "Wishart"
-            },
-            {
-              "given": "Masanori",
-              "family": "Arita"
-            },
-            {
-              "given": "Pieter C",
-              "family": "Dorrestein"
-            },
-            {
-              "given": "Nuno",
-              "family": "Bandeira"
-            },
-            {
-              "given": "Mingxun",
-              "family": "Wang"
-            },
-            {
-              "given": "Tobias",
-              "family": "Schulze"
-            },
-            {
-              "given": "Reza M",
-              "family": "Salek"
-            },
-            {
-              "given": "Christoph",
-              "family": "Steinbeck"
-            },
-            {
-              "given": "Venkata Chandrasekhar",
-              "family": "Nainala"
-            },
-            {
-              "given": "Robert",
-              "family": "Mistrik"
-            },
-            {
-              "given": "Takaaki",
-              "family": "Nishioka"
-            },
-            {
-              "given": "Oliver",
-              "family": "Fiehn"
-            }
+            {"given": "Gert", "family": "Wohlgemuth"},
+            {"given": "Sajjan S", "family": "Mehta"},
+            {"given": "Ramon F", "family": "Mejia"},
+            {"given": "Steffen", "family": "Neumann"},
+            {"given": "Diego", "family": "Pedrosa"},
+            {"given": "Tomáš", "family": "Pluskal"},
+            {"given": "Emma", "family": "Schymanski"},
+            {"given": "Egon", "family": "Willighagen"},
+            {"given": "Michael", "family": "Wilson"},
+            {"given": "David S", "family": "Wishart"},
+            {"given": "Masanori", "family": "Arita"},
+            {"given": "Pieter C", "family": "Dorrestein"},
+            {"given": "Nuno", "family": "Bandeira"},
+            {"given": "Mingxun", "family": "Wang"},
+            {"given": "Tobias", "family": "Schulze"},
+            {"given": "Reza M", "family": "Salek"},
+            {"given": "Christoph", "family": "Steinbeck"},
+            {"given": "Venkata Chandrasekhar", "family": "Nainala"},
+            {"given": "Robert", "family": "Mistrik"},
+            {"given": "Takaaki", "family": "Nishioka"},
+            {"given": "Oliver", "family": "Fiehn"}
           ]
         }
       ],
@@ -2907,34 +2633,16 @@ module.exports={
           "label": "Steinbeck2003",
           "type": "article-journal",
           "author": [
-            {
-              "given": "Christoph",
-              "family": "Steinbeck"
-            },
-            {
-              "given": "Yongquan",
-              "family": "Han"
-            },
-            {
-              "given": "Stefan",
-              "family": "Kuhn"
-            },
-            {
-              "given": "Oliver",
-              "family": "Horlacher"
-            },
-            {
-              "given": "Edgar",
-              "family": "Luttmann"
-            },
-            {
-              "given": "Egon",
-              "family": "Willighagen"
-            }
+            {"given": "Christoph", "family": "Steinbeck"},
+            {"given": "Yongquan", "family": "Han"},
+            {"given": "Stefan", "family": "Kuhn"},
+            {"given": "Oliver", "family": "Horlacher"},
+            {"given": "Edgar", "family": "Luttmann"},
+            {"given": "Egon", "family": "Willighagen"}
           ],
-          "year": "2003",
-          "title": "The Chemistry Development Kit (CDK): an open-source Java library for Chemo- and Bioinformatics",
+          "title": "The Chemistry Development Kit (CDK): an open-source Java library for Chemo- and Bioinformatics.",
           "container-title": "Journal of chemical information and computer sciences",
+          "issued": {"date-parts": [["2003"]]},
           "volume": "43",
           "issue": "2",
           "page": "493-500",
@@ -2950,19 +2658,13 @@ module.exports={
           "label": "Ekstrand:2009:RYD",
           "type": "paper-conference",
           "author": [
-            {
-              "given": "Michael D.",
-              "family": "Ekstrand"
-            },
-            {
-              "given": "John T.",
-              "family": "Riedl"
-            }
+            {"given": "Michael D.", "family": "Ekstrand"},
+            {"given": "John T.", "family": "Riedl"}
           ],
           "title": "rv you're dumb: Identifying Discarded Work in Wiki Article History",
           "container-title": "Proceedings of the 5th International Symposium on Wikis and Open Collaboration",
           "collection-title": "WikiSym '09",
-          "year": "2009",
+          "issued": {"date-parts": [["2009"]]},
           "ISBN": "978-1-60558-730-1",
           "publisher-place": "New York, NY, USA",
           "page": "4:1-4:10",
@@ -2971,18 +2673,44 @@ module.exports={
           "publisher": "ACM",
           "id": "Ekstrand:2009:RYD"
         }
-      ]
+      ],
+      "literals": [{
+        "label": "b",
+        "id": "b",
+        "type": "book",
+        "author": [
+          {"literal": "a and b"},
+          {"literal": "c"},
+          {"given": "D", "family": "E"}
+        ],
+        "issued": {
+          "literal": "13th Century"
+        }
+      }],
+      "yearMonthNeeded": [{
+        "label": "b",
+        "id": "b",
+        "type": "book",
+        "issued": {
+          "date-parts": [["2017", "8"]]
+        }
+      }],
+      "yearMonth": [{
+        "label": "b",
+        "id": "b",
+        "type": "book",
+        "issued": {
+          "date-parts": [[2016, 12, 13]]
+        }
+      }]
     },
     "bibtxt": {
       "author": [
-        {
-          "given": "J.W.",
-          "family": "Goethe"
-        }
+        {"given": "J.W.", "family": "Goethe"}
       ],
       "title": "Faust. Der Tragödie Erster Teil",
       "publisher": "Reclam",
-      "year": "1986",
+      "issued": {"date-parts": [["1986"]]},
       "publisher-place": "Stuttgart",
       "type": "book",
       "id": "Fau86",
@@ -3006,10 +2734,7 @@ module.exports={
           "copyright": "2006 Johnson; licensee BioMed Central Ltd.",
           "type": "article-journal",
           "author": [
-            {
-              "given": "Leslie Main",
-              "family": "Johnson"
-            }
+            {"given": "Leslie Main", "family": "Johnson"}
           ],
           "page-first": "1",
           "page": "1",
@@ -3028,163 +2753,157 @@ module.exports={
     }
   }
 }
-},{}],13:[function(require,module,exports){
+},{}],12:[function(require,module,exports){
 'use strict';
 
-var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; }(); /* global describe, context, it */
 
-/* global require, module, describe, it */
+var _expect = require('expect.js');
 
-var expect = require('expect.js');
-var Cite = require('./cite');
-var test = require('./output.json');
+var _expect2 = _interopRequireDefault(_expect);
 
-var customTemplate = '<?xml version="1.0" encoding="utf-8"?>\n<style xmlns="http://purl.org/net/xbiblio/csl" class="in-text" version="1.0" demote-non-dropping-particle="sort-only" page-range-format="minimal">\n  <bibliography>\n    <layout>\n      <text variable="title"/>\n    </layout>\n  </bibliography>\n</style>';
-var customLocale = '<?xml version="1.0" encoding="utf-8"?>\n<locale xmlns="http://purl.org/net/xbiblio/csl" version="1.0" xml:lang="custom">\n  <style-options punctuation-in-quote="true"/>\n  <date form="text">\n    <date-part name="month" suffix=" "/>\n    <date-part name="day" suffix=", "/>\n    <date-part name="year"/>\n  </date>\n  <date form="numeric">\n    <date-part name="month" form="numeric-leading-zeros" suffix="/"/>\n    <date-part name="day" form="numeric-leading-zeros" suffix="/"/>\n    <date-part name="year"/>\n  </date>\n  <terms>\n    <term name="no date" form="short">custom</term>\n  </terms>\n</locale>';
+var _cite = require('./cite');
 
-var testCaseGenerator = function testCaseGenerator(data, options, output) {
+var _cite2 = _interopRequireDefault(_cite);
+
+var _input = require('./input.json');
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+_input.input.wd.simple = require('./Q21972834.json');
+_input.input.wd.author = require('./Q27795847.json');
+
+var testCaseGenerator = function testCaseGenerator(input, type, output) {
   var _ref = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : {},
+      _ref$exact = _ref.exact,
+      exact = _ref$exact === undefined ? false : _ref$exact,
       _ref$callback = _ref.callback,
       callback = _ref$callback === undefined ? function (v) {
     return v;
   } : _ref$callback,
-      _ref$msg = _ref.msg,
-      msg = _ref$msg === undefined ? 'outputs correctly' : _ref$msg;
+      _ref$link = _ref.link,
+      link = _ref$link === undefined ? false : _ref$link;
 
   return function () {
-    var out = callback(data.get(options));
-    out = typeof out === 'string' ? out.trim() : out;
+    var test = link ? _cite2.default.parse.input.chainLink(input) : _cite2.default.parse.input.chain(input);
 
-    it(msg, function () {
-      expect(out).to[(typeof out === 'undefined' ? 'undefined' : _typeof(out)) === 'object' ? 'eql' : 'be'](output);
+    it('handles input type', function () {
+      (0, _expect2.default)(_cite2.default.parse.input.type(input)).to.be(type);
+    });
+
+    it('parses input correctly', function () {
+      (0, _expect2.default)(callback(test)).to[exact ? 'be' : 'eql'](output);
     });
   };
 };
 
-module.exports = function () {
-  var data = new Cite(test.input.csl.simple);
+var wikidataTestCaseOptions = {
+  exact: true,
+  callback: function callback(_ref2) {
+    var _ref3 = _slicedToArray(_ref2, 1),
+        data = _ref3[0];
 
-  describe('formatted CSL', function () {
-    describe('html', function () {
-      describe('default built-in template (APA)', testCaseGenerator(data, {
-        format: 'string',
-        type: 'html',
-        style: 'citation-apa'
-      }, test.output.csl.html.apa));
+    return data.replace(/[&?]origin=\*/, '');
+  },
+  link: true
+};
+var doiLinkTestCaseOptions = { link: true };
+var doiTestCaseOptions = { link: true, callback: function callback(_ref4) {
+    var title = _ref4.title;
+    return title;
+  } };
 
-      describe('non-default built-in template (Vancouver)', testCaseGenerator(data, {
-        format: 'string',
-        type: 'html',
-        style: 'citation-vancouver'
-      }, test.output.csl.html.vancouver));
+describe('input', function () {
+  describe('Wikidata ID', testCaseGenerator(_input.input.wd.id, 'string/wikidata', _input.output.wd.api[0], wikidataTestCaseOptions));
 
-      describe('custom template', function () {
-        var reg = Cite.CSL.register;
-        reg.addTemplate('custom', customTemplate);
+  describe('Wikidata URL', testCaseGenerator(_input.input.wd.url, 'url/wikidata', _input.output.wd.api[0], wikidataTestCaseOptions));
 
-        it('registers the template', function () {
-          expect(reg.hasTemplate('custom')).to.be(true);
-          expect(reg.getTemplate('custom')).to.be(customTemplate);
-        });
+  describe('Wikidata ID list', function () {
+    context('separated by spaces', testCaseGenerator(_input.input.wd.list.space, 'list/wikidata', _input.output.wd.api[1], wikidataTestCaseOptions));
 
-        testCaseGenerator(data, {
-          format: 'string',
-          type: 'html',
-          style: 'citation-custom'
-        }, test.output.csl.html.title, { msg: 'uses the template' })();
-      });
+    context('separated by newlines', testCaseGenerator(_input.input.wd.list.newline, 'list/wikidata', _input.output.wd.api[1], wikidataTestCaseOptions));
 
-      describe('custom locale', function () {
-        var reg = Cite.CSL.register;
-        reg.addLocale('custom', customLocale);
+    context('separated by commas', testCaseGenerator(_input.input.wd.list.comma, 'list/wikidata', _input.output.wd.api[1], wikidataTestCaseOptions));
+  });
 
-        it('registers the locale', function () {
-          expect(reg.hasLocale('custom')).to.be(true);
-          expect(reg.getLocale('custom')).to.be(customLocale);
-        });
+  describe('Wikidata JSON', function () {
+    testCaseGenerator(_input.input.wd.simple, 'object/wikidata', _input.output.wd.simple)();
 
-        testCaseGenerator(new Cite({ id: 'a', type: 'article-journal' }), {
-          format: 'string',
-          type: 'html',
-          style: 'citation-apa',
-          lang: 'custom'
-        }, test.output.csl.html.locale, { msg: 'uses the locale' })();
-      });
-    });
+    context('with linked authors', testCaseGenerator(_input.input.wd.author, 'object/wikidata', _input.output.wd.author));
+  });
 
-    describe('plain text', function () {
-      describe('default built-in template (APA)', testCaseGenerator(data, {
-        format: 'string',
-        type: 'string',
-        style: 'citation-apa'
-      }, test.output.csl.apa));
+  describe('DOI ID', testCaseGenerator(_input.input.doi.id, 'string/doi', _input.output.doi.api[0], doiLinkTestCaseOptions));
+  describe('DOI URL', testCaseGenerator(_input.input.doi.url, 'api/doi', _input.output.doi.simple.title, doiTestCaseOptions));
 
-      describe('non-default built-in template (Vancouver)', testCaseGenerator(data, {
-        format: 'string',
-        type: 'string',
-        style: 'citation-vancouver'
-      }, test.output.csl.vancouver));
+  describe('DOI ID list', function () {
+    context('separated by spaces', testCaseGenerator(_input.input.doi.list.space, 'list/doi', _input.output.doi.api[1], doiLinkTestCaseOptions));
 
-      describe('custom template', function () {
-        var reg = Cite.CSL.register;
-        reg.addTemplate('custom', customTemplate);
+    context('separated by newlines', testCaseGenerator(_input.input.doi.list.newline, 'list/doi', _input.output.doi.api[1], doiLinkTestCaseOptions));
+  });
 
-        it('registers the template', function () {
-          expect(reg.hasTemplate('custom')).to.be(true);
-          expect(reg.getTemplate('custom')).to.be(customTemplate);
-        });
+  describe('BibTeX string', function () {
+    testCaseGenerator(_input.input.bibtex.simple, 'string/bibtex', _input.output.bibtex.simple)();
 
-        testCaseGenerator(data, {
-          format: 'string',
-          type: 'string',
-          style: 'citation-custom'
-        }, test.output.csl.title, { msg: 'uses the template' })();
-      });
+    context('with whitespace and unknown fields', testCaseGenerator(_input.input.bibtex.whitespace, 'string/bibtex', _input.output.bibtex.whitespace));
 
-      describe('custom locale', function () {
-        var reg = Cite.CSL.register;
-        reg.addLocale('custom', customLocale);
+    context('with literals', testCaseGenerator(_input.input.bibtex.literals, 'string/bibtex', _input.output.bibtex.literals));
+    context('with year and month without date', testCaseGenerator(_input.input.bibtex.yearMonthNeeded, 'string/bibtex', _input.output.bibtex.yearMonthNeeded));
+    context('with year and month with date', testCaseGenerator(_input.input.bibtex.yearMonth, 'string/bibtex', _input.output.bibtex.yearMonth));
+  });
 
-        it('registers the locale', function () {
-          expect(reg.hasLocale('custom')).to.be(true);
-          expect(reg.getLocale('custom')).to.be(customLocale);
-        });
+  describe('BibTeX JSON', testCaseGenerator(_input.input.bibtex.json, 'object/bibtex', _input.output.bibtex.simple));
 
-        testCaseGenerator(new Cite({ id: 'a', type: 'article-journal' }), {
-          format: 'string',
-          type: 'string',
-          style: 'citation-apa',
-          lang: 'custom'
-        }, '(custom).', { msg: 'uses the locale' })();
-      });
-    });
+  describe('Bib.TXT string', function () {
+    testCaseGenerator(_input.input.bibtxt.simple, 'string/bibtxt', [_input.output.bibtxt])();
+
+    context('with multiple entries', testCaseGenerator(_input.input.bibtxt.multiple, 'string/bibtxt', [_input.output.bibtxt, _input.output.bibtex.simple[0]]));
+
+    context('with whitespace', testCaseGenerator(_input.input.bibtxt.whitespace, 'string/bibtxt', [_input.output.bibtxt]));
   });
 
   describe('CSL-JSON', function () {
-    describe('plain text', testCaseGenerator(data, { format: 'string' }, test.input.csl.simple, { callback: JSON.parse }));
-    describe('object', testCaseGenerator(data, undefined, test.input.csl.simple));
+    testCaseGenerator(_input.input.csl.simple, 'object/csl', [_input.input.csl.simple])();
+
+    context('as JSON string', testCaseGenerator(JSON.stringify(_input.input.csl.simple), 'string/json', [_input.input.csl.simple]));
+    context('as JS Object string', testCaseGenerator(_input.input.csl.string, 'string/json', [_input.input.csl.simple]));
+    context('with a syntax error', testCaseGenerator('{"hi"}', 'string/json', []));
   });
 
-  describe('BibTeX', function () {
-    describe('plain text', testCaseGenerator(data, {
-      format: 'string',
-      type: 'string',
-      style: 'bibtex'
-    }, test.output.bibtex.plain, { callback: function callback(v) {
-        return v.replace(/\s+/g, ' ');
-      } }));
+  describe('ContentMine JSON', testCaseGenerator(_input.input.bibjson.simple, 'object/contentmine', _input.output.bibjson.simple));
 
-    describe('JSON', testCaseGenerator(data, { style: 'bibtex' }, test.output.bibtex.json));
+  describe('Array', function () {
+    var objs = [{ id: 'a' }, { id: 'b' }];
 
-    describe('Bib.TXT', testCaseGenerator(data, {
-      format: 'string',
-      type: 'string',
-      style: 'bibtxt'
-    }, test.output.bibtex.bibtxt));
+    testCaseGenerator(objs, 'array/csl', objs)();
+    it('duplicates objects', function () {
+      (0, _expect2.default)((0, _cite2.default)(objs).data).not.to.be(objs);
+    });
+
+    describe('nested', function () {
+      var data = [[objs[0]], objs[1]];
+
+      testCaseGenerator(data, 'array/else', objs)();
+      it('duplicates objects', function () {
+        var test = (0, _cite2.default)(data).data;
+
+        (0, _expect2.default)(test[0]).not.to.be(objs[0]);
+        (0, _expect2.default)(test[1]).not.to.be(objs[1]);
+      });
+    });
   });
-};
 
-},{"./cite":10,"./output.json":14,"expect.js":"expect.js"}],14:[function(require,module,exports){
+  describe('Empty', function () {
+    describe('string', function () {
+      describe('empty', testCaseGenerator('', 'string/empty', []));
+      describe('whitespace', testCaseGenerator('   \t\n \r  ', 'string/whitespace', []));
+    });
+
+    describe('null', testCaseGenerator(null, 'empty', []));
+    describe('undefined', testCaseGenerator(undefined, 'empty', []));
+  });
+});
+
+},{"./Q21972834.json":5,"./Q27795847.json":6,"./cite":9,"./input.json":11,"expect.js":"expect.js"}],13:[function(require,module,exports){
 module.exports={
   "input": {
     "csl": {
@@ -3206,7 +2925,8 @@ module.exports={
           "issue": "20",
           "page": "5441-5444"
         }
-      ]
+      ],
+      "locale": [{"id": "a", "type": "article-journal"}]
     }
   },
   "output": {
@@ -3243,4 +2963,144 @@ module.exports={
     }
   }
 }
-},{}]},{},[7]);
+},{}],14:[function(require,module,exports){
+'use strict';
+
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; /* global describe, it */
+
+var _expect = require('expect.js');
+
+var _expect2 = _interopRequireDefault(_expect);
+
+var _cite = require('./cite');
+
+var _cite2 = _interopRequireDefault(_cite);
+
+var _output = require('./output.json');
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var customTemplate = '<?xml version="1.0" encoding="utf-8"?>\n<style xmlns="http://purl.org/net/xbiblio/csl" class="in-text" version="1.0" demote-non-dropping-particle="sort-only" page-range-format="minimal">\n  <bibliography>\n    <layout>\n      <text variable="title"/>\n    </layout>\n  </bibliography>\n</style>';
+var customLocale = '<?xml version="1.0" encoding="utf-8"?>\n<locale xmlns="http://purl.org/net/xbiblio/csl" version="1.0" xml:lang="custom">\n  <style-options punctuation-in-quote="true"/>\n  <date form="text">\n    <date-part name="month" suffix=" "/>\n    <date-part name="day" suffix=", "/>\n    <date-part name="year"/>\n  </date>\n  <date form="numeric">\n    <date-part name="month" form="numeric-leading-zeros" suffix="/"/>\n    <date-part name="day" form="numeric-leading-zeros" suffix="/"/>\n    <date-part name="year"/>\n  </date>\n  <terms>\n    <term name="no date" form="short">custom</term>\n  </terms>\n</locale>';
+
+var testCaseGenerator = function testCaseGenerator(data, options, output) {
+  var _ref = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : {},
+      _ref$callback = _ref.callback,
+      callback = _ref$callback === undefined ? function (v) {
+    return v;
+  } : _ref$callback,
+      _ref$msg = _ref.msg,
+      msg = _ref$msg === undefined ? 'outputs correctly' : _ref$msg;
+
+  return function () {
+    var out = callback(data.get(options));
+    out = typeof out === 'string' ? out.trim() : out;
+
+    it(msg, function () {
+      return (0, _expect2.default)(out).to[(typeof out === 'undefined' ? 'undefined' : _typeof(out)) === 'object' ? 'eql' : 'be'](output);
+    });
+  };
+};
+
+var defaultOpts = _cite2.default.prototype.defaultOptions;
+var opts = function opts(format, type, style) {
+  var lang = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : defaultOpts.lang;
+  return { format: format, type: type, style: style, lang: lang };
+};
+
+describe('output', function () {
+  var data = new _cite2.default(_output.input.csl.simple);
+
+  describe('formatted CSL', function () {
+    describe('html', function () {
+      describe('default built-in template (APA)', testCaseGenerator(data, opts('string', 'html', 'citation-apa'), _output.output.csl.html.apa));
+
+      describe('non-default built-in template (Vancouver)', testCaseGenerator(data, opts('string', 'html', 'citation-vancouver'), _output.output.csl.html.vancouver));
+
+      describe('non-existent template', testCaseGenerator(data, opts('string', 'html', 'citation-larsgw'), _output.output.csl.html.apa));
+
+      describe('non-existent locale', testCaseGenerator(data, opts('string', 'html', 'citation-apa', 'larsgw'), _output.output.csl.html.apa));
+
+      describe('custom template', function () {
+        _cite2.default.CSL.register.addTemplate('custom', customTemplate);
+
+        it('registers the template', function () {
+          (0, _expect2.default)(_cite2.default.CSL.register.hasTemplate('custom')).to.be(true);
+          (0, _expect2.default)(_cite2.default.CSL.register.getTemplate('custom')).to.be(customTemplate);
+        });
+
+        testCaseGenerator(data, opts('string', 'html', 'citation-custom'), _output.output.csl.html.title)();
+      });
+
+      describe('custom locale', function () {
+        var data = new _cite2.default(_output.input.csl.locale);
+        _cite2.default.CSL.register.addLocale('custom', customLocale);
+
+        it('registers the locale', function () {
+          (0, _expect2.default)(_cite2.default.CSL.register.hasLocale('custom')).to.be(true);
+          (0, _expect2.default)(_cite2.default.CSL.register.getLocale('custom')).to.be(customLocale);
+        });
+
+        testCaseGenerator(data, opts('string', 'html', 'citation-apa', 'custom'), _output.output.csl.html.locale)();
+      });
+    });
+
+    describe('plain text', function () {
+      describe('default built-in template (APA)', testCaseGenerator(data, opts('string', 'string', 'citation-apa'), _output.output.csl.apa));
+
+      describe('non-default built-in template (Vancouver)', testCaseGenerator(data, opts('string', 'string', 'citation-vancouver'), _output.output.csl.vancouver));
+
+      describe('non-existent template', testCaseGenerator(data, opts('string', 'string', 'citation-larsgw'), _output.output.csl.apa));
+
+      describe('non-existent locale', testCaseGenerator(data, opts('string', 'string', 'citation-apa', 'larsgw'), _output.output.csl.apa));
+
+      describe('custom template', function () {
+        _cite2.default.CSL.register.addTemplate('custom', customTemplate);
+
+        it('registers the template', function () {
+          (0, _expect2.default)(_cite2.default.CSL.register.hasTemplate('custom')).to.be(true);
+          (0, _expect2.default)(_cite2.default.CSL.register.getTemplate('custom')).to.be(customTemplate);
+        });
+
+        testCaseGenerator(data, opts('string', 'string', 'citation-custom'), _output.output.csl.title)();
+      });
+
+      describe('custom locale', function () {
+        var data = new _cite2.default(_output.input.csl.locale);
+        _cite2.default.CSL.register.addLocale('custom', customLocale);
+
+        it('registers the locale', function () {
+          (0, _expect2.default)(_cite2.default.CSL.register.hasLocale('custom')).to.be(true);
+          (0, _expect2.default)(_cite2.default.CSL.register.getLocale('custom')).to.be(customLocale);
+        });
+
+        testCaseGenerator(data, opts('string', 'string', 'citation-apa', 'custom'), '(custom).')();
+      });
+    });
+  });
+
+  describe('CSL-JSON', function () {
+    describe('plain text', testCaseGenerator(data, { format: 'string' }, _output.input.csl.simple, { callback: JSON.parse }));
+    describe('object', testCaseGenerator(data, undefined, _output.input.csl.simple));
+  });
+
+  describe('BibTeX', function () {
+    describe('plain text', testCaseGenerator(data, opts('string', 'string', 'bibtex'), _output.output.bibtex.plain, { callback: function callback(v) {
+        return v.replace(/\s+/g, ' ');
+      } }));
+
+    describe('JSON', testCaseGenerator(data, { style: 'bibtex' }, _output.output.bibtex.json));
+
+    describe('Bib.TXT', testCaseGenerator(data, opts('string', 'string', 'bibtxt'), _output.output.bibtex.bibtxt));
+  });
+});
+
+},{"./cite":9,"./output.json":13,"expect.js":"expect.js"}],15:[function(require,module,exports){
+'use strict';
+
+require('./async.spec');
+require('./cite.spec');
+require('./input.spec');
+require('./output.spec');
+
+},{"./async.spec":7,"./cite.spec":10,"./input.spec":12,"./output.spec":14}]},{},[15]);
