@@ -48,7 +48,7 @@ const parseBibtexNameList = function (list) {
   const literals = []
   list = list.replace(/%/g, '%0').replace(/{.*?}/g, m => `%[${literals.push(m) - 1}]`)
   return list.split(' and ').map(name => {
-    name = name.replace(/%\[(\d+)\]/, (_, i) => literals[+i]).replace(/%0/g, '%%')
+    name = name.replace(/%\[(\d+)\]/, (_, i) => literals[+i]).replace(/%0/g, '%')
     return parseBibtexName(name)
   })
 }
