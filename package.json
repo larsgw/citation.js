@@ -98,5 +98,5 @@
   "engines": {
     "node": ">=6.0.0"
   },
-  "homepage": "https://larsgw.github.io/citation.js/"
+  "homepage": "https://citation.js.org/"
 }

@@ -1,4 +1,4 @@
-![Citation.js](https://larsgw.github.io/citation.js/static/img/banner.png)
+![Citation.js](https://citation.js.org/static/img/banner.png)
 
 Citation.js converts formats like BibTeX, Wikidata JSON and ContentMine JSON to CSL-JSON to convert to other formats like APA, Vancouver and back to BibTeX.
 
@@ -268,7 +268,7 @@ array // [1, 2, 3]
 
 ## <a id="cite.internal" href="#cite.internal">Internal functions</a>
 
-`Cite` holds most internal functions, too. These are documented [here](https://larsgw.github.io/citation.js/api/global.html) and can be accessed like this:
+`Cite` holds most internal functions, too. These are documented [here](https://citation.js.org/api/global.html) and can be accessed like this:
 
 Note that most `get*` functions expect CSL-JSON normalised with `Cite.parse.csl: [Function: parseCsl]`.
 
@@ -374,7 +374,7 @@ Where `<DATA>` is the input data and `<OPTIONS>` is the input options. `<OPTIONS
 
 ## <a id="more.docs" href="#more.docs">More Docs</a>
 
-Further explanation can be found [here](https://larsgw.github.io/citation.js/api/).
+Further explanation can be found [here](https://citation.js.org/api/).
 
 ## <a id="more.demo" href="#more.demo">Demo</a>
 
@@ -397,5 +397,5 @@ data.get() // Should implicitly display
 
 ### <a id="more.demo.browser" href="#more.demo.browser">Browser Demos</a>
 
-* [Normal demo](https://larsgw.github.io/citation.js/demo/)
-* [Bib.TXT demo](https://larsgw.github.io/citation.js/demo/bibtxt.html)
+* [Normal demo](https://citation.js.org/demo/)
+* [Bib.TXT demo](https://citation.js.org/demo/bibtxt.html)
