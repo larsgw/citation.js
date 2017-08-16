@@ -46,11 +46,20 @@ const parseBibtexName = function (name) {
  */
 const parseBibtexNameList = function (list) {
   const literals = []
+
+  // To split author names by ' and '  while supporting literal names like
+  // '{National Academy for Arts and Sciences}' (i.e. some name with ' and '
+  // in it), we first pick a escaping character ('%')...
+
+  // ...escape all '%'s and remove all literals ('{...}')...
   list = list.replace(/%/g, '%0').replace(/{.*?}/g, m => `%[${literals.push(m) - 1}]`)
-  return list.split(' and ').map(name => {
-    name = name.replace(/%\[(\d+)\]/, (_, i) => literals[+i]).replace(/%0/g, '%')
-    return parseBibtexName(name)
-  })
+
+  // ...split the string...
+  return list.split(' and ')
+  // ...re-insert all literals and unescape all '%'s...
+    .map(name => name.replace(/%\[(\d+)\]/, (_, i) => literals[+i]).replace(/%0/g, '%'))
+  // ...and parse the names to make sure literals are actually preserved.
+    .map(parseBibtexName)
 }
 
 /**
