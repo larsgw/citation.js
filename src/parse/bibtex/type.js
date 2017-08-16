@@ -1,5 +1,34 @@
 /**
- * BibTeX pub type to CSL pub type
+ * Map holding information on BibTeX pub types.
+ *
+ *  * If string, use as CSL type
+ *  * If false, type is known but has no (good) mapping
+ *
+ * @access private
+ * @constant typeMap
+ * @default
+ */
+const typeMap = {
+  article: 'article-journal',
+  book: 'book',
+  booklet: 'book',
+  proceedings: 'book',
+  manual: false,
+  mastersthesis: 'thesis',
+  misc: false,
+  inbook: 'chapter',
+  incollection: 'chapter',
+  conference: 'paper-conference',
+  inproceedings: 'paper-conference',
+  online: 'website',
+  patent: 'patent',
+  phdthesis: 'thesis',
+  techreport: 'report',
+  unpublished: 'manuscript'
+}
+
+/**
+ * BibTeX pub type to CSL pub type. Defaults to 'book'.
  *
  * @access protected
  * @method parseBibTeXType
@@ -9,44 +38,13 @@
  * @return {String} CSL type
  */
 const parseBibTeXType = function (pubType) {
-  switch (pubType) {
-    case 'article':
-      return 'article-journal'
-
-    case 'book':
-    case 'booklet':
-    case 'manual':
-    case 'misc':
-    case 'proceedings':
-      return 'book'
-
-    case 'inbook':
-    case 'incollection':
-      return 'chapter'
-
-    case 'conference':
-    case 'inproceedings':
-      return 'paper-conference'
-
-    case 'online':
-      return 'webpage'
-
-    case 'patent':
-      return 'patent'
-
-    case 'phdthesis':
-    case 'mastersthesis':
-      return 'thesis'
-
-    case 'techreport':
-      return 'report'
-
-    case 'unpublished':
-      return 'manuscript'
-
-    default:
-      console.warn('[set]', `BibTeX publication type not recognized: ${pubType}. Interpreting as "book".`)
-      return 'book'
+  if (!typeMap.hasOwnProperty(pubType)) {
+    console.warn('[set]', `BibTeX publication type not recognized: ${pubType}. Defaulting to "book".`)
+    return 'book'
+  } else if (typeMap[pubType] === false) {
+    return 'book'
+  } else {
+    return typeMap[pubType]
   }
 }
 
