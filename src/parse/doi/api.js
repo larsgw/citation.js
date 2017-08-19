@@ -31,9 +31,9 @@ const fetchDoiApi = function (url) {
  * @access protected
  * @method parseDoiApi
  *
- * @param {String|String[]} data - DOIs
+ * @param {String|Array<String>} data - DOIs
  *
- * @return {CSL[]} Array of CSL
+ * @return {Array<CSL>} Array of CSL
  */
 const parseDoiApi = data => [].concat(data).map(fetchDoiApi).map(parseDoiJson)
 

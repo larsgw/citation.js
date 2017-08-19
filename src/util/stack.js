@@ -4,7 +4,7 @@
  * @access protected
  * @class TokenStack
  *
- * @param {String[]} array - list of tokens
+ * @param {Array<String>} array - list of tokens
  */
 class TokenStack {
   constructor (array) {

@@ -8,7 +8,7 @@ import fetchId from '../util/fetchId'
  * @memberof Cite
  * @this Cite
  *
- * @param {String|CSL|Object|String[]|CSL[]|Object[]} data - The data to add to your object
+ * @param {String|CSL|Object|Array<String>|Array<CSL>|Array<Object>} data - The data to add to your object
  * @param {Boolean} [log=false] - Show this call in the log
  *
  * @return {Cite} The updated parent object
@@ -35,7 +35,7 @@ const add = function (data, log) {
  * @memberof Cite
  * @this Cite
  *
- * @param {String|CSL|Object|String[]|CSL[]|Object[]} data - The data to replace the data in your object
+ * @param {String|CSL|Object|Array<String>|Array<CSL>|Array<Object>} data - The data to replace the data in your object
  * @param {Boolean} [log=false] - Show this call in the log
  *
  * @return {Cite} The updated parent object

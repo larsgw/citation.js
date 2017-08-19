@@ -205,9 +205,9 @@ const correctField = function (fieldName, value, bestGuessConversions = true) {
  * @access protected
  * @method parseCsl
  *
- * @param {CSL[]} data - Array of CSL
+ * @param {Array<CSL>} data - Array of CSL
  *
- * @return {CSL[]} Array of clean CSL
+ * @return {Array<CSL>} Array of clean CSL
  */
 const parseCsl = function (data) {
   return data.map(function (entry) {

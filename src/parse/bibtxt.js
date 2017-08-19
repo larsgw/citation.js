@@ -56,7 +56,7 @@ const parseBibTxtEntry = entry => {
  *
  * @param {String} src - The input data
  *
- * @return {Object[]} Array of BibTeX-JSON
+ * @return {Array<Object>} Array of BibTeX-JSON
  */
 const parseBibTxt = src => src.trim().split(bibTxtRegex.splitEntries).map(parseBibTxtEntry)
 

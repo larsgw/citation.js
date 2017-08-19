@@ -11,10 +11,10 @@ import parseDoiApiAsync from '../../doi/async/api'
  * @access protected
  * @method parseInputDataAsync
  *
- * @param {String|String[]|Object|Object[]} input - The input data
+ * @param {String|Array<String>|Object|Array<Object>} input - The input data
  * @param {String} type - The input type
  *
- * @return {CSL[]} The parsed input
+ * @return {Array<CSL>} The parsed input
  */
 const parseInputDataAsync = async function (input, type) {
   switch (type) {

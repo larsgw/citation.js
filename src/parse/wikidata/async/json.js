@@ -9,7 +9,7 @@ import parseWikidataPropAsync from './prop'
  *
  * @param {Object} data - The input data
  *
- * @return {CSL[]} The formatted input data
+ * @return {Array<CSL>} The formatted input data
  */
 const parseWikidataJSONAsync = async function (data) {
   return Promise.all(Object.keys(data.entities).map(async function (entityKey) {

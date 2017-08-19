@@ -54,7 +54,7 @@ const delimiters = {
  *
  * @param {String} str - Input BibTeX
  *
- * @return {String[]} list of tokens
+ * @return {Array<String>} list of tokens
  */
 const getTokenizedBibtex = function (str) {
   // Substitute command of form "\X{X}" into "{\X X}"
@@ -74,7 +74,7 @@ const getTokenizedBibtex = function (str) {
  *
  * @param {String} str - The input data
  *
- * @return {CSL[]} The formatted input data
+ * @return {Array<CSL>} The formatted input data
  */
 const parseBibTeX = function (str) {
   const entries = []

@@ -11,10 +11,10 @@ import parseName from '../../name'
  * @access private
  * @method fetchWikidataLabelAsync
  *
- * @param {String|String[]} q - Wikidata IDs
+ * @param {String|Array<String>} q - Wikidata IDs
  * @param {String} lang - Language
  *
- * @return {String[]} Array with labels of each prop
+ * @return {Array<String>} Array with labels of each prop
  */
 const fetchWikidataLabelAsync = async function (q, lang) {
   const ids = Array.isArray(q) ? q : typeof q === 'string' ? q.split('|') : ''
@@ -36,7 +36,7 @@ const parseWikidataP1545 = qualifiers => qualifiers.P1545 ? parseInt(qualifiers.
  * @param {String|Number} value - Value
  * @param {String} lang - Language
  *
- * @return {String[]} Array with new prop and value
+ * @return {Array<String>} Array with new prop and value
  */
 const parseWikidataPropAsync = async function (prop, value, lang) {
   switch (prop) {

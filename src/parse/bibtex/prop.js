@@ -42,7 +42,7 @@ const parseBibtexName = function (name) {
  * @method parseBibtexNameList
  *
  * @param {String} list - list of names separated by ' and '
- * @return {Object[]} array of CSL name objects
+ * @return {Array<Object>} array of CSL name objects
  */
 const parseBibtexNameList = function (list) {
   const literals = []
@@ -117,7 +117,7 @@ const propMap = {
  * @param {String} name - Field name
  * @param {String} value - Field value
  *
- * @return {String[]} Array with new name and value
+ * @return {Array<String>} Array with new name and value
  */
 const parseBibTeXProp = function (name, value) {
   if (!propMap.hasOwnProperty(name)) {

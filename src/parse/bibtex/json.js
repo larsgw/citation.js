@@ -7,9 +7,9 @@ import parseBibTeXType from './type'
  * @access protected
  * @method parseBibTeXJSON
  *
- * @param {Object|Object[]} data - The input data
+ * @param {Object|Array<Object>} data - The input data
  *
- * @return {CSL[]} The formatted input data
+ * @return {Array<CSL>} The formatted input data
  */
 const parseBibTeXJSON = function (data) {
   return [].concat(data).map(entry => {

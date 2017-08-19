@@ -9,7 +9,7 @@ import parseInputType from '../type'
  * @access protected
  * @method parseInputAsync
  *
- * @param {String|String[]|Object|Object[]} input - The input data
+ * @param {String|Array<String>|Object|Array<Object>} input - The input data
  *
  * @return {Promise} The parsed input
  */

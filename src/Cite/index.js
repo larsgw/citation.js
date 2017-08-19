@@ -9,7 +9,7 @@ import * as get from './get'
  *
  * @description Create a `Cite` object with almost any kind of data, and manipulate it with its default methods.
  *
- * @param {String|CSL|Object|String[]|CSL[]|Object[]} data - Input data. If no data is passed, an empty object is returned
+ * @param {String|CSL|Object|Array<String>|Array<CSL>|Array<Object>} data - Input data. If no data is passed, an empty object is returned
  * @param {Object} options - The options for the output. See [input options](../#citation.cite.in.options).
  */
 function Cite (data, options) {
@@ -38,7 +38,7 @@ function Cite (data, options) {
    *
    * @memberof Cite
    * @access protected
-   * @type Object[]
+   * @type Array<Object>
    *
    * @property {Cite} 0 - The first image.
    */

@@ -9,9 +9,9 @@ import parseInputData from './data'
  * @access protected
  * @method parseInput
  *
- * @param {String|String[]|Object|Object[]} input - The input data
+ * @param {String|Array<String>|Object|Array<Object>} input - The input data
  *
- * @return {CSL[]} The parsed input
+ * @return {Array<CSL>} The parsed input
  */
 const parseInput = function (input) {
   let output = input

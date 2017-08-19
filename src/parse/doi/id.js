@@ -6,7 +6,7 @@
  *
  * @param {String} data - DOIs
  *
- * @return {String[]} DOI URLs
+ * @return {Array<String>} DOI URLs
  */
 const parseDoi = data => data.split(/(?:\s+)/g).map(doi => `https://doi.org/${doi.trim()}`)
 

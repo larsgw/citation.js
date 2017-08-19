@@ -4,7 +4,7 @@
  * @access protected
  * @method fetchId
  *
- * @param {String[]} list - old ID list
+ * @param {Array<String>} list - old ID list
  * @param {String} prefix - ID prefix
  *
  * @return {String} CSL ID

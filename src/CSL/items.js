@@ -4,7 +4,7 @@
  * @access protected
  * @method fetchCSLItemCallback
  *
- * @param {CSL[]} data - CSL array
+ * @param {Array<CSL>} data - CSL array
  *
  * @return {Cite~retrieveItem} Code to retreive item
  */

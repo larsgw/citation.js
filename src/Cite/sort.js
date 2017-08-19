@@ -90,7 +90,7 @@ const getSortCallback = function (...props) {
  * @memberof Cite
  * @this Cite
  *
- * @param {Cite~sort|String[]} [method=[]] - How to sort
+ * @param {Cite~sort|Array<String>} [method=[]] - How to sort
  * @param {Boolean} [log=false] - Show this call in the log
  *
  * @return {Cite} The updated parent object

@@ -31,7 +31,7 @@ const varBibTeXSyntaxTokens = {
  * @access protected
  * @method getBibTeX
  *
- * @param {CSL[]} src - Input CSL
+ * @param {Array<CSL>} src - Input CSL
  * @param {Boolean} html - Output as HTML string (instead of plain text)
  *
  * @return {String} BibTeX (HTML) string

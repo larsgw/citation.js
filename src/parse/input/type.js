@@ -8,7 +8,7 @@ import varRegex from '../regex'
  * @access protected
  * @method parseInputType
  *
- * @param {String|String[]|Object|Object[]} input - The input data
+ * @param {String|Array<String>|Object|Array<Object>} input - The input data
  *
  * @return {String} The input type
  */

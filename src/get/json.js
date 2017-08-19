@@ -6,7 +6,7 @@ import { htmlDict as dict } from './dict'
  * @access private
  * @function getJSONObjectHTML
  *
- * @param {Object|Object[]|String[]|Number[]} src - The data
+ * @param {Object|Array<Object>|Array<String>|Array<Number>} src - The data
  *
  * @return {String} The html (in string form)
  */
@@ -28,7 +28,7 @@ const getJSONObjectHTML = function (src) {
  * @access private
  * @function getJSONValueHTML
  *
- * @param {Object|String|Number|Object[]|String[]|Number[]} src - The data
+ * @param {Object|String|Number|Array<Object>|Array<String>|Array<Number>} src - The data
  *
  * @return {String} The html (in string form)
  */
@@ -52,7 +52,7 @@ const getJSONValueHTML = function (src) {
  * @access protected
  * @method getJSON
  *
- * @param {CSL[]} src - Input CSL
+ * @param {Array<CSL>} src - Input CSL
  *
  * @return {String} JSON HTML string
  */

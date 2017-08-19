@@ -21,7 +21,7 @@ import fetchCSLItemCallback from '../CSL/items'
  * @memberof Cite
  * @this Cite
  *
- * @return {String[]} List of IDs
+ * @return {Array<String>} List of IDs
  */
 const getIds = function () {
   return this.data.map(entry => entry.id)
@@ -36,7 +36,7 @@ const getIds = function () {
  *
  * @param {Object} [options={}] - The options for the output. See [input options](../#citation.cite.in.options)
  *
- * @return {String|Object[]} The formatted data
+ * @return {String|Array<Object>} The formatted data
  */
 const get = function (options = {}) {
   const {format, type, style, lang} = Object.assign({}, this.defaultOptions, this._options, options)

@@ -9,7 +9,7 @@ import parseWikidataProp from './prop'
  *
  * @param {Object} data - The input data
  *
- * @return {CSL[]} The formatted input data
+ * @return {Array<CSL>} The formatted input data
  */
 const parseWikidataJSON = function (data) {
   return Object.keys(data.entities).map((entityKey) => {

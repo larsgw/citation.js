@@ -9,7 +9,7 @@ import parseName from '../name'
  *
  * @param {Object} data - The input data
  *
- * @return {CSL[]} The formatted input data
+ * @return {Array<CSL>} The formatted input data
  */
 const parseContentMine = function (data) {
   const res = {

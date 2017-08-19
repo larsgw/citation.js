@@ -8,7 +8,7 @@ import varRegex from './regex'
  *
  * @param {String} str - The input string
  *
- * @return {Object|Object[]|String[]} The parsed object
+ * @return {Object|Array<Object>|Array<String>} The parsed object
  */
 const parseJSON = function (str) {
   try {

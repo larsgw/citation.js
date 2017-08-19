@@ -30,9 +30,9 @@ const fetchDoiApiAsync = async function (url) {
  * @access protected
  * @method parseDoiApiAsync
  *
- * @param {String|String[]} data - DOIs
+ * @param {String|Array<String>} data - DOIs
  *
- * @return {CSL[]} Array of CSL
+ * @return {Array<CSL>} Array of CSL
  */
 const parseDoiApiAsync = async function (data) {
   const doiJsonList = await Promise.all([].concat(data).map(fetchDoiApiAsync))
