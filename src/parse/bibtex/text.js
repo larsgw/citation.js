@@ -82,32 +82,26 @@ const parseBibTeX = function (str) {
   const stack = new TokenStack(tokens)
 
   try {
-    stack.consume(whitespace)
+    stack.consumeWhitespace()
 
     while (stack.tokensLeft()) {
-      stack.consumeToken('@')
-      stack.consume(whitespace)
+      stack.consumeToken('@', {spaced: false})
+      stack.consumeWhitespace()
 
       const type = stack.consume([whitespace, syntax], {inverse: true}).toLowerCase()
 
-      stack.consume(whitespace)
       stack.consumeToken('{')
-      stack.consume(whitespace)
 
       const label = stack.consume([whitespace, syntax], {inverse: true})
 
-      stack.consume(whitespace)
       stack.consumeToken(',')
-      stack.consume(whitespace)
 
       const properties = {}
 
       while (stack.tokensLeft()) {
         const key = stack.consume([whitespace, '='], {inverse: true}).toLowerCase()
 
-        stack.consume(whitespace)
         stack.consumeToken('=')
-        stack.consume(whitespace)
 
         const startDelimiter = stack.consume(/^({|"|)$/g)
 
@@ -152,20 +146,20 @@ const parseBibTeX = function (str) {
         properties[key] = val
 
         stack.consumeN(endDelimiter.length)
-        stack.consume(whitespace)
+        stack.consumeWhitespace()
 
         // Last entry (no trailing comma)
         if (stack.matches('}')) { break }
 
-        stack.consumeToken(',')
-        stack.consume(whitespace)
+        stack.consumeToken(',', {spaced: false})
+        stack.consumeWhitespace()
 
         // Last entry (trailing comma)
         if (stack.matches('}')) { break }
       }
 
-      stack.consumeToken('}')
-      stack.consume(whitespace)
+      stack.consumeToken('}', {spaced: false})
+      stack.consumeWhitespace()
 
       entries.push({type, label, properties})
     }

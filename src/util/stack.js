@@ -72,6 +72,8 @@ class TokenStack {
    * @method matches
    * @memberof TokenStack
    *
+   * @param {String|RegExp|TokenStack~match|Array} pattern - pattern
+   *
    * @return {Boolean} match
    */
   matches (pattern) {
@@ -84,14 +86,19 @@ class TokenStack {
    * @method consumeToken
    * @memberof TokenStack
    *
-   * @param {String|RegExp|TokenStack~match|Array} [pattern=/^[\s\S]$/g] - pattern
+   * @param {String|RegExp|TokenStack~match|Array} [pattern=/^[\s\S]$/] - pattern
    * @param {Object} options
    * @param {Boolean} [options.inverse=false] - invert pattern
+   * @param {Boolean} [options.spaced=true] - allow leading and trailing whitespace
    *
    * @return {String} token
    * @throws {SyntaxError} Unexpected token at index: Expected pattern, got token
    */
-  consumeToken (pattern = /^[\s\S]$/, {inverse = false} = {}) {
+  consumeToken (pattern = /^[\s\S]$/, {inverse = false, spaced = true} = {}) {
+    if (spaced) {
+      this.consumeWhitespace()
+    }
+
     const token = this.current
     const match = TokenStack.getMatchCallback(pattern)(token, this.index, this.stack)
     if (match) {
@@ -99,7 +106,29 @@ class TokenStack {
     } else {
       throw new SyntaxError(`Unexpected token at index ${this.index}: Expected ${TokenStack.getPatternText(pattern)}, got "${token}"`)
     }
+
+    if (spaced) {
+      this.consumeWhitespace()
+    }
+
     return token
+  }
+
+  /**
+   * Consume a single token if possible, and throw if not.
+   *
+   * @method consumeToken
+   * @memberof TokenStack
+   *
+   * @param {String|RegExp|TokenStack~match|Array} [pattern=/^\s$/] - whitespace pattern
+   * @param {Object} options
+   * @param {Boolean} [options.optional=true] - allow having no whitespace
+   *
+   * @return {String} matched whitespace
+   * @throws {SyntaxError} Unexpected token at index: Expected whitespace, got token
+   */
+  consumeWhitespace (pattern = /^\s$/, {optional = true} = {}) {
+    return this.consume(pattern, {min: +!optional})
   }
 
   /**
@@ -130,7 +159,7 @@ class TokenStack {
    * @method consume
    * @memberof TokenStack
    *
-   * @param {String|RegExp|TokenStack~match|Array} [pattern=/^[\s\S]$/g] - pattern
+   * @param {String|RegExp|TokenStack~match|Array} [pattern=/^[\s\S]$/] - pattern
    * @param {Object} options
    * @param {Boolean} [options.inverse=false] - invert pattern
    * @param {Number} [options.min=0] - mininum number of consumed tokens
