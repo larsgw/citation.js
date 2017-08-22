@@ -37,7 +37,7 @@ class TokenStack {
    * @static
    * @memberof TokenStack
    *
-   * @param {String|RegExp|TokenStack~match|Array} pattern - pattern
+   * @param {TokenStack~pattern} pattern - pattern
    *
    * @return {TokenStack~match} Match callback
    */
@@ -72,7 +72,7 @@ class TokenStack {
    * @method matches
    * @memberof TokenStack
    *
-   * @param {String|RegExp|TokenStack~match|Array} pattern - pattern
+   * @param {TokenStack~pattern} pattern - pattern
    *
    * @return {Boolean} match
    */
@@ -81,12 +81,29 @@ class TokenStack {
   }
 
   /**
+   * Match current token against pattern.
+   *
+   * @method matches
+   * @memberof TokenStack
+   *
+   * @param {TokenStack~sequence} pattern - pattern
+   *
+   * @return {Boolean} match
+   */
+  matchesSequence (sequence) {
+    const part = this.stack.slice(this.index, this.index + sequence.length).join('')
+    return typeof sequence === 'string'
+      ? part === sequence
+      : sequence.every((pattern, index) => TokenStack.getMatchCallback(pattern)(part[index]))
+  }
+
+  /**
    * Consume a single token if possible, and throw if not.
    *
    * @method consumeToken
    * @memberof TokenStack
    *
-   * @param {String|RegExp|TokenStack~match|Array} [pattern=/^[\s\S]$/] - pattern
+   * @param {TokenStack~pattern} [pattern=/^[\s\S]$/] - pattern
    * @param {Object} options
    * @param {Boolean} [options.inverse=false] - invert pattern
    * @param {Boolean} [options.spaced=true] - allow leading and trailing whitespace
@@ -120,7 +137,7 @@ class TokenStack {
    * @method consumeToken
    * @memberof TokenStack
    *
-   * @param {String|RegExp|TokenStack~match|Array} [pattern=/^\s$/] - whitespace pattern
+   * @param {TokenStack~pattern} [pattern=/^\s$/] - whitespace pattern
    * @param {Object} options
    * @param {Boolean} [options.optional=true] - allow having no whitespace
    *
@@ -154,12 +171,31 @@ class TokenStack {
   }
 
   /**
+   * Consume a pattern spanning multiple tokens ('sequence').
+   *
+   * @method consumeSequence
+   * @memberof TokenStack
+   *
+   * @param {TokenStack~sequence} sequence - sequence
+   *
+   * @return {String} consumed tokens
+   * @throws {SyntaxError} Expected sequence, got tokens
+   */
+  consumeSequence (sequence) {
+    if (this.matchesSequence(sequence)) {
+      return this.consumeN(sequence.length)
+    } else {
+      throw new SyntaxError(`Expected "${sequence}", got "${this.consumeN(sequence.length)}"`)
+    }
+  }
+
+  /**
    * Consumes all consecutive tokens matching pattern. Throws if number of matched tokens not within range min-max.
    *
    * @method consume
    * @memberof TokenStack
    *
-   * @param {String|RegExp|TokenStack~match|Array} [pattern=/^[\s\S]$/] - pattern
+   * @param {TokenStack~pattern} [pattern=/^[\s\S]$/] - pattern
    * @param {Object} options
    * @param {Boolean} [options.inverse=false] - invert pattern
    * @param {Number} [options.min=0] - mininum number of consumed tokens

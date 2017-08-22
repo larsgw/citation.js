@@ -7,3 +7,17 @@
  *
  * @class CSL
  */
+
+/**
+ * TokenStack pattern
+ *
+ * @class TokenStack~pattern
+ * @type {String|RegExp|TokenStack~match|Array}
+ */
+
+/**
+ * TokenStack pattern sequence
+ *
+ * @class TokenStack~sequence
+ * @type {String|Array<TokenStack~pattern>}
+ */

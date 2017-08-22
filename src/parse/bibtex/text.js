@@ -104,13 +104,12 @@ const parseBibTeX = function (str) {
         stack.consumeToken('=')
 
         const startDelimiter = stack.consume(/^({|"|)$/g)
+        const endDelimiter = delimiters[startDelimiter]
 
         if (!delimiters.hasOwnProperty(startDelimiter)) {
           throw new SyntaxError(`Unexpected field delimiter at index ${stack.index}. Expected ` +
-            `${Object.keys(delimiters).map(function (v) { return `"${v}"` }).join(', ')}; got "${startDelimiter}"`)
+            `${Object.keys(delimiters).map(v => `"${v}"`).join(', ')}; got "${startDelimiter}"`)
         }
-
-        const endDelimiter = delimiters[startDelimiter]
 
         const tokenMap = token => {
           if (varBibTeXTokens.hasOwnProperty(token)) {
@@ -134,12 +133,8 @@ const parseBibTeX = function (str) {
             throw new SyntaxError(`Unmatched delimiter at index ${stack.index}: Expected ${endDelimiter}`)
           } else if (!endDelimiter.length) {
             return ![whitespace, syntax].some(rgx => rgx.test(token))
-          } else if (token === '}' && openBrackets) {
-            openBrackets--
-            return true
           } else {
-            token = stack.stack.slice(index, index + endDelimiter.length).join('')
-            return token !== endDelimiter
+            return (token === '}' && openBrackets--) || !stack.matchesSequence(endDelimiter)
           }
         }, {tokenMap})
 
