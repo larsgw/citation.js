@@ -30,7 +30,7 @@ const parseBibTeXJSON = function (data) {
     }
 
     newEntry.type = parseBibTeXType(entry.type)
-    newEntry.id = newEntry.label = entry.label
+    newEntry.id = newEntry._label = entry.label
 
     toMerge.forEach(([cslField, value]) => {
       const props = cslField.split(/:|\./g)

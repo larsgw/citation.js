@@ -16,7 +16,7 @@ const parseWikidataJSON = function (data) {
     const {labels, claims} = data.entities[entityKey]
     const entity = wdk.simplifyClaims(claims, null, null, true)
     const json = {
-      wikiId: entityKey,
+      _wikiId: entityKey,
       id: entityKey
     }
 

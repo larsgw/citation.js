@@ -86,7 +86,7 @@
       "id": "Q21972834",
       "simple": [
         {
-          "wikiId": "Q21972834",
+          "_wikiId": "Q21972834",
           "id": "Q21972834",
           "type": "article-journal",
           "title": "Assembling the 20 Gb white spruce (Picea glauca) genome from whole-genome shotgun sequencing data",
@@ -126,7 +126,7 @@
       ],
       "author": [
         {
-          "wikiId": "Q27795847",
+          "_wikiId": "Q27795847",
           "id": "Q27795847",
           "type": "article-journal",
           "issued": {
@@ -182,7 +182,7 @@
     "bibtex": {
       "simple": [
         {
-          "label": "Steinbeck2003",
+          "_label": "Steinbeck2003",
           "type": "article-journal",
           "author": [
             {"given": "Christoph", "family": "Steinbeck"},
@@ -207,7 +207,7 @@
       ],
       "whitespace": [
         {
-          "label": "Ekstrand:2009:RYD",
+          "_label": "Ekstrand:2009:RYD",
           "type": "paper-conference",
           "author": [
             {"given": "Michael D.", "family": "Ekstrand"},
@@ -227,7 +227,7 @@
         }
       ],
       "literals": [{
-        "label": "b",
+        "_label": "b",
         "id": "b",
         "type": "book",
         "author": [
@@ -240,7 +240,7 @@
         }
       }],
       "yearMonthNeeded": [{
-        "label": "b",
+        "_label": "b",
         "id": "b",
         "type": "book",
         "issued": {
@@ -248,7 +248,7 @@
         }
       }],
       "yearMonth": [{
-        "label": "b",
+        "_label": "b",
         "id": "b",
         "type": "book",
         "issued": {
@@ -266,7 +266,7 @@
       "publisher-place": "Stuttgart",
       "type": "book",
       "id": "Fau86",
-      "label": "Fau86"
+      "_label": "Fau86"
     },
     "bibjson": {
       "simple": [
