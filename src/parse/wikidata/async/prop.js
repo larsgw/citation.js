@@ -1,8 +1,7 @@
 import wdk from 'wikidata-sdk'
 import fetchFileAsync from '../../../util/fetchFileAsync'
 
-import fetchWikidataType from '../type'
-import parseDate from '../../date'
+import parseWikidataProp from '../prop'
 import parseName from '../../name'
 
 /**
@@ -39,125 +38,24 @@ const parseWikidataP1545 = qualifiers => qualifiers.P1545 ? parseInt(qualifiers.
  * @return {Array<String>} Array with new prop and value
  */
 const parseWikidataPropAsync = async function (prop, value, lang) {
-  switch (prop) {
-    case 'P50':
-    case 'P2093':
-      value = value.slice()
-      break
-
-    default:
-      value = value.length ? value[0].value : undefined
-      break
-  }
-
-  let rProp = ''
-  let rValue = value
-
-  switch (prop) {
-    // Author ( q )
-    case 'P50':
-      rProp = 'authorQ'
-      rValue = await Promise.all(value.map(async function ({value, qualifiers}) {
-        return [
+  const cslValue = await (async (prop, value) => {
+    switch (prop) {
+      case 'P50':
+        return Promise.all(value.map(async ({value, qualifiers}) => [
           parseName((await fetchWikidataLabelAsync(value, lang))[0]),
           parseWikidataP1545(qualifiers)
-        ]
-      }))
-      break
+        ]))
 
-    // Author ( s )
-    case 'P2093':
-      rProp = 'authorS'
-      rValue = value.map(({value, qualifiers}) => [parseName(value), parseWikidataP1545(qualifiers)])
-      break
+      case 'P1433':
+        return (await fetchWikidataLabelAsync(value, lang))[0]
+    }
+  })(prop, value)
 
-    // Date
-    case 'P580':
-    case 'P585':
-      rProp = 'accessed'
-      rValue = parseDate(value)
-      break
-
-    // DOI
-    case 'P356':
-      rProp = 'DOI'
-      break
-
-    // Instance of
-    case 'P31':
-      rProp = 'type'
-      rValue = fetchWikidataType(value)
-
-      if (rValue === undefined) {
-        console.warn('[set]', `This entry type is not recognized and therefore interpreted as 'article-journal': ${value}`)
-        rValue = 'article-journal'
-      }
-      break
-
-    // ISBN 13 & 10
-    case 'P212':
-    case 'P957':
-      rProp = 'ISBN'
-      break
-
-    // Issue
-    case 'P433':
-      rProp = 'issue'
-      break
-
-    // Journal
-    case 'P1433':
-      rProp = 'container-title'
-      rValue = (await fetchWikidataLabelAsync(value, lang))[0]
-      break
-
-    // Pages
-    case 'P304':
-      rProp = 'page'
-      break
-
-    // Print/edition
-    case 'P393':
-      rProp = 'edition'
-      break
-
-    // Pubdate
-    case 'P577':
-      rProp = 'issued'
-      rValue = parseDate(value)
-      break
-
-    // Title
-    case 'P1476':
-      rProp = 'title'
-      break
-
-    // URL
-    case 'P953': // (full work available at)
-      rProp = 'URL'
-      break
-
-    // Volume
-    case 'P478':
-      rProp = 'volume'
-      break
-
-    case 'P2860': // Cites
-    case 'P921':  // Main subject
-    case 'P3181': // OpenCitations bibliographic resource ID
-    case 'P364':  // Original language of work
-    case 'P698':  // PMID
-    case 'P932':  // PMCID
-    case 'P1104': // Number of pages
-      // Property ignored
-      break
-
-    default:
-      console.info('[set]', `Unknown property: ${prop}`)
-      break
+  if (cslValue) {
+    return [parseWikidataProp(prop), cslValue]
+  } else {
+    return parseWikidataProp(prop, value, lang)
   }
-
-  return [rProp, rValue]
 }
 
 export default parseWikidataPropAsync

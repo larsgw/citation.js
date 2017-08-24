@@ -21,26 +21,19 @@ const parseWikidataJSON = function (data) {
     }
 
     Object.keys(entity).forEach((prop) => {
-      const value = entity[prop]
-      const [resProp, resValue] = parseWikidataProp(prop, value, 'en')
-      if (resProp.length > 0) {
-        json[resProp] = resValue
+      const field = parseWikidataProp(prop, entity[prop], 'en')
+      if (field) {
+        const [fieldName, fieldValue] = field
+
+        if (Array.isArray(json[fieldName])) {
+          json[fieldName] = json[fieldName].concat(fieldValue)
+        } else if (fieldValue !== undefined) {
+          json[fieldName] = fieldValue
+        }
       }
     })
 
-    // It still has to combine authors from string value and numeric-id value :(
-    if (json.hasOwnProperty('authorQ') || json.hasOwnProperty('authorS')) {
-      if (json.hasOwnProperty('authorQ') && json.hasOwnProperty('authorS')) {
-        json.author = json.authorQ.concat(json.authorS)
-        delete json.authorQ
-        delete json.authorS
-      } else if (json.hasOwnProperty('authorQ')) {
-        json.author = json.authorQ
-        delete json.authorQ
-      } else if (json.hasOwnProperty('authorS')) {
-        json.author = json.authorS
-        delete json.authorS
-      }
+    if (Array.isArray(json.author)) {
       json.author = json.author.sort((a, b) => a[1] - b[1]).map(v => v[0])
     }
 

@@ -16,27 +16,24 @@ const parseWikidataJSONAsync = async function (data) {
     const {labels, claims} = data.entities[entityKey]
     const entity = wdk.simplifyClaims(claims, null, null, true)
     const json = {
-      wikiId: entityKey,
+      _wikiId: entityKey,
       id: entityKey
     }
 
-    const props = await Promise.all(Object.keys(entity)
-      .map(prop => parseWikidataPropAsync(prop, entity[prop], 'en')))
-    props.forEach(([resProp, resValue]) => { if (resProp.length > 0) { json[resProp] = resValue } })
+    await Promise.all(Object.keys(entity).map(async prop => {
+      const field = await parseWikidataPropAsync(prop, entity[prop], 'en')
+      if (field) {
+        const [fieldName, fieldValue] = field
 
-    // It still has to combine authors from string value and numeric-id value :(
-    if (json.hasOwnProperty('authorQ') || json.hasOwnProperty('authorS')) {
-      if (json.hasOwnProperty('authorQ') && json.hasOwnProperty('authorS')) {
-        json.author = json.authorQ.concat(json.authorS)
-        delete json.authorQ
-        delete json.authorS
-      } else if (json.hasOwnProperty('authorQ')) {
-        json.author = json.authorQ
-        delete json.authorQ
-      } else if (json.hasOwnProperty('authorS')) {
-        json.author = json.authorS
-        delete json.authorS
+        if (Array.isArray(json[fieldName])) {
+          json[fieldName] = json[fieldName].concat(fieldValue)
+        } else if (fieldValue !== undefined) {
+          json[fieldName] = fieldValue
+        }
       }
+    }))
+
+    if (Array.isArray(json.author)) {
       json.author = json.author.sort((a, b) => a[1] - b[1]).map(v => v[0])
     }
 

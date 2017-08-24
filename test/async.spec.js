@@ -10,7 +10,7 @@ describe('.async()', () => {
       return new Promise(resolve => {
         Cite.async(input.wd.url, data => {
           expect(data).to.be.a(Cite)
-          expect(data.data[0].wikiId).to.be(output.wd.id)
+          expect(data.data).to.eql(output.wd.simple)
           resolve()
         })
       })
@@ -31,7 +31,7 @@ describe('.async()', () => {
     it('works', async () => {
       const data = await Cite.async(input.wd.url)
       expect(data).to.be.a(Cite)
-      expect(data.data[0].wikiId).to.be(output.wd.id)
+      expect(data.data).to.eql(output.wd.simple)
     })
 
     it('works with options', async () => {

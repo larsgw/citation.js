@@ -37,135 +37,105 @@ const fetchWikidataLabel = function (q, lang) {
 const parseWikidataP1545 = qualifiers => qualifiers.P1545 ? parseInt(qualifiers.P1545[0]) : -1
 
 /**
+ * Map holding information on Wikidata fields.
+ *
+ *  * If false, field should be ignored
+ *  * If string, use as field name
+ *
+ * @access private
+ * @constant propMap
+ * @default
+ */
+const propMap = {
+  P31: 'type',
+  P50: 'author',
+  P212: 'ISBN',
+  P304: 'page',
+  P356: 'DOI',
+  P393: 'edition',
+  P433: 'issue',
+  P478: 'volume',
+  P577: 'issued',
+  P580: 'accessed',
+  P585: 'accessed',
+  P953: 'URL',
+  P957: 'ISBN',
+  P1433: 'container-title',
+  P1476: 'title',
+  P2093: 'author',
+
+  // ignore
+  P2860: false, // Cites
+  P921: false,  // Main subject
+  P3181: false, // OpenCitations bibliographic resource ID
+  P364: false,  // Original language of work
+  P698: false,  // PMID
+  P932: false,  // PMCID
+  P1104: false  // Number of pages
+}
+
+/**
  * Transform property and value from Wikidata format to CSL
  *
  * @access protected
  * @method parseWikidataProp
  *
- * @param {String} prop - Property
- * @param {String|Number} value - Value
- * @param {String} lang - Language
+ * @param {String} name - Property name
+ * @param {String|Number} [value] - Value
+ * @param {String} [lang] - Language
  *
- * @return {Array<String>} Array with new prop and value
+ * @return {Array<String>|String} Array with new prop and value or just the prop when function is called without value
  */
-const parseWikidataProp = function (prop, value, lang) {
-  switch (prop) {
-    case 'P50':
-    case 'P2093':
-      value = value.slice()
-      break
-
-    default:
-      value = value.length ? value[0].value : undefined
-      break
+const parseWikidataProp = function (name, value, lang) {
+  if (!propMap.hasOwnProperty(name)) {
+    console.info('[set]', `Unknown property: ${name}`)
+    return undefined
+  } else if (propMap[name] === false) {
+    return undefined
   }
 
-  let rProp = ''
-  let rValue = value
+  const cslProp = propMap[name]
 
-  switch (prop) {
-    // Author ( q )
-    case 'P50':
-      rProp = 'authorQ'
-      rValue = value.map(({value, qualifiers}) => [
-        parseName(fetchWikidataLabel(value, lang)[0]),
-        parseWikidataP1545(qualifiers)
-      ])
-      break
-
-    // Author ( s )
-    case 'P2093':
-      rProp = 'authorS'
-      rValue = value.map(({value, qualifiers}) => [parseName(value), parseWikidataP1545(qualifiers)])
-      break
-
-    // Date
-    case 'P580':
-    case 'P585':
-      rProp = 'accessed'
-      rValue = parseDate(value)
-      break
-
-    // DOI
-    case 'P356':
-      rProp = 'DOI'
-      break
-
-    // Instance of
-    case 'P31':
-      rProp = 'type'
-      rValue = fetchWikidataType(value)
-
-      if (rValue === undefined) {
-        console.warn('[set]', `This entry type is not recognized and therefore interpreted as 'article-journal': ${value}`)
-        rValue = 'article-journal'
-      }
-      break
-
-    // ISBN 13 & 10
-    case 'P212':
-    case 'P957':
-      rProp = 'ISBN'
-      break
-
-    // Issue
-    case 'P433':
-      rProp = 'issue'
-      break
-
-    // Journal
-    case 'P1433':
-      rProp = 'container-title'
-      rValue = fetchWikidataLabel(value, lang)[0]
-      break
-
-    // Pages
-    case 'P304':
-      rProp = 'page'
-      break
-
-    // Print/edition
-    case 'P393':
-      rProp = 'edition'
-      break
-
-    // Pubdate
-    case 'P577':
-      rProp = 'issued'
-      rValue = parseDate(value)
-      break
-
-    // Title
-    case 'P1476':
-      rProp = 'title'
-      break
-
-    // URL
-    case 'P953': // (full work available at)
-      rProp = 'URL'
-      break
-
-    // Volume
-    case 'P478':
-      rProp = 'volume'
-      break
-
-    case 'P2860': // Cites
-    case 'P921':  // Main subject
-    case 'P3181': // OpenCitations bibliographic resource ID
-    case 'P364':  // Original language of work
-    case 'P698':  // PMID
-    case 'P932':  // PMCID
-    case 'P1104': // Number of pages
-      // Property ignored
-      break
-
-    default:
-      console.info('[set]', `Unknown property: ${prop}`)
-      break
+  if (!value) {
+    return cslProp
   }
 
-  return [rProp, rValue]
+  const cslValue = ((prop, valueList) => {
+    const value = valueList[0].value
+
+    switch (prop) {
+      case 'P31':
+        const type = fetchWikidataType(value)
+
+        if (!type) {
+          console.warn('[set]', `Wikidata entry type not recogniszed: ${value}. Defaulting to "article-journal".`)
+        }
+
+        return type
+
+      case 'P50':
+        return valueList.map(({value, qualifiers}) => [
+          parseName(fetchWikidataLabel(value, lang)[0]),
+          parseWikidataP1545(qualifiers)
+        ])
+
+      case 'P577':
+      case 'P580':
+      case 'P585':
+        return parseDate(value)
+
+      case 'P1433':
+        return fetchWikidataLabel(value, lang)[0]
+
+      case 'P2093':
+        return valueList.map(({value, qualifiers}) => [parseName(value), parseWikidataP1545(qualifiers)])
+
+      default:
+        return value
+    }
+  })(name, value)
+
+  return [cslProp, cslValue]
 }
 
 export default parseWikidataProp
