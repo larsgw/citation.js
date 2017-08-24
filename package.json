@@ -8,6 +8,7 @@
     "test": "test/",
     "lib": "src/"
   },
+  "homepage": "https://citation.js.org",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/larsgw/citation.js.git"
