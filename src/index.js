@@ -38,7 +38,16 @@ import * as version from './version'
 import async from './async/index'
 import Cite from './Cite/index'
 
-Object.assign(Cite, {async: async, get, CSL, parse, util, version})
+Object.assign(Cite, {
+  async: async,
+  get,
+  CSL,
+  parse,
+  util,
+  version,
+  normalise: parse.input.chain,
+  normaliseAsync: parse.input.async.chain
+})
 deepFreeze(Cite)
 
 module.exports = Cite
