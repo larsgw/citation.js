@@ -1,6 +1,6 @@
 import striptags from 'striptags'
 
-import { getPrefixedEntry } from '../util/attr.js'
+import { getPrefixedEntry, getWrappedEntry } from '../util/attr.js'
 
 import getBibTeXJSON from '../get/bibtex/json'
 import getBibTeX from '../get/bibtex/text'
@@ -39,7 +39,7 @@ const getIds = function () {
  * @return {String|Array<Object>} The formatted data
  */
 const get = function (options = {}) {
-  const {format, type, style, lang} = Object.assign({}, this.defaultOptions, this._options, options)
+  const {format, type, style, lang, append, prepend} = Object.assign({}, this.defaultOptions, this._options, options)
   const [, styleType, styleFormat] = style.match(/^([^-]+)(?:-(.+))?$/)
 
   const data = parseCsl(this.data)
@@ -54,10 +54,15 @@ const get = function (options = {}) {
       const citeproc = fetchCSLEngine(styleFormat, useLang, useTemplate, cbItem, fetchCSLLocale)
       const sortedIds = citeproc.updateItems(this.getIds())
 
-      let [{bibstart: bibStart, bibend: bibEnd}, bibBody] = citeproc.makeBibliography()
-      bibBody = bibBody.map((element, index) => getPrefixedEntry(element, sortedIds[index]))
+      const [{bibstart: bibStart, bibend: bibEnd}, bibBody] = citeproc.makeBibliography()
+      let entries = bibBody.map((element, index) => getPrefixedEntry(element, sortedIds[index]))
 
-      result = `${bibStart}${bibBody.join('<br />')}${bibEnd}`
+      if (append || prepend) {
+        const sortedItems = sortedIds.map(itemId => this.data.find(({id}) => id === itemId))
+        entries = entries.map((element, index) => getWrappedEntry(element, sortedItems[index], {append, prepend}))
+      }
+
+      result = `${bibStart}${entries.join('<br />')}${bibEnd}`
       break
 
     case 'html,csl':

@@ -1,4 +1,4 @@
-/* global describe, it */
+/* global describe, context, it */
 
 import expect from 'expect.js'
 import Cite from './cite'
@@ -83,6 +83,20 @@ describe('output', () => {
         })
 
         testCaseGenerator(data, opts('string', 'html', 'citation-apa', 'custom'), output.csl.html.locale)()
+      })
+
+      describe('pre/append', () => {
+        context('static',
+          testCaseGenerator(
+            data,
+            {format: 'string', type: 'html', style: 'citation-apa', append: 'b', prepend: 'a'},
+            output.csl.html.wrappedStatic))
+
+        context('dynamic',
+          testCaseGenerator(
+            data,
+            {format: 'string', type: 'html', style: 'citation-apa', append: ({volume}) => volume, prepend: ({issue}) => issue},
+            output.csl.html.wrappedDynamic))
       })
     })
 
