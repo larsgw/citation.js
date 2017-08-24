@@ -2,12 +2,6 @@ import parseInputAsync from '../parse/input/async/chain'
 import Cite from '../Cite/index'
 
 /**
- * @callback Cite~asyncCite
- *
- * @param {Cite} data - Cite object
- */
-
-/**
  * @access private
  * @method asyncCite
  *
@@ -25,7 +19,7 @@ const asyncCite = async function (promise, options) {
  *
  * @param {String|CSL|Object|Array<String>|Array<CSL>|Array<Object>} data - Input data.
  * @param {Object} [options={}] - The options for the output. See [input options](../#citation.cite.in.options).
- * @param {Cite~asyncCite} callback - if not give, function returns promise.
+ * @param {Cite~asyncCite} [callback] - if not given, function returns promise.
  * @return {Promise} If callback is not given, it returns a Promise. Else returns undefined.
  */
 const async = function (data, options, callback) {

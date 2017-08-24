@@ -48,6 +48,35 @@ describe('Cite instance', () => {
       })
     })
 
+    describe('addAsync()', () => {
+      it('works', async () => {
+        await test.addAsync(input.empty)
+        expect(test.data).to.have.length(2)
+        expect(test.log).to.have.length(1)
+      })
+
+      it('saves', async () => {
+        await test.addAsync(input.empty, true)
+        expect(test.data).to.have.length(2)
+        expect(test.log).to.have.length(2)
+      })
+    })
+
+    describe('setAsync()', () => {
+      it('works', async () => {
+        await test.setAsync(input.ids)
+        expect(test.data).to.have.length(2)
+        expect(test.data).to.eql(input.ids)
+        expect(test.log).to.have.length(1)
+      })
+
+      it('saves', async () => {
+        await test.setAsync(input.empty, true)
+        expect(test.data).to.have.length(1)
+        expect(test.log).to.have.length(2)
+      })
+    })
+
     describe('reset()', () => {
       it('works', () => {
         test.reset()

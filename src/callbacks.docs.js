@@ -22,6 +22,11 @@
  */
 
 /**
+ * @callback Cite~asyncCite
+ * @param {Cite} data - Cite object
+ */
+
+/**
  * @callback TokenStack~match
  * @param {String} token - token
  * @param {Number} index - token index
