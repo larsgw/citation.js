@@ -6,7 +6,7 @@
  * @projectname Citation.js
  *
  * @author Lars Willighagen
- * @version 0.3.0-7
+ * @version 0.3.0-13
  * @license
  * Copyright (c) 2016-2017 Lars Willighagen
  *
