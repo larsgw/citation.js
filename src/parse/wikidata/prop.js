@@ -108,7 +108,7 @@ const parseWikidataProp = function (name, value, lang) {
         const type = fetchWikidataType(value)
 
         if (!type) {
-          console.warn('[set]', `Wikidata entry type not recogniszed: ${value}. Defaulting to "article-journal".`)
+          console.warn('[set]', `Wikidata entry type not recognized: ${value}. Defaulting to "article-journal".`)
         }
 
         return type

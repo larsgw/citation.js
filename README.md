@@ -166,6 +166,8 @@ These are the default options for using `.get()`. More options will follow.
   2. `type`: The output type: `"html"`, `"string"` or `"json"` (default).
   3. `style`: The output style. See [Output](#cite.out). `"csl"` is default
   4. `lang`: The language of the output. [RFC 5646](https://tools.ietf.org/html/rfc5646) codes. Currently supported: `"en-US"` (default), `"fr-FR"`, `"es-ES"` ,`"de-DE"` and `"nl-NL"`
+  5. `prepend`: Function taking source CSL-JSON as input or constant string to prepend to each element
+  6. `append`: Same, but appending
 
 ### <a id="cite.out" href="#cite.out">Ouput</a>
 
@@ -251,6 +253,8 @@ data.get({
 * `.save()`: Save the current object
 * `.sort()`: Sort all entries on basis of their BibTeX label
 
+`.set()` and `.get()` also have async variants (append `Async` to the function name), which return Promises.
+
 #### <a id="cite.misc.iterator" href="#cite.misc.iterator">Iterator</a>
 
 Every `Cite` instance is an Iterator, so you can loop over an instance with `for of`:
@@ -273,7 +277,7 @@ array // [1, 2, 3]
 Note that most `get*` functions expect CSL-JSON normalised with `Cite.parse.csl: [Function: parseCsl]`.
 
 ```js
-{
+{ [Function: Cite]
   async: [Function: async],
   get: 
    { bibtex: 
@@ -282,7 +286,9 @@ Note that most `get*` functions expect CSL-JSON normalised with `Cite.parse.csl:
         label: [Function: getBibTeXLabel],
         type: [Function: fetchBibTeXType] },
      bibtxt: [Function: getBibTxt],
-     dict: { htmlDict: [Object], textDict: [Object] },
+     dict: 
+      { htmlDict: [Object],
+        textDict: [Object] },
      json: [Function: getJSON],
      date: [Function: getDate],
      name: [Function: getName],
@@ -337,11 +343,16 @@ Note that most `get*` functions expect CSL-JSON normalised with `Cite.parse.csl:
   util: 
    { attr: 
       { getAttributedEntry: [Function: getAttributedEntry],
-        getPrefixedEntry: [Function: getPrefixedEntry] },
+        getPrefixedEntry: [Function: getPrefixedEntry],
+        getWrappedEntry: [Function: getWrappedEntry] },
      deepCopy: [Function: deepCopy],
      fetchFile: [Function: fetchFile],
      fetchFileAsync: [Function: fetchFileAsync],
-     fetchId: [Function: fetchId] } }
+     fetchId: [Function: fetchId],
+     TokenStack: [Function: TokenStack] },
+  version: { cite: '0.3.0-14', citeproc: '1.1.169' },
+  normalise: [Function: parseInput],
+  normaliseAsync: [Function: parseInputAsync] }
 ```
 
 ## <a id="async" href="#async">Async</a>
