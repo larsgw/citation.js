@@ -1,12 +1,22 @@
+# node
 npm-debug.log
 npm-debug.log.*
 node_modules/
-dev/api/
+
+# dev
+dev/
+
+# generated site content
 build/
 coverage/
 docs/src/
 docs/api/
 docs/disc/
+
+# coverage
 .nyc_output/
+coverage.lcov
+
+# not really needed, is it?
 .directory
 

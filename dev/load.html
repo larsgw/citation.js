@@ -1,8 +1,0 @@
-<script>
-window.onload = () => {
-  const t = document.createElement('script')
-  t.setAttribute('type', 'text/javascript')
-  t.setAttribute('src', location.href.match(/[&?]script=((?!(?:\w+:)?\/\/).*?\.js)(?:[&#]|$)/)[1])
-  document.body.appendChild(t)
-}
-</script>
