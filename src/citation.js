@@ -26986,7 +26986,7 @@ var encodeCharacter = function encodeCharacter(c) {
 },{}],332:[function(require,module,exports){
 module.exports={
   "name": "citation-js",
-  "version": "0.3.0-12",
+  "version": "0.3.0",
   "description": "Citation.js converts formats like BibTeX, Wikidata JSON and ContentMine JSON to CSL-JSON to convert to other formats like APA, Vancouver and back to BibTeX.",
   "main": "lib/index.js",
   "directories": {
@@ -26994,6 +26994,7 @@ module.exports={
     "test": "test/",
     "lib": "src/"
   },
+  "homepage": "https://citation.js.org/",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/larsgw/citation.js.git"
@@ -27083,8 +27084,7 @@ module.exports={
   },
   "engines": {
     "node": ">=6.0.0"
-  },
-  "homepage": "https://larsgw.github.io/citation.js/"
+  }
 }
 
 },{}],333:[function(require,module,exports){
@@ -27189,7 +27189,7 @@ Object.defineProperty(exports, "__esModule", {
  * @access protected
  * @method fetchCSLItemCallback
  *
- * @param {CSL[]} data - CSL array
+ * @param {Array<CSL>} data - CSL array
  *
  * @return {Cite~retrieveItem} Code to retreive item
  */
@@ -27473,7 +27473,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
  * @memberof Cite
  * @this Cite
  *
- * @return {String[]} List of IDs
+ * @return {Array<String>} List of IDs
  */
 var getIds = function getIds() {
   return this.data.map(function (entry) {
@@ -27490,16 +27490,20 @@ var getIds = function getIds() {
  *
  * @param {Object} [options={}] - The options for the output. See [input options](../#citation.cite.in.options)
  *
- * @return {String|Object[]} The formatted data
+ * @return {String|Array<Object>} The formatted data
  */
 var get = function get() {
+  var _this = this;
+
   var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
 
   var _Object$assign = Object.assign({}, this.defaultOptions, this._options, options),
       format = _Object$assign.format,
       type = _Object$assign.type,
       style = _Object$assign.style,
-      lang = _Object$assign.lang;
+      lang = _Object$assign.lang,
+      append = _Object$assign.append,
+      prepend = _Object$assign.prepend;
 
   var _style$match = style.match(/^([^-]+)(?:-(.+))?$/),
       _style$match2 = _slicedToArray(_style$match, 3),
@@ -27525,11 +27529,23 @@ var get = function get() {
           bibEnd = _citeproc$makeBibliog3.bibend,
           bibBody = _citeproc$makeBibliog2[1];
 
-      bibBody = bibBody.map(function (element, index) {
+      var entries = bibBody.map(function (element, index) {
         return (0, _attr.getPrefixedEntry)(element, sortedIds[index]);
       });
 
-      result = '' + bibStart + bibBody.join('<br />') + bibEnd;
+      if (append || prepend) {
+        var sortedItems = sortedIds.map(function (itemId) {
+          return _this.data.find(function (_ref) {
+            var id = _ref.id;
+            return id === itemId;
+          });
+        });
+        entries = entries.map(function (element, index) {
+          return (0, _attr.getWrappedEntry)(element, sortedItems[index], { append: append, prepend: prepend });
+        });
+      }
+
+      result = '' + bibStart + entries.join('<br />') + bibEnd;
       break;
 
     case 'html,csl':
@@ -27628,7 +27644,7 @@ function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj;
  *
  * @description Create a `Cite` object with almost any kind of data, and manipulate it with its default methods.
  *
- * @param {String|CSL|Object|String[]|CSL[]|Object[]} data - Input data. If no data is passed, an empty object is returned
+ * @param {String|CSL|Object|Array<String>|Array<CSL>|Array<Object>} data - Input data. If no data is passed, an empty object is returned
  * @param {Object} options - The options for the output. See [input options](../#citation.cite.in.options).
  */
 function Cite(data, options) {
@@ -27657,7 +27673,7 @@ function Cite(data, options) {
    *
    * @memberof Cite
    * @access protected
-   * @type Object[]
+   * @type Array<Object>
    *
    * @property {Cite} 0 - The first image.
    */
@@ -27845,17 +27861,23 @@ exports.defaultOptions = defaultOptions;
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.reset = exports.set = exports.add = undefined;
+exports.reset = exports.setAsync = exports.set = exports.addAsync = exports.add = undefined;
 
 var _chain = require('../parse/input/chain');
 
 var _chain2 = _interopRequireDefault(_chain);
+
+var _chain3 = require('../parse/input/async/chain');
+
+var _chain4 = _interopRequireDefault(_chain3);
 
 var _fetchId = require('../util/fetchId');
 
 var _fetchId2 = _interopRequireDefault(_fetchId);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { step("next", value); }, function (err) { step("throw", err); }); } } return step("next"); }); }; }
 
 /**
  * Add an object to the array of objects
@@ -27864,7 +27886,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
  * @memberof Cite
  * @this Cite
  *
- * @param {String|CSL|Object|String[]|CSL[]|Object[]} data - The data to add to your object
+ * @param {String|CSL|Object|Array<String>|Array<CSL>|Array<Object>} data - The data to add to your object
  * @param {Boolean} [log=false] - Show this call in the log
  *
  * @return {Cite} The updated parent object
@@ -27888,13 +27910,67 @@ var add = function add(data, log) {
 };
 
 /**
+ * Add an object to the array of objects
+ *
+ * @method addAsync
+ * @memberof Cite
+ * @this Cite
+ *
+ * @param {String|CSL|Object|Array<String>|Array<CSL>|Array<Object>} data - The data to add to your object
+ * @param {Boolean} [log=false] - Show this call in the log
+ *
+ * @return {Cite} The updated parent object
+ */
+var addAsync = function () {
+  var _ref = _asyncToGenerator(regeneratorRuntime.mark(function _callee(data, log) {
+    var _this2 = this;
+
+    return regeneratorRuntime.wrap(function _callee$(_context) {
+      while (1) {
+        switch (_context.prev = _context.next) {
+          case 0:
+            if (log) {
+              this.save();
+            }
+
+            _context.t0 = this.data;
+            _context.next = 4;
+            return (0, _chain4.default)(data);
+
+          case 4:
+            _context.t1 = _context.sent;
+            this.data = _context.t0.concat.call(_context.t0, _context.t1);
+
+
+            this.data.filter(function (entry) {
+              return !entry.hasOwnProperty('id');
+            }).forEach(function (entry) {
+              entry.id = (0, _fetchId2.default)(_this2.getIds(), 'temp_id_');
+            });
+
+            return _context.abrupt('return', this);
+
+          case 8:
+          case 'end':
+            return _context.stop();
+        }
+      }
+    }, _callee, this);
+  }));
+
+  return function addAsync(_x, _x2) {
+    return _ref.apply(this, arguments);
+  };
+}();
+
+/**
  * Recreate a `Cite` object with almost any kind of data, and manipulate it with its default methods.
  *
  * @method set
  * @memberof Cite
  * @this Cite
  *
- * @param {String|CSL|Object|String[]|CSL[]|Object[]} data - The data to replace the data in your object
+ * @param {String|CSL|Object|Array<String>|Array<CSL>|Array<Object>} data - The data to replace the data in your object
  * @param {Boolean} [log=false] - Show this call in the log
  *
  * @return {Cite} The updated parent object
@@ -27909,6 +27985,48 @@ var set = function set(data, log) {
 
   return this;
 };
+
+/**
+ * Recreate a `Cite` object with almost any kind of data, and manipulate it with its default methods.
+ *
+ * @method setAsync
+ * @memberof Cite
+ * @this Cite
+ *
+ * @param {String|CSL|Object|Array<String>|Array<CSL>|Array<Object>} data - The data to replace the data in your object
+ * @param {Boolean} [log=false] - Show this call in the log
+ *
+ * @return {Cite} The updated parent object
+ */
+var setAsync = function () {
+  var _ref2 = _asyncToGenerator(regeneratorRuntime.mark(function _callee2(data, log) {
+    return regeneratorRuntime.wrap(function _callee2$(_context2) {
+      while (1) {
+        switch (_context2.prev = _context2.next) {
+          case 0:
+            if (log) {
+              this.save();
+            }
+
+            this.data = [];
+            _context2.next = 4;
+            return this.addAsync(data);
+
+          case 4:
+            return _context2.abrupt('return', this);
+
+          case 5:
+          case 'end':
+            return _context2.stop();
+        }
+      }
+    }, _callee2, this);
+  }));
+
+  return function setAsync(_x3, _x4) {
+    return _ref2.apply(this, arguments);
+  };
+}();
 
 /**
  * Reset a `Cite` object.
@@ -27933,10 +28051,12 @@ var reset = function reset(log) {
 };
 
 exports.add = add;
+exports.addAsync = addAsync;
 exports.set = set;
+exports.setAsync = setAsync;
 exports.reset = reset;
 
-},{"../parse/input/chain":382,"../util/fetchId":402}],346:[function(require,module,exports){
+},{"../parse/input/async/chain":378,"../parse/input/chain":382,"../util/fetchId":402}],346:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -28057,7 +28177,7 @@ var getSortCallback = function getSortCallback() {
  * @memberof Cite
  * @this Cite
  *
- * @param {Cite~sort|String[]} [method=[]] - How to sort
+ * @param {Cite~sort|Array<String>} [method=[]] - How to sort
  * @param {Boolean} [log=false] - Show this call in the log
  *
  * @return {Cite} The updated parent object
@@ -28095,12 +28215,6 @@ var _index2 = _interopRequireDefault(_index);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { step("next", value); }, function (err) { step("throw", err); }); } } return step("next"); }); }; }
-
-/**
- * @callback Cite~asyncCite
- *
- * @param {Cite} data - Cite object
- */
 
 /**
  * @access private
@@ -28142,9 +28256,9 @@ var asyncCite = function () {
  * @access public
  * @method async
  *
- * @param {String|CSL|Object|String[]|CSL[]|Object[]} data - Input data.
+ * @param {String|CSL|Object|Array<String>|Array<CSL>|Array<Object>} data - Input data.
  * @param {Object} [options={}] - The options for the output. See [input options](../#citation.cite.in.options).
- * @param {Cite~asyncCite} callback - if not give, function returns promise.
+ * @param {Cite~asyncCite} [callback] - if not given, function returns promise.
  * @return {Promise} If callback is not given, it returns a Promise. Else returns undefined.
  */
 var async = function async(data, options, callback) {
@@ -28382,7 +28496,7 @@ var varBibTeXSyntaxTokens = {
    * @access protected
    * @method getBibTeX
    *
-   * @param {CSL[]} src - Input CSL
+   * @param {Array<CSL>} src - Input CSL
    * @param {Boolean} html - Output as HTML string (instead of plain text)
    *
    * @return {String} BibTeX (HTML) string
@@ -28492,7 +28606,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
  * @access protected
  * @method getBibTxt
  *
- * @param {CSL[]} src - Input CSL
+ * @param {Array<CSL>} src - Input CSL
  * @param {Boolean} html - Output as HTML string (instead of plain text)
  *
  * @return {String} BibTeX (HTML) string
@@ -28655,7 +28769,7 @@ var _dict = require('./dict');
  * @access private
  * @function getJSONObjectHTML
  *
- * @param {Object|Object[]|String[]|Number[]} src - The data
+ * @param {Object|Array<Object>|Array<String>|Array<Number>} src - The data
  *
  * @return {String} The html (in string form)
  */
@@ -28681,7 +28795,7 @@ var getJSONObjectHTML = function getJSONObjectHTML(src) {
  * @access private
  * @function getJSONValueHTML
  *
- * @param {Object|String|Number|Object[]|String[]|Number[]} src - The data
+ * @param {Object|String|Number|Array<Object>|Array<String>|Array<Number>} src - The data
  *
  * @return {String} The html (in string form)
  */
@@ -28705,7 +28819,7 @@ var getJSONValueHTML = function getJSONValueHTML(src) {
  * @access protected
  * @method getJSON
  *
- * @param {CSL[]} src - Input CSL
+ * @param {Array<CSL>} src - Input CSL
  *
  * @return {String} JSON HTML string
  */
@@ -28806,7 +28920,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
  *
  * @param {Object} data - The input data
  *
- * @return {CSL[]} The formatted input data
+ * @return {Array<CSL>} The formatted input data
  */
 var parseContentMine = function parseContentMine(data) {
   var res = {
@@ -28894,9 +29008,9 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
  * @access protected
  * @method parseBibTeXJSON
  *
- * @param {Object|Object[]} data - The input data
+ * @param {Object|Array<Object>} data - The input data
  *
- * @return {CSL[]} The formatted input data
+ * @return {Array<CSL>} The formatted input data
  */
 var parseBibTeXJSON = function parseBibTeXJSON(data) {
   return [].concat(data).map(function (entry) {
@@ -28921,7 +29035,7 @@ var parseBibTeXJSON = function parseBibTeXJSON(data) {
     }
 
     newEntry.type = (0, _type2.default)(entry.type);
-    newEntry.id = newEntry.label = entry.label;
+    newEntry.id = newEntry._label = entry.label;
 
     toMerge.forEach(function (_ref3) {
       var _ref4 = _slicedToArray(_ref3, 2),
@@ -29001,19 +29115,30 @@ var parseBibtexName = function parseBibtexName(name) {
  * @method parseBibtexNameList
  *
  * @param {String} list - list of names separated by ' and '
- * @return {Object[]} array of CSL name objects
+ * @return {Array<Object>} array of CSL name objects
  */
 var parseBibtexNameList = function parseBibtexNameList(list) {
   var literals = [];
+
+  // To split author names by ' and '  while supporting literal names like
+  // '{National Academy for Arts and Sciences}' (i.e. some name with ' and '
+  // in it), we first pick a escaping character ('%')...
+
+  // ...escape all '%'s and remove all literals ('{...}')...
   list = list.replace(/%/g, '%0').replace(/{.*?}/g, function (m) {
     return '%[' + (literals.push(m) - 1) + ']';
   });
-  return list.split(' and ').map(function (name) {
-    name = name.replace(/%\[(\d+)\]/, function (_, i) {
+
+  // ...split the string...
+  return list.split(' and ')
+  // ...re-insert all literals and unescape all '%'s...
+  .map(function (name) {
+    return name.replace(/%\[(\d+)\]/, function (_, i) {
       return literals[+i];
-    }).replace(/%0/g, '%%');
-    return parseBibtexName(name);
-  });
+    }).replace(/%0/g, '%');
+  })
+  // ...and parse the names to make sure literals are actually preserved.
+  .map(parseBibtexName);
 };
 
 /**
@@ -29070,7 +29195,7 @@ var propMap = {
    * @param {String} name - Field name
    * @param {String} value - Field value
    *
-   * @return {String[]} Array with new name and value
+   * @return {Array<String>} Array with new name and value
    */
 };var parseBibTeXProp = function parseBibTeXProp(name, value) {
   if (!propMap.hasOwnProperty(name)) {
@@ -29177,7 +29302,7 @@ var delimiters = {
    *
    * @param {String} str - Input BibTeX
    *
-   * @return {String[]} list of tokens
+   * @return {Array<String>} list of tokens
    */
 };var getTokenizedBibtex = function getTokenizedBibtex(str) {
   // Substitute command of form "\X{X}" into "{\X X}"
@@ -29195,7 +29320,7 @@ var delimiters = {
  *
  * @param {String} str - The input data
  *
- * @return {CSL[]} The formatted input data
+ * @return {Array<CSL>} The formatted input data
  */
 var parseBibTeX = function parseBibTeX(str) {
   var entries = [];
@@ -29203,42 +29328,35 @@ var parseBibTeX = function parseBibTeX(str) {
   var stack = new _stack2.default(tokens);
 
   try {
-    stack.consume(whitespace);
+    stack.consumeWhitespace();
 
     while (stack.tokensLeft()) {
-      stack.consumeToken('@');
-      stack.consume(whitespace);
+      stack.consumeToken('@', { spaced: false });
+      stack.consumeWhitespace();
 
       var type = stack.consume([whitespace, syntax], { inverse: true }).toLowerCase();
 
-      stack.consume(whitespace);
       stack.consumeToken('{');
-      stack.consume(whitespace);
 
       var label = stack.consume([whitespace, syntax], { inverse: true });
 
-      stack.consume(whitespace);
       stack.consumeToken(',');
-      stack.consume(whitespace);
 
       var properties = {};
 
       var _loop = function _loop() {
         var key = stack.consume([whitespace, '='], { inverse: true }).toLowerCase();
 
-        stack.consume(whitespace);
         stack.consumeToken('=');
-        stack.consume(whitespace);
 
         var startDelimiter = stack.consume(/^({|"|)$/g);
+        var endDelimiter = delimiters[startDelimiter];
 
         if (!delimiters.hasOwnProperty(startDelimiter)) {
           throw new SyntaxError('Unexpected field delimiter at index ' + stack.index + '. Expected ' + (Object.keys(delimiters).map(function (v) {
             return '"' + v + '"';
           }).join(', ') + '; got "' + startDelimiter + '"'));
         }
-
-        var endDelimiter = delimiters[startDelimiter];
 
         var tokenMap = function tokenMap(token) {
           if (_tokens2.default.hasOwnProperty(token)) {
@@ -29264,27 +29382,23 @@ var parseBibTeX = function parseBibTeX(str) {
             return ![whitespace, syntax].some(function (rgx) {
               return rgx.test(token);
             });
-          } else if (token === '}' && openBrackets) {
-            openBrackets--;
-            return true;
           } else {
-            token = stack.stack.slice(index, index + endDelimiter.length).join('');
-            return token !== endDelimiter;
+            return token === '}' && openBrackets-- || !stack.matchesSequence(endDelimiter);
           }
         }, { tokenMap: tokenMap });
 
         properties[key] = val;
 
         stack.consumeN(endDelimiter.length);
-        stack.consume(whitespace);
+        stack.consumeWhitespace();
 
         // Last entry (no trailing comma)
         if (stack.matches('}')) {
           return 'break';
         }
 
-        stack.consumeToken(',');
-        stack.consume(whitespace);
+        stack.consumeToken(',', { spaced: false });
+        stack.consumeWhitespace();
 
         // Last entry (trailing comma)
         if (stack.matches('}')) {
@@ -29298,8 +29412,8 @@ var parseBibTeX = function parseBibTeX(str) {
         if (_ret === 'break') break;
       }
 
-      stack.consumeToken('}');
-      stack.consume(whitespace);
+      stack.consumeToken('}', { spaced: false });
+      stack.consumeWhitespace();
 
       entries.push({ type: type, label: label, properties: properties });
     }
@@ -29438,54 +29552,51 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 /**
- * BibTeX pub type to CSL pub type
+ * Map holding information on BibTeX pub types.
  *
- * @access protected
- * @method parseBibTeXType
+ *  * If string, use as CSL type
+ *  * If false, type is known but has no (good) mapping
  *
- * @param {String} pubType - BibTeX type
- *
- * @return {String} CSL type
+ * @access private
+ * @constant typeMap
+ * @default
  */
-var parseBibTeXType = function parseBibTeXType(pubType) {
-  switch (pubType) {
-    case 'article':
-      return 'article-journal';
+var typeMap = {
+  article: 'article-journal',
+  book: 'book',
+  booklet: 'book',
+  proceedings: 'book',
+  manual: false,
+  mastersthesis: 'thesis',
+  misc: false,
+  inbook: 'chapter',
+  incollection: 'chapter',
+  conference: 'paper-conference',
+  inproceedings: 'paper-conference',
+  online: 'website',
+  patent: 'patent',
+  phdthesis: 'thesis',
+  techreport: 'report',
+  unpublished: 'manuscript'
 
-    case 'book':
-    case 'booklet':
-    case 'manual':
-    case 'misc':
-    case 'proceedings':
-      return 'book';
-
-    case 'inbook':
-    case 'incollection':
-      return 'chapter';
-
-    case 'conference':
-    case 'inproceedings':
-      return 'paper-conference';
-
-    case 'online':
-      return 'webpage';
-
-    case 'patent':
-      return 'patent';
-
-    case 'phdthesis':
-    case 'mastersthesis':
-      return 'thesis';
-
-    case 'techreport':
-      return 'report';
-
-    case 'unpublished':
-      return 'manuscript';
-
-    default:
-      console.warn('[set]', 'BibTeX publication type not recognized: ' + pubType + '. Interpreting as "book".');
-      return 'book';
+  /**
+   * BibTeX pub type to CSL pub type. Defaults to 'book'.
+   *
+   * @access protected
+   * @method parseBibTeXType
+   *
+   * @param {String} pubType - BibTeX type
+   *
+   * @return {String} CSL type
+   */
+};var parseBibTeXType = function parseBibTeXType(pubType) {
+  if (!typeMap.hasOwnProperty(pubType)) {
+    console.warn('[set]', 'BibTeX publication type not recognized: ' + pubType + '. Defaulting to "book".');
+    return 'book';
+  } else if (typeMap[pubType] === false) {
+    return 'book';
+  } else {
+    return typeMap[pubType];
   }
 };
 
@@ -29566,7 +29677,7 @@ var bibTxtRegex = {
  *
  * @param {String} src - The input data
  *
- * @return {Object[]} Array of BibTeX-JSON
+ * @return {Array<Object>} Array of BibTeX-JSON
  */
 var parseBibTxt = function parseBibTxt(src) {
   return src.trim().split(bibTxtRegex.splitEntries).map(parseBibTxtEntry);
@@ -29824,9 +29935,9 @@ var correctField = function correctField(fieldName, value) {
  * @access protected
  * @method parseCsl
  *
- * @param {CSL[]} data - Array of CSL
+ * @param {Array<CSL>} data - Array of CSL
  *
- * @return {CSL[]} Array of clean CSL
+ * @return {Array<CSL>} Array of clean CSL
  */
 var parseCsl = function parseCsl(data) {
   return data.map(function (entry) {
@@ -29917,9 +30028,9 @@ var fetchDoiApi = function fetchDoiApi(url) {
  * @access protected
  * @method parseDoiApi
  *
- * @param {String|String[]} data - DOIs
+ * @param {String|Array<String>} data - DOIs
  *
- * @return {CSL[]} Array of CSL
+ * @return {Array<CSL>} Array of CSL
  */
 var parseDoiApi = function parseDoiApi(data) {
   return [].concat(data).map(fetchDoiApi).map(_json2.default);
@@ -29999,9 +30110,9 @@ var fetchDoiApiAsync = function () {
  * @access protected
  * @method parseDoiApiAsync
  *
- * @param {String|String[]} data - DOIs
+ * @param {String|Array<String>} data - DOIs
  *
- * @return {CSL[]} Array of CSL
+ * @return {Array<CSL>} Array of CSL
  */
 var parseDoiApiAsync = function () {
   var _ref2 = _asyncToGenerator(regeneratorRuntime.mark(function _callee2(data) {
@@ -30062,7 +30173,7 @@ Object.defineProperty(exports, "__esModule", {
  *
  * @param {String} data - DOIs
  *
- * @return {String[]} DOI URLs
+ * @return {Array<String>} DOI URLs
  */
 var parseDoi = function parseDoi(data) {
   return data.split(/(?:\s+)/g).map(function (doi) {
@@ -30270,7 +30381,7 @@ function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, a
  * @access protected
  * @method parseInputAsync
  *
- * @param {String|String[]|Object|Object[]} input - The input data
+ * @param {String|Array<String>|Object|Array<Object>} input - The input data
  *
  * @return {Promise} The parsed input
  */
@@ -30354,7 +30465,7 @@ function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, a
  * @access protected
  * @method parseInputChainLinkAsync
  *
- * @param {String|String[]|Object|Object[]} input - The input data
+ * @param {String|Array<String>|Object|Array<Object>} input - The input data
  *
  * @return {Promise} The parsed input
  */
@@ -30427,10 +30538,10 @@ function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, a
  * @access protected
  * @method parseInputDataAsync
  *
- * @param {String|String[]|Object|Object[]} input - The input data
+ * @param {String|Array<String>|Object|Array<Object>} input - The input data
  * @param {String} type - The input type
  *
- * @return {CSL[]} The parsed input
+ * @return {Array<CSL>} The parsed input
  */
 var parseInputDataAsync = function () {
   var _ref = _asyncToGenerator(regeneratorRuntime.mark(function _callee(input, type) {
@@ -30540,9 +30651,9 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
  * @access protected
  * @method parseInput
  *
- * @param {String|String[]|Object|Object[]} input - The input data
+ * @param {String|Array<String>|Object|Array<Object>} input - The input data
  *
- * @return {CSL[]} The parsed input
+ * @return {Array<CSL>} The parsed input
  */
 var parseInput = function parseInput(input) {
   var output = input;
@@ -30590,9 +30701,9 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
  * @access protected
  * @method parseInputChainLink
  *
- * @param {String|String[]|Object|Object[]} input - The input data
+ * @param {String|Array<String>|Object|Array<Object>} input - The input data
  *
- * @return {CSL[]} The parsed input
+ * @return {Array<CSL>} The parsed input
  */
 var parseInputChainLink = function parseInputChainLink(input) {
   var output = input;
@@ -30668,10 +30779,10 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
  * @access protected
  * @method parseInputData
  *
- * @param {String|String[]|Object|Object[]} input - The input data
+ * @param {String|Array<String>|Object|Array<Object>} input - The input data
  * @param {String} type - The input type
  *
- * @return {CSL[]} The parsed input
+ * @return {Array<CSL>} The parsed input
  */
 var parseInputData = function parseInputData(input, type) {
   switch (type) {
@@ -30812,7 +30923,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
  * @access protected
  * @method parseInputType
  *
- * @param {String|String[]|Object|Object[]} input - The input data
+ * @param {String|Array<String>|Object|Array<Object>} input - The input data
  *
  * @return {String} The input type
  */
@@ -30860,7 +30971,7 @@ var parseInputType = function parseInputType(input) {
         return 'url/else';
         // Else
       } else {
-        console.warn('[set]', 'This format is not supported or recognised');
+        console.warn('[set]', 'This format is not supported or recognized');
         return 'invalid';
       }
 
@@ -30924,7 +31035,7 @@ var parseInputType = function parseInputType(input) {
       return 'empty';
 
     default:
-      console.warn('[set]', 'This format is not supported or recognised');
+      console.warn('[set]', 'This format is not supported or recognized');
       return 'invalid';
   }
 };
@@ -30954,7 +31065,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
  *
  * @param {String} str - The input string
  *
- * @return {Object|Object[]|String[]} The parsed object
+ * @return {Object|Array<Object>|Array<String>} The parsed object
  */
 var parseJSON = function parseJSON(str) {
   try {
@@ -31036,7 +31147,7 @@ Object.defineProperty(exports, "__esModule", {
  */
 var regex = {
   url: /^(https?:\/\/)?((([a-z\d]([a-z\d-]*[a-z\d])*)\.)+[a-z]{2,}|((\d{1,3}\.){3}\d{1,3})|localhost)(:\d+)?(\/[-a-z\d%_.~+:]*)*(\?[;&a-z\d%_.~+=-]*)?(#[-a-z\d_]*)?$/i,
-  bibtxt: /^\s*(\[.*?\]\s*(\n\s*[^[]((?!:)\S)+\s*:\s*.+?\s*)*\s*)+$/,
+  bibtxt: /^\s*(\[(?!\s*[{[]).*?\]\s*(\n\s*[^[]((?!:)\S)+\s*:\s*.+?\s*)*\s*)+$/,
   bibtex: /^(?:\s*@\s*[^@]+?\s*\{\s*[^@]+?\s*,\s*[^@]+\})+\s*$/,
   wikidata: [/^\s*(Q\d+)\s*$/, /^\s*((?:Q\d+(?:\s+|,|))*Q\d+)\s*$/, /^(https?:\/\/(?:www\.)wikidata.org\/w\/api\.php(?:\?.*)?)$/, /\/(Q\d+)(?:[#?/]|\s*$)/],
   json: [[/((?:\[|:|,)\s*)'((?:\\'|[^'])*?[^\\])?'(?=\s*(?:\]|}|,))/g, '$1"$2"'], [/((?:(?:"|]|}|\/[gmi]|\.|(?:\d|\.|-)*\d)\s*,|{)\s*)(?:"([^":\n]+?)"|'([^":\n]+?)'|([^":\n]+?))(\s*):/g, '$1"$2$3$4"$5:']],
@@ -31096,59 +31207,72 @@ function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, a
  *
  * @param {Object} data - The input data
  *
- * @return {CSL[]} The formatted input data
+ * @return {Array<CSL>} The formatted input data
  */
 var parseWikidataJSONAsync = function () {
-  var _ref = _asyncToGenerator(regeneratorRuntime.mark(function _callee2(data) {
-    return regeneratorRuntime.wrap(function _callee2$(_context2) {
+  var _ref = _asyncToGenerator(regeneratorRuntime.mark(function _callee3(data) {
+    return regeneratorRuntime.wrap(function _callee3$(_context3) {
       while (1) {
-        switch (_context2.prev = _context2.next) {
+        switch (_context3.prev = _context3.next) {
           case 0:
-            return _context2.abrupt('return', Promise.all(Object.keys(data.entities).map(function () {
-              var _ref2 = _asyncToGenerator(regeneratorRuntime.mark(function _callee(entityKey) {
-                var _data$entities$entity, labels, claims, entity, json, props;
+            return _context3.abrupt('return', Promise.all(Object.keys(data.entities).map(function () {
+              var _ref2 = _asyncToGenerator(regeneratorRuntime.mark(function _callee2(entityKey) {
+                var _this = this;
 
-                return regeneratorRuntime.wrap(function _callee$(_context) {
+                var _data$entities$entity, labels, claims, entity, json;
+
+                return regeneratorRuntime.wrap(function _callee2$(_context2) {
                   while (1) {
-                    switch (_context.prev = _context.next) {
+                    switch (_context2.prev = _context2.next) {
                       case 0:
                         _data$entities$entity = data.entities[entityKey], labels = _data$entities$entity.labels, claims = _data$entities$entity.claims;
                         entity = _wikidataSdk2.default.simplifyClaims(claims, null, null, true);
                         json = {
-                          wikiId: entityKey,
+                          _wikiId: entityKey,
                           id: entityKey
                         };
-                        _context.next = 5;
-                        return Promise.all(Object.keys(entity).map(function (prop) {
-                          return (0, _prop2.default)(prop, entity[prop], 'en');
-                        }));
+                        _context2.next = 5;
+                        return Promise.all(Object.keys(entity).map(function () {
+                          var _ref3 = _asyncToGenerator(regeneratorRuntime.mark(function _callee(prop) {
+                            var field, _field, fieldName, fieldValue;
+
+                            return regeneratorRuntime.wrap(function _callee$(_context) {
+                              while (1) {
+                                switch (_context.prev = _context.next) {
+                                  case 0:
+                                    _context.next = 2;
+                                    return (0, _prop2.default)(prop, entity[prop], 'en');
+
+                                  case 2:
+                                    field = _context.sent;
+
+                                    if (field) {
+                                      _field = _slicedToArray(field, 2), fieldName = _field[0], fieldValue = _field[1];
+
+
+                                      if (Array.isArray(json[fieldName])) {
+                                        json[fieldName] = json[fieldName].concat(fieldValue);
+                                      } else if (fieldValue !== undefined) {
+                                        json[fieldName] = fieldValue;
+                                      }
+                                    }
+
+                                  case 4:
+                                  case 'end':
+                                    return _context.stop();
+                                }
+                              }
+                            }, _callee, _this);
+                          }));
+
+                          return function (_x3) {
+                            return _ref3.apply(this, arguments);
+                          };
+                        }()));
 
                       case 5:
-                        props = _context.sent;
 
-                        props.forEach(function (_ref3) {
-                          var _ref4 = _slicedToArray(_ref3, 2),
-                              resProp = _ref4[0],
-                              resValue = _ref4[1];
-
-                          if (resProp.length > 0) {
-                            json[resProp] = resValue;
-                          }
-                        });
-
-                        // It still has to combine authors from string value and numeric-id value :(
-                        if (json.hasOwnProperty('authorQ') || json.hasOwnProperty('authorS')) {
-                          if (json.hasOwnProperty('authorQ') && json.hasOwnProperty('authorS')) {
-                            json.author = json.authorQ.concat(json.authorS);
-                            delete json.authorQ;
-                            delete json.authorS;
-                          } else if (json.hasOwnProperty('authorQ')) {
-                            json.author = json.authorQ;
-                            delete json.authorQ;
-                          } else if (json.hasOwnProperty('authorS')) {
-                            json.author = json.authorS;
-                            delete json.authorS;
-                          }
+                        if (Array.isArray(json.author)) {
                           json.author = json.author.sort(function (a, b) {
                             return a[1] - b[1];
                           }).map(function (v) {
@@ -31160,14 +31284,14 @@ var parseWikidataJSONAsync = function () {
                           json.title = labels['en'].value;
                         }
 
-                        return _context.abrupt('return', json);
+                        return _context2.abrupt('return', json);
 
-                      case 10:
+                      case 8:
                       case 'end':
-                        return _context.stop();
+                        return _context2.stop();
                     }
                   }
-                }, _callee, this);
+                }, _callee2, this);
               }));
 
               return function (_x2) {
@@ -31177,10 +31301,10 @@ var parseWikidataJSONAsync = function () {
 
           case 1:
           case 'end':
-            return _context2.stop();
+            return _context3.stop();
         }
       }
-    }, _callee2, this);
+    }, _callee3, this);
   }));
 
   return function parseWikidataJSONAsync(_x) {
@@ -31205,13 +31329,9 @@ var _fetchFileAsync = require('../../../util/fetchFileAsync');
 
 var _fetchFileAsync2 = _interopRequireDefault(_fetchFileAsync);
 
-var _type = require('../type');
+var _prop = require('../prop');
 
-var _type2 = _interopRequireDefault(_type);
-
-var _date = require('../../date');
-
-var _date2 = _interopRequireDefault(_date);
+var _prop2 = _interopRequireDefault(_prop);
 
 var _name = require('../../name');
 
@@ -31227,10 +31347,10 @@ function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, a
  * @access private
  * @method fetchWikidataLabelAsync
  *
- * @param {String|String[]} q - Wikidata IDs
+ * @param {String|Array<String>} q - Wikidata IDs
  * @param {String} lang - Language
  *
- * @return {String[]} Array with labels of each prop
+ * @return {Array<String>} Array with labels of each prop
  */
 var fetchWikidataLabelAsync = function () {
   var _ref = _asyncToGenerator(regeneratorRuntime.mark(function _callee(q, lang) {
@@ -31289,159 +31409,99 @@ var parseWikidataP1545 = function parseWikidataP1545(qualifiers) {
  * @param {String|Number} value - Value
  * @param {String} lang - Language
  *
- * @return {String[]} Array with new prop and value
+ * @return {Array<String>} Array with new prop and value
  */
 var parseWikidataPropAsync = function () {
-  var _ref2 = _asyncToGenerator(regeneratorRuntime.mark(function _callee3(prop, value, lang) {
-    var rProp, rValue;
-    return regeneratorRuntime.wrap(function _callee3$(_context3) {
+  var _ref2 = _asyncToGenerator(regeneratorRuntime.mark(function _callee4(prop, value, lang) {
+    var _this = this;
+
+    var cslValue;
+    return regeneratorRuntime.wrap(function _callee4$(_context4) {
       while (1) {
-        switch (_context3.prev = _context3.next) {
+        switch (_context4.prev = _context4.next) {
           case 0:
-            _context3.t0 = prop;
-            _context3.next = _context3.t0 === 'P50' ? 3 : _context3.t0 === 'P2093' ? 3 : 5;
-            break;
-
-          case 3:
-            value = value.slice();
-            return _context3.abrupt('break', 7);
-
-          case 5:
-            value = value.length ? value[0].value : undefined;
-            return _context3.abrupt('break', 7);
-
-          case 7:
-            rProp = '';
-            rValue = value;
-            _context3.t1 = prop;
-            _context3.next = _context3.t1 === 'P50' ? 12 : _context3.t1 === 'P2093' ? 17 : _context3.t1 === 'P580' ? 20 : _context3.t1 === 'P585' ? 20 : _context3.t1 === 'P356' ? 23 : _context3.t1 === 'P31' ? 25 : _context3.t1 === 'P212' ? 29 : _context3.t1 === 'P957' ? 29 : _context3.t1 === 'P433' ? 31 : _context3.t1 === 'P1433' ? 33 : _context3.t1 === 'P304' ? 38 : _context3.t1 === 'P393' ? 40 : _context3.t1 === 'P577' ? 42 : _context3.t1 === 'P1476' ? 45 : _context3.t1 === 'P953' ? 47 : _context3.t1 === 'P478' ? 49 : _context3.t1 === 'P2860' ? 51 : _context3.t1 === 'P921' ? 51 : _context3.t1 === 'P3181' ? 51 : _context3.t1 === 'P364' ? 51 : _context3.t1 === 'P698' ? 51 : _context3.t1 === 'P932' ? 51 : _context3.t1 === 'P1104' ? 51 : 52;
-            break;
-
-          case 12:
-            rProp = 'authorQ';
-            _context3.next = 15;
-            return Promise.all(value.map(function () {
-              var _ref4 = _asyncToGenerator(regeneratorRuntime.mark(function _callee2(_ref3) {
-                var value = _ref3.value,
-                    qualifiers = _ref3.qualifiers;
-                return regeneratorRuntime.wrap(function _callee2$(_context2) {
+            _context4.next = 2;
+            return function () {
+              var _ref3 = _asyncToGenerator(regeneratorRuntime.mark(function _callee3(prop, value) {
+                return regeneratorRuntime.wrap(function _callee3$(_context3) {
                   while (1) {
-                    switch (_context2.prev = _context2.next) {
+                    switch (_context3.prev = _context3.next) {
                       case 0:
-                        _context2.t0 = _name2.default;
-                        _context2.next = 3;
-                        return fetchWikidataLabelAsync(value, lang);
+                        _context3.t0 = prop;
+                        _context3.next = _context3.t0 === 'P50' ? 3 : _context3.t0 === 'P1433' ? 4 : 7;
+                        break;
 
                       case 3:
-                        _context2.t1 = _context2.sent[0];
-                        _context2.t2 = (0, _context2.t0)(_context2.t1);
-                        _context2.t3 = parseWikidataP1545(qualifiers);
-                        return _context2.abrupt('return', [_context2.t2, _context2.t3]);
+                        return _context3.abrupt('return', Promise.all(value.map(function () {
+                          var _ref5 = _asyncToGenerator(regeneratorRuntime.mark(function _callee2(_ref4) {
+                            var value = _ref4.value,
+                                qualifiers = _ref4.qualifiers;
+                            return regeneratorRuntime.wrap(function _callee2$(_context2) {
+                              while (1) {
+                                switch (_context2.prev = _context2.next) {
+                                  case 0:
+                                    _context2.t0 = _name2.default;
+                                    _context2.next = 3;
+                                    return fetchWikidataLabelAsync(value, lang);
+
+                                  case 3:
+                                    _context2.t1 = _context2.sent[0];
+                                    _context2.t2 = (0, _context2.t0)(_context2.t1);
+                                    _context2.t3 = parseWikidataP1545(qualifiers);
+                                    return _context2.abrupt('return', [_context2.t2, _context2.t3]);
+
+                                  case 7:
+                                  case 'end':
+                                    return _context2.stop();
+                                }
+                              }
+                            }, _callee2, _this);
+                          }));
+
+                          return function (_x8) {
+                            return _ref5.apply(this, arguments);
+                          };
+                        }())));
+
+                      case 4:
+                        _context3.next = 6;
+                        return fetchWikidataLabelAsync(value, lang);
+
+                      case 6:
+                        return _context3.abrupt('return', _context3.sent[0]);
 
                       case 7:
                       case 'end':
-                        return _context2.stop();
+                        return _context3.stop();
                     }
                   }
-                }, _callee2, this);
+                }, _callee3, _this);
               }));
 
-              return function (_x6) {
-                return _ref4.apply(this, arguments);
+              return function (_x6, _x7) {
+                return _ref3.apply(this, arguments);
               };
-            }()));
+            }()(prop, value);
 
-          case 15:
-            rValue = _context3.sent;
-            return _context3.abrupt('break', 54);
+          case 2:
+            cslValue = _context4.sent;
 
-          case 17:
-            rProp = 'authorS';
-            rValue = value.map(function (_ref5) {
-              var value = _ref5.value,
-                  qualifiers = _ref5.qualifiers;
-              return [(0, _name2.default)(value), parseWikidataP1545(qualifiers)];
-            });
-            return _context3.abrupt('break', 54);
-
-          case 20:
-            rProp = 'accessed';
-            rValue = (0, _date2.default)(value);
-            return _context3.abrupt('break', 54);
-
-          case 23:
-            rProp = 'DOI';
-            return _context3.abrupt('break', 54);
-
-          case 25:
-            rProp = 'type';
-            rValue = (0, _type2.default)(value);
-
-            if (rValue === undefined) {
-              console.warn('[set]', 'This entry type is not recognized and therefore interpreted as \'article-journal\': ' + value);
-              rValue = 'article-journal';
+            if (!cslValue) {
+              _context4.next = 7;
+              break;
             }
-            return _context3.abrupt('break', 54);
 
-          case 29:
-            rProp = 'ISBN';
-            return _context3.abrupt('break', 54);
+            return _context4.abrupt('return', [(0, _prop2.default)(prop), cslValue]);
 
-          case 31:
-            rProp = 'issue';
-            return _context3.abrupt('break', 54);
+          case 7:
+            return _context4.abrupt('return', (0, _prop2.default)(prop, value, lang));
 
-          case 33:
-            rProp = 'container-title';
-            _context3.next = 36;
-            return fetchWikidataLabelAsync(value, lang);
-
-          case 36:
-            rValue = _context3.sent[0];
-            return _context3.abrupt('break', 54);
-
-          case 38:
-            rProp = 'page';
-            return _context3.abrupt('break', 54);
-
-          case 40:
-            rProp = 'edition';
-            return _context3.abrupt('break', 54);
-
-          case 42:
-            rProp = 'issued';
-            rValue = (0, _date2.default)(value);
-            return _context3.abrupt('break', 54);
-
-          case 45:
-            rProp = 'title';
-            return _context3.abrupt('break', 54);
-
-          case 47:
-            // (full work available at)
-            rProp = 'URL';
-            return _context3.abrupt('break', 54);
-
-          case 49:
-            rProp = 'volume';
-            return _context3.abrupt('break', 54);
-
-          case 51:
-            return _context3.abrupt('break', 54);
-
-          case 52:
-            console.info('[set]', 'Unknown property: ' + prop);
-            return _context3.abrupt('break', 54);
-
-          case 54:
-            return _context3.abrupt('return', [rProp, rValue]);
-
-          case 55:
+          case 8:
           case 'end':
-            return _context3.stop();
+            return _context4.stop();
         }
       }
-    }, _callee3, this);
+    }, _callee4, this);
   }));
 
   return function parseWikidataPropAsync(_x3, _x4, _x5) {
@@ -31451,7 +31511,7 @@ var parseWikidataPropAsync = function () {
 
 exports.default = parseWikidataPropAsync;
 
-},{"../../../util/fetchFileAsync":401,"../../date":369,"../../name":388,"../type":397,"wikidata-sdk":320}],393:[function(require,module,exports){
+},{"../../../util/fetchFileAsync":401,"../../name":388,"../prop":396,"wikidata-sdk":320}],393:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -31516,7 +31576,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
  *
  * @param {Object} data - The input data
  *
- * @return {CSL[]} The formatted input data
+ * @return {Array<CSL>} The formatted input data
  */
 var parseWikidataJSON = function parseWikidataJSON(data) {
   return Object.keys(data.entities).map(function (entityKey) {
@@ -31526,36 +31586,26 @@ var parseWikidataJSON = function parseWikidataJSON(data) {
 
     var entity = _wikidataSdk2.default.simplifyClaims(claims, null, null, true);
     var json = {
-      wikiId: entityKey,
+      _wikiId: entityKey,
       id: entityKey
     };
 
     Object.keys(entity).forEach(function (prop) {
-      var value = entity[prop];
+      var field = (0, _prop2.default)(prop, entity[prop], 'en');
+      if (field) {
+        var _field = _slicedToArray(field, 2),
+            fieldName = _field[0],
+            fieldValue = _field[1];
 
-      var _parseWikidataProp = (0, _prop2.default)(prop, value, 'en'),
-          _parseWikidataProp2 = _slicedToArray(_parseWikidataProp, 2),
-          resProp = _parseWikidataProp2[0],
-          resValue = _parseWikidataProp2[1];
-
-      if (resProp.length > 0) {
-        json[resProp] = resValue;
+        if (Array.isArray(json[fieldName])) {
+          json[fieldName] = json[fieldName].concat(fieldValue);
+        } else if (fieldValue !== undefined) {
+          json[fieldName] = fieldValue;
+        }
       }
     });
 
-    // It still has to combine authors from string value and numeric-id value :(
-    if (json.hasOwnProperty('authorQ') || json.hasOwnProperty('authorS')) {
-      if (json.hasOwnProperty('authorQ') && json.hasOwnProperty('authorS')) {
-        json.author = json.authorQ.concat(json.authorS);
-        delete json.authorQ;
-        delete json.authorS;
-      } else if (json.hasOwnProperty('authorQ')) {
-        json.author = json.authorQ;
-        delete json.authorQ;
-      } else if (json.hasOwnProperty('authorS')) {
-        json.author = json.authorS;
-        delete json.authorS;
-      }
+    if (Array.isArray(json.author)) {
       json.author = json.author.sort(function (a, b) {
         return a[1] - b[1];
       }).map(function (v) {
@@ -31637,10 +31687,10 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
  * @access private
  * @method fetchWikidataLabel
  *
- * @param {String|String[]} q - Wikidata IDs
+ * @param {String|Array<String>} q - Wikidata IDs
  * @param {String} lang - Language
  *
- * @return {String[]} Array with labels of each prop
+ * @return {Array<String>} Array with labels of each prop
  */
 var fetchWikidataLabel = function fetchWikidataLabel(q, lang) {
   var ids = Array.isArray(q) ? q : typeof q === 'string' ? q.split('|') : '';
@@ -31667,142 +31717,110 @@ var parseWikidataP1545 = function parseWikidataP1545(qualifiers) {
 };
 
 /**
- * Transform property and value from Wikidata format to CSL
+ * Map holding information on Wikidata fields.
  *
- * @access protected
- * @method parseWikidataProp
+ *  * If false, field should be ignored
+ *  * If string, use as field name
  *
- * @param {String} prop - Property
- * @param {String|Number} value - Value
- * @param {String} lang - Language
- *
- * @return {String[]} Array with new prop and value
+ * @access private
+ * @constant propMap
+ * @default
  */
-var parseWikidataProp = function parseWikidataProp(prop, value, lang) {
-  switch (prop) {
-    case 'P50':
-    case 'P2093':
-      value = value.slice();
-      break;
+var propMap = {
+  P31: 'type',
+  P50: 'author',
+  P212: 'ISBN',
+  P304: 'page',
+  P356: 'DOI',
+  P393: 'edition',
+  P433: 'issue',
+  P478: 'volume',
+  P577: 'issued',
+  P580: 'accessed',
+  P585: 'accessed',
+  P953: 'URL',
+  P957: 'ISBN',
+  P1433: 'container-title',
+  P1476: 'title',
+  P2093: 'author',
 
-    default:
-      value = value.length ? value[0].value : undefined;
-      break;
+  // ignore
+  P2860: false, // Cites
+  P921: false, // Main subject
+  P3181: false, // OpenCitations bibliographic resource ID
+  P364: false, // Original language of work
+  P698: false, // PMID
+  P932: false, // PMCID
+  P1104: false // Number of pages
+
+
+  /**
+   * Transform property and value from Wikidata format to CSL
+   *
+   * @access protected
+   * @method parseWikidataProp
+   *
+   * @param {String} name - Property name
+   * @param {String|Number} [value] - Value
+   * @param {String} [lang] - Language
+   *
+   * @return {Array<String>|String} Array with new prop and value or just the prop when function is called without value
+   */
+};var parseWikidataProp = function parseWikidataProp(name, value, lang) {
+  if (!propMap.hasOwnProperty(name)) {
+    console.info('[set]', 'Unknown property: ' + name);
+    return undefined;
+  } else if (propMap[name] === false) {
+    return undefined;
   }
 
-  var rProp = '';
-  var rValue = value;
+  var cslProp = propMap[name];
 
-  switch (prop) {
-    // Author ( q )
-    case 'P50':
-      rProp = 'authorQ';
-      rValue = value.map(function (_ref) {
-        var value = _ref.value,
-            qualifiers = _ref.qualifiers;
-        return [(0, _name2.default)(fetchWikidataLabel(value, lang)[0]), parseWikidataP1545(qualifiers)];
-      });
-      break;
-
-    // Author ( s )
-    case 'P2093':
-      rProp = 'authorS';
-      rValue = value.map(function (_ref2) {
-        var value = _ref2.value,
-            qualifiers = _ref2.qualifiers;
-        return [(0, _name2.default)(value), parseWikidataP1545(qualifiers)];
-      });
-      break;
-
-    // Date
-    case 'P580':
-    case 'P585':
-      rProp = 'accessed';
-      rValue = (0, _date2.default)(value);
-      break;
-
-    // DOI
-    case 'P356':
-      rProp = 'DOI';
-      break;
-
-    // Instance of
-    case 'P31':
-      rProp = 'type';
-      rValue = (0, _type2.default)(value);
-
-      if (rValue === undefined) {
-        console.warn('[set]', 'This entry type is not recognized and therefore interpreted as \'article-journal\': ' + value);
-        rValue = 'article-journal';
-      }
-      break;
-
-    // ISBN 13 & 10
-    case 'P212':
-    case 'P957':
-      rProp = 'ISBN';
-      break;
-
-    // Issue
-    case 'P433':
-      rProp = 'issue';
-      break;
-
-    // Journal
-    case 'P1433':
-      rProp = 'container-title';
-      rValue = fetchWikidataLabel(value, lang)[0];
-      break;
-
-    // Pages
-    case 'P304':
-      rProp = 'page';
-      break;
-
-    // Print/edition
-    case 'P393':
-      rProp = 'edition';
-      break;
-
-    // Pubdate
-    case 'P577':
-      rProp = 'issued';
-      rValue = (0, _date2.default)(value);
-      break;
-
-    // Title
-    case 'P1476':
-      rProp = 'title';
-      break;
-
-    // URL
-    case 'P953':
-      // (full work available at)
-      rProp = 'URL';
-      break;
-
-    // Volume
-    case 'P478':
-      rProp = 'volume';
-      break;
-
-    case 'P2860': // Cites
-    case 'P921': // Main subject
-    case 'P3181': // OpenCitations bibliographic resource ID
-    case 'P364': // Original language of work
-    case 'P698': // PMID
-    case 'P932': // PMCID
-    case 'P1104':
-      // Number of pages
-      // Property ignored
-      break;
-
-    default:
-      console.info('[set]', 'Unknown property: ' + prop);
-      break;
+  if (!value) {
+    return cslProp;
   }
 
-  return [rProp, rValue];
+  var cslValue = function (prop, valueList) {
+    var value = valueList[0].value;
+
+    switch (prop) {
+      case 'P31':
+        var type = (0, _type2.default)(value);
+
+        if (!type) {
+          console.warn('[set]', 'Wikidata entry type not recognized: ' + value + '. Defaulting to "article-journal".');
+        }
+
+        return type;
+
+      case 'P50':
+        return valueList.map(function (_ref) {
+          var value = _ref.value,
+              qualifiers = _ref.qualifiers;
+          return [(0, _name2.default)(fetchWikidataLabel(value, lang)[0]), parseWikidataP1545(qualifiers)];
+        });
+
+      case 'P577':
+      case 'P580':
+      case 'P585':
+        return (0, _date2.default)(value);
+
+      case 'P1433':
+        return fetchWikidataLabel(value, lang)[0];
+
+      case 'P2093':
+        return valueList.map(function (_ref2) {
+          var value = _ref2.value,
+              qualifiers = _ref2.qualifiers;
+          return [(0, _name2.default)(value), parseWikidataP1545(qualifiers)];
+        });
+
+      default:
+        return value;
+    }
+  }(name, value);
+
+  return [cslProp, cslValue];
 };
 
 exports.default = parseWikidataProp;
@@ -31849,6 +31867,9 @@ exports.default = fetchWikidataType;
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
+
+var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; }();
+
 /**
  * Add data-* attribute to a HTML string
  *
@@ -31862,7 +31883,7 @@ Object.defineProperty(exports, "__esModule", {
  * @return {String} HTML string with attribute
  */
 var getAttributedEntry = function getAttributedEntry(string, name, value) {
-  return string.replace(/^\s*<[a-z]+/, function (match) {
+  return string.replace(/^\s*<[a-z]+/i, function (match) {
     return match + ' data-' + name + '="' + value + '"';
   });
 };
@@ -31882,8 +31903,53 @@ var getPrefixedEntry = function getPrefixedEntry(value, id) {
   return getAttributedEntry(value, 'csl-entry-id', id);
 };
 
+/**
+ * Get a rendered affix
+ *
+ * @access private
+ * @method getAffix
+ *
+ * @param {CSL} source - source element
+ * @param {String|Cite~wrapper} affix
+ *
+ * @return {String} Rendered affixs
+ */
+var getAffix = function getAffix(source, affix) {
+  return typeof affix === 'function' ? affix(source) : typeof affix === 'string' ? affix : '';
+};
+
+/**
+ * Pre/append things to entry
+ *
+ * @access protected
+ * @method getWrappedEntry
+ *
+ * @param {String} value - HTML string
+ * @param {CSL} source - source element
+ * @param {Object} wrapping - append / prepend configuration
+ * @param {String|Cite~wrapper} [wrapping.prepend]
+ * @param {String|Cite~wrapper} [wrapping.append]
+ *
+ * @return {String} Wrapped HTML string
+ */
+var getWrappedEntry = function getWrappedEntry(value, source, _ref) {
+  var prepend = _ref.prepend,
+      append = _ref.append;
+
+  var _ref2 = value.match(/^(\s*<[a-z0-9:-]+(?:\s*[a-z0-9:-]+=(?:"(?:\\\\|\\"|[^"])*"|'(?:\\\\|\\'|[^'])*'|\w+))*\s*>)([\s\S]+)(<\/[a-z:]+>\s*)$/i) || [],
+      _ref3 = _slicedToArray(_ref2, 4),
+      a = _ref3[1],
+      c = _ref3[2],
+      e = _ref3[3];
+
+  var b = getAffix(source, prepend);
+  var d = getAffix(source, append);
+  return a + b + c + d + e;
+};
+
 exports.getAttributedEntry = getAttributedEntry;
 exports.getPrefixedEntry = getPrefixedEntry;
+exports.getWrappedEntry = getWrappedEntry;
 
 },{}],399:[function(require,module,exports){
 "use strict";
@@ -32011,7 +32077,7 @@ Object.defineProperty(exports, "__esModule", {
  * @access protected
  * @method fetchId
  *
- * @param {String[]} list - old ID list
+ * @param {Array<String>} list - old ID list
  * @param {String} prefix - ID prefix
  *
  * @return {String} CSL ID
@@ -32088,7 +32154,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
  * @access protected
  * @class TokenStack
  *
- * @param {String[]} array - list of tokens
+ * @param {Array<String>} array - list of tokens
  */
 var TokenStack = function () {
   function TokenStack(array) {
@@ -32135,6 +32201,8 @@ var TokenStack = function () {
      * @method matches
      * @memberof TokenStack
      *
+     * @param {TokenStack~pattern} pattern - pattern
+     *
      * @return {Boolean} match
      */
 
@@ -32145,14 +32213,35 @@ var TokenStack = function () {
     }
 
     /**
+     * Match current token against pattern.
+     *
+     * @method matches
+     * @memberof TokenStack
+     *
+     * @param {TokenStack~sequence} pattern - pattern
+     *
+     * @return {Boolean} match
+     */
+
+  }, {
+    key: 'matchesSequence',
+    value: function matchesSequence(sequence) {
+      var part = this.stack.slice(this.index, this.index + sequence.length).join('');
+      return typeof sequence === 'string' ? part === sequence : sequence.every(function (pattern, index) {
+        return TokenStack.getMatchCallback(pattern)(part[index]);
+      });
+    }
+
+    /**
      * Consume a single token if possible, and throw if not.
      *
      * @method consumeToken
      * @memberof TokenStack
      *
-     * @param {String|RegExp|TokenStack~match|Array} [pattern=/^[\s\S]$/g] - pattern
+     * @param {TokenStack~pattern} [pattern=/^[\s\S]$/] - pattern
      * @param {Object} options
      * @param {Boolean} [options.inverse=false] - invert pattern
+     * @param {Boolean} [options.spaced=true] - allow leading and trailing whitespace
      *
      * @return {String} token
      * @throws {SyntaxError} Unexpected token at index: Expected pattern, got token
@@ -32165,7 +32254,13 @@ var TokenStack = function () {
 
       var _ref = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {},
           _ref$inverse = _ref.inverse,
-          inverse = _ref$inverse === undefined ? false : _ref$inverse;
+          inverse = _ref$inverse === undefined ? false : _ref$inverse,
+          _ref$spaced = _ref.spaced,
+          spaced = _ref$spaced === undefined ? true : _ref$spaced;
+
+      if (spaced) {
+        this.consumeWhitespace();
+      }
 
       var token = this.current;
       var match = TokenStack.getMatchCallback(pattern)(token, this.index, this.stack);
@@ -32174,7 +32269,38 @@ var TokenStack = function () {
       } else {
         throw new SyntaxError('Unexpected token at index ' + this.index + ': Expected ' + TokenStack.getPatternText(pattern) + ', got "' + token + '"');
       }
+
+      if (spaced) {
+        this.consumeWhitespace();
+      }
+
       return token;
+    }
+
+    /**
+     * Consume a single token if possible, and throw if not.
+     *
+     * @method consumeToken
+     * @memberof TokenStack
+     *
+     * @param {TokenStack~pattern} [pattern=/^\s$/] - whitespace pattern
+     * @param {Object} options
+     * @param {Boolean} [options.optional=true] - allow having no whitespace
+     *
+     * @return {String} matched whitespace
+     * @throws {SyntaxError} Unexpected token at index: Expected whitespace, got token
+     */
+
+  }, {
+    key: 'consumeWhitespace',
+    value: function consumeWhitespace() {
+      var pattern = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : /^\s$/;
+
+      var _ref2 = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {},
+          _ref2$optional = _ref2.optional,
+          optional = _ref2$optional === undefined ? true : _ref2$optional;
+
+      return this.consume(pattern, { min: +!optional });
     }
 
     /**
@@ -32203,12 +32329,34 @@ var TokenStack = function () {
     }
 
     /**
+     * Consume a pattern spanning multiple tokens ('sequence').
+     *
+     * @method consumeSequence
+     * @memberof TokenStack
+     *
+     * @param {TokenStack~sequence} sequence - sequence
+     *
+     * @return {String} consumed tokens
+     * @throws {SyntaxError} Expected sequence, got tokens
+     */
+
+  }, {
+    key: 'consumeSequence',
+    value: function consumeSequence(sequence) {
+      if (this.matchesSequence(sequence)) {
+        return this.consumeN(sequence.length);
+      } else {
+        throw new SyntaxError('Expected "' + sequence + '", got "' + this.consumeN(sequence.length) + '"');
+      }
+    }
+
+    /**
      * Consumes all consecutive tokens matching pattern. Throws if number of matched tokens not within range min-max.
      *
      * @method consume
      * @memberof TokenStack
      *
-     * @param {String|RegExp|TokenStack~match|Array} [pattern=/^[\s\S]$/g] - pattern
+     * @param {TokenStack~pattern} [pattern=/^[\s\S]$/] - pattern
      * @param {Object} options
      * @param {Boolean} [options.inverse=false] - invert pattern
      * @param {Number} [options.min=0] - mininum number of consumed tokens
@@ -32226,15 +32374,15 @@ var TokenStack = function () {
     value: function consume() {
       var pattern = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : /^[\s\S]$/;
 
-      var _ref2 = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {},
-          _ref2$min = _ref2.min,
-          min = _ref2$min === undefined ? 0 : _ref2$min,
-          _ref2$max = _ref2.max,
-          max = _ref2$max === undefined ? Infinity : _ref2$max,
-          _ref2$inverse = _ref2.inverse,
-          inverse = _ref2$inverse === undefined ? false : _ref2$inverse,
-          tokenMap = _ref2.tokenMap,
-          tokenFilter = _ref2.tokenFilter;
+      var _ref3 = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {},
+          _ref3$min = _ref3.min,
+          min = _ref3$min === undefined ? 0 : _ref3$min,
+          _ref3$max = _ref3.max,
+          max = _ref3$max === undefined ? Infinity : _ref3$max,
+          _ref3$inverse = _ref3.inverse,
+          inverse = _ref3$inverse === undefined ? false : _ref3$inverse,
+          tokenMap = _ref3.tokenMap,
+          tokenFilter = _ref3.tokenFilter;
 
       var start = this.index;
       var match = TokenStack.getMatchCallback(pattern);
@@ -32274,7 +32422,7 @@ var TokenStack = function () {
      * @static
      * @memberof TokenStack
      *
-     * @param {String|RegExp|TokenStack~match|Array} pattern - pattern
+     * @param {TokenStack~pattern} pattern - pattern
      *
      * @return {TokenStack~match} Match callback
      */
@@ -32370,34 +32518,43 @@ function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj;
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-Object.assign(_index8.default, { async: _index6.default, get: get, CSL: CSL, parse: parse, util: util, version: version }); /**
-                                                                                                                             * @file index.js
-                                                                                                                             *
-                                                                                                                             * @projectname Citationjs
-                                                                                                                             *
-                                                                                                                             * @author Lars Willighagen
-                                                                                                                             * @version 0.3.0-5
-                                                                                                                             * @license
-                                                                                                                             * Copyright (c) 2015-2017 Lars Willighagen
-                                                                                                                             *
-                                                                                                                             * Permission is hereby granted, free of charge, to any person obtaining a copy
-                                                                                                                             * of this software and associated documentation files (the "Software"), to deal
-                                                                                                                             * in the Software without restriction, including without limitation the rights
-                                                                                                                             * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-                                                                                                                             * copies of the Software, and to permit persons to whom the Software is
-                                                                                                                             * furnished to do so, subject to the following conditions:
-                                                                                                                             *
-                                                                                                                             * The above copyright notice and this permission notice shall be included in all
-                                                                                                                             * copies or substantial portions of the Software.
-                                                                                                                             *
-                                                                                                                             * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-                                                                                                                             * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-                                                                                                                             * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-                                                                                                                             * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-                                                                                                                             * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-                                                                                                                             * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-                                                                                                                             * SOFTWARE.
-                                                                                                                             */
+Object.assign(_index8.default, {
+  async: _index6.default,
+  get: get,
+  CSL: CSL,
+  parse: parse,
+  util: util,
+  version: version,
+  normalise: parse.input.chain,
+  normaliseAsync: parse.input.async.chain
+}); /**
+     * @file index.js
+     *
+     * @projectname Citationjs
+     *
+     * @author Lars Willighagen
+     * @version 0.3.0-13
+     * @license
+     * Copyright (c) 2015-2017 Lars Willighagen
+     *
+     * Permission is hereby granted, free of charge, to any person obtaining a copy
+     * of this software and associated documentation files (the "Software"), to deal
+     * in the Software without restriction, including without limitation the rights
+     * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+     * copies of the Software, and to permit persons to whom the Software is
+     * furnished to do so, subject to the following conditions:
+     *
+     * The above copyright notice and this permission notice shall be included in all
+     * copies or substantial portions of the Software.
+     *
+     * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+     * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+     * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+     * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+     * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+     * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+     * SOFTWARE.
+     */
 
 (0, _deepFreeze2.default)(_index8.default);
 

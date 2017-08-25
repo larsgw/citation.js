@@ -615,7 +615,7 @@
     
 
     
-    <h4 class="name" id="async"><span class="type-signature"></span>async<span class="signature">(data, options<span class="signature-attributes">opt</span>, callback)</span><span class="type-signature"> &rarr; {Promise}</span></h4>
+    <h4 class="name" id="async"><span class="type-signature"></span>async<span class="signature">(data, options<span class="signature-attributes">opt</span>, callback<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise}</span></h4>
     
 
     
@@ -763,6 +763,8 @@
             
                 <td class="attributes">
                 
+                    &lt;optional><br>
+                
 
                 
 
@@ -776,7 +778,7 @@
                 </td>
             
 
-            <td class="description last"><p>if not give, function returns promise.</p></td>
+            <td class="description last"><p>if not given, function returns promise.</p></td>
         </tr>
 
     
@@ -817,7 +819,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="async_index.js.html">async/index.js</a>, <a href="async_index.js.html#line22">line 22</a>
+        <a href="async_index.js.html">async/index.js</a>, <a href="async_index.js.html#line16">line 16</a>
     </li></ul></dd>
     
 
@@ -4757,6 +4759,309 @@
     
 
     
+    <h4 class="name" id="getWrappedEntry"><span class="type-signature">(protected) </span>getWrappedEntry<span class="signature">(value, source, wrapping)</span><span class="type-signature"> &rarr; {String}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    <p>Pre/append things to entry</p>
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>value</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>HTML string</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>source</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="CSL.html">CSL</a></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>source element</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>wrapping</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>append / prepend configuration</p>
+                <h6>Properties</h6>
+                
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>prepend</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+|
+
+<span class="param-type"><a href="Cite.html#~wrapper">Cite~wrapper</a></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>append</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+|
+
+<span class="param-type"><a href="Cite.html#~wrapper">Cite~wrapper</a></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+            </td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="util_attr.js.html">util/attr.js</a>, <a href="util_attr.js.html#line41">line 41</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    <p>Wrapped HTML string</p>
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">String</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
     <h4 class="name" id="hasLocale"><span class="type-signature">(protected) </span>hasLocale<span class="signature">(localeName)</span><span class="type-signature"> &rarr; {Boolean}</span></h4>
     
 
@@ -5512,7 +5817,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="parse_bibtex_prop.js.html">parse/bibtex/prop.js</a>, <a href="parse_bibtex_prop.js.html#line102">line 102</a>
+        <a href="parse_bibtex_prop.js.html">parse/bibtex/prop.js</a>, <a href="parse_bibtex_prop.js.html#line111">line 111</a>
     </li></ul></dd>
     
 
@@ -5576,7 +5881,7 @@
 
 
 <div class="description">
-    <p>BibTeX pub type to CSL pub type</p>
+    <p>BibTeX pub type to CSL pub type. Defaults to 'book'.</p>
 </div>
 
 
@@ -5669,7 +5974,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="parse_bibtex_type.js.html">parse/bibtex/type.js</a>, <a href="parse_bibtex_type.js.html#line1">line 1</a>
+        <a href="parse_bibtex_type.js.html">parse/bibtex/type.js</a>, <a href="parse_bibtex_type.js.html#line30">line 30</a>
     </li></ul></dd>
     
 
@@ -9146,7 +9451,7 @@
     
 
     
-    <h4 class="name" id="parseWikidataProp"><span class="type-signature">(protected) </span>parseWikidataProp<span class="signature">(prop, value, lang)</span><span class="type-signature"> &rarr; {Array.&lt;String>}</span></h4>
+    <h4 class="name" id="parseWikidataProp"><span class="type-signature">(protected) </span>parseWikidataProp<span class="signature">(name, value<span class="signature-attributes">opt</span>, lang<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Array.&lt;String>|String}</span></h4>
     
 
     
@@ -9178,6 +9483,8 @@
         <th>Type</th>
 
         
+        <th>Attributes</th>
+        
 
         
 
@@ -9190,7 +9497,7 @@
 
         <tr>
             
-                <td class="name"><code>prop</code></td>
+                <td class="name"><code>name</code></td>
             
 
             <td class="type">
@@ -9203,10 +9510,18 @@
             </td>
 
             
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
 
             
 
-            <td class="description last"><p>Property</p></td>
+            <td class="description last"><p>Property name</p></td>
         </tr>
 
     
@@ -9228,6 +9543,16 @@
             
             </td>
 
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
             
 
             
@@ -9251,6 +9576,16 @@
             
             </td>
 
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
             
 
             
@@ -9296,7 +9631,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="parse_wikidata_prop.js.html">parse/wikidata/prop.js</a>, <a href="parse_wikidata_prop.js.html#line39">line 39</a>
+        <a href="parse_wikidata_prop.js.html">parse/wikidata/prop.js</a>, <a href="parse_wikidata_prop.js.html#line77">line 77</a>
     </li></ul></dd>
     
 
@@ -9323,7 +9658,7 @@
 
         
 <div class="param-desc">
-    <p>Array with new prop and value</p>
+    <p>Array with new prop and value or just the prop when function is called without value</p>
 </div>
 
 
@@ -9335,6 +9670,9 @@
     <dd>
         
 <span class="param-type">Array.&lt;String></span>
+|
+
+<span class="param-type">String</span>
 
 
     </dd>
@@ -9502,7 +9840,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="parse_wikidata_async_prop.js.html">parse/wikidata/async/prop.js</a>, <a href="parse_wikidata_async_prop.js.html#line29">line 29</a>
+        <a href="parse_wikidata_async_prop.js.html">parse/wikidata/async/prop.js</a>, <a href="parse_wikidata_async_prop.js.html#line28">line 28</a>
     </li></ul></dd>
     
 
@@ -9568,7 +9906,7 @@
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Cite.html">Cite</a></li><li><a href="CSL.html">CSL</a></li><li><a href="TokenStack.html">TokenStack</a></li></ul><h3>Global</h3><ul><li><a href="global.html#addLocale">addLocale</a></li><li><a href="global.html#addTemplate">addTemplate</a></li><li><a href="global.html#async">async</a></li><li><a href="global.html#deepCopy">deepCopy</a></li><li><a href="global.html#fetchBibTeXType">fetchBibTeXType</a></li><li><a href="global.html#fetchCSLEngine">fetchCSLEngine</a></li><li><a href="global.html#fetchCSLItemCallback">fetchCSLItemCallback</a></li><li><a href="global.html#fetchCSLLocale">fetchCSLLocale</a></li><li><a href="global.html#fetchCSLStyle">fetchCSLStyle</a></li><li><a href="global.html#fetchDoiType">fetchDoiType</a></li><li><a href="global.html#fetchFile">fetchFile</a></li><li><a href="global.html#fetchFileAsync">fetchFileAsync</a></li><li><a href="global.html#fetchId">fetchId</a></li><li><a href="global.html#fetchWikidataType">fetchWikidataType</a></li><li><a href="global.html#getAttributedEntry">getAttributedEntry</a></li><li><a href="global.html#getBibTeX">getBibTeX</a></li><li><a href="global.html#getBibTeXJSON">getBibTeXJSON</a></li><li><a href="global.html#getBibTeXLabel">getBibTeXLabel</a></li><li><a href="global.html#getBibTxt">getBibTxt</a></li><li><a href="global.html#getDate">getDate</a></li><li><a href="global.html#getJSON">getJSON</a></li><li><a href="global.html#getLabel">getLabel</a></li><li><a href="global.html#getLocale">getLocale</a></li><li><a href="global.html#getName">getName</a></li><li><a href="global.html#getPrefixedEntry">getPrefixedEntry</a></li><li><a href="global.html#getTemplate">getTemplate</a></li><li><a href="global.html#hasLocale">hasLocale</a></li><li><a href="global.html#hasTemplate">hasTemplate</a></li><li><a href="global.html#htmlDict">htmlDict</a></li><li><a href="global.html#parseBibTeX">parseBibTeX</a></li><li><a href="global.html#parseBibTeXJSON">parseBibTeXJSON</a></li><li><a href="global.html#parseBibTeXProp">parseBibTeXProp</a></li><li><a href="global.html#parseBibTeXType">parseBibTeXType</a></li><li><a href="global.html#parseBibTxt">parseBibTxt</a></li><li><a href="global.html#parseBibTxtEntry">parseBibTxtEntry</a></li><li><a href="global.html#parseContentMine">parseContentMine</a></li><li><a href="global.html#parseCsl">parseCsl</a></li><li><a href="global.html#parseDate">parseDate</a></li><li><a href="global.html#parseDoi">parseDoi</a></li><li><a href="global.html#parseDoiApi">parseDoiApi</a></li><li><a href="global.html#parseDoiApiAsync">parseDoiApiAsync</a></li><li><a href="global.html#parseDoiJson">parseDoiJson</a></li><li><a href="global.html#parseInput">parseInput</a></li><li><a href="global.html#parseInputAsync">parseInputAsync</a></li><li><a href="global.html#parseInputChainLink">parseInputChainLink</a></li><li><a href="global.html#parseInputChainLinkAsync">parseInputChainLinkAsync</a></li><li><a href="global.html#parseInputData">parseInputData</a></li><li><a href="global.html#parseInputDataAsync">parseInputDataAsync</a></li><li><a href="global.html#parseInputType">parseInputType</a></li><li><a href="global.html#parseJSON">parseJSON</a></li><li><a href="global.html#parseName">parseName</a></li><li><a href="global.html#parseWikidata">parseWikidata</a></li><li><a href="global.html#parseWikidataJSON">parseWikidataJSON</a></li><li><a href="global.html#parseWikidataJSONAsync">parseWikidataJSONAsync</a></li><li><a href="global.html#parseWikidataProp">parseWikidataProp</a></li><li><a href="global.html#parseWikidataPropAsync">parseWikidataPropAsync</a></li><li><a href="global.html#textDict">textDict</a></li><li><a href="global.html#varRegex">varRegex</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Cite.html">Cite</a></li><li><a href="CSL.html">CSL</a></li><li><a href="TokenStack.html">TokenStack</a></li><li><a href="TokenStack-pattern.html">pattern</a></li><li><a href="TokenStack-sequence.html">sequence</a></li></ul><h3>Global</h3><ul><li><a href="global.html#addLocale">addLocale</a></li><li><a href="global.html#addTemplate">addTemplate</a></li><li><a href="global.html#async">async</a></li><li><a href="global.html#deepCopy">deepCopy</a></li><li><a href="global.html#fetchBibTeXType">fetchBibTeXType</a></li><li><a href="global.html#fetchCSLEngine">fetchCSLEngine</a></li><li><a href="global.html#fetchCSLItemCallback">fetchCSLItemCallback</a></li><li><a href="global.html#fetchCSLLocale">fetchCSLLocale</a></li><li><a href="global.html#fetchCSLStyle">fetchCSLStyle</a></li><li><a href="global.html#fetchDoiType">fetchDoiType</a></li><li><a href="global.html#fetchFile">fetchFile</a></li><li><a href="global.html#fetchFileAsync">fetchFileAsync</a></li><li><a href="global.html#fetchId">fetchId</a></li><li><a href="global.html#fetchWikidataType">fetchWikidataType</a></li><li><a href="global.html#getAttributedEntry">getAttributedEntry</a></li><li><a href="global.html#getBibTeX">getBibTeX</a></li><li><a href="global.html#getBibTeXJSON">getBibTeXJSON</a></li><li><a href="global.html#getBibTeXLabel">getBibTeXLabel</a></li><li><a href="global.html#getBibTxt">getBibTxt</a></li><li><a href="global.html#getDate">getDate</a></li><li><a href="global.html#getJSON">getJSON</a></li><li><a href="global.html#getLabel">getLabel</a></li><li><a href="global.html#getLocale">getLocale</a></li><li><a href="global.html#getName">getName</a></li><li><a href="global.html#getPrefixedEntry">getPrefixedEntry</a></li><li><a href="global.html#getTemplate">getTemplate</a></li><li><a href="global.html#getWrappedEntry">getWrappedEntry</a></li><li><a href="global.html#hasLocale">hasLocale</a></li><li><a href="global.html#hasTemplate">hasTemplate</a></li><li><a href="global.html#htmlDict">htmlDict</a></li><li><a href="global.html#parseBibTeX">parseBibTeX</a></li><li><a href="global.html#parseBibTeXJSON">parseBibTeXJSON</a></li><li><a href="global.html#parseBibTeXProp">parseBibTeXProp</a></li><li><a href="global.html#parseBibTeXType">parseBibTeXType</a></li><li><a href="global.html#parseBibTxt">parseBibTxt</a></li><li><a href="global.html#parseBibTxtEntry">parseBibTxtEntry</a></li><li><a href="global.html#parseContentMine">parseContentMine</a></li><li><a href="global.html#parseCsl">parseCsl</a></li><li><a href="global.html#parseDate">parseDate</a></li><li><a href="global.html#parseDoi">parseDoi</a></li><li><a href="global.html#parseDoiApi">parseDoiApi</a></li><li><a href="global.html#parseDoiApiAsync">parseDoiApiAsync</a></li><li><a href="global.html#parseDoiJson">parseDoiJson</a></li><li><a href="global.html#parseInput">parseInput</a></li><li><a href="global.html#parseInputAsync">parseInputAsync</a></li><li><a href="global.html#parseInputChainLink">parseInputChainLink</a></li><li><a href="global.html#parseInputChainLinkAsync">parseInputChainLinkAsync</a></li><li><a href="global.html#parseInputData">parseInputData</a></li><li><a href="global.html#parseInputDataAsync">parseInputDataAsync</a></li><li><a href="global.html#parseInputType">parseInputType</a></li><li><a href="global.html#parseJSON">parseJSON</a></li><li><a href="global.html#parseName">parseName</a></li><li><a href="global.html#parseWikidata">parseWikidata</a></li><li><a href="global.html#parseWikidataJSON">parseWikidataJSON</a></li><li><a href="global.html#parseWikidataJSONAsync">parseWikidataJSONAsync</a></li><li><a href="global.html#parseWikidataProp">parseWikidataProp</a></li><li><a href="global.html#parseWikidataPropAsync">parseWikidataPropAsync</a></li><li><a href="global.html#textDict">textDict</a></li><li><a href="global.html#varRegex">varRegex</a></li></ul>
 </nav>
 
 <br class="clear">

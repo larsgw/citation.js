@@ -2078,7 +2078,7 @@ describe('.async()', function () {
       return new Promise(function (resolve) {
         _cite2.default.async(_input.input.wd.url, function (data) {
           (0, _expect2.default)(data).to.be.a(_cite2.default);
-          (0, _expect2.default)(data.data[0].wikiId).to.be(_input.output.wd.id);
+          (0, _expect2.default)(data.data).to.eql(_input.output.wd.simple);
           resolve();
         });
       });
@@ -2109,7 +2109,7 @@ describe('.async()', function () {
               data = _context.sent;
 
               (0, _expect2.default)(data).to.be.a(_cite2.default);
-              (0, _expect2.default)(data.data[0].wikiId).to.be(_input.output.wd.id);
+              (0, _expect2.default)(data.data).to.eql(_input.output.wd.simple);
 
             case 5:
             case 'end':
@@ -2198,6 +2198,8 @@ var _cite4 = _interopRequireDefault(_cite3);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { step("next", value); }, function (err) { step("throw", err); }); } } return step("next"); }); }; }
+
 function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } } /* global describe, context, it, beforeEach */
 
 describe('Cite instance', function () {
@@ -2252,6 +2254,91 @@ describe('Cite instance', function () {
         (0, _expect2.default)(test.data).to.have.length(1);
         (0, _expect2.default)(test.log).to.have.length(2);
       });
+    });
+
+    describe('addAsync()', function () {
+      it('works', _asyncToGenerator(regeneratorRuntime.mark(function _callee() {
+        return regeneratorRuntime.wrap(function _callee$(_context) {
+          while (1) {
+            switch (_context.prev = _context.next) {
+              case 0:
+                _context.next = 2;
+                return test.addAsync(_cite4.default.empty);
+
+              case 2:
+                (0, _expect2.default)(test.data).to.have.length(2);
+                (0, _expect2.default)(test.log).to.have.length(1);
+
+              case 4:
+              case 'end':
+                return _context.stop();
+            }
+          }
+        }, _callee, undefined);
+      })));
+
+      it('saves', _asyncToGenerator(regeneratorRuntime.mark(function _callee2() {
+        return regeneratorRuntime.wrap(function _callee2$(_context2) {
+          while (1) {
+            switch (_context2.prev = _context2.next) {
+              case 0:
+                _context2.next = 2;
+                return test.addAsync(_cite4.default.empty, true);
+
+              case 2:
+                (0, _expect2.default)(test.data).to.have.length(2);
+                (0, _expect2.default)(test.log).to.have.length(2);
+
+              case 4:
+              case 'end':
+                return _context2.stop();
+            }
+          }
+        }, _callee2, undefined);
+      })));
+    });
+
+    describe('setAsync()', function () {
+      it('works', _asyncToGenerator(regeneratorRuntime.mark(function _callee3() {
+        return regeneratorRuntime.wrap(function _callee3$(_context3) {
+          while (1) {
+            switch (_context3.prev = _context3.next) {
+              case 0:
+                _context3.next = 2;
+                return test.setAsync(_cite4.default.ids);
+
+              case 2:
+                (0, _expect2.default)(test.data).to.have.length(2);
+                (0, _expect2.default)(test.data).to.eql(_cite4.default.ids);
+                (0, _expect2.default)(test.log).to.have.length(1);
+
+              case 5:
+              case 'end':
+                return _context3.stop();
+            }
+          }
+        }, _callee3, undefined);
+      })));
+
+      it('saves', _asyncToGenerator(regeneratorRuntime.mark(function _callee4() {
+        return regeneratorRuntime.wrap(function _callee4$(_context4) {
+          while (1) {
+            switch (_context4.prev = _context4.next) {
+              case 0:
+                _context4.next = 2;
+                return test.setAsync(_cite4.default.empty, true);
+
+              case 2:
+                (0, _expect2.default)(test.data).to.have.length(1);
+                (0, _expect2.default)(test.log).to.have.length(2);
+
+              case 4:
+              case 'end':
+                return _context4.stop();
+            }
+          }
+        }, _callee4, undefined);
+      })));
     });
 
     describe('reset()', function () {
@@ -2534,7 +2621,7 @@ module.exports={
       "id": "Q21972834",
       "simple": [
         {
-          "wikiId": "Q21972834",
+          "_wikiId": "Q21972834",
           "id": "Q21972834",
           "type": "article-journal",
           "title": "Assembling the 20 Gb white spruce (Picea glauca) genome from whole-genome shotgun sequencing data",
@@ -2574,7 +2661,7 @@ module.exports={
       ],
       "author": [
         {
-          "wikiId": "Q27795847",
+          "_wikiId": "Q27795847",
           "id": "Q27795847",
           "type": "article-journal",
           "issued": {
@@ -2630,7 +2717,7 @@ module.exports={
     "bibtex": {
       "simple": [
         {
-          "label": "Steinbeck2003",
+          "_label": "Steinbeck2003",
           "type": "article-journal",
           "author": [
             {"given": "Christoph", "family": "Steinbeck"},
@@ -2655,7 +2742,7 @@ module.exports={
       ],
       "whitespace": [
         {
-          "label": "Ekstrand:2009:RYD",
+          "_label": "Ekstrand:2009:RYD",
           "type": "paper-conference",
           "author": [
             {"given": "Michael D.", "family": "Ekstrand"},
@@ -2675,7 +2762,7 @@ module.exports={
         }
       ],
       "literals": [{
-        "label": "b",
+        "_label": "b",
         "id": "b",
         "type": "book",
         "author": [
@@ -2688,7 +2775,7 @@ module.exports={
         }
       }],
       "yearMonthNeeded": [{
-        "label": "b",
+        "_label": "b",
         "id": "b",
         "type": "book",
         "issued": {
@@ -2696,7 +2783,7 @@ module.exports={
         }
       }],
       "yearMonth": [{
-        "label": "b",
+        "_label": "b",
         "id": "b",
         "type": "book",
         "issued": {
@@ -2714,7 +2801,7 @@ module.exports={
       "publisher-place": "Stuttgart",
       "type": "book",
       "id": "Fau86",
-      "label": "Fau86"
+      "_label": "Fau86"
     },
     "bibjson": {
       "simple": [
@@ -2753,6 +2840,7 @@ module.exports={
     }
   }
 }
+
 },{}],12:[function(require,module,exports){
 'use strict';
 
@@ -2938,7 +3026,9 @@ module.exports={
         "apa": "<div class=\"csl-bib-body\">\n  <div data-csl-entry-id=\"Q23571040\" class=\"csl-entry\">Hall, H. K. (1957). Correlation of the Base Strengths of Amines 1. <i>Journal of the American Chemical Society</i>, <i>79</i>(20), 5441–5444. https://doi.org/10.1021/ja01577a030</div>\n</div>",
         "vancouver": "<div class=\"csl-bib-body\">\n  <div data-csl-entry-id=\"Q23571040\" class=\"csl-entry\">\n    <div class=\"csl-left-margin\">1. </div><div class=\"csl-right-inline\">Hall HK. Correlation of the Base Strengths of Amines 1. Journal of the American Chemical Society. 1957 Jan 1;79(20):5441–4.</div>\n   </div>\n</div>",
         "title": "<div class=\"csl-bib-body\">\n  <div data-csl-entry-id=\"Q23571040\" class=\"csl-entry\">Correlation of the Base Strengths of Amines 1</div>\n</div>",
-        "locale": "<div class=\"csl-bib-body\">\n  <div data-csl-entry-id=\"a\" class=\"csl-entry\"> (custom).</div>\n</div>"
+        "locale": "<div class=\"csl-bib-body\">\n  <div data-csl-entry-id=\"a\" class=\"csl-entry\"> (custom).</div>\n</div>",
+        "wrappedStatic": "<div class=\"csl-bib-body\">\n  <div data-csl-entry-id=\"Q23571040\" class=\"csl-entry\">aHall, H. K. (1957). Correlation of the Base Strengths of Amines 1. <i>Journal of the American Chemical Society</i>, <i>79</i>(20), 5441–5444. https://doi.org/10.1021/ja01577a030b</div>\n</div>",
+        "wrappedDynamic": "<div class=\"csl-bib-body\">\n  <div data-csl-entry-id=\"Q23571040\" class=\"csl-entry\">20Hall, H. K. (1957). Correlation of the Base Strengths of Amines 1. <i>Journal of the American Chemical Society</i>, <i>79</i>(20), 5441–5444. https://doi.org/10.1021/ja01577a03079</div>\n</div>"
       }
     },
     "bibtex": {
@@ -2963,10 +3053,11 @@ module.exports={
     }
   }
 }
+
 },{}],14:[function(require,module,exports){
 'use strict';
 
-var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; /* global describe, it */
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; /* global describe, context, it */
 
 var _expect = require('expect.js');
 
@@ -3042,6 +3133,18 @@ describe('output', function () {
         });
 
         testCaseGenerator(data, opts('string', 'html', 'citation-apa', 'custom'), _output.output.csl.html.locale)();
+      });
+
+      describe('pre/append', function () {
+        context('static', testCaseGenerator(data, { format: 'string', type: 'html', style: 'citation-apa', append: 'b', prepend: 'a' }, _output.output.csl.html.wrappedStatic));
+
+        context('dynamic', testCaseGenerator(data, { format: 'string', type: 'html', style: 'citation-apa', append: function append(_ref2) {
+            var volume = _ref2.volume;
+            return volume;
+          }, prepend: function prepend(_ref3) {
+            var issue = _ref3.issue;
+            return issue;
+          } }, _output.output.csl.html.wrappedDynamic));
       });
     });
 

@@ -48,13 +48,14 @@
 
 
     <section>
-        <article><p><img src="https://larsgw.github.io/citation.js/static/img/banner.png" alt="Citation.js"></p>
+        <article><p><img align="center" alt="Citation.js" src="https://citation.js.org/static/img/square_logo_medium.png" /></p>
 <p>Citation.js converts formats like BibTeX, Wikidata JSON and ContentMine JSON to CSL-JSON to convert to other formats like APA, Vancouver and back to BibTeX.</p>
 <p><a href="https://www.npmjs.org/citation-js"><img src="https://img.shields.io/npm/v/citation-js.svg" alt="NPM version"></a>
 <a href="https://npmjs.org/citation-js"><img src="https://img.shields.io/npm/dt/citation-js.svg" alt="NPM total downloads"></a>
 <a href="https://travis-ci.org/larsgw/citation.js"><img src="https://travis-ci.org/larsgw/citation.js.svg?branch=master" alt="Build Status"></a>
 <a href="https://david-dm.org/larsgw/citation.js"><img src="https://david-dm.org/larsgw/citation.js/status.svg" alt="Dependency Status"></a>
-<a href="https://codecov.io/gh/larsgw/citation.js"><img src="https://codecov.io/gh/larsgw/citation.js/branch/master/graph/badge.svg" alt="codecov"></a></p>
+<a href="https://codecov.io/gh/larsgw/citation.js"><img src="https://codecov.io/gh/larsgw/citation.js/branch/master/graph/badge.svg" alt="codecov"></a>
+<a href="https://github.com/larsgw/citation.js/blob/master/LICENSE.md"><img src="https://img.shields.io/github/license/larsgw/citation.js.svg" alt="license"></a></p>
 <h5>Table of Contents</h5><ul>
 <li><a href="#starting">Get Started</a><ul>
 <li><a href="#install">Install</a><ul>
@@ -183,6 +184,8 @@ data.get() // Should implicitly display</code></pre><p>To test this code, go to 
 <li><code>type</code>: The output type: <code>&quot;html&quot;</code>, <code>&quot;string&quot;</code> or <code>&quot;json&quot;</code> (default).</li>
 <li><code>style</code>: The output style. See <a href="#cite.out">Output</a>. <code>&quot;csl&quot;</code> is default</li>
 <li><code>lang</code>: The language of the output. <a href="https://tools.ietf.org/html/rfc5646">RFC 5646</a> codes. Currently supported: <code>&quot;en-US&quot;</code> (default), <code>&quot;fr-FR&quot;</code>, <code>&quot;es-ES&quot;</code> ,<code>&quot;de-DE&quot;</code> and <code>&quot;nl-NL&quot;</code></li>
+<li><code>prepend</code>: Function taking source CSL-JSON as input or constant string to prepend to each element</li>
+<li><code>append</code>: Same, but appending</li>
 </ol>
 <h3><a id="cite.out" href="#cite.out">Ouput</a></h3><p>When using the <code>.get()</code> function, your output depends on the options you pass. If you don't pass any options, the values you passed as default are used. When you didn't pass default options, standard options are passed.</p>
 <h4><a id="cite.out.type" href="#cite.out.type">Type</a></h4><ul>
@@ -247,6 +250,7 @@ data.get({
 <li><code>.save()</code>: Save the current object</li>
 <li><code>.sort()</code>: Sort all entries on basis of their BibTeX label</li>
 </ul>
+<p><code>.set()</code> and <code>.get()</code> also have async variants (append <code>Async</code> to the function name), which return Promises.</p>
 <h4><a id="cite.misc.iterator" href="#cite.misc.iterator">Iterator</a></h4><p>Every <code>Cite</code> instance is an Iterator, so you can loop over an instance with <code>for of</code>:</p>
 <pre class="prettyprint source lang-js"><code>const data = new Cite([{id: 1}, {id: 2}, {id: 3}])
 let array = []
@@ -255,9 +259,9 @@ for (let {id} of data) {
   array.push(id)
 }
 
-array // [1, 2, 3]</code></pre><h2><a id="cite.internal" href="#cite.internal">Internal functions</a></h2><p><code>Cite</code> holds most internal functions, too. These are documented <a href="https://larsgw.github.io/citation.js/api/global.html">here</a> and can be accessed like this:</p>
+array // [1, 2, 3]</code></pre><h2><a id="cite.internal" href="#cite.internal">Internal functions</a></h2><p><code>Cite</code> holds most internal functions, too. These are documented <a href="https://citation.js.org/api/global.html">here</a> and can be accessed like this:</p>
 <p>Note that most <code>get*</code> functions expect CSL-JSON normalised with <code>Cite.parse.csl: [Function: parseCsl]</code>.</p>
-<pre class="prettyprint source lang-js"><code>{
+<pre class="prettyprint source lang-js"><code>{ [Function: Cite]
   async: [Function: async],
   get: 
    { bibtex: 
@@ -266,7 +270,9 @@ array // [1, 2, 3]</code></pre><h2><a id="cite.internal" href="#cite.internal">I
         label: [Function: getBibTeXLabel],
         type: [Function: fetchBibTeXType] },
      bibtxt: [Function: getBibTxt],
-     dict: { htmlDict: [Object], textDict: [Object] },
+     dict: 
+      { htmlDict: [Object],
+        textDict: [Object] },
      json: [Function: getJSON],
      date: [Function: getDate],
      name: [Function: getName],
@@ -321,11 +327,16 @@ array // [1, 2, 3]</code></pre><h2><a id="cite.internal" href="#cite.internal">I
   util: 
    { attr: 
       { getAttributedEntry: [Function: getAttributedEntry],
-        getPrefixedEntry: [Function: getPrefixedEntry] },
+        getPrefixedEntry: [Function: getPrefixedEntry],
+        getWrappedEntry: [Function: getWrappedEntry] },
      deepCopy: [Function: deepCopy],
      fetchFile: [Function: fetchFile],
      fetchFileAsync: [Function: fetchFileAsync],
-     fetchId: [Function: fetchId] } }</code></pre><h2><a id="async" href="#async">Async</a></h2><p>Use the async api (recommended for Wikidata, URL, and DOI input) like this (with callback):</p>
+     fetchId: [Function: fetchId],
+     TokenStack: [Function: TokenStack] },
+  version: { cite: '0.3.0-14', citeproc: '1.1.169' },
+  normalise: [Function: parseInput],
+  normaliseAsync: [Function: parseInputAsync] }</code></pre><h2><a id="async" href="#async">Async</a></h2><p>Use the async api (recommended for Wikidata, URL, and DOI input) like this (with callback):</p>
 <pre class="prettyprint source lang-js"><code>Cite.async(&lt;DATA>, &lt;OPTIONS>, function (data) {
   data // instance of Cite
 
@@ -338,7 +349,7 @@ array // [1, 2, 3]</code></pre><h2><a id="cite.internal" href="#cite.internal">I
   // Further manipulations...
   console.log(data.get())
 })</code></pre><p>Where <code>&lt;DATA&gt;</code> is the input data and <code>&lt;OPTIONS&gt;</code> is the input options. <code>&lt;OPTIONS&gt;</code> is optional in both examples.</p>
-<h1><a id="more" href="#more">More</a></h1><h2><a id="more.docs" href="#more.docs">More Docs</a></h2><p>Further explanation can be found <a href="https://larsgw.github.io/citation.js/api/">here</a>.</p>
+<h1><a id="more" href="#more">More</a></h1><h2><a id="more.docs" href="#more.docs">More Docs</a></h2><p>Further explanation can be found <a href="https://citation.js.org/api/">here</a>.</p>
 <h2><a id="more.demo" href="#more.demo">Demo</a></h2><h3><a id="more.demo.npm" href="#more.demo.npm">NPM Demo</a></h3><p><a href="https://runkit.com/npm/citation-js">NPM Demo</a>. Example code:</p>
 <pre class="prettyprint source lang-js"><code>var Cite = require('citation-js')
 
@@ -350,8 +361,8 @@ var data = new Cite('Q21972834', {
 })
 
 data.get() // Should implicitly display</code></pre><h3><a id="more.demo.browser" href="#more.demo.browser">Browser Demos</a></h3><ul>
-<li><a href="https://larsgw.github.io/citation.js/demo/">Normal demo</a></li>
-<li><a href="https://larsgw.github.io/citation.js/demo/bibtxt.html">Bib.TXT demo</a></li>
+<li><a href="https://citation.js.org/demo/">Normal demo</a></li>
+<li><a href="https://citation.js.org/demo/bibtxt.html">Bib.TXT demo</a></li>
 </ul></article>
     </section>
 
@@ -386,7 +397,7 @@ data.get() // Should implicitly display</code></pre><h3><a id="more.demo.browser
 
     
     <dt class="tag-version">Version:</dt>
-    <dd class="tag-version"><ul class="dummy"><li>0.3.0-5</li></ul></dd>
+    <dd class="tag-version"><ul class="dummy"><li>0.3.0-13</li></ul></dd>
     
 
     
@@ -487,7 +498,7 @@ SOFTWARE.</li></ul></dd>
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Cite.html">Cite</a></li><li><a href="CSL.html">CSL</a></li><li><a href="TokenStack.html">TokenStack</a></li></ul><h3>Global</h3><ul><li><a href="global.html#addLocale">addLocale</a></li><li><a href="global.html#addTemplate">addTemplate</a></li><li><a href="global.html#async">async</a></li><li><a href="global.html#deepCopy">deepCopy</a></li><li><a href="global.html#fetchBibTeXType">fetchBibTeXType</a></li><li><a href="global.html#fetchCSLEngine">fetchCSLEngine</a></li><li><a href="global.html#fetchCSLItemCallback">fetchCSLItemCallback</a></li><li><a href="global.html#fetchCSLLocale">fetchCSLLocale</a></li><li><a href="global.html#fetchCSLStyle">fetchCSLStyle</a></li><li><a href="global.html#fetchDoiType">fetchDoiType</a></li><li><a href="global.html#fetchFile">fetchFile</a></li><li><a href="global.html#fetchFileAsync">fetchFileAsync</a></li><li><a href="global.html#fetchId">fetchId</a></li><li><a href="global.html#fetchWikidataType">fetchWikidataType</a></li><li><a href="global.html#getAttributedEntry">getAttributedEntry</a></li><li><a href="global.html#getBibTeX">getBibTeX</a></li><li><a href="global.html#getBibTeXJSON">getBibTeXJSON</a></li><li><a href="global.html#getBibTeXLabel">getBibTeXLabel</a></li><li><a href="global.html#getBibTxt">getBibTxt</a></li><li><a href="global.html#getDate">getDate</a></li><li><a href="global.html#getJSON">getJSON</a></li><li><a href="global.html#getLabel">getLabel</a></li><li><a href="global.html#getLocale">getLocale</a></li><li><a href="global.html#getName">getName</a></li><li><a href="global.html#getPrefixedEntry">getPrefixedEntry</a></li><li><a href="global.html#getTemplate">getTemplate</a></li><li><a href="global.html#hasLocale">hasLocale</a></li><li><a href="global.html#hasTemplate">hasTemplate</a></li><li><a href="global.html#htmlDict">htmlDict</a></li><li><a href="global.html#parseBibTeX">parseBibTeX</a></li><li><a href="global.html#parseBibTeXJSON">parseBibTeXJSON</a></li><li><a href="global.html#parseBibTeXProp">parseBibTeXProp</a></li><li><a href="global.html#parseBibTeXType">parseBibTeXType</a></li><li><a href="global.html#parseBibTxt">parseBibTxt</a></li><li><a href="global.html#parseBibTxtEntry">parseBibTxtEntry</a></li><li><a href="global.html#parseContentMine">parseContentMine</a></li><li><a href="global.html#parseCsl">parseCsl</a></li><li><a href="global.html#parseDate">parseDate</a></li><li><a href="global.html#parseDoi">parseDoi</a></li><li><a href="global.html#parseDoiApi">parseDoiApi</a></li><li><a href="global.html#parseDoiApiAsync">parseDoiApiAsync</a></li><li><a href="global.html#parseDoiJson">parseDoiJson</a></li><li><a href="global.html#parseInput">parseInput</a></li><li><a href="global.html#parseInputAsync">parseInputAsync</a></li><li><a href="global.html#parseInputChainLink">parseInputChainLink</a></li><li><a href="global.html#parseInputChainLinkAsync">parseInputChainLinkAsync</a></li><li><a href="global.html#parseInputData">parseInputData</a></li><li><a href="global.html#parseInputDataAsync">parseInputDataAsync</a></li><li><a href="global.html#parseInputType">parseInputType</a></li><li><a href="global.html#parseJSON">parseJSON</a></li><li><a href="global.html#parseName">parseName</a></li><li><a href="global.html#parseWikidata">parseWikidata</a></li><li><a href="global.html#parseWikidataJSON">parseWikidataJSON</a></li><li><a href="global.html#parseWikidataJSONAsync">parseWikidataJSONAsync</a></li><li><a href="global.html#parseWikidataProp">parseWikidataProp</a></li><li><a href="global.html#parseWikidataPropAsync">parseWikidataPropAsync</a></li><li><a href="global.html#textDict">textDict</a></li><li><a href="global.html#varRegex">varRegex</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Cite.html">Cite</a></li><li><a href="CSL.html">CSL</a></li><li><a href="TokenStack.html">TokenStack</a></li><li><a href="TokenStack-pattern.html">pattern</a></li><li><a href="TokenStack-sequence.html">sequence</a></li></ul><h3>Global</h3><ul><li><a href="global.html#addLocale">addLocale</a></li><li><a href="global.html#addTemplate">addTemplate</a></li><li><a href="global.html#async">async</a></li><li><a href="global.html#deepCopy">deepCopy</a></li><li><a href="global.html#fetchBibTeXType">fetchBibTeXType</a></li><li><a href="global.html#fetchCSLEngine">fetchCSLEngine</a></li><li><a href="global.html#fetchCSLItemCallback">fetchCSLItemCallback</a></li><li><a href="global.html#fetchCSLLocale">fetchCSLLocale</a></li><li><a href="global.html#fetchCSLStyle">fetchCSLStyle</a></li><li><a href="global.html#fetchDoiType">fetchDoiType</a></li><li><a href="global.html#fetchFile">fetchFile</a></li><li><a href="global.html#fetchFileAsync">fetchFileAsync</a></li><li><a href="global.html#fetchId">fetchId</a></li><li><a href="global.html#fetchWikidataType">fetchWikidataType</a></li><li><a href="global.html#getAttributedEntry">getAttributedEntry</a></li><li><a href="global.html#getBibTeX">getBibTeX</a></li><li><a href="global.html#getBibTeXJSON">getBibTeXJSON</a></li><li><a href="global.html#getBibTeXLabel">getBibTeXLabel</a></li><li><a href="global.html#getBibTxt">getBibTxt</a></li><li><a href="global.html#getDate">getDate</a></li><li><a href="global.html#getJSON">getJSON</a></li><li><a href="global.html#getLabel">getLabel</a></li><li><a href="global.html#getLocale">getLocale</a></li><li><a href="global.html#getName">getName</a></li><li><a href="global.html#getPrefixedEntry">getPrefixedEntry</a></li><li><a href="global.html#getTemplate">getTemplate</a></li><li><a href="global.html#getWrappedEntry">getWrappedEntry</a></li><li><a href="global.html#hasLocale">hasLocale</a></li><li><a href="global.html#hasTemplate">hasTemplate</a></li><li><a href="global.html#htmlDict">htmlDict</a></li><li><a href="global.html#parseBibTeX">parseBibTeX</a></li><li><a href="global.html#parseBibTeXJSON">parseBibTeXJSON</a></li><li><a href="global.html#parseBibTeXProp">parseBibTeXProp</a></li><li><a href="global.html#parseBibTeXType">parseBibTeXType</a></li><li><a href="global.html#parseBibTxt">parseBibTxt</a></li><li><a href="global.html#parseBibTxtEntry">parseBibTxtEntry</a></li><li><a href="global.html#parseContentMine">parseContentMine</a></li><li><a href="global.html#parseCsl">parseCsl</a></li><li><a href="global.html#parseDate">parseDate</a></li><li><a href="global.html#parseDoi">parseDoi</a></li><li><a href="global.html#parseDoiApi">parseDoiApi</a></li><li><a href="global.html#parseDoiApiAsync">parseDoiApiAsync</a></li><li><a href="global.html#parseDoiJson">parseDoiJson</a></li><li><a href="global.html#parseInput">parseInput</a></li><li><a href="global.html#parseInputAsync">parseInputAsync</a></li><li><a href="global.html#parseInputChainLink">parseInputChainLink</a></li><li><a href="global.html#parseInputChainLinkAsync">parseInputChainLinkAsync</a></li><li><a href="global.html#parseInputData">parseInputData</a></li><li><a href="global.html#parseInputDataAsync">parseInputDataAsync</a></li><li><a href="global.html#parseInputType">parseInputType</a></li><li><a href="global.html#parseJSON">parseJSON</a></li><li><a href="global.html#parseName">parseName</a></li><li><a href="global.html#parseWikidata">parseWikidata</a></li><li><a href="global.html#parseWikidataJSON">parseWikidataJSON</a></li><li><a href="global.html#parseWikidataJSONAsync">parseWikidataJSONAsync</a></li><li><a href="global.html#parseWikidataProp">parseWikidataProp</a></li><li><a href="global.html#parseWikidataPropAsync">parseWikidataPropAsync</a></li><li><a href="global.html#textDict">textDict</a></li><li><a href="global.html#varRegex">varRegex</a></li></ul>
 </nav>
 
 <br class="clear">

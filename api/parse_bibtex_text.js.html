@@ -87,7 +87,7 @@ const delimiters = {
  *
  * @param {String} str - Input BibTeX
  *
- * @return {String[]} list of tokens
+ * @return {Array&lt;String>} list of tokens
  */
 const getTokenizedBibtex = function (str) {
   // Substitute command of form "\X{X}" into "{\X X}"
@@ -107,7 +107,7 @@ const getTokenizedBibtex = function (str) {
  *
  * @param {String} str - The input data
  *
- * @return {CSL[]} The formatted input data
+ * @return {Array&lt;CSL>} The formatted input data
  */
 const parseBibTeX = function (str) {
   const entries = []
@@ -115,41 +115,34 @@ const parseBibTeX = function (str) {
   const stack = new TokenStack(tokens)
 
   try {
-    stack.consume(whitespace)
+    stack.consumeWhitespace()
 
     while (stack.tokensLeft()) {
-      stack.consumeToken('@')
-      stack.consume(whitespace)
+      stack.consumeToken('@', {spaced: false})
+      stack.consumeWhitespace()
 
       const type = stack.consume([whitespace, syntax], {inverse: true}).toLowerCase()
 
-      stack.consume(whitespace)
       stack.consumeToken('{')
-      stack.consume(whitespace)
 
       const label = stack.consume([whitespace, syntax], {inverse: true})
 
-      stack.consume(whitespace)
       stack.consumeToken(',')
-      stack.consume(whitespace)
 
       const properties = {}
 
       while (stack.tokensLeft()) {
         const key = stack.consume([whitespace, '='], {inverse: true}).toLowerCase()
 
-        stack.consume(whitespace)
         stack.consumeToken('=')
-        stack.consume(whitespace)
 
         const startDelimiter = stack.consume(/^({|"|)$/g)
+        const endDelimiter = delimiters[startDelimiter]
 
         if (!delimiters.hasOwnProperty(startDelimiter)) {
           throw new SyntaxError(`Unexpected field delimiter at index ${stack.index}. Expected ` +
-            `${Object.keys(delimiters).map(function (v) { return `"${v}"` }).join(', ')}; got "${startDelimiter}"`)
+            `${Object.keys(delimiters).map(v => `"${v}"`).join(', ')}; got "${startDelimiter}"`)
         }
-
-        const endDelimiter = delimiters[startDelimiter]
 
         const tokenMap = token => {
           if (varBibTeXTokens.hasOwnProperty(token)) {
@@ -173,32 +166,28 @@ const parseBibTeX = function (str) {
             throw new SyntaxError(`Unmatched delimiter at index ${stack.index}: Expected ${endDelimiter}`)
           } else if (!endDelimiter.length) {
             return ![whitespace, syntax].some(rgx => rgx.test(token))
-          } else if (token === '}' &amp;&amp; openBrackets) {
-            openBrackets--
-            return true
           } else {
-            token = stack.stack.slice(index, index + endDelimiter.length).join('')
-            return token !== endDelimiter
+            return (token === '}' &amp;&amp; openBrackets--) || !stack.matchesSequence(endDelimiter)
           }
         }, {tokenMap})
 
         properties[key] = val
 
         stack.consumeN(endDelimiter.length)
-        stack.consume(whitespace)
+        stack.consumeWhitespace()
 
         // Last entry (no trailing comma)
         if (stack.matches('}')) { break }
 
-        stack.consumeToken(',')
-        stack.consume(whitespace)
+        stack.consumeToken(',', {spaced: false})
+        stack.consumeWhitespace()
 
         // Last entry (trailing comma)
         if (stack.matches('}')) { break }
       }
 
-      stack.consumeToken('}')
-      stack.consume(whitespace)
+      stack.consumeToken('}', {spaced: false})
+      stack.consumeWhitespace()
 
       entries.push({type, label, properties})
     }
@@ -223,7 +212,7 @@ export default parseBibTeX
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Cite.html">Cite</a></li><li><a href="CSL.html">CSL</a></li><li><a href="TokenStack.html">TokenStack</a></li></ul><h3>Global</h3><ul><li><a href="global.html#addLocale">addLocale</a></li><li><a href="global.html#addTemplate">addTemplate</a></li><li><a href="global.html#async">async</a></li><li><a href="global.html#deepCopy">deepCopy</a></li><li><a href="global.html#fetchBibTeXType">fetchBibTeXType</a></li><li><a href="global.html#fetchCSLEngine">fetchCSLEngine</a></li><li><a href="global.html#fetchCSLItemCallback">fetchCSLItemCallback</a></li><li><a href="global.html#fetchCSLLocale">fetchCSLLocale</a></li><li><a href="global.html#fetchCSLStyle">fetchCSLStyle</a></li><li><a href="global.html#fetchDoiType">fetchDoiType</a></li><li><a href="global.html#fetchFile">fetchFile</a></li><li><a href="global.html#fetchFileAsync">fetchFileAsync</a></li><li><a href="global.html#fetchId">fetchId</a></li><li><a href="global.html#fetchWikidataType">fetchWikidataType</a></li><li><a href="global.html#getAttributedEntry">getAttributedEntry</a></li><li><a href="global.html#getBibTeX">getBibTeX</a></li><li><a href="global.html#getBibTeXJSON">getBibTeXJSON</a></li><li><a href="global.html#getBibTeXLabel">getBibTeXLabel</a></li><li><a href="global.html#getBibTxt">getBibTxt</a></li><li><a href="global.html#getDate">getDate</a></li><li><a href="global.html#getJSON">getJSON</a></li><li><a href="global.html#getLabel">getLabel</a></li><li><a href="global.html#getLocale">getLocale</a></li><li><a href="global.html#getName">getName</a></li><li><a href="global.html#getPrefixedEntry">getPrefixedEntry</a></li><li><a href="global.html#getTemplate">getTemplate</a></li><li><a href="global.html#hasLocale">hasLocale</a></li><li><a href="global.html#hasTemplate">hasTemplate</a></li><li><a href="global.html#htmlDict">htmlDict</a></li><li><a href="global.html#parseBibTeX">parseBibTeX</a></li><li><a href="global.html#parseBibTeXJSON">parseBibTeXJSON</a></li><li><a href="global.html#parseBibTeXProp">parseBibTeXProp</a></li><li><a href="global.html#parseBibTeXType">parseBibTeXType</a></li><li><a href="global.html#parseBibTxt">parseBibTxt</a></li><li><a href="global.html#parseBibTxtEntry">parseBibTxtEntry</a></li><li><a href="global.html#parseContentMine">parseContentMine</a></li><li><a href="global.html#parseCsl">parseCsl</a></li><li><a href="global.html#parseDate">parseDate</a></li><li><a href="global.html#parseDoi">parseDoi</a></li><li><a href="global.html#parseDoiApi">parseDoiApi</a></li><li><a href="global.html#parseDoiApiAsync">parseDoiApiAsync</a></li><li><a href="global.html#parseDoiJson">parseDoiJson</a></li><li><a href="global.html#parseInput">parseInput</a></li><li><a href="global.html#parseInputAsync">parseInputAsync</a></li><li><a href="global.html#parseInputChainLink">parseInputChainLink</a></li><li><a href="global.html#parseInputChainLinkAsync">parseInputChainLinkAsync</a></li><li><a href="global.html#parseInputData">parseInputData</a></li><li><a href="global.html#parseInputDataAsync">parseInputDataAsync</a></li><li><a href="global.html#parseInputType">parseInputType</a></li><li><a href="global.html#parseJSON">parseJSON</a></li><li><a href="global.html#parseName">parseName</a></li><li><a href="global.html#parseWikidata">parseWikidata</a></li><li><a href="global.html#parseWikidataJSON">parseWikidataJSON</a></li><li><a href="global.html#parseWikidataJSONAsync">parseWikidataJSONAsync</a></li><li><a href="global.html#parseWikidataProp">parseWikidataProp</a></li><li><a href="global.html#parseWikidataPropAsync">parseWikidataPropAsync</a></li><li><a href="global.html#textDict">textDict</a></li><li><a href="global.html#varRegex">varRegex</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Cite.html">Cite</a></li><li><a href="CSL.html">CSL</a></li><li><a href="TokenStack.html">TokenStack</a></li><li><a href="TokenStack-pattern.html">pattern</a></li><li><a href="TokenStack-sequence.html">sequence</a></li></ul><h3>Global</h3><ul><li><a href="global.html#addLocale">addLocale</a></li><li><a href="global.html#addTemplate">addTemplate</a></li><li><a href="global.html#async">async</a></li><li><a href="global.html#deepCopy">deepCopy</a></li><li><a href="global.html#fetchBibTeXType">fetchBibTeXType</a></li><li><a href="global.html#fetchCSLEngine">fetchCSLEngine</a></li><li><a href="global.html#fetchCSLItemCallback">fetchCSLItemCallback</a></li><li><a href="global.html#fetchCSLLocale">fetchCSLLocale</a></li><li><a href="global.html#fetchCSLStyle">fetchCSLStyle</a></li><li><a href="global.html#fetchDoiType">fetchDoiType</a></li><li><a href="global.html#fetchFile">fetchFile</a></li><li><a href="global.html#fetchFileAsync">fetchFileAsync</a></li><li><a href="global.html#fetchId">fetchId</a></li><li><a href="global.html#fetchWikidataType">fetchWikidataType</a></li><li><a href="global.html#getAttributedEntry">getAttributedEntry</a></li><li><a href="global.html#getBibTeX">getBibTeX</a></li><li><a href="global.html#getBibTeXJSON">getBibTeXJSON</a></li><li><a href="global.html#getBibTeXLabel">getBibTeXLabel</a></li><li><a href="global.html#getBibTxt">getBibTxt</a></li><li><a href="global.html#getDate">getDate</a></li><li><a href="global.html#getJSON">getJSON</a></li><li><a href="global.html#getLabel">getLabel</a></li><li><a href="global.html#getLocale">getLocale</a></li><li><a href="global.html#getName">getName</a></li><li><a href="global.html#getPrefixedEntry">getPrefixedEntry</a></li><li><a href="global.html#getTemplate">getTemplate</a></li><li><a href="global.html#getWrappedEntry">getWrappedEntry</a></li><li><a href="global.html#hasLocale">hasLocale</a></li><li><a href="global.html#hasTemplate">hasTemplate</a></li><li><a href="global.html#htmlDict">htmlDict</a></li><li><a href="global.html#parseBibTeX">parseBibTeX</a></li><li><a href="global.html#parseBibTeXJSON">parseBibTeXJSON</a></li><li><a href="global.html#parseBibTeXProp">parseBibTeXProp</a></li><li><a href="global.html#parseBibTeXType">parseBibTeXType</a></li><li><a href="global.html#parseBibTxt">parseBibTxt</a></li><li><a href="global.html#parseBibTxtEntry">parseBibTxtEntry</a></li><li><a href="global.html#parseContentMine">parseContentMine</a></li><li><a href="global.html#parseCsl">parseCsl</a></li><li><a href="global.html#parseDate">parseDate</a></li><li><a href="global.html#parseDoi">parseDoi</a></li><li><a href="global.html#parseDoiApi">parseDoiApi</a></li><li><a href="global.html#parseDoiApiAsync">parseDoiApiAsync</a></li><li><a href="global.html#parseDoiJson">parseDoiJson</a></li><li><a href="global.html#parseInput">parseInput</a></li><li><a href="global.html#parseInputAsync">parseInputAsync</a></li><li><a href="global.html#parseInputChainLink">parseInputChainLink</a></li><li><a href="global.html#parseInputChainLinkAsync">parseInputChainLinkAsync</a></li><li><a href="global.html#parseInputData">parseInputData</a></li><li><a href="global.html#parseInputDataAsync">parseInputDataAsync</a></li><li><a href="global.html#parseInputType">parseInputType</a></li><li><a href="global.html#parseJSON">parseJSON</a></li><li><a href="global.html#parseName">parseName</a></li><li><a href="global.html#parseWikidata">parseWikidata</a></li><li><a href="global.html#parseWikidataJSON">parseWikidataJSON</a></li><li><a href="global.html#parseWikidataJSONAsync">parseWikidataJSONAsync</a></li><li><a href="global.html#parseWikidataProp">parseWikidataProp</a></li><li><a href="global.html#parseWikidataPropAsync">parseWikidataPropAsync</a></li><li><a href="global.html#textDict">textDict</a></li><li><a href="global.html#varRegex">varRegex</a></li></ul>
 </nav>
 
 <br class="clear">
