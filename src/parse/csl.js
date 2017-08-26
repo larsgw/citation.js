@@ -1,7 +1,7 @@
 import parseName from './name'
 
 /**
- * Object containing types for CSL-JSON fields.
+ * Object containing types for CSL-JSON fields, omitting name and date fields.
  * Data from https://github.com/citation-style-language/schema/blob/master/csl-data.json
  *
  * @access private
@@ -187,6 +187,8 @@ const correctField = function (fieldName, value, bestGuessConversions = true) {
   const fieldType = [].concat(fieldTypes[fieldName])
 
   if (fieldType.includes(typeof value)) {
+    return value
+  } else if (/^_/.test(value)) {
     return value
   } else if (!bestGuessConversions) {
     return undefined

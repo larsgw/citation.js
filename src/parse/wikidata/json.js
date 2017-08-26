@@ -34,7 +34,7 @@ const parseWikidataJSON = function (data) {
     })
 
     if (Array.isArray(json.author)) {
-      json.author = json.author.sort((a, b) => a[1] - b[1]).map(v => v[0])
+      json.author.sort(({_ordinal: a}, {_ordinal: b}) => a - b)
     }
 
     if (!json.title) {

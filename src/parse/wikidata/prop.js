@@ -75,7 +75,9 @@ const propMap = {
 }
 
 /**
- * Transform property and value from Wikidata format to CSL
+ * Transform property and value from Wikidata format to CSL.
+ *
+ * Returns additional _ordinal property on authors.
  *
  * @access protected
  * @method parseWikidataProp
@@ -114,10 +116,11 @@ const parseWikidataProp = function (name, value, lang) {
         return type
 
       case 'P50':
-        return valueList.map(({value, qualifiers}) => [
-          parseName(fetchWikidataLabel(value, lang)[0]),
-          parseWikidataP1545(qualifiers)
-        ])
+        return valueList.map(({value, qualifiers}) => {
+          const name = parseName(fetchWikidataLabel(value, lang)[0])
+          name._ordinal = parseWikidataP1545(qualifiers)
+          return name
+        })
 
       case 'P577':
       case 'P580':
@@ -128,7 +131,11 @@ const parseWikidataProp = function (name, value, lang) {
         return fetchWikidataLabel(value, lang)[0]
 
       case 'P2093':
-        return valueList.map(({value, qualifiers}) => [parseName(value), parseWikidataP1545(qualifiers)])
+        return valueList.map(({value, qualifiers}) => {
+          const name = parseName(value)
+          name._ordinal = parseWikidataP1545(qualifiers)
+          return name
+        })
 
       default:
         return value

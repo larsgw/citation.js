@@ -26,7 +26,9 @@ const fetchWikidataLabelAsync = async function (q, lang) {
 const parseWikidataP1545 = qualifiers => qualifiers.P1545 ? parseInt(qualifiers.P1545[0]) : -1
 
 /**
- * Transform property and value from Wikidata format to CSL (async)
+ * Transform property and value from Wikidata format to CSL (async).
+ *
+ * Returns additional _ordinal property on authors.
  *
  * @access protected
  * @method parseWikidataPropAsync
@@ -41,10 +43,11 @@ const parseWikidataPropAsync = async function (prop, value, lang) {
   const cslValue = await (async (prop, value) => {
     switch (prop) {
       case 'P50':
-        return Promise.all(value.map(async ({value, qualifiers}) => [
-          parseName((await fetchWikidataLabelAsync(value, lang))[0]),
-          parseWikidataP1545(qualifiers)
-        ]))
+        return Promise.all(value.map(async ({value, qualifiers}) => {
+          const name = parseName((await fetchWikidataLabelAsync(value, lang))[0])
+          name._ordinal = parseWikidataP1545(qualifiers)
+          return name
+        }))
 
       case 'P1433':
         return (await fetchWikidataLabelAsync(value, lang))[0]
