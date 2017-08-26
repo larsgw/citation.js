@@ -1,7 +1,7 @@
 import varRegex from '../regex'
 
 import fetchFile from '../../util/fetchFile'
-import parseInputChainLink from './chainLink'
+import parseInput from './chain'
 import parseWikidata from '../wikidata/list'
 import parseWikidataJSON from '../wikidata/json'
 import parseDoi from '../doi/id'

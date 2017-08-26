@@ -19,6 +19,7 @@ const testCaseGenerator = function (input, type, output, {
     })
 
     it('parses input correctly', () => {
+      test.forEach(entry => delete entry._graph)
       expect(callback(test)).to[exact ? 'be' : 'eql'](output)
     })
   }
