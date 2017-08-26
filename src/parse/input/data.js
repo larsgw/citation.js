@@ -1,7 +1,7 @@
 import varRegex from '../regex'
 
 import fetchFile from '../../util/fetchFile'
-import parseInput from './chain'
+import parseInputChainLink from './chainLink'
 import parseWikidata from '../wikidata/list'
 import parseWikidataJSON from '../wikidata/json'
 import parseDoi from '../doi/id'
@@ -80,11 +80,7 @@ const parseInputData = function (input, type) {
       return parseContentMine(input)
 
     case 'array/else':
-      let output = []
-      input.forEach(function (value) {
-        output = output.concat(parseInput(value))
-      })
-      return output
+      return [].concat(...input.map(value => parseInput(value)))
 
     case 'object/csl':
       return [input]

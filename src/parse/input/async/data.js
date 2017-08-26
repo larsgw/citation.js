@@ -31,10 +31,7 @@ const parseInputDataAsync = async function (input, type) {
       return fetchFileAsync(input)
 
     case 'array/else':
-      let output = (await Promise
-        .all(input.map(value => parseInputAsync(value))))
-        .reduce((a, b) => [].concat(a, b))
-      return output
+      return [].concat(...await Promise.all(input.map(value => parseInputAsync(value))))
 
     default:
       return parseInputData(input, type)

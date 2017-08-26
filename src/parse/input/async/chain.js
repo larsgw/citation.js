@@ -10,19 +10,21 @@ import parseInputType from '../type'
  * @method parseInputAsync
  *
  * @param {String|Array<String>|Object|Array<Object>} input - The input data
+ * @param {Object} [options] - Options
+ * @param {Number} [options.maxChainLength=10] - Max. number of parsing iterations before giving up
  *
  * @return {Promise} The parsed input
  */
-const parseInputAsync = async function (input) {
-  let output = input
-  let type = parseInputType(output)
+const parseInputAsync = async (input, {maxChainLength = 10} = {}) => {
+  let type = parseInputType(input)
+  let output = type.match(/^(array|object)\//) ? deepCopy(input) : input
 
-  if (type.match(/^(array|object)\//)) {
-    output = deepCopy(output)
-  }
-
-  // TODO max recursion level
   while (type !== 'array/csl') {
+    if (maxChainLength-- <= 0) {
+      console.error('[set]', 'Max. number of parsing iterations reached')
+      return []
+    }
+
     output = await parseInputDataAsync(output, type)
     type = parseInputType(output)
   }
