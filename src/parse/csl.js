@@ -1,7 +1,16 @@
 import parseName from './name'
 
+const NAME = 1
+const NAME_LIST = 2
+const DATE = 3
+
 /**
- * Object containing types for CSL-JSON fields, omitting name and date fields.
+ * Object containing type info on CSL-JSON fields.
+ *
+ * * string: primitive value type
+ * * array: list of primitive value types
+ * * number: special type
+ *
  * Data from https://github.com/citation-style-language/schema/blob/master/csl-data.json
  *
  * @access private
@@ -9,6 +18,27 @@ import parseName from './name'
  * @default
  */
 const fieldTypes = {
+  author: NAME_LIST,
+  'collection-editor': NAME_LIST,
+  composer: NAME_LIST,
+  'container-author': NAME_LIST,
+  editor: NAME_LIST,
+  'editorial-director': NAME_LIST,
+  director: NAME_LIST,
+  interviewer: NAME_LIST,
+  illustrator: NAME_LIST,
+  'original-author': NAME_LIST,
+  'reviewed-author': NAME_LIST,
+  recipient: NAME_LIST,
+  translator: NAME_LIST,
+
+  accessed: DATE,
+  container: DATE,
+  'event-date': DATE,
+  issued: DATE,
+  'original-date': DATE,
+  submitted: DATE,
+
   categories: 'object', // TODO Array<String>
 
   id: ['string', 'number'],
@@ -159,32 +189,16 @@ const correctDate = function (date, bestGuessConversions = true) {
  * @return {*|undefined} returns the (corrected) value if possible, otherwise undefined
  */
 const correctField = function (fieldName, value, bestGuessConversions = true) {
-  switch (fieldName) {
-    case 'author':
-    case 'editor':
-    case 'interviewer':
-    case 'illustrator':
-    case 'translator':
-    case 'original-author':
-    case 'reviewed-author':
-    case 'recipient':
-    case 'editorial-director':
-    case 'director':
-    case 'container-author':
-    case 'composer':
-    case 'collection-editor':
-      return correctNameList(value, bestGuessConversions)
+  const fieldType = [].concat(fieldTypes[fieldName])
 
-    case 'submitted':
-    case 'issued':
-    case 'event-date':
-    case 'original-date':
-    case 'container':
-    case 'accessed':
+  switch (fieldTypes[fieldName]) {
+    case NAME:
+      return correctName(value, bestGuessConversions)
+    case NAME_LIST:
+      return correctNameList(value, bestGuessConversions)
+    case DATE:
       return correctDate(value, bestGuessConversions)
   }
-
-  const fieldType = [].concat(fieldTypes[fieldName])
 
   if (fieldType.includes(typeof value)) {
     return value
