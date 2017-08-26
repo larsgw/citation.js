@@ -1,4 +1,4 @@
-![Citation.js](https://citation.js.org/static/img/banner.png)
+<p align="center"><img alt="Citation.js" src="https://citation.js.org/static/img/square_logo_medium.png" /></p>
 
 Citation.js converts formats like BibTeX, Wikidata JSON and ContentMine JSON to CSL-JSON to convert to other formats like APA, Vancouver and back to BibTeX.
 
