@@ -28,18 +28,18 @@ const getIds = function () {
 }
 
 /**
- * Get formatted data from your object. For more info, see [Output](../#output).
+ * Get formatted data from your object. For more info, see [Output](../#cite.out).
  *
  * @method get
  * @memberof Cite
  * @this Cite
  *
- * @param {Object} [options={}] - The options for the output. See [input options](../#citation.cite.in.options)
+ * @param {Object} [options={}] - [Output options](../#cite.out.options)
  *
  * @return {String|Array<Object>} The formatted data
  */
 const get = function (options = {}) {
-  const {format, type, style, lang, append, prepend} = Object.assign({}, this.defaultOptions, this._options, options)
+  const {format, type, style, lang, append, prepend} = Object.assign({}, this.defaultOptions, this._options.output, options)
   const [, styleType, styleFormat] = style.match(/^([^-]+)(?:-(.+))?$/)
 
   const data = parseCsl(this.data)
@@ -103,7 +103,7 @@ const get = function (options = {}) {
       break
 
     case 'json,citation':
-      console.error('[get]', `Combination type/style of json/citation-* is not valid: ${type}/${style}`)//
+      console.error('[get]', `Combination type/style of json/citation-* is not valid: ${type}/${style}`)
       break
 
     default:

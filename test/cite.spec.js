@@ -4,6 +4,8 @@ import expect from 'expect.js'
 import Cite from './cite'
 import input from './cite.json'
 
+const noGraph = {generateGraph: false}
+
 describe('Cite instance', () => {
   describe('initialisation', () => {
     it('returns a Cite object', () => expect(new Cite()).to.be.a(Cite))
@@ -12,7 +14,7 @@ describe('Cite instance', () => {
 
   describe('iteration', () => it('works', () => {
     expect((new Cite())[Symbol.iterator]).to.be.a('function')
-    expect([...(new Cite(input.ids))]).to.eql(input.ids)
+    expect([...(new Cite(input.ids, noGraph))]).to.eql(input.ids)
   }))
 
   describe('function', () => {
@@ -35,7 +37,7 @@ describe('Cite instance', () => {
 
     describe('set()', () => {
       it('works', () => {
-        test.set(input.ids)
+        test.set(input.ids, noGraph)
         expect(test.data).to.have.length(2)
         expect(test.data).to.eql(input.ids)
         expect(test.log).to.have.length(1)
@@ -64,7 +66,7 @@ describe('Cite instance', () => {
 
     describe('setAsync()', () => {
       it('works', async () => {
-        await test.setAsync(input.ids)
+        await test.setAsync(input.ids, noGraph)
         expect(test.data).to.have.length(2)
         expect(test.data).to.eql(input.ids)
         expect(test.log).to.have.length(1)

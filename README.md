@@ -22,6 +22,7 @@ Citation.js converts formats like BibTeX, Wikidata JSON and ContentMine JSON to 
       * [Input types](#cite.in.type)
       * [Options](#cite.in.options)
     * [Ouput](#cite.out)
+      * [Options](#cite.out.options)
       * [Type](#cite.out.type)
       * [Style](#cite.out.style)
       * [CSL Templates](#cite.out.templates)
@@ -119,6 +120,13 @@ var example = new Cite( <data>, <options> )
 1. In the first parameter you pass the input data. [Input types](#cite.in.type)
 2. In the second parameter you pass the [options](#cite.in.options).
 
+#### <a id="cite.in.options" href="#cite.in.options">Options</a>
+
+  * `output`: Default [output options](#cite.out.options), used when calling `Cite#get()`.
+  * `maxChainLength`: Max number of parsing iterations (before giving up). Default: 10.
+  * `generateGraph`: Generate a parsing chain graph. Holds info on how an entry was parsed. Default: true.
+  * `forceType`: Force parsing as a certain [type](#cite.in.type), if the type checking methods fail (or are slow, and you already know what the input type is, etc.).
+
 #### <a id="cite.in.type" href="#cite.in.type">Input types</a>
 Input type doesn't have to be specified. The identifiers below are used by internal functions.
 
@@ -159,19 +167,18 @@ These formats are not input-ready, but are rather parsed and re-evaluated, e.g. 
 * `url/else`: URL. Fetches and re-evaluates the file
 * `array/else`: JavaScript array. Re-evaluates every element in the array
 
-#### <a id="cite.in.options" href="#cite.in.options">Options</a>
-These are the default options for using `.get()`. More options will follow.
-
-  1. `format`: The output format: `"real"` (default) or `"string"`
-  2. `type`: The output type: `"html"`, `"string"` or `"json"` (default).
-  3. `style`: The output style. See [Output](#cite.out). `"csl"` is default
-  4. `lang`: The language of the output. [RFC 5646](https://tools.ietf.org/html/rfc5646) codes. Currently supported: `"en-US"` (default), `"fr-FR"`, `"es-ES"` ,`"de-DE"` and `"nl-NL"`
-  5. `prepend`: Function taking source CSL-JSON as input or constant string to prepend to each element
-  6. `append`: Same, but appending
-
 ### <a id="cite.out" href="#cite.out">Ouput</a>
 
-When using the `.get()` function, your output depends on the options you pass. If you don't pass any options, the values you passed as default are used. When you didn't pass default options, standard options are passed.
+When using the `Cite#get()` function, your output depends on the options you pass. If you don't pass any options, the values you passed as default are used. When you didn't pass default options, standard options are passed.
+
+#### <a id="cite.out.options" href="#cite.out.options">Options</a>
+
+  * `format`: The output format: `"real"` (default) or `"string"`
+  * `type`: The output type: `"html"`, `"string"` or `"json"` (default).
+  * `style`: The output style. See [Output](#cite.out.style). `"csl"` is default
+  * `lang`: The language of the output. [RFC 5646](https://tools.ietf.org/html/rfc5646) codes. Currently supported: `"en-US"` (default), `"fr-FR"`, `"es-ES"` ,`"de-DE"` and `"nl-NL"`
+  * `prepend`: Function taking source CSL-JSON as input or constant string to prepend to each element
+  * `append`: Same, but appending
 
 #### <a id="cite.out.type" href="#cite.out.type">Type</a>
 
@@ -242,18 +249,18 @@ data.get({
 
 `Cite` instances have some more functions:
 
-* `.options(<options>)`: Change default options
-* `.set(<data>)`: Replace all data with new data
-* `.add(<data>)`: Add data
-* `.reset()`: Remove all data and options
-* `.currentVersion()`: Get current version number
-* `.retrieveVersion(<version number>)`: Retrieve a certain version of the object
-* `.retrieveLastVersion()`: Retrieve the last saved version of the object
-* `.undo(<number>)`: Restore the n to last version (default: `1`)
-* `.save()`: Save the current object
-* `.sort()`: Sort all entries on basis of their BibTeX label
+* `Cite#options(<options>)`: Change default options
+* `Cite#set(<data>)`: Replace all data with new data
+* `Cite#add(<data>)`: Add data
+* `Cite#reset()`: Remove all data and options
+* `Cite#currentVersion()`: Get current version number
+* `Cite#retrieveVersion(<version number>)`: Retrieve a certain version of the object
+* `Cite#retrieveLastVersion()`: Retrieve the last saved version of the object
+* `Cite#undo(<number>)`: Restore the n to last version (default: `1`)
+* `Cite#save()`: Save the current object
+* `Cite#sort()`: Sort all entries on basis of their BibTeX label
 
-`.set()` and `.get()` also have async variants (append `Async` to the function name), which return Promises.
+`Cite#set()` and `Cite#get()` also have async variants (append `Async` to the function name), which return Promises.
 
 #### <a id="cite.misc.iterator" href="#cite.misc.iterator">Iterator</a>
 

@@ -11,14 +11,16 @@ import {applyGraph, removeGraph} from './graph'
  * @method parseInput
  *
  * @param {String|Array<String>|Object|Array<Object>} input - The input data
- * @param {Object} [options] - Options
- * @param {Number} [options.maxChainLength=10] - Max. number of parsing iterations before giving
- * @param {Number} [options.generateGraph=true] - Generate a parsing graph
+ * @param {Object} [options] - [Options](../#cite.in.options)
  *
  * @return {Array<CSL>} The parsed input
  */
-const parseInput = (input, {maxChainLength = 10, generateGraph = true} = {}) => {
-  let type = parseInputType(input)
+const parseInput = (input, {
+  maxChainLength = 10,
+  generateGraph = true,
+  forceType
+} = {}) => {
+  let type = forceType || parseInputType(input)
   let output = type.match(/^(array|object)\//) ? deepCopy(input) : input
 
   const graph = [{type, data: input}]

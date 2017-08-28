@@ -10,16 +10,17 @@ import fetchId from '../util/fetchId'
  * @this Cite
  *
  * @param {String|CSL|Object|Array<String>|Array<CSL>|Array<Object>} data - The data to add to your object
+ * @param {Object} [options={}] - [Options](../#cite.in.options)
  * @param {Boolean} [log=false] - Show this call in the log
  *
  * @return {Cite} The updated parent object
  */
-const add = function (data, log) {
-  if (log) {
+const add = function (data, options = {}, log = false) {
+  if (options === true || log === true) {
     this.save()
   }
 
-  this.data = this.data.concat(parseInput(data))
+  this.data.push(...parseInput(data, options))
 
   this.data.filter(entry => !entry.hasOwnProperty('id')).forEach(entry => {
     entry.id = fetchId(this.getIds(), 'temp_id_')
@@ -36,16 +37,17 @@ const add = function (data, log) {
  * @this Cite
  *
  * @param {String|CSL|Object|Array<String>|Array<CSL>|Array<Object>} data - The data to add to your object
+ * @param {Object} [options={}] - [Options](../#cite.in.options)
  * @param {Boolean} [log=false] - Show this call in the log
  *
  * @return {Cite} The updated parent object
  */
-const addAsync = async function (data, log) {
-  if (log) {
+const addAsync = async function (data, options = {}, log = false) {
+  if (options === true || log === true) {
     this.save()
   }
 
-  this.data = this.data.concat(await parseInputAsync(data))
+  this.data.push(...await parseInputAsync(data, options))
 
   this.data.filter(entry => !entry.hasOwnProperty('id')).forEach(entry => {
     entry.id = fetchId(this.getIds(), 'temp_id_')
@@ -61,20 +63,19 @@ const addAsync = async function (data, log) {
  * @memberof Cite
  * @this Cite
  *
- * @param {String|CSL|Object|Array<String>|Array<CSL>|Array<Object>} data - The data to replace the data in your object
+ * @param {String|CSL|Object|Array<String>|Array<CSL>|Array<Object>} data - Replacement data
+ * @param {Object} [options={}] - [Options](../#cite.in.options)
  * @param {Boolean} [log=false] - Show this call in the log
  *
  * @return {Cite} The updated parent object
  */
-const set = function (data, log) {
-  if (log) {
+const set = function (data, options = {}, log = false) {
+  if (options === true || log === true) {
     this.save()
   }
 
   this.data = []
-  this.add(data)
-
-  return this
+  return typeof options !== 'boolean' ? this.add(data, options) : this.add(data)
 }
 
 /**
@@ -84,20 +85,19 @@ const set = function (data, log) {
  * @memberof Cite
  * @this Cite
  *
- * @param {String|CSL|Object|Array<String>|Array<CSL>|Array<Object>} data - The data to replace the data in your object
+ * @param {String|CSL|Object|Array<String>|Array<CSL>|Array<Object>} data - Replacement data
+ * @param {Object} [options={}] - [Options](../#cite.in.options)
  * @param {Boolean} [log=false] - Show this call in the log
  *
  * @return {Cite} The updated parent object
  */
-const setAsync = async function (data, log) {
-  if (log) {
+const setAsync = async function (data, options = {}, log = false) {
+  if (options === true || log === true) {
     this.save()
   }
 
   this.data = []
-  await this.addAsync(data)
-
-  return this
+  return typeof options !== 'boolean' ? this.addAsync(data, options) : this.addAsync(data)
 }
 
 /**

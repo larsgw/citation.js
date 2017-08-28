@@ -5,22 +5,14 @@ import Cite from './cite'
 import {input, output} from './input.json'
 
 describe('.async()', () => {
+  const noGraph = {generateGraph: false}
+
   context('with callback', () => {
     it('works', () => {
       return new Promise(resolve => {
-        Cite.async(input.wd.url, data => {
+        Cite.async(input.wd.url, noGraph, data => {
           expect(data).to.be.a(Cite)
           expect(data.data).to.eql(output.wd.simple)
-          resolve()
-        })
-      })
-    })
-
-    it('works with options', () => {
-      return new Promise(resolve => {
-        Cite.async([], {}, data => {
-          expect(data).to.be.a(Cite)
-          expect(data.data.length).to.be(0)
           resolve()
         })
       })
@@ -29,15 +21,9 @@ describe('.async()', () => {
 
   context('as promise', () => {
     it('works', async () => {
-      const data = await Cite.async(input.wd.url)
+      const data = await Cite.async(input.wd.url, noGraph)
       expect(data).to.be.a(Cite)
       expect(data.data).to.eql(output.wd.simple)
-    })
-
-    it('works with options', async () => {
-      const data = await Cite.async([], {})
-      expect(data).to.be.a(Cite)
-      expect(data.data.length).to.be(0)
     })
   })
 })
