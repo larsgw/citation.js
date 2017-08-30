@@ -10,9 +10,9 @@
  */
 const parseDate = function (value) {
   const date = new Date(value)
-  return {
-    'date-parts': [date.getFullYear() ? [date.getFullYear(), date.getMonth() + 1, date.getDate()] : []]
-  }
+  return date.getFullYear()
+    ? {'date-parts': [[date.getFullYear(), date.getMonth() + 1, date.getDate()]]}
+    : {'raw': value}
 }
 
 export default parseDate
