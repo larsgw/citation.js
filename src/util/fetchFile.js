@@ -14,8 +14,8 @@ const fetchFile = function (url) {
   try {
     return request('GET', url).getBody('utf8')
   } catch (e) {
-    console.error('[set]', 'File could not be fetched')
-    return undefined
+    console.error('[set]', 'File could not be fetched:', e.message)
+    return '[]'
   }
 }
 
