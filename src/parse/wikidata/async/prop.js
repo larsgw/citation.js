@@ -40,10 +40,12 @@ const parseWikidataP1545 = qualifiers => qualifiers.P1545 ? parseInt(qualifiers.
  * @return {Array<String>} Array with new prop and value
  */
 const parseWikidataPropAsync = async function (prop, value, lang) {
-  const cslValue = await (async (prop, value) => {
+  const cslValue = await (async (prop, valueList) => {
+    const value = valueList[0].value
+
     switch (prop) {
       case 'P50':
-        return Promise.all(value.map(async ({value, qualifiers}) => {
+        return Promise.all(valueList.map(async ({value, qualifiers}) => {
           const name = parseName((await fetchWikidataLabelAsync(value, lang))[0])
           name._ordinal = parseWikidataP1545(qualifiers)
           return name
