@@ -20,7 +20,7 @@ const fetchDoiApi = function (url) {
       allowRedirectHeaders: ['Accept']
     }).getBody('utf8'))
   } catch (e) {
-    console.error('[set]', 'File could not be fetched')
+    console.error('[set]', 'File could not be fetched:', e.message)
     return {}
   }
 }
