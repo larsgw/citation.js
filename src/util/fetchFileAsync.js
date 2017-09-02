@@ -16,7 +16,7 @@ const fetchFileAsync = async function (url) {
   try {
     return (await fetch(url)).text()
   } catch (e) {
-    console.error('[set]', 'File could not be fetched:', e.message)
+    console.error('[set]', `File '${url}' could not be fetched:`, e.message)
     return '[]'
   }
 }

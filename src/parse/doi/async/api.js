@@ -19,7 +19,7 @@ const fetchDoiApiAsync = async function (url) {
     headers.append('Accept', 'application/vnd.citationstyles.csl+json')
     return (await fetch(url, {headers})).json()
   } catch (e) {
-    console.error('[set]', 'File could not be fetched:', e.message)
+    console.error('[set]', `File '${url}' could not be fetched:`, e.message)
     return {}
   }
 }
