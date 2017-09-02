@@ -5,6 +5,8 @@ node_modules/
 
 # dev
 dev/
+profile/
+isolate-0x*
 
 # generated site content
 build/
@@ -19,4 +21,3 @@ coverage.lcov
 
 # not really needed, is it?
 .directory
-

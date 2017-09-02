@@ -6,4 +6,5 @@ build/
 coverage/
 .nyc_output/
 .directory
-
+profile/
+isolate-0x*
