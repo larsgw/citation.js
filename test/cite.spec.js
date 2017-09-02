@@ -1,8 +1,8 @@
 /* global describe, context, it, beforeEach */
 
 import expect from 'expect.js'
-import Cite from './cite'
-import input from './cite.json'
+import Cite from './citation'
+import input from './input/cite'
 
 const noGraph = {generateGraph: false}
 

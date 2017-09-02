@@ -1,0 +1,24 @@
+{
+  "csl": {
+    "simple": [
+      {
+        "id": "Q23571040",
+        "type": "article-journal",
+        "title": "Correlation of the Base Strengths of Amines 1",
+        "DOI": "10.1021/ja01577a030",
+        "author": [
+          {
+            "given": "H. K.",
+            "family": "Hall"
+          }
+        ],
+        "issued": {"date-parts": [[1957, 1, 1]]},
+        "container-title": "Journal of the American Chemical Society",
+        "volume": "79",
+        "issue": "20",
+        "page": "5441-5444"
+      }
+    ],
+    "locale": [{"id": "a", "type": "article-journal"}]
+  }
+}

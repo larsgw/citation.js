@@ -1,8 +1,9 @@
 /* global describe, context, it */
 
 import expect from 'expect.js'
-import Cite from './cite'
-import {input, output} from './output.json'
+import Cite from './citation'
+import input from './input/get'
+import output from './output/get'
 
 const customTemplate = `<?xml version="1.0" encoding="utf-8"?>
 <style xmlns="http://purl.org/net/xbiblio/csl" class="in-text" version="1.0" demote-non-dropping-particle="sort-only" page-range-format="minimal">

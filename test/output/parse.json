@@ -1,0 +1,223 @@
+{
+  "wd": {
+    "id": "Q21972834",
+    "simple": [
+      {
+        "_wikiId": "Q21972834",
+        "id": "Q21972834",
+        "type": "article-journal",
+        "title": "Assembling the 20 Gb white spruce (Picea glauca) genome from whole-genome shotgun sequencing data",
+        "volume": "29",
+        "issue": "12",
+        "issued": {"date-parts": [[2013, 6, 15]]},
+        "page": "1492-7",
+        "container-title": "Bioinformatics",
+        "DOI": "10.1093/BIOINFORMATICS/BTT178",
+        "author": [
+          {"given": "Inanc", "family": "Birol", "_ordinal": 1},
+          {"given": "Anthony", "family": "Raymond", "_ordinal": 2},
+          {"given": "Shaun D", "family": "Jackman", "_ordinal": 3},
+          {"given": "Stephen", "family": "Pleasance", "_ordinal": 4},
+          {"given": "Robin", "family": "Coope", "_ordinal": 5},
+          {"given": "Greg A", "family": "Taylor", "_ordinal": 6},
+          {"given": "Macaire Man Saint", "family": "Yuen", "_ordinal": 7},
+          {"given": "Christopher I", "family": "Keeling", "_ordinal": 8},
+          {"given": "Dana", "family": "Brand", "_ordinal": 9},
+          {"given": "Benjamin P", "family": "Vandervalk", "_ordinal": 10},
+          {"given": "Heather", "family": "Kirk", "_ordinal": 11},
+          {"given": "Pawan", "family": "Pandoh", "_ordinal": 12},
+          {"given": "Richard A", "family": "Moore", "_ordinal": 13},
+          {"given": "Yongjun", "family": "Zhao", "_ordinal": 14},
+          {"given": "Andrew J", "family": "Mungall", "_ordinal": 15},
+          {"given": "Barry", "family": "Jaquish", "_ordinal": 16},
+          {"given": "Alvin", "family": "Yanchuk", "_ordinal": 17},
+          {"given": "Carol", "family": "Ritland", "_ordinal": 18},
+          {"given": "Brian", "family": "Boyle", "_ordinal": 19},
+          {"given": "Jean", "family": "Bousquet", "_ordinal": 20},
+          {"given": "Kermit", "family": "Ritland", "_ordinal": 21},
+          {"given": "John", "family": "Mackay", "_ordinal": 22},
+          {"given": "Jörg", "family": "Bohlmann", "_ordinal": 23},
+          {"given": "Steven J M", "family": "Jones", "_ordinal": 24}
+        ]
+      }
+    ],
+    "author": [
+      {
+        "_wikiId": "Q27795847",
+        "id": "Q27795847",
+        "type": "article-journal",
+        "issued": {
+          "date-parts": [[
+            2016,
+            11,
+            8
+          ]]
+        },
+        "title": "SPLASH, a hashed identifier for mass spectra",
+        "volume": "34",
+        "page": "1099–1101",
+        "container-title": "Nature Biotechnology",
+        "URL": "http://rdcu.be/msZj",
+        "DOI": "10.1038/NBT.3689",
+        "author": [
+          {"given": "Gert", "family": "Wohlgemuth", "_ordinal": 1},
+          {"given": "Sajjan S", "family": "Mehta", "_ordinal": 2},
+          {"given": "Ramon F", "family": "Mejia", "_ordinal": 3},
+          {"given": "Steffen", "family": "Neumann", "_ordinal": 4},
+          {"given": "Diego", "family": "Pedrosa", "_ordinal": 5},
+          {"given": "Tomáš", "family": "Pluskal", "_ordinal": 6},
+          {"given": "Emma", "family": "Schymanski", "_ordinal": 7},
+          {"given": "Egon", "family": "Willighagen", "_ordinal": 8},
+          {"given": "Michael", "family": "Wilson", "_ordinal": 9},
+          {"given": "David S", "family": "Wishart", "_ordinal": 10},
+          {"given": "Masanori", "family": "Arita", "_ordinal": 11},
+          {"given": "Pieter C", "family": "Dorrestein", "_ordinal": 12},
+          {"given": "Nuno", "family": "Bandeira", "_ordinal": 13},
+          {"given": "Mingxun", "family": "Wang", "_ordinal": 14},
+          {"given": "Tobias", "family": "Schulze", "_ordinal": 15},
+          {"given": "Reza M", "family": "Salek", "_ordinal": 16},
+          {"given": "Christoph", "family": "Steinbeck", "_ordinal": 17},
+          {"given": "Venkata Chandrasekhar", "family": "Nainala", "_ordinal": 18},
+          {"given": "Robert", "family": "Mistrik", "_ordinal": 19},
+          {"given": "Takaaki", "family": "Nishioka", "_ordinal": 20},
+          {"given": "Oliver", "family": "Fiehn", "_ordinal": 21}
+        ]
+      }
+    ],
+    "api": [
+      "https://www.wikidata.org/w/api.php?action=wbgetentities&ids=Q21972834&format=json&languages=en",
+      "https://www.wikidata.org/w/api.php?action=wbgetentities&ids=Q21972834%7CQ27795847&format=json&languages=en"
+    ]
+  },
+  "doi": {
+    "simple": [{"indexed":{"date-parts":[[2017,5,10]],"date-time":"2017-05-10T11:14:56Z","timestamp":1494414896320},"reference-count":0,"publisher":"American Chemical Society (ACS)","issue":"20","content-domain":{"domain":[],"crossmark-restriction":false},"short-container-title":["J. Am. Chem. Soc."],"published-print":{"date-parts":[[1957,10]]},"DOI":"10.1021\/ja01577a030","type":"journal-article","created":{"date-parts":[[2005,3,10]],"date-time":"2005-03-10T14:51:56Z","timestamp":1110466316000},"page":"5441-5444","source":"Crossref","is-referenced-by-count":0,"title":"Correlation of the Base Strengths of Amines1","prefix":"10.1021","volume":"79","author":[{"suffix":"Jr.","given":"H. K.","family":"Hall","affiliation":[]}],"member":"316","container-title":"Journal of the American Chemical Society","original-title":[],"deposited":{"date-parts":[[2016,9,7]],"date-time":"2016-09-07T14:19:33Z","timestamp":1473257973000},"score":1.0,"subtitle":[],"short-title":[],"issued":{"date-parts":[[1957,10]]},"references-count":0,"alternative-id":["10.1021\/ja01577a030"],"URL":"http:\/\/dx.doi.org\/10.1021\/ja01577a030","relation":{},"ISSN":["0002-7863","1520-5126"],"issn-type":[{"value":"0002-7863","type":"print"},{"value":"1520-5126","type":"electronic"}],"subject":["Colloid and Surface Chemistry","Biochemistry","Chemistry(all)","Catalysis"]}],
+    "api": [
+      ["https://doi.org/10.1021/ja01577a030"],
+      ["https://doi.org/10.1021/ja01577a030", "https://doi.org/10.1021/ci025584y"]
+    ]
+  },
+  "bibtex": {
+    "simple": [
+      {
+        "_label": "Steinbeck2003",
+        "type": "article-journal",
+        "author": [
+          {"given": "Christoph", "family": "Steinbeck"},
+          {"given": "Yongquan", "family": "Han"},
+          {"given": "Stefan", "family": "Kuhn"},
+          {"given": "Oliver", "family": "Horlacher"},
+          {"given": "Edgar", "family": "Luttmann"},
+          {"given": "Egon", "family": "Willighagen"}
+        ],
+        "title": "The Chemistry Development Kit (CDK): an open-source Java library for Chemo- and Bioinformatics.",
+        "container-title": "Journal of chemical information and computer sciences",
+        "issued": {"date-parts": [["2003"]]},
+        "volume": "43",
+        "issue": "2",
+        "page": "493-500",
+        "DOI": "10.1021/ci025584y",
+        "ISBN": "2214707786",
+        "ISSN": "0095-2338",
+        "URL": "http://www.ncbi.nlm.nih.gov/pubmed/12653513",
+        "id": "Steinbeck2003"
+      }
+    ],
+    "whitespace": [
+      {
+        "_label": "Ekstrand:2009:RYD",
+        "type": "paper-conference",
+        "author": [
+          {"given": "Michael D.", "family": "Ekstrand"},
+          {"given": "John T.", "family": "Riedl"}
+        ],
+        "title": "rv you're dumb: Identifying Discarded Work in Wiki Article History",
+        "container-title": "Proceedings of the 5th International Symposium on Wikis and Open Collaboration",
+        "collection-title": "WikiSym '09",
+        "issued": {"date-parts": [["2009"]]},
+        "ISBN": "978-1-60558-730-1",
+        "publisher-place": "New York, NY, USA",
+        "page": "4:1-4:10",
+        "URL": "https://dx.doi.org/10.1145/1641309.1641317",
+        "DOI": "10.1145/1641309.1641317",
+        "publisher": "ACM",
+        "id": "Ekstrand:2009:RYD"
+      }
+    ],
+    "literals": [{
+      "_label": "b",
+      "id": "b",
+      "type": "book",
+      "author": [
+        {"literal": "a and b"},
+        {"literal": "c"},
+        {"given": "D", "family": "E"}
+      ],
+      "issued": {
+        "literal": "13th Century"
+      }
+    }],
+    "yearMonthNeeded": [{
+      "_label": "b",
+      "id": "b",
+      "type": "book",
+      "issued": {
+        "date-parts": [["2017", "8"]]
+      }
+    }],
+    "yearMonth": [{
+      "_label": "b",
+      "id": "b",
+      "type": "book",
+      "issued": {
+        "date-parts": [[2016, 12, 13]]
+      }
+    }]
+  },
+  "bibtxt": {
+    "author": [
+      {"given": "J.W.", "family": "Goethe"}
+    ],
+    "title": "Faust. Der Tragödie Erster Teil",
+    "publisher": "Reclam",
+    "issued": {"date-parts": [["1986"]]},
+    "publisher-place": "Stuttgart",
+    "type": "book",
+    "id": "Fau86",
+    "_label": "Fau86"
+  },
+  "bibjson": {
+    "simple": [
+      {
+        "publisher": "BioMed Central",
+        "journal": "Journal of Ethnobiology and Ethnomedicine",
+        "title": "Gitksan medicinal plants-cultural choice and efficacy",
+        "authors": "Leslie Main Johnson",
+        "date": "2006-06-21",
+        "doi": "10.1186/1746-4269-2-29",
+        "volume": "2",
+        "issue": "1",
+        "firstpage": "1",
+        "fulltext_html": "http://ethnobiomed.biomedcentral.com/articles/10.1186/1746-4269-2-29",
+        "fulltext_pdf": "http://ethnobiomed.biomedcentral.com/track/pdf/10.1186/1746-4269-2-29?site=http://ethnobiomed.biomedcentral.com",
+        "license": "This article is published under license to BioMed Central Ltd. This is an Open Access article distributed under the terms of the Creative Commons Attribution License (http://creativecommons.org/licenses/by/2.0), which permits unrestricted use, distribution, and reproduction in any medium, provided the original work is properly cited.",
+        "copyright": "2006 Johnson; licensee BioMed Central Ltd.",
+        "type": "article-journal",
+        "author": [
+          {"given": "Leslie Main", "family": "Johnson"}
+        ],
+        "page-first": "1",
+        "page": "1",
+        "issued": {
+          "date-parts": [[
+            2006,
+            6,
+            21
+          ]]
+        },
+        "container-title": "Journal of Ethnobiology and Ethnomedicine",
+        "id": "10.1186/1746-4269-2-29",
+        "DOI": "10.1186/1746-4269-2-29"
+      }
+    ]
+  }
+}

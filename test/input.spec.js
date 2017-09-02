@@ -1,32 +1,30 @@
 /* global describe, context, it */
 
 import expect from 'expect.js'
-import Cite from './cite'
-import {input, output} from './input.json'
+import Cite from './citation'
+import input from './input/parse'
+import output from './output/parse'
 input.wd.simple = require('./Q21972834.json')
 input.wd.author = require('./Q27795847.json')
 
-const testCaseGenerator = function (input, type, output, {
-  exact = false,
-  callback = v => v,
-  link = false
-} = {}) {
-  return () => {
-    const test = link ? Cite.parse.input.chainLink(input) : Cite.parse.input.chain(input)
+const testCaseGenerator = (input, type, output, {callback, link = false} = {}) => () => {
+  let test = link
+    ? Cite.parse.input.chainLink(input)
+    : Cite.parse.input.chain(input, {generateGraph: false})
+  test = typeof callback === 'function'
+    ? callback(test)
+    : test
 
-    it('handles input type', () => {
-      expect(Cite.parse.input.type(input)).to.be(type)
-    })
+  it('handles input type', () => {
+    expect(Cite.parse.input.type(input)).to.be(type)
+  })
 
-    it('parses input correctly', () => {
-      test.forEach(entry => delete entry._graph)
-      expect(callback(test)).to[exact ? 'be' : 'eql'](output)
-    })
-  }
+  it('parses input correctly', () => {
+    expect(test).to.eql(output)
+  })
 }
 
 const wikidataTestCaseOptions = {
-  exact: true,
   callback: ([data]) => data.replace(/[&?]origin=\*/, ''),
   link: true
 }
