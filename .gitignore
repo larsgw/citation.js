@@ -2,3 +2,5 @@ npm-debug.log
 npm-debug.log.*
 node_modules
 dev/api
+.directory
+citation.js/.directory
