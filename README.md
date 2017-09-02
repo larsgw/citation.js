@@ -75,8 +75,8 @@ var Cite = require('citation-js')
 
 ### <a id="starting.install.browser" href="#starting.install.browser">Browser</a>
 
-Download [citation.js](https://github.com/larsgw/citation.js/blob/master/build/citation.js)
-([citation.min.js](https://github.com/larsgw/citation.js/blob/master/build/citation.min.js)),
+Download [citation.js](https://github.com/larsgw/citation.js/blob/archive/citation.js/citation-0.3.0-6.js)
+([citation.min.js](https://github.com/larsgw/citation.js/blob/archive/citation.js/citation-0.3.0-6.min.js)),
 include it in you page, and you can `require('citation-js')` to get the [`Cite`](#cite) contructor.
 
 ```html
@@ -89,16 +89,17 @@ include it in you page, and you can `require('citation-js')` to get the [`Cite`]
 ## <a id="starting.example" href="#starting.example">Example</a>
 
 ```js
-var Cite = require('citation-js@0.3.0-6')
+var Cite = require('citation-js')
  
-var data = new Cite('Q21972834', {
+var data = new Cite('Q21972834')
+
+// Should implicitly display 
+data.get({
   format: 'string',
   type: 'html',
   style: 'citation-apa',
   lang: 'en-US'
 })
- 
-data.get() // Should implicitly display 
 ```
 
 To test this code, go to [RunKit](https://runkit.com/larsgw/591b5651bd9b40001113931c).
@@ -403,14 +404,16 @@ Further explanation can be found [here](https://citation.js.org/api/).
 ```js
 var Cite = require('citation-js')
 
-var data = new Cite('Q21972834', {
+var data = new Cite('Q21972834')
+
+data.get({
   format: 'string',
   type: 'html',
   style: 'citation-apa',
   lang: 'en-US'
 })
 
-data.get() // Should implicitly display
+// Should implicitly display
 ```
 
 ### <a id="more.demo.browser" href="#more.demo.browser">Browser Demos</a>
