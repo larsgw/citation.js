@@ -13,13 +13,13 @@
     }
   },
   "bibtex": {
-    "plain": "@article{Hall1957Correlation, author={H. K. Hall}, doi={10.1021/ja01577a030}, journal={Journal of the American Chemical Society}, issue=20, pages={5441--5444}, title={{Correlation of the Base Strengths of Amines 1}}, volume=79, year=1957, }",
+    "plain": "@article{Hall1957Correlation, author={Hall, H. K.}, doi={10.1021/ja01577a030}, journal={Journal of the American Chemical Society}, issue=20, pages={5441--5444}, title={{Correlation of the Base Strengths of Amines 1}}, volume=79, year=1957, }",
     "json": [
       {
         "label": "Hall1957Correlation",
         "type": "article",
         "properties": {
-          "author": "H. K. Hall",
+          "author": "Hall, H. K.",
           "doi": "10.1021/ja01577a030",
           "journal": "Journal of the American Chemical Society",
           "issue": "20",
@@ -30,6 +30,6 @@
         }
       }
     ],
-    "bibtxt": "[Hall1957Correlation]\n\ttype: article\n\tauthor: H. K. Hall\n\tdoi: 10.1021/ja01577a030\n\tjournal: Journal of the American Chemical Society\n\tissue: 20\n\tpages: 5441--5444\n\ttitle: Correlation of the Base Strengths of Amines 1\n\tvolume: 79\n\tyear: 1957"
+    "bibtxt": "[Hall1957Correlation]\n\ttype: article\n\tauthor: Hall, H. K.\n\tdoi: 10.1021/ja01577a030\n\tjournal: Journal of the American Chemical Society\n\tissue: 20\n\tpages: 5441--5444\n\ttitle: Correlation of the Base Strengths of Amines 1\n\tvolume: 79\n\tyear: 1957"
   }
 }
