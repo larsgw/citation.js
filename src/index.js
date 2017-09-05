@@ -45,8 +45,8 @@ Object.assign(Cite, {
   parse,
   util,
   version,
-  normalise: parse.input.chain,
-  normaliseAsync: parse.input.async.chain
+  input: parse.input.chain,
+  inputAsync: parse.input.async.chain
 })
 deepFreeze(Cite)
 
