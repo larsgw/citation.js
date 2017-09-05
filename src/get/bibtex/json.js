@@ -21,11 +21,11 @@ const getBibTeXJSON = function (src) {
 
   const props = {}
 
-  if (src.author) { props.author = src.author.map(getName).join(' and ') }
+  if (src.author) { props.author = src.author.map(name => getName(name, true)).join(' and ') }
   if (src.event) { props.organization = src.event }
   if (src.accessed) { props.note = '[Online; accesed ' + getDate(src.accessed) + ']' }
   if (src.DOI) { props.doi = src.DOI }
-  if (src.editor) { props.editor = src.editor.map(getName).join(' and ') }
+  if (src.editor) { props.editor = src.editor.map(name => getName(name, true)).join(' and ') }
   if (src.ISBN) { props.isbn = src.ISBN }
   if (src.ISSN) { props.issn = src.ISSN }
   if (src['container-title']) { props.journal = src['container-title'] }
