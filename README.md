@@ -12,6 +12,7 @@ Citation.js converts formats like BibTeX, Wikidata JSON and ContentMine JSON to 
 ---
 
 Thanks to JS.ORG for providing the citation.js.org domain:
+
 [![JS.ORG](https://logo.js.org/dark_tiny.png)](https://js.org)
 
 ---
