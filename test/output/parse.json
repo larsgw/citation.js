@@ -12,6 +12,8 @@
         "issued": {"date-parts": [[2013, 6, 15]]},
         "page": "1492-7",
         "container-title": "Bioinformatics",
+        "PMID": "23698863",
+        "PMCID": "3673215",
         "DOI": "10.1093/BIOINFORMATICS/BTT178",
         "author": [
           {"given": "Inanc", "family": "Birol", "_ordinal": 1},
@@ -56,8 +58,10 @@
         "title": "SPLASH, a hashed identifier for mass spectra",
         "volume": "34",
         "page": "1099–1101",
+        "number-of-pages": 3,
         "container-title": "Nature Biotechnology",
         "URL": "http://rdcu.be/msZj",
+        "PMID": "27824832",
         "DOI": "10.1038/NBT.3689",
         "author": [
           {"given": "Gert", "family": "Wohlgemuth", "_ordinal": 1},

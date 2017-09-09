@@ -50,16 +50,19 @@ const propMap = {
   P31: 'type',
   P50: 'author',
   P212: 'ISBN',
+  P236: 'ISSN',
   P304: 'page',
+  P348: 'version',
   P356: 'DOI',
   P393: 'edition',
   P433: 'issue',
   P478: 'volume',
   P577: 'issued',
-  P580: 'accessed',
-  P585: 'accessed',
+  P698: 'PMID',
+  P932: 'PMCID',
   P953: 'URL',
   P957: 'ISBN',
+  P1104: 'number-of-pages',
   P1433: 'container-title',
   P1476: 'title',
   P2093: 'author',
@@ -68,10 +71,7 @@ const propMap = {
   P2860: false, // Cites
   P921: false,  // Main subject
   P3181: false, // OpenCitations bibliographic resource ID
-  P364: false,  // Original language of work
-  P698: false,  // PMID
-  P932: false,  // PMCID
-  P1104: false  // Number of pages
+  P364: false   // Original language of work
 }
 
 /**
