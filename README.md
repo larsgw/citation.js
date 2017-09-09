@@ -199,6 +199,7 @@ When using the `Cite#get()` function, your output depends on the options you pas
 
 * `csl`: Outputs raw CSL-JSON data
 * `bibtex`: Outputs a BibTeX string, or BibTeX-JSON if `type: "json"`
+* `bibtxt`: Outputs a Bib.TXT string, or BibTeX-JSON if `type: "json"`
 * `citation-*`: Formatted citation, formatted with citeproc-js. `*` is a [CSL Template](#cite.out.templates) name.
 
 #### <a id="cite.out.templates" href="#cite.out.templates">CSL Templates</a>
