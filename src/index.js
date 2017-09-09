@@ -4,7 +4,7 @@
  * @projectname Citationjs
  *
  * @author Lars Willighagen
- * @version 0.3.0-13
+ * @version 0.3.1
  * @license
  * Copyright (c) 2015-2017 Lars Willighagen
  *
@@ -49,6 +49,6 @@ Object.assign(Cite, staticMethods, {
   input: parse.input.chain,
   inputAsync: parse.input.async.chain
 })
-deepFreeze(Cite)
+// deepFreeze(Cite)
 
 module.exports = Cite

@@ -1,5 +1,5 @@
 import parseInputAsync from '../async/chain'
-import parseInputData from '../data'
+import {data as parseInputData} from '../../register'
 
 import fetchFileAsync from '../../../util/fetchFileAsync'
 import parseWikidataJSONAsync from '../../wikidata/async/json'
@@ -31,7 +31,7 @@ const parseInputDataAsync = async function (input, type) {
       return fetchFileAsync(input)
 
     case 'array/else':
-      return [].concat(...await Promise.all(input.map(value => parseInputAsync(value))))
+      return [].concat(...await Promise.all(input.map(parseInputAsync)))
 
     default:
       return parseInputData(input, type)

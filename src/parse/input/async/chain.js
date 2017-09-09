@@ -1,7 +1,7 @@
 import deepCopy from '../../../util/deepCopy'
 
-import parseInputDataAsync from '../async/data'
-import parseInputType from '../type'
+import {type as parseInputType} from '../../register'
+import {dataAsync as parseInputDataAsync} from '../../register'
 import {applyGraph, removeGraph} from '../graph'
 
 /**

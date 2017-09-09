@@ -9,4 +9,6 @@ import name from './name'
 import json from './json'
 import csl from './csl'
 
-export { input, wikidata, bibtex, bibtxt, bibjson, doi, date, name, json, csl }
+export { input, wikidata, bibtex, bibtxt, doi, bibjson, date, name, json, csl }
+
+export * from './register'
