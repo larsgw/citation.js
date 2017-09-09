@@ -49,8 +49,15 @@ const parseWikidataP1545 = qualifiers => qualifiers.P1545 ? parseInt(qualifiers.
 const propMap = {
   P31: 'type',
   P50: 'author',
+  P57: 'director',
+  P86: 'composer',
+  P98: 'editor',
+  P110: 'illustrator',
+  P123: 'publisher',
+  P136: 'genre',
   P212: 'ISBN',
   P236: 'ISSN',
+  P291: 'publisher-place',
   P304: 'page',
   P348: 'version',
   P356: 'DOI',
@@ -58,6 +65,7 @@ const propMap = {
   P433: 'issue',
   P478: 'volume',
   P577: 'issued',
+  P655: 'translator',
   P698: 'PMID',
   P932: 'PMCID',
   P953: 'URL',
@@ -116,6 +124,11 @@ const parseWikidataProp = function (name, value, lang) {
         return type
 
       case 'P50':
+      case 'P57':
+      case 'P86':
+      case 'P98':
+      case 'P110':
+      case 'P655':
         return valueList.map(({value, qualifiers}) => {
           const name = parseName(fetchWikidataLabel(value, lang)[0])
           name._ordinal = parseWikidataP1545(qualifiers)
@@ -123,10 +136,11 @@ const parseWikidataProp = function (name, value, lang) {
         })
 
       case 'P577':
-      case 'P580':
-      case 'P585':
         return parseDate(value)
 
+      case 'P123':
+      case 'P136':
+      case 'P291':
       case 'P1433':
         return fetchWikidataLabel(value, lang)[0]
 

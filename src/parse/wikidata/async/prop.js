@@ -45,12 +45,20 @@ const parseWikidataPropAsync = async function (prop, value, lang) {
 
     switch (prop) {
       case 'P50':
+      case 'P57':
+      case 'P86':
+      case 'P98':
+      case 'P110':
+      case 'P655':
         return Promise.all(valueList.map(async ({value, qualifiers}) => {
           const name = parseName((await fetchWikidataLabelAsync(value, lang))[0])
           name._ordinal = parseWikidataP1545(qualifiers)
           return name
         }))
 
+      case 'P123':
+      case 'P136':
+      case 'P291':
       case 'P1433':
         return (await fetchWikidataLabelAsync(value, lang))[0]
     }
