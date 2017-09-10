@@ -2,8 +2,16 @@
 
 ## [Unreleased]
 
+## [0.3.2] - 2017-09-10
+
+### Added
+* New Wikidata field mappings (see [#76](https://github.com/larsgw/citation.js/issues/76))
+
 ### Changed
 * BibTeX name field output now uses reverse notation
+* Main parsing function aliases/shortcuts:
+  * `Cite.normalise()` -> `Cite.input()`
+  * `Cite.normaliseAsync()` -> `Cite.inputAsync()`
 
 ## [0.3.1] - 2017-09-02
 
