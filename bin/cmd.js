@@ -73,13 +73,6 @@ if (program.input && !fs.existsSync(program.input)) {
   throw new Error('Input file does not exist: ' + program.input)
 }
 
-var options = {
-  format: 'string',
-  type: program.outputType,
-  style: program.outputStyle,
-  lang: program.outputLanguage
-}
-
 var extension = program.outputStyle === 'bibtex' && program.outputType === 'string'
   ? 'bib'
   : program.outputNonReal
@@ -87,7 +80,12 @@ var extension = program.outputStyle === 'bibtex' && program.outputType === 'stri
   : {string: 'txt', html: 'html', json: 'json'}[program.outputType]
 
 var saveOutput = function (data) {
-  var output = data.get()
+  var output = data.get({
+    format: 'string',
+    type: program.outputType,
+    style: program.outputStyle,
+    lang: program.outputLanguage
+  })
 
   if (!program.outputNonReal && program.outputType === 'html') {
     output = '<!DOCTYPE html><html><head><meta charset="UTF-8"></head><body>' + output + '</body></html>'
@@ -108,7 +106,7 @@ var input
 
 if (program.input || program.text || program.url) {
   input = program.input ? fs.readFileSync(program.input, 'utf8') : program.url || program.text
-  Cite.async(input, options, saveOutput)
+  Cite.async(input, saveOutput)
 } else {
   input = ''
 
@@ -120,6 +118,6 @@ if (program.input || program.text || program.url) {
     }
   })
   process.stdin.on('end', function () {
-    Cite.async(input, options, saveOutput)
+    Cite.async(input, saveOutput)
   })
 }
