@@ -2,6 +2,20 @@
 
 ## [Unreleased]
 
+## [0.3.3] - 2017-09-12
+
+## Added
+* A lot of Wikidata entry type mappings
+* Support for option-less piping stdin -> stdout in the CLI
+
+## Changed
+* Greatly improve name parsing
+* Wikidata entry type default is now `book` to align with, among other things, BibTeX
+
+## Fixed
+* Unknown Wikidata entry type now actually defaults to something
+* CLI now uses the API changed in 0.3.1
+
 ## [0.3.2] - 2017-09-10
 
 ### Added
