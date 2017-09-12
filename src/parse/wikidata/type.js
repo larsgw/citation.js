@@ -6,6 +6,7 @@
  * @default
  */
 const varWikidataTypes = {
+  Q49848: 'article',
   Q191067: 'article',
   Q13442814: 'article-journal',
   Q18918145: 'article-journal',
@@ -42,13 +43,17 @@ const varWikidataTypes = {
   Q23927052: 'paper-conference',
   Q253623: 'patent',
   Q30070565: 'personal_communication',
+  Q30070439: 'personal_communication',
+  Q133492: 'personal_communication',
   Q628523: 'personal_communication',
+  Q7216866: 'post',
   Q17928402: 'post-blog',
   Q10870555: 'report',
   Q265158: 'review',
   Q637866: 'review-book',
   Q7366: 'song',
   Q3741908: 'song',
+  Q30070318: 'song',
   Q24634210: 'song',
   Q861911: 'speech',
   Q1266946: 'thesis',
