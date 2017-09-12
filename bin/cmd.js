@@ -65,10 +65,6 @@ program
 
   .parse(process.argv)
 
-if (process.argv.length <= 2) {
-  program.help()
-}
-
 if (program.input && !fs.existsSync(program.input)) {
   throw new Error('Input file does not exist: ' + program.input)
 }
