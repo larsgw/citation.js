@@ -22,6 +22,7 @@ Thanks to JS.ORG for providing the citation.js.org domain:
 * [Get Started](#starting)
   * [Install](#install)
     * [Node.js](#starting.install.node)
+      * [CLI](#starting.install.node.cli)
     * [Browser](#starting.install.browser)
   * [Example](#starting.example)
 * [Use](#use)
@@ -31,10 +32,12 @@ Thanks to JS.ORG for providing the citation.js.org domain:
       * [Options](#cite.in.options)
     * [Ouput](#cite.out)
       * [Options](#cite.out.options)
+      * [Format](#cite.out.format)
       * [Type](#cite.out.type)
       * [Style](#cite.out.style)
       * [CSL Templates](#cite.out.templates)
       * [CSL Locales](#cite.out.locales)
+      * [Append/Prepend](#cite.out.wrap)
     * [Misc](#cite.misc)
       * [Iterator](#cite.misc.iterator)
   * [Internal functions](#internal)
@@ -51,11 +54,31 @@ Thanks to JS.ORG for providing the citation.js.org domain:
 
 ### <a id="starting.install.node" href="#starting.install.node">Node.js</a>
 
-Install the package ([citation-js](https://www.npmjs.org/package/citation-js)) like this:
+Install the package ([citation-js](https://npmjs.org/package/citation-js)) like this:
 
-    npm install -g citation-js
+    npm install citation-js
+    
+    OR
+    
+    npm i citation-js
 
-To run the program, use
+To use the [`Cite`](#cite) constructor, `require()` the module like this:
+
+```js
+const Cite = require('citation-js')
+```
+
+### <a id="starting.install.node.cli" href="#starting.install.node.cli">CLI</a>
+
+To install the CLI, do this:
+
+    npm install --global citation-js
+    
+    OR
+    
+    npm i -g citation-js
+
+Run the CLI like this:
 
     citation-js  [options]
 
@@ -75,39 +98,34 @@ To run the program, use
       -s, --output-style <option>     Ouput scheme. A combination of --output-format json and --output-style citation-* is considered invalid. Options: csl (Citation Style Lanugage JSON), bibtex, citation-* (where * is any formatting style)
       -l, --output-language <option>  Output language. [RFC 5646](https://tools.ietf.org/html/rfc5646) codes
 
-To use the [`Cite`](#cite) constructor, `require()` the module like this:
-
-```js
-var Cite = require('citation-js')
-```
-
 ### <a id="starting.install.browser" href="#starting.install.browser">Browser</a>
 
-Download [citation.js](https://github.com/larsgw/citation.js/blob/archive/citation.js/citation-0.3.0-6.js)
-([citation.min.js](https://github.com/larsgw/citation.js/blob/archive/citation.js/citation-0.3.0-6.min.js)),
+Download [citation.js](https://github.com/larsgw/citation.js/tree/archive)
+([citation.min.js](https://github.com/larsgw/citation.js/tree/archive)),
 include it in you page, and you can `require('citation-js')` to get the [`Cite`](#cite) contructor.
 
 ```html
 <script src="path/to/citation.js" type="text/javascript"></script>
 <script>
-  var Cite = require('citation.js')
+  const Cite = require('citation.js')
 </script>
 ```
 
 ## <a id="starting.example" href="#starting.example">Example</a>
 
 ```js
-var Cite = require('citation-js')
+const Cite = require('citation-js')
  
-var data = new Cite('Q21972834')
+const data = new Cite('Q21972834')
 
-// Should implicitly display 
-data.get({
+const output = data.get({
   format: 'string',
   type: 'html',
   style: 'citation-apa',
   lang: 'en-US'
 })
+
+console.log(output)
 ```
 
 To test this code, go to [RunKit](https://runkit.com/larsgw/591b5651bd9b40001113931c).
@@ -126,8 +144,8 @@ Make a `Cite` object like this:
 var example = new Cite( <data>, <options> )
 ```
 
-1. In the first parameter you pass the input data. [Input types](#cite.in.type)
-2. In the second parameter you pass the [options](#cite.in.options).
+  1. In the first parameter you pass the input data. [Input types](#cite.in.type)
+  2. In the second parameter you pass the [options](#cite.in.options).
 
 #### <a id="cite.in.options" href="#cite.in.options">Options</a>
 
@@ -140,41 +158,46 @@ var example = new Cite( <data>, <options> )
 Input type doesn't have to be specified. The identifiers below are used by internal functions.
 
 ##### <a id="cite.in.type.doi" href="#cite.in.type.doi">DOI</a>
-* `api/doi`: URL in the form of `http[s]://doi.org/$DOI` where `$DOI` is the [DOI](https://www.doi.org/)
-* `string/doi`: A DOI surrounded by whitespace
-* `list/doi`: A whitespace-separated list of DOIs
-* `array/doi`: An array of strings of type `string/doi`
-* There's no `url/doi`, because that's equivalent to `api/doi` through [DOI Content Negotiation](https://citation.crosscite.org/docs.html)
-* There's no `object/doi`, because the API output is CSL-JSON (it currently does need some minor changes, see [CrossRef/rest-api-doc#222](https://github.com/CrossRef/rest-api-doc/issues/222)).
+
+  * `api/doi`: URL in the form of `http[s]://doi.org/$DOI` where `$DOI` is the [DOI](https://www.doi.org/)
+  * `string/doi`: A DOI surrounded by whitespace
+  * `list/doi`: A whitespace-separated list of DOIs
+  * `array/doi`: An array of strings of type `string/doi`
+  * There's no `url/doi`, because that's equivalent to `api/doi` through [DOI Content Negotiation](https://citation.crosscite.org/docs.html)
+  * There's no `object/doi`, because the API output is CSL-JSON (it currently does need some minor changes, see [CrossRef/rest-api-doc#222](https://github.com/CrossRef/rest-api-doc/issues/222)).
 
 ##### <a id="cite.in.type.wikidata" href="#cite.in.type.wikidata">Wikidata</a>
-* `url/wikidata`: URL with [Wikidata](https://www.wikidata.org/) [Entity ID](https://www.wikidata.org/wiki/Wikidata:Glossary#Entities.2C_items.2C_properties_and_queries). Gets and parses the entity data
-* `list/wikidata`: List of Wikidata Entity IDs, separated by spaces, newlines or commas. Gets and parses the entity data
-* `string/wikidata`: Single Wikidata Entity ID. Gets and parses the entity data
-* `array/wikidata`: Array of strings of type `string/wikidata`
-* `api/wikidata`: Wikidata API URL. Gets and parses the entity data
-* `object/wikidata`: Wikidata Entity data. Parses the entity data
+
+  * `url/wikidata`: URL with [Wikidata](https://www.wikidata.org/) [Entity ID](https://www.wikidata.org/wiki/Wikidata:Glossary#Entities.2C_items.2C_properties_and_queries). Gets and parses the entity data
+  * `list/wikidata`: List of Wikidata Entity IDs, separated by spaces, newlines or commas. Gets and parses the entity data
+  * `string/wikidata`: Single Wikidata Entity ID. Gets and parses the entity data
+  * `array/wikidata`: Array of strings of type `string/wikidata`
+  * `api/wikidata`: Wikidata API URL. Gets and parses the entity data
+  * `object/wikidata`: Wikidata Entity data. Parses the entity data
 
 ##### <a id="cite.in.type.bibtex" href="#cite.in.type.bibtex">BibTeX</a>
-* `string/bibtex`: [BibTeX](http://www.bibtex.org/) string. Parses the data
-* `object/bibtex`: BibTeX JSON. Nothing special, or standardised. Parses the data
-* `string/bibtxt`: [Bib.TXT](http://bibtxt.github.io) string. Parses the data
+
+  * `string/bibtex`: [BibTeX](http://www.bibtex.org/) string. Parses the data
+  * `object/bibtex`: BibTeX JSON. Nothing special, or standardised. Parses the data
+  * `string/bibtxt`: [Bib.TXT](http://bibtxt.github.io) string. Parses the data
 
 ##### <a id="cite.in.type.bibjson" href="#cite.in.type.bibjson">BibJSON</a>
-* `object/contentmine`: Actually BibJSON, all references to ContentMine will be removed when the parser is fully done. Parses the data
+
+  * `object/contentmine`: Actually BibJSON, all references to ContentMine will be removed when the parser is fully done. Parses the data
 
 ##### <a id="cite.in.type.csl" href="#cite.in.type.csl">CSL-JSON</a>
-* `object/csl`: [CSL-JSON](https://github.com/citation-style-language/schema#csl-json-schema). Adds the data
-* `array/csl`: Array of CSL-JSON. Adds the data
+
+  * `object/csl`: [CSL-JSON](https://github.com/citation-style-language/schema#csl-json-schema). Adds the data
+  * `array/csl`: Array of CSL-JSON. Adds the data
 
 ##### <a id="cite.in.type.inter" href="#cite.in.type.inter">Intermediary formats</a>
 These formats are not input-ready, but are rather parsed and re-evaluated, e.g. `html/else` (DOM element) to `string/json` to `json/csl`.
 
-* `string/json`: JSON or JavaScript Object string. Parses and re-evaluates the data
-* `jquery/else`: jQuery element. Fetches and re-evaluates the contents
-* `html/else`: HTML DOM element. Fetches and re-evaluates the contents
-* `url/else`: URL. Fetches and re-evaluates the file
-* `array/else`: JavaScript array. Re-evaluates every element in the array
+  * `string/json`: JSON or JavaScript Object string. Parses and re-evaluates the data
+  * `jquery/else`: jQuery element. Fetches and re-evaluates the contents
+  * `html/else`: HTML DOM element. Fetches and re-evaluates the contents
+  * `url/else`: URL. Fetches and re-evaluates the file
+  * `array/else`: JavaScript array. Re-evaluates every element in the array
 
 ### <a id="cite.out" href="#cite.out">Ouput</a>
 
@@ -183,32 +206,82 @@ When using the `Cite#get()` function, your output depends on the options you pas
 #### <a id="cite.out.options" href="#cite.out.options">Options</a>
 
   * `format`: The output format: `"real"` (default) or `"string"`
-  * `type`: The output type: `"html"`, `"string"` or `"json"` (default).
-  * `style`: The output style. See [Output](#cite.out.style). `"csl"` is default
-  * `lang`: The language of the output. [RFC 5646](https://tools.ietf.org/html/rfc5646) codes. Currently supported: `"en-US"` (default), `"fr-FR"`, `"es-ES"` ,`"de-DE"` and `"nl-NL"`
+  * `type`: The output type. See [Type](#cite.out.type)
+  * `style`: The output style. See [Style](#cite.out.style)
+  * `lang`: The language of the output. See [Locales](#cite.out.locales)
   * `prepend`: Function taking source CSL-JSON as input or constant string to prepend to each element
   * `append`: Same, but appending
 
+#### <a id="cite.out.format" href="#cite.out.format">Format</a>
+
+  * `string`: String representation of JSON/HTML/String (doesn't do much in the last example)
+  * `real` (default): Actual JSON Object, HTML DOM Element (if possible, else string anyway) or a string
+
 #### <a id="cite.out.type" href="#cite.out.type">Type</a>
 
-* `json`: Output as JSON. Not possible together with `style:"citation-*"`
-* `html`: Output as HTML
-* `string`: Output as string
+  * `json` (default): Output as JSON. Not possible together with `style: 'citation-*'`
+  * `html`: Output as HTML
+  * `string`: Output as string
 
 #### <a id="cite.out.style" href="#cite.out.style">Style</a>
 
-* `csl`: Outputs raw CSL-JSON data
-* `bibtex`: Outputs a BibTeX string, or BibTeX-JSON if `type: "json"`
-* `bibtxt`: Outputs a Bib.TXT string, or BibTeX-JSON if `type: "json"`
-* `citation-*`: Formatted citation, formatted with citeproc-js. `*` is a [CSL Template](#cite.out.templates) name.
+  * `csl` (default): Outputs raw CSL-JSON data
+  * `bibtex`: Outputs a BibTeX string, or BibTeX-JSON if `type: "json"`
+  * `bibtxt`: Outputs a Bib.TXT string, or BibTeX-JSON if `type: "json"`
+  * `citation-*`: Formatted citation, formatted with citeproc-js. `*` is a [CSL Template](#cite.out.templates) name
+
+#### <a id="cite.out.wrap" href="#cite.out.wrap">Append/Prepend</a>
+
+The value passed to the append/prepend options is either
+
+  1. a constant string or
+  2. a callback taking a parameter `entry`, a CSL-JSON object, and returning HTML or plain text
+
+that should either be appended or prepended to the corresponding entry in the outputted bibliography. Example:
+
+```js
+const Cite = require('citation-js')
+const data = new Cite('Q30000000')
+
+const date = (new Date()).toLocaleDateString()
+
+data.get({
+  type: 'html',
+  style: 'citation-apa',
+  prepend ({id}) {
+    return `[${id}]: `
+  },
+  append: ` [Retreived on ${date}]`
+})
+```
+
+Or in older JavaScript:
+
+```js
+var Cite = require('citation-js')
+var data = new Cite('Q30000000')
+
+data.get({
+  type: 'html',
+  style: 'citation-apa',
+  prepend: function (entry) {
+    return '[' + entry.id + ']: '
+  },
+  append: ' [Retrieved on ' + date + ']'
+})
+```
+
+This prepends `[$ID]: ` to each entry, where `$ID` is the ID of that entry, and appends ` [Retrieved on $DATE]`, where `$DATE` is today (constant for all entries).
+
+**Functionality only available when using `citation-*` styles**
 
 #### <a id="cite.out.templates" href="#cite.out.templates">CSL Templates</a>
 
 Currently, the following CSL Templates are built-in in Citation.js:
 
-* `apa`
-* `vancouver`
-* `harvard1`
+  * `apa` (default)
+  * `vancouver`
+  * `harvard1`
 
 Different [CSL Templates](https://github.com/citation-style-language/styles) can be registered like this:
 
@@ -233,11 +306,11 @@ Replace `templateName` with the template name you want to use.
 
 Currently, the following CSL Locales are built-in in Citation.js:
 
-* `en-US`
-* `es-ES`
-* `de-DE`
-* `fr-FR`
-* `nl-NL`
+  * `en-US` (default)
+  * `es-ES`
+  * `de-DE`
+  * `fr-FR`
+  * `nl-NL`
 
 Different [CSL Locales](https://github.com/citation-style-language/locales) can be registered like this:
 
@@ -259,18 +332,18 @@ data.get({
 
 `Cite` instances have some more functions:
 
-* `Cite#options(<options>)`: Change default options
-* `Cite#set(<data>)`: Replace all data with new data
-* `Cite#add(<data>)`: Add data
-* `Cite#reset()`: Remove all data and options
-* `Cite#currentVersion()`: Get current version number
-* `Cite#retrieveVersion(<version number>)`: Retrieve a certain version of the object
-* `Cite#retrieveLastVersion()`: Retrieve the last saved version of the object
-* `Cite#undo(<number>)`: Restore the n to last version (default: `1`)
-* `Cite#save()`: Save the current object
-* `Cite#sort()`: Sort all entries on basis of their BibTeX label
+  * `Cite#options(<options>)`: Change default options
+  * `Cite#set(<data>)`: Replace all data with new data
+  * `Cite#add(<data>)`: Add data
+  * `Cite#reset()`: Remove all data and options
+  * `Cite#currentVersion()`: Get current version number
+  * `Cite#retrieveVersion(<version number>)`: Retrieve a certain version of the object
+  * `Cite#retrieveLastVersion()`: Retrieve the last saved version of the object
+  * `Cite#undo(<number>)`: Restore the n to last version (default: `1`)
+  * `Cite#save()`: Save the current object
+  * `Cite#sort()`: Sort all entries on basis of their BibTeX label
 
-`Cite#set()` and `Cite#get()` also have async variants (append `Async` to the function name), which return Promises.
+`Cite#set()` and `Cite#get()` also have async variants (`Cite#setAsync()` and `Cite#addAsync()`), which return Promises.
 
 #### <a id="cite.misc.iterator" href="#cite.misc.iterator">Iterator</a>
 
@@ -278,10 +351,10 @@ Every `Cite` instance is an Iterator, so you can loop over an instance with `for
 
 ```js
 const data = new Cite([{id: 1}, {id: 2}, {id: 3}])
-let array = []
+const array = []
 
-for (let {id} of data) {
-  array.push(id)
+for (let item of data) {
+  array.push(item.id)
 }
 
 array // [1, 2, 3]
@@ -374,7 +447,7 @@ Note that most `get*` functions expect CSL-JSON normalised with `Cite.parse.csl:
 
 ## <a id="async" href="#async">Async</a>
 
-Use the async api (recommended for Wikidata, URL, and DOI input) like this (with callback):
+Use the async API (recommended for Wikidata, URL, and DOI input) like this (with callback):
 
 ```js
 Cite.async(<DATA>, <OPTIONS>, function (data) {
