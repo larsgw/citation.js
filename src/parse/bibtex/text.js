@@ -59,8 +59,8 @@ const delimiters = {
 const getTokenizedBibtex = function (str) {
   // Substitute command of form "\X{X}" into "{\X X}"
   str = str
-    .replace(/{?(\\[`"'^~=.]){?\\?([A-Za-z])}/g, '{$1$2}')
-    .replace(/{?(\\[a-z]){?\\?([A-Za-z])}/g, '{$1 $2}')
+    .replace(/(\\[`"'^~=.]){\\?([A-Za-z])}/g, '{$1$2}')
+    .replace(/(\\[a-z]) ?{\\?([A-Za-z])}/g, '{$1 $2}')
 
   // Tokenize, with escaped characters in mind
   return str.match(tokenPattern)
