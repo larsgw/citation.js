@@ -153,7 +153,7 @@
       "type": "book",
       "author": [
         {"literal": "a and b"},
-        {"literal": "c"},
+        {"given": "c"},
         {"given": "D", "family": "E"}
       ],
       "issued": {
