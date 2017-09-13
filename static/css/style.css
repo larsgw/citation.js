@@ -7,9 +7,10 @@ a.no-border { border: none }
 
 body {
   position: relative;
-  margin: 0 auto;
-  max-width: 1000px;
-  box-shadow:-1px 1px 3px rgba(0,0,0,.4),1px 1px 3px rgba(0,0,0,.4);
+}
+
+.mdl-layout {
+  height: auto !important;
 }
 
 header {
@@ -31,6 +32,17 @@ footer {
   overflow-y:auto;
   overflow-x:hidden;
   margin:8px;
+}
+
+body > footer,
+body > .code,
+.mdl-layout__content {
+  margin: 0 auto;
+  max-width: 1000px;
+}
+
+.mdl-layout__content {
+  box-shadow:-1px 1px 3px rgba(0,0,0,.4),1px 1px 3px rgba(0,0,0,.4);
 }
 
 .mdl-layout__content .mdl-grid { padding-bottom:56px; }

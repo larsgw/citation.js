@@ -28,8 +28,6 @@
     })</script>
   </head>
   <body>
-    
-    <div class="code"></div>
 
     <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
       <header class="mdl-layout__header">
@@ -65,6 +63,16 @@
       </div>
       
       <div class="mdl-layout__content">
+        <div class="code"></div>
+
+        <footer>
+          &copy; 2017 Lars Willighagen
+          <span style="left:0;right:0;position:absolute;text-align:center">Citation.js</span>
+          <span style="right:5px;position:absolute">
+            <a href="https://larsgw.github.io">larsgw.github.io</a>
+          </span>
+        </footer>
+
         <div class="mdl-grid">
           <div class="mdl-cell mdl-cell--6-col">
             <section class="mdl-card mdl-shadow--2dp">
@@ -152,29 +160,22 @@
               </div>
               
               <pre id="runkit">
-const Cite = require('citation-js@0.3.0-6')
+const Cite = require('citation-js')
 
-const data = await Cite.async('Q21972834', {
+const data = await Cite.async('Q30000000')
+
+data.get({
   format: 'string',
   type: 'html',
   style: 'citation-apa',
   lang: 'en-US'
 })
-
-data.get() // Should implicitly display
               </pre>
             </section>
           </div>
         </div>
       </div>
     </div>
-    
-    <footer>
-      &copy; 2017 Lars Willighagen
-      <span style="left:0;right:0;position:absolute;text-align:center">Citation.js</span>
-      <span style="right:5px;position:absolute">
-        <a href="https://larsgw.github.io">larsgw.github.io</a>
-      </span>
-    </footer>
+
   </body>
 </html>
