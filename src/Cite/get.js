@@ -1,5 +1,6 @@
 import striptags from 'striptags'
 
+import { validateOutputOptions as validate } from './static'
 import { getPrefixedEntry, getWrappedEntry } from '../util/attr.js'
 
 import getBibTeXJSON from '../get/bibtex/json'
@@ -39,6 +40,12 @@ const getIds = function () {
  * @return {String|Array<Object>} The formatted data
  */
 const get = function (options = {}) {
+  try {
+    validate(options)
+  } catch ({message}) {
+    console.warn('[get]', message)
+  }
+
   const {format, type, style, lang, append, prepend} = Object.assign({}, this.defaultOptions, this._options.output, options)
   const [, styleType, styleFormat] = style.match(/^([^-]+)(?:-(.+))?$/)
 

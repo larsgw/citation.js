@@ -1,3 +1,5 @@
+import {validateOptions as validate} from './static'
+
 // TODO docs
 const defaultOptions = {format: 'real', type: 'json', style: 'csl', lang: 'en-US'}
 
@@ -18,9 +20,15 @@ const options = function (options, log) {
     this.save()
   }
 
-  Object.assign(this._options, options)
+  try {
+    validate(options)
+  } catch ({message}) {
+    console.warn('[options]', message)
+  } finally {
+    Object.assign(this._options, options)
 
-  return this
+    return this
+  }
 }
 
 export { options, defaultOptions }
