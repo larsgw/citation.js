@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>Source: parse/json.js - Docs - Citation.js</title>
+    <title>Source: parse/input/graph.js - Docs - Citation.js</title>
     
     <meta name="theme-color" content="#FFC107">
     <link rel="shortcut icon" type="image/png" href="../favicon.png"/>
@@ -22,7 +22,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Source: parse/json.js</h1>
+    <h1 class="page-title">Source: parse/input/graph.js</h1>
 
     
 
@@ -31,34 +31,46 @@
     
     <section>
         <article>
-            <pre class="prettyprint source linenums"><code>import varRegex from './regex'
-
-/**
- * Parse (in)valid JSON
+            <pre class="prettyprint source linenums"><code>/**
+ * Apply a parse chain graph to an element
  *
  * @access protected
- * @method parseJSON
+ * @method applyGraph
  *
- * @param {String} str - The input string
+ * @param {CSL} entry
+ * @param {Array&lt;Object>} graph
  *
- * @return {Object|Array&lt;Object>|Array&lt;String>} The parsed object
+ * @return {CSL} entry
  */
-const parseJSON = function (str) {
-  try {
-    return JSON.parse(str)
-  } catch (e) {
-    console.info('[set]', 'Input was not valid JSON, switching to experimental parser for invalid JSON')
-    try {
-      varRegex.json.forEach(([regex, subst]) => { str = str.replace(regex, subst) })
-      return JSON.parse(str)
-    } catch (e) {
-      console.error('[set]', 'Experimental parser failed. Please improve the JSON. If this is not JSON, please re-read the supported formats.')
-      return undefined
-    }
+const applyGraph = (entry, graph) => {
+  const isArrayElse = ({type}) => type === 'array/else'
+
+  if (!Array.isArray(entry._graph)) {
+    entry._graph = graph
+  } else if (graph.find(isArrayElse)) {
+    graph.splice(graph.findIndex(isArrayElse), 1, ...entry._graph.slice(0, -1))
+    entry._graph = graph
   }
+
+  return entry
 }
 
-export default parseJSON
+/**
+ * Remove the parse chain graph from an element
+ *
+ * @access protected
+ * @method removeGraph
+ *
+ * @param {CSL} entry
+ *
+ * @return {CSL} entry
+ */
+const removeGraph = (entry) => {
+  delete entry._graph
+  return entry
+}
+
+export { applyGraph, removeGraph }
 </code></pre>
         </article>
     </section>
