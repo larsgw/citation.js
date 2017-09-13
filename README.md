@@ -68,7 +68,7 @@ To use the [`Cite`](#cite) constructor, `require()` the module like this:
 const Cite = require('citation-js')
 ```
 
-### <a id="starting.install.node.cli" href="#starting.install.node.cli">CLI</a>
+#### <a id="starting.install.node.cli" href="#starting.install.node.cli">CLI</a>
 
 To install the CLI, do this:
 
@@ -100,9 +100,7 @@ Run the CLI like this:
 
 ### <a id="starting.install.browser" href="#starting.install.browser">Browser</a>
 
-Download [citation.js](https://github.com/larsgw/citation.js/tree/archive)
-([citation.min.js](https://github.com/larsgw/citation.js/tree/archive)),
-include it in you page, and you can `require('citation-js')` to get the [`Cite`](#cite) contructor.
+Download [citation.js](https://github.com/larsgw/citation.js/tree/archive), include it in you page, and you can `require('citation-js')` to get the [`Cite`](#cite) contructor.
 
 ```html
 <script src="path/to/citation.js" type="text/javascript"></script>
@@ -141,7 +139,7 @@ Use the object constructor `Cite()` to parse input and get output.
 Make a `Cite` object like this:
 
 ```js
-var example = new Cite( <data>, <options> )
+const example = new Cite(<data>, <options>)
 ```
 
   1. In the first parameter you pass the input data. [Input types](#cite.in.type)
@@ -205,12 +203,12 @@ When using the `Cite#get()` function, your output depends on the options you pas
 
 #### <a id="cite.out.options" href="#cite.out.options">Options</a>
 
-  * `format`: The output format: `"real"` (default) or `"string"`
+  * `format`: The output format. See [Format](#cite.out.format)
   * `type`: The output type. See [Type](#cite.out.type)
   * `style`: The output style. See [Style](#cite.out.style)
   * `lang`: The language of the output. See [Locales](#cite.out.locales)
-  * `prepend`: Function taking source CSL-JSON as input or constant string to prepend to each element
-  * `append`: Same, but appending
+  * `prepend`: Function taking source CSL-JSON as input or constant string to prepend to each element. See [Append/Prepend](#cite.out.wrap)
+  * `append`: See above.
 
 #### <a id="cite.out.format" href="#cite.out.format">Format</a>
 
@@ -261,6 +259,8 @@ Or in older JavaScript:
 var Cite = require('citation-js')
 var data = new Cite('Q30000000')
 
+var date = (new Date()).toLocaleDateString()
+
 data.get({
   type: 'html',
   style: 'citation-apa',
@@ -286,12 +286,12 @@ Currently, the following CSL Templates are built-in in Citation.js:
 Different [CSL Templates](https://github.com/citation-style-language/styles) can be registered like this:
 
 ```js
-var templateName = 'custom'
-var template = '<?xml version="1.0" encoding="utf-8"?><style ...>...</style>' // The actual XML file
+const templateName = 'custom'
+const template = '<?xml version="1.0" encoding="utf-8"?><style ...>...</style>' // The actual XML file
 
 Cite.CSL.register.addTemplate(templateName, template)
 
-var data = new Cite(...)
+const data = new Cite(...)
 data.get({
   format: 'string',
   type: 'html',
@@ -315,12 +315,12 @@ Currently, the following CSL Locales are built-in in Citation.js:
 Different [CSL Locales](https://github.com/citation-style-language/locales) can be registered like this:
 
 ```js
-var language = 'en-GB'
-var locale = '<?xml version="1.0" encoding="utf-8"?><locale ...>...</locale>' // The actual XML file
+const language = 'en-GB'
+const locale = '<?xml version="1.0" encoding="utf-8"?><locale ...>...</locale>' // The actual XML file
 
 Cite.CSL.register.addLocale(language, locale)
 
-var data = new Cite(...)
+const data = new Cite(...)
 data.get({
   format: 'string',
   type: 'html',
