@@ -103,7 +103,8 @@
   "bibtex": {
     "simple": [
       {
-        "_label": "Steinbeck2003",
+        "citation-label": "Steinbeck2003",
+        "PMID": "12653513",
         "type": "article-journal",
         "author": [
           {"given": "Christoph", "family": "Steinbeck"},
@@ -128,7 +129,9 @@
     ],
     "whitespace": [
       {
-        "_label": "Ekstrand:2009:RYD",
+        "citation-label": "Ekstrand:2009:RYD",
+        "year-suffix": ":RYD",
+        "number-of-pages": "10",
         "type": "paper-conference",
         "author": [
           {"given": "Michael D.", "family": "Ekstrand"},
@@ -148,7 +151,7 @@
       }
     ],
     "literals": [{
-      "_label": "b",
+      "citation-label": "b",
       "id": "b",
       "type": "book",
       "author": [
@@ -161,7 +164,7 @@
       }
     }],
     "yearMonthNeeded": [{
-      "_label": "b",
+      "citation-label": "b",
       "id": "b",
       "type": "book",
       "issued": {
@@ -169,7 +172,7 @@
       }
     }],
     "yearMonth": [{
-      "_label": "b",
+      "citation-label": "b",
       "id": "b",
       "type": "book",
       "issued": {
@@ -187,7 +190,7 @@
     "publisher-place": "Stuttgart",
     "type": "book",
     "id": "Fau86",
-    "_label": "Fau86"
+    "citation-label": "Fau86"
   },
   "bibjson": {
     "simple": [

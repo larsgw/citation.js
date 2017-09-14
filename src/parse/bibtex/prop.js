@@ -86,9 +86,14 @@ const propMap = {
   issn: 'ISSN',
   issue: 'issue',
   journal: 'container-title',
+  language: true,
   location: 'publisher-place',
+  note: true,
   number: 'issue',
+  numpages: 'number-of-pages',
   pages: 'page',
+  pmid: 'PMID',
+  pmcid: 'PMCID',
   publisher: true,
   series: 'collection-title',
   title: true,
@@ -98,14 +103,11 @@ const propMap = {
   // prepare for merge
   year: 'issued:date-parts.0.0',
   month: 'issued:date-parts.0.1',
+  day: 'issued:date-parts.0.2',
 
   // ignore
   crossref: false,
-  keywords: false,
-  language: false,
-  note: false,
-  numpages: false,
-  pmid: false
+  keywords: false
 }
 
 /**

@@ -30,7 +30,11 @@ const parseBibTeXJSON = function (data) {
     }
 
     newEntry.type = parseBibTeXType(entry.type)
-    newEntry.id = newEntry._label = entry.label
+    newEntry.id = newEntry['citation-label'] = entry.label
+
+    if (/\d(\D+)$/.test(entry.label)) {
+      newEntry['year-suffix'] = entry.label.match(/\d(\D+)$/)[1]
+    }
 
     toMerge.forEach(([cslField, value]) => {
       const props = cslField.split(/:|\./g)
