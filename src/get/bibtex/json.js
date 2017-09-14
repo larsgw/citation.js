@@ -21,24 +21,53 @@ const getBibTeXJSON = function (src) {
 
   const props = {}
 
-  if (src.author) { props.author = src.author.map(name => getName(name, true)).join(' and ') }
-  if (src.event) { props.organization = src.event }
-  if (src.accessed) { props.note = '[Online; accesed ' + getDate(src.accessed) + ']' }
-  if (src.DOI) { props.doi = src.DOI }
-  if (src.editor) { props.editor = src.editor.map(name => getName(name, true)).join(' and ') }
-  if (src.ISBN) { props.isbn = src.ISBN }
-  if (src.ISSN) { props.issn = src.ISSN }
-  if (src['container-title']) { props.journal = src['container-title'] }
-  if (src.issue || src.issue === 0) { props.issue = src.issue.toString() }
-  if (src.page) { props.pages = src.page.replace('-', '--') }
-  if (src['publisher-place']) { props.address = src['publisher-place'] }
-  if (src.edition || src.edition === 0) { props.edition = src.edition.toString() }
-  if (src.publisher) { props.publisher = src.publisher }
-  if (src.title) { props.title = src['title'] }
-  if (src.url) { props.url = src.url }
-  if (src.volume || src.volume === 0) { props.volume = src.volume.toString() }
+  const simple = {
+    'collection-title': 'series',
+    'container-title': src.type === 'chapter' ? 'booktitle' : 'journal',
+    edition: 'edition',
+    event: 'organization',
+    DOI: 'doi',
+    ISBN: 'isbn',
+    ISSN: 'issn',
+    issue: 'number',
+    language: 'language',
+    note: 'note',
+    'number-of-pages': 'numpages',
+    PMID: 'pmid',
+    PMCID: 'pmcid',
+    publisher: 'publisher',
+    'publisher-place': 'address',
+    title: 'title',
+    url: 'url',
+    volume: 'volume'
+  }
+
+  for (let prop in simple) {
+    if (src.hasOwnProperty(prop)) {
+      props[simple[prop]] = src[prop] + ''
+    }
+  }
+
+  if (src.author) {
+    props.author = src.author.map(name => getName(name, true)).join(' and ')
+  }
+  if (src.editor) {
+    props.editor = src.editor.map(name => getName(name, true)).join(' and ')
+  }
+
+  if (!src.note && src.accessed) {
+    props.note = `[Online; accessed ${getDate(src.accessed)}]`
+  }
+
+  if (src.page) {
+    props.pages = src.page.replace('-', '--')
+  }
+
   if (src.issued && src.issued['date-parts'][0].length === 3) {
+    props.date = getDate(src.issued)
     props.year = src.issued['date-parts'][0][0].toString()
+    props.month = src.issued['date-parts'][0][1].toString()
+    props.day = src.issued['date-parts'][0][2].toString()
   }
 
   res.properties = props

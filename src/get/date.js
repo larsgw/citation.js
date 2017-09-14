@@ -10,7 +10,8 @@
  */
 const getDate = function ({'date-parts': [date]}) {
   if (date.length === 3) {
-    return `${date[0].padStart(4, '0')}-${date[1].padStart(2, '0')}-${date[2].padStart(2, '0')}`
+    const [year, month, day] = date.map(part => part.toString())
+    return `${year.padStart(4, '0')}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`
   } else {
     return ''
   }

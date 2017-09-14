@@ -13,7 +13,7 @@
     }
   },
   "bibtex": {
-    "plain": "@article{Hall1957Correlation, author={Hall, H. K.}, doi={10.1021/ja01577a030}, journal={Journal of the American Chemical Society}, issue=20, pages={5441--5444}, title={{Correlation of the Base Strengths of Amines 1}}, volume=79, year=1957, }",
+    "plain": "@article{Hall1957Correlation, journal={Journal of the American Chemical Society}, doi={10.1021/ja01577a030}, number=20, title={{Correlation of the Base Strengths of Amines 1}}, volume=79, author={Hall, H. K.}, pages={5441--5444}, date={1957-01-01}, year=1957, month=1, day=1, }",
     "json": [
       {
         "label": "Hall1957Correlation",
@@ -22,14 +22,17 @@
           "author": "Hall, H. K.",
           "doi": "10.1021/ja01577a030",
           "journal": "Journal of the American Chemical Society",
-          "issue": "20",
+          "number": "20",
           "pages": "5441--5444",
           "title": "Correlation of the Base Strengths of Amines 1",
           "volume": "79",
+          "date": "1957-01-01",
+          "day": "1",
+          "month": "1",
           "year": "1957"
         }
       }
     ],
-    "bibtxt": "[Hall1957Correlation]\n\ttype: article\n\tauthor: Hall, H. K.\n\tdoi: 10.1021/ja01577a030\n\tjournal: Journal of the American Chemical Society\n\tissue: 20\n\tpages: 5441--5444\n\ttitle: Correlation of the Base Strengths of Amines 1\n\tvolume: 79\n\tyear: 1957"
+    "bibtxt": "[Hall1957Correlation]\n\ttype: article\n\tjournal: Journal of the American Chemical Society\n\tdoi: 10.1021/ja01577a030\n\tnumber: 20\n\ttitle: Correlation of the Base Strengths of Amines 1\n\tvolume: 79\n\tauthor: Hall, H. K.\n\tpages: 5441--5444\n\tdate: 1957-01-01\n\tyear: 1957\n\tmonth: 1\n\tday: 1"
   }
 }
