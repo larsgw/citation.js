@@ -159,7 +159,7 @@ const correctDate = function (date, bestGuessConversions = true) {
       return {[dp]: date[dp].map(part => part.slice())}
     } else if (!bestGuessConversions) {
       return undefined
-    } else if (date[dp].every(part => part.every(datePart => typeof datePart === 'string'))) {
+    } else if (date[dp].some(part => part.some(datePart => typeof datePart === 'string'))) {
       return {[dp]: date[dp].map(part => part.map(parseFloat))}
     }
 

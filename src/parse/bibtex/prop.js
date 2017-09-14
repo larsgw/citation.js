@@ -2,6 +2,29 @@ import parseName from '../name'
 import parseDate from '../date'
 
 /**
+ * To match months.
+ *
+ * @access private
+ * @constant propMap
+ * @type {Array<RegExp>}
+ * @default
+ */
+const months = [
+  /jan(uary)?\.?/i,
+  /feb(ruary)?\.?/i,
+  /mar(ch)?\.?/i,
+  /apr(il)?\.?/i,
+  /may\.?/i,
+  /jun(e)?\.?/i,
+  /jul(y)?\.?/i,
+  /aug(ust)?\.?/i,
+  /sep(tember)?\.?/i,
+  /oct(ober)?\.?/i,
+  /nov(ember)?\.?/i,
+  /dec(ember)?\.?/i
+]
+
+/**
  * Parse date into list of CSL date object.
  *
  * @access private
@@ -142,6 +165,9 @@ const parseBibTeXProp = function (name, value) {
       case 'edition':
         // return parseOrdinal(value)
         return value
+
+      case 'issued:date-parts.0.1':
+        return parseFloat(value) ? value : months.findIndex(month => month.test(value)) + 1
 
       case 'page':
         return value.replace(/[—–]/, '-')
