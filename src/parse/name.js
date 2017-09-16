@@ -122,4 +122,8 @@ const parseName = function (name = '') {
   }
 }
 
-export default parseName
+export const name = '@name'
+export {
+  parseName as data,
+  parseName as default
+}

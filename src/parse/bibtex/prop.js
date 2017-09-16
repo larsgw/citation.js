@@ -180,4 +180,8 @@ const parseBibTeXProp = function (name, value) {
   return [cslProp, cslValue]
 }
 
-export default parseBibTeXProp
+export const name = '@bibtex/prop'
+export {
+  parseBibTeXProp as data,
+  parseBibTeXProp as default
+}

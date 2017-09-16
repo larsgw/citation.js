@@ -45,4 +45,8 @@ const parseWikidataJSONAsync = async function (data) {
   }))
 }
 
-export default parseWikidataJSONAsync
+export const name = '@wikidata/object'
+export {
+  parseWikidataJSONAsync as dataAsync,
+  parseWikidataJSONAsync as default
+}

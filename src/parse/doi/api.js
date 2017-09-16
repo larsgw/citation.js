@@ -37,4 +37,8 @@ const fetchDoiApi = function (url) {
  */
 const parseDoiApi = data => [].concat(data).map(fetchDoiApi).map(parseDoiJson)
 
-export default parseDoiApi
+export const name = '@doi/api'
+export {
+  parseDoiApi as data,
+  parseDoiApi as default
+}

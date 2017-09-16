@@ -15,4 +15,8 @@ const parseDate = function (value) {
     : {'raw': value}
 }
 
-export default parseDate
+export const name = '@date'
+export {
+  parseDate as data,
+  parseDate as default
+}

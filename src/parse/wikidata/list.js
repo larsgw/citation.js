@@ -14,4 +14,8 @@ const parseWikidata = function (data) {
   return [].concat(wdk.getEntities(data.split(/(?:\s+|,\s*)/g), ['en']))
 }
 
-export default parseWikidata
+export const name = '@wikidata/list'
+export {
+  parseWikidata as data,
+  parseWikidata as default
+}

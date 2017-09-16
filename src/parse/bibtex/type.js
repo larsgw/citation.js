@@ -48,4 +48,8 @@ const parseBibTeXType = function (pubType) {
   }
 }
 
-export default parseBibTeXType
+export const name = '@bibtex/type'
+export {
+  parseBibTeXType as data,
+  parseBibTeXType as default
+}

@@ -27,4 +27,8 @@ const varDoiTypes = {
  */
 const fetchDoiType = value => varDoiTypes[value] || value
 
-export default fetchDoiType
+export const name = '@doi/type'
+export {
+  fetchDoiType as data,
+  fetchDoiType as default
+}

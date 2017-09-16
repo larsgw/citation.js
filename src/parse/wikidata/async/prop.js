@@ -71,4 +71,8 @@ const parseWikidataPropAsync = async function (prop, value, lang) {
   }
 }
 
-export default parseWikidataPropAsync
+export const name = '@wikidata/prop'
+export {
+  parseWikidataPropAsync as dataAsync,
+  parseWikidataPropAsync as default
+}

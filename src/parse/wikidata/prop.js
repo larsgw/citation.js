@@ -160,4 +160,8 @@ const parseWikidataProp = function (name, value, lang) {
   return [cslProp, cslValue]
 }
 
-export default parseWikidataProp
+export const name = '@wikidata/prop'
+export {
+  parseWikidataProp as data,
+  parseWikidataProp as default
+}

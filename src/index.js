@@ -28,7 +28,6 @@
  */
 
 import 'babel-polyfill'
-import deepFreeze from 'deep-freeze'
 
 import * as staticMethods from './Cite/static'
 import * as get from './get/index'
@@ -49,6 +48,5 @@ Object.assign(Cite, staticMethods, {
   input: parse.input.chain,
   inputAsync: parse.input.async.chain
 })
-// deepFreeze(Cite)
 
 module.exports = Cite

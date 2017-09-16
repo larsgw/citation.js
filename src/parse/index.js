@@ -7,8 +7,9 @@ import bibjson from './bibjson/index'
 import date from './date'
 import name from './name'
 import json from './json'
-import csl from './csl'
 
-export { input, wikidata, bibtex, bibtxt, doi, bibjson, date, name, json, csl }
+export {wikidata, bibtex, bibtxt, doi, bibjson, date, name, json}
 
+export {input as input}
+export {default as csl} from './csl'
 export * from './register'

@@ -168,4 +168,8 @@ const parseBibTeX = function (str) {
   return entries
 }
 
-export default parseBibTeX
+export const name = '@bibtex/text'
+export {
+  parseBibTeX as data,
+  parseBibTeX as default
+}

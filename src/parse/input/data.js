@@ -8,7 +8,7 @@ import parseDoi from '../doi/id'
 import parseDoiApi from '../doi/api'
 import parseContentMine from '../bibjson/index'
 import parseBibTeX from '../bibtex/text'
-import { text as parseBibTxt } from '../bibtxt'
+import {text as parseBibTxt} from '../bibtxt'
 import parseBibTeXJSON from '../bibtex/json'
 import parseJSON from '../json'
 

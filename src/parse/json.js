@@ -1,4 +1,19 @@
-import varRegex from './regex'
+/**
+ *
+ * @access protected
+ * @constant substituters
+ * @default
+ */
+const substituters = [
+  [
+    /((?:\[|:|,)\s*)'((?:\\'|[^'])*?[^\\])?'(?=\s*(?:\]|}|,))/g,
+    '$1"$2"'
+  ],
+  [
+    /((?:(?:"|]|}|\/[gmiuys]|\.|(?:\d|\.|-)*\d)\s*,|{)\s*)(?:"([^":\n]+?)"|'([^":\n]+?)'|([^":\n]+?))(\s*):/g,
+    '$1"$2$3$4"$5:'
+  ]
+]
 
 /**
  * Parse (in)valid JSON
@@ -16,7 +31,7 @@ const parseJSON = function (str) {
   } catch (e) {
     console.info('[set]', 'Input was not valid JSON, switching to experimental parser for invalid JSON')
     try {
-      varRegex.json.forEach(([regex, subst]) => { str = str.replace(regex, subst) })
+      substituters.forEach(([regex, subst]) => { str = str.replace(regex, subst) })
       return JSON.parse(str)
     } catch (e) {
       console.error('[set]', 'Experimental parser failed. Please improve the JSON. If this is not JSON, please re-read the supported formats.')
@@ -25,4 +40,8 @@ const parseJSON = function (str) {
   }
 }
 
-export default parseJSON
+export const name = '@json/text'
+export {
+  parseJSON as data,
+  parseJSON as default
+}

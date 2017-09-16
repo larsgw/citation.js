@@ -25,4 +25,8 @@ const parseDoiJson = function (data) {
   return Object.assign({}, data, res)
 }
 
-export default parseDoiJson
+export const name = '@doi/object'
+export {
+  parseDoiJson as data,
+  parseDoiJson as default
+}

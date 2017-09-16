@@ -10,4 +10,8 @@
  */
 const parseDoi = data => data.split(/(?:\s+)/g).map(doi => `https://doi.org/${doi.trim()}`)
 
-export default parseDoi
+export const name = '@doi/id'
+export {
+  parseDoi as data,
+  parseDoi as default
+}
