@@ -1,3 +1,5 @@
+import {add} from '../register'
+
 import varRegex from '../regex'
 
 import fetchFile from '../../util/fetchFile'
@@ -12,89 +14,38 @@ import {text as parseBibTxt} from '../bibtxt'
 import parseBibTeXJSON from '../bibtex/json'
 import parseJSON from '../json'
 
-/**
- * Standardise input (internal use)
- *
- * @access protected
- * @method parseInputData
- *
- * @param {String|Array<String>|Object|Array<Object>} input - The input data
- * @param {String} type - The input type
- *
- * @return {Array<CSL>} The parsed input
- */
-const parseInputData = function (input, type) {
-  switch (type) {
-    case 'string/wikidata':
-      return parseWikidata(input.match(varRegex.wikidata[0])[1])
-
-    case 'list/wikidata':
-      return parseWikidata(input.match(varRegex.wikidata[1])[1])
-
-    case 'api/wikidata':
-      return fetchFile(input)
-
-    case 'url/wikidata':
-      return parseWikidata(input.match(varRegex.wikidata[3])[1])
-
-    case 'array/wikidata':
-      return parseWikidata(input.join(','))
-
-    case 'api/doi':
-      return parseDoiApi(input)
-
-    case 'string/doi':
-      return parseDoi(input)
-
-    case 'list/doi':
-      return parseDoi(input)
-
-    case 'array/doi':
-      return parseDoi(input.join('\n'))
-
-    case 'url/else':
-      return fetchFile(input)
-
-    case 'jquery/else':
-      return input.val() || input.text() || input.html()
-
-    case 'html/else':
-      return input.value || input.textContent
-
-    case 'string/json':
-      return parseJSON(input)
-
-    case 'string/bibtex':
-      return parseBibTeX(input)
-
-    case 'string/bibtxt':
-      return parseBibTxt(input)
-
-    case 'object/bibtex':
-      return parseBibTeXJSON(input)
-
-    case 'object/wikidata':
-      return parseWikidataJSON(input)
-
-    case 'object/contentmine':
-      return parseContentMine(input)
-
-    case 'array/else':
-      return [].concat(...input.map(value => parseInput(value)))
-
-    case 'object/csl':
-      return [input]
-
-    case 'array/csl':
-      return input
-
-    case 'string/empty':
-    case 'string/whitespace':
-    case 'empty':
-    case 'invalid':
-    default:
-      return []
-  }
+const parsers = {
+  'string/wikidata': input => parseWikidata(input.match(varRegex.wikidata[0])[1]),
+  'list/wikidata': input => parseWikidata(input.match(varRegex.wikidata[1])[1]),
+  'api/wikidata': input => fetchFile(input),
+  'url/wikidata': input => parseWikidata(input.match(varRegex.wikidata[3])[1]),
+  'array/wikidata': input => parseWikidata(input.join(',')),
+  'api/doi': input => parseDoiApi(input),
+  'string/doi': input => parseDoi(input),
+  'list/doi': input => parseDoi(input),
+  'array/doi': input => parseDoi(input.join('\n')),
+  'url/else': input => fetchFile(input),
+  'jquery/else': input => input.val() || input.text() || input.html(),
+  'html/else': input => input.value || input.textContent,
+  'string/json': input => parseJSON(input),
+  'string/bibtex': input => parseBibTeX(input),
+  'string/bibtxt': input => parseBibTxt(input),
+  'object/bibtex': input => parseBibTeXJSON(input),
+  'object/wikidata': input => parseWikidataJSON(input),
+  'object/contentmine': input => parseContentMine(input),
+  'array/else': input => [].concat(...input.map(parseInput)),
+  'object/csl': input => [input],
+  'array/csl': input => input,
+  'string/empty': () => [],
+  'string/whitespace': () => [],
+  'empty': () => [],
+  'invalid': () => []
 }
 
-export default parseInputData
+for (let type in parsers) {
+  add(type, {data: parsers[type]})
+}
+
+export default function parseInputData (data, type) {
+  return parsers[type](data)
+}

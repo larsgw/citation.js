@@ -63,7 +63,8 @@
     "instrument": false
   },
   "standard": {
-    "parser": "babel-eslint"
+    "parser": "babel-eslint",
+    "globals": ["logger"]
   },
   "scripts": {
     "--1--": "lint",

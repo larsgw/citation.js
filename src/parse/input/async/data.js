@@ -1,41 +1,18 @@
-import parseInputAsync from '../async/chain'
-import {data as parseInputData} from '../../register'
+import {add} from '../../register'
 
+import parseInputAsync from '../async/chain'
 import fetchFileAsync from '../../../util/fetchFileAsync'
 import parseWikidataJSONAsync from '../../wikidata/async/json'
 import parseDoiApiAsync from '../../doi/async/api'
 
-/**
- * Standardise input (internal use)
- *
- * @access protected
- * @method parseInputDataAsync
- *
- * @param {String|Array<String>|Object|Array<Object>} input - The input data
- * @param {String} type - The input type
- *
- * @return {Array<CSL>} The parsed input
- */
-const parseInputDataAsync = async function (input, type) {
-  switch (type) {
-    case 'api/wikidata':
-      return fetchFileAsync(input)
-
-    case 'object/wikidata':
-      return parseWikidataJSONAsync(input)
-
-    case 'api/doi':
-      return parseDoiApiAsync(input)
-
-    case 'url/else':
-      return fetchFileAsync(input)
-
-    case 'array/else':
-      return [].concat(...await Promise.all(input.map(parseInputAsync)))
-
-    default:
-      return parseInputData(input, type)
-  }
+const parsers = {
+  'api/wikidata': input => fetchFileAsync(input),
+  'object/wikidata': input => parseWikidataJSONAsync(input),
+  'api/doi': input => parseDoiApiAsync(input),
+  'url/else': input => fetchFileAsync(input),
+  'array/else': async input => [].concat(...await Promise.all(input.map(parseInputAsync)))
 }
 
-export default parseInputDataAsync
+for (let type in parsers) {
+  add(type, {dataAsync: parsers[type]})
+}

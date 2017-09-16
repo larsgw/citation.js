@@ -1,6 +1,4 @@
 import parseInputType from './input/type'
-import parseInputData from './input/data'
-import parseInputDataAsync from './input/async/data'
 
 const types = []
 const parsers = {}
@@ -46,39 +44,39 @@ const add = (format, {type, data, dataAsync} = {}) => {
   }
 
   if (dataAsync) {
-    parsers[format] = _[methodName + 'Async'] = dataAsync
+    async[format] = _[methodName + 'Async'] = dataAsync
   }
 }
 
-const type = (data) => {
-  const result = types.find(([_, typeParser]) => typeParser(data))
+const type = (input) => {
+  const result = types.find(([_, typeParser]) => typeParser(input))
 
   if (result === undefined) {
     // TODO could not match type
     // return 'invalid'
-    return parseInputType(data)
+    return parseInputType(input)
   } else {
     return result[0]
   }
 }
 
-const data = (data, type) => {
+const data = (input, type) => {
   if (parsers.hasOwnProperty(type)) {
-    return parsers[type](data)
+    return parsers[type](input)
   } else {
-    // TODO ERROR 404 parser not found
-    // return []
-    return parseInputData(data, type)
+    logger.error('[set]', `No synchronous parser found for ${type}`)
+    return []
   }
 }
 
-const dataAsync = async (data, type) => {
+const dataAsync = async (input, type) => {
   if (async.hasOwnProperty(type)) {
-    return async[type](data)
+    return async[type](input)
+  } else if (parsers.hasOwnProperty(type)) {
+    return data(input, type)
   } else {
-    // TODO ERROR 404 parser not found
-    // return []
-    return parseInputDataAsync(data, type)
+    logger.error('[set]', `No parser found for ${type}`)
+    return []
   }
 }
 

@@ -1,7 +1,9 @@
 import deepCopy from '../../../util/deepCopy'
 
-import parseInputDataAsync from '../async/data'
-import parseInputType from '../type'
+import {
+  type as parseInputType,
+  dataAsync as parseInputDataAsync
+} from '../../register'
 
 /**
  * Parse input once. (async)
