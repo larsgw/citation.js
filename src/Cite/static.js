@@ -19,7 +19,7 @@ const getRegex = options => new RegExp(`^(${options.join('|')})$`)
  */
 const validateOutputOptions = function (options) {
   const formats = ['real', 'string']
-  const types = ['json', 'html', 'string']
+  const types = ['json', 'html', 'string', 'rtf']
   const styles = ['csl', 'bibtex', 'bibtxt', 'citation-(.*)']
 
   if (typeof options !== 'object') {

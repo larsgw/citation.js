@@ -1,5 +1,3 @@
-import striptags from 'striptags'
-
 import { validateOutputOptions as validate } from './static'
 import { getPrefixedEntry, getWrappedEntry } from '../util/attr.js'
 
@@ -52,14 +50,21 @@ const get = function (options = {}) {
   const data = parseCsl(this.data)
   let result
 
-  switch ([type, styleType].join()) {
-    case 'html,citation':
+  switch (styleType) {
+    case 'citation':
+      if (type === 'json') {
+        console.error('[get]', `Combination type/style of json/citation-* is not valid: ${type}/${style}`)
+        break
+      }
+
       const useLang = fetchCSLLocale(lang) ? lang : 'en-US'
       const useTemplate = fetchCSLStyle(styleFormat)
       const cbItem = fetchCSLItemCallback(data)
 
       const citeproc = fetchCSLEngine(styleFormat, useLang, useTemplate, cbItem, fetchCSLLocale)
       const sortedIds = citeproc.updateItems(this.getIds())
+
+      citeproc.setOutputFormat({string: 'text'}[type] || type)
 
       const [{bibstart: bibStart, bibend: bibEnd}, bibBody] = citeproc.makeBibliography()
       let entries = bibBody.map((element, index) => getPrefixedEntry(element, sortedIds[index]))
@@ -69,48 +74,37 @@ const get = function (options = {}) {
         entries = entries.map((element, index) => getWrappedEntry(element, sortedItems[index], {append, prepend}))
       }
 
-      result = `${bibStart}${entries.join('<br />')}${bibEnd}`
+      result = bibStart + entries.join('') + bibEnd
       break
 
-    case 'html,csl':
-      result = getJSON(data)
+    case 'csl':
+      if (type === 'html') {
+        result = getJSON(data)
+      } else if (type === 'string') {
+        result = JSON.stringify(data, null, 2)
+      } else if (type === 'json') {
+        result = JSON.stringify(data)
+      }
       break
 
-    case 'html,bibtex':
-      result = getBibTeX(data, true)
+    case 'bibtex':
+      if (type === 'html') {
+        result = getBibTeX(data, true)
+      } else if (type === 'string') {
+        result = getBibTeX(data, false)
+      } else if (type === 'json') {
+        result = JSON.stringify(data.map(getBibTeXJSON))
+      }
       break
 
-    case 'string,bibtex':
-      result = getBibTeX(data, false)
-      break
-
-    case 'html,bibtxt':
-      result = getBibTxt(data, true)
-      break
-
-    case 'string,bibtxt':
-      result = getBibTxt(data, false)
-      break
-
-    case 'string,citation':
-      result = striptags(this.get(Object.assign({}, options, {type: 'html'})))
-      break
-
-    case 'string,csl':
-      result = JSON.stringify(data)
-      break
-
-    case 'json,csl':
-      result = JSON.stringify(data)
-      break
-
-    case 'json,bibtex':
-    case 'json,bibtxt':
-      result = JSON.stringify(data.map(getBibTeXJSON))
-      break
-
-    case 'json,citation':
-      console.error('[get]', `Combination type/style of json/citation-* is not valid: ${type}/${style}`)
+    case 'bibtxt':
+      if (type === 'html') {
+        result = getBibTxt(data, true)
+      } else if (type === 'string') {
+        result = getBibTxt(data, false)
+      } else if (type === 'json') {
+        result = JSON.stringify(data.map(getBibTeXJSON))
+      }
       break
 
     default:
@@ -121,7 +115,7 @@ const get = function (options = {}) {
   if (format === 'real') {
     if (type === 'json') {
       result = JSON.parse(result)
-    } else if (type === 'html' && typeof document !== 'undefined' && document.createElement) {
+    } else if (type === 'html' && typeof document !== 'undefined' && typeof document.createElement === 'function') {
       const tmp = document.createElement('div')
       tmp.innerHTML = result
       result = tmp.firstChild

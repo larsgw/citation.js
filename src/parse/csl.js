@@ -206,9 +206,9 @@ const correctField = function (fieldName, value, bestGuessConversions = true) {
     return value
   } else if (!bestGuessConversions) {
     return undefined
-  } else if (typeof value === 'string' && fieldType.includes('number')) {
+  } else if (typeof value === 'string' && fieldType.includes('number') && parseFloat(value)) {
     return parseFloat(value)
-  } else if (typeof value === 'number' && fieldType.includes('string')) {
+  } else if (typeof value === 'number' && fieldType.includes('string') && !fieldType.includes('number')) {
     return value.toString()
   } else if (Array.isArray(value) && value.length) {
     return correctField(fieldName, value[0])
