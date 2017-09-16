@@ -98,7 +98,7 @@ const propMap = {
  */
 const parseWikidataProp = function (name, value, lang) {
   if (!propMap.hasOwnProperty(name)) {
-    console.info('[set]', `Unknown property: ${name}`)
+    logger.info('[set]', `Unknown property: ${name}`)
     return undefined
   } else if (propMap[name] === false) {
     return undefined
@@ -118,7 +118,7 @@ const parseWikidataProp = function (name, value, lang) {
         const type = fetchWikidataType(value)
 
         if (!type) {
-          console.warn('[set]', `Wikidata entry type not recognized: ${value}. Defaulting to "book".`)
+          logger.warn('[set]', `Wikidata entry type not recognized: ${value}. Defaulting to "book".`)
           return 'book'
         }
 

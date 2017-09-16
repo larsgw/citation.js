@@ -45,7 +45,7 @@ const fetchBibTeXType = function (pubType) {
       return 'misc'
 
     default:
-      console.warn(`CSL publication type not recognized: ${pubType}}. Interpreting as "misc".`)
+      logger.warn(`CSL publication type not recognized: ${pubType}}. Interpreting as "misc".`)
       return 'misc'
   }
 }

@@ -56,7 +56,7 @@ var parseInputType = function (input) {
         return 'url/else'
       // Else
       } else {
-        console.warn('[set]', 'This format is not supported or recognized')
+        logger.warn('[set]', 'This format is not supported or recognized')
         return 'invalid'
       }
 
@@ -110,7 +110,7 @@ var parseInputType = function (input) {
       return 'empty'
 
     default:
-      console.warn('[set]', 'This format is not supported or recognized')
+      logger.warn('[set]', 'This format is not supported or recognized')
       return 'invalid'
   }
 }

@@ -29,12 +29,12 @@ const parseJSON = function (str) {
   try {
     return JSON.parse(str)
   } catch (e) {
-    console.info('[set]', 'Input was not valid JSON, switching to experimental parser for invalid JSON')
+    logger.info('[set]', 'Input was not valid JSON, switching to experimental parser for invalid JSON')
     try {
       substituters.forEach(([regex, subst]) => { str = str.replace(regex, subst) })
       return JSON.parse(str)
     } catch (e) {
-      console.error('[set]', 'Experimental parser failed. Please improve the JSON. If this is not JSON, please re-read the supported formats.')
+      logger.error('[set]', 'Experimental parser failed. Please improve the JSON. If this is not JSON, please re-read the supported formats.')
       return undefined
     }
   }

@@ -23,7 +23,7 @@ const options = function (options, log) {
   try {
     validate(options)
   } catch ({message}) {
-    console.warn('[options]', message)
+    logger.warn('[options]', message)
   } finally {
     Object.assign(this._options, options)
 

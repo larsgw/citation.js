@@ -27,7 +27,7 @@ const parseInput = (input, {
 
   while (type !== 'array/csl') {
     if (maxChainLength-- <= 0) {
-      console.error('[set]', 'Max. number of parsing iterations reached')
+      logger.error('[set]', 'Max. number of parsing iterations reached')
       return []
     }
 

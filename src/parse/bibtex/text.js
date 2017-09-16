@@ -159,7 +159,7 @@ const parseBibTeX = function (str) {
       entries.push({type, label, properties})
     }
   } catch (e) {
-    console.error(`Uncaught SyntaxError: ${e.message}. Returning completed entries.`)
+    logger.error(`Uncaught SyntaxError: ${e.message}. Returning completed entries.`)
 
     // Remove last, possibly incomplete entry
     entries.pop()

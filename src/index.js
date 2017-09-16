@@ -38,6 +38,8 @@ import * as version from './version'
 import async from './async/index'
 import Cite from './Cite/index'
 
+global.logger = new console.Console(process.stderr, process.stderr)
+
 Object.assign(Cite, staticMethods, {
   async: async,
   get,

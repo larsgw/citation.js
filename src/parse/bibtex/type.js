@@ -39,7 +39,7 @@ const typeMap = {
  */
 const parseBibTeXType = function (pubType) {
   if (!typeMap.hasOwnProperty(pubType)) {
-    console.warn('[set]', `BibTeX publication type not recognized: ${pubType}. Defaulting to "book".`)
+    logger.warn('[set]', `BibTeX publication type not recognized: ${pubType}. Defaulting to "book".`)
     return 'book'
   } else if (typeMap[pubType] === false) {
     return 'book'

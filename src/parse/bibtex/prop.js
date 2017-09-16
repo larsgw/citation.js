@@ -146,7 +146,7 @@ const propMap = {
  */
 const parseBibTeXProp = function (name, value) {
   if (!propMap.hasOwnProperty(name)) {
-    console.info('[set]', `Unknown property: ${name}`)
+    logger.info('[set]', `Unknown property: ${name}`)
     return undefined
   } else if (propMap[name] === false) {
     return undefined

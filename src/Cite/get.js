@@ -41,7 +41,7 @@ const get = function (options = {}) {
   try {
     validate(options)
   } catch ({message}) {
-    console.warn('[get]', message)
+    logger.warn('[get]', message)
   }
 
   const {format, type, style, lang, append, prepend} = Object.assign({}, this.defaultOptions, this._options.output, options)
@@ -53,7 +53,7 @@ const get = function (options = {}) {
   switch (styleType) {
     case 'citation':
       if (type === 'json') {
-        console.error('[get]', `Combination type/style of json/citation-* is not valid: ${type}/${style}`)
+        logger.error('[get]', `Combination type/style of json/citation-* is not valid: ${type}/${style}`)
         break
       }
 
@@ -108,7 +108,7 @@ const get = function (options = {}) {
       break
 
     default:
-      console.error('[get]', 'Invalid options')
+      logger.error('[get]', 'Invalid options')
       break
   }
 
