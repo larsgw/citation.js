@@ -5,54 +5,54 @@ import {add, type} from '../register'
 
 const stringTypes = {
   // Empty
-  'string/empty': input => input === '',
+  '@empty/text': input => input === '',
   // Only whitespace
-  'string/whitespace': /^\s+$/,
+  '@empty/whitespace+text': /^\s+$/,
   // DOI API URL
-  'api/doi': varRegex.doi[0],
+  '@doi/api': varRegex.doi[0],
   // DOI ID
-  'string/doi': varRegex.doi[1],
+  '@doi/id': varRegex.doi[1],
   // DOI ID list
-  'list/doi': varRegex.doi[2],
+  '@doi/list+text': varRegex.doi[2],
   // Wikidata ID
-  'string/wikidata': varRegex.wikidata[0],
+  '@wikidata/id': varRegex.wikidata[0],
   // Wikidata entity list
-  'list/wikidata': varRegex.wikidata[1],
+  '@wikidata/list+text': varRegex.wikidata[1],
   // Wikidata API URL
-  'api/wikidata': varRegex.wikidata[2],
+  '@wikidata/api': varRegex.wikidata[2],
   // Wikidata URL
-  'url/wikidata': varRegex.wikidata[3],
+  '@wikidata/url': varRegex.wikidata[3],
   // BibTeX
-  'string/bibtex': varRegex.bibtex,
+  '@bibtex/text': varRegex.bibtex,
   // Bib.TXT
-  'string/bibtxt': varRegex.bibtxt,
+  '@bibtxt/text': varRegex.bibtxt,
   // JSON
-  'string/json': /^\s*(\{|\[)/,
+  '@else/json': /^\s*(\{|\[)/,
   // Else URL
-  'url/else': varRegex.url
+  '@else/url': varRegex.url
 }
 
 const types = {
   // Empty
-  'empty': input => input === null || input === undefined,
+  '@empty': input => input === null || input === undefined,
   // jQuery
-  'jquery/else': input => typeof jQuery !== 'undefined' && input instanceof jQuery,
+  '@else/jquery': input => typeof jQuery !== 'undefined' && input instanceof jQuery,
   // HTML
-  'html/else': input => typeof HTMLElement !== 'undefined' && input instanceof HTMLElement
+  '@else/html': input => typeof HTMLElement !== 'undefined' && input instanceof HTMLElement
 }
 
 const arrayTypes = {
-  'array/csl': input => input.every(v => type(v) === 'object/csl'),
-  'array/wikidata': input => input.every(v => type(v) === 'string/wikidata'),
-  'array/doi': input => input.every(v => type(v) === 'string/doi'),
-  'array/else': () => true
+  '@csl/list+object': input => input.every(v => type(v) === '@csl/object'),
+  '@wikidata/array': input => input.every(v => type(v) === '@wikidata/id'),
+  '@doi/list+object': input => input.every(v => type(v) === '@doi/id'),
+  '@else/list+object': () => true
 }
 
 const objectTypes = {
-  'object/wikidata': input => input.hasOwnProperty('entities'),
-  'object/contentmine': input => ['fulltext_html', 'fulltext_xml', 'fulltext_pdf'].some(prop => input[prop] && Array.isArray(input[prop].value)),
-  'object/bibtex': input => ['type', 'label', 'properties'].every(prop => input.hasOwnProperty(prop)),
-  'object/csl': input => true
+  '@wikidata/object': input => input.hasOwnProperty('entities'),
+  '@contentmine/object': input => ['fulltext_html', 'fulltext_xml', 'fulltext_pdf'].some(prop => input[prop] && Array.isArray(input[prop].value)),
+  '@bibtex/object': input => ['type', 'label', 'properties'].every(prop => input.hasOwnProperty(prop)),
+  '@csl/object': input => true
 }
 
 for (let type in stringTypes) {

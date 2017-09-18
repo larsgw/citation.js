@@ -6,11 +6,11 @@ import parseWikidataJSONAsync from '../../wikidata/async/json'
 import parseDoiApiAsync from '../../doi/async/api'
 
 const parsers = {
-  'api/wikidata': input => fetchFileAsync(input),
-  'object/wikidata': input => parseWikidataJSONAsync(input),
-  'api/doi': input => parseDoiApiAsync(input),
-  'url/else': input => fetchFileAsync(input),
-  'array/else': async input => [].concat(...await Promise.all(input.map(parseInputAsync)))
+  '@wikidata/api': input => fetchFileAsync(input),
+  '@wikidata/object': input => parseWikidataJSONAsync(input),
+  '@doi/api': input => parseDoiApiAsync(input),
+  '@else/url': input => fetchFileAsync(input),
+  '@else/list+object': async input => [].concat(...await Promise.all(input.map(parseInputAsync)))
 }
 
 for (let type in parsers) {

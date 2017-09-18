@@ -16,12 +16,8 @@ import {
  * @return {Array<CSL>} The parsed input
  */
 const parseInputChainLink = function (input) {
-  let output = input
   const type = parseInputType(input)
-
-  if (type.match(/^(array|object)\//)) {
-    output = deepCopy(output)
-  }
+  let output = type.match(/array|object/) ? deepCopy(input) : input
 
   return parseInputData(output, type)
 }

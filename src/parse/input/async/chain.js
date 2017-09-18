@@ -23,11 +23,11 @@ const parseInputAsync = async (input, {
   forceType
 } = {}) => {
   let type = forceType || parseInputType(input)
-  let output = type.match(/^(array|object)\//) ? deepCopy(input) : input
+  let output = type.match(/array|object/) ? deepCopy(input) : input
 
   const graph = [{type, data: input}]
 
-  while (type !== 'array/csl') {
+  while (type !== '@csl/list+object') {
     if (maxChainLength-- <= 0) {
       logger.error('[set]', 'Max. number of parsing iterations reached')
       return []

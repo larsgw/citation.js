@@ -5,7 +5,7 @@ const _ = {}
 
 const typeOf = thing => thing === undefined ? 'Undefined' : thing === null ? 'Null' : thing.constructor.name
 
-const typeMatcher = /^(?:(.+?)\/)?(.+?)(?:\/(.+?))?$/ // /^(?:@(.+?))(?:\/(.+?))?(?:\/(.+?))?$/
+const typeMatcher = /^(?:@(.+?))(?:\/(?:(.+?)\+)?(?:(.+)))?$/
 const capitalize = word => word[0].toUpperCase() + word.slice(1).toLowerCase()
 const camelCase = (prefix = '', ...words) => prefix.toLowerCase() + words.map(capitalize).join('')
 const getMethodName = type => camelCase(...type.match(typeMatcher).slice(1).filter(Boolean))
@@ -22,7 +22,7 @@ const addTypeParser = (format, type) => {
 
 const add = (format, {parseType, parse, parseAsync} = {}) => {
   if (typeof format !== 'string' || !format.match(typeMatcher)) {
-    throw new TypeError('Invalid format name') //, expected name starting with \'@\'')
+    throw new TypeError('Invalid format name, expected name starting with \'@\'')
   } else if (parseType && typeof parseType !== 'function' && !(parseType instanceof RegExp)) {
     throw new TypeError(`Invalid type parser, expected callback or regex, got ${typeof parseType}`)
   } else if (parse && typeof parse !== 'function') {
@@ -31,7 +31,7 @@ const add = (format, {parseType, parse, parseAsync} = {}) => {
     throw new TypeError(`Invalid data parser, expected callback, got ${typeof parseAsync}`)
   }
 
-  const methodName = getMethodName(format)
+  const methodName = parse || parseAsync ? getMethodName(format) : ''
 
   if (typeof parseType === 'function') {
     addTypeParser(format, parseType)
@@ -39,11 +39,11 @@ const add = (format, {parseType, parse, parseAsync} = {}) => {
     addTypeParser(format, input => typeof input === 'string' && parseType.test(input))
   }
 
-  if (typeof parse === 'function') {
+  if (parse) {
     parsers[format] = _[methodName] = parse
   }
 
-  if (typeof parseAsync === 'function') {
+  if (parseAsync) {
     asyncParsers[format] = _[methodName + 'Async'] = parseAsync
   }
 }
@@ -53,7 +53,7 @@ const type = (input) => {
 
   if (result === undefined) {
     logger.warn('[set]', 'This format is not supported or recognized')
-    return 'invalid'
+    return '@invalid'
   } else {
     return result[0]
   }

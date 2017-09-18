@@ -10,7 +10,7 @@
  * @return {CSL} entry
  */
 const applyGraph = (entry, graph) => {
-  const isArrayElse = ({type}) => type === 'array/else'
+  const isArrayElse = ({type}) => type === '@else/list+object'
 
   if (!Array.isArray(entry._graph)) {
     entry._graph = graph
