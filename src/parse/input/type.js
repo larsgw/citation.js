@@ -1,118 +1,71 @@
 /* global jQuery, HTMLElement */
 
 import varRegex from '../regex'
+import {add, type} from '../register'
 
-/**
- * Determine input type (internal use)
- *
- * @access protected
- * @method parseInputType
- *
- * @param {String|Array<String>|Object|Array<Object>} input - The input data
- *
- * @return {String} The input type
- */
-var parseInputType = function (input) {
-  switch (typeof input) {
-    case 'string':
-      // Empty
-      if (input.length === 0) {
-        return 'string/empty'
-      // Only whitespace
-      } else if (/^\s+$/.test(input)) {
-        return 'string/whitespace'
-      // DOI API URL
-      } else if (varRegex.doi[0].test(input)) {
-        return 'api/doi'
-      // DOI ID
-      } else if (varRegex.doi[1].test(input)) {
-        return 'string/doi'
-      // DOI ID list
-      } else if (varRegex.doi[2].test(input)) {
-        return 'list/doi'
-      // Wikidata ID
-      } else if (varRegex.wikidata[0].test(input)) {
-        return 'string/wikidata'
-      // Wikidata entity list
-      } else if (varRegex.wikidata[1].test(input)) {
-        return 'list/wikidata'
-      // Wikidata API URL
-      } else if (varRegex.wikidata[2].test(input)) {
-        return 'api/wikidata'
-      // Wikidata URL
-      } else if (varRegex.wikidata[3].test(input)) {
-        return 'url/wikidata'
-      // BibTeX
-      } else if (varRegex.bibtex.test(input)) {
-        return 'string/bibtex'
-      // Bib.TXT
-      } else if (varRegex.bibtxt.test(input)) {
-        return 'string/bibtxt'
-      // JSON
-      } else if (/^\s*(\{|\[)/.test(input)) {
-        return 'string/json'
-      // Else URL
-      } else if (varRegex.url.test(input)) {
-        return 'url/else'
-      // Else
-      } else {
-        logger.warn('[set]', 'This format is not supported or recognized')
-        return 'invalid'
-      }
-
-    case 'object':
-      // Empty
-      if (input === null) {
-        return 'empty'
-      // jQuery
-      } else if (typeof jQuery !== 'undefined' && input instanceof jQuery) {
-        return 'jquery/else'
-      // HTML
-      } else if (typeof HTMLElement !== 'undefined' && input instanceof HTMLElement) {
-        return 'html/else'
-      // Array
-      } else if (Array.isArray(input)) {
-        // Empty array (counts as csl for parsing purposes)
-        if (input.length === 0) {
-          return 'array/csl'
-        // Array of Wikidata IDs
-        } else if (input.every(v => parseInputType(v) === 'string/wikidata')) {
-          return 'array/wikidata'
-        // Array of DOI IDs
-        } else if (input.every(v => parseInputType(v) === 'string/doi')) {
-          return 'array/doi'
-        // Array of CSL-JSON
-        } else if (input.every(v => parseInputType(v) === 'object/csl')) {
-          return 'array/csl'
-        // Array of misc or multiple types
-        } else {
-          return 'array/else'
-        }
-      // Object
-      } else {
-        // Wikidata
-        if (input.hasOwnProperty('entities')) {
-          return 'object/wikidata'
-        // ContentMine
-        } else if (['fulltext_html', 'fulltext_xml', 'fulltext_pdf'].some(prop => input[prop] && Array.isArray(input[prop].value))) {
-          return 'object/contentmine'
-        // BibTeX JSON
-        } else if (['type', 'label', 'properties'].every(prop => input.hasOwnProperty(prop))) {
-          return 'object/bibtex'
-        // CSL-JSON
-        } else {
-          return 'object/csl'
-        }
-      }
-
-    case 'undefined':
-      // Empty
-      return 'empty'
-
-    default:
-      logger.warn('[set]', 'This format is not supported or recognized')
-      return 'invalid'
-  }
+const stringTypes = {
+  // Empty
+  'string/empty': input => input === '',
+  // Only whitespace
+  'string/whitespace': /^\s+$/,
+  // DOI API URL
+  'api/doi': varRegex.doi[0],
+  // DOI ID
+  'string/doi': varRegex.doi[1],
+  // DOI ID list
+  'list/doi': varRegex.doi[2],
+  // Wikidata ID
+  'string/wikidata': varRegex.wikidata[0],
+  // Wikidata entity list
+  'list/wikidata': varRegex.wikidata[1],
+  // Wikidata API URL
+  'api/wikidata': varRegex.wikidata[2],
+  // Wikidata URL
+  'url/wikidata': varRegex.wikidata[3],
+  // BibTeX
+  'string/bibtex': varRegex.bibtex,
+  // Bib.TXT
+  'string/bibtxt': varRegex.bibtxt,
+  // JSON
+  'string/json': /^\s*(\{|\[)/,
+  // Else URL
+  'url/else': varRegex.url
 }
 
-export default parseInputType
+const types = {
+  // Empty
+  'empty': input => input === null || input === undefined,
+  // jQuery
+  'jquery/else': input => typeof jQuery !== 'undefined' && input instanceof jQuery,
+  // HTML
+  'html/else': input => typeof HTMLElement !== 'undefined' && input instanceof HTMLElement
+}
+
+const arrayTypes = {
+  'array/csl': input => input.every(v => type(v) === 'object/csl'),
+  'array/wikidata': input => input.every(v => type(v) === 'string/wikidata'),
+  'array/doi': input => input.every(v => type(v) === 'string/doi'),
+  'array/else': () => true
+}
+
+const objectTypes = {
+  'object/wikidata': input => input.hasOwnProperty('entities'),
+  'object/contentmine': input => ['fulltext_html', 'fulltext_xml', 'fulltext_pdf'].some(prop => input[prop] && Array.isArray(input[prop].value)),
+  'object/bibtex': input => ['type', 'label', 'properties'].every(prop => input.hasOwnProperty(prop)),
+  'object/csl': input => true
+}
+
+for (let type in stringTypes) {
+  add(type, {parseType: stringTypes[type]})
+}
+for (let type in types) {
+  add(type, {parseType: types[type]})
+}
+for (let type in arrayTypes) {
+  add(type, {parseType: input => Array.isArray(input) && arrayTypes[type](input)})
+}
+for (let type in objectTypes) {
+  add(type, {parseType: objectTypes[type]})
+}
+
+export default type

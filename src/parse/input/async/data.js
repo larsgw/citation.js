@@ -14,5 +14,5 @@ const parsers = {
 }
 
 for (let type in parsers) {
-  add(type, {dataAsync: parsers[type]})
+  add(type, {parseAsync: parsers[type]})
 }

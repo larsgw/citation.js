@@ -43,7 +43,7 @@ const parsers = {
 }
 
 for (let type in parsers) {
-  add(type, {data: parsers[type]})
+  add(type, {parse: parsers[type]})
 }
 
 export default function parseInputData (data, type) {
