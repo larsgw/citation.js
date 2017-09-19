@@ -29,8 +29,9 @@ const parseContentMine = function (data) {
   return res
 }
 
-export const name = '@bibjson/object'
+export const scope = '@bibjson'
+export const types = '@bibjson/object'
 export {
-  parseContentMine as data,
+  parseContentMine as parse,
   parseContentMine as default
 }

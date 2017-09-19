@@ -35,9 +35,6 @@ describe('input', () => {
   describe('Wikidata ID', testCaseGenerator(
     input.wd.id, '@wikidata/id', output.wd.api[0], wikidataTestCaseOptions))
 
-  describe('Wikidata URL', testCaseGenerator(
-    input.wd.url, '@wikidata/url', output.wd.api[0], wikidataTestCaseOptions))
-
   describe('Wikidata ID list', () => {
     context('separated by spaces', testCaseGenerator(
       input.wd.list.space, '@wikidata/list+text', output.wd.api[1], wikidataTestCaseOptions))
@@ -48,6 +45,9 @@ describe('input', () => {
     context('separated by commas', testCaseGenerator(
       input.wd.list.comma, '@wikidata/list+text', output.wd.api[1], wikidataTestCaseOptions))
   })
+
+  describe('Wikidata URL', testCaseGenerator(
+    input.wd.url, '@wikidata/url', output.wd.id, {link: true}))
 
   describe('Wikidata JSON', () => {
     testCaseGenerator(input.wd.simple, '@wikidata/object', output.wd.simple)()

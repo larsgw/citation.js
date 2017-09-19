@@ -39,8 +39,9 @@ const parseDoiApiAsync = async function (data) {
   return doiJsonList.map(parseDoiJson)
 }
 
-export const name = '@doi/api'
+export const scope = '@doi'
+export const types = '@doi/api'
 export {
-  parseDoiApiAsync as dataAsync,
+  parseDoiApiAsync as parseAsync,
   parseDoiApiAsync as default
 }

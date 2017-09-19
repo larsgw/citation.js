@@ -11,11 +11,13 @@ import wdk from 'wikidata-sdk'
  * @return {Object} Wikidata JSON
  */
 const parseWikidata = function (data) {
-  return [].concat(wdk.getEntities(data.split(/(?:\s+|,\s*)/g), ['en']))
+  const list = Array.isArray(data) ? data : data.trim().split(/(?:\s+|,\s*)/g)
+  return [].concat(wdk.getEntities(list, ['en']))
 }
 
-export const name = '@wikidata/list'
+export const scope = '@wikidata'
+export const types = ['@wikidata/list+text', '@wikidata/id', '@wikidata/url', '@wikidata/list+object']
 export {
-  parseWikidata as data,
+  parseWikidata as parse,
   parseWikidata as default
 }

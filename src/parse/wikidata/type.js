@@ -74,8 +74,9 @@ const varWikidataTypes = {
  */
 const fetchWikidataType = value => varWikidataTypes[value]
 
-export const name = '@wikidata/type'
+export const scope = '@wikidata'
+export const types = '@wikidata/type'
 export {
-  fetchWikidataType as data,
+  fetchWikidataType as parse,
   fetchWikidataType as default
 }

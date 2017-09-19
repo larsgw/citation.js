@@ -27,8 +27,9 @@ const varDoiTypes = {
  */
 const fetchDoiType = value => varDoiTypes[value] || value
 
-export const name = '@doi/type'
+export const scope = '@doi'
+export const types = '@doi/type'
 export {
-  fetchDoiType as data,
+  fetchDoiType as parse,
   fetchDoiType as default
 }

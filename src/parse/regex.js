@@ -12,7 +12,7 @@ const regex = {
   wikidata: [
     /^\s*(Q\d+)\s*$/,
     /^\s*((?:Q\d+(?:\s+|,|))*Q\d+)\s*$/,
-    /^(https?:\/\/(?:www\.)wikidata.org\/w\/api\.php(?:\?.*)?)$/,
+    /^(https?:\/\/(?:www\.)?wikidata.org\/w\/api\.php(?:\?.*)?)$/,
     /\/(Q\d+)(?:[#?/]|\s*$)/
   ],
   doi: [

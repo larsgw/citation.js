@@ -45,8 +45,9 @@ const parseWikidataJSON = function (data) {
   })
 }
 
-export const name = '@wikidata/object'
+export const scope = '@wikidata'
+export const types = '@wikidata/object'
 export {
-  parseWikidataJSON as data,
+  parseWikidataJSON as parse,
   parseWikidataJSON as default
 }

@@ -8,10 +8,14 @@
  *
  * @return {Array<String>} DOI URLs
  */
-const parseDoi = data => data.split(/(?:\s+)/g).map(doi => `https://doi.org/${doi.trim()}`)
+const parseDoi = data => {
+  const list = Array.isArray(data) ? data : data.split(/(?:\s+)/g)
+  return list.map(doi => `https://doi.org/${doi.trim()}`)
+}
 
-export const name = '@doi/id'
+export const scope = '@doi'
+export const types = ['@doi/id', '@doi/list+text', '@doi/list+object']
 export {
-  parseDoi as data,
+  parseDoi as parse,
   parseDoi as default
 }

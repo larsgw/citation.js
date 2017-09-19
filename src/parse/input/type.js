@@ -27,7 +27,7 @@ const stringTypes = {
   // Bib.TXT
   '@bibtxt/text': varRegex.bibtxt,
   // JSON
-  '@else/json': /^\s*(\{|\[)/,
+  '@else/json': /^\s*(\{[\S\s]+\}|\[[\S\s]*\])\s*$/,
   // Else URL
   '@else/url': varRegex.url
 }

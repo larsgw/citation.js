@@ -40,8 +40,9 @@ const parseJSON = function (str) {
   }
 }
 
-export const name = '@json/text'
+export const scope = '@json'
+export const types = '@json/text'
 export {
-  parseJSON as data,
+  parseJSON as parse,
   parseJSON as default
 }
