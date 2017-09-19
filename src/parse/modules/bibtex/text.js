@@ -1,4 +1,4 @@
-import TokenStack from '../../util/stack'
+import TokenStack from '../../../util/stack'
 
 /**
  * Mapping of BibTeX Escaped Chars to Unicode.

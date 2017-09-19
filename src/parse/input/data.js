@@ -1,18 +1,19 @@
 import {add} from '../register'
 
-import varRegex from '../regex'
-
 import fetchFile from '../../util/fetchFile'
 import parseInput from './chain'
-import parseWikidata from '../wikidata/list'
-import parseWikidataJSON from '../wikidata/json'
-import parseDoi from '../doi/id'
-import parseDoiApi from '../doi/api'
-import parseContentMine from '../bibjson/index'
-import parseBibTeX from '../bibtex/text'
-import {text as parseBibTxt} from '../bibtxt'
-import parseBibTeXJSON from '../bibtex/json'
+
+import varRegex from '../regex'
 import parseJSON from '../json'
+
+import parseWikidata from '../modules/wikidata/list'
+import parseWikidataJSON from '../modules/wikidata/json'
+import parseDoi from '../modules/doi/id'
+import parseDoiApi from '../modules/doi/api'
+import parseContentMine from '../modules/bibjson/index'
+import parseBibTeX from '../modules/bibtex/text'
+import {text as parseBibTxt} from '../modules/bibtex/bibtxt'
+import parseBibTeXJSON from '../modules/bibtex/json'
 
 const parsers = {
   '@wikidata/id': parseWikidata,

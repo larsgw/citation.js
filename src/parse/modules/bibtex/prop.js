@@ -1,5 +1,5 @@
-import parseName from '../name'
-import parseDate from '../date'
+import parseName from '../../name'
+import parseDate from '../../date'
 
 /**
  * To match months.

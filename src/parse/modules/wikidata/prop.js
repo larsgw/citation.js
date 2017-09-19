@@ -1,9 +1,9 @@
 import wdk from 'wikidata-sdk'
-import fetchFile from '../../util/fetchFile'
+import fetchFile from '../../../util/fetchFile'
 
 import fetchWikidataType from './type'
-import parseDate from '../date'
-import parseName from '../name'
+import parseDate from '../../date'
+import parseName from '../../name'
 
 /**
  * Get the names of objects from Wikidata IDs

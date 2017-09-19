@@ -1,8 +1,8 @@
 import wdk from 'wikidata-sdk'
-import fetchFileAsync from '../../../util/fetchFileAsync'
+import fetchFileAsync from '../../../../util/fetchFileAsync'
 
 import parseWikidataProp from '../prop'
-import parseName from '../../name'
+import parseName from '../../../name'
 
 /**
  * Get the names of objects from Wikidata IDs (async)
