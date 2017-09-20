@@ -139,6 +139,29 @@ const correctNameList = function (nameList, bestGuessConversions = true) {
   }
 }
 
+const MONTH = {
+    jan: 1,
+    feb: 2,
+    mar: 3,
+    apr: 4,
+    may: 5,
+    jun: 6,
+    jul: 7,
+    aug: 8,
+    sep: 9,
+    oct: 10,
+    nov: 11,
+    dec: 12
+};
+
+const parseDateString = function(s) {
+    let val = parseFloat(s);
+    if (isNaN(val)) {
+        val = MONTH[s.toLowerCase()];
+    }
+    return val;
+};
+
 /**
  * Correct a date field.
  *
@@ -160,7 +183,7 @@ const correctDate = function (date, bestGuessConversions = true) {
     } else if (!bestGuessConversions) {
       return undefined
     } else if (date[dp].every(part => part.every(datePart => typeof datePart === 'string'))) {
-      return {[dp]: date[dp].map(part => part.map(parseFloat))}
+      return {[dp]: date[dp].map(part => part.map(parseDateString))}
     }
 
   // LEGACY support
@@ -171,7 +194,7 @@ const correctDate = function (date, bestGuessConversions = true) {
     } else if (!bestGuessConversions) {
       return undefined
     } else if (date[0][dp].every(datePart => typeof datePart === 'string')) {
-      return {[dp]: [date[0][dp].map(parseFloat)]}
+      return {[dp]: [date[0][dp].map(parseDateString)]}
     }
   }
 }
