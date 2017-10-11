@@ -66,6 +66,9 @@
     "parser": "babel-eslint",
     "globals": ["logger"]
   },
+  "browser": {
+    "./src/logger.js": "./src/logger-browser.js"
+  },
   "scripts": {
     "--1--": "lint",
     "lint:src": "standard \"src/**/*.js\"",
