@@ -99,8 +99,8 @@ describe('input', () => {
     context('with a syntax error', testCaseGenerator('{"hi"}', '@else/json', []))
   })
 
-  describe('ContentMine JSON',
-    testCaseGenerator(input.bibjson.simple, '@contentmine/object', output.bibjson.simple))
+  describe('BibJSON',
+    testCaseGenerator(input.bibjson.simple, '@bibjson/object', output.bibjson.simple))
 
   describe('Array', () => {
     const objs = [{id: 'a'}, {id: 'b'}]

@@ -3,8 +3,8 @@ import {add} from '../../register'
 import parseInputAsync from '../async/chain'
 import fetchFileAsync from '../../../util/fetchFileAsync'
 
-import parseWikidataJSONAsync from '../../modules/wikidata/async/json'
-import parseDoiApiAsync from '../../modules/doi/async/api'
+import {parseAsync as parseWikidataJSONAsync} from '../../modules/wikidata/json'
+import {parseAsync as parseDoiApiAsync} from '../../modules/doi/api'
 
 const parsers = {
   '@wikidata/api': fetchFileAsync,

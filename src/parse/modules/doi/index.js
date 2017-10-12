@@ -1,5 +1,27 @@
-import id from './id'
-import api from './api'
-import * as async from './async/index'
+import * as id from './id'
+import * as api from './api'
+import * as json from './json'
+import * as type from './type'
 
-export { id, api, async }
+import {type as parseType} from '../../register'
+
+export const scope = '@doi'
+export const parsers = {id, api, json, type}
+export const types = {
+  '@doi/api': {
+    dataType: 'String',
+    parseType: /^\s*(https?:\/\/(?:dx\.)?doi\.org\/(10.\d{4,9}\/[-._;()/:A-Z0-9]+))\s*$/i
+  },
+  '@doi/id': {
+    dataType: 'String',
+    parseType: /^\s*(10.\d{4,9}\/[-._;()/:A-Z0-9]+)\s*$/i
+  },
+  '@doi/list+text': {
+    dataType: 'String',
+    parseType: /^\s*(?:(?:10.\d{4,9}\/[-._;()/:A-Z0-9]+)\s*)+$/i
+  },
+  '@doi/list+object': {
+    dataType: 'Array',
+    parseType: input => input.every(v => parseType(v) === '@doi/id')
+  }
+}

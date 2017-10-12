@@ -16,7 +16,7 @@ const parseWikidata = function (data) {
 }
 
 export const scope = '@wikidata'
-export const types = ['@wikidata/list+text', '@wikidata/id', '@wikidata/url', '@wikidata/list+object']
+export const types = ['@wikidata/list+text', '@wikidata/id', '@wikidata/list+object']
 export {
   parseWikidata as parse,
   parseWikidata as default

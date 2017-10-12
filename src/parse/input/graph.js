@@ -18,6 +18,7 @@ const applyGraph = (entry, graph) => {
     graph.splice(graph.findIndex(isArrayElse), 1, ...entry._graph.slice(0, -1))
     entry._graph = graph
   }
+//   logger.log(2.1, entry._graph)
 
   return entry
 }

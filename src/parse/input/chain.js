@@ -23,7 +23,7 @@ const parseInput = (input, {
   forceType
 } = {}) => {
   let type = forceType || parseInputType(input)
-  let output = type.match(/array|object/) ? deepCopy(input) : input
+  let output = type.match(/object$/) ? deepCopy(input) : input
 
   const graph = [{type, data: input}]
 

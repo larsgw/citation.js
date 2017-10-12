@@ -1,6 +1,22 @@
-import text from './text'
-import json from './json'
-import prop from './prop'
-import type from './type'
+import * as text from './text'
+import * as json from './json'
+import * as prop from './prop'
+import * as type from './type'
+import * as bibtxt from './bibtxt'
 
-export { json, text, prop, type }
+export const scope = '@bibtex'
+export const parsers = {text, json, prop, type, bibtxt}
+export const types = {
+  '@bibtex/text': {
+    dataType: 'String',
+    parseType: /^(?:\s*@\s*[^@]+?\s*\{\s*[^@]+?\s*,\s*[^@]+\})+\s*$/
+  },
+  '@bibtxt/text': {
+    dataType: 'String',
+    parseType: /^\s*(\[(?!\s*[{[]).*?\]\s*(\n\s*[^[]((?!:)\S)+\s*:\s*.+?\s*)*\s*)+$/
+  },
+  '@bibtex/object': {
+    dataType: 'SimpleObject',
+    parseType: input => input && ['type', 'label', 'properties'].every(prop => input.hasOwnProperty(prop))
+  }
+}
