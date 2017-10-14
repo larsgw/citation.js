@@ -1,7 +1,7 @@
 branches:
   only:
     - master
-    - /^(fix|feature|dev)\/\w+$/
+    - /^(fix|feat|feature|dev|tmp)\//
 language: node_js
 node_js:
   - "node"
