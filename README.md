@@ -8,11 +8,9 @@ Citation.js converts formats like BibTeX, Wikidata JSON and ContentMine JSON to 
 [![Dependency Status](https://david-dm.org/larsgw/citation.js/status.svg)](https://david-dm.org/larsgw/citation.js)
 [![codecov](https://codecov.io/gh/larsgw/citation.js/branch/master/graph/badge.svg)](https://codecov.io/gh/larsgw/citation.js)
 [![license](https://img.shields.io/github/license/larsgw/citation.js.svg)](https://github.com/larsgw/citation.js/blob/master/LICENSE.md)
+[![DOI](https://zenodo.org/badge/doi/10.5281/zenodo.1005176.svg)](https://doi.org/10.5281/zenodo.1005176)
 
----
-
-Thanks to JS.ORG for providing the citation.js.org domain:
-
+[![JavaScript Style Guide](https://cdn.rawgit.com/standard/standard/master/badge.svg)](https://github.com/standard/standard)
 [![JS.ORG](https://logo.js.org/dark_tiny.png)](https://js.org)
 
 ---
@@ -40,8 +38,13 @@ Thanks to JS.ORG for providing the citation.js.org domain:
       * [Append/Prepend](#cite.out.wrap)
     * [Misc](#cite.misc)
       * [Iterator](#cite.misc.iterator)
-  * [Internal functions](#internal)
+  * [Internal functions](#cite.internal)
   * [Async](#async)
+* [Plugins](#plugins)
+  * [Input Plugins](#plugins.in)
+  * [CSL Plugins](#plugins.csl)
+    * [CSL Template Plugins](#plugins.csl.templates)
+    * [CSL Locale Plugins](#plugins.csl.locales)
 * [More](#more)
   * [More Docs](#more.docs)
   * [Demo](#more.demo)
@@ -283,24 +286,7 @@ Currently, the following CSL Templates are built-in in Citation.js:
   * `vancouver`
   * `harvard1`
 
-Different [CSL Templates](https://github.com/citation-style-language/styles) can be registered like this:
-
-```js
-const templateName = 'custom'
-const template = '<?xml version="1.0" encoding="utf-8"?><style ...>...</style>' // The actual XML file
-
-Cite.CSL.register.addTemplate(templateName, template)
-
-const data = new Cite(...)
-data.get({
-  format: 'string',
-  type: 'html',
-  style: 'citation-' + templateName,
-  lang: 'en-US'
-})
-```
-
-Replace `templateName` with the template name you want to use.
+For different templates, see [CSL Template Plugins](#plugins.csl.templates).
 
 #### <a id="cite.out.locales" href="#cite.out.locales">CSL Locales</a>
 
@@ -312,22 +298,8 @@ Currently, the following CSL Locales are built-in in Citation.js:
   * `fr-FR`
   * `nl-NL`
 
-Different [CSL Locales](https://github.com/citation-style-language/locales) can be registered like this:
+For different locales, see [CSL Locale Plugins](#plugins.csl.locales).
 
-```js
-const language = 'en-GB'
-const locale = '<?xml version="1.0" encoding="utf-8"?><locale ...>...</locale>' // The actual XML file
-
-Cite.CSL.register.addLocale(language, locale)
-
-const data = new Cite(...)
-data.get({
-  format: 'string',
-  type: 'html',
-  style: 'citation-apa',
-  lang: language
-})
-```
 ### <a id="cite.misc" href="#cite.misc">Misc</a>
 
 `Cite` instances have some more functions:
@@ -470,6 +442,172 @@ Cite.async(<DATA>, <OPTIONS>).then(function (data) {
 ```
 
 Where `<DATA>` is the input data and `<OPTIONS>` is the input options. `<OPTIONS>` is optional in both examples.
+
+# <a id="plugins" href="#plugins">Plugins</a>
+
+Plugins to Citation.js are slowly getting support too. You can either publish this code as a module like this:
+
+_module.js_
+
+```js
+const Cite = require('citation-js')
+
+// Some plugin code as described below
+Cite.parse.add(...)
+Cite.CSL.register.addTemplate(...)
+Cite.CSL.register.addLocale(...)
+```
+
+_your-file.js_
+
+```js
+require('module.js')
+const Cite = require('citation-js')
+
+Cite // Should be pre-loaded with plugins
+```
+
+---
+
+Or just include the plugin code somewhere in one of your files:
+
+_your-file.js_
+
+```js
+const Cite = require('citation-js')
+
+// Some plugin code as described below
+Cite.parse.add(...)
+Cite.CSL.register.addTemplate(...)
+Cite.CSL.register.addLocale(...)
+
+Cite // Should have plugins
+```
+
+## <a id="plugins.in" href="#plugins.in">Input Plugins</a>
+
+With Input Plugins you can register different input types and parsers and overwrite existing ones. To register/overwrite a input type, do this:
+
+```js
+// Note that you don't have to add all these variables at once. You can pass
+// parse and parseAsync on their own, even seperately.
+//
+// However, too correctly add a type checker, you need to pass the final
+// combination of dataType, parseType, elementConstraint, and/or propertyConstraint
+// in one go. In that combination, there should be at least one of parseType,
+// elementConstraint, and propertyConstraint present.
+Cite.parse.add(type, {
+  parse,
+
+  parseAsync,
+
+  dataType,
+  parseType,
+  elementConstraint,
+  propertyConstraint
+})
+```
+
+More explanation on the variables:
+
+```js
+// The type is the name of the input type, and should be in the syntax shown below.
+// Alternative syntaxes include '@scope' and '@scope/format'. Examples:
+//   * '@bibtex/text' for a series of BibTeX entries
+//   * '@wikidata/list+string' for a list of Wikidata IDs separated by spaces/newlines/commas
+//   * '@wikidata/list+object' for an actual array of Wikidata IDs
+//
+// Actual semantics in this string aren't mandated, but recommended. Scopes aren't reserved,
+// but again, try to respect other plugins.
+const type = '@scope/type+format'
+
+// Function to call to parse the input of your input type. Note that this doesn't
+// directly have to parse to CSL-JSON: for example, the @bibtex/text parser parses
+// entries into an array of objects (@bibtex/json). The @bibtex/json parser then
+// parses these objects into CSL-JSON (@csl/object).
+const parse = input => { ... }
+
+// Same, but async. May both exist for the same input type. For example, the
+// @wikidata/object parser has both a sync and async variant
+const parseAsync = async input => { ... }
+
+// The dataType is in what category your input data falls:
+//   * 'String' for strings
+//   * 'Array' for arrays
+//   * 'SimpleObject' for regular objects
+//   * 'ComplexObject' for other and/or custom classes
+//   * 'Primitive' for numbers, undefined, etc., and null
+//
+// Note: if parseType (see below) is a regex, dataType defaults to 'String'
+const dataType = ''
+
+// parseType is a function to check if any value is of your input type. Note
+// that this function should account for the input value being undefined, etc.
+//
+// Alternatively, you can pass a regex that matches if the input string is of
+// your input type.
+const parseType = input => { ... }
+const parseType = /.../
+
+// Instead of or even in combination with parseType you can pass the constraints below.
+//   * elementConstraint mandates every element in an array should be of the passed type
+//   * propertyConstraint mandates the following:
+//     * for every/some (propertyConstraint.match) prop in propertyConstraint.props:
+//     * assert that the input has that property and
+//     * if there is a value constraint (propertyConstraint.value), assert that
+//       the value corresponding to that prop is evaluated as `true` when
+//       passed in the value constraint callback
+const elementConstraint = '@scope/type+format'
+const propertyConstraint = {
+  props: ['a'], // or simply props: 'a'
+  match: 'every', // or some
+  value: value => { ... }
+}
+```
+
+## <a id="plugins.csl" href="#plugins.csl">CSL Plugins</a>
+
+CSL Plugins rely on extending the citeproc engine, currently only by feeding it different templates and locales.
+
+### <a id="plugins.csl.templates" href="#plugins.csl.templates">CSL Template Plugins</a>
+
+Different [CSL Templates](https://github.com/citation-style-language/styles) can be registered like this:
+
+```js
+const templateName = 'custom'
+const template = '<?xml version="1.0" encoding="utf-8"?><style ...>...</style>' // The actual XML file
+
+Cite.CSL.register.addTemplate(templateName, template)
+
+const data = new Cite(...)
+data.get({
+  format: 'string',
+  type: 'html',
+  style: 'citation-' + templateName,
+  lang: 'en-US'
+})
+```
+
+### <a id="plugins.csl.locales" href="#plugins.csl.locales">CSL Locale Plugins</a>
+
+Replace `templateName` with the template name you want to use.
+
+Different [CSL Locales](https://github.com/citation-style-language/locales) can be registered like this:
+
+```js
+const language = 'en-GB'
+const locale = '<?xml version="1.0" encoding="utf-8"?><locale ...>...</locale>' // The actual XML file
+
+Cite.CSL.register.addLocale(language, locale)
+
+const data = new Cite(...)
+data.get({
+  format: 'string',
+  type: 'html',
+  style: 'citation-apa',
+  lang: language
+})
+```
 
 # <a id="more" href="#more">More</a>
 
