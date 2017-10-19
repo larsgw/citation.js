@@ -3,7 +3,7 @@ import deepCopy from '../../util/deepCopy'
 import {
   type as parseInputType,
   data as parseInputData
-} from '../register'
+} from '../registrar/'
 import {applyGraph, removeGraph} from './graph'
 
 /**

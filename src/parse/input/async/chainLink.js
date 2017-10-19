@@ -3,7 +3,7 @@ import deepCopy from '../../../util/deepCopy'
 import {
   type as parseInputType,
   dataAsync as parseInputDataAsync
-} from '../../register'
+} from '../../registrar/'
 
 /**
  * Parse input once. (async)

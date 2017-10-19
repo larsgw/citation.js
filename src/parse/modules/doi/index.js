@@ -3,8 +3,6 @@ import * as api from './api'
 import * as json from './json'
 import * as type from './type'
 
-import {type as parseType} from '../../register'
-
 export const scope = '@doi'
 export const parsers = {id, api, json, type}
 export const types = {
@@ -22,6 +20,6 @@ export const types = {
   },
   '@doi/list+object': {
     dataType: 'Array',
-    parseType: input => input.every(v => parseType(v) === '@doi/id')
+    elementConstraint: '@doi/id'
   }
 }

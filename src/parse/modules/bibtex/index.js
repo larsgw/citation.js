@@ -17,6 +17,6 @@ export const types = {
   },
   '@bibtex/object': {
     dataType: 'SimpleObject',
-    parseType: input => input && ['type', 'label', 'properties'].every(prop => input.hasOwnProperty(prop))
+    propertyConstraint: {props: ['type', 'label', 'properties']}
   }
 }

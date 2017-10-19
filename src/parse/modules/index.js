@@ -1,4 +1,5 @@
-import {add} from '../register'
+import {add} from '../registrar/'
+import './native'
 import * as modules from './modules'
 
 for (const module in modules) {

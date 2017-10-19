@@ -1,3 +1,1 @@
-/* global jQuery, HTMLElement */
-
-export {type as default} from '../register'
+export {type as default} from '../registrar/type'

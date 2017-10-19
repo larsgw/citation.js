@@ -1,8 +1,6 @@
-import type from './type'
-import data from './data'
-import chain from './chain'
-import chainLink from './chainLink'
+export {default as type} from './type'
+export {default as data} from './data'
+export {default as chain} from './chain'
+export {default as chainLink} from './chainLink'
 
-import * as async from './async/index'
-
-export { type, data, chain, chainLink, async }
+export * from './async/'

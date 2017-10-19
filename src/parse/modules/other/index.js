@@ -1,7 +1,13 @@
 /* global jQuery, HTMLElement */
 
+import * as empty from './empty'
+import * as url from './url'
+import * as json from './json'
+import * as jquery from './jquery'
+import * as html from './html'
+
 export const scope = '@else'
-export const parsers = {}
+export const parsers = {empty, url, json, jquery, html}
 export const types = {
   '@empty/text': {
     dataType: 'String',

@@ -2,11 +2,11 @@ import * as list from './list'
 import * as json from './json'
 import * as prop from './prop'
 import * as type from './type'
-
-import {type as parseType} from '../../register'
+import * as url from './url'
+import * as api from './api'
 
 export const scope = '@wikidata'
-export const parsers = {list, json, prop, type}
+export const parsers = {list, json, prop, type, url, api}
 export const types = {
   '@wikidata/id': {
     dataType: 'String',
@@ -26,10 +26,10 @@ export const types = {
   },
   '@wikidata/array': {
     dataType: 'Array',
-    parseType: input => input.every(v => parseType(v) === '@wikidata/id')
+    elementConstraint: '@wikidata/id'
   },
   '@wikidata/object': {
     dataType: 'SimpleObject',
-    parseType: input => input && input.hasOwnProperty('entities')
+    propertyConstraint: {props: 'entities'}
   }
 }
