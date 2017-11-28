@@ -1,14 +1,22 @@
 {
   "plugins": ["plugins/markdown"],
+  "markdown": {
+    "idInHeadings": true
+  },
   "tags": {
     "allowUnknownTags": true,
     "dictionaries": ["jsdoc", "closure"]
   },
+  "source": {
+    "include": ["src"]
+  },
   "opts": {
-    "template": "templates/default",
+    "template": "node_modules/minami",
     "encoding": "utf8",
-    "destination": "docs/api",
-    "recurse": true
+    "readme": "./README.md",
+    "recurse": true,
+    "destination": "./jsdoc/",
+    "tutorials": "./docs/"
   },
   "templates": {
     "default": {

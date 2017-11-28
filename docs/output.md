@@ -1,0 +1,1 @@
+Output in Citation.js is currently only done with the `Cite#get()` method explained in {@tutorial cite_output}. There's a more detailed list of possible configurations in {@tutorial output_options} and there is some info on output plugins in {@tutorial output_plugins}.

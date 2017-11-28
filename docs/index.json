@@ -1,0 +1,63 @@
+{
+  "cli": {
+    "title": "CLI"
+  },
+  "getting_started": {
+    "title": "Getting Started"
+  },
+  "plugins": {
+    "title": "Plugins",
+    "children": []
+  },
+  "cite": {
+    "title": "Cite",
+    "children": [
+      "cite_constructor",
+      "cite_data",
+      "cite_output"
+    ]
+  },
+  "input": {
+    "title": "Input",
+    "children": [
+      "input_parsing",
+      "input_types",
+      "input_options",
+      "input_plugins"
+    ]
+  },
+  "output": {
+    "title": "Output",
+    "children": [
+      "output_options",
+      "output_plugins"
+    ]
+  },
+  "input_parsing": {
+    "title": "Input Parsing"
+  },
+  "input_types": {
+    "title": "Input Types"
+  },
+  "input_options": {
+    "title": "Input Options"
+  },
+  "input_plugins": {
+    "title": "Input Plugins"
+  },
+  "output_options": {
+    "title": "Ouput Options"
+  },
+  "output_plugins": {
+    "title": "Output Plugins"
+  },
+  "cite_constructor": {
+    "title": "Cite Constructor"
+  },
+  "cite_data": {
+    "title": "Cite Data Methods"
+  },
+  "cite_output": {
+    "title": "Cite Output Methods"
+  }
+}

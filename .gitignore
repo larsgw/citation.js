@@ -7,13 +7,12 @@ node_modules/
 dev/
 profile/
 isolate-0x*
+debug.html
 
 # generated site content
 build/
 coverage/
-docs/src/
-docs/api/
-docs/disc/
+jsdoc/
 
 # coverage
 .nyc_output/
