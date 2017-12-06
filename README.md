@@ -105,7 +105,7 @@ Download [citation.js](https://github.com/larsgw/citation.js/tree/archive), incl
 ```html
 <script src="path/to/citation.js" type="text/javascript"></script>
 <script>
-  const Cite = require('citation.js')
+  const Cite = require('citation-js')
 </script>
 ```
 
