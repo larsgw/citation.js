@@ -1,4 +1,8 @@
 /**
+ * @module output/bibtex
+ */
+
+/**
  * Get a BibTeX label from CSL data
  *
  * @access protected

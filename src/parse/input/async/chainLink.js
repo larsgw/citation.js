@@ -9,9 +9,10 @@ import {
  * Parse input once. (async)
  *
  * @access protected
- * @method parseInputChainLinkAsync
+ * @method chainLink
+ * @memberof Cite.parse.input.async
  *
- * @param {String|Array<String>|Object|Array<Object>} input - The input data
+ * @param {InputData} input - The input data
  *
  * @return {Promise} The parsed input
  */

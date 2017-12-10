@@ -1,3 +1,8 @@
+/**
+ * @namespace parse
+ * @memberof Cite
+ */
+
 import * as input from './input/'
 import date from './date'
 import name from './name'

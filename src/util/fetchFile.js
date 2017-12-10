@@ -4,7 +4,7 @@ import request from 'sync-request'
  * Fetch file
  *
  * @access protected
- * @method fetchFile
+ * @memberof Cite.util
  *
  * @param {String} url - The input url
  *

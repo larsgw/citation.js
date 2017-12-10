@@ -4,7 +4,7 @@ import getBibTeXLabel from './bibtex/label'
  * Get a label from CSL data
  *
  * @access protected
- * @method getLabel
+ * @memberof Cite.output
  *
  * @param {CSL} src - Input CSL
  *

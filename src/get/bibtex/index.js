@@ -1,3 +1,7 @@
+/**
+ * @module output/bibtex
+ */
+
 import json from './json'
 import text from './text'
 import label from './label'

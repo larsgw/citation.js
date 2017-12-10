@@ -6,11 +6,11 @@ import 'isomorphic-fetch'
  * Fetch file (async)
  *
  * @access protected
- * @method fetchFileAsync
+ * @memberof Cite.util
  *
  * @param {String} url - The input url
  *
- * @return {String} The fetched string
+ * @return {Promise<String>} The fetched string
  */
 const fetchFileAsync = async function (url) {
   try {

@@ -1,3 +1,7 @@
+/**
+ * @module input/wikidata
+ */
+
 import * as list from './list'
 import * as json from './json'
 import * as prop from './prop'

@@ -9,9 +9,10 @@ import {
  * Parse input once.
  *
  * @access protected
- * @method parseInputChainLink
+ * @method chainLink
+ * @memberof Cite.parse.input
  *
- * @param {String|Array<String>|Object|Array<Object>} input - The input data
+ * @param {InputData} input - input data
  *
  * @return {Array<CSL>} The parsed input
  */

@@ -1,3 +1,7 @@
+/**
+ * @module output/bibtex
+ */
+
 import fetchBibTeXType from './type'
 import getBibTeXLabel from './label'
 import getName from '../name'

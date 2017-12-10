@@ -1,3 +1,7 @@
+/**
+ * @module input/doi
+ */
+
 import fetchDoiType from './type'
 
 /**

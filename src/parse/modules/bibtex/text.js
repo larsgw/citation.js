@@ -1,3 +1,7 @@
+/**
+ * @module input/bibtex
+ */
+
 import TokenStack from '../../../util/stack'
 
 /**

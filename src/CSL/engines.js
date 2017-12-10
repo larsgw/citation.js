@@ -4,7 +4,8 @@ import CSL from 'citeproc'
  * Object containing CSL Engines
  *
  * @access private
- * @constant varCSLEngines
+ * @constant
+ * @memberof Cite.CSL
  * @default
  */
 const varCSLEngines = {}
@@ -13,13 +14,14 @@ const varCSLEngines = {}
  * Retrieve CSL parsing engine
  *
  * @access protected
- * @method fetchCSLEngine
+ * @method engine
+ * @memberof Cite.CSL
  *
  * @param {String} style - CSL style id
  * @param {String} lang - Language code
  * @param {String} template - CSL XML template
- * @param {Cite~retrieveItem} retrieveItem - Code to retreive item
- * @param {Cite~retrieveLocale} retrieveLocale - Code to retreive locale
+ * @param {Cite.CSL~retrieveItem} retrieveItem - Code to retreive item
+ * @param {Cite.CSL~retrieveLocale} retrieveLocale - Code to retreive locale
  *
  * @return {Object} CSL Engine
  */

@@ -10,12 +10,13 @@ import {applyGraph, removeGraph} from '../graph'
  * Parse input until success. (async)
  *
  * @access protected
- * @method parseInputAsync
+ * @method chain
+ * @memberof Cite.parse.input.async
  *
- * @param {String|Array<String>|Object|Array<Object>} input - The input data
- * @param {Object} [options] - [Options](../#cite.in.options)
+ * @param {InputData} input - input data
+ * @param {Cite~InputOptions} [options] - options
  *
- * @return {Promise} The parsed input
+ * @return {Promise<Array<CSL>>} The parsed input
  */
 const parseInputAsync = async (input, {
   maxChainLength = 10,

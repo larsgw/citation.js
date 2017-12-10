@@ -2,7 +2,7 @@
  * Apply a parse chain graph to an element
  *
  * @access protected
- * @method applyGraph
+ * @memberof Cite.parse.input
  *
  * @param {CSL} entry
  * @param {Array<Object>} graph
@@ -26,7 +26,7 @@ const applyGraph = (entry, graph) => {
  * Remove the parse chain graph from an element
  *
  * @access protected
- * @method removeGraph
+ * @memberof Cite.parse.input
  *
  * @param {CSL} entry
  *
@@ -37,4 +37,4 @@ const removeGraph = (entry) => {
   return entry
 }
 
-export { applyGraph, removeGraph }
+export {applyGraph, removeGraph}

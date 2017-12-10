@@ -10,6 +10,7 @@ import { getTemplate as getCustomStyle, hasTemplate as hasCustomStyle } from './
  *
  * @access private
  * @constant varCSLStyles
+ * @memberof Cite.CSL
  * @default
  */
 import varCSLStyles from './styles.json'
@@ -18,7 +19,8 @@ import varCSLStyles from './styles.json'
  * Retrieve CSL style
  *
  * @access protected
- * @method fetchCSLStyle
+ * @method style
+ * @memberof Cite.CSL
  *
  * @param {String} [style="apa"] - style name
  *

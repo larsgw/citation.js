@@ -1,8 +1,42 @@
 /**
+ * TokenStack pattern
+ *
+ * @typedef Cite.util.TokenStack~pattern
+ * @type {String|RegExp|Cite.util.TokenStack~match|Array<Cite.util.TokenStack~pattern>}
+ */
+
+/**
+ * TokenStack pattern sequence
+ *
+ * @typedef Cite.util.TokenStack~sequence
+ * @type {String|Array<Cite.util.TokenStack~pattern>}
+ */
+
+/**
+ * @callback Cite.util.TokenStack~match
+ * @param {String} token - token
+ * @param {Number} index - token index
+ * @param {Array<String>} stack - token stack
+ * @return {Boolean} match or not
+ */
+
+/**
+ * @callback Cite.util.TokenStack~tokenMap
+ * @param {String} token - token
+ * @return {String} new token
+ */
+
+/**
+ * @callback Cite.util.TokenStack~tokenFilter
+ * @param {String} token - token
+ * @return {Boolean} keep or not
+ */
+
+/**
  * Create a TokenStack for parsing strings with complex escape sequences.
  *
  * @access protected
- * @class TokenStack
+ * @memberof Cite.util
  *
  * @param {Array<String>} array - list of tokens
  */
@@ -17,9 +51,6 @@ class TokenStack {
    * Get string representation of pattern.
    *
    * @access protected
-   * @method getPatternText
-   * @static
-   * @memberof TokenStack
    *
    * @param {String|RegExp} pattern - pattern
    *
@@ -33,13 +64,10 @@ class TokenStack {
    * Get a single callback to match a token against one or several patterns.
    *
    * @access protected
-   * @method getMatchCallback
-   * @static
-   * @memberof TokenStack
    *
-   * @param {TokenStack~pattern} pattern - pattern
+   * @param {Cite.util.TokenStack~pattern} pattern - pattern
    *
-   * @return {TokenStack~match} Match callback
+   * @return {Cite.util.TokenStack~match} Match callback
    */
   static getMatchCallback (pattern) {
     if (Array.isArray(pattern)) {
@@ -57,8 +85,7 @@ class TokenStack {
   /**
    * Get a number representing the number of tokens that are left.
    *
-   * @method tokensLeft
-   * @memberof TokenStack
+   * @access protected
    *
    * @return {Number} tokens left
    */
@@ -69,10 +96,9 @@ class TokenStack {
   /**
    * Match current token against pattern.
    *
-   * @method matches
-   * @memberof TokenStack
+   * @access protected
    *
-   * @param {TokenStack~pattern} pattern - pattern
+   * @param {Cite.util.TokenStack~pattern} pattern - pattern
    *
    * @return {Boolean} match
    */
@@ -83,10 +109,9 @@ class TokenStack {
   /**
    * Match current token against pattern.
    *
-   * @method matches
-   * @memberof TokenStack
+   * @access protected
    *
-   * @param {TokenStack~sequence} pattern - pattern
+   * @param {Cite.util.TokenStack~sequence} pattern - pattern
    *
    * @return {Boolean} match
    */
@@ -100,10 +125,9 @@ class TokenStack {
   /**
    * Consume a single token if possible, and throw if not.
    *
-   * @method consumeToken
-   * @memberof TokenStack
+   * @access protected
    *
-   * @param {TokenStack~pattern} [pattern=/^[\s\S]$/] - pattern
+   * @param {Cite.util.TokenStack~pattern} [pattern=/^[\s\S]$/] - pattern
    * @param {Object} options
    * @param {Boolean} [options.inverse=false] - invert pattern
    * @param {Boolean} [options.spaced=true] - allow leading and trailing whitespace
@@ -134,10 +158,9 @@ class TokenStack {
   /**
    * Consume a single token if possible, and throw if not.
    *
-   * @method consumeToken
-   * @memberof TokenStack
+   * @access protected
    *
-   * @param {TokenStack~pattern} [pattern=/^\s$/] - whitespace pattern
+   * @param {Cite.util.TokenStack~pattern} [pattern=/^\s$/] - whitespace pattern
    * @param {Object} options
    * @param {Boolean} [options.optional=true] - allow having no whitespace
    *
@@ -151,8 +174,7 @@ class TokenStack {
   /**
    * Consume n tokens. Throws if not enough tokens left
    *
-   * @method consumeN
-   * @memberof TokenStack
+   * @access protected
    *
    * @param {Number} length - number of tokens
    *
@@ -173,10 +195,9 @@ class TokenStack {
   /**
    * Consume a pattern spanning multiple tokens ('sequence').
    *
-   * @method consumeSequence
-   * @memberof TokenStack
+   * @access protected
    *
-   * @param {TokenStack~sequence} sequence - sequence
+   * @param {Cite.util.TokenStack~sequence} sequence - sequence
    *
    * @return {String} consumed tokens
    * @throws {SyntaxError} Expected sequence, got tokens
@@ -192,16 +213,15 @@ class TokenStack {
   /**
    * Consumes all consecutive tokens matching pattern. Throws if number of matched tokens not within range min-max.
    *
-   * @method consume
-   * @memberof TokenStack
+   * @access protected
    *
-   * @param {TokenStack~pattern} [pattern=/^[\s\S]$/] - pattern
+   * @param {Cite.util.TokenStack~pattern} [pattern=/^[\s\S]$/] - pattern
    * @param {Object} options
    * @param {Boolean} [options.inverse=false] - invert pattern
    * @param {Number} [options.min=0] - mininum number of consumed tokens
    * @param {Number} [options.max=Infinity] - maximum number of matched tokens
-   * @param {TokenStack~tokenMap} [options.tokenMap] - map tokens before returning
-   * @param {TokenStack~tokenFilter} [options.tokenFilter] - filter tokens before returning
+   * @param {Cite.util.TokenStack~tokenMap} [options.tokenMap] - map tokens before returning
+   * @param {Cite.util.TokenStack~tokenFilter} [options.tokenFilter] - filter tokens before returning
    *
    * @return {String} consumed tokens
    * @throws {SyntaxError} Not enough tokens

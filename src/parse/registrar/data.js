@@ -1,20 +1,47 @@
 import {typeMatcher} from './type'
 
+// Different registers to store parsers in
 const parsers = {}
 const asyncParsers = {}
 const nativeParsers = {}
 const nativeAsyncParsers = {}
+
+// Global register
 const _ = {}
+
+// Cache method names
 const methodNames = {}
 
+// All methods for `getMethodName`
 const capitalize = word => word[0].toUpperCase() + word.slice(1).toLowerCase()
 const camelCase = (prefix = '', ...words) => prefix.toLowerCase() + words.map(capitalize).join('')
+
+// Get method name to write parser to in global register
 const getMethodName = type => camelCase(...type.match(typeMatcher).slice(1).filter(Boolean))
 
+/**
+ * @access public
+ * @memberof Cite.parse
+ *
+ * @param {Cite.parse~format} type
+ * @param {Boolean} [async=false] - check only for async, or only sync
+ *
+ * @return {Boolean} parser exists
+ */
 const hasDataParser = (type, async = false) => async
   ? asyncParsers[type] || nativeAsyncParsers[type]
   : parsers[type] || nativeParsers[type]
 
+/**
+ * @access public
+ * @memberof Cite.parse
+ *
+ * @param {InputData} input - input data
+ * @param {Cite.parse~format} type - input type
+ *
+ * @return {*} parsed data
+ * @return {Null} if no parser available
+ */
 const data = (input, type) => {
   if (parsers.hasOwnProperty(type)) {
     return parsers[type](input)
@@ -26,13 +53,22 @@ const data = (input, type) => {
   }
 }
 
+/**
+ * @access public
+ * @memberof Cite.parse
+ *
+ * @param {InputData} input - input data
+ * @param {Cite.parse~format} type - input type
+ *
+ * @return {Promise} parsed data
+ * @return {Promise<Null>} if no parser available
+ */
 const dataAsync = async (input, type) => {
   if (asyncParsers.hasOwnProperty(type)) {
     return asyncParsers[type](input)
   } else if (nativeAsyncParsers.hasOwnProperty(type)) {
     return nativeAsyncParsers[type](input)
-  } else if (hasDataParser(type)) {
-    // Off-load handling of @invalid to data(), for DRY
+  } else if (hasDataParser(type, false)) {
     return data(input, type)
   } else {
     logger.error('[set]', `No parser found for ${type}`)
@@ -40,6 +76,16 @@ const dataAsync = async (input, type) => {
   }
 }
 
+/**
+ * @access protected
+ * @memberof Cite.parse
+ *
+ * @param {Cite.parse~format} format
+ * @param {Cite.parse~parse|Cite.parse~parseAsync} parser
+ * @param {Object} [options={}]
+ * @param {Boolean} [options.async=false]
+ * @param {Boolean} [options.native=false] - native parsers get less priority when parsing type, like urls get less priority over Wikidata API URLs or DOIs
+ */
 const addDataParser = (format, parser, {async = false, native = false} = {}) => {
   let methodName = methodNames[format] = methodNames[format] || getMethodName(format)
   let parserObject

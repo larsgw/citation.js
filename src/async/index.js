@@ -2,25 +2,30 @@ import parseInputAsync from '../parse/input/async/chain'
 import Cite from '../Cite/index'
 
 /**
- * @access private
- * @method asyncCite
- *
- * @param {Promise} promise - promise returning parsed input
- * @param {Object} options - The options for the output. See [input options](../#cite.in.options).
- * @return {Promise} promise returning Cite object
+ * @callback Cite~asyncCallback
+ * @param {Cite} data - Cite object
  */
-const asyncCite = async function (promise, options) {
-  return new Cite(await promise, options)
+
+/**
+ * @access private
+ *
+ * @param {Promise<Array<CSL>>} data - promise returning parsed input
+ * @param {Cite~InputOptions} [options] - cite options
+ * @return {Promise<Cite>} promise returning Cite object
+ */
+const asyncCite = async function (data, options) {
+  return new Cite(await data, options)
 }
 
 /**
  * @access public
- * @method async
+ * @memberof Cite
  *
- * @param {String|CSL|Object|Array<String>|Array<CSL>|Array<Object>} data - Input data.
- * @param {Object} [options={}] - The options for the output. See [input options](../#cite.in.options).
- * @param {Cite~asyncCite} [callback] - if not given, function returns promise.
- * @return {Promise} If callback is not given, it returns a Promise. Else returns undefined.
+ * @param {Cite~InputData} data - input data
+ * @param {Cite~InputOptions} [options={}] - cite options
+ * @param {Cite~asyncCallback} [callback] - if not given, function returns promise.
+ *
+ * @return {Promise<Cite>} if callback is omitted, returns a promise
  */
 const async = function (data, options, callback) {
   const promise = parseInputAsync(data)

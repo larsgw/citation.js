@@ -1,4 +1,32 @@
-const typeOf = thing => thing === undefined ? 'Undefined' : thing === null ? 'Null' : thing.constructor.name
+/**
+ * Gets the constructor name, with a special case for `null` and `undefined`
+ *
+ * @access public
+ * @memberof Cite.parse
+ *
+ * @param {*} thing - input data or anything else
+ *
+ * @return {String} type
+ */
+const typeOf = thing => {
+  switch (thing) {
+    case undefined:
+      return 'Undefined'
+    case null:
+      return 'Null'
+    default:
+      return thing.constructor.name
+  }
+}
+
+/**
+ * @access public
+ * @memberof Cite.parse
+ *
+ * @param {*} thing - input data or anything else
+ *
+ * @return {} dataType
+ */
 const dataTypeOf = thing => {
   switch (typeof thing) {
     case 'string':

@@ -1,4 +1,8 @@
 /**
+ * @module input/bibtex
+ */
+
+/**
  * Map holding information on BibTeX pub types.
  *
  *  * If string, use as CSL type

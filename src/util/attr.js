@@ -1,8 +1,13 @@
 /**
+ * @namespace attr
+ * @memberof Cite.util
+ */
+
+/**
  * Add data-* attribute to a HTML string
  *
  * @access protected
- * @method getAttributedEntry
+ * @memberof Cite.util.attr
  *
  * @param {String} string - HTML string
  * @param {String} name - attribute name
@@ -16,7 +21,7 @@ const getAttributedEntry = (string, name, value) => string.replace(/^\s*<[a-z]+/
  * Add CSL identifiers to entry
  *
  * @access protected
- * @method getPrefixedEntry
+ * @memberof Cite.util.attr
  *
  * @param {String} value - HTML string
  * @param {String|Number} id - ID
@@ -29,7 +34,7 @@ const getPrefixedEntry = (value, id) => getAttributedEntry(value, 'csl-entry-id'
  * Get a rendered affix
  *
  * @access private
- * @method getAffix
+ * @memberof Cite.util.attr
  *
  * @param {CSL} source - source element
  * @param {String|Cite~wrapper} affix
@@ -42,7 +47,7 @@ const getAffix = (source, affix) => typeof affix === 'function' ? affix(source) 
  * Pre/append things to entry
  *
  * @access protected
- * @method getWrappedEntry
+ * @memberof Cite.util.attr
  *
  * @param {String} value - HTML string
  * @param {CSL} source - source element

@@ -1,4 +1,8 @@
 /**
+ * @module input/wikidata
+ */
+
+/**
  * Object containing a list of Wikidata Instances and it's corresponding name as specified by the docs
  *
  * @access private

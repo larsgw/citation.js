@@ -1,10 +1,7 @@
 import Cite from './index'
 
 /**
- *
- * @method currentVersion
- * @memberof Cite
- * @this Cite
+ * @memberof Cite#
  *
  * @return {Number} The latest version of the object
  */
@@ -15,11 +12,9 @@ const currentVersion = function () {
 /**
  * Returns an image of the object in the version specified.
  *
- * @method retrieveVersion
- * @memberof Cite
- * @this Cite
+ * @memberof Cite#
  *
- * @param {Number} [versnum=1] - The number of the version you want to retrieve. Illegel numbers: numbers under or equal to zero, floats, numbers above the current version of the object.
+ * @param {Number} [versnum=1] - The number of the version you want to retrieve. Illegal numbers: numbers under or equal to zero, floats, numbers above the current version of the object.
  *
  * @return {Cite} The version of the object with the version number passed. `undefined` if an illegal number is passed.
  */
@@ -37,9 +32,7 @@ const retrieveVersion = function (versnum = 1) {
 /**
  * Returns the second to last saved image of the object.
  *
- * @method undo
- * @memberof Cite
- * @this Cite
+ * @memberof Cite#
  *
  * @param {Number} [number=1] - number of versions to go back.
  *
@@ -52,9 +45,7 @@ const undo = function (number = 1) {
 /**
  * Returns the last saved image of the object.
  *
- * @method undo
- * @memberof Cite
- * @this Cite
+ * @memberof Cite#
  *
  * @return {Cite} The last version of the object. `undefined` if used on first version.
  */
@@ -65,9 +56,7 @@ const retrieveLastVersion = function () {
 /**
  * Save an image of the current version of the object.
  *
- * @method save
- * @memberof Cite
- * @this Cite
+ * @memberof Cite#
  *
  * @return {Cite} The current version of the object.
  */

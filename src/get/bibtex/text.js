@@ -1,3 +1,7 @@
+/**
+ * @module output/bibtex
+ */
+
 import getBibTeXJSON from './json'
 import { htmlDict, textDict } from '../dict'
 

@@ -4,7 +4,7 @@ Here's how input is parsed internally in Citation.js.
 
 ## `Cite.parse()`
 
-You can also parse input data with `Cite.parse()`, which returns CSL-JSON:
+You can parse input data with `Cite.parse()`, which returns CSL-JSON:
 
 ```js
 const json = Cite.parse('10.5281/zenodo.1005176')

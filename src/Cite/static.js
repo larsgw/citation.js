@@ -1,18 +1,11 @@
 /**
- * @access private
- * @method getRegex
- * @param {Array<string>} options - enum of possible configs
- * @return {RegExp} regex
- */
-const getRegex = options => new RegExp(`^(${options.join('|')})$`)
-
-/**
  * @access public
- * @method validateOutputOptions
+ * @memberof Cite
  *
- * @param {Object} - options
+ * @param {Cite~OutputOptions} - options
  *
  * @return {Boolean} true (if valid)
+ * @throw {TypeError} Options not an object
  * @throw {TypeError} Invalid options
  *
  * @todo check registers if styles and langs are present
@@ -20,21 +13,25 @@ const getRegex = options => new RegExp(`^(${options.join('|')})$`)
 const validateOutputOptions = function (options) {
   const formats = ['real', 'string']
   const types = ['json', 'html', 'string', 'rtf']
-  const styles = ['csl', 'bibtex', 'bibtxt', 'citation-(.*)']
+  const styles = ['csl', 'bibtex', 'bibtxt', 'citation-*']
 
   if (typeof options !== 'object') {
     throw new TypeError('Options not an object!')
-  } else if (options.format && !getRegex(formats).test(options.format)) {
+  }
+
+  const {format, type, style, lang, append, prepend} = options
+
+  if (format && !formats.includes(format)) {
     throw new TypeError(`Option format should be one of: ${formats}`)
-  } else if (options.type && !getRegex(types).test(options.type)) {
+  } else if (type && !formats.includes(format)) {
     throw new TypeError(`Option type should be one of: ${types}`)
-  } else if (options.style && !getRegex(styles).test(options.style)) {
+  } else if (style && !styles.includes(style)) {
     throw new TypeError(`Option style should be one of: ${styles}`)
-  } else if (options.lang && typeof options.lang !== 'string') {
+  } else if (lang && typeof lang !== 'string') {
     throw new TypeError('Option lang should be a string')
-  } else if (options.prepend && !['string', 'function'].includes(typeof options.prepend)) {
+  } else if (prepend && !['string', 'function'].includes(typeof prepend)) {
     throw new TypeError('Option prepend should be a string or a function')
-  } else if (options.append && !['string', 'function'].includes(typeof options.append)) {
+  } else if (append && !['string', 'function'].includes(typeof append)) {
     throw new TypeError('Option append should be a string or a function')
   }
 
@@ -43,16 +40,21 @@ const validateOutputOptions = function (options) {
 
 /**
  * @access public
- * @method validateOutputOptions
+ * @memberof Cite
  *
- * @param {Object} - options
- *
- * @throw {TypeError} Invalid options
+ * @param {Cite~InputOptions} - options
  *
  * @return {Boolean} true (if valid)
+ * @throw {TypeError} Options not an object
+ * @throw {TypeError} Invalid options
+ *
  * @todo check registers if type is present
  */
 const validateOptions = function (options) {
+  if (typeof options !== 'object') {
+    throw new TypeError('Options not an object!')
+  }
+
   if (options.output) {
     validateOutputOptions(options.output)
   } else if (options.maxChainLength && typeof options.maxChainLength !== 'number') {

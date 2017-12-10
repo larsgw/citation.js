@@ -2,7 +2,7 @@
  * Generate ID
  *
  * @access protected
- * @method fetchId
+ * @memberof Cite.util
  *
  * @param {Array<String>} list - old ID list
  * @param {String} prefix - ID prefix

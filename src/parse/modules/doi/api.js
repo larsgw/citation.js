@@ -1,3 +1,7 @@
+/**
+ * @module input/doi
+ */
+
 import request from 'sync-request'
 import parseDoiJson from './json'
 
@@ -11,7 +15,7 @@ import parseDoiJson from './json'
  *
  * @param {String} url - The input url
  *
- * @return {CSL} The fetched JSON
+ * @return {Promise<CSL>} The fetched JSON
  */
 const fetchDoiApiAsync = async function (url) {
   try {
@@ -32,7 +36,7 @@ const fetchDoiApiAsync = async function (url) {
  *
  * @param {String|Array<String>} data - DOIs
  *
- * @return {Array<CSL>} Array of CSL
+ * @return {Promise<Array<CSL>>} Array of CSL
  */
 const parseDoiApiAsync = async function (data) {
   const doiJsonList = await Promise.all([].concat(data).map(fetchDoiApiAsync))

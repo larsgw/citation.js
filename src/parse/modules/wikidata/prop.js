@@ -1,3 +1,7 @@
+/**
+ * @module input/wikidata
+ */
+
 import wdk from 'wikidata-sdk'
 import fetchFile from '../../../util/fetchFile'
 import fetchFileAsync from '../../../util/fetchFileAsync'
@@ -170,7 +174,7 @@ const parseWikidataProp = function (name, value, lang) {
  * @param {String|Array<String>} q - Wikidata IDs
  * @param {String} lang - Language
  *
- * @return {Array<String>} Array with labels of each prop
+ * @return {Promise<Array<String>>} Array with labels of each prop
  */
 const fetchWikidataLabelAsync = async function (q, lang) {
   const ids = Array.isArray(q) ? q : typeof q === 'string' ? q.split('|') : ''
@@ -192,7 +196,7 @@ const fetchWikidataLabelAsync = async function (q, lang) {
  * @param {String|Number} value - Value
  * @param {String} lang - Language
  *
- * @return {Array<String>} Array with new prop and value
+ * @return {Promise<Array<String>>} Array with new prop and value
  */
 const parseWikidataPropAsync = async function (prop, value, lang) {
   const cslValue = await (async (prop, valueList) => {

@@ -5,13 +5,58 @@ import * as sort from './sort'
 import * as get from './get'
 
 /**
+ * Citation.js input data, see {@tutorial input_types}
+ *
+ * @typedef InputData
+ * @tutorial input_types
+ */
+
+/**
+ * Citation.js {@tutorial input_options}
+ *
+ * @typedef {Object} Cite~InputOptions
+ * @tutorial input_options
+ *
+ * @property {Cite~OutputOptions} output
+ * @property {Number} maxChainLength
+ * @property {Boolean} generateGraph
+ * @property {Cite.parse~format} forceType
+ */
+
+/**
+ * Citation.js {@tutorial output_options}
+ *
+ * @typedef {Object} Cite~OutputOptions
+ * @tutorial output_options
+ *
+ * @property {String} format
+ * @property {String} type
+ * @property {String} style
+ * @property {String} lang
+ * @property {String|Cite~wrapper} prepend
+ * @property {String|Cite~wrapper} append
+ */
+
+/**
+ * @callback Cite~wrapper
+ * @param {CSL} data - Cite object
+ * @return {String} wrapping string
+ */
+
+/**
+ * [CSL](https://citeproc-js.readthedocs.io/en/latest/csl-json/markup.html#csl-json-items) object
+ *
+ * @typedef {Object} CSL
+ */
+
+/**
  * Create a `Cite` object with almost any kind of data, and manipulate it with its default methods.
  *
  * @access public
  * @constructor Cite
  *
- * @param {String|CSL|Object|Array<String>|Array<CSL>|Array<Object>} data - Input data
- * @param {Object} [options={}] - [Options](../#cite.in.options)
+ * @param {Cite~InputData} data - Input data
+ * @param {Cite~InputOptions} [options={}] - Input options
  */
 function Cite (data, options = {}) {
   // Making it Scope-Safe
@@ -23,10 +68,9 @@ function Cite (data, options = {}) {
    * The default options for the output. See [input options](../#cite.in.options)
    *
    * @access protected
-   * @memberof Cite
+   * @memberof Cite#
    *
-   * @type Object
-   * @default {}
+   * @property {Cite~InputOptions} options
    */
   this._options = options || {}
 
@@ -34,10 +78,9 @@ function Cite (data, options = {}) {
    * The saved-images-log
    *
    * @access protected
-   * @memberof Cite
+   * @memberof Cite#
    *
-   * @type Array<Object>
-   * @property {Cite} 0 - The first image.
+   * @property {Array<Array<String>>} log
    */
   this.log = []
 
@@ -45,10 +88,9 @@ function Cite (data, options = {}) {
    * The parsed data
    *
    * @access protected
-   * @memberof Cite
+   * @memberof Cite#
    *
-   * @type Array<CSL>
-   * @default []
+   * @property {Array<CSL>} data
    */
   this.data = []
 

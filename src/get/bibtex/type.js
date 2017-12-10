@@ -1,4 +1,8 @@
 /**
+ * @module output/bibtex
+ */
+
+/**
  * CSL pub type to BibTeX pub type
  *
  * @access protected

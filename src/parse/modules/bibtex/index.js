@@ -1,3 +1,7 @@
+/**
+ * @module input/bibtex
+ */
+
 import * as text from './text'
 import * as json from './json'
 import * as prop from './prop'

@@ -1,3 +1,7 @@
+/**
+ * @module input/doi
+ */
+
 import * as id from './id'
 import * as api from './api'
 import * as json from './json'

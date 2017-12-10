@@ -1,6 +1,10 @@
 /**
+ * @module input/other
+ */
+
+/**
  *
- * @access protected
+ * @access private
  * @constant substituters
  * @default
  */

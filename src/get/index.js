@@ -1,3 +1,8 @@
+/**
+ * @namespace output
+ * @memberof Cite
+ */
+
 import * as bibtex from './bibtex/index'
 import bibtxt from './bibtxt'
 import * as dict from './dict'

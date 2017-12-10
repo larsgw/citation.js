@@ -2,11 +2,12 @@
  * Retrieve CSL item callback function
  *
  * @access protected
- * @method fetchCSLItemCallback
+ * @method item
+ * @memberof Cite.CSL
  *
  * @param {Array<CSL>} data - CSL array
  *
- * @return {Cite~retrieveItem} Code to retreive item
+ * @return {Cite.CSL~retrieveItem} Code to retreive item
  */
 const fetchCSLItemCallback = data => id => data.find(entry => entry.id === id)
 

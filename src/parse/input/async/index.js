@@ -1,3 +1,10 @@
+/**
+ * @namespace async
+ * @memberof Cite.parse.input
+ *
+ * @borrows Cite.parse.dataAsync as data
+ */
+
 import data from './data'
 import chain from './chain'
 import chainLink from './chainLink'

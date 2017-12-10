@@ -5,11 +5,9 @@ import fetchId from '../util/fetchId'
 /**
  * Add an object to the array of objects
  *
- * @method add
- * @memberof Cite
- * @this Cite
+ * @memberof Cite#
  *
- * @param {String|CSL|Object|Array<String>|Array<CSL>|Array<Object>} data - The data to add to your object
+ * @param {Cite~InputData} data - The data to add to your object
  * @param {Object} [options={}] - [Options](../#cite.in.options)
  * @param {Boolean} [log=false] - Show this call in the log
  *
@@ -32,15 +30,13 @@ const add = function (data, options = {}, log = false) {
 /**
  * Add an object to the array of objects
  *
- * @method addAsync
- * @memberof Cite
- * @this Cite
+ * @memberof Cite#
  *
- * @param {String|CSL|Object|Array<String>|Array<CSL>|Array<Object>} data - The data to add to your object
+ * @param {Cite~InputData} data - The data to add to your object
  * @param {Object} [options={}] - [Options](../#cite.in.options)
  * @param {Boolean} [log=false] - Show this call in the log
  *
- * @return {Cite} The updated parent object
+ * @return {Promise<Cite>} The updated parent object
  */
 const addAsync = async function (data, options = {}, log = false) {
   if (options === true || log === true) {
@@ -59,11 +55,9 @@ const addAsync = async function (data, options = {}, log = false) {
 /**
  * Recreate a `Cite` object with almost any kind of data, and manipulate it with its default methods.
  *
- * @method set
- * @memberof Cite
- * @this Cite
+ * @memberof Cite#
  *
- * @param {String|CSL|Object|Array<String>|Array<CSL>|Array<Object>} data - Replacement data
+ * @param {Cite~InputData} data - Replacement data
  * @param {Object} [options={}] - [Options](../#cite.in.options)
  * @param {Boolean} [log=false] - Show this call in the log
  *
@@ -81,15 +75,13 @@ const set = function (data, options = {}, log = false) {
 /**
  * Recreate a `Cite` object with almost any kind of data, and manipulate it with its default methods.
  *
- * @method setAsync
- * @memberof Cite
- * @this Cite
+ * @memberof Cite#
  *
- * @param {String|CSL|Object|Array<String>|Array<CSL>|Array<Object>} data - Replacement data
+ * @param {Cite~InputData} data - Replacement data
  * @param {Object} [options={}] - [Options](../#cite.in.options)
  * @param {Boolean} [log=false] - Show this call in the log
  *
- * @return {Cite} The updated parent object
+ * @return {Promise<Cite>} The updated parent object
  */
 const setAsync = async function (data, options = {}, log = false) {
   if (options === true || log === true) {
@@ -103,9 +95,7 @@ const setAsync = async function (data, options = {}, log = false) {
 /**
  * Reset a `Cite` object.
  *
- * @method reset
- * @memberof Cite
- * @this Cite
+ * @memberof Cite#
  *
  * @param {Boolean} [log=false] - Show this call in the log
  *

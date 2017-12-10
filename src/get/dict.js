@@ -1,9 +1,8 @@
 /**
- * Object containing HTML strings for building JSON and BibTeX. Made to match citeproc, for compatability.
+ * Object containing HTML strings for building JSON and BibTeX. Made to match citeproc, for compatibility.
  *
  * @access protected
- * @constant htmlDict
- * @default
+ * @memberof Cite.output.dict
  */
 const htmlDict = {
   wr_start: '<div class="csl-bib-body">',
@@ -17,11 +16,10 @@ const htmlDict = {
 }
 
 /**
- * Object containing text strings for building JSON and BibTeX. Made to match citeproc, for compatability.
+ * Object containing text strings for building JSON and BibTeX. Made to match citeproc, for compatibility.
  *
  * @access protected
- * @constant textDict
- * @default
+ * @memberof Cite.output.dict
  */
 const textDict = {
   wr_start: '',
@@ -33,5 +31,10 @@ const textDict = {
   li_start: '\t',
   li_end: '\n'
 }
+
+/**
+ * @namespace dict
+ * @memberof Cite.output
+ */
 
 export { htmlDict, textDict }

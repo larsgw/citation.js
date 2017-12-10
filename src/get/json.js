@@ -1,3 +1,7 @@
+/**
+ * @module output/json
+ */
+
 import { htmlDict as dict } from './dict'
 
 /**

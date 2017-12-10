@@ -67,7 +67,7 @@ const endSplitter = getSplittingRegex(`(?:${/\p{Lowercase}/u.source}.*|${particl
  * Get CSL from name
  *
  * @access protected
- * @method parseName
+ * @memberof Cite.parse
  *
  * @param {String} name - string
  *

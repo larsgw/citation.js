@@ -1,5 +1,8 @@
 /**
- *
+ * @module input/bibtex
+ */
+
+/**
  * @access private
  * @constant bibTxtRegex
  * @default

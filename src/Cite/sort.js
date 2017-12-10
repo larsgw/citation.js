@@ -2,6 +2,13 @@ import getLabel from '../get/label'
 import getName from '../get/name'
 
 /**
+ * @callback Cite~sort
+ * @param {CSL} a - element a
+ * @param {CSL} b - element b
+ * @return {Number} positive for a > b, negative for b > a, zero for a = b
+ */
+
+/**
  * Get value for comparing
  *
  * @access private
@@ -86,9 +93,7 @@ const getSortCallback = function (...props) {
 /**
  * Sort the dataset
  *
- * @method sort
- * @memberof Cite
- * @this Cite
+ * @memberof Cite#
  *
  * @param {Cite~sort|Array<String>} [method=[]] - How to sort
  * @param {Boolean} [log=false] - Show this call in the log

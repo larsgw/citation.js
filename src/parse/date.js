@@ -2,7 +2,7 @@
  * Convert epoch to CSL date
  *
  * @access protected
- * @function parseDate
+ * @memberof Cite.parse
  *
  * @param {Number|String} value - Epoch time or string in format "YYYY-MM-DD"
  *

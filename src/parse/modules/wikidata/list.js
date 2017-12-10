@@ -1,3 +1,7 @@
+/**
+ * @module input/wikidata
+ */
+
 import wdk from 'wikidata-sdk'
 
 /**

@@ -1,3 +1,7 @@
+/**
+ * @module input/bibtex
+ */
+
 import parseName from '../../name'
 import parseDate from '../../date'
 

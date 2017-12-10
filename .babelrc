@@ -1,22 +1,18 @@
 {
   "presets": [
-    [
-      "env",
-      {
-	"targets": {
-	  "browser": [
-	    "> 1%",
-	    "last 10 versions",
-	    "ie > 7"
-	  ]
-	}
-      }
-    ]
+    ["env", {"targets": {
+      "browser": [
+        "> 1%",
+        "last 10 versions",
+        "ie > 7"
+      ]}
+    }]
   ],
   "plugins": ["transform-unicode-property-regex"],
   "env": {
     "test": {
       "plugins": ["istanbul"]
     }
-  }
+  },
+  "comments": false
 }

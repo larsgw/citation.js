@@ -45,7 +45,7 @@ Browser releases are available [here](https://github.com/larsgw/citation.js/tree
 ```html
 <script src="path/to/citation.js" type="text/javascript"></script>
 <script>
-  const Cite = require('citation.js')
+  const Cite = require('citation-js')
 </script>
 ```
 

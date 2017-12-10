@@ -18,7 +18,8 @@ import varCSLLocales from './locales.json'
  * Retrieve CSL locale
  *
  * @access protected
- * @method fetchCSLLocale
+ * @method locale
+ * @memberof Cite.CSL
  *
  * @param {String} [lang="en-US"] - lang code
  *

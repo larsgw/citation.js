@@ -1,3 +1,7 @@
+/**
+ * @module input/bibtex
+ */
+
 import parseBibTeXProp from './prop'
 import parseBibTeXType from './type'
 

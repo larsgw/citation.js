@@ -1,16 +1,18 @@
 import {validateOptions as validate} from './static'
 
-// TODO docs
+/**
+ * @memberof Cite#
+ * 
+ * @property {Cite~OutputOptions} defaultOptions - default output options
+ */
 const defaultOptions = {format: 'real', type: 'json', style: 'csl', lang: 'en-US'}
 
 /**
  * Change the default options of a `Cite` object.
  *
- * @method options
- * @memberof Cite
- * @this Cite
+ * @memberof Cite#
  *
- * @param {Object} options - The options for the output. See [input options](../#citation.cite.in.options)
+ * @param {Cite~OutputOptions} options - The options for the output
  * @param {Boolean} [log=false] - Show this call in the log
  *
  * @return {Cite} The updated parent object

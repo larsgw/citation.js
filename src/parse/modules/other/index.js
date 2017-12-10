@@ -1,5 +1,9 @@
 /* global jQuery, HTMLElement */
 
+/**
+ * @module input/other
+ */
+
 import * as empty from './empty'
 import * as url from './url'
 import * as json from './json'

@@ -1,3 +1,7 @@
+/**
+ * @module input/bibjson
+ */
+
 import parseDate from '../../date'
 import parseName from '../../name'
 

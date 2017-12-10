@@ -16,9 +16,7 @@ import fetchCSLItemCallback from '../CSL/items'
 /**
  * Get a list of the data entry IDs, in the order of that list
  *
- * @method getIds
- * @memberof Cite
- * @this Cite
+ * @memberof Cite#
  *
  * @return {Array<String>} List of IDs
  */
@@ -27,13 +25,12 @@ const getIds = function () {
 }
 
 /**
- * Get formatted data from your object. For more info, see [Output](../#cite.out).
+ * Get formatted data from your object.
  *
- * @method get
- * @memberof Cite
- * @this Cite
+ * @tutorial output
+ * @memberof Cite#
  *
- * @param {Object} [options={}] - [Output options](../#cite.out.options)
+ * @param {Cite~OutputOptions} [options={}] - Output options
  *
  * @return {String|Array<Object>} The formatted data
  */

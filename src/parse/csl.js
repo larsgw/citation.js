@@ -15,6 +15,7 @@ const DATE = 3
  *
  * @access private
  * @constant fieldTypes
+ * @memberof Cite.parse
  * @default
  */
 const fieldTypes = {
@@ -105,7 +106,7 @@ const fieldTypes = {
  * Correct a name.
  *
  * @access private
- * @method correctName
+ * @memberof Cite.parse
  *
  * @param {*} name - name
  * @param {Boolean} [bestGuessConversions=true] - make some best guess conversions on type mismatch, default: true
@@ -126,7 +127,7 @@ const correctName = function (name, bestGuessConversions = true) {
  * Correct a name field.
  *
  * @access private
- * @method correctNameList
+ * @memberof Cite.parse
  *
  * @param {*} nameList - name list
  * @param {Boolean} [bestGuessConversions=true] - make some best guess conversions on type mismatch, default: true
@@ -143,7 +144,7 @@ const correctNameList = function (nameList, bestGuessConversions = true) {
  * Correct a date field.
  *
  * @access private
- * @method correctDate
+ * @memberof Cite.parse
  *
  * @param {*} date - date
  * @param {Boolean} [bestGuessConversions=true] - make some best guess conversions on type mismatch, default: true
@@ -180,7 +181,7 @@ const correctDate = function (date, bestGuessConversions = true) {
  * Correct a field.
  *
  * @access private
- * @method correctField
+ * @memberof Cite.parse
  *
  * @param {String} fieldName - field name
  * @param {*} value - value
@@ -216,10 +217,10 @@ const correctField = function (fieldName, value, bestGuessConversions = true) {
 }
 
 /**
- * Make CSL JSON conform to standards. This, unfortunately, needs to happen, so it doesn't have to happen anywhere else.
+ * Make CSL JSON conform to standards so that plugins don't have to typecheck all the time.
  *
  * @access protected
- * @method parseCsl
+ * @memberof Cite.parse
  *
  * @param {Array<CSL>} data - Array of CSL
  *

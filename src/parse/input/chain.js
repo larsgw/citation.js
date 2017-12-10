@@ -10,10 +10,11 @@ import {applyGraph, removeGraph} from './graph'
  * Parse input until success.
  *
  * @access protected
- * @method parseInput
+ * @method chain
+ * @memberof Cite.parse.input
  *
- * @param {String|Array<String>|Object|Array<Object>} input - The input data
- * @param {Object} [options] - [Options](../#cite.in.options)
+ * @param {InputData} input - input data
+ * @param {Cite~InputOptions} [options] - options
  *
  * @return {Array<CSL>} The parsed input
  */

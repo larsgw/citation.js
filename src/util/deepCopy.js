@@ -2,7 +2,7 @@
  * Duplicate objects to prevent Cite changing values outside of own scope
  *
  * @access protected
- * @method deepCopy
+ * @memberof Cite.util
  *
  * @param {Object} obj - Input object
  *

@@ -1,4 +1,8 @@
 /**
+ * @module input/doi
+ */
+
+/**
  * Get DOI API URLs from DOI ID.
  *
  * @access protected

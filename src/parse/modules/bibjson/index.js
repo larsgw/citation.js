@@ -1,3 +1,7 @@
+/**
+ * @module input/bibjson
+ */
+
 import * as json from './json'
 
 export const scope = '@bibjson'
