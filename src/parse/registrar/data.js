@@ -16,8 +16,13 @@ const methodNames = {}
 const capitalize = word => word[0].toUpperCase() + word.slice(1).toLowerCase()
 const camelCase = (prefix = '', ...words) => prefix.toLowerCase() + words.map(capitalize).join('')
 
-// Get method name to write parser to in global register
-const getMethodName = type => camelCase(...type.match(typeMatcher).slice(1).filter(Boolean))
+// Get method name to put in the global register
+const getMethodName = format => {
+  if (!methodNames[format]) {
+    methodNames[format] = camelCase(...format.match(typeMatcher).slice(1).filter(Boolean))
+  }
+  return methodNames[format]
+}
 
 /**
  * @access public
@@ -87,7 +92,7 @@ const dataAsync = async (input, type) => {
  * @param {Boolean} [options.native=false] - native parsers get less priority when parsing type, like urls get less priority over Wikidata API URLs or DOIs
  */
 const addDataParser = (format, parser, {async = false, native = false} = {}) => {
-  let methodName = methodNames[format] = methodNames[format] || getMethodName(format)
+  let methodName = getMethodName(format)
   let parserObject
 
   if (async) {
