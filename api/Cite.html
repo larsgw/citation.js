@@ -2,27 +2,45 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>Class: Cite - Docs - Citation.js</title>
-    
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+
+    <title>Cite - Docs - Citation.js</title>
     <meta name="theme-color" content="#FFC107">
     <link rel="shortcut icon" type="image/png" href="../favicon.png"/>
     <link rel="icon" type="image/png" href="../favicon.png"/>
-    
-    <script src="scripts/prettify/prettify.js"> </script>
-    <script src="scripts/prettify/lang-css.js"> </script>
+
+    <script src="scripts/prettify/prettify.js"></script>
+    <script src="scripts/prettify/lang-css.js"></script>
     <!--[if lt IE 9]>
       <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
-    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+
+    <!--<link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">-->
+    <link type="text/css" rel="stylesheet" href="https://cdn.rawgit.com/jmblog/color-themes-for-google-code-prettify/be5aa6fe/dist/themes/tomorrow-night.min.css">
+
     <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+
     <link type="text/css" rel="stylesheet" href="../static/css/api.css">
 </head>
 
 <body>
 
-<div id="main">
+<input type="checkbox" id="nav-trigger" class="nav-trigger" />
+<label for="nav-trigger" class="navicon-button x">
+  <div class="navicon"></div>
+</label>
 
-    <h1 class="page-title">Class: Cite</h1>
+<label for="nav-trigger" class="overlay"></label>
+
+<nav>
+    <li class="nav-link nav-home-link"><a href="index.html">Home</a></li><li class="nav-heading">Tutorials</li><li class="nav-item"><a href="tutorial-cite_.html">Cite</a></li><li class="nav-item"><a href="tutorial-cli.html">CLI</a></li><li class="nav-item"><a href="tutorial-getting_started.html">Getting Started</a></li><li class="nav-item"><a href="tutorial-input.html">Input</a></li><li class="nav-item"><a href="tutorial-output.html">Output</a></li><li class="nav-item"><a href="tutorial-plugins.html">Plugins</a></li><li class="nav-heading">Classes</li><li class="nav-heading"><span class="nav-item-type type-class">C</span><span class="nav-item-name"><a href="Cite.html">Cite</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="Cite.html#.async">async</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="Cite.html#.validateOptions">validateOptions</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="Cite.html#.validateOutputOptions">validateOutputOptions</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="Cite.html#add">add</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="Cite.html#addAsync">addAsync</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="Cite.html#currentVersion">currentVersion</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="Cite.html#get">get</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="Cite.html#getIds">getIds</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="Cite.html#options">options</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="Cite.html#reset">reset</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="Cite.html#retrieveLastVersion">retrieveLastVersion</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="Cite.html#retrieveVersion">retrieveVersion</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="Cite.html#save">save</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="Cite.html#set">set</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="Cite.html#setAsync">setAsync</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="Cite.html#sort">sort</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="Cite.html#undo">undo</a></span></li><li class="nav-heading"><span class="nav-item-type type-class">C</span><span class="nav-item-name"><a href="Cite.util.TokenStack.html">TokenStack</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="Cite.util.TokenStack.html#.getMatchCallback">getMatchCallback</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="Cite.util.TokenStack.html#.getPatternText">getPatternText</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="Cite.util.TokenStack.html#consume">consume</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="Cite.util.TokenStack.html#consumeN">consumeN</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="Cite.util.TokenStack.html#consumeSequence">consumeSequence</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="Cite.util.TokenStack.html#consumeToken">consumeToken</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="Cite.util.TokenStack.html#consumeWhitespace">consumeWhitespace</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="Cite.util.TokenStack.html#matches">matches</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="Cite.util.TokenStack.html#matchesSequence">matchesSequence</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="Cite.util.TokenStack.html#tokensLeft">tokensLeft</a></span></li><li class="nav-heading">Modules</li><li class="nav-heading"><span class="nav-item-type type-module">M</span><span class="nav-item-name"><a href="module-input_bibjson.html">input/bibjson</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-input_bibjson.html#~parseContentMine">parseContentMine</a></span></li><li class="nav-heading"><span class="nav-item-type type-module">M</span><span class="nav-item-name"><a href="module-input_bibtex.html">input/bibtex</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-input_bibtex.html#~parseBibTeX">parseBibTeX</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-input_bibtex.html#~parseBibTeXJSON">parseBibTeXJSON</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-input_bibtex.html#~parseBibTeXProp">parseBibTeXProp</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-input_bibtex.html#~parseBibTeXType">parseBibTeXType</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-input_bibtex.html#~parseBibTxt">parseBibTxt</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-input_bibtex.html#~parseBibTxtEntry">parseBibTxtEntry</a></span></li><li class="nav-heading"><span class="nav-item-type type-module">M</span><span class="nav-item-name"><a href="module-input_doi.html">input/doi</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-input_doi.html#~fetchDoiType">fetchDoiType</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-input_doi.html#~parseDoi">parseDoi</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-input_doi.html#~parseDoiApi">parseDoiApi</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-input_doi.html#~parseDoiApiAsync">parseDoiApiAsync</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-input_doi.html#~parseDoiJson">parseDoiJson</a></span></li><li class="nav-heading"><span class="nav-item-type type-module">M</span><span class="nav-item-name"><a href="module-input_other.html">input/other</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-input_other.html#~parseJSON">parseJSON</a></span></li><li class="nav-heading"><span class="nav-item-type type-module">M</span><span class="nav-item-name"><a href="module-input_wikidata.html">input/wikidata</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-input_wikidata.html#~fetchWikidataType">fetchWikidataType</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-input_wikidata.html#~parseWikidata">parseWikidata</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-input_wikidata.html#~parseWikidataJSON">parseWikidataJSON</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-input_wikidata.html#~parseWikidataJSONAsync">parseWikidataJSONAsync</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-input_wikidata.html#~parseWikidataProp">parseWikidataProp</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-input_wikidata.html#~parseWikidataPropAsync">parseWikidataPropAsync</a></span></li><li class="nav-heading"><span class="nav-item-type type-module">M</span><span class="nav-item-name"><a href="module-output_bibtex.html">output/bibtex</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-output_bibtex.html#~fetchBibTeXType">fetchBibTeXType</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-output_bibtex.html#~getBibTeX">getBibTeX</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-output_bibtex.html#~getBibTeXJSON">getBibTeXJSON</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-output_bibtex.html#~getBibTeXLabel">getBibTeXLabel</a></span></li><li class="nav-heading"><span class="nav-item-type type-module">M</span><span class="nav-item-name"><a href="module-output_bibtxt.html">output/bibtxt</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-output_bibtxt.html#~getBibTxt">getBibTxt</a></span></li><li class="nav-heading"><span class="nav-item-type type-module">M</span><span class="nav-item-name"><a href="module-output_json.html">output/json</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-output_json.html#~getJSON">getJSON</a></span></li><li class="nav-heading">Namespaces</li><li class="nav-heading"><span class="nav-item-type type-namespace">N</span><span class="nav-item-name"><a href="Cite.CSL.html">CSL</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="Cite.CSL.html#.engine">engine</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="Cite.CSL.html#.item">item</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="Cite.CSL.html#.locale">locale</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="Cite.CSL.html#.style">style</a></span></li><li class="nav-heading"><span class="nav-item-type type-namespace">N</span><span class="nav-item-name"><a href="Cite.CSL.register.html">register</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="Cite.CSL.register.html#.addLocale">addLocale</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="Cite.CSL.register.html#.addTemplate">addTemplate</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="Cite.CSL.register.html#.getLocale">getLocale</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="Cite.CSL.register.html#.getTemplate">getTemplate</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="Cite.CSL.register.html#.hasLocale">hasLocale</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="Cite.CSL.register.html#.hasTemplate">hasTemplate</a></span></li><li class="nav-heading"><span class="nav-item-type type-namespace">N</span><span class="nav-item-name"><a href="Cite.output.html">output</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="Cite.output.html#.getDate">getDate</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="Cite.output.html#.getLabel">getLabel</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="Cite.output.html#.getName">getName</a></span></li><li class="nav-heading"><span class="nav-item-type type-namespace">N</span><span class="nav-item-name"><a href="Cite.output.dict.html">dict</a></span></li><li class="nav-heading"><span class="nav-item-type type-namespace">N</span><span class="nav-item-name"><a href="Cite.parse.html">parse</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="Cite.parse.html#.add">add</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="Cite.parse.html#.addDataParser">addDataParser</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="Cite.parse.html#.addTypeParser">addTypeParser</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="Cite.parse.html#.data">data</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="Cite.parse.html#.dataAsync">dataAsync</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="Cite.parse.html#.dataTypeOf">dataTypeOf</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="Cite.parse.html#.hasDataParser">hasDataParser</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="Cite.parse.html#.parseCsl">parseCsl</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="Cite.parse.html#.parseDate">parseDate</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="Cite.parse.html#.parseName">parseName</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="Cite.parse.html#.type">type</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="Cite.parse.html#.typeOf">typeOf</a></span></li><li class="nav-heading"><span class="nav-item-type type-namespace">N</span><span class="nav-item-name"><a href="Cite.parse.input.html">input</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="Cite.parse.input.html#.applyGraph">applyGraph</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="Cite.parse.input.html#.chain">chain</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="Cite.parse.input.html#.chainAsync">chainAsync</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="Cite.parse.input.html#.chainLink">chainLink</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="Cite.parse.input.html#.chainLinkAsync">chainLinkAsync</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="Cite.parse.input.html#.data">data</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="Cite.parse.input.html#.dataAsync">dataAsync</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="Cite.parse.input.html#.removeGraph">removeGraph</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="Cite.parse.input.html#.type">type</a></span></li><li class="nav-heading"><span class="nav-item-type type-namespace">N</span><span class="nav-item-name"><a href="Cite.parse.input.async.html">async</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="Cite.parse.input.async.html#.chain">chain</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="Cite.parse.input.async.html#.chainLink">chainLink</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="Cite.parse.input.async.html#.data">data</a></span></li><li class="nav-heading"><span class="nav-item-type type-namespace">N</span><span class="nav-item-name"><a href="Cite.util.html">util</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="Cite.util.html#.deepCopy">deepCopy</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="Cite.util.html#.fetchFile">fetchFile</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="Cite.util.html#.fetchFileAsync">fetchFileAsync</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="Cite.util.html#.fetchId">fetchId</a></span></li><li class="nav-heading"><span class="nav-item-type type-namespace">N</span><span class="nav-item-name"><a href="Cite.util.attr.html">attr</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="Cite.util.attr.html#.getAttributedEntry">getAttributedEntry</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="Cite.util.attr.html#.getPrefixedEntry">getPrefixedEntry</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="Cite.util.attr.html#.getWrappedEntry">getWrappedEntry</a></span></li><li class="nav-heading"><span class="nav-item-type type-namespace">N</span><span class="nav-item-name"><a href="Cite.version.html">version</a></span></li><li class="nav-heading"><a href="global.html">Globals</a></li>
+</nav>
+
+<div id="main">
+    
+    <h1 class="page-title">Cite</h1>
+    
 
     
 
@@ -33,7 +51,9 @@
 
 <header>
     
-        <h2><span class="attribs"><span class="type-signature"></span></span>Cite<span class="signature">(data, options<span class="signature-attributes">opt</span>)</span><span class="type-signature"></span></h2>
+        <h2>
+        Cite
+        </h2>
         
     
 </header>
@@ -42,12 +62,11 @@
     <div class="container-overview">
     
         
+<div class="section-method">
 
     
 
-    
     <h4 class="name" id="Cite"><span class="type-signature"></span>new Cite<span class="signature">(data, options<span class="signature-attributes">opt</span>)</span><span class="type-signature"></span></h4>
-    
 
     
 
@@ -56,6 +75,50 @@
 <div class="description">
     <p>Create a <code>Cite</code> object with almost any kind of data, and manipulate it with its default methods.</p>
 </div>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="Cite_index.js.html">Cite/index.js</a>, <a href="Cite_index.js.html#line52">line 52</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
 
 
 
@@ -100,22 +163,7 @@
             <td class="type">
             
                 
-<span class="param-type">String</span>
-|
-
-<span class="param-type"><a href="CSL.html">CSL</a></span>
-|
-
-<span class="param-type">Object</span>
-|
-
-<span class="param-type">Array.&lt;String></span>
-|
-
-<span class="param-type">Array.&lt;<a href="CSL.html">CSL</a>></span>
-|
-
-<span class="param-type">Array.&lt;Object></span>
+<span class="param-type"><code>Cite~InputData</code></span>
 
 
             
@@ -137,7 +185,10 @@
                 </td>
             
 
-            <td class="description last"><p>Input data</p></td>
+            <td class="description last">
+                <p>Input data</p>
+                
+            </td>
         </tr>
 
     
@@ -150,7 +201,7 @@
             <td class="type">
             
                 
-<span class="param-type">Object</span>
+<span class="param-type"><code><a href="Cite.html#~InputOptions">Cite~InputOptions</a></code></span>
 
 
             
@@ -176,7 +227,10 @@
                 </td>
             
 
-            <td class="description last"><p><a href="../#cite.in.options">Options</a></p></td>
+            <td class="description last">
+                <p>Input options</p>
+                
+            </td>
         </tr>
 
     
@@ -188,45 +242,6 @@
 
 
 
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Cite_index.js.html">Cite/index.js</a>, <a href="Cite_index.js.html#line7">line 7</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
 
 
 
@@ -237,14 +252,7 @@
 
 
 
-
-
-
-
-
-
-
-
+</div>
     
     </div>
 
@@ -254,10 +262,27 @@
 
     
 
-    
+     
 
     
+        <h3 class="subsection-title">Namespaces</h3>
 
+        <dl>
+            <dt><a href="Cite.CSL.html">CSL</a></dt>
+            <dd></dd>
+        
+            <dt><a href="Cite.output.html">output</a></dt>
+            <dd></dd>
+        
+            <dt><a href="Cite.parse.html">parse</a></dt>
+            <dd></dd>
+        
+            <dt><a href="Cite.util.html">util</a></dt>
+            <dd></dd>
+        
+            <dt><a href="Cite.version.html">version</a></dt>
+            <dd></dd>
+        </dl>
     
 
     
@@ -265,180 +290,11 @@
 
         
             
-<h4 class="name" id=".this._options"><span class="type-signature">(protected, static) </span>this._options<span class="type-signature"> :Object</span></h4>
+<div class="section-members">
+<h4 class="name" id="defaultOptions"><span class="type-signature">(constant) </span>defaultOptions<span class="type-signature"></span></h4>
 
 
 
-
-<div class="description">
-    <p>The default options for the output. See <a href="../#cite.in.options">input options</a></p>
-</div>
-
-
-
-    <h5>Type:</h5>
-    <ul>
-        <li>
-            
-<span class="param-type">Object</span>
-
-
-        </li>
-    </ul>
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-default">Default Value:</dt>
-    <dd class="tag-default"><ul class="dummy">
-            <li>{}</li>
-        </ul></dd>
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Cite_index.js.html">Cite/index.js</a>, <a href="Cite_index.js.html#line31">line 31</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-        
-            
-<h4 class="name" id=".this.data"><span class="type-signature">(protected, static) </span>this.data<span class="type-signature"> :Array.&lt;<a href="CSL.html">CSL</a>></span></h4>
-
-
-
-
-<div class="description">
-    <p>The parsed data</p>
-</div>
-
-
-
-    <h5>Type:</h5>
-    <ul>
-        <li>
-            
-<span class="param-type">Array.&lt;<a href="CSL.html">CSL</a>></span>
-
-
-        </li>
-    </ul>
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-default">Default Value:</dt>
-    <dd class="tag-default"><ul class="dummy">
-            <li>[]</li>
-        </ul></dd>
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Cite_index.js.html">Cite/index.js</a>, <a href="Cite_index.js.html#line53">line 53</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-        
-            
-<h4 class="name" id=".this.log"><span class="type-signature">(protected, static) </span>this.log<span class="type-signature"> :Array.&lt;Object></span></h4>
-
-
-
-
-<div class="description">
-    <p>The saved-images-log</p>
-</div>
-
-
-
-    <h5>Type:</h5>
-    <ul>
-        <li>
-            
-<span class="param-type">Array.&lt;Object></span>
-
-
-        </li>
-    </ul>
 
 
 
@@ -470,13 +326,13 @@
 
         <tr>
             
-                <td class="name"><code>0</code></td>
+                <td class="name"><code>defaultOptions</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type"><a href="Cite.html">Cite</a></span>
+<span class="param-type"><code><a href="Cite.html#~OutputOptions">Cite~OutputOptions</a></code></span>
 
 
             
@@ -486,8 +342,10 @@
 
             
 
-            <td class="description last"><p>The first image.</p></td>
+            <td class="description last"><p>default output options</p></td>
         </tr>
+
+        
 
     
     </tbody>
@@ -525,7 +383,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Cite_index.js.html">Cite/index.js</a>, <a href="Cite_index.js.html#line42">line 42</a>
+        <a href="Cite_options.js.html">Cite/options.js</a>, <a href="Cite_options.js.html#line8">line 8</a>
     </li></ul></dd>
     
 
@@ -540,6 +398,9 @@
 
 
 
+
+
+</div>
 
         
     
@@ -549,29 +410,65 @@
 
         
             
+<div class="section-method">
+
+    
+
+    <h4 class="name" id=".async"><span class="type-signature">(static) </span>async<span class="signature">(data, options<span class="signature-attributes">opt</span>, callback<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise.&lt;<a href="Cite.html">Cite</a>>}</span></h4>
+
+    
+
+
+
+
+
+
+
+<dl class="details">
 
     
 
     
-    <h4 class="name" id=".add"><span class="type-signature">(static) </span>add<span class="signature">(data, options<span class="signature-attributes">opt</span>, log<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {<a href="Cite.html">Cite</a>}</span></h4>
+
+    
+
     
 
     
 
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="async_index.js.html">async/index.js</a>, <a href="async_index.js.html#line30">line 30</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
 
 
-<div class="description">
-    <p>Add an object to the array of objects</p>
-</div>
 
 
 
 
-
-
-
-    <h5>This:</h5>
-    <ul><li><a href="Cite.html">Cite</a></li></ul>
 
 
 
@@ -610,22 +507,7 @@
             <td class="type">
             
                 
-<span class="param-type">String</span>
-|
-
-<span class="param-type"><a href="CSL.html">CSL</a></span>
-|
-
-<span class="param-type">Object</span>
-|
-
-<span class="param-type">Array.&lt;String></span>
-|
-
-<span class="param-type">Array.&lt;<a href="CSL.html">CSL</a>></span>
-|
-
-<span class="param-type">Array.&lt;Object></span>
+<span class="param-type"><code>Cite~InputData</code></span>
 
 
             
@@ -647,7 +529,10 @@
                 </td>
             
 
-            <td class="description last"><p>The data to add to your object</p></td>
+            <td class="description last">
+                <p>input data</p>
+                
+            </td>
         </tr>
 
     
@@ -660,7 +545,7 @@
             <td class="type">
             
                 
-<span class="param-type">Object</span>
+<span class="param-type"><code><a href="Cite.html#~InputOptions">Cite~InputOptions</a></code></span>
 
 
             
@@ -686,20 +571,23 @@
                 </td>
             
 
-            <td class="description last"><p><a href="../#cite.in.options">Options</a></p></td>
+            <td class="description last">
+                <p>cite options</p>
+                
+            </td>
         </tr>
 
     
 
         <tr>
             
-                <td class="name"><code>log</code></td>
+                <td class="name"><code>callback</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">Boolean</span>
+<span class="param-type"><code><a href="Cite.html#~asyncCallback">Cite~asyncCallback</a></code></span>
 
 
             
@@ -720,17 +608,70 @@
             
                 <td class="default">
                 
-                    false
-                
                 </td>
             
 
-            <td class="description last"><p>Show this call in the log</p></td>
+            <td class="description last">
+                <p>if not given, function returns promise.</p>
+                
+            </td>
         </tr>
 
     
     </tbody>
 </table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="section-returns">
+<h5>Returns:</h5>
+
+        
+
+<dl class="param-type">
+    <dt>
+        Type:
+    </dt>
+    <dd>
+        
+<span class="param-type"><code>Promise.&lt;<a href="Cite.html">Cite</a>></code></span>
+
+
+    </dd>
+</dl>
+
+
+<div class="param-desc">
+    <p>if callback is omitted, returns a promise</p>
+</div>
+
+    
+</div>
+
+
+
+</div>
+        
+            
+<div class="section-method">
+
+    
+
+    <h4 class="name" id=".validateOptions"><span class="type-signature">(static) </span>validateOptions<span class="signature">()</span><span class="type-signature"> &rarr; {Boolean}</span></h4>
+
+    
+
 
 
 
@@ -766,7 +707,329 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Cite_set.js.html">Cite/set.js</a>, <a href="Cite_set.js.html#line5">line 5</a>
+        <a href="Cite_static.js.html">Cite/static.js</a>, <a href="Cite_static.js.html#line53">line 53</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+    <dt class="tag-todo">To Do:</dt>
+    <dd class="tag-todo">
+        <ul>
+            <li>check registers if type is present</li>
+        </ul>
+    </dd>
+    
+</dl>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code><a href="Cite.html#~InputOptions">Cite~InputOptions</a></code></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">
+                <p>options</p>
+                
+            </td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="section-returns">
+<h5>Returns:</h5>
+
+        
+
+<dl class="param-type">
+    <dt>
+        Type:
+    </dt>
+    <dd>
+        
+<span class="param-type"><code>Boolean</code></span>
+
+
+    </dd>
+</dl>
+
+
+<div class="param-desc">
+    <p>true (if valid)</p>
+</div>
+
+    
+</div>
+
+
+
+</div>
+        
+            
+<div class="section-method">
+
+    
+
+    <h4 class="name" id=".validateOutputOptions"><span class="type-signature">(static) </span>validateOutputOptions<span class="signature">()</span><span class="type-signature"> &rarr; {Boolean}</span></h4>
+
+    
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="Cite_static.js.html">Cite/static.js</a>, <a href="Cite_static.js.html#line13">line 13</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+    <dt class="tag-todo">To Do:</dt>
+    <dd class="tag-todo">
+        <ul>
+            <li>check registers if styles and langs are present</li>
+        </ul>
+    </dd>
+    
+</dl>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code><a href="Cite.html#~OutputOptions">Cite~OutputOptions</a></code></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">
+                <p>options</p>
+                
+            </td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="section-returns">
+<h5>Returns:</h5>
+
+        
+
+<dl class="param-type">
+    <dt>
+        Type:
+    </dt>
+    <dd>
+        
+<span class="param-type"><code>Boolean</code></span>
+
+
+    </dd>
+</dl>
+
+
+<div class="param-desc">
+    <p>true (if valid)</p>
+</div>
+
+    
+</div>
+
+
+
+</div>
+        
+            
+<div class="section-method">
+
+    
+
+    <h4 class="name" id="add"><span class="type-signature"></span>add<span class="signature">(data, options<span class="signature-attributes">opt</span>, log<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {<a href="Cite.html">Cite</a>}</span></h4>
+
+    
+
+
+
+<div class="description">
+    <p>Add an object to the array of objects</p>
+</div>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="Cite_set.js.html">Cite/set.js</a>, <a href="Cite_set.js.html#line16">line 16</a>
     </li></ul></dd>
     
 
@@ -782,65 +1045,6 @@
 
 
 
-
-
-
-
-
-
-
-<h5>Returns:</h5>
-
-        
-<div class="param-desc">
-    <p>The updated parent object</p>
-</div>
-
-
-
-<dl>
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type"><a href="Cite.html">Cite</a></span>
-
-
-    </dd>
-</dl>
-
-    
-
-
-
-
-
-        
-            
-
-    
-
-    
-    <h4 class="name" id=".addAsync"><span class="type-signature">(static) </span>addAsync<span class="signature">(data, options<span class="signature-attributes">opt</span>, log<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {<a href="Cite.html">Cite</a>}</span></h4>
-    
-
-    
-
-
-
-<div class="description">
-    <p>Add an object to the array of objects</p>
-</div>
-
-
-
-
-
-
-
-    <h5>This:</h5>
-    <ul><li><a href="Cite.html">Cite</a></li></ul>
 
 
 
@@ -879,22 +1083,7 @@
             <td class="type">
             
                 
-<span class="param-type">String</span>
-|
-
-<span class="param-type"><a href="CSL.html">CSL</a></span>
-|
-
-<span class="param-type">Object</span>
-|
-
-<span class="param-type">Array.&lt;String></span>
-|
-
-<span class="param-type">Array.&lt;<a href="CSL.html">CSL</a>></span>
-|
-
-<span class="param-type">Array.&lt;Object></span>
+<span class="param-type"><code>Cite~InputData</code></span>
 
 
             
@@ -916,7 +1105,10 @@
                 </td>
             
 
-            <td class="description last"><p>The data to add to your object</p></td>
+            <td class="description last">
+                <p>The data to add to your object</p>
+                
+            </td>
         </tr>
 
     
@@ -929,7 +1121,7 @@
             <td class="type">
             
                 
-<span class="param-type">Object</span>
+<span class="param-type"><code>Object</code></span>
 
 
             
@@ -955,7 +1147,10 @@
                 </td>
             
 
-            <td class="description last"><p><a href="../#cite.in.options">Options</a></p></td>
+            <td class="description last">
+                <p><a href="../#cite.in.options">Options</a></p>
+                
+            </td>
         </tr>
 
     
@@ -968,7 +1163,7 @@
             <td class="type">
             
                 
-<span class="param-type">Boolean</span>
+<span class="param-type"><code>Boolean</code></span>
 
 
             
@@ -994,7 +1189,10 @@
                 </td>
             
 
-            <td class="description last"><p>Show this call in the log</p></td>
+            <td class="description last">
+                <p>Show this call in the log</p>
+                
+            </td>
         </tr>
 
     
@@ -1006,45 +1204,6 @@
 
 
 
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Cite_set.js.html">Cite/set.js</a>, <a href="Cite_set.js.html#line32">line 32</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
 
 
 
@@ -1053,49 +1212,93 @@
 
 
 
-
-
-
-
-
+<div class="section-returns">
 <h5>Returns:</h5>
 
         
-<div class="param-desc">
-    <p>The updated parent object</p>
-</div>
 
-
-
-<dl>
+<dl class="param-type">
     <dt>
-        Type
+        Type:
     </dt>
     <dd>
         
-<span class="param-type"><a href="Cite.html">Cite</a></span>
+<span class="param-type"><code><a href="Cite.html">Cite</a></code></span>
 
 
     </dd>
 </dl>
 
+
+<div class="param-desc">
+    <p>The updated parent object</p>
+</div>
+
     
+</div>
 
 
 
-
-
+</div>
         
             
+<div class="section-method">
+
+    
+
+    <h4 class="name" id="addAsync"><span class="type-signature">(async) </span>addAsync<span class="signature">(data, options<span class="signature-attributes">opt</span>, log<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise.&lt;<a href="Cite.html">Cite</a>>}</span></h4>
+
+    
+
+
+
+<div class="description">
+    <p>Add an object to the array of objects</p>
+</div>
+
+
+
+
+
+<dl class="details">
 
     
 
     
-    <h4 class="name" id=".currentVersion"><span class="type-signature">(static) </span>currentVersion<span class="signature">()</span><span class="type-signature"> &rarr; {Number}</span></h4>
+
+    
+
     
 
     
 
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="Cite_set.js.html">Cite/set.js</a>, <a href="Cite_set.js.html#line41">line 41</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
 
 
 
@@ -1104,8 +1307,208 @@
 
 
 
-    <h5>This:</h5>
-    <ul><li><a href="Cite.html">Cite</a></li></ul>
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+        <th>Default</th>
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>data</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code>Cite~InputData</code></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last">
+                <p>The data to add to your object</p>
+                
+            </td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>options</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code>Object</code></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    {}
+                
+                </td>
+            
+
+            <td class="description last">
+                <p><a href="../#cite.in.options">Options</a></p>
+                
+            </td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>log</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code>Boolean</code></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    false
+                
+                </td>
+            
+
+            <td class="description last">
+                <p>Show this call in the log</p>
+                
+            </td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="section-returns">
+<h5>Returns:</h5>
+
+        
+
+<dl class="param-type">
+    <dt>
+        Type:
+    </dt>
+    <dd>
+        
+<span class="param-type"><code>Promise.&lt;<a href="Cite.html">Cite</a>></code></span>
+
+
+    </dd>
+</dl>
+
+
+<div class="param-desc">
+    <p>The updated parent object</p>
+</div>
+
+    
+</div>
+
+
+
+</div>
+        
+            
+<div class="section-method">
+
+    
+
+    <h4 class="name" id="currentVersion"><span class="type-signature"></span>currentVersion<span class="signature">()</span><span class="type-signature"> &rarr; {Number}</span></h4>
+
+    
 
 
 
@@ -1142,7 +1545,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Cite_log.js.html">Cite/log.js</a>, <a href="Cite_log.js.html#line3">line 3</a>
+        <a href="Cite_log.js.html">Cite/log.js</a>, <a href="Cite_log.js.html#line8">line 8</a>
     </li></ul></dd>
     
 
@@ -1165,58 +1568,114 @@
 
 
 
+
+
+
+
+
+
+
+
+<div class="section-returns">
 <h5>Returns:</h5>
 
         
+
+<dl class="param-type">
+    <dt>
+        Type:
+    </dt>
+    <dd>
+        
+<span class="param-type"><code>Number</code></span>
+
+
+    </dd>
+</dl>
+
+
 <div class="param-desc">
     <p>The latest version of the object</p>
 </div>
 
-
-
-<dl>
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">Number</span>
-
-
-    </dd>
-</dl>
-
     
+</div>
 
 
 
-
-
+</div>
         
             
+<div class="section-method">
 
     
 
-    
-    <h4 class="name" id=".get"><span class="type-signature">(static) </span>get<span class="signature">(options<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {String|Array.&lt;Object>}</span></h4>
-    
+    <h4 class="name" id="get"><span class="type-signature"></span>get<span class="signature">(options<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {String|Array.&lt;Object>}</span></h4>
 
     
 
 
 
 <div class="description">
-    <p>Get formatted data from your object. For more info, see <a href="../#cite.out">Output</a>.</p>
+    <p>Get formatted data from your object.</p>
 </div>
 
 
 
 
 
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="Cite_get.js.html">Cite/get.js</a>, <a href="Cite_get.js.html#line37">line 37</a>
+    </li></ul></dd>
+    
+
+    
+    <dt class="tag-tutorial">Tutorials:</dt>
+    <dd class="tag-tutorial">
+        <ul>
+            <li><a href="tutorial-output.html">Output</a></li>
+        </ul>
+    </dd>
+    
+
+    
+
+    
+</dl>
 
 
-    <h5>This:</h5>
-    <ul><li><a href="Cite.html">Cite</a></li></ul>
+
+
+
+
 
 
 
@@ -1255,7 +1714,7 @@
             <td class="type">
             
                 
-<span class="param-type">Object</span>
+<span class="param-type"><code><a href="Cite.html#~OutputOptions">Cite~OutputOptions</a></code></span>
 
 
             
@@ -1281,7 +1740,10 @@
                 </td>
             
 
-            <td class="description last"><p><a href="../#cite.out.options">Output options</a></p></td>
+            <td class="description last">
+                <p>Output options</p>
+                
+            </td>
         </tr>
 
     
@@ -1293,45 +1755,6 @@
 
 
 
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Cite_get.js.html">Cite/get.js</a>, <a href="Cite_get.js.html#line30">line 30</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
 
 
 
@@ -1340,49 +1763,44 @@
 
 
 
-
-
-
-
-
+<div class="section-returns">
 <h5>Returns:</h5>
 
         
-<div class="param-desc">
-    <p>The formatted data</p>
-</div>
 
-
-
-<dl>
+<dl class="param-type">
     <dt>
-        Type
+        Type:
     </dt>
     <dd>
         
-<span class="param-type">String</span>
+<span class="param-type"><code>String</code></span>
 |
 
-<span class="param-type">Array.&lt;Object></span>
+<span class="param-type"><code>Array.&lt;Object></code></span>
 
 
     </dd>
 </dl>
 
+
+<div class="param-desc">
+    <p>The formatted data</p>
+</div>
+
     
+</div>
 
 
 
-
-
+</div>
         
             
+<div class="section-method">
 
     
 
-    
-    <h4 class="name" id=".getIds"><span class="type-signature">(static) </span>getIds<span class="signature">()</span><span class="type-signature"> &rarr; {Array.&lt;String>}</span></h4>
-    
+    <h4 class="name" id="getIds"><span class="type-signature"></span>getIds<span class="signature">()</span><span class="type-signature"> &rarr; {Array.&lt;String>}</span></h4>
 
     
 
@@ -1396,17 +1814,6 @@
 
 
 
-
-
-    <h5>This:</h5>
-    <ul><li><a href="Cite.html">Cite</a></li></ul>
-
-
-
-
-
-
-
 <dl class="details">
 
     
@@ -1436,7 +1843,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Cite_get.js.html">Cite/get.js</a>, <a href="Cite_get.js.html#line17">line 17</a>
+        <a href="Cite_get.js.html">Cite/get.js</a>, <a href="Cite_get.js.html#line23">line 23</a>
     </li></ul></dd>
     
 
@@ -1459,41 +1866,49 @@
 
 
 
+
+
+
+
+
+
+
+
+<div class="section-returns">
 <h5>Returns:</h5>
 
         
-<div class="param-desc">
-    <p>List of IDs</p>
-</div>
 
-
-
-<dl>
+<dl class="param-type">
     <dt>
-        Type
+        Type:
     </dt>
     <dd>
         
-<span class="param-type">Array.&lt;String></span>
+<span class="param-type"><code>Array.&lt;String></code></span>
 
 
     </dd>
 </dl>
 
+
+<div class="param-desc">
+    <p>List of IDs</p>
+</div>
+
     
+</div>
 
 
 
-
-
+</div>
         
             
+<div class="section-method">
 
     
 
-    
-    <h4 class="name" id=".options"><span class="type-signature">(static) </span>options<span class="signature">(options, log<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {<a href="Cite.html">Cite</a>}</span></h4>
-    
+    <h4 class="name" id="options"><span class="type-signature"></span>options<span class="signature">(options, log<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {<a href="Cite.html">Cite</a>}</span></h4>
 
     
 
@@ -1507,10 +1922,51 @@
 
 
 
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="Cite_options.js.html">Cite/options.js</a>, <a href="Cite_options.js.html#line20">line 20</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
 
 
-    <h5>This:</h5>
-    <ul><li><a href="Cite.html">Cite</a></li></ul>
+
+
+
+
 
 
 
@@ -1549,7 +2005,7 @@
             <td class="type">
             
                 
-<span class="param-type">Object</span>
+<span class="param-type"><code><a href="Cite.html#~OutputOptions">Cite~OutputOptions</a></code></span>
 
 
             
@@ -1571,7 +2027,10 @@
                 </td>
             
 
-            <td class="description last"><p>The options for the output. See <a href="../#citation.cite.in.options">input options</a></p></td>
+            <td class="description last">
+                <p>The options for the output</p>
+                
+            </td>
         </tr>
 
     
@@ -1584,7 +2043,7 @@
             <td class="type">
             
                 
-<span class="param-type">Boolean</span>
+<span class="param-type"><code>Boolean</code></span>
 
 
             
@@ -1610,7 +2069,10 @@
                 </td>
             
 
-            <td class="description last"><p>Show this call in the log</p></td>
+            <td class="description last">
+                <p>Show this call in the log</p>
+                
+            </td>
         </tr>
 
     
@@ -1622,45 +2084,6 @@
 
 
 
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Cite_options.js.html">Cite/options.js</a>, <a href="Cite_options.js.html#line4">line 4</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
 
 
 
@@ -1669,46 +2092,41 @@
 
 
 
-
-
-
-
-
+<div class="section-returns">
 <h5>Returns:</h5>
 
         
-<div class="param-desc">
-    <p>The updated parent object</p>
-</div>
 
-
-
-<dl>
+<dl class="param-type">
     <dt>
-        Type
+        Type:
     </dt>
     <dd>
         
-<span class="param-type"><a href="Cite.html">Cite</a></span>
+<span class="param-type"><code><a href="Cite.html">Cite</a></code></span>
 
 
     </dd>
 </dl>
 
+
+<div class="param-desc">
+    <p>The updated parent object</p>
+</div>
+
     
+</div>
 
 
 
-
-
+</div>
         
             
+<div class="section-method">
 
     
 
-    
-    <h4 class="name" id=".reset"><span class="type-signature">(static) </span>reset<span class="signature">(log<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {<a href="Cite.html">Cite</a>}</span></h4>
-    
+    <h4 class="name" id="reset"><span class="type-signature"></span>reset<span class="signature">(log<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {<a href="Cite.html">Cite</a>}</span></h4>
 
     
 
@@ -1722,10 +2140,51 @@
 
 
 
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="Cite_set.js.html">Cite/set.js</a>, <a href="Cite_set.js.html#line104">line 104</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
 
 
-    <h5>This:</h5>
-    <ul><li><a href="Cite.html">Cite</a></li></ul>
+
+
+
+
 
 
 
@@ -1764,7 +2223,7 @@
             <td class="type">
             
                 
-<span class="param-type">Boolean</span>
+<span class="param-type"><code>Boolean</code></span>
 
 
             
@@ -1790,7 +2249,10 @@
                 </td>
             
 
-            <td class="description last"><p>Show this call in the log</p></td>
+            <td class="description last">
+                <p>Show this call in the log</p>
+                
+            </td>
         </tr>
 
     
@@ -1802,45 +2264,6 @@
 
 
 
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Cite_set.js.html">Cite/set.js</a>, <a href="Cite_set.js.html#line103">line 103</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
 
 
 
@@ -1849,1097 +2272,41 @@
 
 
 
-
-
-
-
-
+<div class="section-returns">
 <h5>Returns:</h5>
 
         
+
+<dl class="param-type">
+    <dt>
+        Type:
+    </dt>
+    <dd>
+        
+<span class="param-type"><code><a href="Cite.html">Cite</a></code></span>
+
+
+    </dd>
+</dl>
+
+
 <div class="param-desc">
     <p>The updated, empty parent object (except the log, the log lives)</p>
 </div>
 
-
-
-<dl>
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type"><a href="Cite.html">Cite</a></span>
-
-
-    </dd>
-</dl>
-
     
-
-
-
-
-
-        
-            
-
-    
-
-    
-    <h4 class="name" id=".retrieveVersion"><span class="type-signature">(static) </span>retrieveVersion<span class="signature">(versnum<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {<a href="Cite.html">Cite</a>}</span></h4>
-    
-
-    
-
-
-
-<div class="description">
-    <p>Returns an image of the object in the version specified.</p>
 </div>
 
 
 
-
-
-
-
-    <h5>This:</h5>
-    <ul><li><a href="Cite.html">Cite</a></li></ul>
-
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-        <th>Attributes</th>
-        
-
-        
-        <th>Default</th>
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>versnum</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">Number</span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-
-                
-                </td>
-            
-
-            
-                <td class="default">
-                
-                    1
-                
-                </td>
-            
-
-            <td class="description last"><p>The number of the version you want to retrieve. Illegel numbers: numbers under or equal to zero, floats, numbers above the current version of the object.</p></td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Cite_log.js.html">Cite/log.js</a>, <a href="Cite_log.js.html#line15">line 15</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-<h5>Returns:</h5>
-
-        
-<div class="param-desc">
-    <p>The version of the object with the version number passed. <code>undefined</code> if an illegal number is passed.</p>
 </div>
-
-
-
-<dl>
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type"><a href="Cite.html">Cite</a></span>
-
-
-    </dd>
-</dl>
-
-    
-
-
-
-
-
         
             
+<div class="section-method">
 
     
 
-    
-    <h4 class="name" id=".save"><span class="type-signature">(static) </span>save<span class="signature">()</span><span class="type-signature"> &rarr; {<a href="Cite.html">Cite</a>}</span></h4>
-    
-
-    
-
-
-
-<div class="description">
-    <p>Save an image of the current version of the object.</p>
-</div>
-
-
-
-
-
-
-
-    <h5>This:</h5>
-    <ul><li><a href="Cite.html">Cite</a></li></ul>
-
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Cite_log.js.html">Cite/log.js</a>, <a href="Cite_log.js.html#line65">line 65</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-<h5>Returns:</h5>
-
-        
-<div class="param-desc">
-    <p>The current version of the object.</p>
-</div>
-
-
-
-<dl>
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type"><a href="Cite.html">Cite</a></span>
-
-
-    </dd>
-</dl>
-
-    
-
-
-
-
-
-        
-            
-
-    
-
-    
-    <h4 class="name" id=".set"><span class="type-signature">(static) </span>set<span class="signature">(data, options<span class="signature-attributes">opt</span>, log<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {<a href="Cite.html">Cite</a>}</span></h4>
-    
-
-    
-
-
-
-<div class="description">
-    <p>Recreate a <code>Cite</code> object with almost any kind of data, and manipulate it with its default methods.</p>
-</div>
-
-
-
-
-
-
-
-    <h5>This:</h5>
-    <ul><li><a href="Cite.html">Cite</a></li></ul>
-
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-        <th>Attributes</th>
-        
-
-        
-        <th>Default</th>
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>data</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">String</span>
-|
-
-<span class="param-type"><a href="CSL.html">CSL</a></span>
-|
-
-<span class="param-type">Object</span>
-|
-
-<span class="param-type">Array.&lt;String></span>
-|
-
-<span class="param-type">Array.&lt;<a href="CSL.html">CSL</a>></span>
-|
-
-<span class="param-type">Array.&lt;Object></span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-
-                
-
-                
-                </td>
-            
-
-            
-                <td class="default">
-                
-                </td>
-            
-
-            <td class="description last"><p>Replacement data</p></td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>options</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">Object</span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-
-                
-                </td>
-            
-
-            
-                <td class="default">
-                
-                    {}
-                
-                </td>
-            
-
-            <td class="description last"><p><a href="../#cite.in.options">Options</a></p></td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>log</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">Boolean</span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-
-                
-                </td>
-            
-
-            
-                <td class="default">
-                
-                    false
-                
-                </td>
-            
-
-            <td class="description last"><p>Show this call in the log</p></td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Cite_set.js.html">Cite/set.js</a>, <a href="Cite_set.js.html#line59">line 59</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-<h5>Returns:</h5>
-
-        
-<div class="param-desc">
-    <p>The updated parent object</p>
-</div>
-
-
-
-<dl>
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type"><a href="Cite.html">Cite</a></span>
-
-
-    </dd>
-</dl>
-
-    
-
-
-
-
-
-        
-            
-
-    
-
-    
-    <h4 class="name" id=".setAsync"><span class="type-signature">(static) </span>setAsync<span class="signature">(data, options<span class="signature-attributes">opt</span>, log<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {<a href="Cite.html">Cite</a>}</span></h4>
-    
-
-    
-
-
-
-<div class="description">
-    <p>Recreate a <code>Cite</code> object with almost any kind of data, and manipulate it with its default methods.</p>
-</div>
-
-
-
-
-
-
-
-    <h5>This:</h5>
-    <ul><li><a href="Cite.html">Cite</a></li></ul>
-
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-        <th>Attributes</th>
-        
-
-        
-        <th>Default</th>
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>data</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">String</span>
-|
-
-<span class="param-type"><a href="CSL.html">CSL</a></span>
-|
-
-<span class="param-type">Object</span>
-|
-
-<span class="param-type">Array.&lt;String></span>
-|
-
-<span class="param-type">Array.&lt;<a href="CSL.html">CSL</a>></span>
-|
-
-<span class="param-type">Array.&lt;Object></span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-
-                
-
-                
-                </td>
-            
-
-            
-                <td class="default">
-                
-                </td>
-            
-
-            <td class="description last"><p>Replacement data</p></td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>options</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">Object</span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-
-                
-                </td>
-            
-
-            
-                <td class="default">
-                
-                    {}
-                
-                </td>
-            
-
-            <td class="description last"><p><a href="../#cite.in.options">Options</a></p></td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>log</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">Boolean</span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-
-                
-                </td>
-            
-
-            
-                <td class="default">
-                
-                    false
-                
-                </td>
-            
-
-            <td class="description last"><p>Show this call in the log</p></td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Cite_set.js.html">Cite/set.js</a>, <a href="Cite_set.js.html#line81">line 81</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-<h5>Returns:</h5>
-
-        
-<div class="param-desc">
-    <p>The updated parent object</p>
-</div>
-
-
-
-<dl>
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type"><a href="Cite.html">Cite</a></span>
-
-
-    </dd>
-</dl>
-
-    
-
-
-
-
-
-        
-            
-
-    
-
-    
-    <h4 class="name" id=".sort"><span class="type-signature">(static) </span>sort<span class="signature">(method<span class="signature-attributes">opt</span>, log<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {<a href="Cite.html">Cite</a>}</span></h4>
-    
-
-    
-
-
-
-<div class="description">
-    <p>Sort the dataset</p>
-</div>
-
-
-
-
-
-
-
-    <h5>This:</h5>
-    <ul><li><a href="Cite.html">Cite</a></li></ul>
-
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-        <th>Attributes</th>
-        
-
-        
-        <th>Default</th>
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>method</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type"><a href="Cite.html#~sort">Cite~sort</a></span>
-|
-
-<span class="param-type">Array.&lt;String></span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-
-                
-                </td>
-            
-
-            
-                <td class="default">
-                
-                    []
-                
-                </td>
-            
-
-            <td class="description last"><p>How to sort</p></td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>log</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">Boolean</span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-
-                
-                </td>
-            
-
-            
-                <td class="default">
-                
-                    false
-                
-                </td>
-            
-
-            <td class="description last"><p>Show this call in the log</p></td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Cite_sort.js.html">Cite/sort.js</a>, <a href="Cite_sort.js.html#line86">line 86</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-<h5>Returns:</h5>
-
-        
-<div class="param-desc">
-    <p>The updated parent object</p>
-</div>
-
-
-
-<dl>
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type"><a href="Cite.html">Cite</a></span>
-
-
-    </dd>
-</dl>
-
-    
-
-
-
-
-
-        
-            
-
-    
-
-    
-    <h4 class="name" id=".undo"><span class="type-signature">(static) </span>undo<span class="signature">()</span><span class="type-signature"> &rarr; {<a href="Cite.html">Cite</a>}</span></h4>
-    
+    <h4 class="name" id="retrieveLastVersion"><span class="type-signature"></span>retrieveLastVersion<span class="signature">()</span><span class="type-signature"> &rarr; {<a href="Cite.html">Cite</a>}</span></h4>
 
     
 
@@ -2948,17 +2315,6 @@
 <div class="description">
     <p>Returns the last saved image of the object.</p>
 </div>
-
-
-
-
-
-
-
-    <h5>This:</h5>
-    <ul><li><a href="Cite.html">Cite</a></li></ul>
-
-
 
 
 
@@ -3016,41 +2372,1082 @@
 
 
 
+
+
+
+
+
+
+
+
+<div class="section-returns">
 <h5>Returns:</h5>
 
         
-<div class="param-desc">
-    <p>The last version of the object. <code>undefined</code> if used on first version.</p>
-</div>
 
-
-
-<dl>
+<dl class="param-type">
     <dt>
-        Type
+        Type:
     </dt>
     <dd>
         
-<span class="param-type"><a href="Cite.html">Cite</a></span>
+<span class="param-type"><code><a href="Cite.html">Cite</a></code></span>
 
 
     </dd>
 </dl>
 
+
+<div class="param-desc">
+    <p>The last version of the object. <code>undefined</code> if used on first version.</p>
+</div>
+
     
+</div>
 
 
 
-
-
+</div>
         
             
+<div class="section-method">
+
+    
+
+    <h4 class="name" id="retrieveVersion"><span class="type-signature"></span>retrieveVersion<span class="signature">(versnum<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {<a href="Cite.html">Cite</a>}</span></h4>
+
+    
+
+
+
+<div class="description">
+    <p>Returns an image of the object in the version specified.</p>
+</div>
+
+
+
+
+
+<dl class="details">
 
     
 
     
-    <h4 class="name" id=".undo"><span class="type-signature">(static) </span>undo<span class="signature">(number<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {<a href="Cite.html">Cite</a>}</span></h4>
+
     
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="Cite_log.js.html">Cite/log.js</a>, <a href="Cite_log.js.html#line21">line 21</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+        <th>Default</th>
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>versnum</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code>Number</code></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    1
+                
+                </td>
+            
+
+            <td class="description last">
+                <p>The number of the version you want to retrieve. Illegal numbers: numbers under or equal to zero, floats, numbers above the current version of the object.</p>
+                
+            </td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="section-returns">
+<h5>Returns:</h5>
+
+        
+
+<dl class="param-type">
+    <dt>
+        Type:
+    </dt>
+    <dd>
+        
+<span class="param-type"><code><a href="Cite.html">Cite</a></code></span>
+
+
+    </dd>
+</dl>
+
+
+<div class="param-desc">
+    <p>The version of the object with the version number passed. <code>undefined</code> if an illegal number is passed.</p>
+</div>
+
+    
+</div>
+
+
+
+</div>
+        
+            
+<div class="section-method">
+
+    
+
+    <h4 class="name" id="save"><span class="type-signature"></span>save<span class="signature">()</span><span class="type-signature"> &rarr; {<a href="Cite.html">Cite</a>}</span></h4>
+
+    
+
+
+
+<div class="description">
+    <p>Save an image of the current version of the object.</p>
+</div>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="Cite_log.js.html">Cite/log.js</a>, <a href="Cite_log.js.html#line63">line 63</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="section-returns">
+<h5>Returns:</h5>
+
+        
+
+<dl class="param-type">
+    <dt>
+        Type:
+    </dt>
+    <dd>
+        
+<span class="param-type"><code><a href="Cite.html">Cite</a></code></span>
+
+
+    </dd>
+</dl>
+
+
+<div class="param-desc">
+    <p>The current version of the object.</p>
+</div>
+
+    
+</div>
+
+
+
+</div>
+        
+            
+<div class="section-method">
+
+    
+
+    <h4 class="name" id="set"><span class="type-signature"></span>set<span class="signature">(data, options<span class="signature-attributes">opt</span>, log<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {<a href="Cite.html">Cite</a>}</span></h4>
+
+    
+
+
+
+<div class="description">
+    <p>Recreate a <code>Cite</code> object with almost any kind of data, and manipulate it with its default methods.</p>
+</div>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="Cite_set.js.html">Cite/set.js</a>, <a href="Cite_set.js.html#line66">line 66</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+        <th>Default</th>
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>data</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code>Cite~InputData</code></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last">
+                <p>Replacement data</p>
+                
+            </td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>options</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code>Object</code></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    {}
+                
+                </td>
+            
+
+            <td class="description last">
+                <p><a href="../#cite.in.options">Options</a></p>
+                
+            </td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>log</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code>Boolean</code></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    false
+                
+                </td>
+            
+
+            <td class="description last">
+                <p>Show this call in the log</p>
+                
+            </td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="section-returns">
+<h5>Returns:</h5>
+
+        
+
+<dl class="param-type">
+    <dt>
+        Type:
+    </dt>
+    <dd>
+        
+<span class="param-type"><code><a href="Cite.html">Cite</a></code></span>
+
+
+    </dd>
+</dl>
+
+
+<div class="param-desc">
+    <p>The updated parent object</p>
+</div>
+
+    
+</div>
+
+
+
+</div>
+        
+            
+<div class="section-method">
+
+    
+
+    <h4 class="name" id="setAsync"><span class="type-signature">(async) </span>setAsync<span class="signature">(data, options<span class="signature-attributes">opt</span>, log<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise.&lt;<a href="Cite.html">Cite</a>>}</span></h4>
+
+    
+
+
+
+<div class="description">
+    <p>Recreate a <code>Cite</code> object with almost any kind of data, and manipulate it with its default methods.</p>
+</div>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="Cite_set.js.html">Cite/set.js</a>, <a href="Cite_set.js.html#line86">line 86</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+        <th>Default</th>
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>data</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code>Cite~InputData</code></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last">
+                <p>Replacement data</p>
+                
+            </td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>options</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code>Object</code></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    {}
+                
+                </td>
+            
+
+            <td class="description last">
+                <p><a href="../#cite.in.options">Options</a></p>
+                
+            </td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>log</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code>Boolean</code></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    false
+                
+                </td>
+            
+
+            <td class="description last">
+                <p>Show this call in the log</p>
+                
+            </td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="section-returns">
+<h5>Returns:</h5>
+
+        
+
+<dl class="param-type">
+    <dt>
+        Type:
+    </dt>
+    <dd>
+        
+<span class="param-type"><code>Promise.&lt;<a href="Cite.html">Cite</a>></code></span>
+
+
+    </dd>
+</dl>
+
+
+<div class="param-desc">
+    <p>The updated parent object</p>
+</div>
+
+    
+</div>
+
+
+
+</div>
+        
+            
+<div class="section-method">
+
+    
+
+    <h4 class="name" id="sort"><span class="type-signature"></span>sort<span class="signature">(method<span class="signature-attributes">opt</span>, log<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {<a href="Cite.html">Cite</a>}</span></h4>
+
+    
+
+
+
+<div class="description">
+    <p>Sort the dataset</p>
+</div>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="Cite_sort.js.html">Cite/sort.js</a>, <a href="Cite_sort.js.html#line103">line 103</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+        <th>Default</th>
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>method</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code><a href="Cite.html#~sort">Cite~sort</a></code></span>
+|
+
+<span class="param-type"><code>Array.&lt;String></code></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    []
+                
+                </td>
+            
+
+            <td class="description last">
+                <p>How to sort</p>
+                
+            </td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>log</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code>Boolean</code></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    false
+                
+                </td>
+            
+
+            <td class="description last">
+                <p>Show this call in the log</p>
+                
+            </td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="section-returns">
+<h5>Returns:</h5>
+
+        
+
+<dl class="param-type">
+    <dt>
+        Type:
+    </dt>
+    <dd>
+        
+<span class="param-type"><code><a href="Cite.html">Cite</a></code></span>
+
+
+    </dd>
+</dl>
+
+
+<div class="param-desc">
+    <p>The updated parent object</p>
+</div>
+
+    
+</div>
+
+
+
+</div>
+        
+            
+<div class="section-method">
+
+    
+
+    <h4 class="name" id="undo"><span class="type-signature"></span>undo<span class="signature">(number<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {<a href="Cite.html">Cite</a>}</span></h4>
 
     
 
@@ -3064,10 +3461,51 @@
 
 
 
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="Cite_log.js.html">Cite/log.js</a>, <a href="Cite_log.js.html#line41">line 41</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
 
 
-    <h5>This:</h5>
-    <ul><li><a href="Cite.html">Cite</a></li></ul>
+
+
+
+
 
 
 
@@ -3106,7 +3544,7 @@
             <td class="type">
             
                 
-<span class="param-type">Number</span>
+<span class="param-type"><code>Number</code></span>
 
 
             
@@ -3132,12 +3570,73 @@
                 </td>
             
 
-            <td class="description last"><p>number of versions to go back.</p></td>
+            <td class="description last">
+                <p>number of versions to go back.</p>
+                
+            </td>
         </tr>
 
     
     </tbody>
 </table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="section-returns">
+<h5>Returns:</h5>
+
+        
+
+<dl class="param-type">
+    <dt>
+        Type:
+    </dt>
+    <dd>
+        
+<span class="param-type"><code><a href="Cite.html">Cite</a></code></span>
+
+
+    </dd>
+</dl>
+
+
+<div class="param-desc">
+    <p>The second to last version of the object. <code>undefined</code> if used on first version.</p>
+</div>
+
+    
+</div>
+
+
+
+</div>
+        
+    
+
+    
+        <h3 class="subsection-title">Type Definitions</h3>
+
+        
+                
+<div class="section-method">
+
+    
+
+    <h4 class="name" id="~asyncCallback"><span class="type-signature"></span>asyncCallback<span class="signature">(data)</span><span class="type-signature"></span></h4>
+
+    
+
 
 
 
@@ -3173,7 +3672,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Cite_log.js.html">Cite/log.js</a>, <a href="Cite_log.js.html#line37">line 37</a>
+        <a href="async_index.js.html">async/index.js</a>, <a href="async_index.js.html#line4">line 4</a>
     </li></ul></dd>
     
 
@@ -3183,64 +3682,6 @@
 
     
 </dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-<h5>Returns:</h5>
-
-        
-<div class="param-desc">
-    <p>The second to last version of the object. <code>undefined</code> if used on first version.</p>
-</div>
-
-
-
-<dl>
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type"><a href="Cite.html">Cite</a></span>
-
-
-    </dd>
-</dl>
-
-    
-
-
-
-
-
-        
-    
-
-    
-        <h3 class="subsection-title">Type Definitions</h3>
-
-        
-                
-
-    
-
-    
-    <h4 class="name" id="~asyncCite"><span class="type-signature"></span>asyncCite<span class="signature">(data)</span><span class="type-signature"></span></h4>
-    
-
-    
-
-
 
 
 
@@ -3281,7 +3722,7 @@
             <td class="type">
             
                 
-<span class="param-type"><a href="Cite.html">Cite</a></span>
+<span class="param-type"><code><a href="Cite.html">Cite</a></code></span>
 
 
             
@@ -3291,7 +3732,10 @@
 
             
 
-            <td class="description last"><p>Cite object</p></td>
+            <td class="description last">
+                <p>Cite object</p>
+                
+            </td>
         </tr>
 
     
@@ -3303,45 +3747,6 @@
 
 
 
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="callbacks.docs.js.html">callbacks.docs.js</a>, <a href="callbacks.docs.js.html#line24">line 24</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
 
 
 
@@ -3352,39 +3757,28 @@
 
 
 
-
-
-
-
-
-
-
-
+</div>
             
                 
+<div class="section-members">
+<h4 class="name" id="~InputOptions">InputOptions</h4>
+
+
+
+
+<div class="description">
+    <p>Citation.js <a href="tutorial-input_options.html">Input Options</a></p>
+</div>
+
+
+
+
+
+    <h5 class="subsection-title">Properties:</h5>
 
     
 
-    
-    <h4 class="name" id="~retrieveItem"><span class="type-signature"></span>retrieveItem<span class="signature">(id)</span><span class="type-signature"> &rarr; {<a href="CSL.html">CSL</a>}</span></h4>
-    
-
-    
-
-
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
+<table class="props">
     <thead>
     <tr>
         
@@ -3406,13 +3800,13 @@
 
         <tr>
             
-                <td class="name"><code>id</code></td>
+                <td class="name"><code>output</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">String</span>
+<span class="param-type"><code><a href="Cite.html#~OutputOptions">Cite~OutputOptions</a></code></span>
 
 
             
@@ -3422,14 +3816,89 @@
 
             
 
-            <td class="description last"><p>Citation id</p></td>
+            <td class="description last"></td>
         </tr>
+
+        
+
+    
+
+        <tr>
+            
+                <td class="name"><code>maxChainLength</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code>Number</code></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+        
+
+    
+
+        <tr>
+            
+                <td class="name"><code>generateGraph</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code>Boolean</code></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+        
+
+    
+
+        <tr>
+            
+                <td class="name"><code>forceType</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code><a href="Cite.parse.html#~format">Cite.parse~format</a></code></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+        
 
     
     </tbody>
 </table>
-
-
 
 
 
@@ -3463,11 +3932,18 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="callbacks.docs.js.html">callbacks.docs.js</a>, <a href="callbacks.docs.js.html#line5">line 5</a>
+        <a href="Cite_index.js.html">Cite/index.js</a>, <a href="Cite_index.js.html#line14">line 14</a>
     </li></ul></dd>
     
 
     
+    <dt class="tag-tutorial">Tutorials:</dt>
+    <dd class="tag-tutorial">
+        <ul>
+            <li><a href="tutorial-input_options.html">Input Options</a></li>
+        </ul>
+    </dd>
+    
 
     
 
@@ -3476,68 +3952,43 @@
 
 
 
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type"><code>Object</code></span>
+
+
+        </li>
+    </ul>
 
 
 
 
 
+</div>
+
+            
+                
+<div class="section-members">
+<h4 class="name" id="~OutputOptions">OutputOptions</h4>
 
 
 
 
-
-<h5>Returns:</h5>
-
-        
-<div class="param-desc">
-    <p>CSL Citation object</p>
+<div class="description">
+    <p>Citation.js <a href="tutorial-output_options.html">Ouput Options</a></p>
 </div>
 
 
 
-<dl>
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type"><a href="CSL.html">CSL</a></span>
 
 
-    </dd>
-</dl>
+    <h5 class="subsection-title">Properties:</h5>
 
     
 
-
-
-
-
-            
-                
-
-    
-
-    
-    <h4 class="name" id="~retrieveLocale"><span class="type-signature"></span>retrieveLocale<span class="signature">(lang)</span><span class="type-signature"> &rarr; {String}</span></h4>
-    
-
-    
-
-
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
+<table class="props">
     <thead>
     <tr>
         
@@ -3555,6 +4006,81 @@
     </thead>
 
     <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>format</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code>String</code></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+        
+
+    
+
+        <tr>
+            
+                <td class="name"><code>type</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code>String</code></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+        
+
+    
+
+        <tr>
+            
+                <td class="name"><code>style</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code>String</code></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+        
+
     
 
         <tr>
@@ -3565,7 +4091,7 @@
             <td class="type">
             
                 
-<span class="param-type">String</span>
+<span class="param-type"><code>String</code></span>
 
 
             
@@ -3575,12 +4101,149 @@
 
             
 
-            <td class="description last"><p>Language code</p></td>
+            <td class="description last"></td>
         </tr>
+
+        
+
+    
+
+        <tr>
+            
+                <td class="name"><code>prepend</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code>String</code></span>
+|
+
+<span class="param-type"><code><a href="Cite.html#~wrapper">Cite~wrapper</a></code></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+        
+
+    
+
+        <tr>
+            
+                <td class="name"><code>append</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code>String</code></span>
+|
+
+<span class="param-type"><code><a href="Cite.html#~wrapper">Cite~wrapper</a></code></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+        
 
     
     </tbody>
 </table>
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="Cite_index.js.html">Cite/index.js</a>, <a href="Cite_index.js.html#line26">line 26</a>
+    </li></ul></dd>
+    
+
+    
+    <dt class="tag-tutorial">Tutorials:</dt>
+    <dd class="tag-tutorial">
+        <ul>
+            <li><a href="tutorial-output_options.html">Ouput Options</a></li>
+        </ul>
+    </dd>
+    
+
+    
+
+    
+</dl>
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type"><code>Object</code></span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
+</div>
+
+            
+                
+<div class="section-method">
+
+    
+
+    <h4 class="name" id="~sort"><span class="type-signature"></span>sort<span class="signature">(a, b)</span><span class="type-signature"> &rarr; {Number}</span></h4>
+
+    
+
 
 
 
@@ -3616,7 +4279,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="callbacks.docs.js.html">callbacks.docs.js</a>, <a href="callbacks.docs.js.html#line11">line 11</a>
+        <a href="Cite_sort.js.html">Cite/sort.js</a>, <a href="Cite_sort.js.html#line4">line 4</a>
     </li></ul></dd>
     
 
@@ -3626,58 +4289,6 @@
 
     
 </dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-<h5>Returns:</h5>
-
-        
-<div class="param-desc">
-    <p>CSL Locale</p>
-</div>
-
-
-
-<dl>
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">String</span>
-
-
-    </dd>
-</dl>
-
-    
-
-
-
-
-
-            
-                
-
-    
-
-    
-    <h4 class="name" id="~sort"><span class="type-signature"></span>sort<span class="signature">(a, b)</span><span class="type-signature"> &rarr; {Number}</span></h4>
-    
-
-    
-
-
 
 
 
@@ -3718,7 +4329,7 @@
             <td class="type">
             
                 
-<span class="param-type"><a href="CSL.html">CSL</a></span>
+<span class="param-type"><code><a href="global.html#CSL">CSL</a></code></span>
 
 
             
@@ -3728,7 +4339,10 @@
 
             
 
-            <td class="description last"><p>element a</p></td>
+            <td class="description last">
+                <p>element a</p>
+                
+            </td>
         </tr>
 
     
@@ -3741,7 +4355,7 @@
             <td class="type">
             
                 
-<span class="param-type"><a href="CSL.html">CSL</a></span>
+<span class="param-type"><code><a href="global.html#CSL">CSL</a></code></span>
 
 
             
@@ -3751,12 +4365,67 @@
 
             
 
-            <td class="description last"><p>element b</p></td>
+            <td class="description last">
+                <p>element b</p>
+                
+            </td>
         </tr>
 
     
     </tbody>
 </table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="section-returns">
+<h5>Returns:</h5>
+
+        
+
+<dl class="param-type">
+    <dt>
+        Type:
+    </dt>
+    <dd>
+        
+<span class="param-type"><code>Number</code></span>
+
+
+    </dd>
+</dl>
+
+
+<div class="param-desc">
+    <p>positive for a &gt; b, negative for b &gt; a, zero for a = b</p>
+</div>
+
+    
+</div>
+
+
+
+</div>
+            
+                
+<div class="section-method">
+
+    
+
+    <h4 class="name" id="~wrapper"><span class="type-signature"></span>wrapper<span class="signature">(data)</span><span class="type-signature"> &rarr; {String}</span></h4>
+
+    
+
 
 
 
@@ -3792,7 +4461,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="callbacks.docs.js.html">callbacks.docs.js</a>, <a href="callbacks.docs.js.html#line17">line 17</a>
+        <a href="Cite_index.js.html">Cite/index.js</a>, <a href="Cite_index.js.html#line40">line 40</a>
     </li></ul></dd>
     
 
@@ -3802,58 +4471,6 @@
 
     
 </dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-<h5>Returns:</h5>
-
-        
-<div class="param-desc">
-    <p>positive for a &gt; b, negative for b &gt; a, zero for a = b</p>
-</div>
-
-
-
-<dl>
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">Number</span>
-
-
-    </dd>
-</dl>
-
-    
-
-
-
-
-
-            
-                
-
-    
-
-    
-    <h4 class="name" id="~wrapper"><span class="type-signature"></span>wrapper<span class="signature">(data)</span><span class="type-signature"> &rarr; {String}</span></h4>
-    
-
-    
-
-
 
 
 
@@ -3894,7 +4511,7 @@
             <td class="type">
             
                 
-<span class="param-type"><a href="CSL.html">CSL</a></span>
+<span class="param-type"><code><a href="global.html#CSL">CSL</a></code></span>
 
 
             
@@ -3904,7 +4521,10 @@
 
             
 
-            <td class="description last"><p>Cite object</p></td>
+            <td class="description last">
+                <p>Cite object</p>
+                
+            </td>
         </tr>
 
     
@@ -3916,45 +4536,6 @@
 
 
 
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="callbacks.docs.js.html">callbacks.docs.js</a>, <a href="callbacks.docs.js.html#line29">line 29</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
 
 
 
@@ -3963,38 +4544,34 @@
 
 
 
-
-
-
-
-
+<div class="section-returns">
 <h5>Returns:</h5>
 
         
-<div class="param-desc">
-    <p>wrapping string</p>
-</div>
 
-
-
-<dl>
+<dl class="param-type">
     <dt>
-        Type
+        Type:
     </dt>
     <dd>
         
-<span class="param-type">String</span>
+<span class="param-type"><code>String</code></span>
 
 
     </dd>
 </dl>
 
+
+<div class="param-desc">
+    <p>wrapping string</p>
+</div>
+
     
+</div>
 
 
 
-
-
+</div>
             
     
 
@@ -4008,14 +4585,10 @@
 
 </div>
 
-<nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Cite.html">Cite</a></li><li><a href="CSL.html">CSL</a></li><li><a href="TokenStack.html">TokenStack</a></li><li><a href="TokenStack-pattern.html">pattern</a></li><li><a href="TokenStack-sequence.html">sequence</a></li></ul><h3>Global</h3><ul><li><a href="global.html#addLocale">addLocale</a></li><li><a href="global.html#addTemplate">addTemplate</a></li><li><a href="global.html#applyGraph">applyGraph</a></li><li><a href="global.html#async">async</a></li><li><a href="global.html#deepCopy">deepCopy</a></li><li><a href="global.html#fetchBibTeXType">fetchBibTeXType</a></li><li><a href="global.html#fetchCSLEngine">fetchCSLEngine</a></li><li><a href="global.html#fetchCSLItemCallback">fetchCSLItemCallback</a></li><li><a href="global.html#fetchCSLLocale">fetchCSLLocale</a></li><li><a href="global.html#fetchCSLStyle">fetchCSLStyle</a></li><li><a href="global.html#fetchDoiType">fetchDoiType</a></li><li><a href="global.html#fetchFile">fetchFile</a></li><li><a href="global.html#fetchFileAsync">fetchFileAsync</a></li><li><a href="global.html#fetchId">fetchId</a></li><li><a href="global.html#fetchWikidataType">fetchWikidataType</a></li><li><a href="global.html#getAttributedEntry">getAttributedEntry</a></li><li><a href="global.html#getBibTeX">getBibTeX</a></li><li><a href="global.html#getBibTeXJSON">getBibTeXJSON</a></li><li><a href="global.html#getBibTeXLabel">getBibTeXLabel</a></li><li><a href="global.html#getBibTxt">getBibTxt</a></li><li><a href="global.html#getDate">getDate</a></li><li><a href="global.html#getJSON">getJSON</a></li><li><a href="global.html#getLabel">getLabel</a></li><li><a href="global.html#getLocale">getLocale</a></li><li><a href="global.html#getName">getName</a></li><li><a href="global.html#getPrefixedEntry">getPrefixedEntry</a></li><li><a href="global.html#getTemplate">getTemplate</a></li><li><a href="global.html#getWrappedEntry">getWrappedEntry</a></li><li><a href="global.html#hasLocale">hasLocale</a></li><li><a href="global.html#hasTemplate">hasTemplate</a></li><li><a href="global.html#htmlDict">htmlDict</a></li><li><a href="global.html#parseBibTeX">parseBibTeX</a></li><li><a href="global.html#parseBibTeXJSON">parseBibTeXJSON</a></li><li><a href="global.html#parseBibTeXProp">parseBibTeXProp</a></li><li><a href="global.html#parseBibTeXType">parseBibTeXType</a></li><li><a href="global.html#parseBibTxt">parseBibTxt</a></li><li><a href="global.html#parseBibTxtEntry">parseBibTxtEntry</a></li><li><a href="global.html#parseContentMine">parseContentMine</a></li><li><a href="global.html#parseCsl">parseCsl</a></li><li><a href="global.html#parseDate">parseDate</a></li><li><a href="global.html#parseDoi">parseDoi</a></li><li><a href="global.html#parseDoiApi">parseDoiApi</a></li><li><a href="global.html#parseDoiApiAsync">parseDoiApiAsync</a></li><li><a href="global.html#parseDoiJson">parseDoiJson</a></li><li><a href="global.html#parseInput">parseInput</a></li><li><a href="global.html#parseInputAsync">parseInputAsync</a></li><li><a href="global.html#parseInputChainLink">parseInputChainLink</a></li><li><a href="global.html#parseInputChainLinkAsync">parseInputChainLinkAsync</a></li><li><a href="global.html#parseInputData">parseInputData</a></li><li><a href="global.html#parseInputDataAsync">parseInputDataAsync</a></li><li><a href="global.html#parseInputType">parseInputType</a></li><li><a href="global.html#parseJSON">parseJSON</a></li><li><a href="global.html#parseName">parseName</a></li><li><a href="global.html#parseWikidata">parseWikidata</a></li><li><a href="global.html#parseWikidataJSON">parseWikidataJSON</a></li><li><a href="global.html#parseWikidataJSONAsync">parseWikidataJSONAsync</a></li><li><a href="global.html#parseWikidataProp">parseWikidataProp</a></li><li><a href="global.html#parseWikidataPropAsync">parseWikidataPropAsync</a></li><li><a href="global.html#removeGraph">removeGraph</a></li><li><a href="global.html#textDict">textDict</a></li><li><a href="global.html#varRegex">varRegex</a></li></ul>
-</nav>
-
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.3</a>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a>
 </footer>
 
 <script> prettyPrint(); </script>
