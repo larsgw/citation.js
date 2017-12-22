@@ -1,18 +1,43 @@
 # Changelog
 
-## [Unreleased]
+## [0.4.0-0] - 2017-12-22
+
+### Added
+* New parsing system w/ plugins
+
+> This change should be mostly backwards-compatible, although certain workarounds may stop working. If there's an issue, please report it [here](https://github.com/larsgw/citation.js/issues)
+
+* Support for dynamic output types
+* Greatly improved docs
+* Map namespaces in JSDoc comments
+* Add tutorials
+
+### Changed
+* `Cite#options()` now doesn't update options when they are invalid
+* Improved BibTeX field mappings
+* Support month names in BibTeX
+* CLI logging now on stderr (instead of stdout)
+
+## [0.3.4] - 2017-09-12
+
+### Changed
+* Updated README
+
+### Fixed
+* Command sequence normalisation in BibTeX
+* BibTeX test case output
 
 ## [0.3.3] - 2017-09-12
 
-## Added
+### Added
 * A lot of Wikidata entry type mappings
 * Support for option-less piping stdin -> stdout in the CLI
 
-## Changed
+### Changed
 * Greatly improve name parsing
 * Wikidata entry type default is now `book` to align with, among other things, BibTeX
 
-## Fixed
+### Fixed
 * Unknown Wikidata entry type now actually defaults to something
 * CLI now uses the API changed in 0.3.1
 
