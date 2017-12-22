@@ -2,7 +2,7 @@ import {validateOptions as validate} from './static'
 
 /**
  * @memberof Cite#
- * 
+ *
  * @property {Cite~OutputOptions} defaultOptions - default output options
  */
 const defaultOptions = {format: 'real', type: 'json', style: 'csl', lang: 'en-US'}
@@ -24,13 +24,12 @@ const options = function (options, log) {
 
   try {
     validate(options)
+    Object.assign(this._options, options)
   } catch ({message}) {
     logger.warn('[options]', message)
-  } finally {
-    Object.assign(this._options, options)
-
-    return this
   }
+
+  return this
 }
 
 export { options, defaultOptions }

@@ -23,7 +23,7 @@ export const types = {
   },
   '@empty': {
     dataType: 'Primitive',
-    parseType: input => input === null || input === undefined
+    parseType: input => input == null
   },
   '@else/json': {
     dataType: 'String',

@@ -52,7 +52,7 @@ const parseBibTxtEntry = entry => {
 }
 
 /**
- * Format Bib.TXT data
+ * Parse Bib.TXT data
  *
  * @access protected
  * @method parseBibTxt
