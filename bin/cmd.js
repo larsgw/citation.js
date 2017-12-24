@@ -56,7 +56,7 @@ program
           'Output structure type: string, html, json',
           'json')
   .option('-s, --output-style <option>',
-          'Ouput scheme. A combination of --output-format json and --output-style citation-* is considered invalid. ' +
+          'Output scheme. A combination of --output-format json and --output-style citation-* is considered invalid. ' +
           'Options: csl (Citation Style Lanugage JSON), bibtex, citation-* (where * is any formatting style)',
           'csl')
   .option('-l, --output-language <option>',
