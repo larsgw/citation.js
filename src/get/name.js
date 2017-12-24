@@ -5,7 +5,7 @@
  * @memberof Cite.output
  *
  * @param {Object} name - CSL input
- * @param {Boolean} [reversed=false] - ouput name as 'family, given'
+ * @param {Boolean} [reversed=false] - output name as 'family, given'
  *
  * @return {String} Full name
  */

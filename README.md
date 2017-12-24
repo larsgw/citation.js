@@ -74,7 +74,7 @@ Run the CLI like this:
       
       -R, --output-non-real           Do not output the file in its mime type, but as a string
       -f, --output-type <option>      Output structure type: string, html, json
-      -s, --output-style <option>     Ouput scheme. A combination of --output-format json and --output-style citation-* is considered invalid. Options: csl (Citation Style Lanugage JSON), bibtex, citation-* (where * is any formatting style)
+      -s, --output-style <option>     Output scheme. A combination of --output-format json and --output-style citation-* is considered invalid. Options: csl (Citation Style Lanugage JSON), bibtex, citation-* (where * is any formatting style)
       -l, --output-language <option>  Output language. [RFC 5646](https://tools.ietf.org/html/rfc5646) codes
 
 # `Cite`
