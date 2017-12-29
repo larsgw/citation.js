@@ -1,10 +1,10 @@
 import { validateOutputOptions as validate } from './static'
 import { getPrefixedEntry, getWrappedEntry } from '../util/attr.js'
 
-import getBibTeXJSON from '../get/bibtex/json'
-import getBibTeX from '../get/bibtex/text'
-import getBibTxt from '../get/bibtxt'
-import getJSON from '../get/json'
+import getBibTeXJSON from '../get/modules/bibtex/json'
+import getBibTeX from '../get/modules/bibtex/text'
+import getBibTxt from '../get/modules/bibtex/bibtxt'
+import {getJsonWrapper as getJSON} from '../get/modules/json'
 
 import parseCsl from '../parse/csl'
 

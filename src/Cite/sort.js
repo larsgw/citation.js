@@ -1,4 +1,4 @@
-import getLabel from '../get/label'
+import {getLabel} from '../get/modules/label'
 import getName from '../get/name'
 
 /**

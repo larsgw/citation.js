@@ -2,7 +2,7 @@
  * Convert a CSL date into human-readable format
  *
  * @access protected
- * @memberof Cite.output
+ * @memberof Cite.get
  *
  * @param {Object} date - A date in CSL format
  *

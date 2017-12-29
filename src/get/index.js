@@ -1,14 +1,33 @@
 /**
- * @namespace output
+ * @namespace get
  * @memberof Cite
  */
 
-import * as bibtex from './bibtex/index'
-import bibtxt from './bibtxt'
 import * as dict from './dict'
-import json from './json'
 import date from './date'
 import name from './name'
-import label from './label'
 
-export { bibtex, bibtxt, dict, json, date, name, label }
+import './modules/'
+
+// BEGIN compat
+import bibtexJson from './modules/bibtex/json'
+import bibtexLabel from './modules/bibtex/label'
+import bibtexText from './modules/bibtex/text'
+import bibtexType from './modules/bibtex/type'
+
+import bibtxt from './modules/bibtex/bibtxt'
+import {getJsonWrapper as json} from './modules/json'
+import {getLabel as label} from './modules/label'
+
+export const bibtex = {
+  json: bibtexJson,
+  label: bibtexLabel,
+  text: bibtexText,
+  type: bibtexType
+}
+export {bibtxt, json, label}
+// END compat
+
+export {date, name, dict}
+
+export * from './registrar'
