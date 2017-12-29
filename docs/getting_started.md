@@ -19,7 +19,7 @@ Browser releases are available [here](https://github.com/larsgw/citation.js/tree
 ```html
 <script src="path/to/citation.js" type="text/javascript"></script>
 <script>
-  const Cite = require('citation.js')
+  const Cite = require('citation-js')
 </script>
 ```
 
@@ -33,7 +33,7 @@ Alternatively, you can use services as [rawgit.com](https://rawgit.com/) or the 
 > The examples use version `0.3.4`; this can be replaced with other versions
 
 > Note that
-> * all GitHub builds before version `0.3.5` [don't work in IE](https://github.com/larsgw/citation.js/issues/87)
+> * all GitHub builds before version `0.4.0-0` [don't work in IE](https://github.com/larsgw/citation.js/issues/87)
 > * the bundle.run builds don't transpile dependencies, so don't work in IE either
 
 ## CLI
