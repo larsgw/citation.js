@@ -12,7 +12,7 @@ import {get as getDict} from '../../dict'
  * @method getBibtxt
  *
  * @param {Array<CSL>} src - Input CSL
- * @param {Cite.output.dict~dict} dict - Dictionary
+ * @param {Cite.get.dict~dict} dict - Dictionary
  *
  * @return {String} Bib.TXT string
  */
@@ -35,7 +35,7 @@ const getBibtxt = function (src, dict) {
  *
  * @access protected
  * @method getBibtxtWrapper
- * @deprecated
+ * @deprecated use the generalised method: {@link module:output/bibtex~getBibtxt}
  *
  * @param {Array<CSL>} src - Input CSL
  * @param {Boolean} html - Output as HTML string (instead of plain text)

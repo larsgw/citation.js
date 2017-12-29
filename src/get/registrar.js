@@ -1,13 +1,13 @@
 const register = {}
 
 /**
- * @callback Cite.output~formatter
+ * @callback Cite.get~formatter
  * @param {Array<InputData>}
  * @return {String} output
  */
 
 /**
- * @typedef Cite.output~formatterName
+ * @typedef Cite.get~formatterName
  * @type String
  */
 
@@ -18,7 +18,7 @@ const register = {}
  * @memberof Cite.get
  *
  * @param {String} name - output format name
- * @param {Cite.output~formatter} formatter - outputting function
+ * @param {Cite.get~formatter} formatter - outputting function
  * @throw {TypeError} Invalid output format name
  * @throw {TypeError} Invalid formatter
  */
@@ -35,9 +35,10 @@ const validate = (name, formatter) => {
  *
  * @access public
  * @memberof Cite.get
+ * @method add
  *
- * @param {Cite.output~formatterName} name - output format name
- * @param {Cite.output~formatter} formatter - outputting function
+ * @param {Cite.get~formatterName} name - output format name
+ * @param {Cite.get~formatter} formatter - outputting function
  * @throw {TypeError} validation errors
  */
 export const add = (name, formatter) => {
@@ -51,8 +52,9 @@ export const add = (name, formatter) => {
  *
  * @access public
  * @memberof Cite.get
+ * @method remove
  *
- * @param {Cite.output~formatterName} name - output format name
+ * @param {Cite.get~formatterName} name - output format name
  */
 export const remove = (name) => {
   delete register[name]
@@ -63,8 +65,9 @@ export const remove = (name) => {
  *
  * @access public
  * @memberof Cite.get
+ * @method has
  *
- * @param {Cite.output~formatterName} name - output format name
+ * @param {Cite.get~formatterName} name - output format name
  * @return {Boolean} register has plugin
  */
 export const has = (name) => {
@@ -76,6 +79,7 @@ export const has = (name) => {
  *
  * @access public
  * @memberof Cite.get
+ * @method list
  *
  * @return {Array<String>} list of plugins
  */
@@ -88,8 +92,9 @@ export const list = () => {
  *
  * @access public
  * @memberof Cite.get
+ * @method format
  *
- * @param {Cite.output~formatterName} name - output format name
+ * @param {Cite.get~formatterName} name - output format name
  * @param {...*} options - output options
  */
 export const format = (name, ...options) => {

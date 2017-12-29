@@ -4,22 +4,22 @@
  */
 
 /**
- * @typedef Cite.output.dict~dictName
+ * @typedef Cite.get.dict~dictName
  * @type String
  */
 
 /**
- * @typedef Cite.output.dict~dict
- * @type Object<Cite.output.dict~entryName,Cite.output.dict~dictEntry>
+ * @typedef Cite.get.dict~dict
+ * @type Object<Cite.get.dict~entryName,Cite.get.dict~dictEntry>
  */
 
 /**
- * @typedef Cite.output.dict~entryName
+ * @typedef Cite.get.dict~entryName
  * @type String
  */
 
 /**
- * @typedef Cite.output.dict~dictEntry
+ * @typedef Cite.get.dict~dictEntry
  * @type Array<String>
  */
 
@@ -31,8 +31,8 @@ const register = {}
  * @access private
  * @memberof Cite.get.dict
  *
- * @param {Cite.output.dict~dictName} name - output format name
- * @param {Cite.output.dict~dict} formatter - outputting function
+ * @param {Cite.get.dict~dictName} name - output format name
+ * @param {Cite.get.dict~dict} formatter - outputting function
  * @throw {TypeError} Invalid output format name
  * @throw {TypeError} Invalid formatter
  */
@@ -56,11 +56,12 @@ const validate = (name, dict) => {
  *
  * @todo docs
  *
- * @access protected
+ * @access public
  * @memberof Cite.get.dict
+ * @method add
  *
- * @param {Cite.output.dict~dictName} name - dict name
- * @param {Cite.output.dict~dict} dict - dict data
+ * @param {Cite.get.dict~dictName} name - dict name
+ * @param {Cite.get.dict~dict} dict - dict data
  * @throw {TypeError} argument validation error
  */
 export const add = (name, dict) => {
@@ -73,8 +74,9 @@ export const add = (name, dict) => {
  *
  * @access public
  * @memberof Cite.get.dict
+ * @method remove
  *
- * @param {Cite.output.dict~dictName} name - output format name
+ * @param {Cite.get.dict~dictName} name - output format name
  */
 export const remove = (name) => {
   delete register[name]
@@ -85,8 +87,9 @@ export const remove = (name) => {
  *
  * @access public
  * @memberof Cite.get.dict
+ * @method has
  *
- * @param {Cite.output.dict~dictName} name - output format name
+ * @param {Cite.get.dict~dictName} name - output format name
  * @return {Boolean} register has plugin
  */
 export const has = (name) => {
@@ -98,6 +101,7 @@ export const has = (name) => {
  *
  * @access public
  * @memberof Cite.get.dict
+ * @method list
  *
  * @return {Array<String>} list of plugins
  */
@@ -110,8 +114,9 @@ export const list = () => {
  *
  * @access public
  * @memberof Cite.get.dict
+ * @method get
  *
- * @param {Cite.output.dict~dictName} name - output format name
+ * @param {Cite.get.dict~dictName} name - output format name
  * @return {Boolean} register has plugin
  */
 export const get = (name) => {
@@ -141,7 +146,7 @@ add('text', {
  *
  * @access protected
  * @memberof Cite.get.dict
- * @deprecated
+ * @deprecated use the new formatting dicts: {@link Cite.get.dict}
  */
 export const html = {
   wr_start: '<div class="csl-bib-body">',
@@ -159,7 +164,7 @@ export const html = {
  *
  * @access protected
  * @memberof Cite.get.dict
- * @deprecated
+ * @deprecated use the new formatting dicts: {@link Cite.get.dict}
  */
 export const text = {
   wr_start: '',

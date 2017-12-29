@@ -49,7 +49,7 @@ const wrapInBrackets = (prop, value) => {
  * @method getBibtex
  *
  * @param {Array<CSL>} src - Input CSL
- * @param {Cite.output.dict~dict} dict - Dictionary
+ * @param {Cite.get.dict~dict} dict - Dictionary
  *
  * @return {String} BibTeX string
  */
@@ -72,7 +72,7 @@ const getBibtex = function (src, dict) {
  *
  * @access protected
  * @method getBibTeXWrapper
- * @deprecated
+ * @deprecated use the generalised method: {@link module:output/bibtex~getBibtex}
  *
  * @param {Array<CSL>} src - Input CSL
  * @param {Boolean} html - Output as HTML string (instead of plain text)

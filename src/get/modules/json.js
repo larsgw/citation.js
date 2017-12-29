@@ -23,7 +23,7 @@ const appendCommas = (string, index, array) => string + (index < array.length - 
  * @access private
  *
  * @param {Object|Array} src - The data
- * @param {Cite.output.dict~dict} dict - Dictionary
+ * @param {Cite.get.dict~dict} dict - Dictionary
  *
  * @return {String} string form
  */
@@ -49,7 +49,7 @@ const getJsonObject = function (src, dict) {
  * @access private
  *
  * @param {*} src - The data
- * @param {Cite.output.dict~dict} dict - Dictionary
+ * @param {Cite.get.dict~dict} dict - Dictionary
  *
  * @return {String} string form
  */
@@ -74,7 +74,7 @@ const getJsonValue = function (src, dict) {
  * @method getJson
  *
  * @param {Array<CSL>} src - Input CSL
- * @param {Cite.output.dict~dict} dict - Dictionary
+ * @param {Cite.get.dict~dict} dict - Dictionary
  *
  * @return {String} JSON string
  */
@@ -90,7 +90,7 @@ const getJson = function (src, dict) {
  *
  * @access protected
  * @method getJsonWrapper
- * @deprecated
+ * @deprecated use the generalised method: {@link module:output/json~getJson}
  *
  * @param {Array<CSL>} src - Input CSL
  *
