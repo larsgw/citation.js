@@ -6,7 +6,7 @@ const cb = function (err, html) {
   if (err) {
     throw err
   } else {
-    fs.writeFileSync('docs/disc/index.html', html)
+    fs.writeFileSync('build/disc/index.html', html)
   }
 
   fs.unlinkSync('build/tmp.js')
