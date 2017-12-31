@@ -14,6 +14,7 @@ const validateOutputOptions = function (options) {
   const formats = ['real', 'string']
   const types = ['json', 'html', 'string', 'rtf']
   const styles = ['csl', 'bibtex', 'bibtxt', 'citation-*']
+  const wrapperTypes = ['string', 'function']
 
   if (typeof options !== 'object') {
     throw new TypeError('Options not an object!')
@@ -22,17 +23,17 @@ const validateOutputOptions = function (options) {
   const {format, type, style, lang, append, prepend} = options
 
   if (format && !formats.includes(format)) {
-    throw new TypeError(`Option format should be one of: ${formats}`)
-  } else if (type && !formats.includes(format)) {
-    throw new TypeError(`Option type should be one of: ${types}`)
-  } else if (style && !styles.includes(style)) {
-    throw new TypeError(`Option style should be one of: ${styles}`)
+    throw new TypeError(`Option format ("${format}") should be one of: ${formats}`)
+  } else if (type && !types.includes(type)) {
+    throw new TypeError(`Option type ("${type}") should be one of: ${types}`)
+  } else if (style && !styles.includes(style) && !/^citation/.test(style)) {
+    throw new TypeError(`Option style ("${style}") should be one of: ${styles}`)
   } else if (lang && typeof lang !== 'string') {
-    throw new TypeError('Option lang should be a string')
-  } else if (prepend && !['string', 'function'].includes(typeof prepend)) {
-    throw new TypeError('Option prepend should be a string or a function')
-  } else if (append && !['string', 'function'].includes(typeof append)) {
-    throw new TypeError('Option append should be a string or a function')
+    throw new TypeError(`Option lang should be a string, but is a ${typeof lang}`)
+  } else if (prepend && !wrapperTypes.includes(typeof prepend)) {
+    throw new TypeError(`Option prepend should be a string or a function, but is a ${typeof prepend}`)
+  } else if (append && !wrapperTypes.includes(typeof append)) {
+    throw new TypeError(`Option append should be a string or a function, but is a ${typeof append}`)
   }
 
   return true
@@ -62,6 +63,8 @@ const validateOptions = function (options) {
   } else if (options.forceType && typeof options.forceType !== 'string') {
     throw new TypeError('Option forceType should be a string')
   }
+
+  // options.generateGraph can be any falsy/truthy value, which is any value
 
   return true
 }
