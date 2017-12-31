@@ -1,8 +1,11 @@
 /**
+ * @module output/csl
+ */
+
+/**
  * Add data-* attribute to a HTML string
  *
  * @access protected
- * @memberof Cite.util.attr
  *
  * @param {String} string - HTML string
  * @param {String} name - attribute name
@@ -17,7 +20,6 @@ const getAttributedEntry = (string, name, value) =>
  * Add CSL identifiers to entry
  *
  * @access protected
- * @memberof Cite.util.attr
  *
  * @param {String} value - HTML string
  * @param {String|Number} id - ID

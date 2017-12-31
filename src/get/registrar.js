@@ -1,4 +1,4 @@
-const register = {}
+import Register from '../util/register'
 
 /**
  * @callback Cite.get~formatter
@@ -31,6 +31,15 @@ const validate = (name, formatter) => {
 }
 
 /**
+ * @access public
+ * @memberof Cite.get
+ * @constant register
+ *
+ * @type Cite.util.Register
+ */
+export const register = new Register()
+
+/**
  * Add output plugin.
  *
  * @access public
@@ -44,7 +53,7 @@ const validate = (name, formatter) => {
 export const add = (name, formatter) => {
   validate(name, formatter)
 
-  register[name] = formatter
+  register.set(name, formatter)
 }
 
 /**
@@ -57,7 +66,7 @@ export const add = (name, formatter) => {
  * @param {Cite.get~formatterName} name - output format name
  */
 export const remove = (name) => {
-  delete register[name]
+  register.remove(name)
 }
 
 /**
@@ -71,7 +80,7 @@ export const remove = (name) => {
  * @return {Boolean} register has plugin
  */
 export const has = (name) => {
-  return register.hasOwnProperty(name)
+  return register.has(name)
 }
 
 /**
@@ -84,7 +93,7 @@ export const has = (name) => {
  * @return {Array<String>} list of plugins
  */
 export const list = () => {
-  return Object.keys(register)
+  return register.list()
 }
 
 /**
@@ -99,9 +108,9 @@ export const list = () => {
  * @param {...*} options - output options
  */
 export const format = (name, data, ...options) => {
-  if (!has(name)) {
+  if (!register.has(name)) {
     logger.error('[get]', `Output plugin "${name}" unavailable`)
     return undefined
   }
-  return register[name](data, ...options)
+  return register.get(name)(data, ...options)
 }

@@ -17,13 +17,16 @@ import Register from '../../../util/register'
  */
 import defaultLocales from './locales.json'
 
+/**
+ * @type Cite.util.Register
+ * @member
+ */
 const locales = new Register(defaultLocales)
 
 /**
  * Retrieve CSL locale
  *
  * @access protected
- * @method locale
  *
  * @param {String} [lang="en-US"] - lang code
  *

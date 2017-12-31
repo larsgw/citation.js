@@ -1,10 +1,26 @@
+/**
+ * @module output/csl
+ */
+
 import prepareEngine from './engines'
 
 import {getPrefixedEntry} from './attr.js'
 import {getWrappedEntry} from './affix'
 
-export default function bibliography (data, options) {
-  const {template, lang, format} = options
+/**
+ * @access protected
+ * @method bibliography
+ *
+ * @param {Array<CSL>} data
+ * @param {Object} [options={}]
+ * @param {String} [options.template='apa']
+ * @param {String} [options.lang='en-US']
+ * @param {String} [options.format='text']
+ *
+ * @return {String} output
+ */
+export default function bibliography (data, options = {}) {
+  const {template = 'apa', lang = 'en-US', format = 'text'} = options
   const citeproc = prepareEngine(data, template, lang, format)
   const sortedIds = citeproc.updateItems(data.map(entry => entry.id))
 

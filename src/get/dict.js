@@ -3,6 +3,8 @@
  * @memberof Cite.get
  */
 
+import Register from '../util/register'
+
 /**
  * @typedef Cite.get.dict~dictName
  * @type String
@@ -22,8 +24,6 @@
  * @typedef Cite.get.dict~dictEntry
  * @type Array<String>
  */
-
-const register = {}
 
 /**
  * Validate input arguments
@@ -52,6 +52,28 @@ const validate = (name, dict) => {
 }
 
 /**
+ * @access public
+ * @memberof Cite.get.dict
+ * @constant register
+ *
+ * @type Cite.util.Register
+ */
+export const register = new Register({
+  html: {
+    bibliographyContainer: ['<div class="csl-bib-body>', '</div>'],
+    entry: ['<div class="csl-entry>', '</div>'],
+    list: ['<ul style="list-style-type:none">', '</ul>'],
+    listItem: ['<li>', '</li>']
+  },
+  text: {
+    bibliographyContainer: ['', '\n'],
+    entry: ['', '\n'],
+    list: ['\n', ''],
+    listItem: ['\t', '\n']
+  }
+})
+
+/**
  * Add dictionary to register. Can be used by output plugins.
  *
  * @todo docs
@@ -66,7 +88,7 @@ const validate = (name, dict) => {
  */
 export const add = (name, dict) => {
   validate(name, dict)
-  register[name] = dict
+  register.set(name, dict)
 }
 
 /**
@@ -79,7 +101,7 @@ export const add = (name, dict) => {
  * @param {Cite.get.dict~dictName} name - output format name
  */
 export const remove = (name) => {
-  delete register[name]
+  register.remove(name)
 }
 
 /**
@@ -93,7 +115,7 @@ export const remove = (name) => {
  * @return {Boolean} register has plugin
  */
 export const has = (name) => {
-  return register.hasOwnProperty(name)
+  return register.has(name)
 }
 
 /**
@@ -106,7 +128,7 @@ export const has = (name) => {
  * @return {Array<String>} list of plugins
  */
 export const list = () => {
-  return Object.keys(register)
+  return register.list()
 }
 
 /**
@@ -120,26 +142,12 @@ export const list = () => {
  * @return {Boolean} register has plugin
  */
 export const get = (name) => {
-  if (!has(name)) {
+  if (!register.has(name)) {
     logger.error('[get]', `Dict "${name}" unavailable`)
     return undefined
   }
-  return register[name]
+  return register.get(name)
 }
-
-add('html', {
-  bibliographyContainer: ['<div class="csl-bib-body>', '</div>'],
-  entry: ['<div class="csl-entry>', '</div>'],
-  list: ['<ul style="list-style-type:none">', '</ul>'],
-  listItem: ['<li>', '</li>']
-})
-
-add('text', {
-  bibliographyContainer: ['', '\n'],
-  entry: ['', '\n'],
-  list: ['\n', ''],
-  listItem: ['\t', '\n']
-})
 
 /**
  * Object containing HTML strings for building JSON and BibTeX. Made to match citeproc, for compatibility.

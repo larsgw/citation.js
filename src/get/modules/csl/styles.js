@@ -17,13 +17,16 @@ import Register from '../../../util/register'
  */
 import defaultTemplates from './styles.json'
 
+/**
+ * @type Cite.util.Register
+ * @member
+ */
 const templates = new Register(defaultTemplates)
 
 /**
  * Retrieve CSL style
  *
  * @access protected
- * @method style
  *
  * @param {String} [style="apa"] - style name
  *
@@ -37,5 +40,5 @@ const fetchStyle = style => {
   }
 }
 
-export default fetchStyle
+export default fetchStyle 
 export {templates}

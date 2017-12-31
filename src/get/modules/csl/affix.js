@@ -1,8 +1,11 @@
 /**
+ * @module output/csl
+ */
+
+/**
  * Get a rendered affix
  *
  * @access private
- * @memberof Cite.util.attr
  *
  * @param {CSL} source - source element
  * @param {String|Cite~wrapper} affix
@@ -17,7 +20,6 @@ const htmlRegex = /^(\s*<[a-z0-9:-]+(?:\s*[a-z0-9:-]+=(?:"(?:\\\\|\\"|[^"])*"|'(
  * Pre/append things to entry
  *
  * @access protected
- * @memberof Cite.util.attr
  *
  * @param {String} value - HTML string
  * @param {CSL} source - source element

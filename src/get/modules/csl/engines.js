@@ -19,13 +19,12 @@ const engines = {}
  * Retrieve CSL parsing engine
  *
  * @access protected
- * @method engine
  *
  * @param {String} style - CSL style id
  * @param {String} lang - Language code
  * @param {String} template - CSL XML template
- * @param {Cite.CSL~retrieveItem} retrieveItem - Code to retreive item
- * @param {Cite.CSL~retrieveLocale} retrieveLocale - Code to retreive locale
+ * @param {module:output/csl~retrieveItem} retrieveItem - Code to retreive item
+ * @param {module:output/csl~retrieveLocale} retrieveLocale - Code to retreive locale
  *
  * @return {Object} CSL Engine
  */

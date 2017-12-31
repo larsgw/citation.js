@@ -1,6 +1,5 @@
 /**
  * @module output/label
- * @todo requires {@link module:output/bibtex}, which isn't really modular
  */
 
 import getBibtexLabel from './bibtex/label'
@@ -9,7 +8,7 @@ import getBibtexLabel from './bibtex/label'
  * Get a label from CSL data
  *
  * @access protected
- * @memberof Cite.get
+ * @method getLabel
  * @todo flavors/formats
  *
  * @param {CSL} src - Input CSL
