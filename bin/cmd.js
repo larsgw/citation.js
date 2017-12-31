@@ -90,7 +90,7 @@ var saveOutput = function (data) {
   if (!program.output) {
     process.stdout.write(output + '\n')
   } else {
-    fs.writeFile(program.output + extension, output, function (err) {
+    fs.writeFile(program.output + '.' + extension, output, function (err) {
       if (err) {
         throw err
       }
