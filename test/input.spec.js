@@ -50,7 +50,8 @@ describe('input', () => {
   describe('Wikidata URL', testCaseGenerator(
     input.wd.url, '@wikidata/url', output.wd.id, {link: true}))
 
-  describe('Wikidata JSON', () => {
+  describe('Wikidata JSON', function () {
+    this.timeout(4000)
     testCaseGenerator(input.wd.simple, '@wikidata/object', output.wd.simple)()
 
     context('with linked authors',
