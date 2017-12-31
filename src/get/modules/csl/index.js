@@ -1,13 +1,17 @@
 /**
+ * @module output/csl
+ */
+
+/**
  * @namespace CSL
  * @memberof Cite
  */
 
-import style from './styles'
-import locale from './locales'
-import engine from './engines'
-import item from './items'
-import * as register from './register'
+import './locales'
+import './styles'
+
+import bibliography from './bibliography'
+// import citation from './citation'
 
 /**
  * @callback Cite.CSL~retrieveItem
@@ -21,4 +25,10 @@ import * as register from './register'
  * @return {String} CSL Locale
  */
 
-export { style, locale, engine, item, register }
+export default [{
+  name: 'bibliography',
+  formatter: bibliography
+}/* , {
+  name: 'citation',
+  formatter: citation
+} */]

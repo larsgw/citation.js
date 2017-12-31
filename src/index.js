@@ -3,12 +3,32 @@ import './logger'
 
 import * as staticMethods from './Cite/static'
 import * as get from './get/index'
-import * as CSL from './CSL/index'
 import * as parse from './parse/index'
 import * as util from './util/index'
 import * as version from './version'
 import async from './async/index'
 import Cite from './Cite/index'
+
+// BEGIN compat
+import {default as locale, locales} from './get/modules/csl/locales'
+import {default as style, templates} from './get/modules/csl/styles'
+import {fetchEngine as engine} from './get/modules/csl/engines'
+
+const CSL = {
+  engine,
+  style,
+  locale,
+  item (data) { return id => data.find(entry => entry.id === id) },
+  register: {
+    addTemplate: templates.add.bind(templates),
+    getTemplate: templates.get.bind(templates),
+    hasTemplate: templates.has.bind(templates),
+    addLocale: locales.add.bind(locales),
+    getLocale: locales.get.bind(locales),
+    hasLocale: locales.has.bind(locales)
+  }
+}
+// END compat
 
 Object.assign(Cite, staticMethods, {
   async: async,

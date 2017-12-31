@@ -1,3 +1,8 @@
+/**
+ * @module output/label
+ * @todo requires {@link module:output/bibtex}, which isn't really modular
+ */
+
 import getBibtexLabel from './bibtex/label'
 
 /**
@@ -17,6 +22,6 @@ export {getLabel}
 export default [{
   name: 'label',
   formatter (data) {
-    return data.reduce((object, entry) => { object[entry.id] = getLabel(entry) }, {})
+    return data.reduce((object, entry) => { object[entry.id] = getLabel(entry); return object }, {})
   }
 }]

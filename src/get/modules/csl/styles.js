@@ -1,4 +1,8 @@
-import { getTemplate as getCustomStyle, hasTemplate as hasCustomStyle } from './register'
+/**
+ * @module output/csl
+ */
+
+import Register from '../../../util/register'
 
 /**
  * Object containing CSL templates
@@ -9,27 +13,29 @@ import { getTemplate as getCustomStyle, hasTemplate as hasCustomStyle } from './
  * Accesed 10/22/2016
  *
  * @access private
- * @constant varCSLStyles
- * @memberof Cite.CSL
- * @default
+ * @constant defaultTemplates
  */
-import varCSLStyles from './styles.json'
+import defaultTemplates from './styles.json'
+
+const templates = new Register(defaultTemplates)
 
 /**
  * Retrieve CSL style
  *
  * @access protected
  * @method style
- * @memberof Cite.CSL
  *
  * @param {String} [style="apa"] - style name
  *
  * @return {String} CSL style
  */
-const fetchCSLStyle = style => hasCustomStyle(style)
-  ? getCustomStyle(style)
-  : varCSLStyles.hasOwnProperty(style)
-  ? varCSLStyles[style]
-  : varCSLStyles['apa']
+const fetchStyle = style => {
+  if (templates.has(style)) {
+    return templates.get(style)
+  } else {
+    return templates.get('apa')
+  }
+}
 
-export default fetchCSLStyle
+export default fetchStyle
+export {templates}

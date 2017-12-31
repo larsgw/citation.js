@@ -1,5 +1,6 @@
 import { validateOutputOptions as validate } from './static'
-import { getPrefixedEntry, getWrappedEntry } from '../util/attr.js'
+
+import {format as formatData} from '../get/registrar'
 
 import getBibTeXJSON from '../get/modules/bibtex/json'
 import getBibTeX from '../get/modules/bibtex/text'
@@ -7,11 +8,6 @@ import getBibTxt from '../get/modules/bibtex/bibtxt'
 import {getJsonWrapper as getJSON} from '../get/modules/json'
 
 import parseCsl from '../parse/csl'
-
-import fetchCSLEngine from '../CSL/engines'
-import fetchCSLStyle from '../CSL/styles'
-import fetchCSLLocale from '../CSL/locales'
-import fetchCSLItemCallback from '../CSL/items'
 
 /**
  * Get a list of the data entry IDs, in the order of that list
@@ -54,24 +50,14 @@ const get = function (options = {}) {
         break
       }
 
-      const useLang = fetchCSLLocale(lang) ? lang : 'en-US'
-      const useTemplate = fetchCSLStyle(styleFormat)
-      const cbItem = fetchCSLItemCallback(data)
-
-      const citeproc = fetchCSLEngine(styleFormat, useLang, useTemplate, cbItem, fetchCSLLocale)
-      const sortedIds = citeproc.updateItems(this.getIds())
-
-      citeproc.setOutputFormat({string: 'text'}[type] || type)
-
-      const [{bibstart: bibStart, bibend: bibEnd}, bibBody] = citeproc.makeBibliography()
-      let entries = bibBody.map((element, index) => getPrefixedEntry(element, sortedIds[index]))
-
-      if (append || prepend) {
-        const sortedItems = sortedIds.map(itemId => this.data.find(({id}) => id === itemId))
-        entries = entries.map((element, index) => getWrappedEntry(element, sortedItems[index], {append, prepend}))
-      }
-
-      result = bibStart + entries.join('') + bibEnd
+      result = formatData('bibliography', data, {
+        template: styleFormat,
+        lang,
+        format: type === 'string' ? 'text' : type,
+        append,
+        prepend
+      })
+      // TODO 'string' -> 'text'
       break
 
     case 'csl':

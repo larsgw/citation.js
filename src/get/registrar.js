@@ -95,12 +95,13 @@ export const list = () => {
  * @method format
  *
  * @param {Cite.get~formatterName} name - output format name
+ * @param {Array<CSL>} data - all entries
  * @param {...*} options - output options
  */
-export const format = (name, ...options) => {
+export const format = (name, data, ...options) => {
   if (!has(name)) {
     logger.error('[get]', `Output plugin "${name}" unavailable`)
     return undefined
   }
-  return register[name](...options)
+  return register[name](data, ...options)
 }
