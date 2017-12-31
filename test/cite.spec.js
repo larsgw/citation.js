@@ -1,4 +1,4 @@
-/* global describe, context, it, beforeEach */
+/* eslint-env mocha */
 
 import expect from 'expect.js'
 import Cite from './citation'
