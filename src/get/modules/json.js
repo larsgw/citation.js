@@ -2,6 +2,7 @@
  * @module output/json
  */
 
+import deepCopy from '../../util/deepCopy.js'
 import {has as hasDict, get as getDict} from '../dict'
 
 /**
@@ -37,7 +38,7 @@ const getJsonObject = function (src, dict) {
     entries = Object.entries(src).map(([prop, value]) => `"${prop}": ${getJsonValue(value, dict)}`)
   }
 
-  entries = appendCommas(entries).map(entry => dict.listItem.join(entry))
+  entries = entries.map(appendCommas).map(entry => dict.listItem.join(entry))
   entries = dict.list.join(entries.join(''))
 
   return isArray ? `[${entries}]` : `{${entries}}`
@@ -80,7 +81,7 @@ const getJsonValue = function (src, dict) {
  */
 const getJson = function (src, dict) {
   let entries = src.map(entry => getJsonObject(entry, dict))
-  entries = appendCommas(entries).map(entry => dict.entry.join(entry))
+  entries = entries.map(appendCommas).map(entry => dict.entry.join(entry))
 
   return dict.bibliographyContainer.join(`[${entries}]`)
 }
@@ -104,6 +105,10 @@ export {getJsonWrapper}
 export default [{
   name: 'data',
   formatter (data, {type = 'text'} = {}) {
-    return hasDict(type) ? getJson(data, getDict(type)) : ''
+    if (type === 'object') {
+      return deepCopy(data)
+    } else {
+      return hasDict(type) ? getJson(data, getDict(type)) : ''
+    }
   }
 }]

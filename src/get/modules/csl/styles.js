@@ -40,5 +40,5 @@ const fetchStyle = style => {
   }
 }
 
-export default fetchStyle 
+export default fetchStyle
 export {templates}

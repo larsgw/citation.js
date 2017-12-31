@@ -9,11 +9,10 @@ import {getBibtxt} from './bibtxt'
 
 const factory = function (formatter) {
   return function (data, {type = 'text'} = {}) {
-    switch (type) {
-      case 'object':
-        return data.map(json)
-      default:
-        return hasDict(type) ? formatter(data, getDict(type)) : ''
+    if (type === 'object') {
+      return data.map(json)
+    } else {
+      return hasDict(type) ? formatter(data, getDict(type)) : ''
     }
   }
 }

@@ -1,3 +1,8 @@
+const formats = ['real', 'string']
+const types = ['json', 'html', 'string', 'rtf']
+const styles = ['csl', 'bibtex', 'bibtxt', 'citation-*']
+const wrapperTypes = ['string', 'function']
+
 /**
  * @access public
  * @memberof Cite
@@ -7,15 +12,11 @@
  * @return {Boolean} true (if valid)
  * @throw {TypeError} Options not an object
  * @throw {TypeError} Invalid options
+ * @throw {Error} Invalid options combination
  *
  * @todo check registers if styles and langs are present
  */
 const validateOutputOptions = function (options) {
-  const formats = ['real', 'string']
-  const types = ['json', 'html', 'string', 'rtf']
-  const styles = ['csl', 'bibtex', 'bibtxt', 'citation-*']
-  const wrapperTypes = ['string', 'function']
-
   if (typeof options !== 'object') {
     throw new TypeError('Options not an object!')
   }
@@ -34,6 +35,10 @@ const validateOutputOptions = function (options) {
     throw new TypeError(`Option prepend should be a string or a function, but is a ${typeof prepend}`)
   } else if (append && !wrapperTypes.includes(typeof append)) {
     throw new TypeError(`Option append should be a string or a function, but is a ${typeof append}`)
+  }
+
+  if (/^citation/.test(style) && type === 'json') {
+    throw new Error(`Combination type/style of json/citation-* is not valid: ${type}/${style}`)
   }
 
   return true
