@@ -1,5 +1,33 @@
 # Changelog
 
+## [0.4.0-1] - 2017-12-31
+
+### Added
+
+* New formatting system w/ plugins (#82)
+* `Register` class for general-purpose registers (already used in 4 places) (#115)
+* `Cite#format` (a `Cite` formatting method for output plugins)
+
+### Changed
+
+* Modularised most output formatting code
+* Adding CSL locales and templates now overwrites existing ones. Previously, it didn't, but there wasn't any way of getting them back anyway
+* Generalised formatting functions (there are still backwards-compatible wrappers)
+* Expanded output options validation issue error messages
+* Deprecated `Cite#get`
+
+### Refactored
+
+* Use ESLint envs instead of listing globals (#114)
+
+### Fixed
+
+* Docs issues (#112)
+* CLI ouptut file extensions (#121)
+* `Cite.async` behaviour w/ callback & no options (#122)
+* Output options validation issues (#120)
+* Moved input parsing to actual respective test cases
+
 ## [0.4.0-0] - 2017-12-22
 
 ### Added
