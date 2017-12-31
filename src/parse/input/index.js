@@ -1,6 +1,7 @@
 /**
  * @namespace input
  * @memberof Cite.parse
+ * @deprecated the {@link Cite.parse.input.type}, {@link Cite.parse.input.data}, {@link Cite.parse.input.dataAsync} and {@link Cite.parse.input.async.data} functions are deprecated, but not in the {@link Cite.parse} namespace
  *
  * @borrows Cite.parse.data as data
  * @borrows Cite.parse.dataAsync as dataAsync
