@@ -32,6 +32,7 @@ const async = function (data, options, callback) {
 
   if (typeof options === 'function' && !callback) {
     callback = options
+    options = undefined
   }
 
   if (typeof callback === 'function') {
