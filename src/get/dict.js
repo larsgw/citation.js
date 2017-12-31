@@ -156,7 +156,7 @@ export const get = (name) => {
  * @memberof Cite.get.dict
  * @deprecated use the new formatting dicts: {@link Cite.get.dict}
  */
-export const html = {
+export const htmlDict = {
   wr_start: '<div class="csl-bib-body">',
   wr_end: '</div>',
   en_start: '<div class="csl-entry">',
@@ -174,7 +174,7 @@ export const html = {
  * @memberof Cite.get.dict
  * @deprecated use the new formatting dicts: {@link Cite.get.dict}
  */
-export const text = {
+export const textDict = {
   wr_start: '',
   wr_end: '\n',
   en_start: '',
