@@ -151,4 +151,12 @@ describe('output', () => {
 
     describe('Bib.TXT', testCaseGenerator(data, opts('string', 'string', 'bibtxt'), output.bibtex.bibtxt))
   })
+
+  describe('RIS', () => {
+    describe('plain text', () => {
+      it('outputs correctly', () => {
+        expect(data.format('ris')).to.be(output.ris.simple)
+      })
+    })
+  })
 })

@@ -34,5 +34,8 @@
       }
     ],
     "bibtxt": "[Hall1957Correlation]\n\tjournal: Journal of the American Chemical Society\n\tdoi: 10.1021/ja01577a030\n\tnumber: 20\n\ttitle: Correlation of the Base Strengths of Amines 1\n\tvolume: 79\n\tauthor: Hall, H. K.\n\tpages: 5441--5444\n\tdate: 1957-01-01\n\tyear: 1957\n\tmonth: 1\n\tday: 1\n\ttype: article"
+  },
+  "ris": {
+    "simple": "TY  - JOUR\nAU  - Hall, H. K.\nDA  - 1957/01/01\nPY  - 1957\nDO  - 10.1021/ja01577a030\nIS  - 20\nSP  - 5441-5444\nT2  - Journal of the American Chemical Society\nTI  - Correlation of the Base Strengths of Amines 1\nVL  - 79\nID  - Q23571040\nER  - \n"
   }
 }
