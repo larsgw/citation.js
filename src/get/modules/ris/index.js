@@ -144,7 +144,7 @@ const fieldMap = {
     {type: ['article-journal', 'article'], fieldName: 'number'}
   ],
 
-  // discussable
+  // debatable
   BT: [{type: 'chapter', fieldName: 'container-title'}],
   DB: 'archive',
   DP: 'source',
@@ -171,7 +171,8 @@ const parseFieldInfo = function (fieldInfo, field, entry) {
     let specificInfo
     let genericInfo
     fieldInfo.forEach(infoPart => {
-      if (infoPart.type === entry.type || infoPart.type.includes(entry.type)) {
+      if ((typeof infoPart.type === 'string' && infoPart.type === entry.type) ||
+          (Array.isArray(infoPart.type) && infoPart.type.includes(entry.type))) {
         specificInfo = infoPart
       } else if (infoPart.type === '__default') {
         genericInfo = infoPart
@@ -183,7 +184,7 @@ const parseFieldInfo = function (fieldInfo, field, entry) {
     }
     return parseFieldInfo(combinedInfo.convert ? combinedInfo : combinedInfo.fieldName, field, entry)
   } else if (typeof fieldInfo === 'object' && fieldInfo !== null) {
-    // If info is a regular object, prepare the convertr
+    // If info is a regular object, prepare the converter
     return {
       sourceFields: [].concat(fieldInfo.fieldName),
       workOnEmptyInput: fieldInfo.fieldName === undefined,

@@ -1,5 +1,11 @@
 # Changelog
 
+## Unreleased
+
+### Fixed
+
+* Sublte type checking bug in translation scheme parsing code (#128)
+
 ## [0.4.0-1] - 2017-12-31
 
 ### Added
