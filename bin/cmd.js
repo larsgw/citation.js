@@ -39,29 +39,16 @@ program
   .version(cjs.version)
   .usage('[options]')
 
-  .option('-i, --input <path>',
-          'Input file. If all input options are omitted, it uses stdin')
-  .option('-t, --text <string>',
-          'Input text. If all input options are omitted, it uses stdin')
-  .option('-u, --url <string>',
-          'Deprecated in favor of -t, --text. If all input options are omitted, it uses stdin')
+  .option('-i, --input <path>', 'Input file. If all input options are omitted, it uses stdin')
+  .option('-t, --text <string>', 'Input text. If all input options are omitted, it uses stdin')
+  .option('-u, --url <string>', 'Deprecated in favor of -t, --text. If all input options are omitted, it uses stdin')
 
-  .option('-o, --output <path>',
-          'Output file (omit file extension). If this option is omitted, the output is written to stdout')
+  .option('-o, --output <path>', 'Output file (omit file extension). If this option is omitted, the output is written to stdout')
 
-  .option('-R, --output-non-real',
-          'Output as a text file',
-            false)
-  .option('-f, --output-type <option>',
-          'Output structure type: string, html, json',
-          'json')
-  .option('-s, --output-style <option>',
-          'Output scheme. A combination of --output-format json and --output-style citation-* is considered invalid. ' +
-          'Options: csl (Citation Style Lanugage JSON), bibtex, citation-* (where * is any formatting style)',
-          'csl')
-  .option('-l, --output-language <option>',
-          'Output language. [RFC 5646](https://tools.ietf.org/html/rfc5646) codes',
-          'en-US')
+  .option('-R, --output-non-real', 'Output as a text file', false)
+  .option('-f, --output-type <option>', 'Output structure type: string, html, json', 'json')
+  .option('-s, --output-style <option>', 'Output scheme. A combination of --output-format json and --output-style citation-* is considered invalid. ' + 'Options: csl (Citation Style Lanugage JSON), bibtex, citation-* (where * is any formatting style)', 'csl')
+  .option('-l, --output-language <option>', 'Output language. [RFC 5646](https://tools.ietf.org/html/rfc5646) codes', 'en-US')
 
   .parse(process.argv)
 
@@ -69,11 +56,14 @@ if (program.input && !fs.existsSync(program.input)) {
   throw new Error('Input file does not exist: ' + program.input)
 }
 
-var extension = program.outputStyle === 'bibtex' && program.outputType === 'string'
-  ? 'bib'
-  : program.outputNonReal
-  ? 'txt'
-  : {string: 'txt', html: 'html', json: 'json'}[program.outputType]
+var extension
+if (program.outputStyle === 'bibtex' && program.outputType === 'string') {
+  extension = 'bib'
+} else if (program.outputNonReal) {
+  extension = 'txt'
+} else {
+  extension = {string: 'txt', html: 'html', json: 'json'}[program.outputType]
+}
 
 var saveOutput = function (data) {
   var output = data.get({

@@ -82,9 +82,9 @@ const propMap = {
 
   // ignore
   P2860: false, // Cites
-  P921: false,  // Main subject
+  P921: false, // Main subject
   P3181: false, // OpenCitations bibliographic resource ID
-  P364: false   // Original language of work
+  P364: false // Original language of work
 }
 
 /**

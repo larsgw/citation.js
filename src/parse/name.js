@@ -79,8 +79,8 @@ const parseName = function (name = '') {
   }
 
   let start = '' // dropping-particle + given
-  let mid = ''   // non-dropping-particle + family
-  let end = ''   // suffix
+  let mid = '' // non-dropping-particle + family
+  let end = '' // suffix
 
   if (/[^.], /.test(name)) {
     // reversed name
