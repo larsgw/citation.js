@@ -24,12 +24,10 @@
   ],
   "dependencies": {
     "babel-polyfill": "^6.23.0",
-    "citeproc": "^2.0.2",
-    "commander": "~2.11.0",
-    "deep-freeze": "0.0.1",
+    "citeproc": "^2.1.183",
+    "commander": "^2.13.0",
     "isomorphic-fetch": "^2.2.1",
-    "striptags": "^3.0.1",
-    "sync-request": "^4.1.0",
+    "sync-request": "^5.0.0",
     "wikidata-sdk": "^5.2.2"
   },
   "devDependencies": {
@@ -50,11 +48,11 @@
     "jsdoc": "^3.5.5",
     "markdown-toc": "^1.2.0",
     "minami": "^1.2.3",
-    "mocha": "^3.4.2",
+    "mocha": "^5.0.0",
     "nock": "^9.0.14",
     "npm-run-all": "^4.0.2",
     "nyc": "^11.0.3",
-    "standard": "^10.0.2",
+    "standard": "^11.0.0-beta.0",
     "uglify-es": "^3.0.4"
   },
   "nyc": {
