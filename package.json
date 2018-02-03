@@ -23,7 +23,7 @@
     "citeproc"
   ],
   "dependencies": {
-    "babel-polyfill": "^6.23.0",
+    "@babel/polyfill": "^7.0.0-beta.39",
     "citeproc": "^2.1.183",
     "commander": "^2.13.0",
     "isomorphic-fetch": "^2.2.1",
@@ -31,17 +31,15 @@
     "wikidata-sdk": "^5.2.2"
   },
   "devDependencies": {
-    "babel-cli": "^6.24.1",
-    "babel-core": "^6.25.0",
+    "@babel/cli": "^7.0.0-beta.39",
+    "@babel/core": "^7.0.0-beta.39",
+    "@babel/plugin-proposal-unicode-property-regex": "^7.0.0-beta.39",
+    "@babel/preset-env": "^7.0.0-beta.39",
+    "@babel/register": "^7.0.0-beta.39",
     "babel-eslint": "^7.2.3",
     "babel-plugin-istanbul": "^4.1.4",
-    "babel-plugin-transform-unicode-property-regex": "^2.0.4",
-    "babel-preset-env": "^1.4.0",
-    "babel-preset-es2015": "^6.24.1",
-    "babel-preset-stage-0": "^6.24.1",
-    "babel-register": "^6.24.1",
-    "babelify": "^7.3.0",
-    "browserify": "^14.3.0",
+    "babelify": "github:ylemkimon/babelify#a369126",
+    "browserify": "^15.2.0",
     "cross-env": "^5.0.1",
     "disc": "^1.3.2",
     "expect.js": "^0.3.1",
@@ -57,7 +55,7 @@
   },
   "nyc": {
     "require": [
-      "babel-register"
+      "@babel/register"
     ],
     "sourceMap": false,
     "instrument": false
@@ -69,7 +67,9 @@
     ]
   },
   "browser": {
-    "./src/logger.js": "./src/logger-browser.js"
+    "./src/logger.js": "./src/logger-browser.js",
+    "./test/citation.js": "./test/citation-browser.js",
+    "./test/api.js": "./test/api-browser.js"
   },
   "scripts": {
     "--1--": "lint",
@@ -79,7 +79,7 @@
     "lint:bin": "standard \"bin/**/*.js\"",
     "lint": "npm-run-all lint:*",
     "--2--": "test",
-    "test": "cross-env MOCHA=1 mocha --check-leaks -r babel-register -R dot test/*.spec.js",
+    "test": "cross-env MOCHA=1 mocha --check-leaks -r @babel/register -R dot test/*.spec.js",
     "coverage:test": "cross-env NODE_ENV=test nyc npm test",
     "coverage:report": "nyc report --reporter=lcov > coverage.lcov",
     "coverage": "npm-run-all coverage:*",
@@ -87,8 +87,8 @@
     "compile:test": "babel src/test -d lib/test --copy-files",
     "compile": "babel src -d lib --copy-files",
     "--4--": "distributions",
-    "dist:regular-main": "browserify -r ./src/index.js:citation-js -o build/citation.js -g [ babelify --ignore=citeproc ]",
-    "dist:regular-test": "browserify -r expect.js -e test/wrapper.js -x expect.js -o build/test.citation.js -g [ babelify --ignore=citeproc --presets [ env ] ]",
+    "dist:regular-main": "browserify -r ./src/index.js:citation-js -o build/citation.js -g [ babelify ]",
+    "dist:regular-test": "browserify -r expect.js -e test/wrapper.js -x expect.js -x citation-js -o build/test.citation.js -g [ babelify ]",
     "dist:minify-main": "uglifyjs build/citation.js --ie8 -c -o build/citation.min.js",
     "dist:minify-test": "uglifyjs build/test.citation.js --ie8 -c -o build/test.citation.min.js",
     "dist:regular": "npm-run-all dist:regular-*",
@@ -98,7 +98,7 @@
     "--5--": "generate",
     "generate:files": "npm-run-all dist:*-*",
     "generate:docs": "markdown-toc -i README.md && jsdoc -c .jsdoc.json",
-    "generate:disc": "browserify -e ./src/index.js -o build/tmp.js --full-paths -g [ babelify --ignore=citeproc ] && node tools/disc.js",
+    "generate:disc": "browserify -e ./src/index.js -o build/tmp.js --full-paths -t [ babelify ] && node tools/disc.js",
     "generate": "npm-run-all generate:*",
     "--6--": "dev",
     "dev:test": "npm run compile && npm run test",

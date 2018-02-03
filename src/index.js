@@ -1,4 +1,4 @@
-import 'babel-polyfill'
+import '@babel/polyfill'
 import './logger'
 
 import * as staticMethods from './Cite/static'
