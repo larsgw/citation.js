@@ -12,19 +12,6 @@ input.wd.author = require('./Q27795847.json')
 // start sync-request beforehand (interferes with the reporter otherwise)
 try { syncRequest() } catch (e) { }
 
-const testCaseGenerator = (input, type, output, {callback, link = false} = {}) => () => {
-  it('handles input type', () => {
-    expect(Cite.parse.input.type(input)).to.be(type)
-  })
-
-  it('parses input correctly', () => {
-    const test = link
-      ? Cite.parse.input.chainLink(input)
-      : Cite.parse.input.chain(input, {generateGraph: false})
-    expect(typeof callback === 'function' ? callback(test) : test).to.eql(output)
-  })
-}
-
 const wikidataTestCaseOptions = {
   callback: ([data]) => data.replace(/[&?]origin=\*/, ''),
   link: true
@@ -32,106 +19,109 @@ const wikidataTestCaseOptions = {
 const doiLinkTestCaseOptions = {link: true}
 const doiTestCaseOptions = {link: true, callback: ({title}) => title}
 
-describe('input', () => {
-  describe('Wikidata ID', testCaseGenerator(
-    input.wd.id, '@wikidata/id', output.wd.api[0], wikidataTestCaseOptions))
+const configs = {
+  // @wikdiata
+  '@wikidata/id': [input.wd.id, output.wd.api[0], wikidataTestCaseOptions],
+  '@wikidata/list+text': {
+    'separated by spaces': [input.wd.list.space, output.wd.api[1], wikidataTestCaseOptions],
+    'separated by newlines': [input.wd.list.newline, output.wd.api[1], wikidataTestCaseOptions],
+    'separated by commas': [input.wd.list.comma, output.wd.api[1], wikidataTestCaseOptions]
+  },
+  '@wikidata/url': [input.wd.url, output.wd.id, {link: true}],
+  '@wikidata/object': {
+    'without linked authors': [input.wd.simple, output.wd.simple],
+    'with linked authors': [input.wd.author, output.wd.author]
+  },
 
-  describe('Wikidata ID list', () => {
-    context('separated by spaces', testCaseGenerator(
-      input.wd.list.space, '@wikidata/list+text', output.wd.api[1], wikidataTestCaseOptions))
+  // @doi
+  '@doi/id': [input.doi.id, output.doi.api[0], doiLinkTestCaseOptions],
+  '@doi/api': [input.doi.url, output.doi.simple.title, doiTestCaseOptions],
+  '@doi/list+text': {
+    'separated by spaces': [input.doi.list.space, output.doi.api[1], doiLinkTestCaseOptions],
+    'separated by newlines': [input.doi.list.newline, output.doi.api[1], doiLinkTestCaseOptions]
+  },
 
-    context('separated by newlines', testCaseGenerator(
-      input.wd.list.newline, '@wikidata/list+text', output.wd.api[1], wikidataTestCaseOptions))
+  // @bibtex
+  '@bibtex/text': {
+    'with one simple entry': [input.bibtex.simple, output.bibtex.simple],
+    'with whitespace and unknown fields': [input.bibtex.whitespace, output.bibtex.whitespace],
+    'with literals': [input.bibtex.literals, output.bibtex.literals],
+    'with year and month without date': [input.bibtex.yearMonthNeeded, output.bibtex.yearMonthNeeded],
+    'with year and month with date': [input.bibtex.yearMonth, output.bibtex.yearMonth]
+  },
+  '@bibtex/object': [input.bibtex.json, output.bibtex.simple],
+  '@bibtxt/text': {
+    'with one simple entry': [input.bibtxt.simple, [output.bibtxt]],
+    'with multiple entries': [input.bibtxt.multiple, [output.bibtxt, output.bibtex.simple[0]]],
+    'with whitespace': [input.bibtxt.whitespace, [output.bibtxt]]
+  },
 
-    context('separated by commas', testCaseGenerator(
-      input.wd.list.comma, '@wikidata/list+text', output.wd.api[1], wikidataTestCaseOptions))
-  })
+  // @bibjson
+  '@bibjson/object': [input.bibjson.simple, output.bibjson.simple],
 
-  describe('Wikidata URL', testCaseGenerator(
-    input.wd.url, '@wikidata/url', output.wd.id, {link: true}))
+  // @csl
+  '@csl/object': [input.csl.simple, [input.csl.simple]],
+  '@csl/list+object': [input.array.simple, input.array.simple],
 
-  describe('Wikidata JSON', function () {
-    this.timeout(4000)
-    testCaseGenerator(input.wd.simple, '@wikidata/object', output.wd.simple)()
+  // @else
+  '@else/json': {
+    'as JSON string': [JSON.stringify(input.csl.simple), [input.csl.simple]],
+    'as JS Object string': [input.csl.string, [input.csl.simple]],
+    'with a syntax error': ['{"hi"}', []],
+  },
+  '@else/list+object': [input.array.nested, input.array.simple],
 
-    context('with linked authors',
-      testCaseGenerator(input.wd.author, '@wikidata/object', output.wd.author))
-  })
+  // @empty
+  '@empty/text': ['', []],
+  '@empty/whitespace+text': ['   \t\n \r  ', []],
+  '@empty': {
+    '(null)': [null, []],
+    '(undefined)': [undefined, []]
+  }
+}
 
-  describe('DOI ID', testCaseGenerator(input.doi.id, '@doi/id', output.doi.api[0], doiLinkTestCaseOptions))
-  describe('DOI URL', testCaseGenerator(input.doi.url, '@doi/api', output.doi.simple.title, doiTestCaseOptions))
+const testCaseGenerator = (type, input, output, opts = {}) => {
+  return function () {
+    const {requirements = {}, callback, link = false} = opts
+    const methods = Cite.parse.input
+    const method = link ? methods.chainLink : methods.chain
 
-  describe('DOI ID list', () => {
-    context('separated by spaces', testCaseGenerator(
-      input.doi.list.space, '@doi/list+text', output.doi.api[1], doiLinkTestCaseOptions))
-
-    context('separated by newlines', testCaseGenerator(
-      input.doi.list.newline, '@doi/list+text', output.doi.api[1], doiLinkTestCaseOptions))
-  })
-
-  describe('BibTeX string', () => {
-    testCaseGenerator(input.bibtex.simple, '@bibtex/text', output.bibtex.simple)()
-
-    context('with whitespace and unknown fields',
-      testCaseGenerator(input.bibtex.whitespace, '@bibtex/text', output.bibtex.whitespace))
-
-    context('with literals', testCaseGenerator(input.bibtex.literals, '@bibtex/text', output.bibtex.literals))
-    context('with year and month without date', testCaseGenerator(input.bibtex.yearMonthNeeded, '@bibtex/text', output.bibtex.yearMonthNeeded))
-    context('with year and month with date', testCaseGenerator(input.bibtex.yearMonth, '@bibtex/text', output.bibtex.yearMonth))
-  })
-
-  describe('BibTeX JSON', testCaseGenerator(
-    input.bibtex.json, '@bibtex/object', output.bibtex.simple))
-
-  describe('Bib.TXT string', () => {
-    testCaseGenerator(input.bibtxt.simple, '@bibtxt/text', [output.bibtxt])()
-
-    context('with multiple entries',
-      testCaseGenerator(input.bibtxt.multiple, '@bibtxt/text', [output.bibtxt, output.bibtex.simple[0]]))
-
-    context('with whitespace',
-      testCaseGenerator(input.bibtxt.whitespace, '@bibtxt/text', [output.bibtxt]))
-  })
-
-  describe('CSL-JSON', () => {
-    testCaseGenerator(input.csl.simple, '@csl/object', [input.csl.simple])()
-
-    context('as JSON string', testCaseGenerator(JSON.stringify(input.csl.simple), '@else/json', [input.csl.simple]))
-    context('as JS Object string', testCaseGenerator(input.csl.string, '@else/json', [input.csl.simple]))
-    context('with a syntax error', testCaseGenerator('{"hi"}', '@else/json', []))
-  })
-
-  describe('BibJSON',
-    testCaseGenerator(input.bibjson.simple, '@bibjson/object', output.bibjson.simple))
-
-  describe('Array', () => {
-    const objs = [{id: 'a'}, {id: 'b'}]
-
-    testCaseGenerator(objs, '@csl/list+object', objs)()
-    it('duplicates objects', () => {
-      expect(Cite(objs).data).not.to.be(objs)
+    it('handles input type', () => {
+      expect(methods.type(input)).to.be(type)
     })
 
-    describe('nested', () => {
-      const data = [[objs[0]], objs[1]]
-
-      testCaseGenerator(data, '@else/list+object', objs)()
-      it('duplicates objects', () => {
-        const test = Cite(data).data
-
-        expect(test[0]).not.to.be(objs[0])
-        expect(test[1]).not.to.be(objs[1])
-      })
-    })
-  })
-
-  describe('Empty', () => {
-    describe('string', () => {
-      describe('empty', testCaseGenerator('', '@empty/text', []))
-      describe('whitespace', testCaseGenerator('   \t\n \r  ', '@empty/whitespace+text', []))
+    it('parses input correctly', () => {
+      let data = method(input, {generateGraph: false})
+      if (typeof callback === 'function') {
+        data = callback(data)
+      }
+      expect(data).to.eql(output)
     })
 
-    describe('null', testCaseGenerator(null, '@empty', []))
-    describe('undefined', testCaseGenerator(undefined, '@empty', []))
-  })
+    for (const requirement in requirements) {
+      const predicate = requirements[requirement]
+      it(requirement, () => predicate(input, output, opts))
+    }
+  }
+}
+
+describe('input', function () {
+  this.timeout(4000)
+
+  for (const spec in configs) {
+    const specConfig = configs[spec]
+
+    let callback
+    if (Array.isArray(specConfig)) {
+      callback = testCaseGenerator(spec, ...specConfig)
+    } else {
+      callback = function () {
+        for (const specContext in specConfig) {
+          context(specContext, testCaseGenerator(spec, ...specConfig[specContext]))
+        }
+      }
+    }
+
+    describe(spec, callback)
+  }
 })
