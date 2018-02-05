@@ -2,6 +2,12 @@
 
 Citation.js converts formats like BibTeX, Wikidata JSON and ContentMine JSON to CSL-JSON to convert to other formats like APA, Vancouver and back to BibTeX.
 
+---
+
+<p align="center"><a href="https://citation.js.org">Site</a> • <a href="https://github.com/larsgw/citation.js">Repo</a> • <a href="https://citation.js.org/api/tutorial-getting_started.html">Getting Started</a> • <a href="https://citation.js.org/api">Documentation</a> • <a href="https://citation.js.org/demo">Demo</a></p>
+
+---
+
 [![NPM version](https://img.shields.io/npm/v/citation-js.svg)](https://www.npmjs.org/citation-js)
 [![NPM total downloads](https://img.shields.io/npm/dt/citation-js.svg)](https://npmjs.org/citation-js)
 [![Build Status](https://travis-ci.org/larsgw/citation.js.svg?branch=master)](https://travis-ci.org/larsgw/citation.js)
@@ -11,7 +17,6 @@ Citation.js converts formats like BibTeX, Wikidata JSON and ContentMine JSON to 
 [![DOI](https://zenodo.org/badge/doi/10.5281/zenodo.1005176.svg)](https://doi.org/10.5281/zenodo.1005176)
 
 [![JavaScript Style Guide](https://cdn.rawgit.com/standard/standard/master/badge.svg)](https://github.com/standard/standard)
-[![JS.ORG](https://logo.js.org/dark_tiny.png)](https://js.org)
 
 ---
 
@@ -22,11 +27,7 @@ Citation.js converts formats like BibTeX, Wikidata JSON and ContentMine JSON to 
 - [CLI](#cli)
 - [`Cite`](#cite)
   * [Async](#async)
-- [More](#more)
-  * [More Docs](#more-docs)
-  * [Demo](#demo)
-    + [NPM Demo](#npm-demo)
-    + [Browser Demos](#browser-demos)
+- [Acknowledgements](#acknowledgements)
 
 <!-- tocstop -->
 
@@ -123,34 +124,12 @@ console.log(output)
 
 > `Cite.async()` also supports a callback function as the second or third argument
 
-# More
+# Acknowledgements
 
-## More Docs
+[![JS.ORG](https://logo.js.org/dark_tiny.png)](https://js.org)
 
-Further explanation can be found [here](https://citation.js.org/api/).
+* Thanks to the JS.ORG [DNS service](https://dns.js.org) for the site url!
 
-## Demo
+[<img width="250" alt="BrowserStack" src="https://citation.js.org/static/img/browserstack-logo-600x315.png" />](https://browserstack.com)
 
-### NPM Demo
-
-[NPM Demo](https://runkit.com/npm/citation-js). Example code:
-
-```js
-var Cite = require('citation-js')
-
-var data = new Cite('Q21972834')
-
-data.get({
-  format: 'string',
-  type: 'html',
-  style: 'citation-apa',
-  lang: 'en-US'
-})
-
-// Should implicitly display
-```
-
-### Browser Demos
-
-* [Normal demo](https://citation.js.org/demo/)
-* [Bib.TXT demo](https://citation.js.org/demo/bibtxt.html)
+* Thanks to [BrowserStack](https://browserstack.com) for the free Open Source plan, allowing me to automate testing browser support, and avoid issues like [this one](https://github.com/larsgw/citation.js/issues/87)!

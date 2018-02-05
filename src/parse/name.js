@@ -59,8 +59,8 @@ const particleMatcher = getListMatcher(particles)
 const titleSplitter = new RegExp(`^((?:${titleMatcher} )*)(.*)$`, 'i')
 const suffixSplitter = getSplittingRegex(`(?:${suffixMatcher}, )*(?:${suffixMatcher})`, 'i')
 /* eslint-disable no-useless-escape */ // fix for \p (as it's just stage-3 yet)
-const particleSplitter = getSplittingRegex(`${/\p{Uppercase}/u.source}.*`, 'u')
-const endSplitter = getSplittingRegex(`(?:${/\p{Lowercase}/u.source}.*|${particleMatcher}.*|\\S*)`, 'u')
+const particleSplitter = getSplittingRegex(`${/\p{Uppercase}/u.source}.*`)
+const endSplitter = getSplittingRegex(`(?:${/\p{Lowercase}/u.source}.*|${particleMatcher}.*|\\S*)`)
 /* eslint-enable no-useless-escape */
 
 /**
@@ -79,8 +79,8 @@ const parseName = function (name = '') {
   }
 
   let start = '' // dropping-particle + given
-  let mid = ''   // non-dropping-particle + family
-  let end = ''   // suffix
+  let mid = '' // non-dropping-particle + family
+  let end = '' // suffix
 
   if (/[^.], /.test(name)) {
     // reversed name
