@@ -2959,6 +2959,8 @@ var _parse2 = _interopRequireDefault(require("./output/parse"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = new Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
+
 function _sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
 
 function _slicedToArray(arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return _sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }
@@ -2970,29 +2972,10 @@ try {
   (0, _syncRequest.default)();
 } catch (e) {}
 
-var testCaseGenerator = function testCaseGenerator(input, type, output) {
-  var _ref = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : {},
-      callback = _ref.callback,
-      _ref$link = _ref.link,
-      link = _ref$link === void 0 ? false : _ref$link;
-
-  return function () {
-    it('handles input type', function () {
-      (0, _expect.default)(_citation.default.parse.input.type(input)).to.be(type);
-    });
-    it('parses input correctly', function () {
-      var test = link ? _citation.default.parse.input.chainLink(input) : _citation.default.parse.input.chain(input, {
-        generateGraph: false
-      });
-      (0, _expect.default)(typeof callback === 'function' ? callback(test) : test).to.eql(output);
-    });
-  };
-};
-
 var wikidataTestCaseOptions = {
-  callback: function callback(_ref2) {
-    var _ref3 = _slicedToArray(_ref2, 1),
-        data = _ref3[0];
+  callback: function callback(_ref) {
+    var _ref2 = _slicedToArray(_ref, 1),
+        data = _ref2[0];
 
     return data.replace(/[&?]origin=\*/, '');
   },
@@ -3003,80 +2986,122 @@ var doiLinkTestCaseOptions = {
 };
 var doiTestCaseOptions = {
   link: true,
-  callback: function callback(_ref4) {
-    var title = _ref4.title;
+  callback: function callback(_ref3) {
+    var title = _ref3.title;
     return title;
   }
 };
-describe('input', function () {
-  describe('Wikidata ID', testCaseGenerator(_parse.default.wd.id, '@wikidata/id', _parse2.default.wd.api[0], wikidataTestCaseOptions));
-  describe('Wikidata ID list', function () {
-    context('separated by spaces', testCaseGenerator(_parse.default.wd.list.space, '@wikidata/list+text', _parse2.default.wd.api[1], wikidataTestCaseOptions));
-    context('separated by newlines', testCaseGenerator(_parse.default.wd.list.newline, '@wikidata/list+text', _parse2.default.wd.api[1], wikidataTestCaseOptions));
-    context('separated by commas', testCaseGenerator(_parse.default.wd.list.comma, '@wikidata/list+text', _parse2.default.wd.api[1], wikidataTestCaseOptions));
-  });
-  describe('Wikidata URL', testCaseGenerator(_parse.default.wd.url, '@wikidata/url', _parse2.default.wd.id, {
+var configs = {
+  '@wikidata/id': [_parse.default.wd.id, _parse2.default.wd.api[0], wikidataTestCaseOptions],
+  '@wikidata/list+text': {
+    'separated by spaces': [_parse.default.wd.list.space, _parse2.default.wd.api[1], wikidataTestCaseOptions],
+    'separated by newlines': [_parse.default.wd.list.newline, _parse2.default.wd.api[1], wikidataTestCaseOptions],
+    'separated by commas': [_parse.default.wd.list.comma, _parse2.default.wd.api[1], wikidataTestCaseOptions]
+  },
+  '@wikidata/url': [_parse.default.wd.url, _parse2.default.wd.id, {
     link: true
-  }));
-  describe('Wikidata JSON', function () {
-    this.timeout(4000);
-    testCaseGenerator(_parse.default.wd.simple, '@wikidata/object', _parse2.default.wd.simple)();
-    context('with linked authors', testCaseGenerator(_parse.default.wd.author, '@wikidata/object', _parse2.default.wd.author));
-  });
-  describe('DOI ID', testCaseGenerator(_parse.default.doi.id, '@doi/id', _parse2.default.doi.api[0], doiLinkTestCaseOptions));
-  describe('DOI URL', testCaseGenerator(_parse.default.doi.url, '@doi/api', _parse2.default.doi.simple.title, doiTestCaseOptions));
-  describe('DOI ID list', function () {
-    context('separated by spaces', testCaseGenerator(_parse.default.doi.list.space, '@doi/list+text', _parse2.default.doi.api[1], doiLinkTestCaseOptions));
-    context('separated by newlines', testCaseGenerator(_parse.default.doi.list.newline, '@doi/list+text', _parse2.default.doi.api[1], doiLinkTestCaseOptions));
-  });
-  describe('BibTeX string', function () {
-    testCaseGenerator(_parse.default.bibtex.simple, '@bibtex/text', _parse2.default.bibtex.simple)();
-    context('with whitespace and unknown fields', testCaseGenerator(_parse.default.bibtex.whitespace, '@bibtex/text', _parse2.default.bibtex.whitespace));
-    context('with literals', testCaseGenerator(_parse.default.bibtex.literals, '@bibtex/text', _parse2.default.bibtex.literals));
-    context('with year and month without date', testCaseGenerator(_parse.default.bibtex.yearMonthNeeded, '@bibtex/text', _parse2.default.bibtex.yearMonthNeeded));
-    context('with year and month with date', testCaseGenerator(_parse.default.bibtex.yearMonth, '@bibtex/text', _parse2.default.bibtex.yearMonth));
-  });
-  describe('BibTeX JSON', testCaseGenerator(_parse.default.bibtex.json, '@bibtex/object', _parse2.default.bibtex.simple));
-  describe('Bib.TXT string', function () {
-    testCaseGenerator(_parse.default.bibtxt.simple, '@bibtxt/text', [_parse2.default.bibtxt])();
-    context('with multiple entries', testCaseGenerator(_parse.default.bibtxt.multiple, '@bibtxt/text', [_parse2.default.bibtxt, _parse2.default.bibtex.simple[0]]));
-    context('with whitespace', testCaseGenerator(_parse.default.bibtxt.whitespace, '@bibtxt/text', [_parse2.default.bibtxt]));
-  });
-  describe('CSL-JSON', function () {
-    testCaseGenerator(_parse.default.csl.simple, '@csl/object', [_parse.default.csl.simple])();
-    context('as JSON string', testCaseGenerator(JSON.stringify(_parse.default.csl.simple), '@else/json', [_parse.default.csl.simple]));
-    context('as JS Object string', testCaseGenerator(_parse.default.csl.string, '@else/json', [_parse.default.csl.simple]));
-    context('with a syntax error', testCaseGenerator('{"hi"}', '@else/json', []));
-  });
-  describe('BibJSON', testCaseGenerator(_parse.default.bibjson.simple, '@bibjson/object', _parse2.default.bibjson.simple));
-  describe('Array', function () {
-    var objs = [{
-      id: 'a'
-    }, {
-      id: 'b'
-    }];
-    testCaseGenerator(objs, '@csl/list+object', objs)();
-    it('duplicates objects', function () {
-      (0, _expect.default)((0, _citation.default)(objs).data).not.to.be(objs);
+  }],
+  '@wikidata/object': {
+    'without linked authors': [_parse.default.wd.simple, _parse2.default.wd.simple],
+    'with linked authors': [_parse.default.wd.author, _parse2.default.wd.author]
+  },
+  '@doi/id': [_parse.default.doi.id, _parse2.default.doi.api[0], doiLinkTestCaseOptions],
+  '@doi/api': [_parse.default.doi.url, _parse2.default.doi.simple.title, doiTestCaseOptions],
+  '@doi/list+text': {
+    'separated by spaces': [_parse.default.doi.list.space, _parse2.default.doi.api[1], doiLinkTestCaseOptions],
+    'separated by newlines': [_parse.default.doi.list.newline, _parse2.default.doi.api[1], doiLinkTestCaseOptions]
+  },
+  '@bibtex/text': {
+    'with one simple entry': [_parse.default.bibtex.simple, _parse2.default.bibtex.simple],
+    'with whitespace and unknown fields': [_parse.default.bibtex.whitespace, _parse2.default.bibtex.whitespace],
+    'with literals': [_parse.default.bibtex.literals, _parse2.default.bibtex.literals],
+    'with year and month without date': [_parse.default.bibtex.yearMonthNeeded, _parse2.default.bibtex.yearMonthNeeded],
+    'with year and month with date': [_parse.default.bibtex.yearMonth, _parse2.default.bibtex.yearMonth]
+  },
+  '@bibtex/object': [_parse.default.bibtex.json, _parse2.default.bibtex.simple],
+  '@bibtxt/text': {
+    'with one simple entry': [_parse.default.bibtxt.simple, [_parse2.default.bibtxt]],
+    'with multiple entries': [_parse.default.bibtxt.multiple, [_parse2.default.bibtxt, _parse2.default.bibtex.simple[0]]],
+    'with whitespace': [_parse.default.bibtxt.whitespace, [_parse2.default.bibtxt]]
+  },
+  '@bibjson/object': [_parse.default.bibjson.simple, _parse2.default.bibjson.simple],
+  '@csl/object': [_parse.default.csl.simple, [_parse.default.csl.simple]],
+  '@csl/list+object': [_parse.default.array.simple, _parse.default.array.simple],
+  '@else/json': {
+    'as JSON string': [JSON.stringify(_parse.default.csl.simple), [_parse.default.csl.simple]],
+    'as JS Object string': [_parse.default.csl.string, [_parse.default.csl.simple]],
+    'with a syntax error': ['{"hi"}', []]
+  },
+  '@else/list+object': [_parse.default.array.nested, _parse.default.array.simple],
+  '@empty/text': ['', []],
+  '@empty/whitespace+text': ['   \t\n \r  ', []],
+  '@empty': {
+    '(null)': [null, []],
+    '(undefined)': [undefined, []]
+  }
+};
+
+var testCaseGenerator = function testCaseGenerator(type, input, output) {
+  var opts = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : {};
+  return function () {
+    var _opts$requirements = opts.requirements,
+        requirements = _opts$requirements === void 0 ? {} : _opts$requirements,
+        callback = opts.callback,
+        _opts$link = opts.link,
+        link = _opts$link === void 0 ? false : _opts$link;
+    var methods = _citation.default.parse.input;
+    var method = link ? methods.chainLink : methods.chain;
+    it('handles input type', function () {
+      (0, _expect.default)(methods.type(input)).to.be(type);
     });
-    describe('nested', function () {
-      var data = [[objs[0]], objs[1]];
-      testCaseGenerator(data, '@else/list+object', objs)();
-      it('duplicates objects', function () {
-        var test = (0, _citation.default)(data).data;
-        (0, _expect.default)(test[0]).not.to.be(objs[0]);
-        (0, _expect.default)(test[1]).not.to.be(objs[1]);
+    it('parses input correctly', function () {
+      var data = method(input, {
+        generateGraph: false
       });
+
+      if (typeof callback === 'function') {
+        data = callback(data);
+      }
+
+      (0, _expect.default)(data).to.eql(output);
     });
-  });
-  describe('Empty', function () {
-    describe('string', function () {
-      describe('empty', testCaseGenerator('', '@empty/text', []));
-      describe('whitespace', testCaseGenerator('   \t\n \r  ', '@empty/whitespace+text', []));
-    });
-    describe('null', testCaseGenerator(null, '@empty', []));
-    describe('undefined', testCaseGenerator(undefined, '@empty', []));
-  });
+
+    var _loop = function _loop(requirement) {
+      var predicate = requirements[requirement];
+      it(requirement, function () {
+        return predicate(input, output, opts);
+      });
+    };
+
+    for (var requirement in requirements) {
+      _loop(requirement);
+    }
+  };
+};
+
+describe('input', function () {
+  this.timeout(4000);
+
+  var _loop2 = function _loop2(spec) {
+    var specConfig = configs[spec];
+    var callback = void 0;
+
+    if (Array.isArray(specConfig)) {
+      callback = testCaseGenerator.apply(void 0, [spec].concat(_toConsumableArray(specConfig)));
+    } else {
+      callback = function callback() {
+        for (var specContext in specConfig) {
+          context(specContext, testCaseGenerator.apply(void 0, [spec].concat(_toConsumableArray(specConfig[specContext]))));
+        }
+      };
+    }
+
+    describe(spec, callback);
+  };
+
+  for (var spec in configs) {
+    _loop2(spec);
+  }
 });
 
 },{"./Q21972834.json":12,"./Q27795847.json":13,"./citation":16,"./input/parse":21,"./output/parse":24,"expect.js":"expect.js","sync-request":5}],19:[function(require,module,exports){
@@ -3218,6 +3243,10 @@ module.exports={
       "page": "5441-5444"
     },
     "string": "[\n  {\n    id: \"Q23571040\",\n    type: \"article-journal\",\n    title: \"Correlation of the Base Strengths of Amines 1\",\n    DOI: \"10.1021/ja01577a030\",\n    author: [\n      {\n\tgiven: \"H. K.\",\n\tfamily: \"Hall\"\n      }\n    ],\n    issued: [\n      {\n\tdate-parts: [ \"1957\", \"1\", \"1\" ]\n      }\n    ],\n    container-title: \"Journal of the American Chemical Society\",\n    volume: \"79\",\n    issue: \"20\",\n    page: \"5441-5444\"\n  }\n]"
+  },
+  "array": {
+    "simple": [{"id": "a"}, {"id": "b"}],
+    "nested": [[{"id": "a"}], {"id": "b"}]
   }
 }
 
