@@ -1,0 +1,10 @@
+var fs = require('fs')
+var browserify = require('browserify')
+var babelify = require('babelify')
+
+browserify()
+  .exclude(['citation-js', 'expect.js'])
+  .add('./test/wrapper.js')
+  .transform(babelify, {global: true})
+  .bundle()
+  .pipe(fs.createWriteStream(__dirname + '/../build/test.citation.js'))
