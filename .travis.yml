@@ -5,9 +5,14 @@ branches:
 language: node_js
 node_js:
   - "node"
+env:
+  global:
+    - secret: "QBsE494AuP1EM3EZ1OipTVb7D7EPoDq1ac0Xrz+/UYK043IQ3WY5f1Sro0IWzJTRckXNPM1gZ4Kp7koivvLFk/+irNbQ870FKkcprlOqzwtQR5gLaZ42JPJM1PUSGFhN3T6zVec884KIp3HqBb0POEsi+BH6VnTjtd+jWRWSD4sZ+mx81CHuEiUP+V8V7zGMQ8e+HCCwmx3Rcf/kgU6AwyE+sqAYAcpmXBzpKHqEQkxfVAjpIQZ1UX0+A49ZTpvilQul6iJ/ksyD8OQrvECiy1BZKeG360U98izV8I4YKevwJ+8nhdOnnQgnsJ8jry5veV0ZRYEv99c8IMVrrRU9RO/WuCUdaKv14srYRf81IzQnBKh6X7oT1O8/+N8u7yuIzJwYNWxQOra0WtXARzKHJ1PMZaiZjYnkuyj7xrX4HoAew1s2LlWdb/TS6CtY7JbI7bnq8KJctSBuKcu99bEVyGnMVwfBx9OEGnYtmvi314u5VuV/9TZvsejj7SwkchxI5IJ3Eq9lZTSRmzWPOIysOnNlw5lPejOZbYYp46z/wObjFOpdo3CSFFLgRm1SdCkACoKr/xR5ljTGRaMW2z8z6FoV81Ahsa2lZ6rNhnHHkOLDDZYvjUzytR1y2r5/uiFd6mmNuWaDGCnA960CbeJII/WUNX8wcauCs0cCfrjEYW8="
 sudo: false
 install:
   - npm install
   - npm install -g codecov
+  - mkdir build
 script:
   - npm run coverage && codecov
+  - "npm run dist:main && npm run dist:test"

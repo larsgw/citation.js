@@ -3,7 +3,7 @@ var browserify = require('browserify')
 var babelify = require('babelify')
 
 browserify()
-  .exclude(['citation-js', 'expect.js'])
+  .exclude(['citation-js'])
   .add('./test/wrapper.js')
   .transform(babelify, {global: true})
   .bundle()
