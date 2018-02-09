@@ -16,3 +16,4 @@ install:
 script:
   - npm run coverage && codecov
   - "npm run dist:main && npm run dist:test"
+  - "npm run test:browser"
