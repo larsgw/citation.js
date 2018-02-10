@@ -42,8 +42,6 @@ module.exports = function(config) {
     ],
 
 
-    // BrowserStack
-    browserStack: JSON.parse(process.env.BS_CREDS),
     // define browsers
     customLaunchers: {
       bs_chrome_64: {
