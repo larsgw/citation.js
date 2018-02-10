@@ -67,7 +67,7 @@ const configs = {
   '@else/json': {
     'as JSON string': [JSON.stringify(input.csl.simple), [input.csl.simple]],
     'as JS Object string': [input.csl.string, [input.csl.simple]],
-    'with a syntax error': ['{"hi"}', []],
+    'with a syntax error': ['{"hi"}', []]
   },
   '@else/list+object': [input.array.nested, input.array.simple],
 
