@@ -4,6 +4,8 @@ Citation.js converts formats like BibTeX, Wikidata JSON and ContentMine JSON to 
 
 ---
 
+[![Join the chat at https://gitter.im/citation-js/Lobby](https://badges.gitter.im/citation-js/Lobby.svg)](https://gitter.im/citation-js/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 <p align="center"><a href="https://citation.js.org">Site</a> • <a href="https://github.com/larsgw/citation.js">Repo</a> • <a href="https://citation.js.org/api/tutorial-getting_started.html">Getting Started</a> • <a href="https://citation.js.org/api">Documentation</a> • <a href="https://citation.js.org/demo">Demo</a></p>
 
 ---
