@@ -45,6 +45,7 @@ const configs = {
   '@bibtex/text': {
     'with one simple entry': [input.bibtex.simple, output.bibtex.simple],
     'with whitespace and unknown fields': [input.bibtex.whitespace, output.bibtex.whitespace],
+    'with unicode and capitalized types': [input.bibtex.unicode, [output.bibtex.unicode]],
     'with literals': [input.bibtex.literals, output.bibtex.literals],
     'with year and month without date': [input.bibtex.yearMonthNeeded, output.bibtex.yearMonthNeeded],
     'with year and month with date': [input.bibtex.yearMonth, output.bibtex.yearMonth]
