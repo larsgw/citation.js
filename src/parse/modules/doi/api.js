@@ -2,10 +2,18 @@
  * @module input/doi
  */
 
-import request from 'sync-request'
 import parseDoiJson from './json'
+import fetchFile from '../../../util/fetchFile'
+import fetchFileAsync from '../../../util/fetchFileAsync'
 
-/* global fetch, Headers */
+/**
+ * DOI API headers
+ *
+ * @access private
+ */
+const apiHeaders = {
+  Accept: 'application/vnd.citationstyles.csl+json'
+}
 
 /**
  * Fetch DOI API results
@@ -18,14 +26,8 @@ import parseDoiJson from './json'
  * @return {Promise<CSL>} The fetched JSON
  */
 const fetchDoiApiAsync = async function (url) {
-  try {
-    const headers = new Headers()
-    headers.append('Accept', 'application/vnd.citationstyles.csl+json')
-    return (await fetch(url, {headers})).json()
-  } catch (e) {
-    logger.error('[set]', `File '${url}' could not be fetched:`, e.message)
-    return {}
-  }
+  const result = await fetchFileAsync(url, {headers: apiHeaders})
+  return result === '[]' ? result : {}
 }
 
 /**
@@ -54,17 +56,8 @@ const parseDoiApiAsync = async function (data) {
  * @return {CSL} The fetched JSON
  */
 const fetchDoiApi = function (url) {
-  try {
-    return JSON.parse(request('GET', url, {
-      headers: {
-        Accept: 'application/vnd.citationstyles.csl+json'
-      },
-      allowRedirectHeaders: ['Accept']
-    }).getBody('utf8'))
-  } catch (e) {
-    logger.error('[set]', `File '${url}' could not be fetched:`, e.message)
-    return {}
-  }
+  const result = fetchFile(url, {headers: apiHeaders})
+  return result === '[]' ? result : {}
 }
 
 /**
