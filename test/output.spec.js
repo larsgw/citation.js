@@ -134,7 +134,7 @@ describe('output', () => {
           expect(Cite.CSL.register.getLocale('custom')).to.be(customLocale)
         })
 
-        testCaseGenerator(data, opts('string', 'string', 'citation-apa', 'custom'), '(custom).')()
+        testCaseGenerator(data, opts('string', 'string', 'citation-apa', 'custom'), '(Custom).')()
       })
     })
   })
