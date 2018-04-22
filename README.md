@@ -15,6 +15,7 @@ Citation.js converts formats like BibTeX, Wikidata JSON and ContentMine JSON to 
 [![codecov](https://codecov.io/gh/larsgw/citation.js/branch/master/graph/badge.svg)](https://codecov.io/gh/larsgw/citation.js)
 [![license](https://img.shields.io/github/license/larsgw/citation.js.svg)](https://github.com/larsgw/citation.js/blob/master/LICENSE.md)
 [![DOI](https://zenodo.org/badge/doi/10.5281/zenodo.1005176.svg)](https://doi.org/10.5281/zenodo.1005176)
+[![Maintainability](https://api.codeclimate.com/v1/badges/2b5bc6024d63e519ac15/maintainability)](https://codeclimate.com/github/larsgw/citation.js/maintainability)
 
 [![JavaScript Style Guide](https://cdn.rawgit.com/standard/standard/master/badge.svg)](https://github.com/standard/standard)
 
