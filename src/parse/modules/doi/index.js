@@ -12,7 +12,8 @@ export const parsers = {id, api, json, type}
 export const types = {
   '@doi/api': {
     dataType: 'String',
-    predicate: /^\s*(https?:\/\/(?:dx\.)?doi\.org\/(10.\d{4,9}\/[-._;()/:A-Z0-9]+))\s*$/i
+    predicate: /^\s*(https?:\/\/(?:dx\.)?doi\.org\/(10.\d{4,9}\/[-._;()/:A-Z0-9]+))\s*$/i,
+    extends: '@else/url'
   },
   '@doi/id': {
     dataType: 'String',

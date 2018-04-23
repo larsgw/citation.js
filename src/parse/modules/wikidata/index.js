@@ -22,11 +22,13 @@ export const types = {
   },
   '@wikidata/api': {
     dataType: 'String',
-    predicate: /^(https?:\/\/(?:www\.)?wikidata.org\/w\/api\.php(?:\?.*)?)$/
+    predicate: /^(https?:\/\/(?:www\.)?wikidata.org\/w\/api\.php(?:\?.*)?)$/,
+    extends: '@else/url'
   },
   '@wikidata/url': {
     dataType: 'String',
-    predicate: /\/(Q\d+)(?:[#?/]|\s*$)/
+    predicate: /\/(Q\d+)(?:[#?/]|\s*$)/,
+    extends: '@else/url'
   },
   '@wikidata/array': {
     dataType: 'Array',
