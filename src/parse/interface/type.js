@@ -48,7 +48,7 @@ const parseNativeTypes = (input, dataType) => {
 const matchType = (types = {}, data) => {
   for (const type in types) {
     if (types[type].predicate(data)) {
-      return matchType(types[type].extensions) || type
+      return matchType(types[type].extensions, data) || type
     }
   }
 }
