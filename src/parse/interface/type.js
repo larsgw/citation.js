@@ -7,17 +7,6 @@ const types = {}
 const unregExts = {}
 
 /**
- * @access private
- * @memberof Cite.plugins.input
- *
- * @return {Cite.plugins.input~format} the 'invalid' type (`'@invalid'`)
- */
-const handleInvalidInput = () => {
-  logger.warn('[set]', 'This format is not supported or recognized')
-  return '@invalid'
-}
-
-/**
  * Hard-coded, for reasons
  *
  * @access private
@@ -40,6 +29,10 @@ const parseNativeTypes = (input, dataType) => {
     case 'ComplexObject':
       // might, of course, be something completely else, but this is how the parser works
       return '@csl/object'
+
+    default:
+      logger.warn('[set]', 'This format is not supported or recognized')
+      return '@invalid'
   }
 }
 
@@ -72,8 +65,9 @@ export const type = (input) => {
   const dataType = dataTypeOf(input)
 
   if (!types.hasOwnProperty(dataType)) {
+    // TODO if no parsers registered, this warning is always thrown
     logger.warn('[set]', 'Data type has no formats listed')
-    return parseNativeTypes(input, dataType) || handleInvalidInput(input)
+    return parseNativeTypes(input, dataType)
   }
 
   // Empty array should be @csl/list+object too
@@ -87,7 +81,7 @@ export const type = (input) => {
 
   // If no matching formats found, test if native format,
   // else invalid input.
-  return match || parseNativeTypes(input, dataType) || handleInvalidInput(input)
+  return match || parseNativeTypes(input, dataType)
 }
 
 /**

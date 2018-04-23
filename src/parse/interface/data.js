@@ -8,7 +8,8 @@ const asyncParsers = {}
 const nativeParsers = {
   '@csl/object': input => [input],
   '@csl/list+object': input => input,
-  '@else/list+object': input => flatten(input.map(chain))
+  '@else/list+object': input => flatten(input.map(chain)),
+  '@invalid': () => []
 }
 const nativeAsyncParsers = {
   '@else/list+object': async input => flatten(await Promise.all(input.map(chainAsync)))
