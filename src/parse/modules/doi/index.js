@@ -12,15 +12,15 @@ export const parsers = {id, api, json, type}
 export const types = {
   '@doi/api': {
     dataType: 'String',
-    parseType: /^\s*(https?:\/\/(?:dx\.)?doi\.org\/(10.\d{4,9}\/[-._;()/:A-Z0-9]+))\s*$/i
+    predicate: /^\s*(https?:\/\/(?:dx\.)?doi\.org\/(10.\d{4,9}\/[-._;()/:A-Z0-9]+))\s*$/i
   },
   '@doi/id': {
     dataType: 'String',
-    parseType: /^\s*(10.\d{4,9}\/[-._;()/:A-Z0-9]+)\s*$/i
+    predicate: /^\s*(10.\d{4,9}\/[-._;()/:A-Z0-9]+)\s*$/i
   },
   '@doi/list+text': {
     dataType: 'String',
-    parseType: /^\s*(?:(?:10.\d{4,9}\/[-._;()/:A-Z0-9]+)\s*)+$/i
+    predicate: /^\s*(?:(?:10.\d{4,9}\/[-._;()/:A-Z0-9]+)\s*)+$/i
   },
   '@doi/list+object': {
     dataType: 'Array',

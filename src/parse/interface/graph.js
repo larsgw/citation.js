@@ -9,7 +9,7 @@
  *
  * @return {CSL} entry
  */
-const applyGraph = (entry, graph) => {
+export const applyGraph = (entry, graph) => {
   const isArrayElse = ({type}) => type === '@else/list+object'
 
   if (!Array.isArray(entry._graph)) {
@@ -32,9 +32,7 @@ const applyGraph = (entry, graph) => {
  *
  * @return {CSL} entry
  */
-const removeGraph = (entry) => {
+export const removeGraph = (entry) => {
   delete entry._graph
   return entry
 }
-
-export {applyGraph, removeGraph}

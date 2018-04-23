@@ -8,7 +8,7 @@
  *
  * @return {String} type
  */
-const typeOf = thing => {
+export const typeOf = thing => {
   switch (thing) {
     case undefined:
       return 'Undefined'
@@ -27,7 +27,7 @@ const typeOf = thing => {
  *
  * @return {} dataType
  */
-const dataTypeOf = thing => {
+export const dataTypeOf = thing => {
   switch (typeof thing) {
     case 'string':
       return 'String'
@@ -46,5 +46,3 @@ const dataTypeOf = thing => {
       return 'Primitive'
   }
 }
-
-export {typeOf, dataTypeOf}

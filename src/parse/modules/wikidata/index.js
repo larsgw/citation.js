@@ -14,19 +14,19 @@ export const parsers = {list, json, prop, type, url, api}
 export const types = {
   '@wikidata/id': {
     dataType: 'String',
-    parseType: /^\s*(Q\d+)\s*$/
+    predicate: /^\s*(Q\d+)\s*$/
   },
   '@wikidata/list+text': {
     dataType: 'String',
-    parseType: /^\s*((?:Q\d+(?:\s+|,|))*Q\d+)\s*$/
+    predicate: /^\s*((?:Q\d+(?:\s+|,|))*Q\d+)\s*$/
   },
   '@wikidata/api': {
     dataType: 'String',
-    parseType: /^(https?:\/\/(?:www\.)?wikidata.org\/w\/api\.php(?:\?.*)?)$/
+    predicate: /^(https?:\/\/(?:www\.)?wikidata.org\/w\/api\.php(?:\?.*)?)$/
   },
   '@wikidata/url': {
     dataType: 'String',
-    parseType: /\/(Q\d+)(?:[#?/]|\s*$)/
+    predicate: /\/(Q\d+)(?:[#?/]|\s*$)/
   },
   '@wikidata/array': {
     dataType: 'Array',

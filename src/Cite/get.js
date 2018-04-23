@@ -1,6 +1,6 @@
 import {validateOutputOptions as validate} from './static'
 import {format as formatData} from '../get/registrar'
-import parseCsl from '../parse/csl'
+import {csl as parseCsl} from '../parse/'
 
 /**
  * Get a list of the data entry IDs, in the order of that list

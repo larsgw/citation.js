@@ -3,13 +3,13 @@
  * @memberof Cite
  */
 
-import * as input from './input/'
-import date from './date'
-import name from './name'
-
 import './modules/'
 
 // BEGIN compat
+import {chain, chainLink, chainAsync, chainLinkAsync} from './interface/chain'
+import {data, dataAsync} from './interface/data'
+import {type} from './interface/type'
+
 import {parsers as bibjsonParsers} from './modules/bibjson/'
 import {parsers as bibtexParsers} from './modules/bibtex/'
 import {parsers as doiParsers} from './modules/doi/'
@@ -105,8 +105,47 @@ export const doi = {
  * @deprecated now part of the {@link module:input/other} module
  */
 export {parse as json} from './modules/other/json'
+
+/**
+ * @namespace input
+ * @memberof Cite.parse
+ * @deprecated use toplevel methods
+ *
+ * @borrows Cite.plugins.input.chain as chain
+ * @borrows Cite.plugins.input.chainAsync as chainAsync
+ * @borrows Cite.plugins.input.chainLink as chainLink
+ * @borrows Cite.plugins.input.chainLinkAsync as chainLinkAsync
+ * @borrows Cite.plugins.input.data as data
+ * @borrows Cite.plugins.input.dataAsync as dataAsync
+ * @borrows Cite.plugins.input.type as type
+ */
+export const input = {
+  chain,
+  chainAsync,
+  chainLink,
+  chainLinkAsync,
+  data,
+  dataAsync,
+  type,
+
+  /**
+   * @namespace async
+   * @memberof Cite.parse.input
+   * @deprecated use toplevel methods
+   *
+   * @borrows Cite.plugins.input.chainAsync as chainAsync
+   * @borrows Cite.plugins.input.chainLinkAsync as chainLinkAsync
+   * @borrows Cite.plugins.input.dataAsync as dataAsync
+   */
+  async: {
+    chain: chainAsync,
+    chainLink: chainLinkAsync,
+    data: dataAsync
+  }
+}
 // END compat
 
-export {date, name, input}
+export {default as date} from './date'
+export {default as name} from './name'
 export {default as csl} from './csl'
-export * from './registrar/'
+export * from './interface/'

@@ -15,30 +15,30 @@ export const parsers = {empty, url, json, jquery, html}
 export const types = {
   '@empty/text': {
     dataType: 'String',
-    parseType: input => input === ''
+    predicate: input => input === ''
   },
   '@empty/whitespace+text': {
     dataType: 'String',
-    parseType: /^\s+$/
+    predicate: /^\s+$/
   },
   '@empty': {
     dataType: 'Primitive',
-    parseType: input => input == null
+    predicate: input => input == null
   },
   '@else/json': {
     dataType: 'String',
-    parseType: /^\s*(\{[\S\s]+\}|\[[\S\s]*\])\s*$/
+    predicate: /^\s*(\{[\S\s]+\}|\[[\S\s]*\])\s*$/
   },
   '@else/url': {
     dataType: 'String',
-    parseType: /^(https?:\/\/)?((([a-z\d]([a-z\d-]*[a-z\d])*)\.)+[a-z]{2,}|((\d{1,3}\.){3}\d{1,3})|localhost)(:\d+)?(\/[-a-z\d%_.~+:]*)*(\?[;&a-z\d%_.~+=-]*)?(#[-a-z\d_]*)?$/i
+    predicate: /^(https?:\/\/)?((([a-z\d]([a-z\d-]*[a-z\d])*)\.)+[a-z]{2,}|((\d{1,3}\.){3}\d{1,3})|localhost)(:\d+)?(\/[-a-z\d%_.~+:]*)*(\?[;&a-z\d%_.~+=-]*)?(#[-a-z\d_]*)?$/i
   },
   '@else/jquery': {
     dataType: 'ComplexObject',
-    parseType: input => typeof jQuery !== 'undefined' && input instanceof jQuery
+    predicate: input => typeof jQuery !== 'undefined' && input instanceof jQuery
   },
   '@else/html': {
     dataType: 'ComplexObject',
-    parseType: input => typeof HTMLElement !== 'undefined' && input instanceof HTMLElement
+    predicate: input => typeof HTMLElement !== 'undefined' && input instanceof HTMLElement
   }
 }

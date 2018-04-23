@@ -13,11 +13,11 @@ export const parsers = {text, json, prop, type, bibtxt}
 export const types = {
   '@bibtex/text': {
     dataType: 'String',
-    parseType: /^(?:\s*@\s*[^@]+?\s*\{\s*[^@]+?\s*,\s*[^@]+\})+\s*$/
+    predicate: /^(?:\s*@\s*[^@]+?\s*\{\s*[^@]+?\s*,\s*[^@]+\})+\s*$/
   },
   '@bibtxt/text': {
     dataType: 'String',
-    parseType: /^\s*(\[(?!\s*[{[]).*?\]\s*(\n\s*[^[]((?!:)\S)+\s*:\s*.+?\s*)*\s*)+$/
+    predicate: /^\s*(\[(?!\s*[{[]).*?\]\s*(\n\s*[^[]((?!:)\S)+\s*:\s*.+?\s*)*\s*)+$/
   },
   '@bibtex/object': {
     dataType: 'SimpleObject',

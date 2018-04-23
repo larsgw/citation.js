@@ -37,8 +37,8 @@ Object.assign(Cite, staticMethods, {
   parse,
   util,
   version,
-  input: parse.input.chain,
-  inputAsync: parse.input.async.chain
+  input: parse.chain,
+  inputAsync: parse.chainAsync
 })
 
 module.exports = Cite
