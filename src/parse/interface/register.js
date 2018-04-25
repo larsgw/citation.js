@@ -1,4 +1,6 @@
 import {FormatParser} from './parser'
+import {addTypeParser, removeTypeParser} from './type'
+import {addDataParser, removeDataParser} from './data'
 
 // ============================================================================
 // Type definitions
@@ -76,6 +78,8 @@ import {FormatParser} from './parser'
 // Interface
 // ============================================================================
 
+const formats = {}
+
 /**
  * See the relevant tutorial: {@tutorial input_plugins}
  *
@@ -87,8 +91,83 @@ import {FormatParser} from './parser'
  *
  * @tutorial input_plugins
  */
-export const add = (format, parsers) => {
-  const formatParser = new FormatParser(format, parsers)
+export const addFormat = (format, parsers, pluginRef) => {
+  let formatParser = new FormatParser(format, parsers)
   formatParser.validate()
-  formatParser.add()
+
+  if (!formats[format]) {
+    formats[format] = {}
+  }
+
+  if (formatParser.typeParser) {
+    addTypeParser(format, formatParser.typeParser)
+    formats[format].typeParser = pluginRef
+  }
+  if (formatParser.dataParser) {
+    addDataParser(format, formatParser.dataParser)
+    formats[format].dataParser = pluginRef
+  }
+  if (formatParser.asyncDataParser) {
+    addDataParser(format, formatParser.asyncDataParser)
+    formats[format].asyncDataParser = pluginRef
+  }
 }
+
+export const removeFormat = (format, pluginRef) => {
+  const parsers = formats[format]
+  if (!parsers) {
+    return
+  }
+
+  // TODO refactor into proper code
+  const totalRefs = Object.values(parsers)
+  const deletedRefs = totalRefs.filter(ref => pluginRef == null || ref === pluginRef)
+
+  if (pluginRef == null || parsers.typeParser === pluginRef) {
+    delete parsers.typeParser
+    removeTypeParser(format)
+  }
+  if (pluginRef == null || parsers.dataParser === pluginRef) {
+    delete parsers.dataParser
+    removeDataParser(format)
+  }
+  if (pluginRef == null || parsers.asyncDataParser === pluginRef) {
+    delete parsers.asyncDataParser
+    removeDataParser(format, true)
+  }
+
+  if (deletedRefs.length === totalRefs.length) {
+    delete formats[format]
+  }
+}
+
+export const hasFormat = (format) => format in formats
+export const listFormat = () => Object.keys(formats)
+
+// BEGIN compat
+export const add = (...args) => {
+  logger.warn('This method is deprecated; use addFormat')
+  return addFormat(...args)
+}
+// END compat
+
+const plugins = {}
+
+export const addPlugin = (ref, plugin, config) => {
+  plugins[ref] = config
+  for (let format in plugin) {
+    exports.addFormat(format, plugin[format], ref)
+  }
+}
+
+export const removePlugin = (ref) => {
+  delete plugins[ref]
+  for (let format in formats) {
+    if (Object.values(formats[format]).includes(ref)) {
+      exports.removeFormat(format, ref)
+    }
+  }
+}
+
+export const hasPlugin = (ref) => ref in plugins
+export const listPlugin = () => Object.keys(plugins)

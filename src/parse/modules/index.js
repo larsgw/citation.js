@@ -1,4 +1,4 @@
-import {add} from '../interface/register'
+import {addFormat as add} from '../interface/register'
 import * as modules from './modules'
 
 for (const module in modules) {

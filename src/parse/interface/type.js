@@ -2,6 +2,7 @@ import {dataTypeOf} from './dataType'
 
 // register
 const types = {}
+const dataTypes = {}
 
 // extensions not registered as such
 const unregExts = {}
@@ -40,13 +41,13 @@ const parseNativeTypes = (input, dataType) => {
  * @access private
  * @memberof Cite.plugins.input
  *
- * @param {Object} [types={}]
+ * @param {Array<Cite.plugins.input~format>} [typeList=[]]
  * @param {InputData} data
  *
  * @return {Cite.plugins.input~format} native format
  */
-const matchType = (types = {}, data) => {
-  for (const type in types) {
+const matchType = (typeList = [], data) => {
+  for (const type of typeList) {
     if (types[type].predicate(data)) {
       return matchType(types[type].extensions, data) || type
     }
@@ -64,7 +65,7 @@ const matchType = (types = {}, data) => {
 export const type = (input) => {
   const dataType = dataTypeOf(input)
 
-  if (!types.hasOwnProperty(dataType)) {
+  if (!dataTypes.hasOwnProperty(dataType)) {
     // TODO if no parsers registered, this warning is always thrown
     logger.warn('[set]', 'Data type has no formats listed')
     return parseNativeTypes(input, dataType)
@@ -77,7 +78,7 @@ export const type = (input) => {
     return parseNativeTypes(input, dataType)
   }
 
-  const match = matchType(types[dataType], input)
+  const match = matchType(dataTypes[dataType], input)
 
   // If no matching formats found, test if native format,
   // else invalid input.
@@ -93,38 +94,37 @@ export const type = (input) => {
  */
 export const addTypeParser = (format, {dataType, predicate, extends: extend}) => {
   // 1. check if any subclass formats are waiting for this format
-  let extensions = {}
+  let extensions = []
   if (format in unregExts) {
     extensions = unregExts[format]
     delete unregExts[format]
-    logger.info('[set]', `Subclasses "${Object.keys(extensions)}" finally registered to parent type "${format}"`)
+    logger.info('[set]', `Subclasses "${extensions}" finally registered to parent type "${format}"`)
   }
 
-  // 2. create object to add to type lists
+  // 2. create object with parser info
   const object = {predicate, extensions}
+  types[format] = object
 
-  // 3. determine which type lists the object should be added to
-  const typeList = types[dataType] || (types[dataType] = {})
-
+  // 3. determine which type lists the type should be added to
   if (extend) {
     // 3.1. if format is subclass, check if parent type is registered
-    // TODO recursive 'find'
-    const parentTypeParser = typeList[extend]
+    const parentTypeParser = types[extend]
 
     if (parentTypeParser) {
       // 3.1.1. if it is, add the type parser
-      parentTypeParser.extensions[format] = object
+      parentTypeParser.extensions.push(format)
     } else {
       // 3.1.2. if it isn't, register type as waiting
       if (!unregExts[extend]) {
-        unregExts[extend] = {}
+        unregExts[extend] = []
       }
-      unregExts[extend][format] = object
+      unregExts[extend].push(format)
       logger.info('[set]', `Subclass "${format}" is waiting on parent type "${extend}"`)
     }
   } else {
     // 3.2. else, add
-    typeList[format] = object
+    const typeList = dataTypes[dataType] || (dataTypes[dataType] = [])
+    typeList.push(format)
   }
 }
 
@@ -137,6 +137,51 @@ export const addTypeParser = (format, {dataType, predicate, extends: extend}) =>
  * @return {Boolean} type parser is registered
  */
 export const hasTypeParser = type => types.hasOwnProperty(type)
+
+/**
+ * @access public
+ * @memberof Cite.plugins.input
+ *
+ * @param {Cite.plugins.input~format} type
+ */
+export const removeTypeParser = type => {
+  delete types[type]
+
+  // Removing orphaned type refs
+  const typeLists = [
+    ...Object.values(dataTypes),
+    ...Object.values(types).map(type => type.extensions).filter(list => list.length > 0)
+  ]
+  typeLists.forEach(typeList => {
+    const index = typeList.indexOf(type)
+    if (index > -1) {
+      typeList.splice(index, 1)
+    }
+  })
+}
+
+/**
+ * @access public
+ * @memberof Cite.plugins.input
+ *
+ * @return {Array<Cite.plugins.input~format>} list of registered type parsers
+ */
+export const listTypeParser = () => Object.keys(types)
+
+/**
+ * @access public
+ * @memberof Cite.plugins.input
+ *
+ * @return {Object} tree structure
+ */
+export const treeTypeParser = () => {
+  const attachNode = name => ({name, children: types[name].extensions.map(attachNode)})
+  return {
+    name: 'Type tree',
+    children: Object.entries(dataTypes)
+      .map(([name, children]) => ({name, children: children.map(attachNode)}))
+  }
+}
 
 /**
  * Validate and parse the format name

@@ -88,3 +88,20 @@ export const addDataParser = (format, {parser, async}) => {
 export const hasDataParser = (type, async = false) => async
   ? asyncParsers[type] || nativeAsyncParsers[type]
   : parsers[type] || nativeParsers[type]
+
+/**
+ * @access public
+ * @memberof Cite.plugins.input
+ *
+ * @param {Cite.plugins.input~format} type
+ * @param {Boolean} [async=false]
+ */
+export const removeDataParser = (type, async = false) => { delete (async ? asyncParsers : parsers)[type] }
+
+/**
+ * @access public
+ * @memberof Cite.plugins.input
+ *
+ * @param {Boolean} [async=false]
+ */
+export const listDataParser = (async = false) => Object.keys(async ? asyncParsers : parsers)

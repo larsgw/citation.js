@@ -1,10 +1,9 @@
-import {type, typeMatcher, addTypeParser} from './type'
-import {addDataParser} from './data'
+import {type, typeMatcher} from './type'
 
 export class TypeParser {
   validDataTypes = ['String', 'Array', 'SimpleObject', 'ComplexObject', 'Primitive']
 
-  constructor (data) {
+  constructor (data = {}) {
     this.data = data
   }
 
@@ -130,7 +129,7 @@ export class TypeParser {
 }
 
 export class DataParser {
-  constructor (parser, {async} = {}) {
+  constructor (parser = {}, {async} = {}) {
     this.parser = parser
     this.async = async
   }
@@ -148,8 +147,9 @@ export class DataParser {
 }
 
 export class FormatParser {
-  constructor (format, parsers) {
+  constructor (format, parsers = {}) {
     this.format = format
+
     if (parsers.parseType) {
       this.typeParser = new TypeParser(parsers.parseType)
     }
@@ -157,7 +157,7 @@ export class FormatParser {
       this.dataParser = new DataParser(parsers.parse, {async: false})
     }
     if (parsers.parseAsync) {
-      this.dataAsyncParser = new DataParser(parsers.parseAsync, {async: true})
+      this.asyncDataParser = new DataParser(parsers.parseAsync, {async: true})
     }
   }
 
@@ -180,25 +180,8 @@ export class FormatParser {
     if (this.dataParser) {
       this.dataParser.validate()
     }
-    if (this.dataAsyncParser) {
-      this.dataAsyncParser.validate()
-    }
-  }
-
-  // ==========================================================================
-  // Register handling
-  // ==========================================================================
-
-  add () {
-    const format = this.format
-    if (this.typeParser) {
-      addTypeParser(format, this.typeParser)
-    }
-    if (this.dataParser) {
-      addDataParser(format, this.dataParser)
-    }
-    if (this.dataAsyncParser) {
-      addDataParser(format, this.dataAsyncParser)
+    if (this.asyncDataParser) {
+      this.asyncDataParser.validate()
     }
   }
 }
