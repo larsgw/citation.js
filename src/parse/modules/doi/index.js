@@ -7,24 +7,40 @@ import * as api from './api'
 import * as json from './json'
 import * as type from './type'
 
-export const scope = '@doi'
+export const ref = '@doi'
 export const parsers = {id, api, json, type}
-export const types = {
+export const formats = {
   '@doi/api': {
-    dataType: 'String',
-    predicate: /^\s*(https?:\/\/(?:dx\.)?doi\.org\/(10.\d{4,9}\/[-._;()/:A-Z0-9]+))\s*$/i,
-    extends: '@else/url'
+    parse: api.parse,
+    parseAsync: api.parseAsync,
+    parseType: {
+      dataType: 'String',
+      predicate: /^\s*(https?:\/\/(?:dx\.)?doi\.org\/(10.\d{4,9}\/[-._;()/:A-Z0-9]+))\s*$/i,
+      extends: '@else/url'
+    }
   },
   '@doi/id': {
-    dataType: 'String',
-    predicate: /^\s*(10.\d{4,9}\/[-._;()/:A-Z0-9]+)\s*$/i
+    parse: id.parse,
+    parseType: {
+      dataType: 'String',
+      predicate: /^\s*(10.\d{4,9}\/[-._;()/:A-Z0-9]+)\s*$/i
+    }
   },
   '@doi/list+text': {
-    dataType: 'String',
-    predicate: /^\s*(?:(?:10.\d{4,9}\/[-._;()/:A-Z0-9]+)\s*)+$/i
+    parse: id.parse,
+    parseType: {
+      dataType: 'String',
+      predicate: /^\s*(?:(?:10.\d{4,9}\/[-._;()/:A-Z0-9]+)\s*)+$/i
+    }
   },
   '@doi/list+object': {
-    dataType: 'Array',
-    elementConstraint: '@doi/id'
+    parse: id.parse,
+    parseType: {
+      dataType: 'Array',
+      elementConstraint: '@doi/id'
+    }
+  },
+  '@doi/type': {
+    parse: type.parse
   }
 }

@@ -9,33 +9,59 @@ import * as type from './type'
 import * as url from './url'
 import * as api from './api'
 
-export const scope = '@wikidata'
+export const ref = '@wikidata'
 export const parsers = {list, json, prop, type, url, api}
-export const types = {
+export const formats = {
   '@wikidata/id': {
-    dataType: 'String',
-    predicate: /^\s*(Q\d+)\s*$/
+    parse: list.parse,
+    parseType: {
+      dataType: 'String',
+      predicate: /^\s*(Q\d+)\s*$/
+    }
   },
   '@wikidata/list+text': {
-    dataType: 'String',
-    predicate: /^\s*((?:Q\d+(?:\s+|,|))*Q\d+)\s*$/
+    parse: list.parse,
+    parseType: {
+      dataType: 'String',
+      predicate: /^\s*((?:Q\d+(?:\s+|,|))*Q\d+)\s*$/
+    }
   },
   '@wikidata/api': {
-    dataType: 'String',
-    predicate: /^(https?:\/\/(?:www\.)?wikidata.org\/w\/api\.php(?:\?.*)?)$/,
-    extends: '@else/url'
+    parse: api.parse,
+    parseAsync: api.parseAsync,
+    parseType: {
+      dataType: 'String',
+      predicate: /^(https?:\/\/(?:www\.)?wikidata.org\/w\/api\.php(?:\?.*)?)$/,
+      extends: '@else/url'
+    }
   },
   '@wikidata/url': {
-    dataType: 'String',
-    predicate: /\/(Q\d+)(?:[#?/]|\s*$)/,
-    extends: '@else/url'
+    parse: url.parse,
+    parseType: {
+      dataType: 'String',
+      predicate: /\/(Q\d+)(?:[#?/]|\s*$)/,
+      extends: '@else/url'
+    }
   },
-  '@wikidata/array': {
-    dataType: 'Array',
-    elementConstraint: '@wikidata/id'
+  '@wikidata/list+object': {
+    parse: list.parse,
+    parseType: {
+      dataType: 'Array',
+      elementConstraint: '@wikidata/id'
+    }
   },
   '@wikidata/object': {
-    dataType: 'SimpleObject',
-    propertyConstraint: {props: 'entities'}
+    parse: json.parse,
+    parseAsync: json.parseAsync,
+    parseType: {
+      dataType: 'SimpleObject',
+      propertyConstraint: {props: 'entities'}
+    }
+  },
+  '@wikidata/prop': {
+    parse: prop.parse
+  },
+  '@wikidata/type': {
+    parse: type.parse
   }
 }

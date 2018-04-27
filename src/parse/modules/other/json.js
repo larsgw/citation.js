@@ -44,8 +44,6 @@ const parseJSON = function (str) {
   }
 }
 
-export const scope = '@else'
-export const types = '@else/json'
 export {
   parseJSON as parse,
   parseJSON as default

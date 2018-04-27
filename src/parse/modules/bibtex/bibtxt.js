@@ -63,8 +63,6 @@ const parseBibTxtEntry = entry => {
  */
 const parseBibTxt = src => src.trim().split(bibTxtRegex.splitEntries).map(parseBibTxtEntry)
 
-export const scope = '@bibtxt'
-export const types = '@bibtxt/text'
 export {
   parseBibTxt as parse,
   parseBibTxt as text,

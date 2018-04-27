@@ -54,8 +54,6 @@ const parseBibTeXJSON = function (data) {
   })
 }
 
-export const scope = '@bibtex'
-export const types = '@bibtex/object'
 export {
   parseBibTeXJSON as parse,
   parseBibTeXJSON as default

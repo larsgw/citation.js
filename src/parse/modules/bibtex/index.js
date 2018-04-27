@@ -8,19 +8,34 @@ import * as prop from './prop'
 import * as type from './type'
 import * as bibtxt from './bibtxt'
 
-export const scope = '@bibtex'
+export const ref = '@bibtex'
 export const parsers = {text, json, prop, type, bibtxt}
-export const types = {
+export const formats = {
   '@bibtex/text': {
-    dataType: 'String',
-    predicate: /^(?:\s*@\s*[^@]+?\s*\{\s*[^@]+?\s*,\s*[^@]+\})+\s*$/
+    parse: text.parse,
+    parseType: {
+      dataType: 'String',
+      predicate: /^(?:\s*@\s*[^@]+?\s*\{\s*[^@]+?\s*,\s*[^@]+\})+\s*$/
+    }
   },
   '@bibtxt/text': {
-    dataType: 'String',
-    predicate: /^\s*(\[(?!\s*[{[]).*?\]\s*(\n\s*[^[]((?!:)\S)+\s*:\s*.+?\s*)*\s*)+$/
+    parse: bibtxt.parse,
+    parseType: {
+      dataType: 'String',
+      predicate: /^\s*(\[(?!\s*[{[]).*?\]\s*(\n\s*[^[]((?!:)\S)+\s*:\s*.+?\s*)*\s*)+$/
+    }
   },
   '@bibtex/object': {
-    dataType: 'SimpleObject',
-    propertyConstraint: {props: ['type', 'label', 'properties']}
+    parse: json.parse,
+    parseType: {
+      dataType: 'SimpleObject',
+      propertyConstraint: {props: ['type', 'label', 'properties']}
+    }
+  },
+  '@bibtex/prop': {
+    parse: prop.parse
+  },
+  '@bibtex/type': {
+    parse: type.parse
   }
 }
