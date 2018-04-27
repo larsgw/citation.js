@@ -17,8 +17,6 @@ const parseDoi = data => {
   return list.map(doi => `https://doi.org/${doi}`)
 }
 
-export const scope = '@doi'
-export const types = ['@doi/id', '@doi/list+text', '@doi/list+object']
 export {
   parseDoi as parse,
   parseDoi as default

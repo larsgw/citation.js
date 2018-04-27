@@ -109,20 +109,157 @@ const testCaseGenerator = (type, input, output, opts = {}) => {
 describe('input', function () {
   this.timeout(4000)
 
-  for (const spec in configs) {
-    const specConfig = configs[spec]
+  describe('modules', function () {
+    for (const spec in configs) {
+      const specConfig = configs[spec]
 
-    let callback
-    if (Array.isArray(specConfig)) {
-      callback = testCaseGenerator(spec, ...specConfig)
-    } else {
-      callback = function () {
-        for (const specContext in specConfig) {
-          context(specContext, testCaseGenerator(spec, ...specConfig[specContext]))
+      let callback
+      if (Array.isArray(specConfig)) {
+        callback = testCaseGenerator(spec, ...specConfig)
+      } else {
+        callback = function () {
+          for (const specContext in specConfig) {
+            context(specContext, testCaseGenerator(spec, ...specConfig[specContext]))
+          }
         }
       }
-    }
 
-    describe(spec, callback)
-  }
+      describe(spec, callback)
+    }
+  })
+
+  describe('interface', function () {
+    const ref = '@test'
+    const type = `${ref}/foo`
+    const subType = `${ref}/bar`
+    const data = [{foo: 1}]
+    const parse = () => data
+    const parseAsync = async () => data
+
+    describe('plugin', function () {
+      afterEach(function () { Cite.parse.removePlugin(ref) })
+
+      it('registers', function () {
+        Cite.parse.addPlugin(ref)
+        expect(Cite.parse.hasPlugin(ref)).to.be.ok()
+      })
+      it('works', function () {
+        Cite.parse.addPlugin(ref, {[type]: {parseType: {predicate: /foo/}}})
+        expect(Cite.parse.hasFormat(type)).to.ok()
+        expect(Cite.parse.type('foo')).to.be(type)
+      })
+      it('removes', function () {
+        Cite.parse.addPlugin(ref, {[type]: {parseType: {predicate: /foo/}}})
+        Cite.parse.removePlugin(ref)
+        expect(Cite.parse.hasFormat(type)).to.not.be.ok()
+        expect(Cite.parse.hasTypeParser(type)).to.not.be.ok()
+        expect(Cite.parse.hasDataParser(type)).to.not.be.ok()
+        expect(Cite.parse.hasDataParser(type, true)).to.not.be.ok()
+        expect(Cite.parse.type('foo')).to.not.be(type)
+      })
+      it('removes only relevant parts', function () {
+        Cite.parse.addPlugin(ref, {[type]: {parse, parseAsync, parseType: {predicate: /foo/}}})
+        Cite.parse.addPlugin('@other-ref', {[type]: {parseType: {predicate: /bar/}}})
+        Cite.parse.removePlugin(ref)
+        expect(Cite.parse.hasFormat(type)).to.be.ok()
+        expect(Cite.parse.hasTypeParser(type)).to.be.ok()
+        expect(Cite.parse.hasDataParser(type)).to.not.be.ok()
+        expect(Cite.parse.hasDataParser(type, true)).to.not.be.ok()
+        expect(Cite.parse.type('foo')).to.not.be(type)
+      })
+    })
+
+    describe('format', function () {
+      describe('typeParser', function () {
+        afterEach(function () { Cite.parse.removePlugin(ref) })
+
+        it('registers', function () {
+          Cite.parse.addFormat(type, {parseType: {}}, ref)
+          expect(Cite.parse.hasTypeParser(type)).to.be.ok()
+        })
+        it('works', function () {
+          Cite.parse.addFormat(type, {parseType: {predicate: /foo/}}, ref)
+          expect(Cite.parse.type('foo')).to.be(type)
+        })
+        it('removes', function () {
+          Cite.parse.addFormat(type, {parseType: {}}, ref)
+          Cite.parse.removeFormat(type)
+          expect(Cite.parse.hasTypeParser(type)).to.not.be.ok()
+          expect(Cite.parse.type('foo')).to.not.be(type)
+        })
+
+        context('subtypes', function () {
+          afterEach(function () { Cite.parse.removePlugin(ref) })
+
+          it('registers', function () {
+            Cite.parse.addFormat(type, {parseType: {}}, ref)
+            Cite.parse.addFormat(subType, {parseType: {extends: type}}, ref)
+            expect(Cite.parse.hasTypeParser(type)).to.be.ok()
+            expect(Cite.parse.hasTypeParser(subType)).to.be.ok()
+          })
+          it('waits on parent type', function () {
+            Cite.parse.addFormat(subType, {parseType: {extends: type, predicate: /foo/}}, ref)
+            Cite.parse.addFormat(type, {parseType: {predicate: /fo/}}, ref)
+            expect(Cite.parse.hasTypeParser(type)).to.be.ok()
+            expect(Cite.parse.hasTypeParser(subType)).to.be.ok()
+            expect(Cite.parse.type('foo')).to.be(subType)
+          })
+          it('works', function () {
+            Cite.parse.addFormat(type, {parseType: {predicate: /fo/}}, ref)
+            Cite.parse.addFormat(subType, {parseType: {extends: type, predicate: /foo/}}, ref)
+            expect(Cite.parse.type('foo')).to.be(subType)
+          })
+          it('delegates to parent type', function () {
+            Cite.parse.addFormat(type, {parseType: {predicate: /fo/}}, ref)
+            Cite.parse.addFormat(subType, {parseType: {extends: type, predicate: /foobar/}}, ref)
+            expect(Cite.parse.type('foo')).to.be(type)
+          })
+          it('removes', function () {
+            Cite.parse.addFormat(type, {parseType: {predicate: /fo/}}, ref)
+            Cite.parse.addFormat(subType, {parseType: {extends: type, predicate: /foo/}}, ref)
+            Cite.parse.removeFormat(subType)
+            expect(Cite.parse.hasTypeParser(subType)).to.not.be.ok()
+            expect(Cite.parse.type('foo')).to.not.be(subType)
+          })
+        })
+      })
+      describe('dataParser', function () {
+        afterEach(function () { Cite.parse.removePlugin(ref) })
+
+        it('registers', function () {
+          Cite.parse.addFormat(type, {parse}, ref)
+          expect(Cite.parse.hasDataParser(type)).to.be.ok()
+        })
+        it('works', function () {
+          Cite.parse.addFormat(type, {parse}, ref)
+          expect(Cite.parse.data('foo', type)).to.eql(data)
+        })
+        it('removes', function () {
+          Cite.parse.addFormat(type, {parse}, ref)
+          Cite.parse.removeFormat(type)
+          expect(Cite.parse.hasDataParser(type)).to.not.be.ok()
+          expect(Cite.parse.data('foo', type)).to.not.be(type)
+        })
+
+        context('async', function () {
+          afterEach(function () { Cite.parse.removePlugin(ref) })
+
+          it('registers', function () {
+            Cite.parse.addFormat(type, {parseAsync}, ref)
+            expect(Cite.parse.hasDataParser(type, true)).to.be.ok()
+          })
+          it('works', async function () {
+            Cite.parse.addFormat(type, {parseAsync}, ref)
+            expect(await Cite.parse.dataAsync('foo', type)).to.eql(data)
+          })
+          it('removes', async function () {
+            Cite.parse.addFormat(type, {parseAsync}, ref)
+            Cite.parse.removeFormat(type)
+            expect(Cite.parse.hasDataParser(type, true)).to.not.be.ok()
+            expect(await Cite.parse.dataAsync('foo', type)).to.not.be(type)
+          })
+        })
+      })
+    })
+  })
 })

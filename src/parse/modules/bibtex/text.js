@@ -172,8 +172,6 @@ const parseBibTeX = function (str) {
   return entries
 }
 
-export const scope = '@bibtex'
-export const types = '@bibtex/text'
 export {
   parseBibTeX as parse,
   parseBibTeX as default

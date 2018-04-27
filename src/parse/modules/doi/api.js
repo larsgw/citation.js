@@ -72,8 +72,6 @@ const fetchDoiApi = function (url) {
  */
 const parseDoiApi = data => [].concat(data).map(fetchDoiApi).map(parseDoiJson)
 
-export const scope = '@doi'
-export const types = '@doi/api'
 export {
   parseDoiApi as parse,
   parseDoiApiAsync as parseAsync

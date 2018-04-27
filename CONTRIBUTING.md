@@ -4,6 +4,35 @@ First of all, thanks for considering contributing. Contributions are very welcom
 
 Support questions are fine too, as there isn't a thing set up for that yet. Also, it usually starts a conversation resulting in new bug reports and feature suggestions, which are always welcome. However, [Stack Overflow](https://stackoverflow.com) may also be worth considering.
 
+## Installing
+
+To install for development, it's probably best to clone this repo:
+
+    git clone https://github.com/larsgw/citation.js.git
+
+Install dependencies:
+
+    npm install
+
+Then you can run the scripts available in `package.json`:
+
+* `test` runs the Mocha suite
+* `compile` runs Babel (necessary for the repo to work as a module)
+* `lint` runs the code linter
+  * `lint:src` does it for the source files,
+  * `lint:test` does it for the test suite,
+  * `lint:tools` does it for the various scripts, and
+  * `lint:bin` does it for the CLI
+* `dist:regular-*` makes a Browserify bundle
+  * `dist:regular-main` bundles the source files,
+  * `dist:regular-debug` does the same with source maps, and
+  * `dist:regular-test` bundles the test suite
+* `dist:minify-*` minifies the bundles mentioned above, apart from the debug one
+
+You can run a given script with:
+
+    npm run SCRIPT_NAME
+
 ## Reporting bugs
 
 When filing an issue, make sure to answer these questions:

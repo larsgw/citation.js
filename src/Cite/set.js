@@ -1,5 +1,4 @@
-import parseInput from '../parse/input/chain'
-import parseInputAsync from '../parse/input/async/chain'
+import {chain as parseInput, chainAsync as parseInputAsync} from '../parse/'
 import fetchId from '../util/fetchId'
 
 /**

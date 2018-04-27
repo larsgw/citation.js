@@ -96,8 +96,6 @@ const parseWikidataJSON = function (data) {
   })
 }
 
-export const scope = '@wikidata'
-export const types = '@wikidata/object'
 export {
   parseWikidataJSON as parse,
   parseWikidataJSONAsync as parseAsync,
