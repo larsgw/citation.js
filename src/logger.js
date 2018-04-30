@@ -1,5 +1,5 @@
 /* istanbul ignore else: coverage tools always in testing environment */
-if (process.env.MOCHA === '1') {
+if (process.env.TEST_MOCHA === 'true') {
   // If testing from CLI, use noop logger, to not interfere with the mocha reporter
   // (see issues mochajs/mocha#1998, mochajs/mocha#2107, etc.)
 
