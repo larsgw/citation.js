@@ -65,12 +65,6 @@ const matchType = (typeList = [], data) => {
 export const type = (input) => {
   const dataType = dataTypeOf(input)
 
-  if (!dataTypes.hasOwnProperty(dataType)) {
-    // TODO if no parsers registered, this warning is always thrown
-    logger.warn('[set]', 'Data type has no formats listed')
-    return parseNativeTypes(input, dataType)
-  }
-
   // Empty array should be @csl/list+object too
   if (dataType === 'Array' && input.length === 0) {
     // Off-load to parseNativeTypes() to not repeat the name
@@ -174,7 +168,7 @@ export const listTypeParser = () => Object.keys(types)
  *
  * @return {Object} tree structure
  */
-export const treeTypeParser = () => {
+export const treeTypeParser = /* istanbul ignore next: debugging */ () => {
   const attachNode = name => ({name, children: types[name].extensions.map(attachNode)})
   return {
     name: 'Type tree',

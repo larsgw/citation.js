@@ -145,7 +145,7 @@ export const hasFormat = (format) => format in formats
 export const listFormat = () => Object.keys(formats)
 
 // BEGIN compat
-export const add = (...args) => {
+export const add = /* istanbul ignore next: deprecated */ (...args) => {
   logger.warn('This method is deprecated; use addFormat')
   return addFormat(...args)
 }
