@@ -3,7 +3,7 @@ import {type, typeMatcher} from './type'
 export class TypeParser {
   validDataTypes = ['String', 'Array', 'SimpleObject', 'ComplexObject', 'Primitive']
 
-  constructor (data = {}) {
+  constructor (data) {
     this.data = data
   }
 
@@ -47,6 +47,9 @@ export class TypeParser {
   }
 
   validate () {
+    if (this.data !== null && typeof this.data !== 'object') {
+      throw new TypeError(`typeParser was ${typeof this.data}; expected object`)
+    }
     this.validateDataType()
     this.validateParseType()
     this.validatePropertyConstraint()
@@ -61,7 +64,7 @@ export class TypeParser {
   parsePropertyConstraint () {
     let constraints = [].concat(this.data.propertyConstraint || [])
 
-    return constraints.map(({props = [], match = 'every', value = () => true}) => {
+    return constraints.map(({props, match = 'every', value = () => true}) => {
       props = [].concat(props)
 
       return input => props[match](prop => prop in input && value(input[prop]))
@@ -129,7 +132,7 @@ export class TypeParser {
 }
 
 export class DataParser {
-  constructor (parser = {}, {async} = {}) {
+  constructor (parser, {async} = {}) {
     this.parser = parser
     this.async = async
   }
@@ -140,7 +143,7 @@ export class DataParser {
 
   validate () {
     const parser = this.parser
-    if (parser && typeof parser !== 'function') {
+    if (typeof parser !== 'function') {
       throw new TypeError(`parser was ${typeof parser}; expected function`)
     }
   }

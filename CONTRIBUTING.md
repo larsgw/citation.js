@@ -17,17 +17,33 @@ Install dependencies:
 Then you can run the scripts available in `package.json`:
 
 * `test` runs the Mocha suite
+  * `test:live` doesn't mock http(s) requests
+  * `test:update` updates the mocking data
+  * To update mocking data for individual APIs `test:update:doi` and `test:update:wikidata` 
 * `compile` runs Babel (necessary for the repo to work as a module)
 * `lint` runs the code linter
-  * `lint:src` does it for the source files,
-  * `lint:test` does it for the test suite,
-  * `lint:tools` does it for the various scripts, and
+  * `lint:src` does it for the source files
+  * `lint:test` does it for the test suite
+  * `lint:tools` does it for the various scripts
   * `lint:bin` does it for the CLI
-* `dist:regular-*` makes a Browserify bundle
-  * `dist:regular-main` bundles the source files,
-  * `dist:regular-debug` does the same with source maps, and
+* The following bundles can be created:
+  * `dist:regular-main` bundles the source files
+  * `dist:debug` does the same but with source maps
   * `dist:regular-test` bundles the test suite
-* `dist:minify-*` minifies the bundles mentioned above, apart from the debug one
+  * To minify, run:
+    * `dist:minify-main` minifies the source file bundle
+    * `dist:minify-test` minifies the test suite bundle
+  * Combine this like so:
+    * `dist:regular` creates all bundles
+    * `dist:minify` minifies all bundles
+    * `dist:main` bundles and minifies the source files
+    * `dist:test` bundles and minifies the test suite.
+    * `dist` creates and minifies all bundles
+* Generating other files is done like this:
+  * `generate:files` is an alias for `dist` mentioned above
+  * `generate:docs` generates the JSDoc files
+  * `generate:disc` generates the bundle disc visualisation
+  * `generate` generates everything mentioned above
 
 You can run a given script with:
 

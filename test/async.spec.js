@@ -2,11 +2,8 @@
 
 import expect from 'expect.js'
 import Cite from './citation'
-import {setUp} from './api'
 import input from './input/parse'
 import output from './output/parse'
-
-setUp('wikidata')
 
 describe('.async()', () => {
   const noGraph = {generateGraph: false}
