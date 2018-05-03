@@ -38,7 +38,7 @@ export const formats = {
     parse: json.parse,
     parseType: {
       dataType: 'String',
-      predicate: /^\s*(\{[\S\s]+\}|\[[\S\s]*\])\s*$/
+      predicate: /^\s*(\{[\S\s]*\}|\[[\S\s]*\])\s*$/
     }
   },
   '@else/url': {
