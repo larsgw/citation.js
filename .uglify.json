@@ -1,0 +1,8 @@
+{
+  "ie8": true,
+  "compress": true,
+  "output": {
+    "ascii_only": true,
+    "beautify": false
+  }
+}

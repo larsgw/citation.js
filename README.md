@@ -8,13 +8,14 @@ Citation.js converts formats like BibTeX, Wikidata JSON and ContentMine JSON to 
 
 ---
 
-[![NPM version](https://img.shields.io/npm/v/citation-js.svg)](https://www.npmjs.org/citation-js)
-[![NPM total downloads](https://img.shields.io/npm/dt/citation-js.svg)](https://npmjs.org/citation-js)
+[![NPM version](https://img.shields.io/npm/v/citation-js.svg)](https://npmjs.org/package/citation-js)
+[![NPM total downloads](https://img.shields.io/npm/dt/citation-js.svg)](https://npmcharts.com/compare/citation-js?minimal=true)
 [![Build Status](https://travis-ci.org/larsgw/citation.js.svg?branch=master)](https://travis-ci.org/larsgw/citation.js)
 [![Dependency Status](https://david-dm.org/larsgw/citation.js/status.svg)](https://david-dm.org/larsgw/citation.js)
 [![codecov](https://codecov.io/gh/larsgw/citation.js/branch/master/graph/badge.svg)](https://codecov.io/gh/larsgw/citation.js)
 [![license](https://img.shields.io/github/license/larsgw/citation.js.svg)](https://github.com/larsgw/citation.js/blob/master/LICENSE.md)
 [![DOI](https://zenodo.org/badge/doi/10.5281/zenodo.1005176.svg)](https://doi.org/10.5281/zenodo.1005176)
+[![Maintainability](https://api.codeclimate.com/v1/badges/2b5bc6024d63e519ac15/maintainability)](https://codeclimate.com/github/larsgw/citation.js/maintainability)
 [![Join the chat at https://gitter.im/citation-js/Lobby](https://badges.gitter.im/citation-js/Lobby.svg)](https://gitter.im/citation-js/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
 [![JavaScript Style Guide](https://cdn.rawgit.com/standard/standard/master/badge.svg)](https://github.com/standard/standard)

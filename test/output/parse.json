@@ -150,6 +150,18 @@
         "id": "Ekstrand:2009:RYD"
       }
     ],
+    "unicode": {
+      "author": [
+        {"given": "J.W.", "family": "Goethe"}
+      ],
+      "title": "Faust. Der Tragödie Erster Teil",
+      "publisher": "Reclam",
+      "issued": {"date-parts": [["1986"]]},
+      "publisher-place": "Stuttgart",
+      "type": "book",
+      "id": "Fau86",
+      "citation-label": "Fau86"
+    },
     "literals": [{
       "citation-label": "b",
       "id": "b",

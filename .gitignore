@@ -9,10 +9,11 @@ profile/
 isolate-0x*
 debug.html
 
-# generated site content
+# generated content
 build/
 coverage/
 jsdoc/
+lib/
 
 # coverage
 .nyc_output/

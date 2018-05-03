@@ -4,6 +4,51 @@ First of all, thanks for considering contributing. Contributions are very welcom
 
 Support questions are fine too, as there isn't a thing set up for that yet. Also, it usually starts a conversation resulting in new bug reports and feature suggestions, which are always welcome. However, [Stack Overflow](https://stackoverflow.com) may also be worth considering.
 
+## Installing
+
+To install for development, it's probably best to clone this repo:
+
+    git clone https://github.com/larsgw/citation.js.git
+
+Install dependencies:
+
+    npm install
+
+Then you can run the scripts available in `package.json`:
+
+* `test` runs the Mocha suite
+  * `test:live` doesn't mock http(s) requests
+  * `test:update` updates the mocking data
+  * To update mocking data for individual APIs `test:update:doi` and `test:update:wikidata` 
+* `compile` runs Babel (necessary for the repo to work as a module)
+* `lint` runs the code linter
+  * `lint:src` does it for the source files
+  * `lint:test` does it for the test suite
+  * `lint:tools` does it for the various scripts
+  * `lint:bin` does it for the CLI
+* The following bundles can be created:
+  * `dist:regular-main` bundles the source files
+  * `dist:debug` does the same but with source maps
+  * `dist:regular-test` bundles the test suite
+  * To minify, run:
+    * `dist:minify-main` minifies the source file bundle
+    * `dist:minify-test` minifies the test suite bundle
+  * Combine this like so:
+    * `dist:regular` creates all bundles
+    * `dist:minify` minifies all bundles
+    * `dist:main` bundles and minifies the source files
+    * `dist:test` bundles and minifies the test suite.
+    * `dist` creates and minifies all bundles
+* Generating other files is done like this:
+  * `generate:files` is an alias for `dist` mentioned above
+  * `generate:docs` generates the JSDoc files
+  * `generate:disc` generates the bundle disc visualisation
+  * `generate` generates everything mentioned above
+
+You can run a given script with:
+
+    npm run SCRIPT_NAME
+
 ## Reporting bugs
 
 When filing an issue, make sure to answer these questions:
