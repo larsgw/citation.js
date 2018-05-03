@@ -1,3 +1,6 @@
+env:
+  global:
+    - secure: "ravb36FjUPsmYY6Uoa4iuOprOCD3A0PbEch1Ojh/LVZROzRsVzvs7G8sgEUI2aMQQcz0pLPCE/CpaSEBIKGIIOpFJPR7SQqDofX1uZyUzFxabv4UxONX2pzK6vfjoCs/TkFPB9xAVT0KniaApbKW6zlJfhRfKE8Poe3SC8HWrQ/dUmHo3iQJWx+5GkNy9y4eSWKsRBtmyyFN8MKwLI/BmpW8DFifFTmdnAsnTlEbkjbECnCajuWVg8sp/dwUt0uT/7iLl6oQO3zAWnF7F/lfbrrzrMkcpABNW0eX5xbAvQ1Y/lNkRZtxoJ8kqKBFLLKRbelHQBfpDMMiYKv0iVc8O7H1cPAHgJPbjT1pbt2KodJDDfKtdFHZOK8AtQh1ImGpWkLgGtc7AuImWyZLc5KY0c5XprOGVwjdOgnA9+0NoQsQP9ju2si6on9OPeRFLpufXWrdYtCTRfSU5J943U+pFa+4+w2HgV/r13onebeUC+mnouInsC6rXi6XefE+Q98Los+TX0eEYADwlEP35J0IrybgTBIqj3xsCDy8eHvDOY6n200OLV9Nd7+fm5Wskb9LAMwzEHIoRLMBBzP8vmcKjJ3Bh0JKNm7j8s3SlLbolTsEKLDJ4UIhzw1/UoGKq2TCIu4KcqxmdBMKjHr5cvR5MA5Dy6kaQU1xL9VziNVSTrs="
 branches:
   only:
     - master
@@ -8,6 +11,11 @@ node_js:
 sudo: false
 install:
   - npm install
-  - npm install -g codecov
+  - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
+  - chmod +x ./cc-test-reporter
+before_script:
+  - ./cc-test-reporter before-build
 script:
-  - npm run coverage && codecov
+  - npm run test:live
+after_script:
+  - ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT
