@@ -23,21 +23,21 @@
     "citeproc"
   ],
   "dependencies": {
-    "@babel/polyfill": "^7.0.0-beta.44",
+    "@babel/polyfill": "^7.0.0-beta.46",
     "citeproc": "^2.1.204",
     "commander": "^2.15.1",
     "isomorphic-fetch": "^2.2.1",
     "sync-request": "^5.0.0",
-    "wikidata-sdk": "^5.9.0"
+    "wikidata-sdk": "^5.9.4"
   },
   "devDependencies": {
-    "@babel/cli": "^7.0.0-beta.44",
-    "@babel/core": "^7.0.0-beta.44",
-    "@babel/plugin-proposal-class-properties": "^7.0.0-beta.44",
+    "@babel/cli": "^7.0.0-beta.46",
+    "@babel/core": "^7.0.0-beta.46",
+    "@babel/plugin-proposal-class-properties": "^7.0.0-beta.46",
     "@babel/plugin-proposal-object-rest-spread": "^7.0.0-beta.46",
-    "@babel/plugin-proposal-unicode-property-regex": "^7.0.0-beta.44",
-    "@babel/preset-env": "^7.0.0-beta.44",
-    "@babel/register": "^7.0.0-beta.44",
+    "@babel/plugin-proposal-unicode-property-regex": "^7.0.0-beta.46",
+    "@babel/preset-env": "^7.0.0-beta.46",
+    "@babel/register": "^7.0.0-beta.46",
     "babel-eslint": "^8.2.3",
     "babel-plugin-istanbul": "^4.1.6",
     "babelify": "github:larsgw/babelify#patch-1",
