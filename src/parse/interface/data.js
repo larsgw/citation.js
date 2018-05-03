@@ -85,7 +85,7 @@ export const addDataParser = (format, {parser, async}) => {
  *
  * @return {Boolean} parser exists
  */
-export const hasDataParser = (type, async = false) => async
+export const hasDataParser = (type, async) => async
   ? asyncParsers[type] || nativeAsyncParsers[type]
   : parsers[type] || nativeParsers[type]
 
@@ -96,7 +96,7 @@ export const hasDataParser = (type, async = false) => async
  * @param {Cite.plugins.input~format} type
  * @param {Boolean} [async=false]
  */
-export const removeDataParser = (type, async = false) => { delete (async ? asyncParsers : parsers)[type] }
+export const removeDataParser = (type, async) => { delete (async ? asyncParsers : parsers)[type] }
 
 /**
  * @access public
@@ -104,4 +104,4 @@ export const removeDataParser = (type, async = false) => { delete (async ? async
  *
  * @param {Boolean} [async=false]
  */
-export const listDataParser = (async = false) => Object.keys(async ? asyncParsers : parsers)
+export const listDataParser = (async) => Object.keys(async ? asyncParsers : parsers)

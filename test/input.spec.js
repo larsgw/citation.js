@@ -1,16 +1,11 @@
 /* eslint-env mocha */
 
-import syncRequest from 'sync-request'
-
 import expect from 'expect.js'
 import Cite from './citation'
 import input from './input/parse'
 import output from './output/parse'
 input.wd.simple = require('./Q21972834.json')
 input.wd.author = require('./Q27795847.json')
-
-// start sync-request beforehand (interferes with the reporter otherwise)
-try { syncRequest() } catch (e) { }
 
 const wikidataTestCaseOptions = {
   callback: ([data]) => data.replace(/[&?]origin=\*/, ''),
@@ -78,7 +73,20 @@ const configs = {
   '@empty': {
     '(null)': [null, []],
     '(undefined)': [undefined, []]
-  }
+  },
+
+  // internal
+  '@invalid': ['anything not covered by the parsers above', []],
+  '@csl/object': {
+    'with no properties': [{}, [{}]],
+    'with nonsense properties': [{a: 1}, [{a: 1}]],
+    'with proper properties': [{title: 'test'}, [{title: 'test'}]]
+  },
+  '@csl/list+object': {
+    'without elements': [[], [], {link: true}],
+    'with elements': [[{}], [{}], {link: true}]
+  },
+  '@else/list+object': [[[{i: 1}], [{i: 2}, [{i: 3}]], {i: 4}], [{i: 1}, {i: 2}, {i: 3}, {i: 4}]]
 }
 
 const testCaseGenerator = (type, input, output, opts = {}) => {
@@ -521,6 +529,90 @@ describe('input', function () {
         it('Null', () => { expect(Cite.parse.util.typeOf(null)).to.be('Null') })
         it('primitive literal', () => { expect(Cite.parse.util.typeOf('')).to.be('String') })
         it('Object', () => { expect(Cite.parse.util.typeOf({})).to.be('Object') })
+      })
+    })
+
+    describe('parsing', function () {
+      const {chain, chainAsync, chainLink, chainLinkAsync} = Cite.parse
+      describe('chain', function () {
+        it('parses', function () {
+          expect(chain({}, {generateGraph: false})).to.eql([{}])
+        })
+        it('parses until success', function () {
+          // TODO non-builtin type
+          expect(chain('{}', {generateGraph: false})).to.eql([{}])
+        })
+        it('copies', function () {
+          const object = {}
+          expect(chain(object)[0]).not.to.be(object)
+        })
+        describe('options', function () {
+          it('generateGraph', function () {
+            expect(chain({}, {generateGraph: true})[0]).to.have.property('_graph')
+            expect(chain({}, {generateGraph: false})[0]).not.to.have.property('_graph')
+          })
+          it('maxChainLength', function () {
+            expect(chain({}, {maxChainLength: 1, generateGraph: false})).to.eql([{}])
+            expect(chain({}, {maxChainLength: 0, generateGraph: false})).to.eql([])
+          })
+          it('forceType', function () {
+            expect(chain({}, {generateGraph: false})).to.eql([{}])
+            expect(chain({}, {forceType: '@foo/bar', generateGraph: false})).to.eql([])
+          })
+        })
+      })
+      describe('chainLink', function () {
+        it('parses', function () {
+          expect(chainLink({})).to.eql([{}])
+        })
+        it('parses only once', function () {
+          // TODO non-builtin type
+          expect(chainLink('{}')).to.eql({})
+        })
+        it('copies', function () {
+          const object = {}
+          expect(chainLink(object)[0]).not.to.be(object)
+        })
+      })
+      describe('chainAsync', function () {
+        it('parses', async function () {
+          expect(await chainAsync({}, {generateGraph: false})).to.eql([{}])
+        })
+        it('parses until success', async function () {
+          // TODO non-builtin type
+          expect(await chainAsync('{}', {generateGraph: false})).to.eql([{}])
+        })
+        it('copies', async function () {
+          const object = {}
+          expect((await chainAsync(object))[0]).not.to.be(object)
+        })
+        describe('options', function () {
+          it('generateGraph', async function () {
+            expect((await chainAsync({}, {generateGraph: true}))[0]).to.have.property('_graph')
+            expect((await chainAsync({}, {generateGraph: false}))[0]).not.to.have.property('_graph')
+          })
+          it('maxChainLength', async function () {
+            expect(await chainAsync({}, {maxChainLength: 1, generateGraph: false})).to.eql([{}])
+            expect(await chainAsync({}, {maxChainLength: 0, generateGraph: false})).to.eql([])
+          })
+          it('forceType', async function () {
+            expect(await chainAsync({}, {generateGraph: false})).to.eql([{}])
+            expect(await chainAsync({}, {forceType: '@foo/bar', generateGraph: false})).to.eql([])
+          })
+        })
+      })
+      describe('chainLinkAsync', function () {
+        it('parses', async function () {
+          expect(await chainLinkAsync({})).to.eql([{}])
+        })
+        it('parses only once', async function () {
+          // TODO non-builtin type
+          expect(await chainLinkAsync('{}')).to.eql({})
+        })
+        it('copies', async function () {
+          const object = {}
+          expect((await chainLinkAsync(object))[0]).not.to.be(object)
+        })
       })
     })
   })
