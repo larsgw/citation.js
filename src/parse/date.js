@@ -94,7 +94,11 @@ const parseRfc2822 = function (date) {
   }
 
   let [, day, month, year] = date.match(pattern)
+
   month = getMonth(month)
+  if (!month) {
+    return null
+  }
 
   return [year, month, day]
 }
