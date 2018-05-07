@@ -166,6 +166,11 @@ describe('input', function () {
       it('disregards time values', function () {
         expect(parse('2000-01-01T20:20:20')).to.eql({'date-parts': [[2000, 1, 1]]})
       })
+      it('works for different precisions', function () {
+        expect(parse('2000-01-01')).to.eql({'date-parts': [[2000, 1, 1]]})
+        expect(parse('2000-01-00')).to.eql({'date-parts': [[2000, 1]]})
+        expect(parse('2000-00-00')).to.eql({'date-parts': [[2000]]})
+      })
     })
     describe('RFC-2822 time', function () {
       it('works', function () {
@@ -256,6 +261,24 @@ describe('input', function () {
           expect(parse('2000')).to.eql({'date-parts': [[2000]]})
           expect(parse('-2000')).to.eql({'date-parts': [[-2000]]})
         })
+      })
+    })
+    describe('invalid time', function () {
+      it('works for non-strings and non-numbers', function () {
+        expect(parse()).to.eql({raw: undefined})
+      })
+      it('works for invalid month names', function () {
+        let inputs = ['2000 naj 1', '1 naj 2000', 'naj 2000', '2000 naj']
+        for (let input of inputs) {
+          expect(parse(input)).to.have.property('raw', input)
+        }
+      })
+      it('works for invalid strings', function () {
+        expect(parse('foo')).to.have.property('raw', 'foo')
+      })
+      it('works for invalid numbers', function () {
+        expect(parse(NaN)).to.have.property('raw')
+        expect(parse(Infinity)).to.eql({raw: Infinity})
       })
     })
   })
