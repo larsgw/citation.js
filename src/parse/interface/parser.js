@@ -25,6 +25,13 @@ export class TypeParser {
     }
   }
 
+  validateTokenList () {
+    const tokenList = this.data.tokenList
+    if (tokenList && typeof tokenList !== 'object') {
+      throw new TypeError(`tokenList was ${typeof tokenList}; expected object or RegExp`)
+    }
+  }
+
   validatePropertyConstraint () {
     const propertyConstraint = this.data.propertyConstraint
     if (propertyConstraint && typeof propertyConstraint !== 'object') {
@@ -52,6 +59,7 @@ export class TypeParser {
     }
     this.validateDataType()
     this.validateParseType()
+    this.validateTokenList()
     this.validatePropertyConstraint()
     this.validateElementConstraint()
     this.validateExtends()
@@ -60,6 +68,26 @@ export class TypeParser {
   // ==========================================================================
   // Simplification helpers
   // ==========================================================================
+
+  parseTokenList () {
+    let tokenList = this.data.tokenList
+
+    if (!tokenList) {
+      return []
+    } else if (tokenList instanceof RegExp) {
+      tokenList = {token: tokenList}
+    }
+
+    let {token, split = /\s+/, trim = true, every = true} = tokenList
+
+    let trimInput = (input) => trim ? input.trim() : input
+    let testTokens = every ? 'every' : 'some'
+
+    let predicate = (input) =>
+      trimInput(input).split(split)[testTokens](part => token.test(part))
+
+    return [predicate]
+  }
 
   parsePropertyConstraint () {
     let constraints = [].concat(this.data.propertyConstraint || [])
@@ -89,6 +117,7 @@ export class TypeParser {
   getCombinedPredicate () {
     let predicates = [
       ...this.parsePredicate(),
+      ...this.parseTokenList(),
       ...this.parsePropertyConstraint(),
       ...this.parseElementConstraint()
     ]
@@ -106,6 +135,8 @@ export class TypeParser {
     if (this.data.dataType) {
       return this.data.dataType
     } else if (this.data.predicate instanceof RegExp) {
+      return 'String'
+    } else if (this.data.tokenList) {
       return 'String'
     } else if (this.data.elementConstraint) {
       return 'Array'
