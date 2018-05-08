@@ -11,7 +11,7 @@ const bibTxtRegex = {
   splitEntries: /\n\s*(?=\[)/g,
   parseEntry: /^\[(.+?)\]\s*(?:\n([\s\S]+))?$/,
   splitPairs: /((?=.)\s)*\n\s*/g,
-  parsePair: /^(.+?)\s*:\s*(.+)$/
+  splitPair: /:(.*)/
 }
 
 /**
@@ -37,8 +37,12 @@ const parseBibTxtEntry = entry => {
     }
 
     pairs.trim().split(bibTxtRegex.splitPairs).filter(v => v).forEach(pair => {
-      const [, key, value] = pair.match(bibTxtRegex.parsePair) || []
-      if (key) {
+      let [key, value] = pair.split(bibTxtRegex.splitPair)
+
+      if (value) {
+        key = key.trim()
+        value = value.trim()
+
         if (key === 'type') {
           out.type = value
         } else {

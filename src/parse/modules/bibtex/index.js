@@ -15,7 +15,7 @@ export const formats = {
     parse: text.parse,
     parseType: {
       dataType: 'String',
-      predicate: /^(?:\s*@\s*[^@]+?\s*\{\s*[^@]+?\s*,\s*[^@]+\})+\s*$/
+      predicate: /@\s{0,5}[A-Za-z]{1,13}\s{0,5}\{\s{0,5}[^@{}"=,\\\s]{0,100}\s{0,5},[\s\S]*\}/
     }
   },
   '@bibtxt/text': {
