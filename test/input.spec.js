@@ -463,6 +463,59 @@ describe('input', function () {
               })
             })
           })
+          describe('tokenList', function () {
+            it('outputs properly for objects', function () {
+              var {predicate} = new TypeParser({tokenList: {token: /a/}})
+              expect(predicate('a a a')).to.be.ok()
+              expect(predicate(' a a a ')).to.be.ok()
+              expect(predicate('a b a')).not.to.be.ok()
+            })
+            it('outputs properly for regex', function () {
+              var {predicate} = new TypeParser({tokenList: /a/})
+              expect(predicate('a a a')).to.be.ok()
+              expect(predicate('a b a')).not.to.be.ok()
+            })
+            it('outputs properly for object with split', function () {
+              var {predicate} = new TypeParser({tokenList: {
+                token: /^a$/,
+                split: /b/
+              }})
+              expect(predicate('ababa')).to.be.ok()
+              expect(predicate('a a a')).not.to.be.ok()
+              expect(predicate('abcba')).not.to.be.ok()
+            })
+            it('outputs properly for object without trim', function () {
+              var {predicate} = new TypeParser({tokenList: {
+                token: /^a$/,
+                trim: false
+              }})
+              expect(predicate('a a a')).to.be.ok()
+              expect(predicate(' a a a ')).not.to.be.ok()
+            })
+            it('outputs properly for object without every', function () {
+              var {predicate} = new TypeParser({tokenList: {
+                token: /^a$/,
+                every: false
+              }})
+              expect(predicate('a b a b a')).to.be.ok()
+              expect(predicate('b b')).not.to.be.ok()
+            })
+            it('validates objects', function () {
+              var instance = new TypeParser({tokenList: {}})
+              expect(instance.validate.bind(instance)).to.not.throwException()
+            })
+            it('validates regex', function () {
+              var instance = new TypeParser({tokenList: /a/})
+              expect(instance.validate.bind(instance)).to.not.throwException()
+            })
+            it('invalidates non-tokenlists', function () {
+              var instance = new TypeParser({tokenList: 'Blue'})
+              expect(instance.validate.bind(instance)).to.throwException(e => {
+                expect(e).to.be.a(TypeError)
+                expect(e).to.match(/tokenList was string; expected object or RegExp/)
+              })
+            })
+          })
           describe('propertyConstraint', function () {
             it('outputs properly for one prop', function () {
               var {predicate} = new TypeParser({propertyConstraint: {

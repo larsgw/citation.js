@@ -14,7 +14,9 @@
  */
 const getAffix = (source, affix) => typeof affix === 'function' ? affix(source) : typeof affix === 'string' ? affix : ''
 
-const htmlRegex = /^(\s*<[a-z0-9:-]+(?:\s*[a-z0-9:-]+=(?:"(?:\\\\|\\"|[^"])*"|'(?:\\\\|\\'|[^'])*'|\w+))*\s*>)([\s\S]+)(<\/[a-z:]+>\s*)$/i
+// This simplified Regex only fails when one of the attributes of the top-level
+// element contains a right angle bracket (">").
+const htmlRegex = /^([^>]+>)([\s\S]+)(<[^<]+)$/i
 
 /**
  * Pre/append things to entry
