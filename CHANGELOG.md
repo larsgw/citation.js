@@ -2,9 +2,50 @@
 
 ## Unreleased
 
+### Added
+
+* A lot of tests cases regarding input parsing mechanisms (#123)
+
+### Changed
+
+* Input plugin system (again). This time, not only formats, but also plugins (i.e. collections of formats) are supported (#106)
+
+### Refactored
+* The `parseDate` method now has an internal parsing implementation (#127, #138)
+
+### Testing
+
+* Tests now support HTTP(S) request mocking (#134, #136)
+* Added REDOS flagging tools
+
 ### Fixed
 
-* Sublte type checking bug in translation scheme parsing code (#128)
+* `@else/url` blocking type recognition (#104)
+* `@else/json` type predicate for empty objects:
+  ```js
+  '{}'     // didn't work
+  '{a: 1}' // worked
+  '{ }'    // worked as well
+  ```
+* REDOS (mostly, anyway) (see #107, 7c52beff44b37443b812ee5864733e441e29a812)
+* JSON output still being invalid (#143, see also #144)
+
+## [0.4.0-3] - 2018-05-12
+
+### Added
+* RIS output support (#125)
+
+### Refactored
+* A lot of the building scripts
+* All code uses the util fetchFile(Async) functions, to make testing easier
+
+### Fixed
+* Subtle type checking bug in translation scheme parsing code (#128)
+* Logging API not supported on Node.js v6 (#124)
+
+## [0.4.0-2] - 2018-05-12
+
+> Was skipped due to publishing the wrong files.
 
 ## [0.4.0-1] - 2017-12-31
 
