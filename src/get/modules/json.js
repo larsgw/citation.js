@@ -82,6 +82,7 @@ const getJsonValue = function (src, dict) {
 const getJson = function (src, dict) {
   let entries = src.map(entry => getJsonObject(entry, dict))
   entries = entries.map(appendCommas).map(entry => dict.entry.join(entry))
+  entries = entries.join('')
 
   return dict.bibliographyContainer.join(`[${entries}]`)
 }
@@ -107,7 +108,10 @@ export default [{
   formatter (data, {type = 'text'} = {}) {
     if (type === 'object') {
       return deepCopy(data)
+    } else if (type === 'text') {
+      return JSON.stringify(data, null, 2)
     } else {
+      logger.warn('[get]', 'This feature (JSON output with special formatting) is unstable. See https://github.com/larsgw/citation.js/issues/144')
       return hasDict(type) ? getJson(data, getDict(type)) : ''
     }
   }
