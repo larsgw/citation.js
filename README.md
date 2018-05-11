@@ -12,6 +12,9 @@ for the minified file. Where `VERSION` is one of the versions listed below. Ther
 
 ## Citation.js
 
+* [`0.4.0-3`](https://github.com/larsgw/citation.js/tree/archive/citation.js/citation-0.4.0-3.js)
+* `0.4.0-2` was skipped due to publishing issues (*cough* human errors *cough*)
+* `0.4.0-0` and `0.4.0-1` will be published later
 * [`0.3.4`](https://github.com/larsgw/citation.js/tree/archive/citation.js/citation-0.3.4.js)
 * [`0.3.3`](https://github.com/larsgw/citation.js/tree/archive/citation.js/citation-0.3.3.js)
 * [`0.3.2`](https://github.com/larsgw/citation.js/tree/archive/citation.js/citation-0.3.2.js)
@@ -58,6 +61,7 @@ There was no semver before `0.2`, so version numbering is improvised:
 
 Only since `0.3.0-6`. Note that `0.3.0-6.min` itself has a compression of 167% for some reason, I might investigate that later.
 
+* [`0.4.0-3`](https://github.com/larsgw/citation.js/tree/archive/citation.js/citation-0.4.0-3.min.js)
 * [`0.3.4`](https://github.com/larsgw/citation.js/tree/archive/citation.js/citation-0.3.4.min.js)
 * [`0.3.3`](https://github.com/larsgw/citation.js/tree/archive/citation.js/citation-0.3.3.min.js)
 * [`0.3.2`](https://github.com/larsgw/citation.js/tree/archive/citation.js/citation-0.3.2.min.js)
