@@ -27,7 +27,7 @@ const apiHeaders = {
  */
 const fetchDoiApiAsync = async function (url) {
   const result = await fetchFileAsync(url, {headers: apiHeaders})
-  return result === '[]' ? result : {}
+  return result === '[]' ? {} : JSON.parse(result)
 }
 
 /**
@@ -57,7 +57,7 @@ const parseDoiApiAsync = async function (data) {
  */
 const fetchDoiApi = function (url) {
   const result = fetchFile(url, {headers: apiHeaders})
-  return result === '[]' ? result : {}
+  return result === '[]' ? {} : JSON.parse(result)
 }
 
 /**
