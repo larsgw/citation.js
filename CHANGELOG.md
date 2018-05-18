@@ -30,6 +30,11 @@
 * REDOS (mostly, anyway) (see #107, 7c52beff44b37443b812ee5864733e441e29a812)
 * JSON output still being invalid (#143, see also #144)
 
+## [0.4.0-4] - 2018-05-19
+
+### Fixed
+* DOI bug due to a regression in 0.4.0-3 (dda2360f4d91af1d48e1bf859d784b2bdc694c6d)
+
 ## [0.4.0-3] - 2018-05-12
 
 ### Added
