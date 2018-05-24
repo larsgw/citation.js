@@ -4,7 +4,7 @@
   "description": "Citation.js converts formats like BibTeX, Wikidata JSON and ContentMine JSON to CSL-JSON to convert to other formats like APA, Vancouver and back to BibTeX.",
   "main": "lib/index.js",
   "directories": {
-    "doc": "docs/api/",
+    "doc": "docs/",
     "test": "test/",
     "lib": "src/"
   },
@@ -21,6 +21,12 @@
     "quickscrape",
     "csl",
     "citeproc"
+  ],
+  "files": [
+    "/lib",
+    "/bin",
+    "/build/citation.js",
+    "/build/citation.min.js"
   ],
   "dependencies": {
     "@babel/polyfill": "^7.0.0-beta.46",
@@ -55,7 +61,7 @@
     "npm-run-all": "^4.1.2",
     "nyc": "^11.7.1",
     "standard": "^11.0.1",
-    "uglify-es": "^3.3.10"
+    "uglify-js": "^3.3.27"
   },
   "nyc": {
     "require": [
@@ -109,7 +115,10 @@
     "generate:files": "npm run dist",
     "generate:docs": "markdown-toc -i README.md && jsdoc -c .jsdoc.json",
     "generate:disc": "node tools/disc.js",
-    "generate": "npm-run-all generate:*"
+    "generate": "npm-run-all generate:*",
+    "--7--": "hooks",
+    "preversion": "npm run lint && npm run test",
+    "prepublishOnly": "npm run compile && npm run dist:main"
   },
   "author": "Lars Willighagen (https://larsgw.github.io)",
   "license": "MIT",
