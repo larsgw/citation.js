@@ -6,7 +6,7 @@ import './locales'
 import './styles'
 
 import bibliography from './bibliography'
-// import citation from './citation'
+import citation from './citation'
 
 /**
  * @callback module:output/csl~retrieveItem
@@ -23,7 +23,7 @@ import bibliography from './bibliography'
 export default [{
   name: 'bibliography',
   formatter: bibliography
-}/* , {
+}, {
   name: 'citation',
   formatter: citation
-} */]
+}]

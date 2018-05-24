@@ -49,7 +49,7 @@ const opts = (format, type, style, lang = defaultOpts.lang) => ({format, type, s
 describe('output', () => {
   const data = new Cite(input.csl.simple)
 
-  describe('formatted CSL', () => {
+  describe('CSL bibliography', () => {
     describe('html', () => {
       describe('default built-in template (APA)',
         testCaseGenerator(data, opts('string', 'html', 'citation-apa'), output.csl.html.apa))
@@ -136,6 +136,51 @@ describe('output', () => {
 
         testCaseGenerator(data, opts('string', 'string', 'citation-apa', 'custom'), '(Custom).')()
       })
+    })
+  })
+
+  describe('CSL citation', function () {
+    const data = new Cite([{
+      id: '1',
+      type: 'article-journal',
+      title: 'a',
+      issued: {'date-parts':[[2011]]}
+    }, {
+      id: '2',
+      type: 'article-journal',
+      title: 'b',
+      author: [{
+        family: 'd',
+        given: 'c'
+      }, {
+        literal: 'h'
+      }],
+      issued: {'date-parts':[[2012]]}
+    }, {
+      id: '3',
+      type: 'article-journal',
+      title: 'e',
+      author: [{
+        family: 'f',
+        given: 'g'
+      }],
+      issued: {'date-parts':[[2013]]}
+    }])
+
+    it('works', function () {
+      let input = data.format('citation', {entry: ['1', '2']})
+      let output = '(“a,” 2011; d & h, 2012)'
+      expect(input).to.be(output)
+    })
+    it('works for single entries', function () {
+      let input = data.format('citation', {entry: '2'})
+      let output = '(d & h, 2012)'
+      expect(input).to.be(output)
+    })
+    it('defaults to all entries', function () {
+      let input = data.format('citation')
+      let output = '(“a,” 2011; d & h, 2012; f, 2013)'
+      expect(input).to.be(output)
     })
   })
 
