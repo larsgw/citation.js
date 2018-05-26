@@ -97,7 +97,6 @@
     "--3--": "coverage",
     "coverage:test": "cross-env NODE_ENV=test nyc npm test",
     "coverage:report": "nyc report --reporter=lcov > coverage.lcov",
-    "coverage": "npm-run-all coverage:*",
     "--4--": "compile",
     "compile": "babel src -d lib --copy-files",
     "--5--": "distributions",
