@@ -21,5 +21,6 @@ before_script:
 script:
   - npm run coverage:test
 after_success:
-  - ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT
+  - ./cc-test-reporter format-coverage coverage/lcov.info --input-type lcov
+  - ./cc-test-reporter upload-coverage
   - npm run coverage:report && codecov
