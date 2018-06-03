@@ -21,6 +21,6 @@ before_script:
 script:
   - npm run coverage:test
 after_success:
+  - npm run coverage:report && codecov
   - ./cc-test-reporter format-coverage coverage/lcov.info --input-type lcov
   - ./cc-test-reporter upload-coverage
-  - npm run coverage:report && codecov
