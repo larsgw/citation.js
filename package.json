@@ -77,7 +77,6 @@
     ]
   },
   "browser": {
-    "./src/logger.js": "./src/logger-browser.js",
     "./test/citation.js": "./test/citation-browser.js"
   },
   "scripts": {
