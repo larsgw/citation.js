@@ -42,7 +42,7 @@ const getBibTeXJSON = function (src) {
     publisher: 'publisher',
     'publisher-place': 'address',
     title: 'title',
-    url: 'url',
+    URL: 'url',
     volume: 'volume'
   }
 
