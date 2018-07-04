@@ -20,10 +20,7 @@ import citation from './citation'
  * @return {String} CSL Locale
  */
 
-export default [{
-  name: 'bibliography',
-  formatter: bibliography
-}, {
-  name: 'citation',
-  formatter: citation
-}]
+export default {
+  bibliography,
+  citation
+}

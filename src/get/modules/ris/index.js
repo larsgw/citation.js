@@ -262,13 +262,12 @@ const getRis = function (entries) {
   return entries.map(json).map(getRisPropList).join('')
 }
 
-export default [{
-  name: 'ris',
-  formatter (data, {type = 'text'} = {}) {
+export default {
+  ris (data, {type = 'text'} = {}) {
     if (type === 'object') {
       return data.map(json)
     } else {
       return getRis(data)
     }
   }
-}]
+}

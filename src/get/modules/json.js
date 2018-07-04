@@ -103,9 +103,8 @@ const getJsonWrapper = function (src) {
 }
 
 export {getJsonWrapper}
-export default [{
-  name: 'data',
-  formatter (data, {type = 'text'} = {}) {
+export default {
+  data (data, {type = 'text'} = {}) {
     if (type === 'object') {
       return deepCopy(data)
     } else if (type === 'text') {
@@ -115,4 +114,4 @@ export default [{
       return hasDict(type) ? getJson(data, getDict(type)) : ''
     }
   }
-}]
+}

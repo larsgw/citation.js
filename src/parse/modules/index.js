@@ -1,7 +1,7 @@
-import {addPlugin} from '../interface/register'
+import {add as addPlugin} from '../../plugins/'
 import * as modules from './modules'
 
 for (const module in modules) {
-  const {ref, formats, config} = modules[module]
-  addPlugin(ref, formats, config)
+  const {ref, formats} = modules[module]
+  addPlugin(ref, {input: formats})
 }

@@ -18,9 +18,8 @@ import getBibtexLabel from './bibtex/label'
 const getLabel = getBibtexLabel
 
 export {getLabel}
-export default [{
-  name: 'label',
-  formatter (data) {
+export default {
+  label (data) {
     return data.reduce((object, entry) => { object[entry.id] = getLabel(entry); return object }, {})
   }
-}]
+}

@@ -17,7 +17,7 @@ const factory = function (formatter) {
   }
 }
 
-export default [
-  {name: 'bibtex', formatter: factory(getBibtex)},
-  {name: 'bibtxt', formatter: factory(getBibtxt)}
-]
+export default {
+  bibtex: factory(getBibtex),
+  bibtxt: factory(getBibtxt)
+}

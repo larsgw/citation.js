@@ -91,83 +91,45 @@ const formats = {}
  *
  * @tutorial input_plugins
  */
-export const addFormat = (format, parsers, pluginRef) => {
+export const add = (format, parsers) => {
   let formatParser = new FormatParser(format, parsers)
   formatParser.validate()
 
-  if (!formats[format]) {
-    formats[format] = {}
-  }
+  let index = formats[format] = {}
 
   if (formatParser.typeParser) {
     addTypeParser(format, formatParser.typeParser)
-    formats[format].typeParser = pluginRef
+    index.type = true
   }
   if (formatParser.dataParser) {
     addDataParser(format, formatParser.dataParser)
-    formats[format].dataParser = pluginRef
+    index.data = true
   }
   if (formatParser.asyncDataParser) {
     addDataParser(format, formatParser.asyncDataParser)
-    formats[format].asyncDataParser = pluginRef
+    index.asyncData = true
   }
 }
 
-export const removeFormat = (format, pluginRef) => {
-  const parsers = formats[format]
-  if (!parsers) {
+export const remove = (format) => {
+  let index = formats[format]
+
+  if (!index) {
     return
   }
 
-  // TODO refactor into proper code
-  const totalRefs = Object.values(parsers)
-  const deletedRefs = totalRefs.filter(ref => pluginRef == null || ref === pluginRef)
-
-  if (pluginRef == null || parsers.typeParser === pluginRef) {
-    delete parsers.typeParser
+  if (index.type) {
     removeTypeParser(format)
   }
-  if (pluginRef == null || parsers.dataParser === pluginRef) {
-    delete parsers.dataParser
+  if (index.data) {
     removeDataParser(format)
   }
-  if (pluginRef == null || parsers.asyncDataParser === pluginRef) {
-    delete parsers.asyncDataParser
+  if (index.asyncData) {
     removeDataParser(format, true)
   }
 
-  if (deletedRefs.length === totalRefs.length) {
-    delete formats[format]
-  }
+  delete formats[format]
 }
 
-export const hasFormat = (format) => format in formats
-export const listFormat = () => Object.keys(formats)
-
-// BEGIN compat
-export const add = /* istanbul ignore next: deprecated */ (...args) => {
-  logger.warn('This method is deprecated; use addFormat')
-  return addFormat(...args)
-}
-// END compat
-
-const plugins = {}
-
-export const addPlugin = (ref, plugin, config) => {
-  plugins[ref] = config
-  for (let format in plugin) {
-    exports.addFormat(format, plugin[format], ref)
-  }
-}
-
-export const removePlugin = (ref) => {
-  delete plugins[ref]
-  for (let format in formats) {
-    if (Object.values(formats[format]).includes(ref)) {
-      exports.removeFormat(format, ref)
-    }
-  }
-}
-
-export const hasPlugin = (ref) => ref in plugins
-export const listPlugin = () => Object.keys(plugins)
+export const has = (format) => format in formats
+export const list = () => Object.keys(formats)
