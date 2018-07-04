@@ -1,7 +1,12 @@
+import * as config from './config'
+import * as dict from '../get/dict'
 import * as input from '../parse/interface/register'
 import * as output from '../get/registrar'
 
+const getConfig = config.get
 const registers = {
+  config,
+  dict,
   input,
   output
 }
@@ -10,7 +15,11 @@ const indices = {}
 
 export const add = (ref, plugins) => {
   let mainIndex = indices[ref] = {}
-  console.log(ref, Object.keys(plugins))
+
+  if ('config' in plugins) {
+    registers.config.add(ref, plugins.config)
+    delete plugins.config
+  }
 
   for (let type in plugins) {
     let typeIndex = mainIndex[type] = {}
@@ -42,4 +51,5 @@ export const remove = (ref) => {
 export const has = (ref) => ref in indices
 export const list = () => Object.keys(indices)
 
+export {getConfig as config}
 export {registers}
