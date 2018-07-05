@@ -13,7 +13,7 @@ const registers = {
 
 const indices = {}
 
-export const add = (ref, plugins) => {
+export const add = (ref, plugins = {}) => {
   let mainIndex = indices[ref] = {}
 
   if ('config' in plugins) {
@@ -51,5 +51,4 @@ export const remove = (ref) => {
 export const has = (ref) => ref in indices
 export const list = () => Object.keys(indices)
 
-export {getConfig as config}
-export {registers}
+export {getConfig as config, registers}
