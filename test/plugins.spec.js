@@ -31,17 +31,6 @@ describe('plugins', function () {
     expect(Cite.parse.hasDataParser(type, true)).to.not.be.ok()
     expect(Cite.parse.type('foo')).to.not.be(type)
   })
-  it('removes only relevant parts', function () {
-    Cite.plugins.add(ref, {input: {[type]: {parse, parseAsync, parseType: {predicate: /foo/}}}})
-    Cite.plugins.add('@other-ref', {input: {[type]: {parseType: {predicate: /bar/}}}})
-    Cite.plugins.remove(ref)
-    expect(Cite.parse.has(type)).to.be.ok()
-    expect(Cite.parse.hasTypeParser(type)).to.be.ok()
-    expect(Cite.parse.hasDataParser(type)).to.not.be.ok()
-    expect(Cite.parse.hasDataParser(type, true)).to.not.be.ok()
-    expect(Cite.parse.type('foo')).to.not.be(type)
-    expect(Cite.parse.type('bar')).to.be(type)
-  })
 
   describe('input', function () {
     describe('typeParser', function () {
