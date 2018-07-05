@@ -2,6 +2,7 @@ import '@babel/polyfill'
 import './logger'
 
 import * as staticMethods from './Cite/static'
+import * as plugins from './plugins/index'
 import * as get from './get/index'
 import * as parse from './parse/index'
 import * as util from './util/index'
@@ -33,6 +34,7 @@ const CSL = {
 
 Object.assign(Cite, staticMethods, {
   async: async,
+  plugins,
   get,
   CSL,
   parse,
