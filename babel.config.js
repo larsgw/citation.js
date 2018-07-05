@@ -1,7 +1,7 @@
 module.exports = {
   "presets": [
     ["@babel/env", {"targets": {
-      "browser": [
+      "browsers": [
         "> 1%",
         "last 10 versions",
         "ie > 7"
