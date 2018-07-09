@@ -8,11 +8,11 @@ import {getBibtex} from './text'
 import {getBibtxt} from './bibtxt'
 
 const factory = function (formatter) {
-  return function (data, {type = 'text'} = {}) {
-    if (type === 'object') {
+  return function (data, {type, format = type || 'text'} = {}) {
+    if (format === 'object') {
       return data.map(json)
     } else {
-      return hasDict(type) ? formatter(data, getDict(type)) : ''
+      return hasDict(format) ? formatter(data, getDict(format)) : ''
     }
   }
 }

@@ -263,8 +263,8 @@ const getRis = function (entries) {
 }
 
 export default {
-  ris (data, {type = 'text'} = {}) {
-    if (type === 'object') {
+  ris (data, {type, format = type || 'text'} = {}) {
+    if (format === 'object') {
       return data.map(json)
     } else {
       return getRis(data)

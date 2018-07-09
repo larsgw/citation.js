@@ -104,14 +104,14 @@ const getJsonWrapper = function (src) {
 
 export {getJsonWrapper}
 export default {
-  data (data, {type = 'text'} = {}) {
-    if (type === 'object') {
+  data (data, {type, format = type || 'text'} = {}) {
+    if (format === 'object') {
       return deepCopy(data)
-    } else if (type === 'text') {
+    } else if (format === 'text') {
       return JSON.stringify(data, null, 2)
     } else {
       logger.warn('[get]', 'This feature (JSON output with special formatting) is unstable. See https://github.com/larsgw/citation.js/issues/144')
-      return hasDict(type) ? getJson(data, getDict(type)) : ''
+      return hasDict(format) ? getJson(data, getDict(format)) : ''
     }
   }
 }
