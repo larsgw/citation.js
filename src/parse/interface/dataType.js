@@ -2,7 +2,7 @@
  * Gets the constructor name, with a special case for `null` and `undefined`
  *
  * @access public
- * @memberof Cite.parse
+ * @memberof Cite.plugins.input.util
  *
  * @param {*} thing - input data or anything else
  *
@@ -21,7 +21,7 @@ export const typeOf = thing => {
 
 /**
  * @access public
- * @memberof Cite.parse
+ * @memberof Cite.plugins.input.util
  *
  * @param {*} thing - input data or anything else
  *

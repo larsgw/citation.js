@@ -1,13 +1,18 @@
+/**
+ * @namespace output
+ * @memberof Cite.plugins
+ */
+
 import Register from '../util/register'
 
 /**
- * @callback Cite.get~formatter
+ * @callback Cite.plugins.output~formatter
  * @param {Array<InputData>}
  * @return {String} output
  */
 
 /**
- * @typedef Cite.get~formatterName
+ * @typedef Cite.plugins.output~formatterName
  * @type String
  */
 
@@ -15,10 +20,10 @@ import Register from '../util/register'
  * Validate input arguments
  *
  * @access private
- * @memberof Cite.get
+ * @memberof Cite.plugins.output
  *
  * @param {String} name - output format name
- * @param {Cite.get~formatter} formatter - outputting function
+ * @param {Cite.plugins.output~formatter} formatter - outputting function
  * @throw {TypeError} Invalid output format name
  * @throw {TypeError} Invalid formatter
  */
@@ -32,7 +37,7 @@ const validate = (name, formatter) => {
 
 /**
  * @access public
- * @memberof Cite.get
+ * @memberof Cite.plugins.output
  * @constant register
  *
  * @type Cite.util.Register
@@ -43,11 +48,11 @@ export const register = new Register()
  * Add output plugin.
  *
  * @access public
- * @memberof Cite.get
+ * @memberof Cite.plugins.output
  * @method add
  *
- * @param {Cite.get~formatterName} name - output format name
- * @param {Cite.get~formatter} formatter - outputting function
+ * @param {Cite.plugins.output~formatterName} name - output format name
+ * @param {Cite.plugins.output~formatter} formatter - outputting function
  * @throw {TypeError} validation errors
  */
 export const add = (name, formatter) => {
@@ -60,10 +65,10 @@ export const add = (name, formatter) => {
  * Remove output plugin.
  *
  * @access public
- * @memberof Cite.get
+ * @memberof Cite.plugins.output
  * @method remove
  *
- * @param {Cite.get~formatterName} name - output format name
+ * @param {Cite.plugins.output~formatterName} name - output format name
  */
 export const remove = (name) => {
   register.remove(name)
@@ -73,10 +78,10 @@ export const remove = (name) => {
  * Check if output plugin exists.
  *
  * @access public
- * @memberof Cite.get
+ * @memberof Cite.plugins.output
  * @method has
  *
- * @param {Cite.get~formatterName} name - output format name
+ * @param {Cite.plugins.output~formatterName} name - output format name
  * @return {Boolean} register has plugin
  */
 export const has = (name) => {
@@ -87,7 +92,7 @@ export const has = (name) => {
  * List output plugins.
  *
  * @access public
- * @memberof Cite.get
+ * @memberof Cite.plugins.output
  * @method list
  *
  * @return {Array<String>} list of plugins
@@ -100,10 +105,10 @@ export const list = () => {
  * Call output plugin
  *
  * @access public
- * @memberof Cite.get
+ * @memberof Cite.plugins.output
  * @method format
  *
- * @param {Cite.get~formatterName} name - output format name
+ * @param {Cite.plugins.output~formatterName} name - output format name
  * @param {Array<CSL>} data - all entries
  * @param {...*} options - output options
  */

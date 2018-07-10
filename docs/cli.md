@@ -55,7 +55,7 @@ The CLI outputs to `stdout` by default, but can write to a file with the `-o, --
     $ more output.json
     [{"title": "The Synergistic Activity ...", ...}]
 
-> Note: the file extension is determined automatically, and should therefore be omitted in the `-o` option. To force a file extension, simply redirect `stdout` to the preferred file.
+> Note: the file extension is determined automatically, and should therefore be omitted in the `-o` option. To force a file extension, simply omit `-o` and redirect `stdout` to the preferred file.
 
 ## Output Format
 
@@ -72,7 +72,7 @@ For example, to format [doi:10.5281/zenodo.1005176](https://doi.org/10.5281/zeno
 
     $ citation-js -t 10.5281/zenodo.1005176 -f string -s citation-apa -l fr-FR
 
-    Willighagen, L., &amp;#38; Willighagen, E. (2017,  octobre 9). Larsgw/Citation.Js V0.3.3. Zenodo. https://doi.org/10.5281/zenodo.1005176
+    Willighagen, L., & Willighagen, E. (2017,  octobre 9). Larsgw/Citation.Js V0.3.3. Zenodo. https://doi.org/10.5281/zenodo.1005176
 
 > Note: the `-f` option is mandatory here, because the default value (`json`) is incompatible with the style used (`citation-apa`)
 

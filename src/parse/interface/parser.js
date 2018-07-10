@@ -1,8 +1,95 @@
 import {type, typeMatcher} from './type'
 
+// ============================================================================
+// Type definitions
+// ============================================================================
+
+/**
+ * @typedef Cite.plugins.input~format
+ * @type String
+ */
+
+/**
+ * @typedef Cite.plugins.input~parsers
+ * @type Object
+ *
+ * @property {Cite.plugins.input~dataParser} parse
+ * @property {Cite.plugins.input~asyncDataParser} parseAsync
+ * @property {Cite.plugins.input~typeParser} parseType
+ */
+
+/**
+ * @callback Cite.plugins.input~dataParser
+ * @param {InputData} input
+ * @return parsed data
+ */
+
+/**
+ * @async
+ * @callback Cite.plugins.input~asyncDataParser
+ * @param {InputData} input
+ * @return parsed data
+ */
+
+/**
+ * @typedef Cite.plugins.input~typeParser
+ * @type Object
+ *
+ * @property {Cite.plugins.input~dataType} dataType
+ * @property {Cite.plugins.input~predicate|RegExp} predicate
+ * @property {Cite.plugins.input~tokenList|RegExp} tokenList
+ * @property {Cite.plugins.input~propertyConstraint|Array<Cite.plugins.input~propertyConstraint>} propertyConstraint
+ * @property {Cite.plugins.input~elementConstraint|Array<Cite.plugins.input~elementConstraint>} elementConstraint
+ * @property {Cite.plugins.input~format} extends
+ */
+
+/**
+ * @typedef Cite.plugins.input~dataType
+ * @type String
+ */
+
+/**
+ * @callback Cite.plugins.input~predicate
+ * @param {InputData} input
+ * @return {Boolean} pass
+ */
+
+/**
+ * @typedef Cite.plugins.input~tokenList
+ * @type Object
+ * @property {RegExp} token - token pattern
+ * @property {RegExp} [split=/\s+/] - token delimiter
+ * @property {Boolean} [every=true] - match every token, or only some
+ * @property {Boolean} [trim=true] - trim input whitespace before testing
+ */
+
+/**
+ * @typedef Cite.plugins.input~propertyConstraint
+ * @type Object
+ * @property {String|Array<String>} [props=[]]
+ * @property {String} [match='every']
+ * @property {Cite.plugins.input~valuePredicate} [value]
+ */
+
+/**
+ * @callback Cite.plugins.input~valuePredicate
+ * @param value
+ * @return {Boolean} pass
+ */
+
+/**
+ * @typedef Cite.plugins.input~elementConstraint
+ * @type Cite.plugins.input~format
+ */
+
 export class TypeParser {
   validDataTypes = ['String', 'Array', 'SimpleObject', 'ComplexObject', 'Primitive']
 
+  /**
+   * @class TypeParser
+   * @memberof Cite.plugins.input.util
+   * @param {Cite.plugins.input~typeParser}
+   */
   constructor (data) {
     this.data = data
   }
@@ -54,7 +141,7 @@ export class TypeParser {
   }
 
   validate () {
-    if (this.data !== null && typeof this.data !== 'object') {
+    if (this.data === null || typeof this.data !== 'object') {
       throw new TypeError(`typeParser was ${typeof this.data}; expected object`)
     }
     this.validateDataType()
@@ -163,6 +250,13 @@ export class TypeParser {
 }
 
 export class DataParser {
+  /**
+   * @class DataParser
+   * @memberof Cite.plugins.input.util
+   * @param {Cite.plugins.input~dataParser|Cite.plugins.input~asyncDataParser} parser
+   * @param {Object} options
+   * @param {Boolean} [options.async=false]
+   */
   constructor (parser, {async} = {}) {
     this.parser = parser
     this.async = async
@@ -181,6 +275,12 @@ export class DataParser {
 }
 
 export class FormatParser {
+  /**
+   * @class FormatParser
+   * @memberof Cite.plugins.input.util
+   * @param {Cite.plugins.input~format} format
+   * @param {Cite.plugins.input~parsers} parsers
+   */
   constructor (format, parsers = {}) {
     this.format = format
 

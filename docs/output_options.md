@@ -1,3 +1,17 @@
+> Note that `Cite#get()` is deprecated. Use {@tutorial cite_output `Cite#format()`}
+
+`Cite#get()` can be used like this:
+
+```js
+let cite = new Cite('10.5281/zenodo.1005176')
+
+// CSL-JSON
+cite.get() // {title: 'Citation.js', ...}
+cite.get({format: 'real', type: 'json', style: 'csl'})
+
+// Bibliography
+```
+
 Output options can be set in three different ways: the default output options for a given instance of `Cite` can be set in the second argument to the constructor or by changing them with `Cite#options()`; and the non-default options can be set as an argument in `Cite#get()`. Non-default options take priority over the default ones.
 
 Here are the output options.

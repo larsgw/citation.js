@@ -6,9 +6,9 @@
  * @projectname Citation.js
  *
  * @author Lars Willighagen
- * @version 0.3.0-13
+ * @version 0.3.4
  * @license
- * Copyright (c) 2016-2017 Lars Willighagen
+ * Copyright (c) 2016-2018 Lars Willighagen
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal

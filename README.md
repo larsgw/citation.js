@@ -92,12 +92,11 @@ const Cite = require('citation-js')
 For example, to get the bibliographical data of the Wikidata item [`wd:Q21972834`](https://wikidata.org/wiki/Q21972834), and then format it in HTML, English and APA:
 
 ```js 
-const data = new Cite('Q21972834')
+let example = new Cite('Q21972834')
 
-const output = data.get({
-  format: 'string',
-  type: 'html',
-  style: 'citation-apa',
+let output = example.format('bibliography', {
+  format: 'html',
+  template: 'apa',
   lang: 'en-US'
 })
 
@@ -111,19 +110,18 @@ To test this code, go to [RunKit](https://runkit.com/larsgw/591b5651bd9b40001113
 Use the async API (recommended for Wikidata, URL, and DOI input) like this:
 
 ```js
-const data = await Cite.async('Q21972834')
+let example = await Cite.async('Q21972834')
 
-const output = data.get({
-  format: 'string',
-  type: 'html',
-  style: 'citation-apa',
+let output = example.format('bibliography', {
+  format: 'html',
+  template: 'apa',
   lang: 'en-US'
 })
 
 console.log(output)
 ```
 
-> `Cite.async()` also supports a callback function as the second or third argument
+> `Cite.async()` also supports options as the second argument, and a callback function as last argument.
 
 # Acknowledgements
 

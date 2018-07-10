@@ -1,6 +1,38 @@
 /**
  * @namespace parse
  * @memberof Cite
+ *
+ * @borrows Cite.plugins.input.chain as chain
+ * @borrows Cite.plugins.input.chainAsync as chainAsync
+ * @borrows Cite.plugins.input.chainLink as chainLink
+ * @borrows Cite.plugins.input.chainLinkAsync as chainLinkAsync
+ * @borrows Cite.plugins.input.data as data
+ * @borrows Cite.plugins.input.dataAsync as dataAsync
+ * @borrows Cite.plugins.input.type as type
+ *
+ * @borrows Cite.plugins.input.addTypeParser as addTypeParser
+ * @borrows Cite.plugins.input.hasTypeParser as hasTypeParser
+ * @borrows Cite.plugins.input.removeTypeParser as removeTypeParser
+ * @borrows Cite.plugins.input.listTypeParser as listTypeParser
+ * @borrows Cite.plugins.input.treeTypeParser as treeTypeParser
+ * @borrows Cite.plugins.input.typeMatcher as typeMatcher
+ * @borrows Cite.plugins.input.addDataParser as addDataParser
+ * @borrows Cite.plugins.input.hasDataParser as hasDataParser
+ * @borrows Cite.plugins.input.removeDataParser as removeDataParser
+ * @borrows Cite.plugins.input.listDataParser as listDataParser
+ */
+
+/**
+ * @namespace util
+ * @memberof Cite.parse
+ *
+ * @borrows Cite.plugins.input.util.typeOf as typeOf
+ * @borrows Cite.plugins.input.util.dataTypeOf as dataTypeOf
+ * @borrows Cite.plugins.input.util.applyGraph as applyGraph
+ * @borrows Cite.plugins.input.util.removeGraph as removeGraph
+ * @borrows Cite.plugins.input.util.TypeParser as TypeParser
+ * @borrows Cite.plugins.input.util.DataParser as DataParser
+ * @borrows Cite.plugins.input.util.FormatParser as FormatParser
  */
 
 import './modules/'
@@ -73,7 +105,8 @@ export const bibtxt = {
 }
 
 /**
- * @borrows module:input/bibjson~parseContentMine as Cite.parse.bibjson
+ * @memberof Cite.parse
+ * @borrows module:input/bibjson~parseContentMine as bibjson
  * @deprecated now part of the {@link module:input/bibjson} module
  */
 export const bibjson = bibjsonParsers.json.parse

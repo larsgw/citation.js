@@ -155,19 +155,18 @@ console.log(example.data)
 
 > Read more on {@tutorial cite_output}
 
-To format data in a `Cite` instance, you use the `Cite#get()` method. First, let's create the `Cite` instance itself:
+To format data in a `Cite` instance, you use the `Cite#format()` method. First, let's create the `Cite` instance itself:
 
 ```js
-const example = new Cite('10.5281/zenodo.1005176')
+let example = new Cite('10.5281/zenodo.1005176')
 ```
 
-Now, we can choose different {@tutorial output_options} as a parameter to `Cite#get()`. For example, to get output in HTML in APA-style:
+Now, we can choose different {@tutorial output_formats output options} as a parameter to `Cite#format()`. For example, to get output in HTML in APA-style:
 
 ```js
-> example.get({
-    format: 'string', // Otherwise it tries to return a DOM element
-    type: 'html',
-    style: 'citation-apa'
+> example.format('bibliography', {
+    format: 'html',
+    template: 'apa'
   })
 
 < <div class="csl-bib-body">

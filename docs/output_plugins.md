@@ -1,45 +1,51 @@
-Output plugins are currently limited to adding different CSL templates and locales.
+There are several ways to extend output. First of all, if you want to add citation styles or other locales for your citations, you can use {@tutorial output_plugins_csl}. CSL Plugins themselves are configurations of the CSL Output Plugin. General Output PLugins, used to add different formats (like BibTeX, Bib.TXT, BibJSON, etc.) can also be added. To extend most Output Plugins, you can add {@tutorial output_plugins_dict}.
 
-## CSL Plugins
+## Output Plugins
 
-CSL Plugins rely on extending the citeproc engine, currently only by feeding it different templates and locales.
-
-### CSL Template Plugins
-
-Different [CSL Templates](https://github.com/citation-style-language/styles) can be registered like this:
+Output plugins can be added like this:
 
 ```js
-const templateName = 'custom'
-const template = '<?xml version="1.0" encoding="utf-8"?><style ...>...</style>' // The actual XML file
+Cite.plugins.output.add(type, formatter)
+```
 
-Cite.CSL.register.addTemplate(templateName, template)
+Or with General Plugins, `ref` being the plugin name:
 
-const data = new Cite(...)
-data.get({
-  format: 'string',
-  type: 'html',
-  style: 'citation-' + templateName,
-  lang: 'en-US'
+```js
+Cite.plugins.add(ref, {
+  output: {
+    type: formatter
+  }
 })
 ```
 
-### CSL Locale Plugins
+### Options
 
-Replace `templateName` with the template name you want to use.
+| Option      | Description |
+|-------------|-------------|
+| `type`      | Format name |
+| `formatter` | Formatter   |
 
-Different [CSL Locales](https://github.com/citation-style-language/locales) can be registered like this:
+#### `type`
+
+Any string. Descriptive would be nice.
+
+#### `formatter`
+
+A function taking in an array of CSL-JSON, returning the product. Can use dictionaries, mentioned below. The signature is like below:
 
 ```js
-const language = 'en-GB'
-const locale = '<?xml version="1.0" encoding="utf-8"?><locale ...>...</locale>' // The actual XML file
-
-Cite.CSL.register.addLocale(language, locale)
-
-const data = new Cite(...)
-data.get({
-  format: 'string',
-  type: 'html',
-  style: 'citation-apa',
-  lang: language
-})
+formatter (csl[] data, ...options) {}
 ```
+
+So the first argument is an array of CSL data, and then there are any number of configuring arguments. Usually only one is needed, but multiple are supported. Multiple options can be passed like this:
+
+```js
+cite.format('example', optionA, optionB)
+```
+
+### Standard formatter options
+
+Most Output Plugins share some common options.
+
+* The `format` (and possibly the `type`) options control the formatting language, e.g. HTML, plain text or RTF. How this is achieved (i.e. with or without Dictionary Plugins) is your choice.
+* The `entry` option, if applicable, controls which entries get outputtted.

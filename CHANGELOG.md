@@ -5,18 +5,20 @@
 ### Added
 
 * A lot of tests cases regarding input parsing mechanisms (#123)
+* Global plugin system (#88)
+* Alias `type` option to `format` in most output formats
 
 ### Changed
 
-* Input plugin system (again). This time, not only formats, but also plugins (i.e. collections of formats) are supported (#106)
-
-### Refactored
+* Reformed input plugin system (again) (#106)
 * The `parseDate` method now has an internal parsing implementation (#127, #138)
+* Updated documentation (both in-code JSDoc and guides)
 
 ### Testing
 
 * Tests now support HTTP(S) request mocking (#134, #136)
 * Added REDOS flagging tools
+* Tests for global plugin system
 
 ### Fixed
 
@@ -29,6 +31,17 @@
   ```
 * REDOS (mostly, anyway) (see #107, 7c52beff44b37443b812ee5864733e441e29a812)
 * JSON output still being invalid (#143, see also #144)
+* [meta] Invalid Babel `browsers` target
+
+## [0.4.0-6] - 2018-07-01
+
+### Fixed
+* BibTeX output typo, trying to find the non-existent `url` CSL property, instead of the `URL` one (#153)
+
+## [0.4.0-5] - 2018-06-03
+
+### Fixed
+* Webpack error because of browserify-centric setup (#151)
 
 ## [0.4.0-4] - 2018-05-19
 

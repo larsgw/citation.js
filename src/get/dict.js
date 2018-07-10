@@ -1,27 +1,27 @@
 /**
  * @namespace dict
- * @memberof Cite.get
+ * @memberof Cite.plugins
  */
 
 import Register from '../util/register'
 
 /**
- * @typedef Cite.get.dict~dictName
+ * @typedef Cite.plugins.dict~dictName
  * @type String
  */
 
 /**
- * @typedef Cite.get.dict~dict
- * @type Object<Cite.get.dict~entryName,Cite.get.dict~dictEntry>
+ * @typedef Cite.plugins.dict~dict
+ * @type Object<Cite.plugins.dict~entryName,Cite.plugins.dict~dictEntry>
  */
 
 /**
- * @typedef Cite.get.dict~entryName
+ * @typedef Cite.plugins.dict~entryName
  * @type String
  */
 
 /**
- * @typedef Cite.get.dict~dictEntry
+ * @typedef Cite.plugins.dict~dictEntry
  * @type Array<String>
  */
 
@@ -29,10 +29,10 @@ import Register from '../util/register'
  * Validate input arguments
  *
  * @access private
- * @memberof Cite.get.dict
+ * @memberof Cite.plugins.dict
  *
- * @param {Cite.get.dict~dictName} name - output format name
- * @param {Cite.get.dict~dict} formatter - outputting function
+ * @param {Cite.plugins.dict~dictName} name - output format name
+ * @param {Cite.plugins.dict~dict} formatter - outputting function
  * @throw {TypeError} Invalid output format name
  * @throw {TypeError} Invalid formatter
  */
@@ -53,7 +53,7 @@ const validate = (name, dict) => {
 
 /**
  * @access public
- * @memberof Cite.get.dict
+ * @memberof Cite.plugins.dict
  * @constant register
  *
  * @type Cite.util.Register
@@ -79,11 +79,11 @@ export const register = new Register({
  * @todo docs
  *
  * @access public
- * @memberof Cite.get.dict
+ * @memberof Cite.plugins.dict
  * @method add
  *
- * @param {Cite.get.dict~dictName} name - dict name
- * @param {Cite.get.dict~dict} dict - dict data
+ * @param {Cite.plugins.dict~dictName} name - dictionary name
+ * @param {Cite.plugins.dict~dict} dict - dictionary data
  * @throw {TypeError} argument validation error
  */
 export const add = (name, dict) => {
@@ -92,26 +92,26 @@ export const add = (name, dict) => {
 }
 
 /**
- * Remove dict.
+ * Remove dictionary.
  *
  * @access public
- * @memberof Cite.get.dict
+ * @memberof Cite.plugins.dict
  * @method remove
  *
- * @param {Cite.get.dict~dictName} name - output format name
+ * @param {Cite.plugins.dict~dictName} name - output format name
  */
 export const remove = (name) => {
   register.remove(name)
 }
 
 /**
- * Check if output plugin exists.
+ * Check if dictionary plugin exists.
  *
  * @access public
- * @memberof Cite.get.dict
+ * @memberof Cite.plugins.dict
  * @method has
  *
- * @param {Cite.get.dict~dictName} name - output format name
+ * @param {Cite.plugins.dict~dictName} name - output format name
  * @return {Boolean} register has plugin
  */
 export const has = (name) => {
@@ -119,10 +119,10 @@ export const has = (name) => {
 }
 
 /**
- * List output plugins.
+ * List dictionary plugins.
  *
  * @access public
- * @memberof Cite.get.dict
+ * @memberof Cite.plugins.dict
  * @method list
  *
  * @return {Array<String>} list of plugins
@@ -132,14 +132,14 @@ export const list = () => {
 }
 
 /**
- * Check if output plugin exists.
+ * Get dictionary data.
  *
  * @access public
- * @memberof Cite.get.dict
+ * @memberof Cite.plugins.dict
  * @method get
  *
- * @param {Cite.get.dict~dictName} name - output format name
- * @return {Boolean} register has plugin
+ * @param {Cite.plugins.dict~dictName} name - output format name
+ * @return {Cite.plugins.dict~dict} dictionary data
  */
 export const get = (name) => {
   if (!register.has(name)) {
@@ -153,8 +153,8 @@ export const get = (name) => {
  * Object containing HTML strings for building JSON and BibTeX. Made to match citeproc, for compatibility.
  *
  * @access protected
- * @memberof Cite.get.dict
- * @deprecated use the new formatting dicts: {@link Cite.get.dict}
+ * @memberof Cite.plugins.dict
+ * @deprecated use the new formatting dicts: {@link Cite.plugins.dict}
  */
 export const htmlDict = {
   wr_start: '<div class="csl-bib-body">',
@@ -171,8 +171,8 @@ export const htmlDict = {
  * Object containing text strings for building JSON and BibTeX. Made to match citeproc, for compatibility.
  *
  * @access protected
- * @memberof Cite.get.dict
- * @deprecated use the new formatting dicts: {@link Cite.get.dict}
+ * @memberof Cite.plugins.dict
+ * @deprecated use the new formatting dicts: {@link Cite.plugins.dict}
  */
 export const textDict = {
   wr_start: '',

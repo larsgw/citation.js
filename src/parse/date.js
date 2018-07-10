@@ -1,6 +1,21 @@
 /**
+ * @namespace date
+ * @memberof Cite.parse
+ */
+
+/**
+ * Array of date parts, year-month-day. Month and day are optional.
+ *
+ * @typedef Cite.parse.date~dateParts
+ * @type Array<Number>
+ */
+
+/**
  * Maps of month indexes by month name
  * @default
+ *
+ * @access private
+ * @memberof Cite.parse.date
  */
 const monthMap = {
   jan: 1,
@@ -20,6 +35,9 @@ const monthMap = {
 /**
  * Get month index from month name
  *
+ * @access private
+ * @memberof Cite.parse.date
+ *
  * @param {String} monthName - Name of the given month (in English), or abbreviations
  * @return {Number} month index
  * @return {undefined}
@@ -29,8 +47,11 @@ const getMonth = monthName => monthMap[monthName.toLowerCase().slice(0, 3)]
 /**
  * Get date parts from epoch time
  *
+ * @access private
+ * @memberof Cite.parse.date
+ *
  * @param {Number} date - epoch time
- * @return {dateParts} if valid epoch time
+ * @return {Cite.parse.date~dateParts} if valid epoch time
  * @return {null} else null
  */
 const parseEpoch = function (date) {
@@ -51,8 +72,11 @@ const parseEpoch = function (date) {
  *
  * Time parts are supported but disregarded.
  *
+ * @access private
+ * @memberof Cite.parse.date
+ *
  * @param {String} date - ISO-8601 time
- * @return {dateParts} if valid ISO-8601 time
+ * @return {Cite.parse.date~dateParts} if valid ISO-8601 time
  * @return {null} else null
  */
 const parseIso8601 = function (date) {
@@ -82,8 +106,11 @@ const parseIso8601 = function (date) {
  *
  * Time parts are supported but disregarded.
  *
+ * @access private
+ * @memberof Cite.parse.date
+ *
  * @param {String} date - RFC-2822 time
- * @return {dateParts} if valid RFC-2822 time
+ * @return {Cite.parse.date~dateParts} if valid RFC-2822 time
  * @return {null} else null
  */
 const parseRfc2822 = function (date) {
@@ -113,8 +140,11 @@ const parseRfc2822 = function (date) {
  * The date is considered invalid if it doesn't exist according to the
  * native `Date` implementation.
  *
+ * @access private
+ * @memberof Cite.parse.date
+ *
  * @param {String} date - day time
- * @return {dateParts} if valid day time
+ * @return {Cite.parse.date~dateParts} if valid day time
  * @return {null} else null
  */
 const parseAmericanDay = function (date) {
@@ -148,14 +178,16 @@ const parseAmericanDay = function (date) {
  *
  * This format prefers YY MM DD over DD MM YY and YY MMM DD over DD MMM YY
  * if distinction is necessary. Note that in the overlap between these dates 
- * the American date format ({@link parseAmericanDay}), the latter is
- * preferred. This only happens when the separator is "/" and the date 
- * would be valid.
+ * and the American date format ({@link Cite.parse.date.parseAmericanDay}), the latter is
+ * preferred, only when the separator is "/" and the date would be valid.
  *
  * Any trailing parts (e.g. time parts) are supported but disregarded.
  *
+ * @access private
+ * @memberof Cite.parse.date
+ *
  * @param {String} date - day time
- * @return {dateParts} if valid day time
+ * @return {Cite.parse.date~dateParts} if valid day time
  * @return {null} else null
  */
 const parseDay = function (date) {
@@ -203,8 +235,11 @@ const parseDay = function (date) {
  *
  * Trailing parts are **not** supported.
  *
+ * @access private
+ * @memberof Cite.parse.date
+ *
  * @param {String} date - month time
- * @return {dateParts} if valid month time
+ * @return {Cite.parse.date~dateParts} if valid month time
  * @return {null} else null
  */
 const parseMonth = function (date) {
@@ -242,8 +277,11 @@ const parseMonth = function (date) {
  *
  * Trailing parts are **not** supported.
  *
+ * @access private
+ * @memberof Cite.parse.date
+ *
  * @param {String} date - year time
- * @return {dateParts} if valid year time
+ * @return {Cite.parse.date~dateParts} if valid year time
  * @return {null} else null
  */
 const parseYear = function (date) {

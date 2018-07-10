@@ -1,18 +1,29 @@
-import * as config from './config'
-import * as dict from '../get/dict'
-import * as input from '../parse/interface/register'
-import * as output from '../get/registrar'
+/**
+ * @namespace plugins
+ * @memberof Cite
+ */
 
-const getConfig = config.get
+import * as input from '../parse/interface/'
+import * as output from '../get/registrar'
+import * as dict from '../get/dict'
+import * as config from './config'
+
 const registers = {
-  config,
-  dict,
   input,
-  output
+  output,
+  dict,
+  config
 }
 
 const indices = {}
 
+/**
+ * @access public
+ * @method add
+ * @memberof Cite.plugins
+ * @param {Cite.plugins~pluginRef} ref - plugin reference/name
+ * @param {Cite.plugins~plugins} [plugins={}]
+ */
 export const add = (ref, plugins = {}) => {
   let mainIndex = indices[ref] = {}
 
@@ -34,6 +45,12 @@ export const add = (ref, plugins = {}) => {
   }
 }
 
+/**
+ * @access public
+ * @method remove
+ * @memberof Cite.plugins
+ * @param {Cite.plugins~pluginRef} ref - plugin reference/name
+ */
 export const remove = (ref) => {
   let mainIndex = indices[ref]
 
@@ -48,7 +65,21 @@ export const remove = (ref) => {
   delete indices[ref]
 }
 
+/**
+ * @access public
+ * @method has
+ * @memberof Cite.plugins
+ * @param {Cite.plugins~pluginRef} ref - plugin reference/name
+ * @returns {Boolean} plugin is registered
+ */
 export const has = (ref) => ref in indices
+
+/**
+ * @access public
+ * @method list
+ * @memberof Cite.plugins
+ * @returns {Array<Cite.plugins~pluginRef>} list of registered plugins
+ */
 export const list = () => Object.keys(indices)
 
-export {getConfig as config, registers}
+export {input, output, dict, config}
