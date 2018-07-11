@@ -2,12 +2,6 @@
  * @module output/csl
  */
 
-import './locales'
-import './styles'
-
-import bibliography from './bibliography'
-import citation from './citation'
-
 /**
  * @callback module:output/csl~retrieveItem
  * @param {String} id - Citation id
@@ -20,7 +14,23 @@ import citation from './citation'
  * @return {String} CSL Locale
  */
 
-export default {
-  bibliography,
-  citation
-}
+import {add as addPlugin} from '../../../plugins/'
+
+import {locales} from './locales'
+import {templates} from './styles'
+import engine from './engines'
+
+import bibliography from './bibliography'
+import citation from './citation'
+
+addPlugin('csl', {
+  output: {
+    bibliography,
+    citation
+  },
+  config: {
+    engine,
+    locales,
+    templates
+  }
+})

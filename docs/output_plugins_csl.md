@@ -5,16 +5,16 @@ CSL Plugins rely on extending the citeproc engine, currently only by feeding it 
 Different [CSL Templates](https://github.com/citation-style-language/styles) can be registered like this:
 
 ```js
-const templateName = 'custom'
-const template = '<?xml version="1.0" encoding="utf-8"?><style ...>...</style>' // The actual XML file
+let templateName = 'custom'
+let template = '<?xml version="1.0" encoding="utf-8"?><style ...>...</style>' // The actual XML file
 
-Cite.CSL.register.addTemplate(templateName, template)
+let config = Cite.plugins.output.config.get('csl')
+config.templates.add(templateName, template)
 
-const data = new Cite(...)
-data.get({
-  format: 'string',
-  type: 'html',
-  style: 'citation-' + templateName,
+let example = new Cite(...)
+example.format('bibliography', {
+  format: 'html',
+  template: templateName,
   lang: 'en-US'
 })
 ```
@@ -26,16 +26,16 @@ Replace `templateName` with the template name you want to use.
 Different [CSL Locales](https://github.com/citation-style-language/locales) can be registered like this:
 
 ```js
-const language = 'en-GB'
-const locale = '<?xml version="1.0" encoding="utf-8"?><locale ...>...</locale>' // The actual XML file
+let language = 'en-GB'
+let locale = '<?xml version="1.0" encoding="utf-8"?><locale ...>...</locale>' // The actual XML file
 
-Cite.CSL.register.addLocale(language, locale)
+let config = Cite.plugins.output.config.get('csl')
+config.locales.add(language, locale)
 
-const data = new Cite(...)
-data.get({
-  format: 'string',
-  type: 'html',
-  style: 'citation-apa',
+let example = new Cite(...)
+example.format('bibliography', {
+  format: 'html',
+  template: 'apa',
   lang: language
 })
 ```
