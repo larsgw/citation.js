@@ -55,17 +55,12 @@ const configs = {
   // @bibjson
   '@bibjson/object': [input.bibjson.simple, output.bibjson.simple],
 
-  // @csl
-  '@csl/object': [input.csl.simple, [input.csl.simple]],
-  '@csl/list+object': [input.array.simple, input.array.simple],
-
   // @else
   '@else/json': {
     'as JSON string': [JSON.stringify(input.csl.simple), [input.csl.simple]],
     'as JS Object string': [input.csl.string, [input.csl.simple]],
     'with a syntax error': ['{"hi"}', []]
   },
-  '@else/list+object': [input.array.nested, input.array.simple],
 
   // @empty
   '@empty/text': ['', []],
@@ -86,7 +81,26 @@ const configs = {
     'without elements': [[], [], {link: true}],
     'with elements': [[{}], [{}], {link: true}]
   },
-  '@else/list+object': [[[{i: 1}], [{i: 2}, [{i: 3}]], {i: 4}], [{i: 1}, {i: 2}, {i: 3}, {i: 4}]]
+  '@else/list+object': [
+    [
+      [
+        {i: 1}
+      ],
+      [
+        {i: 2},
+        [
+          {i: 3}
+        ]
+      ],
+      {i: 4}
+    ],
+    [
+      {i: 1},
+      {i: 2},
+      {i: 3},
+      {i: 4}
+    ]
+  ]
 }
 
 const testCaseGenerator = (type, input, output, opts = {}) => {
@@ -197,7 +211,7 @@ describe('input', function () {
           expect(parse('1 1 -2000')).to.eql({'date-parts': [[-2000, 1, 1]]})
           expect(parse('1 Jan -2000')).to.eql({'date-parts': [[-2000, 1, 1]]})
         })
-        it('works reversed', function () {  
+        it('works reversed', function () {
           expect(parse('2000 1 1')).to.eql({'date-parts': [[2000, 1, 1]]})
           expect(parse('2000 Jan 1')).to.eql({'date-parts': [[2000, 1, 1]]})
           expect(parse('2000 01 01')).to.eql({'date-parts': [[2000, 1, 1]]})

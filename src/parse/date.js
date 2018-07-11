@@ -177,7 +177,7 @@ const parseAmericanDay = function (date) {
  * In all cases, " ", ".", "-" and "/" are all considered valid separators.
  *
  * This format prefers YY MM DD over DD MM YY and YY MMM DD over DD MMM YY
- * if distinction is necessary. Note that in the overlap between these dates 
+ * if distinction is necessary. Note that in the overlap between these dates
  * and the American date format ({@link Cite.parse.date.parseAmericanDay}), the latter is
  * preferred, only when the separator is "/" and the date would be valid.
  *
@@ -315,7 +315,7 @@ const parseYear = function (date) {
  *   1. When the former of these formats overlaps with the latter, the
  *      former is preferred
  *   2. " ", ".", "-" and "/" are all supported as separator
- *   3. Any sequence of non-alphanumerical characters are supported as 
+ *   3. Any sequence of non-alphanumerical characters are supported as
  *      separator
  *   4. This format is only assumed if the year is bigger than the month
  *   5. This format doesn't support trailing parts

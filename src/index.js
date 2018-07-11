@@ -19,7 +19,7 @@ const CSL = {
   engine,
   style,
   locale,
-  /* istanbul ignore next: deprecated */ 
+  /* istanbul ignore next: deprecated */
   item (data) { return id => data.find(entry => entry.id === id) },
   register: {
     addTemplate: templates.add.bind(templates),

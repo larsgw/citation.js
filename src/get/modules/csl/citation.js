@@ -23,7 +23,7 @@ export default function citation (data, options = {}) {
   const entries = options.entry ? [].concat(options.entry) : ids
 
   const citeproc = prepareEngine(data, template, lang, format)
-  const sortedIds = citeproc.updateItems(ids)
+  citeproc.updateItems(ids)
 
   const citation = citeproc.previewCitationCluster({
     citationItems: entries.map(id => ({id})),

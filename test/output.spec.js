@@ -144,7 +144,7 @@ describe('output', () => {
       id: '1',
       type: 'article-journal',
       title: 'a',
-      issued: {'date-parts':[[2011]]}
+      issued: {'date-parts': [[2011]]}
     }, {
       id: '2',
       type: 'article-journal',
@@ -155,7 +155,7 @@ describe('output', () => {
       }, {
         literal: 'h'
       }],
-      issued: {'date-parts':[[2012]]}
+      issued: {'date-parts': [[2012]]}
     }, {
       id: '3',
       type: 'article-journal',
@@ -164,7 +164,7 @@ describe('output', () => {
         family: 'f',
         given: 'g'
       }],
-      issued: {'date-parts':[[2013]]}
+      issued: {'date-parts': [[2013]]}
     }])
 
     it('works', function () {
