@@ -96,15 +96,21 @@ describe('Cite instance', () => {
 
     describe('options()', () => {
       it('works', () => {
-        test.options({format: '1'})
-        expect(test._options.format).to.be('1')
+        test.options({lang: '1'})
+        expect(test._options.lang).to.be('1')
         expect(test.log).to.have.length(1)
       })
 
       it('saves', () => {
-        test.options({format: '2'}, true)
-        expect(test._options.format).to.be('2')
+        test.options({lang: '2'}, true)
+        expect(test._options.lang).to.be('2')
         expect(test.log).to.have.length(2)
+      })
+
+      it('validates', () => {
+        test.options({format: 'real'})
+        test.options({format: 'foo'})
+        expect(test._options.format).to.be('real')
       })
     })
 

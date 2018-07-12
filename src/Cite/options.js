@@ -1,4 +1,4 @@
-import {validateOptions as validate} from './validate'
+import {validateOutputOptions as validate} from './validate'
 
 /**
  * @memberof Cite#
