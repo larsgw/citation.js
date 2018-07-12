@@ -1,5 +1,5 @@
 import {chainAsync as parseInputAsync} from '../parse/'
-import Cite from '../Cite/index'
+import Cite from './index'
 
 /**
  * @callback Cite~asyncCallback

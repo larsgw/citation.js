@@ -7,7 +7,6 @@ import * as get from './get/index'
 import * as parse from './parse/index'
 import * as util from './util/index'
 import * as version from './version'
-import async from './async/index'
 import Cite from './Cite/index'
 
 // BEGIN compat
@@ -33,7 +32,6 @@ const CSL = {
 // END compat
 
 Object.assign(Cite, staticMethods, {
-  async: async,
   plugins,
   get,
   CSL,

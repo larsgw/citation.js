@@ -1,4 +1,4 @@
-import {validateOptions as validate} from './static'
+import {validateOptions as validate} from './validate'
 
 /**
  * @memberof Cite#
