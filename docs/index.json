@@ -29,6 +29,7 @@
     "title": "Output",
     "children": {
       "output_formats": {"title": "Output Formats"},
+      "output_options": {"title": "Output Options"},
       "output_plugins": {"title": "Output Plugins",
         "children": {
           "output_plugins_dict": {"title": "Dictionary Plugins"},
