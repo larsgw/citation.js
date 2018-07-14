@@ -4,18 +4,51 @@
 
 import * as json from './json'
 
+let scraperLinks = ['fulltext_html', 'fulltext_xml', 'fulltext_pdf']
+
 export const ref = '@bibjson'
 export const parsers = {json}
 export const formats = {
-  '@bibjson/object': {
-    parse: json.parse,
+  '@bibjson/quickscrape+record+object': {
+    parse: json.quickscrapeRecord,
+    parseType: {
+      propertyConstraint: {
+        props: 'link',
+        value (links) {
+          return scraperLinks.some(link => links.find(({type}) => type === link))
+        }
+      },
+      extends: '@bibjson/record+object'
+    }
+  },
+  '@bibjson/record+object': {
+    parse: json.record,
     parseType: {
       dataType: 'SimpleObject',
-      propertyConstraint: {
-        props: ['fulltext_html', 'fulltext_xml', 'fulltext_pdf'],
+      propertyConstraint: [{
+        props: 'title'
+      }, {
+        props: ['author', 'editor'],
         match: 'some',
-        value: val => val && Array.isArray(val.value)
-      }
+        value (authors) {
+          return Array.isArray(authors) && authors[0] && 'name' in authors[0]
+        }
+      }]
+    }
+  },
+  '@bibjson/collection+object': {
+    parse (collection) {
+      return collection.records
+    },
+    parseType: {
+      dataType: 'SimpleObject',
+      propertyConstraint: [{
+        props: 'metadata',
+        value (metadata) { return 'collection' in metadata }
+      }, {
+        props: 'records',
+        value (records) { return Array.isArray(records) }
+      }]
     }
   }
 }

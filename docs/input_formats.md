@@ -26,7 +26,9 @@ Below is a list of built-in input types.
 
 ## BibJSON
 
-  * `@bibjson/object`: [BibJSON](http://okfnlabs.org/bibjson/) object. Parses the data
+  * `@bibjson/record+object`: [BibJSON](http://okfnlabs.org/bibjson/) object. Parses the data
+  * `@bibjson/quickscrape+record+object`: BibJSON object with some [quickscrape](https://github.com/ContentMine/quickscrape) customisation. Parses the data
+  * `@bibjson/collection+object`: BibJSON object, with a list of records and some collection metadata. Parses the data
 
 ## CSL-JSON
 

@@ -49,19 +49,78 @@
   },
   "bibjson": {
     "simple": {
-      "publisher": {"value": ["BioMed Central"]},
-      "journal": {"value": ["Journal of Ethnobiology and Ethnomedicine"]},
-      "title": {"value": ["Gitksan medicinal plants-cultural choice and efficacy"]},
-      "authors": {"value": ["Leslie Main Johnson"]},
-      "date": {"value": ["2006-06-21"]},
-      "doi": {"value": ["10.1186/1746-4269-2-29"]},
-      "volume": {"value": ["2"]},
-      "issue": {"value": ["1"]},
-      "firstpage": {"value": ["1"]},
-      "fulltext_html": {"value": ["http://ethnobiomed.biomedcentral.com/articles/10.1186/1746-4269-2-29"]},
-      "fulltext_pdf": {"value": ["http://ethnobiomed.biomedcentral.com/track/pdf/10.1186/1746-4269-2-29?site=http://ethnobiomed.biomedcentral.com"]},
-      "license": {"value": ["This article is published under license to BioMed Central Ltd. This is an Open Access article distributed under the terms of the Creative Commons Attribution License (http://creativecommons.org/licenses/by/2.0), which permits unrestricted use, distribution, and reproduction in any medium, provided the original work is properly cited."]},
-      "copyright": {"value": ["2006 Johnson; licensee BioMed Central Ltd."]}
+      "type": "article",
+      "title": "On a family of symmetric Bernoulli convolutions",
+      "author": [
+        {
+          "name": "Erdös, Paul"
+        }
+      ],
+      "journal": {
+        "name": "American Journal of Mathematics",
+        "identifier": [
+          {
+            "id": "0002-9327",
+            "type": "issn"
+          }
+        ],
+        "volume": "61",
+        "pages": "974--976"
+      },
+      "year": "1939",
+      "owner": "me",
+      "id": "ID_1",
+      "collection": "my_collection",
+      "url": "http://example.com/me/my_collection/ID_1",
+      "link":[
+        {
+          "url": "http://okfn.org",
+          "anchor": "Open Knowledge Foundation"
+        }
+      ]
+    },
+    "quickscrape": {
+      "title": "Gitksan medicinal plants-cultural choice and efficacy",
+      "link": [
+        {
+          "type": "fulltext_html",
+          "url": "https://ethnobiomed.biomedcentral.com/articles/10.1186/1746-4269-2-29"
+        },
+        {
+          "type": "fulltext_pdf",
+          "url": "https://ethnobiomed.biomedcentral.com/track/pdf/10.1186/1746-4269-2-29"
+        }
+      ],
+      "author": [
+        {
+          "name": "Leslie Main Johnson",
+          "institution": "Centre for Work and Community Studies and Centre for Integrated Studies, Athabasca University, Athabasca, Canada"
+        },
+        {
+          "institution": "Anthropology Department, University of Alberta, Edmonton, Canada"
+        }
+      ],
+      "publisher": { "name": "BioMed Central" },
+      "journal": {
+        "volume": "2",
+        "issue": "1",
+        "firstpage": "29",
+        "name": "Journal of Ethnobiology and Ethnomedicine",
+        "issn": "1746-4269"
+      },
+      "sections": {
+        "abstract": {
+          "text": "The use of plants for healing by any cultural group is integrally related to local concepts of the nature of disease, the nature of plants, and the world view of the culture. The physical and chemical properties of the plants themselves also bear on their selection by people for medicines, as does the array of plants available for people to choose from. I examine use of medicinal plants from a "
+        },
+        "description": {
+          "text": "The use of plants for healing by any cultural group is integrally related to local concepts of the nature of disease, the nature of plants, and the world view of the culture. The physical and chemical properties of the plants themselves also bear on their selection by people for medicines, as does the array of plants available for people to choose from. I examine use of medicinal plants from a "
+        }
+      },
+      "date": { "published": "2006-06-21T00:00:00+02:00" },
+      "identifier": [ { "type": "doi", "id": "10.1186/1746-4269-2-29" } ],
+      "license": [ { "raw": "This article is published under license to BioMed Central Ltd. This is an Open Access article distributed under the terms of the Creative Commons Attribution License (http://creativecommons.org/licenses/by/2.0), which permits unrestricted use, distribution, and reproduction in any medium, provided the original work is properly cited." } ],
+      "copyright": [ "2006 Johnson; licensee BioMed Central Ltd." ],
+      "log": [ { "date": "2018-07-12T18:35:20+02:00", "event": "scraped by quickscrape v0.4.7" } ]
     }
   },
   "csl": {

@@ -53,7 +53,8 @@ const configs = {
   },
 
   // @bibjson
-  '@bibjson/object': [input.bibjson.simple, output.bibjson.simple],
+  '@bibjson/quickscrape+record+object': [input.bibjson.quickscrape, output.bibjson.quickscrape],
+  '@bibjson/record+object': [input.bibjson.simple, output.bibjson.simple],
 
   // @else
   '@else/json': {
