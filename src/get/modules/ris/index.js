@@ -53,7 +53,6 @@ const fieldMap = {
     {type: ['review', 'review-book'], fieldName: 'reviewed-author', convert: name},
     {type: '__default', fieldName: 'author', convert: name}
   ],
-  // TODO empty parts in DA, Y2
   DA: {fieldName: 'issued', convert (date) { return getDate(date, '/') }},
   PY: {fieldName: 'issued', convert (date) { return date['date-parts'][0][0] }},
   Y2: {fieldName: 'accessed', convert (date) { return getDate(date, '/') }},

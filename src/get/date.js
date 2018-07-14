@@ -10,12 +10,26 @@
  * @return {String} The string
  */
 const getDate = function ({'date-parts': [date]}, delimiter = '-') {
-  if (date.length !== 3) {
-    return ''
-  }
-  const [year, month, day] = date.map(part => part.toString())
+  let strings = date.map(part => part.toString())
 
-  return [year.padStart(4, '0'), month.padStart(2, '0'), day.padStart(2, '0')].join(delimiter)
+  switch (strings.length) {
+    // Day
+    case 3:
+      strings[2] = strings[2].padStart(2, '0')
+      // fall through
+
+    // Month
+    case 2:
+      strings[1] = strings[1].padStart(2, '0')
+      // fall through
+
+    // Year
+    case 1:
+      strings[0] = strings[0].padStart(4, '0')
+      break
+  }
+
+  return strings.join(delimiter)
 }
 
 export default getDate

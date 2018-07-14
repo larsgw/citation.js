@@ -67,11 +67,19 @@ const getBibTeXJSON = function (src) {
     props.pages = src.page.replace('-', '--')
   }
 
-  if (src.issued && src.issued['date-parts'][0].length === 3) {
-    props.date = getDate(src.issued)
-    props.year = src.issued['date-parts'][0][0].toString()
-    props.month = src.issued['date-parts'][0][1].toString()
-    props.day = src.issued['date-parts'][0][2].toString()
+  if (src.issued) {
+    let dateParts = src.issued['date-parts'][0]
+
+    if (dateParts.length > 0) {
+      props.date = getDate(src.issued)
+      props.year = dateParts[0].toString()
+    }
+    if (dateParts.length > 1) {
+      props.month = dateParts[1].toString()
+    }
+    if (dateParts.length > 2) {
+      props.day = dateParts[2].toString()
+    }
   }
 
   res.properties = props
