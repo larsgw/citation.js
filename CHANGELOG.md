@@ -1,12 +1,29 @@
 # Changelog
 
-## Unreleased
+## [0.4.0-8] - 2018-07-14
+
+Bug fixes.
+
+### Added
+* [meta] Point `unpkg` & `jsdelivr` field to citation.min.js
+
+### Changed
+* Update for BibJSON parsing (#32). Including tests & documentation.
+
+### Fixed
+* Cite option validation (and tests that broke because of it)
+* Handling incomplete dates in output formatters (https://github.com/larsgw/citation.js/issues/53#issuecomment-404995961). It was caused by #139, a fix for #138 of which #127 is part of
+* Make a check when polishing API data not fail when a date field is an empty object (#147)
+* [meta] Docs index issue (070cf12)
+
+## [0.4.0-7] - 2018-07-12
 
 ### Added
 
 * A lot of tests cases regarding input parsing mechanisms (#123)
-* Global plugin system (#88)
+* General plugin system (#88)
 * Alias `type` option to `format` in most output formats
+* CSL config is now registered with the general plugin system
 
 ### Changed
 
