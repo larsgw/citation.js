@@ -28,7 +28,7 @@ const getBibTeXLabel = function (entry = {}) {
   if (entry['year-suffix']) {
     res += entry['year-suffix']
   } else if (entry.title) {
-    res += entry.title.match(/^(?:(?:the|a|an)\s+)?(\S+)/i)[1]
+    res += entry.title.replace(/<\/?.*?>/g, '').match(/^(?:(?:the|a|an)\s+)?(\S+)/i)[1]
   }
 
   return res

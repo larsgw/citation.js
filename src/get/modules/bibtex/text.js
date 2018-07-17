@@ -29,6 +29,10 @@ const syntaxTokens = {
   '}': '\\vphantom{\\{}\\}'
 }
 
+function escapeValue (value) {
+  return value.replace(/[|<>~^\\{}]/g, match => syntaxTokens[match])
+}
+
 const caseSensitive = ['title']
 const bracketMappings = {
   '': '',
@@ -36,10 +40,62 @@ const bracketMappings = {
   '{{': '}}'
 }
 
-const wrapInBrackets = (prop, value) => {
-  const delStart = !isNaN(+value) ? '' : caseSensitive.includes(prop) ? '{{' : '{'
-  const delEnd = bracketMappings[delStart]
+function wrapInBrackets (prop, value) {
+  let delStart = !isNaN(+value) ? '' : caseSensitive.includes(prop) ? '{{' : '{'
+  let delEnd = bracketMappings[delStart]
   return delStart + value + delEnd
+}
+
+const richTextMappings = {
+  'i': '\\textit{',
+  'b': '\\textbf{',
+  'sc': '\\textsc{',
+  'sup': '\\textsuperscript{',
+  'sub': '\\textsubscript{',
+  'span style="font-variant:small-caps;"': '\\textsc{',
+  'span class="nocase"': '{'
+}
+
+function serializeRichTextValue (value) {
+  let tokens = value.split(/<(\/.*?|i|b|sc|sup|sub|span.*?)>/g)
+
+  // split, so odd values are text and even values are rich text tokens
+  tokens = tokens.map((token, index) => {
+    if (index % 2 === 0) {
+      return escapeValue(token)
+    } else if (token in richTextMappings) {
+      return richTextMappings[token]
+    } else {
+      return '}'
+    }
+  })
+
+  return tokens.join('')
+}
+
+const richTextFields = ['title']
+
+function serializeValue (prop, value, dict) {
+  if (richTextFields.includes(prop)) {
+    value = serializeRichTextValue(value)
+  } else {
+    value = escapeValue(value)
+  }
+
+  return dict.listItem.join(`${prop}=${wrapInBrackets(prop, value)},`)
+}
+
+function serializePropertyList (properties, dict) {
+  return properties.map(([prop, value]) => serializeValue(prop, value, dict)).join('')
+}
+
+function serializeEntry (entry, dict) {
+  let {type, label, properties} = getBibTeXJSON(entry)
+  properties = serializePropertyList(Object.entries(properties), dict)
+
+  return dict.entry.join(`@${type}{${label},${
+    dict.list.join(properties)
+  }}`)
 }
 
 /**
@@ -54,15 +110,7 @@ const wrapInBrackets = (prop, value) => {
  * @return {String} BibTeX string
  */
 const getBibtex = function (src, dict) {
-  const entries = src.map(sourceEntry => {
-    const entry = getBibTeXJSON(sourceEntry)
-    const properties = Object.entries(entry.properties).map(([prop, value]) => {
-      value = value.replace(/[|<>~^\\{}]/g, match => syntaxTokens[match])
-      return dict.listItem.join(`${prop}=${wrapInBrackets(prop, value)},`)
-    }).join('')
-
-    return dict.entry.join(`@${entry.type}{${entry.label},${dict.list.join(properties)}}`)
-  }).join('')
+  let entries = src.map(entry => serializeEntry(entry, dict)).join('')
 
   return dict.bibliographyContainer.join(entries)
 }

@@ -192,6 +192,17 @@ describe('output', () => {
   describe('BibTeX', () => {
     describe('plain text', testCaseGenerator(data, opts('string', 'string', 'bibtex'), output.bibtex.plain, { callback: v => v.replace(/\s+/g, ' ') }))
 
+    describe('with rich text title', testCaseGenerator(
+      Cite([
+        {title: '<i>i</i><b>b</b><sc>sc</sc><sup>sup</sup><sub>sub</sub>'},
+        {title: '<span style="font-variant:small-caps;">sc</span>'},
+        {title: '<span class="nocase">sc</span>'}
+      ]),
+      opts('string', 'string', 'bibtex'),
+      output.bibtex.rich,
+      { callback: v => v.replace(/\s+/g, ' ') }
+    ))
+
     describe('JSON', testCaseGenerator(data, {style: 'bibtex'}, output.bibtex.json))
 
     describe('Bib.TXT', testCaseGenerator(data, opts('string', 'string', 'bibtxt'), output.bibtex.bibtxt))
