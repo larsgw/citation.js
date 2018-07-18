@@ -214,7 +214,10 @@ const parseBibTeXProp = function (name, value) {
         return value.replace(/[—–]/, '-')
 
       case 'title':
-        return parseBibtexRichText(value.slice(1, -1))
+        if (value[0] === '{' && value.slice(-1) === '}' ) {
+          value = value.slice(1, -1)
+        }
+        return parseBibtexRichText(value)
 
       default:
         return value.replace(/[{}]/g, '')
