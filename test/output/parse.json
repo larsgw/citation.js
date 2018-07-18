@@ -127,6 +127,11 @@
         "id": "Steinbeck2003"
       }
     ],
+    "rich": [
+      {"type": "book", "id": "ibscsupsub", "citation-label": "ibscsupsub", "title": "<i>i</i><b>b</b><sc>sc</sc><sup>sup</sup><sub>sub</sub>"},
+      {"type": "book", "id": "sc", "citation-label": "sc", "title": "<sc>sc</sc>"},
+      {"type": "book", "id": "sc", "citation-label": "sc", "title": "<span class=\"nocase\">sc</span>"}
+    ],
     "whitespace": [
       {
         "citation-label": "Ekstrand:2009:RYD",

@@ -89,6 +89,43 @@ const parseBibtexNameList = function (list) {
     .map(parseBibtexName)
 }
 
+const richTextMappings = {
+  textit: 'i',
+  textbf: 'b',
+  textsc: 'sc',
+  textsuperscript: 'sup',
+  textsubscript: 'sub'
+}
+
+/**
+ * @access private
+ * @param {String} text - BibTeX rich text
+ * @return {String} CSL-JSON rich text
+ */
+const parseBibtexRichText = function (text) {
+  let tokens = text.split(/((?:\\text[a-z]+)?{|})/)
+
+  let closingTags = []
+
+  // tokens at even indices are text, odd indices are markup
+  tokens = tokens.map((token, index) => {
+    if (index % 2 === 0) {
+      return token
+    } else if (token[0] === '\\') {
+      let tag = richTextMappings[token.slice(1, -1)]
+      closingTags.push(`</${tag}>`)
+      return `<${tag}>`
+    } else if (token === '{') {
+      closingTags.push('</span>')
+      return '<span class="nocase">'
+    } else if (token === '}') {
+      return closingTags.pop()
+    }
+  })
+
+  return tokens.join('')
+}
+
 /**
  * Map holding information on BibTeX-JSON fields.
  *
@@ -175,6 +212,9 @@ const parseBibTeXProp = function (name, value) {
 
       case 'page':
         return value.replace(/[—–]/, '-')
+
+      case 'title':
+        return parseBibtexRichText(value.slice(1, -1))
 
       default:
         return value.replace(/[{}]/g, '')
