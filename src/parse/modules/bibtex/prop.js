@@ -103,25 +103,49 @@ const richTextMappings = {
  * @return {String} CSL-JSON rich text
  */
 const parseBibtexRichText = function (text) {
+  // tokens at even indices are text, odd indices are markup
   let tokens = text.split(/((?:\\text[a-z]+)?{|})/)
 
   let closingTags = []
 
-  // tokens at even indices are text, odd indices are markup
+  // there could be a top-level tag if the first and last characters are brackets.
+  // if it isn't, it's set to false later on
+  let hasTopLevelTag = text[0] === '{' && text[text.length - 1] === '}'
+
   tokens = tokens.map((token, index) => {
+    // return text as-is
     if (index % 2 === 0) {
       return token
+
+    // handle style tags
     } else if (token[0] === '\\') {
       let tag = richTextMappings[token.slice(1, -1)]
       closingTags.push(`</${tag}>`)
       return `<${tag}>`
+
+    // handle nocase tags (e.g. text wrapped in {...})
     } else if (token === '{') {
       closingTags.push('</span>')
       return '<span class="nocase">'
+
+    // handle closing tags
     } else if (token === '}') {
+      // If the top-level tag gets closed (the one at index 0, i.e. length 1) and
+      // this isn't the last markup tag yet (at index - 1, i.e. length -2), there
+      // can't be a top-level tag
+      if (closingTags.length === 1 && index !== tokens.length - 2) {
+        hasTopLevelTag = false
+      }
       return closingTags.pop()
     }
   })
+
+  // remove top-level tag (e.g. second and second to last tokens, equivalent to the
+  // first and last markup tokens)
+  if (hasTopLevelTag) {
+    tokens.splice(0, 2)
+    tokens.splice(-2, 2)
+  }
 
   return tokens.join('')
 }
@@ -214,9 +238,6 @@ const parseBibTeXProp = function (name, value) {
         return value.replace(/[—–]/, '-')
 
       case 'title':
-        if (value[0] === '{' && value.slice(-1) === '}' ) {
-          value = value.slice(1, -1)
-        }
         return parseBibtexRichText(value)
 
       default:
