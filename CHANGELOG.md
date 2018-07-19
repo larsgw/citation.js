@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.4.0-9] - 2018-07-19
+
+### Added
+* Support for styled text in title fields in BibTeX input (see #150). Values wrapped in double brackets are treated as values wrapped in single brackets (see #155)
+
+### Changed
+* BibTeX title fields are no longer wrapped in double brackets when creating output (#155)
+
+### Fixed
+* Handling of styled text in CSL-JSON title fields when creating BibTeX output (#150)
+* Bug introduced when fixing REDOS that made the @else/url type not match @wikidata/api in some cases (#156)
+
 ## [0.4.0-8] - 2018-07-14
 
 Bug fixes.
