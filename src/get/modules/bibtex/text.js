@@ -33,15 +33,13 @@ function escapeValue (value) {
   return value.replace(/[|<>~^\\{}]/g, match => syntaxTokens[match])
 }
 
-const caseSensitive = ['title']
 const bracketMappings = {
   '': '',
-  '{': '}',
-  '{{': '}}'
+  '{': '}'
 }
 
 function wrapInBrackets (prop, value) {
-  let delStart = !isNaN(+value) ? '' : caseSensitive.includes(prop) ? '{{' : '{'
+  let delStart = !isNaN(+value) ? '' : '{'
   let delEnd = bracketMappings[delStart]
   return delStart + value + delEnd
 }
