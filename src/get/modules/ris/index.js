@@ -121,7 +121,10 @@ const fieldMap = {
   ],
   C2: [
     {type: ['article-journal', 'article'], fieldName: 'PMCID'},
-    {type: 'paper-conference', fieldName: 'issued', convert (date) { return date['date-parts'][0][0] }},
+    {type: 'paper-conference', fieldName: 'issued', convert (date) {
+      /* istanbul ignore next: fairly arbitrary case to check */
+      return date['date-parts'][0][0]
+    }},
     {type: 'article-newspaper', fieldName: 'issue'}
   ],
   C3: [
@@ -156,10 +159,7 @@ const fieldMap = {
 }
 
 const parseFieldInfo = function (fieldInfo, field, entry) {
-  if (fieldInfo === true) {
-    // If info is true, source field is the same as output field
-    return {sourceFields: [field]}
-  } else if (typeof fieldInfo === 'string') {
+  if (typeof fieldInfo === 'string') {
     // If info is string, source field is that string
     return {sourceFields: [fieldInfo]}
   } else if (Array.isArray(fieldInfo) && typeof fieldInfo[0] === 'string') {
@@ -190,8 +190,6 @@ const parseFieldInfo = function (fieldInfo, field, entry) {
       convert: fieldInfo.convert,
       keepAll: fieldInfo.keepAll === true
     }
-  } else {
-    return {}
   }
 }
 
@@ -243,6 +241,7 @@ const getRisPropList = function (entry) {
   const props = Object.entries(entry)
 
   // move type (TY) tag to start
+  /* istanbul ignore next: could only happen in theory */
   if (props[0][0] !== 'TY') {
     const typeTagIndex = props.findIndex(([prop]) => prop === 'TY')
     const [typeTag] = props.splice(typeTagIndex, 1)

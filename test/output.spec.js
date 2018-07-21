@@ -177,7 +177,9 @@ const cases = {
     bibtxt: [input.simple, 'bibtxt', undefined, output.bibtex.bibtxt]
   },
   ris: {
-    'plain text': [input.simple, 'ris', undefined, output.ris.simple]
+    'plain text': [input.simple, 'ris', undefined, output.ris.simple],
+    'with accessed': [input.editor, 'ris', {format: 'object'}, output.ris.editor],
+    'object': [input.simple, 'ris', {format: 'object'}, output.ris.json]
   }
 }
 
