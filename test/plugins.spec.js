@@ -3,14 +3,18 @@
 import expect from 'expect.js'
 import Cite from './citation'
 
-describe('plugins', function () {
-  const ref = '@test'
-  const type = `${ref}/foo`
-  const subType = `${ref}/bar`
-  const data = [{foo: 1}]
-  const parse = () => data
-  const parseAsync = async () => data
+const ref = '@test'
+const type = `${ref}/foo`
+const subType = `${ref}/bar`
+const data = [{foo: 1}]
+const parse = () => data
+const parseAsync = async () => data
+const format = data => data
+const dict = {
+  foo: ['«<({[', ']})>»']
+}
 
+describe('plugins', function () {
   afterEach(function () { Cite.plugins.remove(ref) })
 
   it('registers', function () {
@@ -30,6 +34,102 @@ describe('plugins', function () {
     expect(Cite.parse.hasDataParser(type)).to.not.be.ok()
     expect(Cite.parse.hasDataParser(type, true)).to.not.be.ok()
     expect(Cite.parse.type('foo')).to.not.be(type)
+  })
+
+  describe('config', function () {
+    afterEach(function () { Cite.plugins.config.remove(ref) })
+
+    it('works', function () {
+      Cite.plugins.config.add(ref, {foo: 1})
+      expect(Cite.plugins.config.get(ref)).to.eql({foo: 1})
+    })
+    it('removes', function () {
+      Cite.plugins.config.add(ref, {foo: 1})
+      Cite.plugins.config.remove(ref)
+      expect(Cite.plugins.config.get(ref)).to.not.be.ok()
+    })
+  })
+
+  describe('dict', function () {
+    afterEach(function () { Cite.plugins.dict.remove(ref) })
+
+    it('registers', function () {
+      Cite.plugins.dict.add(ref, dict)
+      expect(Cite.plugins.dict.has(ref)).to.be.ok()
+    })
+    it('works', function () {
+      Cite.plugins.dict.add(ref, dict)
+      expect(Cite.plugins.dict.get(ref)).to.eql(dict)
+    })
+    it('removes', function () {
+      Cite.plugins.dict.add(ref, dict)
+      Cite.plugins.dict.remove(ref)
+      expect(Cite.plugins.dict.has(ref)).to.not.be.ok()
+      expect(Cite.plugins.dict.get(ref)).to.not.be.ok()
+    })
+    it('lists', function () {
+      Cite.plugins.dict.add(ref, dict)
+      Cite.plugins.dict.add('ref', dict)
+      expect(Cite.plugins.dict.list()).to.eql([ref, 'ref'])
+    })
+
+    describe('validation', function () {
+      it('checks ref', function () {
+        expect(Cite.plugins.dict.add).withArgs(1).to.throwException(e => {
+          expect(e).to.be.a(TypeError)
+        })
+      })
+      it('checks dict', function () {
+        expect(Cite.plugins.dict.add).withArgs(ref, 1).to.throwException(e => {
+          expect(e).to.be.a(TypeError)
+        })
+      })
+      it('checks entries', function () {
+        expect(Cite.plugins.dict.add).withArgs(ref, {foo: 1}).to.throwException(e => {
+          expect(e).to.be.a(TypeError)
+        })
+        expect(Cite.plugins.dict.add).withArgs(ref, {foo: [1]}).to.throwException(e => {
+          expect(e).to.be.a(TypeError)
+        })
+      })
+    })
+  })
+
+  describe('output', function () {
+    afterEach(function () { Cite.plugins.output.remove(ref) })
+
+    it('registers', function () {
+      Cite.plugins.output.add(ref, format)
+      expect(Cite.plugins.output.has(ref)).to.be.ok()
+    })
+    it('works', function () {
+      Cite.plugins.output.add(ref, format)
+      expect(Cite.plugins.output.format(ref, data)).to.eql(data)
+    })
+    it('removes', function () {
+      Cite.plugins.output.add(ref, format)
+      Cite.plugins.output.remove(ref)
+      expect(Cite.plugins.output.has(ref)).to.not.be.ok()
+      expect(Cite.plugins.output.format(ref)).to.not.be.ok()
+    })
+    it('lists', function () {
+      Cite.plugins.output.add(ref, format)
+      Cite.plugins.output.add('ref', format)
+      expect(Cite.plugins.output.list()).to.eql([ref, 'ref'])
+    })
+
+    describe('validation', function () {
+      it('checks ref', function () {
+        expect(Cite.plugins.output.add).withArgs(1).to.throwException(e => {
+          expect(e).to.be.a(TypeError)
+        })
+      })
+      it('checks formatter', function () {
+        expect(Cite.plugins.output.add).withArgs(ref, 1).to.throwException(e => {
+          expect(e).to.be.a(TypeError)
+        })
+      })
+    })
   })
 
   describe('input', function () {
