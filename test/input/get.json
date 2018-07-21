@@ -18,8 +18,39 @@
       "page": "5441-5444"
     }
   ],
+  "citation": [{
+    "id": "1",
+    "type": "article-journal",
+    "title": "a",
+    "issued": {"date-parts": [[2011]]}
+  }, {
+    "id": "2",
+    "type": "article-journal",
+    "title": "b",
+    "author": [{
+      "family": "d",
+      "given": "c"
+    }, {
+      "literal": "h"
+    }],
+    "issued": {"date-parts": [[2012]]}
+  }, {
+    "id": "3",
+    "type": "article-journal",
+    "title": "e",
+    "author": [{
+      "family": "f",
+      "given": "g"
+    }],
+    "issued": {"date-parts": [[2013]]}
+  }],
   "locale": [{"id": "a", "type": "article-journal"}],
   "label": [{"id": "b", "citation-label": "foo", "type": "book"}],
+  "rich": [
+    {"title": "<i>i</i><b>b</b><sc>sc</sc><sup>sup</sup><sub>sub</sub>"},
+    {"title": "<span style=\"font-variant:small-caps;\">sc</span>"},
+    {"title": "<span class=\"nocase\">sc</span>"}
+  ],
   "editor": [
     {
       "id": "Q37108228",
