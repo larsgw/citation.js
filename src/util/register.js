@@ -34,6 +34,13 @@ class Register {
   }
 
   /**
+   * @borrows Cite.util.Register#delete as Cite.util.Register#remove
+   */
+  remove (...args) {
+    return this.delete(...args)
+  }
+
+  /**
    * @param {String} key
    * @return {*} value
    */
