@@ -23,6 +23,7 @@ import defaultTemplates from './styles.json'
  */
 const templates = new Register(defaultTemplates)
 
+/* istanbul ignore next: deprecated */
 /**
  * Retrieve CSL style
  *
@@ -31,7 +32,6 @@ const templates = new Register(defaultTemplates)
  * @param {String} [style="apa"] - style name
  * @return {String} CSL style
  */
-/* istanbul ignore next: deprecated */
 const fetchStyle = style => {
   if (templates.has(style)) {
     return templates.get(style)

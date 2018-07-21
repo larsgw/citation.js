@@ -30,6 +30,7 @@ const getBibtxt = function (src, dict) {
   return dict.bibliographyContainer.join(entries)
 }
 
+/* istanbul ignore next: deprecated */
 /**
  * Get a BibTeX (HTML) string from CSL
  *
@@ -42,7 +43,6 @@ const getBibtxt = function (src, dict) {
  *
  * @return {String} Bib.TXT (HTML) string
  */
-/* istanbul ignore next: deprecated */
 const getBibtxtWrapper = function (src, html) {
   const dict = getDict(html ? 'html' : 'text')
   return getBibtxt(src, dict)

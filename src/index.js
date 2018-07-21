@@ -18,8 +18,10 @@ const CSL = {
   engine,
   style,
   locale,
-  /* istanbul ignore next: deprecated */
-  item (data) { return id => data.find(entry => entry.id === id) },
+  item (data) {
+    /* istanbul ignore next: deprecated */
+    return id => data.find(entry => entry.id === id)
+  },
   register: {
     addTemplate: templates.add.bind(templates),
     getTemplate: templates.get.bind(templates),

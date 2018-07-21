@@ -21,12 +21,13 @@ const getIds = function () {
  * @param {String} format - format module name
  * @param {...*} options - module options (see relevant documentation)
  *
- * @return {String|Arrat<Object>} formatted data
+ * @return {String|Array<Object>} formatted data
  */
 const format = function (format, ...options) {
   return formatData(format, parseCsl(this.data), ...options)
 }
 
+/* istanbul ignore next: deprecated */
 /**
  * Get formatted data from your object.
  *

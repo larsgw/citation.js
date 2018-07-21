@@ -23,6 +23,7 @@ import defaultLocales from './locales.json'
  */
 const locales = new Register(defaultLocales)
 
+/* istanbul ignore next: deprecated */
 /**
  * Retrieve CSL locale
  *
@@ -31,7 +32,6 @@ const locales = new Register(defaultLocales)
  * @param {String} [lang="en-US"] - lang code
  * @return {String} CSL locale
  */
-/* istanbul ignore next: deprecated */
 const fetchLocale = lang => {
   if (locales.has(lang)) {
     return locales.get(lang)
