@@ -70,7 +70,7 @@ describe('plugins', function () {
     it('lists', function () {
       Cite.plugins.dict.add(ref, dict)
       Cite.plugins.dict.add('ref', dict)
-      expect(Cite.plugins.dict.list()).to.eql([ref, 'ref'])
+      expect(Cite.plugins.dict.list().slice(-2)).to.eql([ref, 'ref'])
     })
 
     describe('validation', function () {
@@ -115,7 +115,7 @@ describe('plugins', function () {
     it('lists', function () {
       Cite.plugins.output.add(ref, format)
       Cite.plugins.output.add('ref', format)
-      expect(Cite.plugins.output.list()).to.eql([ref, 'ref'])
+      expect(Cite.plugins.output.list().slice(-2)).to.eql([ref, 'ref'])
     })
 
     describe('validation', function () {
