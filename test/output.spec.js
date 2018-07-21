@@ -47,7 +47,7 @@ const defaultOpts = Cite.prototype.defaultOptions
 const opts = (format, type, style, lang = defaultOpts.lang) => ({format, type, style, lang})
 
 describe('output', () => {
-  const data = new Cite(input.csl.simple)
+  const data = new Cite(input.simple)
 
   describe('CSL bibliography', () => {
     describe('html', () => {
@@ -75,7 +75,7 @@ describe('output', () => {
       })
 
       describe('custom locale', () => {
-        const data = new Cite(input.csl.locale)
+        const data = new Cite(input.locale)
         Cite.CSL.register.addLocale('custom', customLocale)
 
         it('registers the locale', () => {
@@ -126,7 +126,7 @@ describe('output', () => {
       })
 
       describe('custom locale', () => {
-        const data = new Cite(input.csl.locale)
+        const data = new Cite(input.locale)
         Cite.CSL.register.addLocale('custom', customLocale)
 
         it('registers the locale', () => {
@@ -185,8 +185,8 @@ describe('output', () => {
   })
 
   describe('CSL-JSON', () => {
-    describe('plain text', testCaseGenerator(data, {format: 'string'}, input.csl.simple, { callback: JSON.parse }))
-    describe('object', testCaseGenerator(data, undefined, input.csl.simple))
+    describe('plain text', testCaseGenerator(data, {format: 'string'}, input.simple, { callback: JSON.parse }))
+    describe('object', testCaseGenerator(data, undefined, input.simple))
   })
 
   describe('BibTeX', () => {
@@ -204,14 +204,14 @@ describe('output', () => {
     ))
 
     describe('with editor', testCaseGenerator(
-      new Cite(input.csl.editor),
+      new Cite(input.editor),
       opts('string', 'string', 'bibtex'),
       output.bibtex.editor,
       { callback: v => v.replace(/\s+/g, ' ') }
     ))
 
     describe('with own label', testCaseGenerator(
-      new Cite(input.csl.label),
+      new Cite(input.label),
       opts('string', 'string', 'bibtex'),
       output.bibtex.label,
       { callback: v => v.replace(/\s+/g, ' ') }
@@ -220,6 +220,18 @@ describe('output', () => {
     describe('JSON', testCaseGenerator(data, {style: 'bibtex'}, output.bibtex.json))
 
     describe('Bib.TXT', testCaseGenerator(data, opts('string', 'string', 'bibtxt'), output.bibtex.bibtxt))
+  })
+
+  describe('label', () => {
+    it('normal', () => {
+      expect(data.format('label')).to.eql({[input.simple[0].id]: 'Hall1957Correlation'})
+    })
+    it('with year-suffix', () => {
+      expect(Cite(input.editor).format('label')).to.eql({[input.editor[0].id]: 'Vrandečić2013a'})
+    })
+    it('with own label', () => {
+      expect(Cite(input.label).format('label')).to.eql({[input.label[0].id]: 'foo'})
+    })
   })
 
   describe('RIS', () => {
