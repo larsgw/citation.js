@@ -4,7 +4,7 @@
 
 import CSL from 'citeproc'
 
-import fetchStyle from './styles'
+import {templates} from './styles'
 import {locales} from './locales'
 
 /**
@@ -56,7 +56,7 @@ const fetchEngine = function (style, lang, template, retrieveItem, retrieveLocal
  */
 const prepareEngine = function (data, templateName, language, format) {
   const items = data.reduce((store, entry) => { store[entry.id] = entry; return store }, {})
-  const template = fetchStyle(templateName)
+  const template = templates.get(templates.has(templateName) ? templateName : 'apa')
   language = locales.has(language) ? language : 'en-US'
 
   const engine = fetchEngine(templateName, language, template, key => items[key], locales.get.bind(locales))

@@ -27,11 +27,11 @@ const templates = new Register(defaultTemplates)
  * Retrieve CSL style
  *
  * @access protected
- *
+ * @deprecated
  * @param {String} [style="apa"] - style name
- *
  * @return {String} CSL style
  */
+/* istanbul ignore next: deprecated */
 const fetchStyle = style => {
   if (templates.has(style)) {
     return templates.get(style)

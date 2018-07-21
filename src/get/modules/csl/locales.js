@@ -27,11 +27,11 @@ const locales = new Register(defaultLocales)
  * Retrieve CSL locale
  *
  * @access protected
- *
+ * @deprecated
  * @param {String} [lang="en-US"] - lang code
- *
  * @return {String} CSL locale
  */
+/* istanbul ignore next: deprecated */
 const fetchLocale = lang => {
   if (locales.has(lang)) {
     return locales.get(lang)
