@@ -3,6 +3,28 @@
  */
 
 /**
+ * @access private
+ */
+const bibtexTypes = {
+  article: 'article',
+  'article-journal': 'article',
+  'article-magazine': 'article',
+  'article-newspaper': 'article',
+  book: 'book',
+  chapter: 'incollection',
+  graphic: 'misc',
+  interview: 'misc',
+  manuscript: 'unpublished',
+  motion_picture: 'misc',
+  'paper-conference': 'inproceedings',
+  patent: 'patent',
+  personal_communication: 'misc',
+  report: 'techreport',
+  thesis: 'phdthesis',
+  webpage: 'misc'
+}
+
+/**
  * CSL pub type to BibTeX pub type
  *
  * @access protected
@@ -13,44 +35,11 @@
  * @return {String} BibTeX type
  */
 const fetchBibTeXType = function (pubType) {
-  switch (pubType) {
-    case 'article':
-    case 'article-journal':
-    case 'article-magazine':
-    case 'article-newspaper':
-      return 'article'
-
-    case 'book':
-      return 'book'
-
-    case 'chapter':
-      return 'incollection'
-
-    case 'manuscript':
-      return 'unpublished'
-
-    case 'paper-conference':
-      return 'inproceedings'
-
-    case 'patent':
-      return 'patent'
-
-    case 'report':
-      return 'techreport'
-
-    case 'thesis':
-      return 'phdthesis'
-
-    case 'graphic':
-    case 'interview':
-    case 'motion_picture':
-    case 'personal_communication':
-    case 'webpage':
-      return 'misc'
-
-    default:
-      logger.warn(`CSL publication type not recognized: ${pubType}. Interpreting as "misc".`)
-      return 'misc'
+  if (pubType in bibtexTypes) {
+    return bibtexTypes[pubType]
+  } else {
+    logger.warn(`CSL publication type not recognized: ${pubType}. Interpreting as "misc".`)
+    return 'misc'
   }
 }
 

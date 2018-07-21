@@ -203,6 +203,20 @@ describe('output', () => {
       { callback: v => v.replace(/\s+/g, ' ') }
     ))
 
+    describe('with editor', testCaseGenerator(
+      new Cite(input.csl.editor),
+      opts('string', 'string', 'bibtex'),
+      output.bibtex.editor,
+      { callback: v => v.replace(/\s+/g, ' ') }
+    ))
+
+    describe('with own label', testCaseGenerator(
+      new Cite(input.csl.label),
+      opts('string', 'string', 'bibtex'),
+      output.bibtex.label,
+      { callback: v => v.replace(/\s+/g, ' ') }
+    ))
+
     describe('JSON', testCaseGenerator(data, {style: 'bibtex'}, output.bibtex.json))
 
     describe('Bib.TXT', testCaseGenerator(data, opts('string', 'string', 'bibtxt'), output.bibtex.bibtxt))

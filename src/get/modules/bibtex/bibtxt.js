@@ -42,6 +42,7 @@ const getBibtxt = function (src, dict) {
  *
  * @return {String} Bib.TXT (HTML) string
  */
+/* istanbul ignore next: deprecated */
 const getBibtxtWrapper = function (src, html) {
   const dict = getDict(html ? 'html' : 'text')
   return getBibtxt(src, dict)

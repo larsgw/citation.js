@@ -125,6 +125,7 @@ const getBibtex = function (src, dict) {
  *
  * @return {String} BibTeX (HTML) string
  */
+/* istanbul ignore next: deprecated */
 const getBibTeXWrapper = function (src, html) {
   const dict = getDict(html ? 'html' : 'text')
   return getBibtex(src, dict)

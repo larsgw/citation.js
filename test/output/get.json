@@ -34,6 +34,8 @@
         }
       }
     ],
+    "label": "@book{foo, }",
+    "editor": "@article{Vrandečić2013a, journal={IEEE Intelligent Systems}, doi={10.1109/MIS.2013.119}, number=4, numpages=6, title={The Rise of Wikidata}, volume=28, author={Vrandečić, Denny}, editor={Hendler, James and Simperl, Elena}, note={[Online; accessed 2018-07-21]}, pages={90--95}, date={2013-01-01}, year=2013, month=1, day=1, }",
     "bibtxt": "[Hall1957Correlation]\n\tjournal: Journal of the American Chemical Society\n\tdoi: 10.1021/ja01577a030\n\tnumber: 20\n\ttitle: Correlation of the Base Strengths of Amines 1\n\tvolume: 79\n\tauthor: Hall, H. K.\n\tpages: 5441--5444\n\tdate: 1957-01-01\n\tyear: 1957\n\tmonth: 1\n\tday: 1\n\ttype: article"
   },
   "ris": {
