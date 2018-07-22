@@ -11,25 +11,6 @@ import parseDate from '../../date'
 import parseName from '../../name'
 
 /**
- * Get the names of objects from Wikidata IDs
- *
- * @access private
- * @method fetchWikidataLabel
- *
- * @param {String|Array<String>} q - Wikidata IDs
- * @param {String} lang - Language
- *
- * @return {Array<String>} Array with labels of each prop
- */
-const fetchWikidataLabel = function (q, lang) {
-  const ids = Array.isArray(q) ? q : typeof q === 'string' ? q.split('|') : ''
-  const url = wdk.getEntities(ids, [lang], 'labels')
-  const entities = JSON.parse(fetchFile(url)).entities || {}
-
-  return Object.keys(entities).map(entityKey => (entities[entityKey].labels[lang] || {}).value)
-}
-
-/**
  * Get series ordinal from qualifiers object
  *
  * @access private
@@ -39,7 +20,9 @@ const fetchWikidataLabel = function (q, lang) {
  *
  * @return {Number} series ordinal or -1
  */
-const parseWikidataP1545 = qualifiers => qualifiers.P1545 ? parseInt(qualifiers.P1545[0]) : -1
+const getSeriesOrdinal = qualifiers => qualifiers.P1545 ? parseInt(qualifiers.P1545[0]) : -1
+
+const getStatedAs = qualifiers => qualifiers.P1932
 
 /**
  * Map holding information on Wikidata fields.
@@ -85,6 +68,35 @@ const propMap = {
   P921: false, // Main subject
   P3181: false, // OpenCitations bibliographic resource ID
   P364: false // Original language of work
+}
+
+/**
+ * Get the names of objects from Wikidata IDs
+ *
+ * @access private
+ * @method fetchWikidataLabel
+ *
+ * @param {String|Array<String>} q - Wikidata IDs
+ * @param {String} lang - Language
+ *
+ * @return {Array<String>} Array with labels of each prop
+ */
+const fetchWikidataLabel = function (q, lang) {
+  const ids = Array.isArray(q) ? q : typeof q === 'string' ? q.split('|') : ''
+  const url = wdk.getEntities(ids, [lang], 'labels')
+  const entities = JSON.parse(fetchFile(url)).entities || {}
+
+  return Object.keys(entities).map(entityKey => (entities[entityKey].labels[lang] || {}).value)
+}
+
+const parseWikidataName = ({value, qualifiers}, lang) => {
+  let statedAs = getStatedAs(qualifiers)
+
+  let name = statedAs || fetchWikidataLabel(value, lang)[0]
+  name = parseName(name)
+  name._ordinal = getSeriesOrdinal(qualifiers)
+
+  return name
 }
 
 /**
@@ -135,11 +147,7 @@ const parseWikidataProp = function (name, value, lang) {
       case 'P98':
       case 'P110':
       case 'P655':
-        return valueList.map(({value, qualifiers}) => {
-          const name = parseName(fetchWikidataLabel(value, lang)[0])
-          name._ordinal = parseWikidataP1545(qualifiers)
-          return name
-        })
+        return valueList.map(name => parseWikidataName(name, lang))
 
       case 'P577':
         return parseDate(value)
@@ -153,7 +161,7 @@ const parseWikidataProp = function (name, value, lang) {
       case 'P2093':
         return valueList.map(({value, qualifiers}) => {
           const name = parseName(value)
-          name._ordinal = parseWikidataP1545(qualifiers)
+          name._ordinal = getSeriesOrdinal(qualifiers)
           return name
         })
 
@@ -184,6 +192,16 @@ const fetchWikidataLabelAsync = async function (q, lang) {
   return Object.keys(entities).map(entityKey => (entities[entityKey].labels[lang] || {}).value)
 }
 
+const parseWikidataNameAsync = async ({value, qualifiers}, lang) => {
+  let statedAs = getStatedAs(qualifiers)
+
+  let name = statedAs || (await fetchWikidataLabelAsync(value, lang))[0]
+  name = parseName(name)
+  name._ordinal = getSeriesOrdinal(qualifiers)
+
+  return name
+}
+
 /**
  * Transform property and value from Wikidata format to CSL (async).
  *
@@ -209,11 +227,7 @@ const parseWikidataPropAsync = async function (prop, value, lang) {
       case 'P98':
       case 'P110':
       case 'P655':
-        return Promise.all(valueList.map(async ({value, qualifiers}) => {
-          const name = parseName((await fetchWikidataLabelAsync(value, lang))[0])
-          name._ordinal = parseWikidataP1545(qualifiers)
-          return name
-        }))
+        return Promise.all(valueList.map(name => parseWikidataNameAsync(name, lang)))
 
       case 'P123':
       case 'P136':
