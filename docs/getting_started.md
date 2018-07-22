@@ -14,23 +14,34 @@ To install the CLI as a global command, do this:
 
 ## Browser Releases
 
-Browser releases are available [here](https://github.com/larsgw/citation.js/tree/archive). These define `require` and add `citation-js` as a module.
+Browser release guides are available [here](https://github.com/larsgw/citation.js/tree/archive). In short, since `v0.4.0-7`, releases are available through the NPM module, and can be included and/or downloaded like this:
+
+    # Specific version
+    https://cdn.jsdelivr.net/npm/citation-js@0.4.0-7
+    
+    # Latest version (not recommended for prod)
+    https://cdn.jsdelivr.net/npm/citation-js
+    
+    # Unminified
+    https://cdn.jsdelivr.net/npm/citation-js@0.4.0-7/build/citation.js
+
+These define `require` and add `citation-js` as a module.
 
 ```html
-<script src="path/to/citation.js" type="text/javascript"></script>
+<script src="url/to/citation.js" type="text/javascript"></script>
 <script>
   const Cite = require('citation-js')
 </script>
 ```
 
-Alternatively, you can use services as [rawgit.com](https://rawgit.com/) or the pre-built bundle at [bundle.run](https://bundle.run/):
+### Older versions
 
+Most older versions (at least up to `v0.3.4`) are available like this:
+
+    https://cdn.rawgit.com/larsgw/citation.js/archive/citation.js/citation-0.3.4.min.js
+    
+    # Unminified
     https://cdn.rawgit.com/larsgw/citation.js/archive/citation.js/citation-0.3.4.js
-    https://cdn.rawgit.com/larsgw/citation.js/archive/citation.js/citation-0.3.4.min.js (minified)
-    https://bundle.run/citation-js (latest)
-    https://bundle.run/citation-js@0.3.4
-
-> The examples use version `0.3.4`; this can be replaced with other versions
 
 > Note that
 > * all GitHub builds before version `0.4.0-0` [don't work in IE](https://github.com/larsgw/citation.js/issues/87)
