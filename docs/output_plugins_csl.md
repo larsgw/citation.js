@@ -1,4 +1,4 @@
-CSL Plugins rely on extending the citeproc engine, currently only by feeding it different templates and locales.
+CSL Plugins rely on extending the [citeproc engine](https://github.com/Juris-M/citeproc-js/), which does all the formatting, currently only by feeding it different templates and locales.
 
 ### CSL Template Plugins
 

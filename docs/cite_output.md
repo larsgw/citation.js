@@ -88,6 +88,8 @@ const example = new Cite('Q30000000')
 
 A full list of output formats, including options, is available in {@tutorial output_formats}.
 
+> Citation and bibliography formatting is done with the [citeproc-js engine](https://github.com/Juris-M/citeproc-js/) and [CSL](http://citationstyles.org).
+
 ## `Cite#get()`
 
 Before `Cite#format()` there was `Cite#get()`, which was a mess. Documentation can be found {@tutorial output_options here}.

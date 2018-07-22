@@ -23,6 +23,8 @@ For references to dictionaries, see {@tutorial output_plugins_dict}.
 
 ### Bibliography & Citation
 
+Bibliography and citation formatting is done by the [citeproc-js](https://github.com/Juris-M/citeproc-js/) engine, currently maintained by Frank Bennett.
+
 | Option | Description |
 |--------|-------------|
 | `format` | Output format: `object` (JS object), or any dictionary |
