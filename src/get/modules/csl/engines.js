@@ -7,6 +7,21 @@ import CSL from 'citeproc'
 import {templates} from './styles'
 import {locales} from './locales'
 
+// BEGIN add sys function
+const getWrapperProxy = (original) => function (state, entry) {
+  if (state.sys.wrapBibliographyEntry) {
+    let [prefix, postfix] = state.sys.wrapBibliographyEntry(this.system_id)
+    entry = [prefix, entry, postfix].join('')
+  }
+  return original(state, entry)
+}
+
+for (let format in CSL.Output.Formats) {
+  let original = CSL.Output.Formats[format]['@bibliography/entry'] 
+  CSL.Output.Formats[format]['@bibliography/entry'] = getWrapperProxy(original)
+}
+// END
+
 /**
  * Object containing CSL Engines
  *

@@ -67,7 +67,7 @@ Here's an example for `prepend` and `append`:
 let cite = new Cite({id: 'a', title: 'Item A'})
 
 cite.format('bibliography', {append: ' [foobar]'})
-// 'Item A. (n.d.).\n [foobar]'
+// 'Item A. (n.d.). [foobar]\n'
 
 cite.format('bibliography', {prepend (entry) { return `${entry.id}: ` }})
 // 'a: Item A. (n.d.).\n'
