@@ -33,6 +33,7 @@ Bibliography and citation formatting is done by the [citeproc-js](https://github
 | `entry`^ | Control which entries are outputted |
 | `prepend`§ | Add arbitrary content to the start of each entry |
 | `append`§ | Add arbitrary content to the end of each entry |
+| `nosort`§ | Don't sort according to the template-dependent guidelines |
 
 _* Add your own with {@tutorial output_plugins_csl}_
 _^ Only for the `citation` format at the moment_
