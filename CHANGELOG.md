@@ -1,5 +1,22 @@
 # Changelog
 
+## Unreleased
+
+### Added
+
+* [meta] More test work
+* `util.Register`: Alias `remove` to `delete`
+* `input/@wikidata`: Support 'stated as' (P1932) qualifier, if possible preferring that over fetching author labels (#131)
+* `output/@csl`: Bibliography `nosort` option
+
+### Changed
+
+* Deprecated wrapper CSL locale and template methods
+
+### Fixed
+
+* `output/@csl`: Affixes now work reliably for all formats (#84)
+
 ## [0.4.0-9] - 2018-07-19
 
 ### Added
@@ -32,10 +49,11 @@ Bug fixes.
 
 ### Added
 
-* A lot of tests cases regarding input parsing mechanisms (#123)
+* [meta] A lot of tests cases regarding input parsing mechanisms (#123)
 * General plugin system (#88)
 * Alias `type` option to `format` in most output formats
 * CSL config is now registered with the general plugin system
+* CSL `citation` support (see #148)
 
 ### Changed
 
