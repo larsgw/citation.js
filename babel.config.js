@@ -2,9 +2,9 @@ module.exports = {
   "presets": [
     ["@babel/env", {"targets": {
       "browsers": [
-        "> 1%",
-        "last 10 versions",
-        "ie > 7"
+        "> 0.5%",
+        "last 5 versions",
+        "ie >= 10"
       ]}
     }]
   ],
@@ -18,5 +18,6 @@ module.exports = {
       "plugins": ["istanbul"]
     }
   },
+  "ignore": [/node_modules\/core-js/],
   "comments": false
 }
