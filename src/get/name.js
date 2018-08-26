@@ -1,7 +1,3 @@
-const startParts = ['dropping-particle', 'given']
-const suffixParts = ['suffix']
-const endParts = ['non-dropping-particle', 'family']
-
 /**
  * Get name from CSL
  *
@@ -13,18 +9,6 @@ const endParts = ['non-dropping-particle', 'family']
  *
  * @return {String} Full name
  */
-const getName = function (name, reversed = false) {
-  const get = parts => parts.map(entry => name[entry] || '').filter(Boolean).join(' ')
-
-  if (name.literal) {
-    return name.literal
-  } else if (reversed) {
-    const suffixPart = get(suffixParts) ? `, ${get(suffixParts)}` : ''
-    const startPart = get(startParts) ? `, ${get(startParts)}` : ''
-    return get(endParts) + suffixPart + startPart
-  } else {
-    return `${get([...startParts, ...suffixParts, ...endParts])}`
-  }
-}
+import {format as getName} from '@citation-js/name'
 
 export default getName

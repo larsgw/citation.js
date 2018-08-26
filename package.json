@@ -32,6 +32,8 @@
   ],
   "dependencies": {
     "@babel/polyfill": "^7.0.0-rc.3",
+    "@citation-js/date": "^0.4.1",
+    "@citation-js/name": "^0.4.1",
     "citeproc": "^2.1.210",
     "commander": "^2.17.1",
     "isomorphic-fetch": "^2.2.1",
@@ -43,7 +45,6 @@
     "@babel/core": "^7.0.0-rc.3",
     "@babel/plugin-proposal-class-properties": "^7.0.0-rc.3",
     "@babel/plugin-proposal-object-rest-spread": "^7.0.0-rc.3",
-    "@babel/plugin-proposal-unicode-property-regex": "^7.0.0-rc.3",
     "@babel/preset-env": "^7.0.0-rc.3",
     "@babel/register": "^7.0.0-rc.3",
     "babel-eslint": "^9.0.0-beta.3",
