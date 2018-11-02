@@ -2,12 +2,15 @@
 
 ## Unreleased
 
+## [0.4.0-10] - 2018-11-02
+
 ### Added
 
 * [meta] More test work
 * `util.Register`: Alias `remove` to `delete`
 * `input/@wikidata`: Support 'stated as' (P1932) qualifier, if possible preferring that over fetching author labels (#131)
 * `output/@csl`: Bibliography `nosort` option
+* `input/@bibtex`: Support for comma-delimited entries (#157)
 
 ### Changed
 
