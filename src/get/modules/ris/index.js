@@ -121,10 +121,14 @@ const fieldMap = {
   ],
   C2: [
     {type: ['article-journal', 'article'], fieldName: 'PMCID'},
-    {type: 'paper-conference', fieldName: 'issued', convert (date) {
-      /* istanbul ignore next: fairly arbitrary case to check */
-      return date['date-parts'][0][0]
-    }},
+    {
+      type: 'paper-conference',
+      fieldName: 'issued',
+      convert (date) {
+        /* istanbul ignore next: fairly arbitrary case to check */
+        return date['date-parts'][0][0]
+      }
+    },
     {type: 'article-newspaper', fieldName: 'issue'}
   ],
   C3: [

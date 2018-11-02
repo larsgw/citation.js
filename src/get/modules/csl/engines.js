@@ -17,7 +17,7 @@ const getWrapperProxy = (original) => function (state, entry) {
 }
 
 for (let format in CSL.Output.Formats) {
-  let original = CSL.Output.Formats[format]['@bibliography/entry'] 
+  let original = CSL.Output.Formats[format]['@bibliography/entry']
   CSL.Output.Formats[format]['@bibliography/entry'] = getWrapperProxy(original)
 }
 // END
