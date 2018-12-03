@@ -25,10 +25,10 @@ export default function citation (data, options = {}) {
   const citeproc = prepareEngine(data, template, lang, format)
   citeproc.updateItems(ids)
 
-  const citation = citeproc.previewCitationCluster({
+  const citation = citeproc.appendCitationCluster({
     citationItems: entries.map(id => ({id})),
     properties: {noteIndex: 0}
   }, [], [], format)
 
-  return citation
+  return citation[citation.length - 1][1]
 }

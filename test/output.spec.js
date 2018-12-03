@@ -13,6 +13,19 @@ const customTemplate = `<?xml version="1.0" encoding="utf-8"?>
     </layout>
   </bibliography>
 </style>`
+const customNumberedTemplate = `<?xml version="1.0" encoding="utf-8"?>
+<style xmlns="http://purl.org/net/xbiblio/csl" class="in-text" version="1.0" demote-non-dropping-particle="sort-only" page-range-format="minimal">
+  <citation collapse="id">
+    <sort>
+      <key variable="id"/>
+    </sort>
+    <layout delimiter=", ">
+      <group prefix="[" suffix="]" delimiter=", ">
+        <text variable="id"/>
+      </group>
+    </layout>
+  </citation>
+</style>`
 const customLocale = `<?xml version="1.0" encoding="utf-8"?>
 <locale xmlns="http://purl.org/net/xbiblio/csl" version="1.0" xml:lang="custom">
   <style-options punctuation-in-quote="true"/>
@@ -71,6 +84,7 @@ function testCaseGenerator (cases) {
 }
 
 Cite.CSL.register.addTemplate('custom', customTemplate)
+Cite.CSL.register.addTemplate('customNumbered', customNumberedTemplate)
 Cite.CSL.register.addLocale('custom', customLocale)
 
 const cases = {
@@ -152,7 +166,9 @@ const cases = {
     citation: {
       works: [input.citation, 'citation', {entry: ['1', '2']}, '(“a,” 2011; d & h, 2012)'],
       'works for single entries': [input.citation, 'citation', {entry: '2'}, '(d & h, 2012)'],
-      'defaults to all entries': [input.citation, 'citation', undefined, '(“a,” 2011; d & h, 2012; f, 2013)']
+      'defaults to all entries': [input.citation, 'citation', undefined, '(“a,” 2011; d & h, 2012; f, 2013)'],
+      'works for single entries with numbered templates': [input.citation, 'citation', {entry: '3', template: 'customNumbered'}, '[3]'],
+      'works for multiple entries with numbered templates': [input.citation, 'citation', {entry: ['2', '3'], template: 'customNumbered'}, '[2], [3]']
     }
   },
   else: {
