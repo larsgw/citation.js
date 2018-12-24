@@ -1,22 +1,12 @@
 module.exports = {
-  "presets": [
-    ["@babel/env", {"targets": {
-      "browsers": [
-        "> 0.5%",
-        "last 5 versions",
-        "ie >= 10"
-      ]}
+  presets: [
+    ['@babel/env', { targets: {
+      browsers: [
+        '> 0.5%',
+        'last 5 versions',
+        'ie >= 10'
+      ] }
     }]
   ],
-  "plugins": [
-    "@babel/plugin-proposal-class-properties",
-    "@babel/plugin-proposal-object-rest-spread"
-  ],
-  "env": {
-    "test": {
-      "plugins": ["istanbul"]
-    }
-  },
-  "ignore": [/node_modules\/core-js/],
-  "comments": false
+  comments: false
 }

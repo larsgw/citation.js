@@ -14,7 +14,7 @@ const opts = {
   footer: header
 }
 
-browserify({fullPaths: true})
+browserify({ fullPaths: true })
   .add('./src/index.js')
   .transform(babelify)
   .bundle()
