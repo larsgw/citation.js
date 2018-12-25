@@ -15,8 +15,9 @@ const opts = {
 }
 
 browserify({ fullPaths: true })
-  .add('./src/index.js')
-  .transform(babelify)
+  .add(require.resolve('@babel/polyfill'))
+  .require('.', { expose: 'citation-js' })
+  .transform(babelify, { global: true })
   .bundle()
   .pipe(disc(opts))
   .pipe(fs.createWriteStream(path.join(__dirname, '../build/disc/index.html')))
