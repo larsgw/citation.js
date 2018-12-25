@@ -29,8 +29,8 @@
   ],
   "dependencies": {
     "@citation-js/core": "^0.4.0-rc.0",
-    "@citation-js/date": "^0.4.1",
-    "@citation-js/name": "^0.4.1",
+    "@citation-js/date": "^0.4.2",
+    "@citation-js/name": "^0.4.2",
     "@citation-js/plugin-bibjson": "^0.4.0-rc.0",
     "@citation-js/plugin-bibtex": "^0.4.0-rc.0",
     "@citation-js/plugin-csl": "^0.4.0-rc.0",
