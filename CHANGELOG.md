@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+## [0.4.0-11] - 2018-12-27
+
+### BREAKING
+
+* Moved all code to '@citation-js' components. There should be full backwards compatibility, apart from the structure of files.
+
 ## [0.4.0-10] - 2018-11-02
 
 ### Added
