@@ -1,5 +1,4 @@
 var core = require('@citation-js/core')
-var citeproc = require('citeproc')
 
 require('@citation-js/plugin-bibjson')
 require('@citation-js/plugin-bibtex')
@@ -8,6 +7,7 @@ require('@citation-js/plugin-doi')
 require('@citation-js/plugin-ris')
 require('@citation-js/plugin-wikidata')
 
+var citeproc = require('citeproc')
 var name = require('@citation-js/name')
 var date = require('@citation-js/date')
 
