@@ -25,6 +25,7 @@ const parsingInterfaceSpec = {
 const inputInterfaceSpec = Object.assign({}, parsingInterfaceSpec, {
   add: 'function',
   has: 'function',
+  get: 'function',
   list: 'function',
   remove: 'function',
 
