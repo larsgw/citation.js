@@ -51,9 +51,9 @@
     "jsdoc": "^3.5.5",
     "markdown-toc": "^1.2.0",
     "minami": "^1.2.3",
-    "mocha": "^5.2.0",
+    "mocha": "^6.0.2",
     "standard": "^12.0.1",
-    "uglify-js": "^3.4.9"
+    "uglify-js": "^3.4.10"
   },
   "browser": {
     "./test/citation.js": "./test/citation-browser.js"
