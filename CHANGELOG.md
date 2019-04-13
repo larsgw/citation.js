@@ -1,5 +1,9 @@
 # Changelog
 
+## [0.4.0] - 2019-04-13
+
+Updated components to `v0.4.0`, release `v0.4`.
+
 ## [0.4.0-12] - 2019-03-17
 
 Updated components from `v0.4.0-rc.1` to `v0.4.0-rc.4`, see [that changelog](https://github.com/citation-js/citation-js/blob/master/CHANGELOG.md).
