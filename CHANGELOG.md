@@ -1,20 +1,26 @@
 # Changelog
 
-## [0.4.0] - 2019-04-13
+## [`0.4.1`](https://github.com/larsgw/citation.js/compare/v0.4.0...v0.4.1) - 2019-06-13
+
+Pin component versions to [`v0.4.1`](https://github.com/citation-js/citation-js/blob/master/CHANGELOG.md#041-2019-04-14):
+
+> * **plugin-wikidata:** fix getting label if no title exists ([#32](https://github.com/citation-js/citation-js/issues/32)) ([69243c5](https://github.com/citation-js/citation-js/commit/69243c5))
+
+## [`0.4.0`](https://github.com/larsgw/citation.js/compare/v0.4.0-12...v0.4.0) - 2019-04-13
 
 Updated components to `v0.4.0`, release `v0.4`.
 
-## [0.4.0-12] - 2019-03-17
+## [`0.4.0-12`](https://github.com/larsgw/citation.js/compare/v0.4.0-11...v0.4.0-12) - 2019-03-17
 
 Updated components from `v0.4.0-rc.1` to `v0.4.0-rc.4`, see [that changelog](https://github.com/citation-js/citation-js/blob/master/CHANGELOG.md).
 
-## [0.4.0-11] - 2018-12-27
+## [`0.4.0-11`](https://github.com/larsgw/citation.js/compare/v0.4.0-10...v0.4.0-11) - 2018-12-27
 
 ### BREAKING
 
 * Moved all code to '@citation-js' components. There should be full backwards compatibility, apart from the structure of files.
 
-## [0.4.0-10] - 2018-11-02
+## [`0.4.0-10`](https://github.com/larsgw/citation.js/compare/v0.4.0-9...v0.4.0-10) - 2018-11-02
 
 ### Added
 
@@ -32,7 +38,7 @@ Updated components from `v0.4.0-rc.1` to `v0.4.0-rc.4`, see [that changelog](htt
 
 * `output/@csl`: Affixes now work reliably for all formats (#84)
 
-## [0.4.0-9] - 2018-07-19
+## [`0.4.0-9`](https://github.com/larsgw/citation.js/compare/v0.4.0-8...v0.4.0-9) - 2018-07-19
 
 ### Added
 * Support for styled text in title fields in BibTeX input (see #150). Values wrapped in double brackets are treated as values wrapped in single brackets (see #155)
@@ -44,7 +50,7 @@ Updated components from `v0.4.0-rc.1` to `v0.4.0-rc.4`, see [that changelog](htt
 * Handling of styled text in CSL-JSON title fields when creating BibTeX output (#150)
 * Bug introduced when fixing REDOS that made the @else/url type not match @wikidata/api in some cases (#156)
 
-## [0.4.0-8] - 2018-07-14
+## [`0.4.0-8`](https://github.com/larsgw/citation.js/compare/v0.4.0-7...v0.4.0-8) - 2018-07-14
 
 Bug fixes.
 
@@ -60,7 +66,7 @@ Bug fixes.
 * Make a check when polishing API data not fail when a date field is an empty object (#147)
 * [meta] Docs index issue (070cf12)
 
-## [0.4.0-7] - 2018-07-12
+## [`0.4.0-7`](https://github.com/larsgw/citation.js/compare/v0.4.0-6...v0.4.0-7) - 2018-07-12
 
 ### Added
 
@@ -95,22 +101,22 @@ Bug fixes.
 * JSON output still being invalid (#143, see also #144)
 * [meta] Invalid Babel `browsers` target
 
-## [0.4.0-6] - 2018-07-01
+## [`0.4.0-6`](https://github.com/larsgw/citation.js/compare/v0.4.0-5...v0.4.0-6) - 2018-07-01
 
 ### Fixed
 * BibTeX output typo, trying to find the non-existent `url` CSL property, instead of the `URL` one (#153)
 
-## [0.4.0-5] - 2018-06-03
+## [`0.4.0-5`](https://github.com/larsgw/citation.js/compare/v0.4.0-4...v0.4.0-5) - 2018-06-03
 
 ### Fixed
 * Webpack error because of browserify-centric setup (#151)
 
-## [0.4.0-4] - 2018-05-19
+## [`0.4.0-4`](https://github.com/larsgw/citation.js/compare/v0.4.0-3...v0.4.0-4) - 2018-05-19
 
 ### Fixed
 * DOI bug due to a regression in 0.4.0-3 (dda2360f4d91af1d48e1bf859d784b2bdc694c6d)
 
-## [0.4.0-3] - 2018-05-12
+## [`0.4.0-3`](https://github.com/larsgw/citation.js/compare/v0.4.0-2...v0.4.0-3) - 2018-05-12
 
 ### Added
 * RIS output support (#125)
@@ -123,11 +129,11 @@ Bug fixes.
 * Subtle type checking bug in translation scheme parsing code (#128)
 * Logging API not supported on Node.js v6 (#124)
 
-## [0.4.0-2] - 2018-05-12
+## [`0.4.0-2`](https://github.com/larsgw/citation.js/compare/v0.4.0-1...v0.4.0-2) - 2018-05-12
 
 > Was skipped due to publishing the wrong files.
 
-## [0.4.0-1] - 2017-12-31
+## [`0.4.0-1`](https://github.com/larsgw/citation.js/compare/v0.4.0-0...v0.4.0-1) - 2017-12-31
 
 ### Added
 
@@ -155,7 +161,7 @@ Bug fixes.
 * Output options validation issues (#120)
 * Moved input parsing to actual respective test cases
 
-## [0.4.0-0] - 2017-12-22
+## [`0.4.0-0`](https://github.com/larsgw/citation.js/compare/v0.3.4...v0.4.0-0) - 2017-12-22
 
 ### Added
 * New parsing system w/ plugins
@@ -173,7 +179,7 @@ Bug fixes.
 * Support month names in BibTeX
 * CLI logging now on stderr (instead of stdout)
 
-## [0.3.4] - 2017-09-12
+## [`0.3.4`](https://github.com/larsgw/citation.js/compare/v0.3.3...v0.3.4) - 2017-09-12
 
 ### Changed
 * Updated README
@@ -182,7 +188,7 @@ Bug fixes.
 * Command sequence normalisation in BibTeX
 * BibTeX test case output
 
-## [0.3.3] - 2017-09-12
+## [`0.3.3`](https://github.com/larsgw/citation.js/compare/v0.3.2...v0.3.3) - 2017-09-12
 
 ### Added
 * A lot of Wikidata entry type mappings
@@ -196,7 +202,7 @@ Bug fixes.
 * Unknown Wikidata entry type now actually defaults to something
 * CLI now uses the API changed in 0.3.1
 
-## [0.3.2] - 2017-09-10
+## [`0.3.2`](https://github.com/larsgw/citation.js/compare/v0.3.1...v0.3.2) - 2017-09-10
 
 ### Added
 * New Wikidata field mappings (see [#76](https://github.com/larsgw/citation.js/issues/76))
@@ -207,7 +213,7 @@ Bug fixes.
   * `Cite.normalise()` -> `Cite.input()`
   * `Cite.normaliseAsync()` -> `Cite.inputAsync()`
 
-## [0.3.1] - 2017-09-02
+## [`0.3.1`](https://github.com/larsgw/citation.js/compare/v0.3.0...v0.3.1) - 2017-09-02
 
 ### Added
 * Options parameter in `parseInput` and `parseInputAsync`
@@ -240,11 +246,11 @@ Cite(data, {
 * Parsing names with lowercase particles now doesn't omit family names
 * Better error messaging when API/file requests fails
 
-## [0.3.0] - 2017-08-25
+## [`0.3.0`](https://github.com/larsgw/citation.js/compare/v0.3.0-14...v0.3.0) - 2017-08-25
 
 See `0.3.0-14`.
 
-## [0.3.0-14] - 2017-08-24
+## [`0.3.0-14`](https://github.com/larsgw/citation.js/compare/v0.3.0-13...v0.3.0-14) - 2017-08-24
 
 ### Added
 * Alias for main parsing functions: `Cite.parse.input.chain -> Cite.normalise` and `Cite.parse.input.async.chain -> Cite.normaliseAsync`
@@ -256,7 +262,7 @@ See `0.3.0-14`.
 ### Fixed
 * Wikidata prop parsing function now returns with the proper field name when parsing an author prop
 
-## [0.3.0-13] - 2017-08-22
+## [`0.3.0-13`](https://github.com/larsgw/citation.js/compare/v0.3.0-12...v0.3.0-13) - 2017-08-22
 
 ### Added
 * Support for matching several tokens in a row with TokenStack
@@ -269,7 +275,7 @@ See `0.3.0-14`.
 * Typo in BibTeX de-escaping code, now correctly parsing % signs in author fields
 * False positive parsing Array JSON string as Bib.TXT
 
-## [0.3.0-12] - 2017-08-01
+## [`0.3.0-12`](https://github.com/larsgw/citation.js/compare/v0.3.0-11...v0.3.0-12) - 2017-08-01
 
 ### Added
 * Support for BibTeX literals in author and date fields
@@ -285,7 +291,7 @@ See `0.3.0-14`.
 ### Fixed
 * Sorting by any date field
 
-## [0.3.0-11] - 2017-07-28
+## [`0.3.0-11`](https://github.com/larsgw/citation.js/compare/v0.3.0-10...v0.3.0-11) - 2017-07-28
 
 ### Added
 * Custom templates & locales register
@@ -293,7 +299,7 @@ See `0.3.0-14`.
 ### Fixed
 * Use correct date format
 
-## [0.3.0-10] - 2017-07-28
+## [`0.3.0-10`](https://github.com/larsgw/citation.js/compare/v0.3.0-9...v0.3.0-10) - 2017-07-28
 
 ### Added
 * DOI support
@@ -302,7 +308,7 @@ See `0.3.0-14`.
 ### Fixed
 * Async prop parsing
 
-## [0.3.0-9] - 2017-07-06
+## [`0.3.0-9`](https://github.com/larsgw/citation.js/compare/v0.3.0-8...v0.3.0-9) - 2017-07-06
 
 ### Added
 * CLI stdin input
@@ -311,7 +317,7 @@ See `0.3.0-14`.
 * DOM HTML output
 * CLI non-file input
 
-## [0.3.0-8] - 2017-06-03
+## [`0.3.0-8`](https://github.com/larsgw/citation.js/compare/v0.3.0-7...v0.3.0-8) - 2017-06-03
 
 ### Added
 * Iterator to Cite
@@ -324,7 +330,7 @@ See `0.3.0-14`.
 * Sorting by callback and custom props
 * Input support for BibTeX JSON
 
-## [0.3.0-7] - 2017-05-22
+## [`0.3.0-7`](https://github.com/larsgw/citation.js/compare/v0.3.0-6...v0.3.0-7) - 2017-05-22
 
 ### Added
 * Bib.TXT i/o support
@@ -332,7 +338,7 @@ See `0.3.0-14`.
 ### Fixed
 * CLI Citation.js v0.3.0-7 support
 
-## [0.3.0-6] - 2017-05-15
+## [`0.3.0-6`](https://github.com/larsgw/citation.js/compare/v0.3.0-5...v0.3.0-6) - 2017-05-15
 
 ### Added
 * Async support
@@ -340,7 +346,7 @@ See `0.3.0-14`.
 ### Fixed
 * Increased browser support
 
-## [0.3.0-5] - 2017-05-08
+## [`0.3.0-5`](https://github.com/larsgw/citation.js/compare/v0.3.0-4...v0.3.0-5) - 2017-05-08
 
 ### Added
 * Exposition of most Cite functions to users
