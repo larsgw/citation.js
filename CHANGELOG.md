@@ -1,5 +1,19 @@
 # Changelog
 
+## [`0.4.2`](https://github.com/larsgw/citation.js/compare/v0.4.1...v0.4.2) - 2019-06-13
+
+* Pin component versions to [`v0.4.2`](https://github.com/citation-js/citation-js/blob/master/CHANGELOG.md#042-2019-04-26):
+
+> ### Bug Fixes
+>
+> * **plugin-bibtex:** fix label creation ([c7cde40](https://github.com/citation-js/citation-js/commit/c7cde40)), closes [#35](https://github.com/citation-js/citation-js/issues/35)
+> * **plugin-wikidata:** support imprecise dates ([c898db7](https://github.com/citation-js/citation-js/commit/c898db7)), closes [#33](https://github.com/citation-js/citation-js/issues/33)
+>
+>
+> ### Features
+>
+> * **plugin-wikidata:** support more URL properties ([#34](https://github.com/citation-js/citation-js/issues/34)) ([d489843](https://github.com/citation-js/citation-js/commit/d489843))
+
 ## [`0.4.1`](https://github.com/larsgw/citation.js/compare/v0.4.0...v0.4.1) - 2019-06-13
 
 Pin component versions to [`v0.4.1`](https://github.com/citation-js/citation-js/blob/master/CHANGELOG.md#041-2019-04-14):
