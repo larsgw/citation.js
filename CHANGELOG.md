@@ -1,5 +1,11 @@
 # Changelog
 
+## [`0.4.4`](https://github.com/larsgw/citation.js/compare/v0.4.2...v0.4.4) - 2019-06-13
+
+* Pin component versions to [`v0.4.4`](https://github.com/citation-js/citation-js/blob/master/CHANGELOG.md#044-2019-05-24):
+
+> * **plugin-wikidata:** additional mappings ([01be936](https://github.com/citation-js/citation-js/commit/01be936)), closes [#18](https://github.com/citation-js/citation-js/issues/18)
+
 ## [`0.4.2`](https://github.com/larsgw/citation.js/compare/v0.4.1...v0.4.2) - 2019-06-13
 
 * Pin component versions to [`v0.4.2`](https://github.com/citation-js/citation-js/blob/master/CHANGELOG.md#042-2019-04-26):

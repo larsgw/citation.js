@@ -145,7 +145,9 @@ Cite.parse = Object.assign({
     type: wikidata.parsers.prop.parseType,
     async: {
       json: wikidata.parsers.entity.parseAsync,
-      prop: wikidata.parsers.prop.parseAsync
+      prop (...args) {
+        return Promise.resolve(wikidata.parsers.prop.parse.apply(this, args))
+      }
     }
   }))(require('@citation-js/plugin-wikidata'))
 }, Cite.plugins.input)
