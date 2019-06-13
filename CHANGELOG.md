@@ -1,5 +1,33 @@
 # Changelog
 
+## [`0.4.5`](https://github.com/larsgw/citation.js/compare/v0.4.4...v0.4.5) - 2019-06-13
+
+* Pin component versions to [`v0.4.5`](https://github.com/citation-js/citation-js/blob/master/CHANGELOG.md#045-2019-06-12):
+
+> ### Bug Fixes
+>
+> * **plugin-bibtex:** fix parsing of name lists ([11d7dd7](https://github.com/citation-js/citation-js/commit/11d7dd7))
+> * **plugin-bibtex:** fix safe labels for unicode names ([8167958](https://github.com/citation-js/citation-js/commit/8167958))
+> * **plugin-bibtex:** safe author name ([a232fe7](https://github.com/citation-js/citation-js/commit/a232fe7))
+> * **plugin-bibtex:** strip unknown commands in input ([5b3508e](https://github.com/citation-js/citation-js/commit/5b3508e))
+> * **plugin-wikidata:** exclude emoji flags as country names ([73b0e84](https://github.com/citation-js/citation-js/commit/73b0e84))
+> * **plugin-wikidata:** fix cache fetching ([63a4f0d](https://github.com/citation-js/citation-js/commit/63a4f0d)), closes [#41](https://github.com/citation-js/citation-js/issues/41)
+> * **plugin-wikidata:** fix country name check ([90d1c07](https://github.com/citation-js/citation-js/commit/90d1c07))
+>
+>
+> ### Features
+>
+> * **cli:** add --plugins option ([229c95c](https://github.com/citation-js/citation-js/commit/229c95c)), closes [#40](https://github.com/citation-js/citation-js/issues/40)
+> * **cli:** plugin config & format options ([8bd2a4a](https://github.com/citation-js/citation-js/commit/8bd2a4a))
+> * **cli:** support for input options ([87d8eb5](https://github.com/citation-js/citation-js/commit/87d8eb5))
+> * **plugin-bibtex:** add generateLabel option ([d10631c](https://github.com/citation-js/citation-js/commit/d10631c))
+>
+>
+> ### BREAKING CHANGES
+>
+> * **plugin-bibtex:** strips unkown commands entirely instead of replacing
+> the braces with no-case tags
+
 ## [`0.4.4`](https://github.com/larsgw/citation.js/compare/v0.4.2...v0.4.4) - 2019-06-13
 
 * Pin component versions to [`v0.4.4`](https://github.com/citation-js/citation-js/blob/master/CHANGELOG.md#044-2019-05-24):
