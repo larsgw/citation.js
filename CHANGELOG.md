@@ -1,6 +1,15 @@
 # Changelog
 
-## [`0.4.6`](https://github.com/larsgw/citation.js/compare/v0.4.5...v0.4.6) - 2019-06-28
+## [`0.4.7`](https://github.com/larsgw/citation.js/compare/v0.4.6...v0.4.7) - 2019-06-29
+
+* Pin component versions to [`v0.4.7`](https://github.com/citation-js/citation-js/blob/master/CHANGELOG.md#047-2019-06-29):
+
+> ### Bug Fixes
+>
+> * **core:** make fetchFile checkResponse optional ([a51a185](https://github.com/citation-js/citation-js/commit/a51a185))
+> * **plugin-doi:** use new checkContentType option ([92df863](https://github.com/citation-js/citation-js/commit/92df863))
+
+## [`0.4.6`](https://github.com/larsgw/citation.js/compare/v0.4.5...v0.4.6) - 2019-06-29
 
 * Pin component versions to [`v0.4.6`](https://github.com/citation-js/citation-js/blob/master/CHANGELOG.md#046-2019-06-28):
 
