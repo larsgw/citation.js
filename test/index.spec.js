@@ -164,6 +164,7 @@ const staticSpec = {
     deepCopy: 'function',
     fetchFile: 'function',
     fetchFileAsync: 'function',
+    setUserAgent: 'function',
     fetchId: 'function',
     attr: {
       getAttributedEntry: 'function',
