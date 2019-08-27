@@ -1,5 +1,27 @@
 # Changelog
 
+## [`0.4.9`](https://github.com/larsgw/citation.js/compare/v0.4.8...v0.4.9) - 2019-08-27
+
+* Pin component versions to [`v0.4.9`](https://github.com/citation-js/citation-js/blob/master/CHANGELOG.md#049-2019-08-27):
+
+> ### Bug Fixes
+>
+> * **core:** cap sync-rpc version ([2157335](https://github.com/citation-js/citation-js/commit/2157335)), closes [#54](https://github.com/citation-js/citation-js/issues/54)
+> * **core:** remove Object.entries call ([c38e3b9](https://github.com/citation-js/citation-js/commit/c38e3b9))
+> * **core:** remove use of object spread ([d82342a](https://github.com/citation-js/citation-js/commit/d82342a)), closes [#53](https://github.com/citation-js/citation-js/issues/53)
+> * **plugin-csl:** defer error to citeproc-js ([0f76fcb](https://github.com/citation-js/citation-js/commit/0f76fcb))
+> * **plugin-csl:** only proxy @bibliography/style once ([a372012](https://github.com/citation-js/citation-js/commit/a372012))
+> * **plugin-csl:** pass 'this' in getWrapperProxy ([c3e670a](https://github.com/citation-js/citation-js/commit/c3e670a))
+> * **plugin-csl:** return proxy in getWrapperProxy ([39e57a3](https://github.com/citation-js/citation-js/commit/39e57a3))
+> * **plugin-ris:** fix legacy EP tag ([d7c6ea5](https://github.com/citation-js/citation-js/commit/d7c6ea5))
+>
+>
+> ### Features
+>
+> * **core:** add match=none to propertyConstraint ([9bafb58](https://github.com/citation-js/citation-js/commit/9bafb58))
+> * **core:** add Translator to utils ([0dd4963](https://github.com/citation-js/citation-js/commit/0dd4963))
+> * **plugin-ris:** add RIS input support ([1c49bcb](https://github.com/citation-js/citation-js/commit/1c49bcb))
+
 ## [`0.4.8`](https://github.com/larsgw/citation.js/compare/v0.4.7...v0.4.8) - 2019-07-06
 
 * Pin component versions to [`v0.4.8`](https://github.com/citation-js/citation-js/blob/master/CHANGELOG.md#048-2019-07-06):
