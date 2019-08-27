@@ -1,8 +1,7 @@
 #!/usr/bin/env bash
 
 cd node_modules/
-PACKAGES=$(echo @citation-js/*)
+PACKAGES=$(npm outdated --parseable | cut -d: -f4 | grep '^@citation-js' | tr "\n" " ")
 cd ..
 
-npm rm $PACKAGES
 npm i $PACKAGES --save-exact
