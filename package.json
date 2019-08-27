@@ -28,13 +28,13 @@
     "/build/citation.min.js"
   ],
   "dependencies": {
-    "@citation-js/cli": "0.4.9",
+    "@citation-js/cli": "0.4.10",
     "@citation-js/core": "0.4.9",
     "@citation-js/date": "0.4.4",
     "@citation-js/name": "0.4.2",
     "@citation-js/plugin-bibjson": "0.4.9",
     "@citation-js/plugin-bibtex": "0.4.9",
-    "@citation-js/plugin-csl": "0.4.9",
+    "@citation-js/plugin-csl": "0.4.10",
     "@citation-js/plugin-doi": "0.4.9",
     "@citation-js/plugin-ris": "0.4.9",
     "@citation-js/plugin-wikidata": "0.4.9",
