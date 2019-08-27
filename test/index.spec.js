@@ -161,6 +161,7 @@ const staticSpec = {
   util: {
     Register: 'function',
     TokenStack: 'function',
+    Translator: 'function',
     deepCopy: 'function',
     fetchFile: 'function',
     fetchFileAsync: 'function',
