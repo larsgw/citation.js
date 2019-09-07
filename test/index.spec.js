@@ -151,6 +151,8 @@ const staticSpec = {
     config: {
       add: 'function',
       get: 'function',
+      has: 'function',
+      list: 'function',
       remove: 'function'
     },
     dict: dictInterfaceSpec,
