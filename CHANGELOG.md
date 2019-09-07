@@ -1,5 +1,36 @@
 # Changelog
 
+## [`0.5.0-alpha.0`](https://github.com/larsgw/citation.js/compare/v0.4.10...v0.5.0-alpha.0) - 2019-09-07
+
+* Pin component versions to [`v0.5.0-alpha.0`](https://github.com/citation-js/citation-js/blob/master/CHANGELOG.md#050-alpha0-2019-09-07):
+
+> * chore!: drop Node 6 support ([f27d812](https://github.com/citation-js/citation-js/commit/f27d812)), closes [#55](https://github.com/citation-js/citation-js/issues/55)
+>
+>
+> ### Bug Fixes
+>
+> * **core:** do not return empty name lists when cleaning ([d31ca8a](https://github.com/citation-js/citation-js/commit/d31ca8a))
+> * **core:** fix Cite#sort handling of multi-value props ([3a7751c](https://github.com/citation-js/citation-js/commit/3a7751c))
+> * **core:** fix handling of generic best guesses ([c8e8c78](https://github.com/citation-js/citation-js/commit/c8e8c78))
+> * **core:** fix util.fetchId ([7850e75](https://github.com/citation-js/citation-js/commit/7850e75))
+> * **core:** improve date handling when cleaning ([08da3e7](https://github.com/citation-js/citation-js/commit/08da3e7))
+> * **core:** only overwrite individual headers in fetchFile ([8d47684](https://github.com/citation-js/citation-js/commit/8d47684))
+> * **core:** pass around bestGuessConversions ([50fa283](https://github.com/citation-js/citation-js/commit/50fa283))
+> * **core:** pass checkContentType in fetchFile ([e415f76](https://github.com/citation-js/citation-js/commit/e415f76))
+> * **core:** set userAgent properly in fetchFile ([a91fd7b](https://github.com/citation-js/citation-js/commit/a91fd7b))
+> * **plugin-bibtex:** fix label for incomplete author ([352ca4f](https://github.com/citation-js/citation-js/commit/352ca4f)), closes [#56](https://github.com/citation-js/citation-js/issues/56)
+>
+>
+> ### Features
+>
+> * **core:** complete input option validation ([d9be626](https://github.com/citation-js/citation-js/commit/d9be626))
+> * **core:** support has() & list() on plugins.config ([fe7f59f](https://github.com/citation-js/citation-js/commit/fe7f59f))
+>
+>
+> ### BREAKING CHANGES
+>
+> * drops Node 6 support
+
 ## [`0.4.10`](https://github.com/larsgw/citation.js/compare/v0.4.9...v0.4.10) - 2019-08-27
 
 * Pin component versions to [`v0.4.10`](https://github.com/citation-js/citation-js/blob/master/CHANGELOG.md#0410-2019-08-27):
