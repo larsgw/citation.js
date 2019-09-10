@@ -1,5 +1,15 @@
 # Changelog
 
+## [`0.5.0-alpha.2`](https://github.com/larsgw/citation.js/compare/v0.5.0-alpha.0...v0.5.0-alpha.2) - 2019-09-10
+
+* Pin component versions to [`0.5.0-alpha.2`](https://github.com/citation-js/citation-js/blob/master/CHANGELOG.md#050-alpha2-2019-09-10):
+
+> ### Bug Fixes
+> 
+> * **core:** fix date value null check ([f6a3ab2](https://github.com/citation-js/citation-js/commit/f6a3ab2))
+> * **core:** fix cleaning 'null' date values ([c927f81](https://github.com/citation-js/citation-js/commit/c927f81)), closes [/github.com/larsgw/citation.js/issues/190#issuecomment-529917382](https://github.com//github.com/larsgw/citation.js/issues/190/issues/issuecomment-529917382)
+> * **core:** fix cleaning 'null' name values ([2d59a32](https://github.com/citation-js/citation-js/commit/2d59a32))
+
 ## [`0.5.0-alpha.0`](https://github.com/larsgw/citation.js/compare/v0.4.10...v0.5.0-alpha.0) - 2019-09-07
 
 * Pin component versions to [`v0.5.0-alpha.0`](https://github.com/citation-js/citation-js/blob/master/CHANGELOG.md#050-alpha0-2019-09-07):
