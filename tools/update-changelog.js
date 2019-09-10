@@ -48,8 +48,8 @@ function extractChangelog (changelog, version) {
       return version
         .split(/\n{3}/)
         .map(subheader => subheader
-            .match(/^(### .+\n{2})?([\s\S]+)$/)
-            .slice(1, 3))
+          .match(/^(### .+\n{2})?([\s\S]+)$/)
+          .slice(1, 3))
     })
     // merge them
     .reduce((subheaders, [name, content]) => {
