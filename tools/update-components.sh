@@ -5,3 +5,5 @@ PACKAGES=$(npm outdated --parseable | cut -d: -f4 | grep '^@citation-js' | tr "\
 cd ..
 
 npm i $PACKAGES --save-exact
+
+node tools/update-changelog.js $PACKAGES
