@@ -163,6 +163,7 @@ const staticSpec = {
   util: {
     Register: 'function',
     TokenStack: 'function',
+    Grammar: 'function',
     Translator: 'function',
     deepCopy: 'function',
     fetchFile: 'function',
