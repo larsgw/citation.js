@@ -1,5 +1,22 @@
 # Changelog
 
+## [`0.5.0-alpha.3`](https://github.com/larsgw/citation.js/compare/v0.5.0-alpha.2...v0.5.0-alpha.3) - 2019-10-08
+
+* Pin component versions to [`0.5.0-alpha.3`](https://github.com/citation-js/citation-js/blob/master/CHANGELOG.md#050-alpha3-2019-10-07):
+
+> ### Bug Fixes
+> 
+> * **plugin-bibtex:** remove nocase from diacritics ([7f7e52f](https://github.com/citation-js/citation-js/commit/7f7e52f))
+> * **plugin-bibtex:** replace trimEnd() with trim() ([b59da57](https://github.com/citation-js/citation-js/commit/b59da57))
+> * **plugin-ris:** fix handling of multiline values ([eba2bfe](https://github.com/citation-js/citation-js/commit/eba2bfe))
+> * **plugin-ris:** handle \r\n line endings ([f0a3b29](https://github.com/citation-js/citation-js/commit/f0a3b29))
+> 
+> 
+> ### Features
+> 
+> * **bibtex:** add new BibTeX parser ([3c3588e](https://github.com/citation-js/citation-js/commit/3c3588e))
+> * **core:** add Grammar class to utils ([052754f](https://github.com/citation-js/citation-js/commit/052754f))
+
 ## [`0.5.0-alpha.2`](https://github.com/larsgw/citation.js/compare/v0.5.0-alpha.0...v0.5.0-alpha.2) - 2019-09-10
 
 * Pin component versions to [`0.5.0-alpha.2`](https://github.com/citation-js/citation-js/blob/master/CHANGELOG.md#050-alpha2-2019-09-10):
