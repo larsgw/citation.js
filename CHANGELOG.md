@@ -1,5 +1,15 @@
 # Changelog
 
+## [`0.5.0-alpha.4`](https://github.com/larsgw/citation.js/compare/v0.5.0-alpha.3...v0.5.0-alpha.4) - 2019-10-15
+
+* Pin component versions to [`0.5.0-alpha.4`](https://github.com/citation-js/citation-js/blob/master/CHANGELOG.md#050-alpha4-2019-10-15):
+
+> ### Bug Fixes
+> 
+> * **core:** fix normalising headers code for the browser ([d4693a7](https://github.com/citation-js/citation-js/commit/d4693a7))
+> * **plugin-bibtex:** do not try to format raw dates ([b28eca8](https://github.com/citation-js/citation-js/commit/b28eca8))
+> * **plugin-bibtex:** warn for umatched entry braces ([7905667](https://github.com/citation-js/citation-js/commit/7905667))
+
 ## [`0.5.0-alpha.3`](https://github.com/larsgw/citation.js/compare/v0.5.0-alpha.2...v0.5.0-alpha.3) - 2019-10-08
 
 * Pin component versions to [`0.5.0-alpha.3`](https://github.com/citation-js/citation-js/blob/master/CHANGELOG.md#050-alpha3-2019-10-07):
