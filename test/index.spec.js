@@ -185,7 +185,7 @@ const Cite = require('..')
 
 function testTree (tree, spec, stack = []) {
   const keys = new Set(Object.keys(tree))
-  for (let key in spec) {
+  for (const key in spec) {
     const isLeaf = typeof spec[key] === 'string'
     if (isLeaf || !keys.has(key)) {
       it(key, function () {

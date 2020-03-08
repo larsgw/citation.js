@@ -13,7 +13,7 @@ var date = require('@citation-js/date')
 
 function clone (obj) {
   const copy = {}
-  for (let key in obj) {
+  for (const key in obj) {
     copy[key] = typeof obj[key] === 'object' ? clone(obj[key]) : obj[key]
   }
   return copy
@@ -33,8 +33,8 @@ const attr = {
       return value
     }
 
-    let prefix = getAffix(source, affixes.prepend)
-    let suffix = getAffix(source, affixes.append)
+    const prefix = getAffix(source, affixes.prepend)
+    const suffix = getAffix(source, affixes.append)
     let start = ''
     let end = ''
     const match = value.match(/^([^>]+>)([\s\S]+)(<[^<]+)$/i)
