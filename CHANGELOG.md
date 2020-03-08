@@ -1,5 +1,17 @@
 # Changelog
 
+## [`0.5.0-alpha.5`](https://github.com/larsgw/citation.js/compare/v0.5.0-alpha.4...v0.5.0-alpha.5) - 2020-03-08
+
+* Pin component versions to [`0.5.0-alpha.5`](https://github.com/citation-js/citation-js/blob/master/CHANGELOG.md#050-alpha5-2019-10-28):
+
+> ### Bug Fixes
+> 
+> * **core:** do not use User-Agent in CORS ([047847d](https://github.com/citation-js/citation-js/commit/047847d))
+> * **plugin-bibtex:** ignore braces for grouping command ([#64](https://github.com/citation-js/citation-js/issues/64)) ([20763dc](https://github.com/citation-js/citation-js/commit/20763dc))
+> * **plugin-ris:** allow string for keyword component ([#70](https://github.com/citation-js/citation-js/issues/70)) ([0294999](https://github.com/citation-js/citation-js/commit/0294999)), closes [#67](https://github.com/citation-js/citation-js/issues/67)
+> * **plugin-ris:** normalize DOIs ([#68](https://github.com/citation-js/citation-js/issues/68)) ([eb97fa5](https://github.com/citation-js/citation-js/commit/eb97fa5))
+> * **plugin-ris:** trim lines in parse function ([#71](https://github.com/citation-js/citation-js/issues/71)) ([f81b845](https://github.com/citation-js/citation-js/commit/f81b845)), closes [#66](https://github.com/citation-js/citation-js/issues/66)
+
 ## [`0.5.0-alpha.4`](https://github.com/larsgw/citation.js/compare/v0.5.0-alpha.3...v0.5.0-alpha.4) - 2019-10-15
 
 * Pin component versions to [`0.5.0-alpha.4`](https://github.com/citation-js/citation-js/blob/master/CHANGELOG.md#050-alpha4-2019-10-15):
