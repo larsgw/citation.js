@@ -1,5 +1,27 @@
 # Changelog
 
+## [`0.5.0-alpha.6`](https://github.com/larsgw/citation.js/compare/v0.5.0-alpha.5...v0.5.0-alpha.6) - 2020-07-05
+
+* Pin component versions to [`0.5.0-alpha.6`](https://github.com/citation-js/citation-js/blob/master/CHANGELOG.md#050-alpha6-2020-07-04):
+
+> ### Bug Fixes
+> 
+> * **plugin-bibtex:** fix combining tilde ([cc9fd8b](https://github.com/citation-js/citation-js/commit/cc9fd8bf12cb1f62b6a631d18ebc7eba0e05abfe))
+> * **plugin-bibtex:** normalize strings ([447b0b4](https://github.com/citation-js/citation-js/commit/447b0b419abe0719e89bd16e189fe58f4f62cc01))
+> * **plugin-bibtex:** support all 10 escaped characters ([#75](https://github.com/citation-js/citation-js/issues/75)) ([da016b4](https://github.com/citation-js/citation-js/commit/da016b41ac67793f3613e263658551817d7a2e70))
+> * **plugin-ris:** format literal names ([893d144](https://github.com/citation-js/citation-js/commit/893d144d21d665a3a70b5412fdfa44a5514d722c)), closes [#87](https://github.com/citation-js/citation-js/issues/87)
+> 
+> 
+> ### Features
+> 
+> * **plugin-bibtex:** improve BibTeX mappings ([#76](https://github.com/citation-js/citation-js/issues/76)) ([214e77b](https://github.com/citation-js/citation-js/commit/214e77b6eda586e519ddc774dbf7054466472216))
+> * **plugin-csl:** update apa to 7th edition ([#89](https://github.com/citation-js/citation-js/issues/89)) ([2b5f2c5](https://github.com/citation-js/citation-js/commit/2b5f2c59ddefadd1e8c6ad78efde8f331a8e5332))
+> 
+> 
+> ### BREAKING CHANGES
+> 
+> * **plugin-csl:** default APA style is now 7th edition
+
 ## [`0.5.0-alpha.5`](https://github.com/larsgw/citation.js/compare/v0.5.0-alpha.4...v0.5.0-alpha.5) - 2020-03-08
 
 * Pin component versions to [`0.5.0-alpha.5`](https://github.com/citation-js/citation-js/blob/master/CHANGELOG.md#050-alpha5-2019-10-28):
