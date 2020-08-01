@@ -50,11 +50,14 @@
     "glob": "^7.1.4",
     "jsdoc": "^3.6.3",
     "markdown-toc": "^1.2.0",
+    "min-wd": "^2.12.0",
     "minami": "^1.2.3",
     "mocha": "^6.1.4",
+    "mochify": "^6.6.0",
     "regenerator-runtime": "^0.13.2",
     "standard": "^12.0.1",
-    "uglify-js": "^3.6.0"
+    "uglify-js": "^3.6.0",
+    "webdriver-manager": "^12.1.7"
   },
   "scripts": {
     "lint": "standard",
@@ -71,7 +74,10 @@
     "generate": "npm run dist && npm run docs && npm run disc",
     "--3--": "hooks",
     "preversion": "npm run lint && npm run test",
-    "prepublishOnly": "npm run dist:main"
+    "prepublishOnly": "npm run dist:main",
+    "webdriver:update": "npx webdriver-manager update",
+    "webdriver:start": "npx webdriver-manager start",
+    "test:browser": "npx mochify --wd"
   },
   "author": "Lars Willighagen (https://larsgw.github.io)",
   "license": "MIT",
