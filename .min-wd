@@ -1,0 +1,12 @@
+{
+  "hostname": "localhost",
+  "port": 4444,
+  "browsers": [{
+    "name": "chrome",
+    "capabilities": {
+          "chromeOptions": {
+            "w3c": false
+          }
+        }
+  }]
+}
