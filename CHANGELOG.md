@@ -1,5 +1,9 @@
 # Changelog
 
+## [`0.5.0-alpha.9`](https://github.com/larsgw/citation.js/compare/v0.5.0-alpha.8...v0.5.0-alpha.9) - 2020-10-20
+
+* Pin component versions to [`0.5.0-alpha.9`](https://github.com/citation-js/citation-js/blob/master/CHANGELOG.md#050-alpha9-2020-10-20)
+
 ## [`0.5.0-alpha.8`](https://github.com/larsgw/citation.js/compare/v0.5.0-alpha.7...v0.5.0-alpha.8) - 2020-10-20
 
 * Pin component versions to [`0.5.0-alpha.8`](https://github.com/citation-js/citation-js/blob/master/CHANGELOG.md#050-alpha8-2020-10-20):
