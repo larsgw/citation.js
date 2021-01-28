@@ -120,12 +120,29 @@ Cite.parse = Object.assign({
   csl: core.plugins.input.util.clean,
 
   bibjson: require('@citation-js/plugin-bibjson').parsers.json.record,
-  bibtex: ((bibtex) => ({
-    json: bibtex.parsers.json.parse,
-    prop: bibtex.parsers.prop.parse,
-    text: bibtex.parsers.text.parse,
-    type: bibtex.parsers.type.parse
-  }))(require('@citation-js/plugin-bibtex/lib/input')),
+  bibtex: ((parsers, entries, types) => ({
+    json (entries) {
+      return entries.parse([].concat(entries))
+    },
+    prop (field, value) {
+      const parsed = entries.parse([{
+        type: 'book',
+        properties: { [field]: value }
+      }])[0]
+      const key = Object.keys(parsed).find(([key]) => key !== 'type')
+      return [key, parsed[key]]
+    },
+    text (file) {
+      return parsers['@biblatex/text'].parse(file)
+    },
+    type (type) {
+      return types[type] || 'book'
+    }
+  }))(
+    require('@citation-js/plugin-bibtex/lib/input').formats,
+    require('@citation-js/plugin-bibtex/lib/input/entries'),
+    require('@citation-js/plugin-bibtex/lib/mapping/bibtexTypes').target
+  ),
   bibtxt: ((bibtxt) => ({
     text: bibtxt.parse,
     textEntry: bibtxt.textEntry
@@ -158,13 +175,26 @@ Cite.get = Object.assign({
   name: name.format,
   date: date.format,
 
-  bibtex: {
-    json: require('@citation-js/plugin-bibtex/lib/output/json').default,
-    label: require('@citation-js/plugin-bibtex/lib/output/label').default,
-    text: require('@citation-js/plugin-bibtex/lib/output/text').default,
-    type: require('@citation-js/plugin-bibtex/lib/output/type').default
-  },
-  bibtxt: require('@citation-js/plugin-bibtex/lib/output/bibtxt').default,
+  bibtex: ((formatters, entries, converters, types) => ({
+    json (entry) {
+      return entries.formatBibtex([entry])[0]
+    },
+    label ({ id, 'citation-label': label, author, issued, 'year-suffix': suffix, title }) {
+      return converters.LABEL.toSource(id, label, author, issued, suffix, title)
+    },
+    text (entries, asHtml) {
+      return formatters.bibtex(entries, { format: asHtml ? 'html' : 'text' })
+    },
+    type (type) {
+      return types[type] || 'misc'
+    }
+  }))(
+    require('@citation-js/plugin-bibtex/lib/output').default,
+    require('@citation-js/plugin-bibtex/lib/output/entries'),
+    require('@citation-js/plugin-bibtex/lib/mapping/shared').Converters,
+    require('@citation-js/plugin-bibtex/lib/mapping/bibtexTypes').target
+  ),
+  bibtxt: require('@citation-js/plugin-bibtex/lib/output/bibtxt').format,
   json: require('@citation-js/core/lib/plugin-common/output').default.data,
   label: require('@citation-js/core/lib/plugin-common/output').default.label
 }, Cite.plugins.output)

@@ -1,5 +1,63 @@
 # Changelog
 
+## [`0.5.0-alpha.10`](https://github.com/larsgw/citation.js/compare/v0.5.0-alpha.9...v0.5.0-alpha.10) - 2021-01-28
+
+* Pin component versions to [`0.5.0-alpha.10`](https://github.com/citation-js/citation-js/blob/master/CHANGELOG.md#050-alpha10-2021-01-28):
+
+> ### Bug Fixes
+> 
+> * **core:** clean `type` as regular string ([6982ae6](https://github.com/citation-js/citation-js/commit/6982ae627b8ceb0f1fb3ac59ff5351b27912769f))
+> * **core:** do not snapshot initial Cite() state ([19afac7](https://github.com/citation-js/citation-js/commit/19afac7ff22f5a5ea23852374a33aaf879317a1d))
+> * **core:** reset Grammar log on each run ([68d8a2a](https://github.com/citation-js/citation-js/commit/68d8a2a61a4f745d0acf38ec590ba7643d3a8f61))
+> * **core:** reset Grammar state on each run ([834f679](https://github.com/citation-js/citation-js/commit/834f679dfbd0ddd2dcb7d2e0e0488fc4c9aba3da))
+> * **plugin-bibtex:** apply upstream changes ([f5a1514](https://github.com/citation-js/citation-js/commit/f5a15144a78af2c8538eef9465f50a904d55ee17))
+> * **plugin-bibtex:** apply various fixes ([861cb36](https://github.com/citation-js/citation-js/commit/861cb36504cb6f20ae859d220d437dc58c53a086))
+> * **plugin-bibtex:** apply various fixes ([86e55df](https://github.com/citation-js/citation-js/commit/86e55df2261170efba4ff2106569d8cd5e8fcc02))
+> * **plugin-bibtex:** do not escape verbatim value ([a90f4a5](https://github.com/citation-js/citation-js/commit/a90f4a50a99a27bd61469487e003054ea5181e75))
+> * **plugin-bibtex:** do not ignore month after day ([4914797](https://github.com/citation-js/citation-js/commit/4914797c3333f0fe898c538080bf3c98e0b79fcb))
+> * **plugin-bibtex:** escape more unicode in output ([1647734](https://github.com/citation-js/citation-js/commit/1647734903430d483db9b47349dcecb01a70c88e))
+> * **plugin-bibtex:** fix howpublished/url mapping ([b655bec](https://github.com/citation-js/citation-js/commit/b655becf004825fc12d174cc8c2625d57d020804))
+> * **plugin-bibtex:** fix mapping bugs ([a644b3a](https://github.com/citation-js/citation-js/commit/a644b3af3f7dc280875f1ac7efcadaccfa9bb3b6))
+> * **plugin-bibtex:** output w/ case protection ([07f99b5](https://github.com/citation-js/citation-js/commit/07f99b5ba15b672f059f0384dbc75354c40bcc66))
+> * **plugin-bibtex:** remove unicode from label ([81d657d](https://github.com/citation-js/citation-js/commit/81d657d2eb73b3eb022bb58133923f8824181835))
+> * **plugin-bibtex:** update BibTeX mappings ([db79896](https://github.com/citation-js/citation-js/commit/db7989659742cc5473e236cae3bde78d9ba1a1b2))
+> 
+> 
+> ### Features
+> 
+> * **core:** add mainRule param to Grammar ([e8679d5](https://github.com/citation-js/citation-js/commit/e8679d5c33edd7251de1d1779293219754b4b2da))
+> * **core:** move DOI corrections to core ([03b804b](https://github.com/citation-js/citation-js/commit/03b804b5d07841cfab4234dac648bb67c0c18e45))
+> * **plugin-bibtex:** add -subtitle, -titleaddon ([eef0e6c](https://github.com/citation-js/citation-js/commit/eef0e6cf5c01b00a46c4f46b206f667a713bb3b2)), closes [#116](https://github.com/citation-js/citation-js/issues/116)
+> * **plugin-bibtex:** add 'strict' parser option ([64f0c38](https://github.com/citation-js/citation-js/commit/64f0c38605eb9119c9344e8e1296fc3add4d8378))
+> * **plugin-bibtex:** add BibLaTex mappings ([84655a4](https://github.com/citation-js/citation-js/commit/84655a4aa14ae4f4ad9f70ff8541d6f3da1052c4))
+> * **plugin-bibtex:** rename sentenceCase option ([35943d2](https://github.com/citation-js/citation-js/commit/35943d21aad0458010ccb3c33ec51b6a624a0d38))
+> * **plugin-bibtex:** update BibTeX mappings ([987b75c](https://github.com/citation-js/citation-js/commit/987b75c80e6bd6d5ff35afe3a3a8100de45b88d4))
+> * **plugin-bibtex:** update BibTeX parser ([9df7558](https://github.com/citation-js/citation-js/commit/9df75585579560332b7d495c695c72f6e553ae1f))
+> * **plugin-csl:** add 'asEntryArray' option to bibliography ([8039967](https://github.com/citation-js/citation-js/commit/8039967e65565d8b3fd49b91deaef82a0cf1d39d))
+> * **plugin-csl:** add 'entry' option to bibliography ([298819b](https://github.com/citation-js/citation-js/commit/298819bd6b37ad8e622e3d6f7a2b5c5ee6a3e52f))
+> 
+> 
+> ### BREAKING CHANGES
+> 
+> * **core:** Constructing a Cite instance no longer automatically creates a snapshot. 
+> You can do this manually instead.
+> * **plugin-bibtex:**   - The @bibtex input type prefix has been
+>     changed to @biblatex
+>   - The @bibtex input type prefix is now used for
+>     parsing as pure @bibtex. These types have no
+>     type parser so are not automatically used.
+>   - The `bibtex` output format now outputs valid
+>     BibTeX, use the `biblatex` output format for
+>     BibLaTeX output.
+>   - The output option `generateLabel` has been
+>     replaced by the config option
+>     `format.useIdAsLabel`
+> * **plugin-bibtex:** Although the file parsing has been tested extensively,
+> the mapping has not. In addition, since the mapping has been created
+> from scratch according to the BibLaTeX documentation behaviour might
+> change. Please report any problems at
+> https://github.com/citation-js/citation-js/issues
+
 ## [`0.5.0-alpha.9`](https://github.com/larsgw/citation.js/compare/v0.5.0-alpha.8...v0.5.0-alpha.9) - 2020-10-20
 
 * Pin component versions to [`0.5.0-alpha.9`](https://github.com/citation-js/citation-js/blob/master/CHANGELOG.md#050-alpha9-2020-10-20)
