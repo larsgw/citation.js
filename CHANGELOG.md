@@ -1,5 +1,20 @@
 # Changelog
 
+## [`0.5.0`](https://github.com/larsgw/citation.js/compare/v0.5.0-alpha.10...v0.5.0) - 2021-04-01
+
+* Pin component versions to [`0.5.0`](https://github.com/citation-js/citation-js/blob/master/CHANGELOG.md#050-2021-04-01):
+
+> ### Bug Fixes
+> 
+> * **plugin-bibtex:** remove CSL 1.0.2 types ([365fe1c](https://github.com/citation-js/citation-js/commit/365fe1c0a950de5f333ed8fc7e70ba17c59b7c21))
+> * **plugin-bibtex:** remove lookbehind regex ([fe20199](https://github.com/citation-js/citation-js/commit/fe2019901f60bbfa89c2676c4eebae24e8dbfb79))
+> 
+> 
+> ### Features
+> 
+> * **plugin-bibtex:** allow URL in howpublished ([3884e08](https://github.com/citation-js/citation-js/commit/3884e0807c9509b585b8e0ce82ec746915886c63))
+> * **plugin-ris:** add formatting 'spec' option ([ec0bbad](https://github.com/citation-js/citation-js/commit/ec0bbada4019be7f92e33c82d1870b7a4052f089))
+
 ## [`0.5.0-alpha.10`](https://github.com/larsgw/citation.js/compare/v0.5.0-alpha.9...v0.5.0-alpha.10) - 2021-01-28
 
 * Pin component versions to [`0.5.0-alpha.10`](https://github.com/citation-js/citation-js/blob/master/CHANGELOG.md#050-alpha10-2021-01-28):
