@@ -1,26 +1,30 @@
 # Changelog
 
+## [`0.5.1`](https://github.com/larsgw/citation.js/compare/v0.5.0...v0.5.1) - 2021-05-11
+
+* Pin component versions to [`0.5.1`](https://github.com/citation-js/citation-js/blob/main/CHANGELOG.md#051-2021-05-11)
+
 ## [`0.5.0`](https://github.com/larsgw/citation.js/compare/v0.5.0-alpha.10...v0.5.0) - 2021-04-01
 
-* Pin component versions to [`0.5.0`](https://github.com/citation-js/citation-js/blob/master/CHANGELOG.md#050-2021-04-01):
+* Pin component versions to [`0.5.0`](https://github.com/citation-js/citation-js/blob/main/CHANGELOG.md#050-2021-04-01):
 
 > ### Bug Fixes
-> 
+>
 > * **plugin-bibtex:** remove CSL 1.0.2 types ([365fe1c](https://github.com/citation-js/citation-js/commit/365fe1c0a950de5f333ed8fc7e70ba17c59b7c21))
 > * **plugin-bibtex:** remove lookbehind regex ([fe20199](https://github.com/citation-js/citation-js/commit/fe2019901f60bbfa89c2676c4eebae24e8dbfb79))
-> 
-> 
+>
+>
 > ### Features
-> 
+>
 > * **plugin-bibtex:** allow URL in howpublished ([3884e08](https://github.com/citation-js/citation-js/commit/3884e0807c9509b585b8e0ce82ec746915886c63))
 > * **plugin-ris:** add formatting 'spec' option ([ec0bbad](https://github.com/citation-js/citation-js/commit/ec0bbada4019be7f92e33c82d1870b7a4052f089))
 
 ## [`0.5.0-alpha.10`](https://github.com/larsgw/citation.js/compare/v0.5.0-alpha.9...v0.5.0-alpha.10) - 2021-01-28
 
-* Pin component versions to [`0.5.0-alpha.10`](https://github.com/citation-js/citation-js/blob/master/CHANGELOG.md#050-alpha10-2021-01-28):
+* Pin component versions to [`0.5.0-alpha.10`](https://github.com/citation-js/citation-js/blob/main/CHANGELOG.md#050-alpha10-2021-01-28):
 
 > ### Bug Fixes
-> 
+>
 > * **core:** clean `type` as regular string ([6982ae6](https://github.com/citation-js/citation-js/commit/6982ae627b8ceb0f1fb3ac59ff5351b27912769f))
 > * **core:** do not snapshot initial Cite() state ([19afac7](https://github.com/citation-js/citation-js/commit/19afac7ff22f5a5ea23852374a33aaf879317a1d))
 > * **core:** reset Grammar log on each run ([68d8a2a](https://github.com/citation-js/citation-js/commit/68d8a2a61a4f745d0acf38ec590ba7643d3a8f61))
@@ -36,10 +40,10 @@
 > * **plugin-bibtex:** output w/ case protection ([07f99b5](https://github.com/citation-js/citation-js/commit/07f99b5ba15b672f059f0384dbc75354c40bcc66))
 > * **plugin-bibtex:** remove unicode from label ([81d657d](https://github.com/citation-js/citation-js/commit/81d657d2eb73b3eb022bb58133923f8824181835))
 > * **plugin-bibtex:** update BibTeX mappings ([db79896](https://github.com/citation-js/citation-js/commit/db7989659742cc5473e236cae3bde78d9ba1a1b2))
-> 
-> 
+>
+>
 > ### Features
-> 
+>
 > * **core:** add mainRule param to Grammar ([e8679d5](https://github.com/citation-js/citation-js/commit/e8679d5c33edd7251de1d1779293219754b4b2da))
 > * **core:** move DOI corrections to core ([03b804b](https://github.com/citation-js/citation-js/commit/03b804b5d07841cfab4234dac648bb67c0c18e45))
 > * **plugin-bibtex:** add -subtitle, -titleaddon ([eef0e6c](https://github.com/citation-js/citation-js/commit/eef0e6cf5c01b00a46c4f46b206f667a713bb3b2)), closes [#116](https://github.com/citation-js/citation-js/issues/116)
@@ -50,11 +54,11 @@
 > * **plugin-bibtex:** update BibTeX parser ([9df7558](https://github.com/citation-js/citation-js/commit/9df75585579560332b7d495c695c72f6e553ae1f))
 > * **plugin-csl:** add 'asEntryArray' option to bibliography ([8039967](https://github.com/citation-js/citation-js/commit/8039967e65565d8b3fd49b91deaef82a0cf1d39d))
 > * **plugin-csl:** add 'entry' option to bibliography ([298819b](https://github.com/citation-js/citation-js/commit/298819bd6b37ad8e622e3d6f7a2b5c5ee6a3e52f))
-> 
-> 
+>
+>
 > ### BREAKING CHANGES
-> 
-> * **core:** Constructing a Cite instance no longer automatically creates a snapshot. 
+>
+> * **core:** Constructing a Cite instance no longer automatically creates a snapshot.
 > You can do this manually instead.
 > * **plugin-bibtex:**   - The @bibtex input type prefix has been
 >     changed to @biblatex
@@ -75,55 +79,55 @@
 
 ## [`0.5.0-alpha.9`](https://github.com/larsgw/citation.js/compare/v0.5.0-alpha.8...v0.5.0-alpha.9) - 2020-10-20
 
-* Pin component versions to [`0.5.0-alpha.9`](https://github.com/citation-js/citation-js/blob/master/CHANGELOG.md#050-alpha9-2020-10-20)
+* Pin component versions to [`0.5.0-alpha.9`](https://github.com/citation-js/citation-js/blob/main/CHANGELOG.md#050-alpha9-2020-10-20)
 
 ## [`0.5.0-alpha.8`](https://github.com/larsgw/citation.js/compare/v0.5.0-alpha.7...v0.5.0-alpha.8) - 2020-10-20
 
-* Pin component versions to [`0.5.0-alpha.8`](https://github.com/citation-js/citation-js/blob/master/CHANGELOG.md#050-alpha8-2020-10-20):
+* Pin component versions to [`0.5.0-alpha.8`](https://github.com/citation-js/citation-js/blob/main/CHANGELOG.md#050-alpha8-2020-10-20):
 
 > ### Bug Fixes
-> 
+>
 > * **plugin-bibtex:** fix closing tag behavior ([466d5b1](https://github.com/citation-js/citation-js/commit/466d5b1d234c8e327cfabb6528f8e72b065e2469))
 > * **plugin-csl:** fix disambig error ([35ec98d](https://github.com/citation-js/citation-js/commit/35ec98de69ce8b24f45a37139a989cd6754b2200))
 
 ## [`0.5.0-alpha.7`](https://github.com/larsgw/citation.js/compare/v0.5.0-alpha.6...v0.5.0-alpha.7) - 2020-08-29
 
-* Pin component versions to [`0.5.0-alpha.7`](https://github.com/citation-js/citation-js/blob/master/CHANGELOG.md#050-alpha7-2020-08-29):
+* Pin component versions to [`0.5.0-alpha.7`](https://github.com/citation-js/citation-js/blob/main/CHANGELOG.md#050-alpha7-2020-08-29):
 
 > ### Bug Fixes
-> 
+>
 > * **cli:** fix check for prefixed options ([4b7fe6b](https://github.com/citation-js/citation-js/commit/4b7fe6b1f6b908b3304929b1c1f05a09d137cf34))
 > * **plugin-bibtex:** avoid error on non-utf-8 webpages ([c09a9e4](https://github.com/citation-js/citation-js/commit/c09a9e467e85f6a8c52eb78c36a98734e32ee14c))
 > * **plugin-csl:** remove entry caching ([efa648b](https://github.com/citation-js/citation-js/commit/efa648ba570de7dabf0651442ca8ffdf52fcd5fe))
 
 ## [`0.5.0-alpha.6`](https://github.com/larsgw/citation.js/compare/v0.5.0-alpha.5...v0.5.0-alpha.6) - 2020-07-05
 
-* Pin component versions to [`0.5.0-alpha.6`](https://github.com/citation-js/citation-js/blob/master/CHANGELOG.md#050-alpha6-2020-07-04):
+* Pin component versions to [`0.5.0-alpha.6`](https://github.com/citation-js/citation-js/blob/main/CHANGELOG.md#050-alpha6-2020-07-04):
 
 > ### Bug Fixes
-> 
+>
 > * **plugin-bibtex:** fix combining tilde ([cc9fd8b](https://github.com/citation-js/citation-js/commit/cc9fd8bf12cb1f62b6a631d18ebc7eba0e05abfe))
 > * **plugin-bibtex:** normalize strings ([447b0b4](https://github.com/citation-js/citation-js/commit/447b0b419abe0719e89bd16e189fe58f4f62cc01))
 > * **plugin-bibtex:** support all 10 escaped characters ([#75](https://github.com/citation-js/citation-js/issues/75)) ([da016b4](https://github.com/citation-js/citation-js/commit/da016b41ac67793f3613e263658551817d7a2e70))
 > * **plugin-ris:** format literal names ([893d144](https://github.com/citation-js/citation-js/commit/893d144d21d665a3a70b5412fdfa44a5514d722c)), closes [#87](https://github.com/citation-js/citation-js/issues/87)
-> 
-> 
+>
+>
 > ### Features
-> 
+>
 > * **plugin-bibtex:** improve BibTeX mappings ([#76](https://github.com/citation-js/citation-js/issues/76)) ([214e77b](https://github.com/citation-js/citation-js/commit/214e77b6eda586e519ddc774dbf7054466472216))
 > * **plugin-csl:** update apa to 7th edition ([#89](https://github.com/citation-js/citation-js/issues/89)) ([2b5f2c5](https://github.com/citation-js/citation-js/commit/2b5f2c59ddefadd1e8c6ad78efde8f331a8e5332))
-> 
-> 
+>
+>
 > ### BREAKING CHANGES
-> 
+>
 > * **plugin-csl:** default APA style is now 7th edition
 
 ## [`0.5.0-alpha.5`](https://github.com/larsgw/citation.js/compare/v0.5.0-alpha.4...v0.5.0-alpha.5) - 2020-03-08
 
-* Pin component versions to [`0.5.0-alpha.5`](https://github.com/citation-js/citation-js/blob/master/CHANGELOG.md#050-alpha5-2019-10-28):
+* Pin component versions to [`0.5.0-alpha.5`](https://github.com/citation-js/citation-js/blob/main/CHANGELOG.md#050-alpha5-2019-10-28):
 
 > ### Bug Fixes
-> 
+>
 > * **core:** do not use User-Agent in CORS ([047847d](https://github.com/citation-js/citation-js/commit/047847d))
 > * **plugin-bibtex:** ignore braces for grouping command ([#64](https://github.com/citation-js/citation-js/issues/64)) ([20763dc](https://github.com/citation-js/citation-js/commit/20763dc))
 > * **plugin-ris:** allow string for keyword component ([#70](https://github.com/citation-js/citation-js/issues/70)) ([0294999](https://github.com/citation-js/citation-js/commit/0294999)), closes [#67](https://github.com/citation-js/citation-js/issues/67)
@@ -132,44 +136,44 @@
 
 ## [`0.5.0-alpha.4`](https://github.com/larsgw/citation.js/compare/v0.5.0-alpha.3...v0.5.0-alpha.4) - 2019-10-15
 
-* Pin component versions to [`0.5.0-alpha.4`](https://github.com/citation-js/citation-js/blob/master/CHANGELOG.md#050-alpha4-2019-10-15):
+* Pin component versions to [`0.5.0-alpha.4`](https://github.com/citation-js/citation-js/blob/main/CHANGELOG.md#050-alpha4-2019-10-15):
 
 > ### Bug Fixes
-> 
+>
 > * **core:** fix normalising headers code for the browser ([d4693a7](https://github.com/citation-js/citation-js/commit/d4693a7))
 > * **plugin-bibtex:** do not try to format raw dates ([b28eca8](https://github.com/citation-js/citation-js/commit/b28eca8))
 > * **plugin-bibtex:** warn for umatched entry braces ([7905667](https://github.com/citation-js/citation-js/commit/7905667))
 
 ## [`0.5.0-alpha.3`](https://github.com/larsgw/citation.js/compare/v0.5.0-alpha.2...v0.5.0-alpha.3) - 2019-10-08
 
-* Pin component versions to [`0.5.0-alpha.3`](https://github.com/citation-js/citation-js/blob/master/CHANGELOG.md#050-alpha3-2019-10-07):
+* Pin component versions to [`0.5.0-alpha.3`](https://github.com/citation-js/citation-js/blob/main/CHANGELOG.md#050-alpha3-2019-10-07):
 
 > ### Bug Fixes
-> 
+>
 > * **plugin-bibtex:** remove nocase from diacritics ([7f7e52f](https://github.com/citation-js/citation-js/commit/7f7e52f))
 > * **plugin-bibtex:** replace trimEnd() with trim() ([b59da57](https://github.com/citation-js/citation-js/commit/b59da57))
 > * **plugin-ris:** fix handling of multiline values ([eba2bfe](https://github.com/citation-js/citation-js/commit/eba2bfe))
 > * **plugin-ris:** handle \r\n line endings ([f0a3b29](https://github.com/citation-js/citation-js/commit/f0a3b29))
-> 
-> 
+>
+>
 > ### Features
-> 
+>
 > * **bibtex:** add new BibTeX parser ([3c3588e](https://github.com/citation-js/citation-js/commit/3c3588e))
 > * **core:** add Grammar class to utils ([052754f](https://github.com/citation-js/citation-js/commit/052754f))
 
 ## [`0.5.0-alpha.2`](https://github.com/larsgw/citation.js/compare/v0.5.0-alpha.0...v0.5.0-alpha.2) - 2019-09-10
 
-* Pin component versions to [`0.5.0-alpha.2`](https://github.com/citation-js/citation-js/blob/master/CHANGELOG.md#050-alpha2-2019-09-10):
+* Pin component versions to [`0.5.0-alpha.2`](https://github.com/citation-js/citation-js/blob/main/CHANGELOG.md#050-alpha2-2019-09-10):
 
 > ### Bug Fixes
-> 
+>
 > * **core:** fix date value null check ([f6a3ab2](https://github.com/citation-js/citation-js/commit/f6a3ab2))
 > * **core:** fix cleaning 'null' date values ([c927f81](https://github.com/citation-js/citation-js/commit/c927f81)), closes [/github.com/larsgw/citation.js/issues/190#issuecomment-529917382](https://github.com//github.com/larsgw/citation.js/issues/190/issues/issuecomment-529917382)
 > * **core:** fix cleaning 'null' name values ([2d59a32](https://github.com/citation-js/citation-js/commit/2d59a32))
 
 ## [`0.5.0-alpha.0`](https://github.com/larsgw/citation.js/compare/v0.4.10...v0.5.0-alpha.0) - 2019-09-07
 
-* Pin component versions to [`v0.5.0-alpha.0`](https://github.com/citation-js/citation-js/blob/master/CHANGELOG.md#050-alpha0-2019-09-07):
+* Pin component versions to [`v0.5.0-alpha.0`](https://github.com/citation-js/citation-js/blob/main/CHANGELOG.md#050-alpha0-2019-09-07):
 
 > * chore!: drop Node 6 support ([f27d812](https://github.com/citation-js/citation-js/commit/f27d812)), closes [#55](https://github.com/citation-js/citation-js/issues/55)
 >
@@ -200,7 +204,7 @@
 
 ## [`0.4.10`](https://github.com/larsgw/citation.js/compare/v0.4.9...v0.4.10) - 2019-08-27
 
-* Pin component versions to [`v0.4.10`](https://github.com/citation-js/citation-js/blob/master/CHANGELOG.md#0410-2019-08-27):
+* Pin component versions to [`v0.4.10`](https://github.com/citation-js/citation-js/blob/main/CHANGELOG.md#0410-2019-08-27):
 
 > ### Bug Fixes
 >
@@ -208,7 +212,7 @@
 
 ## [`0.4.9`](https://github.com/larsgw/citation.js/compare/v0.4.8...v0.4.9) - 2019-08-27
 
-* Pin component versions to [`v0.4.9`](https://github.com/citation-js/citation-js/blob/master/CHANGELOG.md#049-2019-08-27):
+* Pin component versions to [`v0.4.9`](https://github.com/citation-js/citation-js/blob/main/CHANGELOG.md#049-2019-08-27):
 
 > ### Bug Fixes
 >
@@ -230,7 +234,7 @@
 
 ## [`0.4.8`](https://github.com/larsgw/citation.js/compare/v0.4.7...v0.4.8) - 2019-07-06
 
-* Pin component versions to [`v0.4.8`](https://github.com/citation-js/citation-js/blob/master/CHANGELOG.md#048-2019-07-06):
+* Pin component versions to [`v0.4.8`](https://github.com/citation-js/citation-js/blob/main/CHANGELOG.md#048-2019-07-06):
 
 > ### Bug Fixes
 >
@@ -244,7 +248,7 @@
 
 ## [`0.4.7`](https://github.com/larsgw/citation.js/compare/v0.4.6...v0.4.7) - 2019-06-29
 
-* Pin component versions to [`v0.4.7`](https://github.com/citation-js/citation-js/blob/master/CHANGELOG.md#047-2019-06-29):
+* Pin component versions to [`v0.4.7`](https://github.com/citation-js/citation-js/blob/main/CHANGELOG.md#047-2019-06-29):
 
 > ### Bug Fixes
 >
@@ -253,7 +257,7 @@
 
 ## [`0.4.6`](https://github.com/larsgw/citation.js/compare/v0.4.5...v0.4.6) - 2019-06-29
 
-* Pin component versions to [`v0.4.6`](https://github.com/citation-js/citation-js/blob/master/CHANGELOG.md#046-2019-06-28):
+* Pin component versions to [`v0.4.6`](https://github.com/citation-js/citation-js/blob/main/CHANGELOG.md#046-2019-06-28):
 
 > ### Bug Fixes
 >
@@ -269,7 +273,7 @@
 
 ## [`0.4.5`](https://github.com/larsgw/citation.js/compare/v0.4.4...v0.4.5) - 2019-06-13
 
-* Pin component versions to [`v0.4.5`](https://github.com/citation-js/citation-js/blob/master/CHANGELOG.md#045-2019-06-12):
+* Pin component versions to [`v0.4.5`](https://github.com/citation-js/citation-js/blob/main/CHANGELOG.md#045-2019-06-12):
 
 > ### Bug Fixes
 >
@@ -297,13 +301,13 @@
 
 ## [`0.4.4`](https://github.com/larsgw/citation.js/compare/v0.4.2...v0.4.4) - 2019-06-13
 
-* Pin component versions to [`v0.4.4`](https://github.com/citation-js/citation-js/blob/master/CHANGELOG.md#044-2019-05-24):
+* Pin component versions to [`v0.4.4`](https://github.com/citation-js/citation-js/blob/main/CHANGELOG.md#044-2019-05-24):
 
 > * **plugin-wikidata:** additional mappings ([01be936](https://github.com/citation-js/citation-js/commit/01be936)), closes [#18](https://github.com/citation-js/citation-js/issues/18)
 
 ## [`0.4.2`](https://github.com/larsgw/citation.js/compare/v0.4.1...v0.4.2) - 2019-06-13
 
-* Pin component versions to [`v0.4.2`](https://github.com/citation-js/citation-js/blob/master/CHANGELOG.md#042-2019-04-26):
+* Pin component versions to [`v0.4.2`](https://github.com/citation-js/citation-js/blob/main/CHANGELOG.md#042-2019-04-26):
 
 > ### Bug Fixes
 >
@@ -317,7 +321,7 @@
 
 ## [`0.4.1`](https://github.com/larsgw/citation.js/compare/v0.4.0...v0.4.1) - 2019-06-13
 
-Pin component versions to [`v0.4.1`](https://github.com/citation-js/citation-js/blob/master/CHANGELOG.md#041-2019-04-14):
+Pin component versions to [`v0.4.1`](https://github.com/citation-js/citation-js/blob/main/CHANGELOG.md#041-2019-04-14):
 
 > * **plugin-wikidata:** fix getting label if no title exists ([#32](https://github.com/citation-js/citation-js/issues/32)) ([69243c5](https://github.com/citation-js/citation-js/commit/69243c5))
 
@@ -327,7 +331,7 @@ Updated components to `v0.4.0`, release `v0.4`.
 
 ## [`0.4.0-12`](https://github.com/larsgw/citation.js/compare/v0.4.0-11...v0.4.0-12) - 2019-03-17
 
-Updated components from `v0.4.0-rc.1` to `v0.4.0-rc.4`, see [that changelog](https://github.com/citation-js/citation-js/blob/master/CHANGELOG.md).
+Updated components from `v0.4.0-rc.1` to `v0.4.0-rc.4`, see [that changelog](https://github.com/citation-js/citation-js/blob/main/CHANGELOG.md).
 
 ## [`0.4.0-11`](https://github.com/larsgw/citation.js/compare/v0.4.0-10...v0.4.0-11) - 2018-12-27
 
