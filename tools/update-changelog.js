@@ -10,7 +10,7 @@ const newVersion = process.argv
   .sort(semver.compare)
   .pop()
 
-https.get('https://raw.githubusercontent.com/citation-js/citation-js/v0.5/CHANGELOG.md', res => {
+https.get(`https://raw.githubusercontent.com/citation-js/citation-js/v${newVersion}/CHANGELOG.md`, res => {
   let data = ''
   res.on('data', d => { data += d })
   res.on('end', () => { amendChangelog(data).catch(console.error) })
