@@ -1,5 +1,32 @@
 # Changelog
 
+## [`0.5.3`](https://github.com/larsgw/citation.js/compare/v0.5.1...v0.5.3) - 2021-11-24
+
+* Pin component versions to [`0.5.3`](https://github.com/citation-js/citation-js/blob/master/CHANGELOG.md#053-2021-11-24):
+
+> * chore!: drop Node 8, add Node 14 ([a5ceb07](https://github.com/citation-js/citation-js/commit/a5ceb07496900e66de30e405523ec315cfbc0a89))
+> 
+> 
+> ### Bug Fixes
+> 
+> * **plugin-csl:** handle missing entries ([93400d6](https://github.com/citation-js/citation-js/commit/93400d62d6fa38ce1f6a18f1728b07091f5643d1))
+> * remove named imports of JSON files ([9b8315b](https://github.com/citation-js/citation-js/commit/9b8315bd8352dc9a4bf1866ac71bb65a9df994d0))
+> * **plugin-doi:** handle crossref preprints ([0927f43](https://github.com/citation-js/citation-js/commit/0927f43deb07e512d828e5415a7d649d2d9b966a))
+> * **plugin-csl:** check for non-normalised language codes ([3928f70](https://github.com/citation-js/citation-js/commit/3928f70065f3a802270182d1f0251deb317d4416))
+> 
+> 
+> ### Features
+> 
+> * **core:** throw more descriptive errors in Translator ([c35b40f](https://github.com/citation-js/citation-js/commit/c35b40f3badf81ed9b475979673be284b1407ab4))
+> * **plugin-csl:** allow citation context options ([c5c3e8c](https://github.com/citation-js/citation-js/commit/c5c3e8c6de1a562ec7128e74cc6560d7c5ed2347))
+> * **plugin-csl:** allow cite-items ([48fb79c](https://github.com/citation-js/citation-js/commit/48fb79c9b81e93ec6e44186e064eaca0fac57f1c))
+> * **plugin-bibtex:** allow non-standard day field ([96f8d43](https://github.com/citation-js/citation-js/commit/96f8d43a261efb1ceeffe0f4d8e346e958d867f7)), closes [#134](https://github.com/citation-js/citation-js/issues/134)
+> 
+> 
+> ### BREAKING CHANGES
+> 
+> * drops Node 8 support
+
 ## [`0.5.2`](https://github.com/larsgw/citation.js/compare/v0.5.1...v0.5.2) - 2021-11-24
 
 * Pin component versions to [`0.5.2`](https://github.com/citation-js/citation-js/blob/master/CHANGELOG.md#052-2021-09-21):
