@@ -84,6 +84,6 @@
     "url": "https://github.com/larsgw/citation.js/issues"
   },
   "engines": {
-    "node": ">=8"
+    "node": ">=10"
   }
 }
