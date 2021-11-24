@@ -1,4 +1,4 @@
-var core = require('@citation-js/core')
+const core = require('@citation-js/core')
 
 require('@citation-js/plugin-bibjson')
 require('@citation-js/plugin-bibtex')
@@ -7,9 +7,9 @@ require('@citation-js/plugin-doi')
 require('@citation-js/plugin-ris')
 require('@citation-js/plugin-wikidata')
 
-var citeproc = require('citeproc')
-var name = require('@citation-js/name')
-var date = require('@citation-js/date')
+const citeproc = require('citeproc')
+const name = require('@citation-js/name')
+const date = require('@citation-js/date')
 
 function clone (obj) {
   const copy = {}
@@ -53,7 +53,7 @@ function Cite (data, opts) {
     return new Cite(data, opts)
   }
 
-  var self = new core.Cite(data, opts)
+  const self = new core.Cite(data, opts)
   this._options = self._options
   this.log = self.log
   this.data = self.data

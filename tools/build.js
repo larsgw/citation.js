@@ -1,7 +1,7 @@
-var fs = require('fs')
-var path = require('path')
-var browserify = require('browserify')
-var babelify = require('babelify')
+const fs = require('fs')
+const path = require('path')
+const browserify = require('browserify')
+const babelify = require('babelify')
 
 browserify()
   .add(require.resolve('core-js/stable'))
