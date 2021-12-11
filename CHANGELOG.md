@@ -1,5 +1,15 @@
 # Changelog
 
+## [`0.5.4`](https://github.com/larsgw/citation.js/compare/v0.5.3...v0.5.4) - 2021-12-11
+
+* Pin component versions to [`0.5.4`](https://github.com/citation-js/citation-js/blob/master/CHANGELOG.md#054-2021-12-11):
+
+> ### Bug Fixes
+> 
+> * **core:** do not convert string id to numbers ([6490200](https://github.com/citation-js/citation-js/commit/6490200d256c047cabbfaff899c158ad5a017427))
+> * **plugin-bibtex:** fix numeric id in bibtex label ([6291843](https://github.com/citation-js/citation-js/commit/62918432f1ad9cf9a0f7a1a243689506c3511e4b))
+> * **plugin-bibtex:** replace use of moo.keywords ([efb9586](https://github.com/citation-js/citation-js/commit/efb958674bba4f39abc848053b88e1c7d16ce1ac))
+
 ## [`0.5.3`](https://github.com/larsgw/citation.js/compare/v0.5.1...v0.5.3) - 2021-11-24
 
 * Pin component versions to [`0.5.3`](https://github.com/citation-js/citation-js/blob/master/CHANGELOG.md#053-2021-11-24):
