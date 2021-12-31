@@ -1,5 +1,16 @@
 # Changelog
 
+## [`0.5.5`](https://github.com/larsgw/citation.js/compare/v0.5.4...v0.5.5) - 2021-12-31
+
+* Pin component versions to [`0.5.5`](https://github.com/citation-js/citation-js/blob/master/CHANGELOG.md#055-2021-12-31):
+
+> ### Bug Fixes
+> 
+> * **plugin-bibtex:** ignore empty fields ([6badc93](https://github.com/citation-js/citation-js/commit/6badc9361df2bc35a6b804821e5196b0783e5147))
+> * **plugin-csl:** error for unknown output format ([b9a2b7d](https://github.com/citation-js/citation-js/commit/b9a2b7dce4204d45e4c742596a45b21452db739e))
+> * **plugin-ris:** add non-standard issue mapping ([fb6ae32](https://github.com/citation-js/citation-js/commit/fb6ae3257bee7e3a721d2631592195f706fce39f))
+> * **plugin-ris:** map publisher-place ([89cb3f2](https://github.com/citation-js/citation-js/commit/89cb3f25c4e12e10d65adf101dba2af9beb0e92d))
+
 ## [`0.5.4`](https://github.com/larsgw/citation.js/compare/v0.5.3...v0.5.4) - 2021-12-11
 
 * Pin component versions to [`0.5.4`](https://github.com/citation-js/citation-js/blob/master/CHANGELOG.md#054-2021-12-11):
