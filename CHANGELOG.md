@@ -1,5 +1,13 @@
 # Changelog
 
+## [`0.5.7`](https://github.com/larsgw/citation.js/compare/v0.5.6...v0.5.7) - 2022-04-17
+
+* Pin component versions to [`0.5.7`](https://github.com/citation-js/citation-js/blob/master/CHANGELOG.md#057-2022-04-17):
+
+> ### Bug Fixes
+> 
+> * **core:** do not use process variable in browser ([d779267](https://github.com/citation-js/citation-js/commit/d779267d8579e0e50390834b447c6b83cd446645)), closes [#156](https://github.com/citation-js/citation-js/issues/156)
+
 ## [`0.5.6`](https://github.com/larsgw/citation.js/compare/v0.5.5...v0.5.6) - 2022-02-12
 
 * Pin component versions to [`0.5.6`](https://github.com/citation-js/citation-js/blob/master/CHANGELOG.md#056-2022-02-12):
