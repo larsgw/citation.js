@@ -47,14 +47,14 @@
     "babelify": "^10.0.0",
     "browserify": "^17.0.0",
     "core-js": "^3.8.3",
-    "glob": "^7.1.6",
+    "glob": "^8.0.3",
     "jsdoc": "^3.6.6",
     "markdown-toc": "^1.2.0",
     "minami": "^1.2.3",
-    "mocha": "^9.1.3",
+    "mocha": "^10.0.0",
     "regenerator-runtime": "^0.13.7",
     "semver": "^7.3.4",
-    "standard": "^16.0.4",
+    "standard": "^17.0.0",
     "uglify-js": "^3.12.5"
   },
   "scripts": {
@@ -84,6 +84,6 @@
     "url": "https://github.com/larsgw/citation.js/issues"
   },
   "engines": {
-    "node": ">=10"
+    "node": ">=14"
   }
 }
