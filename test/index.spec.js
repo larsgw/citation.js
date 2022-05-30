@@ -170,6 +170,8 @@ const staticSpec = {
     fetchFileAsync: 'function',
     setUserAgent: 'function',
     fetchId: 'function',
+    downgradeCsl: 'function',
+    upgradeCsl: 'function',
     attr: {
       getAttributedEntry: 'function',
       getPrefixedEntry: 'function',
