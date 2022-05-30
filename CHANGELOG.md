@@ -1,5 +1,53 @@
 # Changelog
 
+## [`0.6.0`](https://github.com/larsgw/citation.js/compare/v0.5.7...v0.6.0) - 2022-05-30
+
+* Pin component versions to [`0.6.0`](https://github.com/citation-js/citation-js/blob/master/CHANGELOG.md#060-2022-05-30):
+
+> * chore!: drop Node 10, 12 support ([37ea76b](https://github.com/citation-js/citation-js/commit/37ea76b80bdba98e92232e49a36c9c850966dc74))
+> 
+> 
+> ### Bug Fixes
+> 
+> * **core:** avoid flatMap for Node 10 support ([8a65094](https://github.com/citation-js/citation-js/commit/8a650942bf90218124c84e8c538403470b4b1ef9))
+> * **plugin-bibjson:** set correct generic type ([ec7de7f](https://github.com/citation-js/citation-js/commit/ec7de7f0c03057692eb84b25e9b6f45bed3c5bde))
+> * **plugin-bibtex:** consider entries with no type ([a55fe60](https://github.com/citation-js/citation-js/commit/a55fe60b5a66046baa51d33f68c4ff3420d31519))
+> * **plugin-bibtex:** fix biblatex handling of mastersthesis ([6196adf](https://github.com/citation-js/citation-js/commit/6196adfb0e2d26f11721580e338b54b87e5d4882))
+> * **plugin-bibtex:** fix handling of bookpagination ([7f41e30](https://github.com/citation-js/citation-js/commit/7f41e3080ba6b9b57158fd6a8ce3b5110e042a1e))
+> * **plugin-bibtex:** fix typo in crossref code ([3c377e4](https://github.com/citation-js/citation-js/commit/3c377e425bbf6a302d1957dfe31c0ee67167589e))
+> * **plugin-bibtex:** map biblatex eid to number ([0eb15af](https://github.com/citation-js/citation-js/commit/0eb15af8db4ed4f1d894cffc3840cc2087479c9c)), closes [#140](https://github.com/citation-js/citation-js/issues/140)
+> * **plugin-bibtex:** set default CSL type correctly ([94a402e](https://github.com/citation-js/citation-js/commit/94a402e7aadf0f9462fcd966eb0304545ef6cce7))
+> * **plugin-bibtex:** set default CSL type correctly ([bcd11b3](https://github.com/citation-js/citation-js/commit/bcd11b3f419e56106d79a7e013099188673a9287))
+> * **plugin-bibtex:** use CSL 1.0.2 'custom' field ([986f80b](https://github.com/citation-js/citation-js/commit/986f80b4fbf451688775f4fcc8ddc58c88ec2ef2))
+> * **plugin-ris:** fix ISSN regex ([76402c1](https://github.com/citation-js/citation-js/commit/76402c1db0ae16ec27b1e084a931aea5088ccfa5))
+> * **plugin-ris:** fix name parsing ([4382f31](https://github.com/citation-js/citation-js/commit/4382f31db4fc4586f71b2459552aa2b218f921f2))
+> * **plugin-wikidata:** fall back to original-author ([1af1249](https://github.com/citation-js/citation-js/commit/1af12496e73934ace090c278235b8c1d473e2203)), closes [#106](https://github.com/citation-js/citation-js/issues/106)
+> 
+> 
+> ### Features
+> 
+> * **core:** output CSL 1.0.2 by default ([5acec19](https://github.com/citation-js/citation-js/commit/5acec192b873728df2e63aca6694e98ed2dcb942))
+> * **core:** remove custom _ fields when cleaning ([c974ebc](https://github.com/citation-js/citation-js/commit/c974ebc2309aef9e6d37c474f3be544708f5bba6))
+> * **core:** update internal format to CSL 1.0.2 ([7249425](https://github.com/citation-js/citation-js/commit/72494257001d424fb345f26e44e973c0d65aea52))
+> * **plugin-bibjson:** update mapping to CSL 1.0.2 ([d04aacf](https://github.com/citation-js/citation-js/commit/d04aacfd735067653a8bad2ad3620bcbe069fd0c))
+> * **plugin-bibtex:** add Semantic Scholar s2id mapping ([#159](https://github.com/citation-js/citation-js/issues/159)) ([f116cde](https://github.com/citation-js/citation-js/commit/f116cdef14f73a8d2714502c613d6b7816d61076))
+> * **plugin-bibtex:** implement crossref properly ([f9cdf5b](https://github.com/citation-js/citation-js/commit/f9cdf5b7cbb4b09d23c757f0b3e95a6899e18d89)), closes [#115](https://github.com/citation-js/citation-js/issues/115)
+> * **plugin-bibtex:** update mapping to CSL 1.0.2 ([6c68aff](https://github.com/citation-js/citation-js/commit/6c68aff80d3e04e132c722ef508d0a45fad40a29))
+> * **plugin-csl:** adapt to CSL 1.0.2 input ([4090164](https://github.com/citation-js/citation-js/commit/40901640a12961b32e4cf373b7fa70361be5e064))
+> * **plugin-csl:** update styles and locales ([1ede64b](https://github.com/citation-js/citation-js/commit/1ede64bce8cbab5697b10cdd03a1494d38ff253c))
+> * **plugin-ris:** update mapping to CSL 1.0.2 ([b59bd12](https://github.com/citation-js/citation-js/commit/b59bd12eacf068d5b6c42325ff1c643e79fddac7))
+> * **plugin-wikidata:** import issue/vol/etc. from qualifiers ([dc7e270](https://github.com/citation-js/citation-js/commit/dc7e270b8a4a1deeb8716ee4a66270dde3e1a170))
+> * **plugin-wikidata:** update mapping to CSL 1.0.2 ([09f2e2d](https://github.com/citation-js/citation-js/commit/09f2e2ddf47bc4bddf16022cdef37b0c40d92ee5)), closes [#142](https://github.com/citation-js/citation-js/issues/142)
+> 
+> 
+> ### BREAKING CHANGES
+> 
+> * use Node.js 14 or above
+> * **core:** to get CSL 1.0.1 output, use the 'version' option
+> * **plugin-csl:** output of updated styles and locales may differ
+> * **core:** use the 'custom' object instead of fields starting with 
+> an underscore.
+
 ## [`0.5.7`](https://github.com/larsgw/citation.js/compare/v0.5.6...v0.5.7) - 2022-04-17
 
 * Pin component versions to [`0.5.7`](https://github.com/citation-js/citation-js/blob/master/CHANGELOG.md#057-2022-04-17):
