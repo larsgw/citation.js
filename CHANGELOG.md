@@ -1,5 +1,13 @@
 # Changelog
 
+## [`0.6.2`](https://github.com/larsgw/citation.js/compare/v0.6.1...v0.6.2) - 2022-06-02
+
+* Pin component versions to [`0.6.2`](https://github.com/citation-js/citation-js/blob/master/CHANGELOG.md#062-2022-06-02):
+
+> ### Bug Fixes
+> 
+> * **plugin-ris:** fix type constraints of mappings ([9be8f3b](https://github.com/citation-js/citation-js/commit/9be8f3bc677079d87f340e60a686ba23d245b294))
+
 ## [`0.6.1`](https://github.com/larsgw/citation.js/compare/v0.6.0...v0.6.1) - 2022-06-02
 
 * Pin component versions to [`0.6.1`](https://github.com/citation-js/citation-js/blob/master/CHANGELOG.md#061-2022-06-02):
