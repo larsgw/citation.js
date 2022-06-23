@@ -1,5 +1,13 @@
 # Changelog
 
+## [`0.6.3`](https://github.com/larsgw/citation.js/compare/v0.6.2...v0.6.3) - 2022-06-23
+
+* Pin component versions to [`0.6.3`](https://github.com/citation-js/citation-js/blob/master/CHANGELOG.md#063-2022-06-23):
+
+> ### Bug Fixes
+> 
+> * **plugin-csl:** respect cs:style attribute default-locale ([8189854](https://github.com/citation-js/citation-js/commit/81898545e2d172b167aabb5aaa5d244794aebcc6)), closes [#166](https://github.com/citation-js/citation-js/issues/166)
+
 ## [`0.6.2`](https://github.com/larsgw/citation.js/compare/v0.6.1...v0.6.2) - 2022-06-02
 
 * Pin component versions to [`0.6.2`](https://github.com/citation-js/citation-js/blob/master/CHANGELOG.md#062-2022-06-02):
