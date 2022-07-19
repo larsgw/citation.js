@@ -1,5 +1,21 @@
 # Changelog
 
+## [`0.6.4`](https://github.com/larsgw/citation.js/compare/v0.6.3...v0.6.4) - 2022-07-19
+
+* Pin component versions to [`0.6.4`](https://github.com/citation-js/citation-js/blob/master/CHANGELOG.md#064-2022-07-19):
+
+> ### Bug Fixes
+> 
+> * **plugin-csl:** fix typo ([dc92fb5](https://github.com/citation-js/citation-js/commit/dc92fb5177fbb560730874f7fe3ddf080e00b815))
+> * **plugin-csl:** handle unknown cs:style default-locale ([974ea05](https://github.com/citation-js/citation-js/commit/974ea05bd65f7f0753e83d0544d47a818ed3e935)), closes [#166](https://github.com/citation-js/citation-js/issues/166)
+> * **plugin-wikidata:** add missing mappings ([abdc0f3](https://github.com/citation-js/citation-js/commit/abdc0f380f3e3fad1462976e9a2ccea1313e51cd))
+> * **plugin-wikidata:** fix mappings ([3f33e5b](https://github.com/citation-js/citation-js/commit/3f33e5b1b56a1037737a8f87e27ae9dca28bee08))
+> 
+> 
+> ### Features
+> 
+> * **plugin-wikidata:** add software fields ([beb5dd9](https://github.com/citation-js/citation-js/commit/beb5dd98366ecc1e2ecd3553fdf73dc841f87fca))
+
 ## [`0.6.3`](https://github.com/larsgw/citation.js/compare/v0.6.2...v0.6.3) - 2022-06-23
 
 * Pin component versions to [`0.6.3`](https://github.com/citation-js/citation-js/blob/master/CHANGELOG.md#063-2022-06-23):
