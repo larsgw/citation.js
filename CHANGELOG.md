@@ -1,5 +1,13 @@
 # Changelog
 
+## [`0.6.5`](https://github.com/larsgw/citation.js/compare/v0.6.4...v0.6.5) - 2022-12-31
+
+* Pin component versions to [`0.6.5`](https://github.com/citation-js/citation-js/blob/master/CHANGELOG.md#065-2022-12-31):
+
+> ### Bug Fixes
+> 
+> * **plugin-ris:** update priority of fields ([636b8e2](https://github.com/citation-js/citation-js/commit/636b8e20ef8a69b731f7d2a963d0d1098c82a4a3)), closes [#185](https://github.com/citation-js/citation-js/issues/185)
+
 ## [`0.6.4`](https://github.com/larsgw/citation.js/compare/v0.6.3...v0.6.4) - 2022-07-19
 
 * Pin component versions to [`0.6.4`](https://github.com/citation-js/citation-js/blob/master/CHANGELOG.md#064-2022-07-19):
