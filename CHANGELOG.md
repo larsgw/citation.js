@@ -1,5 +1,18 @@
 # Changelog
 
+## [`0.6.6`](https://github.com/larsgw/citation.js/compare/v0.6.5...v0.6.6) - 2023-01-31
+
+* Pin component versions to [`0.6.6`](https://github.com/citation-js/citation-js/blob/master/CHANGELOG.md#066-2023-01-31):
+
+> ### Bug Fixes
+> 
+> * **plugin-bibtex:** support mixed case "and" in lists ([8e262db](https://github.com/citation-js/citation-js/commit/8e262db49eb190d80bf9f9de4afbd82b23da2bba)), closes [#188](https://github.com/citation-js/citation-js/issues/188)
+> 
+> 
+> ### Features
+> 
+> * **plugin-doi:** support URLs without scheme ([e84f7d8](https://github.com/citation-js/citation-js/commit/e84f7d88f93473d12589125162c18e23655d69c4))
+
 ## [`0.6.5`](https://github.com/larsgw/citation.js/compare/v0.6.4...v0.6.5) - 2022-12-31
 
 * Pin component versions to [`0.6.5`](https://github.com/citation-js/citation-js/blob/master/CHANGELOG.md#065-2022-12-31):
