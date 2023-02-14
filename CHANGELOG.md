@@ -1,5 +1,13 @@
 # Changelog
 
+## [`0.6.7`](https://github.com/larsgw/citation.js/compare/v0.6.6...v0.6.7) - 2023-02-14
+
+* Pin component versions to [`0.6.7`](https://github.com/citation-js/citation-js/blob/master/CHANGELOG.md#067-2023-02-14):
+
+> ### Bug Fixes
+> 
+> * **plugin-csl:** fix citationsPre, citationsPost ([bfb9db8](https://github.com/citation-js/citation-js/commit/bfb9db8c435de01072cf1a93193320e840f640e4)), closes [#141](https://github.com/citation-js/citation-js/issues/141) [#190](https://github.com/citation-js/citation-js/issues/190)
+
 ## [`0.6.6`](https://github.com/larsgw/citation.js/compare/v0.6.5...v0.6.6) - 2023-01-31
 
 * Pin component versions to [`0.6.6`](https://github.com/citation-js/citation-js/blob/master/CHANGELOG.md#066-2023-01-31):
