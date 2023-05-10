@@ -28,16 +28,16 @@
     "/build/citation.min.js"
   ],
   "dependencies": {
-    "@citation-js/cli": "0.6.7",
-    "@citation-js/core": "0.6.5",
+    "@citation-js/cli": "0.6.8",
+    "@citation-js/core": "0.6.8",
     "@citation-js/date": "0.5.1",
     "@citation-js/name": "0.4.2",
-    "@citation-js/plugin-bibjson": "0.6.5",
-    "@citation-js/plugin-bibtex": "0.6.6",
-    "@citation-js/plugin-csl": "0.6.7",
-    "@citation-js/plugin-doi": "0.6.6",
-    "@citation-js/plugin-ris": "0.6.5",
-    "@citation-js/plugin-wikidata": "0.6.5",
+    "@citation-js/plugin-bibjson": "0.6.8",
+    "@citation-js/plugin-bibtex": "0.6.8",
+    "@citation-js/plugin-csl": "0.6.8",
+    "@citation-js/plugin-doi": "0.6.8",
+    "@citation-js/plugin-ris": "0.6.8",
+    "@citation-js/plugin-wikidata": "0.6.8",
     "citeproc": "^2.4.59"
   },
   "devDependencies": {

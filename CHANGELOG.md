@@ -1,5 +1,14 @@
 # Changelog
 
+## [`0.6.8`](https://github.com/larsgw/citation.js/compare/v0.6.7...v0.6.8) - 2023-05-10
+
+* Pin component versions to [`0.6.8`](https://github.com/citation-js/citation-js/blob/master/CHANGELOG.md#068-2023-05-10):
+
+> ### Bug Fixes
+> 
+> * **plugin-bibtex:** map addendum field to note ([e6d19c5](https://github.com/citation-js/citation-js/commit/e6d19c59cb62179449ab451e18b80cec41b0ebaf)), closes [#198](https://github.com/citation-js/citation-js/issues/198)
+> * **plugin-bibtex:** map langid field to language ([ff00ea2](https://github.com/citation-js/citation-js/commit/ff00ea2f6896c4b5a91bd7e56a973a3c9fafda4d)), closes [#197](https://github.com/citation-js/citation-js/issues/197)
+
 ## [`0.6.7`](https://github.com/larsgw/citation.js/compare/v0.6.6...v0.6.7) - 2023-02-14
 
 * Pin component versions to [`0.6.7`](https://github.com/citation-js/citation-js/blob/master/CHANGELOG.md#067-2023-02-14):
