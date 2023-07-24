@@ -77,7 +77,7 @@ Cite.version = {
 const CSL = core.plugins.config.get('@csl')
 
 Cite.CSL = {
-  engine: require('@citation-js/plugin-csl/lib/engines').fetchEngine,
+  engine: require('@citation-js/plugin-csl/lib/engines.js').fetchEngine,
   item (data) {
     return id => data.find(entry => entry.id === id)
   },
@@ -139,14 +139,14 @@ Cite.parse = Object.assign({
       return types[type] || 'book'
     }
   }))(
-    require('@citation-js/plugin-bibtex/lib/input').formats,
-    require('@citation-js/plugin-bibtex/lib/input/entries'),
-    require('@citation-js/plugin-bibtex/lib/mapping/bibtexTypes').target
+    require('@citation-js/plugin-bibtex/lib/input/index.js').formats,
+    require('@citation-js/plugin-bibtex/lib/input/entries.js'),
+    require('@citation-js/plugin-bibtex/lib/mapping/bibtexTypes.json').target
   ),
   bibtxt: ((bibtxt) => ({
     text: bibtxt.parse,
     textEntry: bibtxt.textEntry
-  }))(require('@citation-js/plugin-bibtex/lib/input/bibtxt')),
+  }))(require('@citation-js/plugin-bibtex/lib/input/bibtxt.js')),
   doi: ((doi) => ({
     api: doi.parsers.api.parse,
     id: doi.parsers.id.parse,
@@ -154,7 +154,7 @@ Cite.parse = Object.assign({
       api: doi.parsers.api.parseAsync
     }
   }))(require('@citation-js/plugin-doi')),
-  json: require('@citation-js/core/lib/plugin-common/input').parsers.json.parse,
+  json: require('@citation-js/core/lib/plugin-common/input/index.js').parsers.json.parse,
   wikidata: ((wikidata) => ({
     json: wikidata.parsers.entity.parse,
     list: wikidata.parsers.id.parse,
@@ -189,14 +189,14 @@ Cite.get = Object.assign({
       return types[type] || 'misc'
     }
   }))(
-    require('@citation-js/plugin-bibtex/lib/output').default,
-    require('@citation-js/plugin-bibtex/lib/output/entries'),
-    require('@citation-js/plugin-bibtex/lib/mapping/shared').Converters,
-    require('@citation-js/plugin-bibtex/lib/mapping/bibtexTypes').target
+    require('@citation-js/plugin-bibtex/lib/output/index.js').default,
+    require('@citation-js/plugin-bibtex/lib/output/entries.js'),
+    require('@citation-js/plugin-bibtex/lib/mapping/shared.js').Converters,
+    require('@citation-js/plugin-bibtex/lib/mapping/bibtexTypes.json').target
   ),
-  bibtxt: require('@citation-js/plugin-bibtex/lib/output/bibtxt').format,
-  json: require('@citation-js/core/lib/plugin-common/output').default.data,
-  label: require('@citation-js/core/lib/plugin-common/output').default.label
+  bibtxt: require('@citation-js/plugin-bibtex/lib/output/bibtxt.js').format,
+  json: require('@citation-js/core/lib/plugin-common/output/index.js').default.data,
+  label: require('@citation-js/core/lib/plugin-common/output/index.js').default.label
 }, Cite.plugins.output)
 
 module.exports = Cite
