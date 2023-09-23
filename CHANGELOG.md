@@ -1,5 +1,28 @@
 # Changelog
 
+## [`0.7.0`](https://github.com/larsgw/citation.js/compare/v0.6.9...v0.7.0) - 2023-09-23
+
+* Pin component versions to [`0.7.0`](https://github.com/citation-js/citation-js/blob/master/CHANGELOG.md#070-2023-09-23):
+
+> ### Bug Fixes
+> 
+> * **plugin-bibjson:** expand recognition of bibjson ([c80b9b9](https://github.com/citation-js/citation-js/commit/c80b9b902e8570d7aa94829bb95f7f7d4d859dc9))
+> * **plugin-bibjson:** make parsing more resilient ([4f615f4](https://github.com/citation-js/citation-js/commit/4f615f451189a2093c6c7e1c50e57242709ed5eb))
+> * **plugin-csl:** fix citation data object in `entry` ([6527db6](https://github.com/citation-js/citation-js/commit/6527db61290927d264533ceb5b34ad7291d98562))
+> 
+> ### BREAKING CHANGES
+> 
+> * Use Node.js 16 or above
+> * **core:** Do not automatically fetch URLs, unless configured to do so. To continue
+>   to automatically fetch and evaluate the response of URLs, install and
+>   load the new URL plugin like so:
+> 
+>       require('@citation-js/plugin-url')
+> 
+>   This is a breaking change. This change does not apply to specific URLs,
+>   like the DOI, ISBN, Pubmed, and Wikidata plugins. The @else/url input
+>   type can still be used to build input types off of.
+
 ## [`0.6.9`](https://github.com/larsgw/citation.js/compare/v0.6.8...v0.6.9) - 2023-09-20
 
 * Pin component versions to [`0.6.9`](https://github.com/citation-js/citation-js/blob/master/CHANGELOG.md#069-2023-09-20):
