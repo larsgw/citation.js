@@ -1,5 +1,13 @@
 # Changelog
 
+## [`0.7.1`](https://github.com/larsgw/citation.js/compare/v0.7.0...v0.7.1) - 2023-09-23
+
+* Pin component versions to [`0.7.1`](https://github.com/citation-js/citation-js/blob/master/CHANGELOG.md#071-2023-09-23):
+
+> ### Bug Fixes
+> 
+> * update peer dependency statements ([95ea6bb](https://github.com/citation-js/citation-js/commit/95ea6bba5dc4159a2de7e0101654628291efa1e3))
+
 ## [`0.7.0`](https://github.com/larsgw/citation.js/compare/v0.6.9...v0.7.0) - 2023-09-23
 
 * Pin component versions to [`0.7.0`](https://github.com/citation-js/citation-js/blob/master/CHANGELOG.md#070-2023-09-23):
