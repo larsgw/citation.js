@@ -1,5 +1,14 @@
 # Changelog
 
+## [`0.7.4`](https://github.com/larsgw/citation.js/compare/v0.7.3...v0.7.4) - 2023-11-01
+
+* Pin component versions to [`0.7.4`](https://github.com/citation-js/citation-js/blob/master/CHANGELOG.md#074-2023-11-01):
+
+> ### Bug Fixes
+> 
+> * **plugin-ris:** fix output of certain date fields ([796dce3](https://github.com/citation-js/citation-js/commit/796dce35c5cb7a90936d4ae9cefee1f87c9133be))
+> * **plugin-ris:** parse year numbers on certain items ([d300c33](https://github.com/citation-js/citation-js/commit/d300c3391dd431e7d64c37a1d29074e255c07a62))
+
 ## [`0.7.3`](https://github.com/larsgw/citation.js/compare/v0.7.2...v0.7.3) - 2023-11-01
 
 * Pin component versions to [`0.7.3`](https://github.com/citation-js/citation-js/blob/master/CHANGELOG.md#073-2023-11-01):
