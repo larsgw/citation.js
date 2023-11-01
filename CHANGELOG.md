@@ -1,5 +1,13 @@
 # Changelog
 
+## [`0.7.2`](https://github.com/larsgw/citation.js/compare/v0.7.1...v0.7.2) - 2023-11-01
+
+* Pin component versions to [`0.7.1`](https://github.com/citation-js/citation-js/blob/master/CHANGELOG.md#072-2023-10-14):
+
+> ### Bug Fixes
+>
+> * **plugin-bibtex:** do not map "howpublished" url to publisher ([d4e3296](https://github.com/citation-js/citation-js/commit/d4e32967cb14dc873ba66ac06ccd77d533d6a726))
+
 ## [`0.7.1`](https://github.com/larsgw/citation.js/compare/v0.7.0...v0.7.1) - 2023-09-23
 
 * Pin component versions to [`0.7.1`](https://github.com/citation-js/citation-js/blob/master/CHANGELOG.md#071-2023-09-23):
