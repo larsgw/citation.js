@@ -1,5 +1,13 @@
 # Changelog
 
+## [`0.7.3`](https://github.com/larsgw/citation.js/compare/v0.7.2...v0.7.3) - 2023-11-01
+
+* Pin component versions to [`0.7.3`](https://github.com/citation-js/citation-js/blob/master/CHANGELOG.md#073-2023-11-01):
+
+> ### Bug Fixes
+> 
+> * **plugin-ris:** always set PY in RIS output ([2979ae2](https://github.com/citation-js/citation-js/commit/2979ae250f42845c2d930623ab5b28b19ee16732)), closes [#213](https://github.com/citation-js/citation-js/issues/213)
+
 ## [`0.7.2`](https://github.com/larsgw/citation.js/compare/v0.7.1...v0.7.2) - 2023-11-01
 
 * Pin component versions to [`0.7.1`](https://github.com/citation-js/citation-js/blob/master/CHANGELOG.md#072-2023-10-14):
