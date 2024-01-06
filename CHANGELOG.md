@@ -1,5 +1,13 @@
 # Changelog
 
+## [`0.7.5`](https://github.com/larsgw/citation.js/compare/v0.7.4...v0.7.5) - 2024-01-06
+
+* Pin component versions to [`0.7.5`](https://github.com/citation-js/citation-js/blob/master/CHANGELOG.md#075-2023-12-31):
+
+> ### Features
+> 
+> * **plugin-bibtex:** add mappings for plainnat fields ([208bd96](https://github.com/citation-js/citation-js/commit/208bd9670572c83ee890c4b2e8d047fc9f02aefc)), closes [#204](https://github.com/citation-js/citation-js/issues/204)
+
 ## [`0.7.4`](https://github.com/larsgw/citation.js/compare/v0.7.3...v0.7.4) - 2023-11-01
 
 * Pin component versions to [`0.7.4`](https://github.com/citation-js/citation-js/blob/master/CHANGELOG.md#074-2023-11-01):
