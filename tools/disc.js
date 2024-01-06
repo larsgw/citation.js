@@ -2,7 +2,7 @@ const fs = require('fs')
 const path = require('path')
 const browserify = require('browserify')
 const babelify = require('babelify')
-const disc = require('disc')
+const disc = require('@citation-js/browserify-disc')
 
 const title = '<title>Build Size Disc - Citation.js</title>'
 const back = '<p><a style="color: inherit;" href="https://citation.js.org/">< Back</a></p>'
