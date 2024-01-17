@@ -1,5 +1,13 @@
 # Changelog
 
+## [`0.7.6`](https://github.com/larsgw/citation.js/compare/v0.7.5...v0.7.6) - 2024-01-17
+
+* Pin component versions to [`0.7.6`](https://github.com/citation-js/citation-js/blob/master/CHANGELOG.md#076-2024-01-17):
+
+> ### Bug Fixes
+> 
+> * **plugin-doi:** map non-standard dissertation type ([5f75243](https://github.com/citation-js/citation-js/commit/5f75243cd4ef0f9d67fd28f7dbd31271ef579821)), closes [#220](https://github.com/citation-js/citation-js/issues/220)
+
 ## [`0.7.5`](https://github.com/larsgw/citation.js/compare/v0.7.4...v0.7.5) - 2024-01-06
 
 * Pin component versions to [`0.7.5`](https://github.com/citation-js/citation-js/blob/master/CHANGELOG.md#075-2023-12-31):
