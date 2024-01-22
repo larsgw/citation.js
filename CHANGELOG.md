@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.7.7](https://github.com/citation-js/citation-js/compare/v0.7.6...v0.7.7) - 2024-01-20
+
+* Pin component versions to [`0.7.7`](https://github.com/citation-js/citation-js/blob/master/CHANGELOG.md#077-2024-01-20):
+
+> ### Features
+> 
+> * **plugin-wikidata:** meaningful errors for 404s ([280274a](https://github.com/citation-js/citation-js/commit/280274a4a9bd9c16eb86780c7e8325d3e83c33a2)), closes [#221](https://github.com/citation-js/citation-js/issues/221)
+
 ## [`0.7.6`](https://github.com/larsgw/citation.js/compare/v0.7.5...v0.7.6) - 2024-01-17
 
 * Pin component versions to [`0.7.6`](https://github.com/citation-js/citation-js/blob/master/CHANGELOG.md#076-2024-01-17):
