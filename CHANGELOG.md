@@ -1,5 +1,22 @@
 # Changelog
 
+## [`0.7.8`](https://github.com/larsgw/citation.js/compare/v0.7.7...v0.7.8) - 2024-01-22
+
+* Pin component versions to [`0.7.8`](https://github.com/citation-js/citation-js/blob/master/CHANGELOG.md#078-2024-01-22):
+
+> ### Bug Fixes
+> 
+> * **plugin-bibtex:** do not case-protect commands in output ([50333d1](https://github.com/citation-js/citation-js/commit/50333d1a4269de63a7bb052f717e7892ec6ae5f5))
+> * **plugin-bibtex:** fix math-mode unicode escapes ([f05e45c](https://github.com/citation-js/citation-js/commit/f05e45c138c95b4bd734de5aead55175d2e58774)), closes [#192](https://github.com/citation-js/citation-js/issues/192)
+> * **plugin-bibtex:** remove lone diacritics ([49e9100](https://github.com/citation-js/citation-js/commit/49e91005fab044fd33d123c3da3b72bc8dc1103a))
+> * **plugin-wikidata:** handle no/unkown value claims ([673e35c](https://github.com/citation-js/citation-js/commit/673e35cf2f9604d74eb08c2f6652216eb39eb975)), closes [#217](https://github.com/citation-js/citation-js/issues/217)
+> 
+> 
+> ### Features
+> 
+> * **plugin-bibtex:** add config to keep all unicode ([cd018f9](https://github.com/citation-js/citation-js/commit/cd018f97e4eede037b2371995e7f3fa25e747ae4)), closes [#177](https://github.com/citation-js/citation-js/issues/177)
+> * **plugin-doi:** parse DOIs with square, angle brackets ([5434d5a](https://github.com/citation-js/citation-js/commit/5434d5a85171fdeff01cdfdced9d12367b674cbd)), closes [#182](https://github.com/citation-js/citation-js/issues/182)
+
 ## [0.7.7](https://github.com/citation-js/citation-js/compare/v0.7.6...v0.7.7) - 2024-01-20
 
 * Pin component versions to [`0.7.7`](https://github.com/citation-js/citation-js/blob/master/CHANGELOG.md#077-2024-01-20):
