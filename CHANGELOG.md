@@ -1,5 +1,20 @@
 # Changelog
 
+## [`0.7.9`](https://github.com/larsgw/citation.js/compare/v0.7.8...v0.7.9) - 2024-03-05
+
+* Pin component versions to [`0.7.9`](https://github.com/citation-js/citation-js/blob/master/CHANGELOG.md#079-2024-03-05):
+
+> ### Bug Fixes
+> 
+> * **plugin-bibtex:** allow list delimiters in text in environments ([da0c64b](https://github.com/citation-js/citation-js/commit/da0c64b5b721f0e70e76cae17a1231652fb7b8c5))
+> 
+> 
+> ### Features
+> 
+> * **core:** normalize ORCIDs on authors ([e91b580](https://github.com/citation-js/citation-js/commit/e91b5808643a9f2d578ea0b376a5386f68b152c5))
+> * **plugin-bibtex:** implement data annotations ([68a8ec6](https://github.com/citation-js/citation-js/commit/68a8ec699c68b2b1dfc6ce96a8e5a9efeb0dd801))
+> * **plugin-bibtex:** map ORCIDs to data annotations ([5c3951a](https://github.com/citation-js/citation-js/commit/5c3951ab315c7ee83bae8e65e22d4c8f3fb45d5e))
+
 ## [`0.7.8`](https://github.com/larsgw/citation.js/compare/v0.7.7...v0.7.8) - 2024-01-22
 
 * Pin component versions to [`0.7.8`](https://github.com/citation-js/citation-js/blob/master/CHANGELOG.md#078-2024-01-22):
