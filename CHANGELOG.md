@@ -1,5 +1,19 @@
 # Changelog
 
+## [`0.7.11`](https://github.com/larsgw/citation.js/compare/v0.7.10...v0.7.11) - 2024-04-17
+
+* Pin component versions to [`0.7.11`](https://github.com/citation-js/citation-js/blob/master/CHANGELOG.md#0711-2024-04-17):
+
+> ### Bug Fixes
+> 
+> * **plugin-ris:** fall back to default type ([a3d0391](https://github.com/citation-js/citation-js/commit/a3d0391573b152d9df040de9eb2d0b271f39a48e)), closes [#225](https://github.com/citation-js/citation-js/issues/225)
+> 
+> 
+> ### Features
+> 
+> * **core:** normalize non-lowercase type values ([1ab0d2f](https://github.com/citation-js/citation-js/commit/1ab0d2fc4aedc627892eba4de5d307aa9cb6776f)), closes [#225](https://github.com/citation-js/citation-js/issues/225)
+> * **plugin-csl:** add option to hyperlink URLs and DOIs ([4c15804](https://github.com/citation-js/citation-js/commit/4c158045628a0028dce972005d647f050f5a43c5))
+
 ## [`0.7.10`](https://github.com/larsgw/citation.js/compare/v0.7.9...v0.7.10) - 2024-03-27
 
 * Pin component versions to [`0.7.10`](https://github.com/citation-js/citation-js/blob/master/CHANGELOG.md#0710-2024-03-27):
