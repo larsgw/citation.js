@@ -1,5 +1,13 @@
 # Changelog
 
+## [`0.7.12`](https://github.com/larsgw/citation.js/compare/v0.7.11...v0.7.12) - 2024-05-07
+
+* Pin component versions to [`0.7.12`](https://github.com/citation-js/citation-js/blob/master/CHANGELOG.md#0712-2024-05-07):
+
+> ### Features
+> 
+> * **plugin-bibtex:** add option to force use of label ([d5631e2](https://github.com/citation-js/citation-js/commit/d5631e239dc95aa054683c91ba49fdf8661ce3e5))
+
 ## [`0.7.11`](https://github.com/larsgw/citation.js/compare/v0.7.10...v0.7.11) - 2024-04-17
 
 * Pin component versions to [`0.7.11`](https://github.com/citation-js/citation-js/blob/master/CHANGELOG.md#0711-2024-04-17):
