@@ -1,5 +1,14 @@
 # Changelog
 
+## [`0.7.16`](https://github.com/larsgw/citation.js/compare/v0.7.15...v0.7.16) - 2024-09-23
+
+* Pin component versions to [`0.7.16`](https://github.com/citation-js/citation-js/blob/master/CHANGELOG.md#0716-2024-09-23):
+
+> ### Bug Fixes
+> 
+> * **plugin-bibtex:** correctly escape syntax in output ([ef9aaff](https://github.com/citation-js/citation-js/commit/ef9aaff434cb97034ccbd94bdc7557d5e2c1926f)), closes [#232](https://github.com/citation-js/citation-js/issues/232)
+> * **plugin-ris:** account for CSL with numeric ids ([43267df](https://github.com/citation-js/citation-js/commit/43267dfca95946c802cea8d357aad3c7d206b68a)), closes [#238](https://github.com/citation-js/citation-js/issues/238)
+
 ## [`0.7.15`](https://github.com/larsgw/citation.js/compare/v0.7.14...v0.7.15) - 2024-08-11
 
 * Pin component versions to [`0.7.15`](https://github.com/citation-js/citation-js/blob/master/CHANGELOG.md#0715-2024-08-11):
