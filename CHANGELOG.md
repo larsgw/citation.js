@@ -1,5 +1,13 @@
 # Changelog
 
+## [`0.7.17`](https://github.com/larsgw/citation.js/compare/v0.7.16...v0.7.17) - 2025-01-28
+
+* Pin component versions to [`0.7.17`](https://github.com/citation-js/citation-js/blob/master/CHANGELOG.md#0717-2024-12-31):
+
+> ### Bug Fixes
+> 
+> * **plugin-bibtex:** use 'organization' for conferences ([1202ee2](https://github.com/citation-js/citation-js/commit/1202ee2535804b42bc3c24775d2de4a6db01d7bc)), closes [#236](https://github.com/citation-js/citation-js/issues/236)
+
 ## [`0.7.16`](https://github.com/larsgw/citation.js/compare/v0.7.15...v0.7.16) - 2024-09-23
 
 * Pin component versions to [`0.7.16`](https://github.com/citation-js/citation-js/blob/master/CHANGELOG.md#0716-2024-09-23):
