@@ -1,5 +1,14 @@
 # Changelog
 
+## [`0.7.19`](https://github.com/larsgw/citation.js/compare/v0.7.18...v0.7.19) - 2025-05-12
+
+* Pin component versions to [`0.7.19`](https://github.com/citation-js/citation-js/blob/master/CHANGELOG.md#0719-2025-05-12):
+
+> ### Bug Fixes
+> 
+> * **plugin-wikidata:** omit keywords without labels ([a121afd](https://github.com/citation-js/citation-js/commit/a121afd8b0eaee1fbfc76c28cb0b67ead8376aa3))
+> * **plugin-wikidata:** use 'mul' labels as fallback ([7699ec5](https://github.com/citation-js/citation-js/commit/7699ec585c60517a96f196d7eddbd86b44fba4d0))
+
 ## [`0.7.18`](https://github.com/larsgw/citation.js/compare/v0.7.17...v0.7.18) - 2025-01-28
 
 * Pin component versions to [`0.7.18`](https://github.com/citation-js/citation-js/blob/master/CHANGELOG.md#0718-2025-01-28):
