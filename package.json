@@ -28,7 +28,7 @@
     "/build/citation.min.js"
   ],
   "dependencies": {
-    "@citation-js/cli": "0.7.19",
+    "@citation-js/cli": "0.7.20",
     "@citation-js/core": "0.7.18",
     "@citation-js/date": "0.5.1",
     "@citation-js/name": "0.4.2",
@@ -37,7 +37,7 @@
     "@citation-js/plugin-csl": "0.7.18",
     "@citation-js/plugin-doi": "0.7.18",
     "@citation-js/plugin-ris": "0.7.18",
-    "@citation-js/plugin-wikidata": "0.7.19",
+    "@citation-js/plugin-wikidata": "0.7.20",
     "citeproc": "^2.4.59"
   },
   "devDependencies": {

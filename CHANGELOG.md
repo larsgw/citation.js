@@ -1,5 +1,13 @@
 # Changelog
 
+## [`0.7.20`](https://github.com/larsgw/citation.js/compare/v0.7.19...v0.7.20) - 2025-07-05
+
+* Pin component versions to [`0.7.20`](https://github.com/citation-js/citation-js/blob/master/CHANGELOG.md#0720-2025-07-05):
+
+> ### Bug Fixes
+> 
+> * **plugin-wikidata:** account for missing data on countries ([c95d47d](https://github.com/citation-js/citation-js/commit/c95d47d62a40ad788ead0ec21c9450d420101d78))
+
 ## [`0.7.19`](https://github.com/larsgw/citation.js/compare/v0.7.18...v0.7.19) - 2025-05-12
 
 * Pin component versions to [`0.7.19`](https://github.com/citation-js/citation-js/blob/master/CHANGELOG.md#0719-2025-05-12):
