@@ -1,5 +1,14 @@
 # Changelog
 
+## [`0.7.21`](https://github.com/larsgw/citation.js/compare/v0.7.20...v0.7.21) - 2025-10-20
+
+* Pin component versions to [`0.7.21`](https://github.com/citation-js/citation-js/blob/master/CHANGELOG.md#0721-2025-10-20):
+
+> ### Bug Fixes
+> 
+> * **core:** handle empty type values when cleaning CSL ([cc70c09](https://github.com/citation-js/citation-js/commit/cc70c09aca0854380b144774abcea48c8eda30b6)), closes [#247](https://github.com/citation-js/citation-js/issues/247)
+> * **plugin-ris:** handle empty lines, convert non-standard type ([#248](https://github.com/citation-js/citation-js/issues/248)) ([2b8a18f](https://github.com/citation-js/citation-js/commit/2b8a18feb9a2f88d767f4a959e844095a5ec5598))
+
 ## [`0.7.20`](https://github.com/larsgw/citation.js/compare/v0.7.19...v0.7.20) - 2025-07-05
 
 * Pin component versions to [`0.7.20`](https://github.com/citation-js/citation-js/blob/master/CHANGELOG.md#0720-2025-07-05):
