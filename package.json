@@ -38,7 +38,8 @@
     "@citation-js/plugin-doi": "0.7.18",
     "@citation-js/plugin-ris": "0.7.18",
     "@citation-js/plugin-wikidata": "0.7.20",
-    "citeproc": "^2.4.59"
+    "citeproc": "^2.4.59",
+    "patch-package": "^8.0.1"
   },
   "devDependencies": {
     "@babel/core": "^7.12.10",
@@ -50,7 +51,6 @@
     "jsdoc": "^4.0.2",
     "minami": "^1.2.3",
     "mocha": "^10.0.0",
-    "patch-package": "^8.0.0",
     "regenerator-runtime": "^0.14.1",
     "semver": "^7.3.4",
     "standard": "^17.0.0",
