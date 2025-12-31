@@ -1,5 +1,13 @@
 # Changelog
 
+## [`0.7.22`](https://github.com/larsgw/citation.js/compare/v0.7.21...v0.7.22) - 2025-12-31
+
+* Pin component versions to [`0.7.22`](https://github.com/citation-js/citation-js/blob/master/CHANGELOG.md#0722-2025-12-31):
+
+> ### Features
+> 
+> * **plugin-wikidata:** map P13046 to 'genre' ([ab4760e](https://github.com/citation-js/citation-js/commit/ab4760e0095c989c0df0d31c1503386f31fbd26d))
+
 ## [`0.7.21`](https://github.com/larsgw/citation.js/compare/v0.7.20...v0.7.21) - 2025-10-20
 
 * Pin component versions to [`0.7.21`](https://github.com/citation-js/citation-js/blob/master/CHANGELOG.md#0721-2025-10-20):
