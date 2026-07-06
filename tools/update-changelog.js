@@ -24,7 +24,7 @@ async function amendChangelog (data) {
   const file = (await fs.readFile(filePath, 'utf8'))
     .replace(/# Changelog\n\n/, `$&## [\`${newVersion}\`](https://github.com/larsgw/citation.js/compare/v${currentVersion}...v${newVersion}) - ${date}
 
-* Pin component versions to [\`${newVersion}\`](https://github.com/citation-js/citation-js/blob/master/CHANGELOG.md#${versionSlug}):
+* Pin component versions to [\`${newVersion}\`](https://github.com/citation-js/citation-js/blob/main/CHANGELOG.md#${versionSlug}):
 
 ${changelog}\n\n`)
   await fs.writeFile(filePath, file)
@@ -40,9 +40,9 @@ const subheaderOrder = [
 function extractChangelog (changelog, version) {
   return changelog
     // grab all recent versions
-    .match(new RegExp(`^#.+\\n{3}([\\s\\S]+?)\\n{4}##? \\[${version}\\]`))[1]
+    .match(new RegExp(`^# ([\\s\\S]+?)\\n{2}##? \\[${version}\\]`))[1]
     // split those
-    .split(/\n{4}##? .+\n{3}/g)
+    .split(/\n{2}##? .+\n{3}/g)
     // split all subheaders
     .flatMap(version => {
       return version

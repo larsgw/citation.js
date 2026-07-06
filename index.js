@@ -82,15 +82,15 @@ Cite.CSL = {
     return id => data.find(entry => entry.id === id)
   },
   locale (lang) {
-    return CSL.styles.get(CSL.styles.has(lang) ? lang : 'en-US')
+    return CSL.locales.get(CSL.locales.has(lang) ? lang : 'en-US')
   },
   style (style) {
-    return CSL.templates.get(CSL.templates.has(style) ? style : 'apa')
+    return CSL.styles.get(CSL.styles.has(style) ? style : 'apa')
   },
   register: {
-    addTemplate: CSL.templates.add.bind(CSL.templates),
-    getTemplate: CSL.templates.get.bind(CSL.templates),
-    hasTemplate: CSL.templates.has.bind(CSL.templates),
+    addTemplate: CSL.styles.add.bind(CSL.styles),
+    getTemplate: CSL.styles.get.bind(CSL.styles),
+    hasTemplate: CSL.styles.has.bind(CSL.styles),
     addLocale: CSL.locales.add.bind(CSL.locales),
     getLocale: CSL.locales.get.bind(CSL.locales),
     hasLocale: CSL.locales.has.bind(CSL.locales)
@@ -98,6 +98,8 @@ Cite.CSL = {
 }
 
 Cite.plugins = clone(core.plugins)
+Cite.plugins.dict.htmlDict = Cite.plugins.dict.get('html')
+Cite.plugins.dict.textDict = Cite.plugins.dict.get('text')
 delete Cite.plugins.input.util.clean
 
 Cite.parse = Object.assign({
