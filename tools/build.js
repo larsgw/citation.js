@@ -6,6 +6,7 @@ const babelify = require('babelify')
 browserify()
   .add(require.resolve('core-js/stable'))
   .add(require.resolve('regenerator-runtime/runtime'))
+  .ignore(require.resolve('node-fetch'))
   .require('.', { expose: 'citation-js' })
   .transform(babelify, {
     global: true,
