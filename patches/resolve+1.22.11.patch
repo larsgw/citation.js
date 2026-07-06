@@ -1,0 +1,14 @@
+diff --git a/node_modules/resolve/lib/async.js b/node_modules/resolve/lib/async.js
+index 7160c33..da61a80 100644
+--- a/node_modules/resolve/lib/async.js
++++ b/node_modules/resolve/lib/async.js
+@@ -90,6 +90,9 @@ module.exports = function resolve(x, options, callback) {
+             cb(err);
+         });
+     }
++    if (x === '@larsgw/wikibase-sdk/commonjs/wikidata.org') {
++      x = '@larsgw/wikibase-sdk/dist/wikidata-sdk.cjs'
++    }
+ 
+     opts = normalizeOptions(x, opts);
+ 
