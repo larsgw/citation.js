@@ -1,5 +1,16 @@
 # Changelog
 
+## [`0.8.1`](https://github.com/larsgw/citation.js/compare/v0.8.0...v0.8.1) - 2026-07-06
+
+* Pin component versions to [`0.8.1`](https://github.com/citation-js/citation-js/blob/main/CHANGELOG.md#081-2026-07-05):
+
+> [](https://github.com/citation-js/citation-js/compare/v0.8.1...v) (2026-07-05)
+> 
+> 
+> ### Bug Fixes
+> 
+> * **deps:** update peer dependencies ([3298e31](https://github.com/citation-js/citation-js/commit/3298e31efc99f08dc8045d2216abc9b2336faee1))
+
 ## [`0.8.0`](https://github.com/larsgw/citation.js/compare/v0.7.22...v0.8.0) - 2026-07-05
 
 * Pin component versions to [`0.8.0`](https://github.com/citation-js/citation-js/blob/main/CHANGELOG.md#080-2026-07-05):
