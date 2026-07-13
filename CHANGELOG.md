@@ -1,5 +1,19 @@
 # Changelog
 
+## [`0.8.2`](https://github.com/larsgw/citation.js/compare/v0.8.1...v0.8.2) - 2026-07-13
+
+* Pin component versions to [`0.8.2`](https://github.com/citation-js/citation-js/blob/main/CHANGELOG.md#082-2026-07-13):
+
+> [](https://github.com/citation-js/citation-js/compare/v0.8.1...v) (2026-07-13)
+> 
+> 
+> ### Bug Fixes
+> 
+> * **core:** fix typo in browser fetchFileAsync ([bde8048](https://github.com/citation-js/citation-js/commit/bde804817576e04a10a424b306021a6b565446d4))
+> * **plugin-bibtex:** add 'sept' month value ([548ecc8](https://github.com/citation-js/citation-js/commit/548ecc8fe2db1122c920f437f6c9962e9e579216)), closes [#263](https://github.com/citation-js/citation-js/issues/263)
+> 
+> # [](https://github.com/citation-js/citation-js/compare/v0.8.1...v) (2026-07-05)
+
 ## [`0.8.1`](https://github.com/larsgw/citation.js/compare/v0.8.0...v0.8.1) - 2026-07-06
 
 * Pin component versions to [`0.8.1`](https://github.com/citation-js/citation-js/blob/main/CHANGELOG.md#081-2026-07-05):
