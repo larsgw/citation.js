@@ -1,6 +1,6 @@
 [![NPM version](https://img.shields.io/npm/v/citation-js.svg)](https://npmjs.org/package/citation-js)
 [![NPM total downloads](https://img.shields.io/npm/dt/citation-js.svg)](https://npmcharts.com/compare/citation-js?minimal=true)
-[![Build Status](https://travis-ci.org/larsgw/citation.js.svg?branch=master)](https://travis-ci.org/larsgw/citation.js)
+[![Build Status](https://img.shields.io/github/actions/workflow/status/larsgw/citation.js/build.yml?branch=main)](https://github.com/larsgw/citation.js/actions?query=workflow%3Abuild)
 [![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com)
 
 Please use [citation-js/citation-js](https://github.com/citation-js/citation-js) if possible.
