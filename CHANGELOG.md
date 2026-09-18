@@ -1,5 +1,19 @@
 # Changelog
 
+## [`0.9.0`](https://github.com/larsgw/citation.js/compare/v0.8.2...v0.9.0) - 2026-09-18
+
+* Pin component versions to [`0.9.0`](https://github.com/citation-js/citation-js/blob/main/CHANGELOG.md#090-2026-09-18):
+
+> [](https://github.com/citation-js/citation-js/compare/v0.8.2...v) (2026-09-18)
+> 
+> ### chore
+> 
+> * drop Node.js v20 ([5984acd](https://github.com/citation-js/citation-js/commit/5984acdd576ccefa4af87b8db74cff8b09ccb14a))
+> 
+> ### BREAKING CHANGES
+> 
+> * minimum Node version now 22
+
 ## [`0.8.2`](https://github.com/larsgw/citation.js/compare/v0.8.1...v0.8.2) - 2026-07-13
 
 * Pin component versions to [`0.8.2`](https://github.com/citation-js/citation-js/blob/main/CHANGELOG.md#082-2026-07-13):
