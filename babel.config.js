@@ -1,6 +1,7 @@
 module.exports = {
   presets: [
     ['@babel/env', {
+      modules: 'commonjs',
       targets: {
         browsers: [
           '> 0.5%',
